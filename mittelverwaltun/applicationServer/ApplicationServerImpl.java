@@ -166,9 +166,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			 // Konten stimmen nicht überein
 		 }
 	 }
+	 
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
 		 return db.selectUsersByRole(i, rollenId);
 	 }
+	 
 	//TODO: Methode umbenennen -> getRemmitanceMax
 	public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException{
 
@@ -1480,6 +1482,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public Kostenart[] getKostenarten() throws ApplicationServerException {
 		return db.selectKostenarten();
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getUsers(dbObjects.Institut)
+	 */
+	public Benutzer[] getUsers(Institut institut) throws ApplicationServerException {
+		return db.selectUsers(institut);
 	}
 
 }

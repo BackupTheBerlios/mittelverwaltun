@@ -194,7 +194,7 @@ public class PreparedSqlStatements {
 				statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//28 Gibt die Benutzer eines Instituts zurück
-			ps = con.prepareStatement("SELECT b.benutzername, b.passwort, b.vorname, b.name " +
+			ps = con.prepareStatement("SELECT b.id, b.benutzername, b.name, b.vorname " +
 										"FROM Benutzer b, Institute a " +
 									   "WHERE a.id = ? AND a.id = b.institutsid AND b.geloescht = '0'");
 			int[] param = {Types.INTEGER};

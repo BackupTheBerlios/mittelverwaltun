@@ -12,6 +12,13 @@ public interface ApplicationServer extends Remote {
 	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException;
 	public void logout()throws ConnectionException;
 	public Benutzer[] getUsers () throws ApplicationServerException;
+	/**
+	 * gibt ein Array aller Benutzer des übergebenen Instituts zurück
+	 * @param institut
+	 * @return	Benutzer Array
+	 * @throws ApplicationServerException
+	 */
+	public Benutzer[] getUsers (Institut institut) throws ApplicationServerException;
 	public Institut[] getInstitutes () throws ApplicationServerException;
 	public void setInstitute (Institut editedInst, Institut clientInst) throws ApplicationServerException;
 	public void delInstitute (Institut institut) throws ApplicationServerException;

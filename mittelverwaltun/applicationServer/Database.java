@@ -684,7 +684,7 @@ public class Database implements Serializable{
 				benutzer = new Benutzer[count];
 				int i = 0;
 				while (rs.next()){
-					benutzer[i] = new Benutzer(rs.getString(1), rs.getString(2), rs.getString(3),rs.getString(4));
+					benutzer[i] = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),rs.getString(4));
 					i++;
 				}
 			}
