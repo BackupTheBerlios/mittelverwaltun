@@ -69,7 +69,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	/**
 	 * Konstruktor zum Durchühren einer neun Auszahlungsanordnung. 
 	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public BestellungKlein(MainFrame frame) {
 		super("Auszahlungsanordnung Erstellen");
@@ -110,7 +110,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	 * Konstruktor zum Anzeigen und Stornieren einer Auszahlunganordnung. 
 	 * @param frame = welches den ApplicationServer besitzt. 
 	 * @param bestellung = KleinBestellung die angezeigt werden soll und welche storniert werden kann. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public BestellungKlein(MainFrame frame, KleinBestellung bestellung) {
 		super("Auszahlungsanordnung Anzeigen/Stornieren");
@@ -175,7 +175,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Methode zum Laden aller möglichen User, die zur Zeit die Kleinbestellung durchführen können.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void loadUsers() {
 		comboBenutzer.removeAllItems();		// Alle Einträge in der ComboBox löschen
@@ -215,7 +215,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	
 	/**
 	 * Methode zum Löschen der FBKonto-Labels und ZVTitel-Labels.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void clearLabels() {
 		labKostenstelle.setText("");
@@ -251,7 +251,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	/**
 	 * Initialisierung der Graphischen Oberfläche. 
 	 * @throws Exception
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void jbInit() throws Exception {
 		labTextKostenstelle.setText("Kostenstelle");
@@ -391,7 +391,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	
 	/**
 	 * Reaktion auf die Button-Ereignise.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equalsIgnoreCase("Löschen")) {
@@ -467,7 +467,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	/**
 	 * Eine Kleinbestellung generieren aus dem Formular. 
 	 * @return Kleinbestellung, die generiert wurde. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private KleinBestellung getKleinBestellung() {
 	    java.util.Date datum = (java.util.Date)tfDatum.getValue();
@@ -480,7 +480,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Wenn in der Combo-Box-Benutzer anderer Eintrag ausgewählt wurde. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == comboBenutzer) {
@@ -491,7 +491,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	/**
 	 * Ermitteln aller Fehler beim Bestellungsformular. 
 	 * @return String mit Fehlern
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private String getErrorString() {
 		String error = "";
@@ -524,7 +524,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Das FBKonto für die Bestellung festlegen.  
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void setFBKonto(FBUnterkonto fbKonto) {
 		clearLabels();
@@ -537,7 +537,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Den ZVTitel für die Bestellung festlegen. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void setZVKonto(ZVUntertitel zvTitel) {
 		this.zvTitel = zvTitel;
@@ -551,7 +551,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Reaktion auf die Veränderungen im Betrag Feld. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getSource() == tableBelege) {
@@ -562,7 +562,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 /**
  * Dialog zur Auswahl, eines FBKontos für eine Kleinbestellung. 
- * @author w.flat
+ * author w.flat
  * 03.03.2005
  */
 class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelectionListener {
@@ -579,7 +579,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	 * @param intFrame = Frame, welches die Methode setFBKonto hat. 
 	 * @param modal = Flag ob der frame blockiert werden soll.
 	 * @param user = für den die FBKonten geladen werden sollen. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public FBKontoAuswahlDialog(MainFrame frame, BestellungKlein intFrame, boolean modal, Benutzer user) {
 		super(frame, "FBKonto Auswahl", modal);
@@ -612,7 +612,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	/**
 	 * Anzeigen des Dialogs und laden der Konten in den Baum. 
 	 * @param inst = Institut mit den FBKonten, die ausgewählt werden können. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void showFBKontoAuswahl(Institut[] inst) {
 		this.show();
@@ -622,7 +622,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	/**
 	 * Initialisierung des Dialogs. 
 	 * @throws Exception
-	 * @author w.flat
+	 * author w.flat
 	 */ 
 	private void jbInit() throws Exception {
 		panel1.setLayout(null);
@@ -642,7 +642,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	
 	/**
 	 * Überprüfung, ob ein FBKonto ausgewählt wurde, bei dem das Flag-Kleinbestellungen gesetzt ist. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void checkKonto() {
 		if(treeKonten.fbHauptkontoIsSelected()) {
@@ -656,7 +656,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	
 	/**
 	 * Reaktion auf die Button-Ereignise.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == butSelect) {
@@ -673,7 +673,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	
 	/**
 	 * Reaktion auf die Baum-Ereignise.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );

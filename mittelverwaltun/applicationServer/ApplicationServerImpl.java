@@ -23,7 +23,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Die id des Servers setzen.
 	 * @param id = Neue ID-Nummer des Servers.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -32,7 +32,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Abfrage der id.
 	 * @return ID-Nummer des Servers.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getId() {
 		return id;
@@ -230,7 +230,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * zugewiesen werden kann
 	 * @return der zuweisungsfähige Betrag
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException{
 
@@ -258,7 +258,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * VORSICHT: Liefert nur korrekte Ergebnisse für _zweckgebundenen_ ZV-Konten!!!
 	 * @return der Betrag des verteilungsfähigen Budgets
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException{
 		return db.selectTotalAccountBudget(account) - db.selectDistributedAccountBudget(account);
@@ -269,7 +269,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * über alle _zweckungebundenen_ ZV-Konten
 	 * @return der Betrag des verteilungsfähigen zweckungebundenen Budgets
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	
 	public float getAvailableNoPurposeBudget () throws ApplicationServerException{
 		return (db.selectNoPurposeZVBudgetSum() - db.selectNoPurposeFBBudgetSum());
@@ -280,7 +280,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param institut = Institut von dem die KOnten abgefragt werden.
 	 * @return Liste FBHauptkonten, die zu einem bestimmten Institut angehören.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFBHauptkonten( Institut institut ) throws ApplicationServerException {
 		ArrayList hauptkonten;		// Liste mit den Hauptkonten
@@ -301,7 +301,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
 	 * @return FBUnterkonten
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException {
 		return db.selectFBUnterkonten( institut, hauptkonto );	// Die ermittelten Konten zurückgeben
@@ -312,7 +312,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param user = Benutzer, für den die Konten ermittelt werden sollen.
 	 * @return Institut-Array(1) mit den ermittelten Konten. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public Institut[] getFBKontenForUser(Benutzer user) throws ApplicationServerException {
 		if(user == null)		// Wenn kein User angegeben
@@ -359,7 +359,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Hauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein konto übergeben
@@ -392,7 +392,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBUnterkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Unterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Wenn kein Konto übergeben wurde
@@ -424,7 +424,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBHauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein FBHauptkonto
@@ -503,7 +503,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBUnterkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBUnterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein FBUnterkonto
@@ -542,7 +542,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBHauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein Konto angegeben
@@ -608,7 +608,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBUnterkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBUnterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein Konto angegeben
@@ -650,7 +650,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBUnterkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom FBHauptkonto abgebucht wird und welchen das FBUnterkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws ApplicationServerException {
 		if( haupt == null || unter == null )	// Ein Konto wurde nicht angegeben
@@ -702,7 +702,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom ersten FBHauptkonto abgebucht wird und welchen das zweite FBHauptkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBHauptkonto from, FBHauptkonto to, float betrag ) throws ApplicationServerException {
 		if( from == null || to == null )
@@ -752,7 +752,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der von dem FBUnterkonto abgebucht wird und welchen das FBHauptkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws ApplicationServerException {
 		if( unter == null || haupt == null )
@@ -800,7 +800,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Abfrage der ZVKonten mit den dazugehörigen ZVTiteln und ZVUntertiteln.
 	 * @return Liste mit den ZVKonten
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getZVKonten() throws ApplicationServerException {
 		ArrayList zvKonten = db.selectZVKonten();	// Es werden alle ZVKonten ermittelt
@@ -835,7 +835,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVKonto, welches eingefügt werden soll.
 	 * @return kontoId vom eingefügten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto
@@ -896,7 +896,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVTitel, welcher abgefragt werden soll
 	 * @return ZVTitelId des ZVTitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getZVTitelId( ZVTitel zvTitel ) throws ApplicationServerException {
 		return db.existsZVTitel( zvTitel );
@@ -907,7 +907,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVTitel, welcher erstellt werden soll
 	 * @return ZVTitelId vom erstellten ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		if( zvTitel == null )		// Wenn kein ZVTitel
@@ -939,7 +939,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVUntertitel, welcher erstellt werden soll
 	 * @return ZVUntertitelId vom eingefügtem ZVUntertitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
 		if( zvUntertitel == null )		// Wenn kein ZVUntertitel
@@ -972,7 +972,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Dabei müssen auch alle dazugehörigen ZVTitel und ZVUntertitel gelöscht werden.
 	 * @return ZVKontoId vom gelöschten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
 		if( zvKonto == null )	// Kein ZVKonto
@@ -1077,7 +1077,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVKonto für welches die Überprüfung durchgeführt werden soll
 	 * @return Zahl > 0, wenn das ZVKonto nicht zweckgebunden sein kann. Sonst Zahl = 0.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getNumberOfKontenzuordnungen( ZVKonto zvKonto ) throws ApplicationServerException {
 		return db.countZVKonten( zvKonto );
@@ -1088,7 +1088,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVTitel, welcher gelöscht werden sollte.
 	 * @return ZVTitelId vom gelöschten ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		if( zvTitel == null )	// Kein ZVTitel
@@ -1158,7 +1158,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVUntertitel der gelöscht werden sollte.
 	 * @return ZVUntertitelId vom gelöschten ZVUntertitel.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
 		if( zvUntertitel == null )	// Kein ZVTitel
@@ -1196,7 +1196,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVKonto, das aktualisiert werden soll.
 	 * @return zvKontoId des ZVKontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto angegeben
@@ -1273,7 +1273,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVTitel, der aktualisiert werden soll
 	 * @return ZVTitelId des übergebenen ZVTitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		if( zvTitel == null )	// Kein ZVTitel angegeben
@@ -1330,7 +1330,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVUntertitel, der aktualisiert werden soll
 	 * @return ZVUntertitelId des aktualisierten ZVUntertitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
 		if( zvUntertitel == null )	// Kein ZVUntertitel angegeben
@@ -1368,7 +1368,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVKonto auf das der Betrag gebucht wird.
 	 * @param Betrag, der auf das ZVKonto gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVKonto konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
@@ -1403,7 +1403,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVTitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVTitel gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVTitel konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
@@ -1437,7 +1437,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param ZVUntertitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVUntertitel gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVUntertitel konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
@@ -2041,7 +2041,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Abfrage aller Firmen in der Datenbank.
 	 * @return Liste mit allen Firmen in der Datenbank.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFirmen() throws ApplicationServerException {
 		return db.selectFirmen();
@@ -2052,7 +2052,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param Firma, die erstellt werden soll.
 	 * @return id der erstellten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
@@ -2083,7 +2083,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param Firma, die aktualisiert werden soll.
 	 * @return id der aktualisierten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
@@ -2112,7 +2112,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param Firma, die gelöscht werden soll.
 	 * @return id der gelöschten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )					// Wurde eine Firma angegeben
@@ -2454,7 +2454,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param newOffer - neues Angebot
 	 * @param bestellId - Id der Bestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	private void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws ApplicationServerException {
 		if(!(oldOffer.equals(newOffer))){ // Angebot hat sich geändert
@@ -2834,7 +2834,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
 	 * @return Id der eingefügten Bestellung. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public int addKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
 		if(bestellung == null)		// keine Bestellung angegeben
@@ -2909,7 +2909,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Alle Kleinbestellung auswählen.
 	 * @return Liste mit Bestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public ArrayList getKleinbestellungen() throws ApplicationServerException {
 		ArrayList bestellungen = db.selectKleinbestellungen();	// Liste mit Bestellungen
@@ -2925,7 +2925,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Alle gelöschten Kleinbestellung auswählen.
 	 * @return Liste mit gelöschten Bestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public ArrayList getDelKleinbestellungen() throws ApplicationServerException {
 		ArrayList bestellungen = db.selectDelKleinbestellungen();	// Liste mit Bestellungen
@@ -2942,7 +2942,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param Kleinbestellung, die gelöscht werden soll. 
 	 * @return Id der gelöschten Bestellung. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
 		if(bestellung == null)		// keine Bestellung angegeben
@@ -2986,7 +2986,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param Id des Kontos. 
 	 * @return Kleinbestellung die abgefragt wurde. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public KleinBestellung getKleinbestellung(int id) throws ApplicationServerException {
 		try {

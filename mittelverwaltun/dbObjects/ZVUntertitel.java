@@ -240,7 +240,7 @@ public class ZVUntertitel implements Serializable {
 	
 	/**
 	 * Rückgabe des Pruesumme als String
-	 * @return
+	 * @return Prüfsummestring
 	 */ 
 	public String getPruefsumme(){
 		if( bedingung == null )
@@ -271,7 +271,7 @@ public class ZVUntertitel implements Serializable {
 	 * @param active
 	 * @param bis
 	 * @param value
-	 * @return
+	 * @return Prüfung
 	 */
 	public static String getPruefung( boolean active, boolean bis, Object value ){
 		if( !active )

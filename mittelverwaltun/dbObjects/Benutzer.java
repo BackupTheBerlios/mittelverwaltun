@@ -3,7 +3,7 @@ package dbObjects;
 import java.io.Serializable;
 
 /**
- * @author robert
+ * author robert
  *
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
@@ -135,7 +135,7 @@ public class Benutzer implements Serializable {
 	/**
 	 * Ausgabe für die Bestellung. 
 	 * @return Name und Vorname als String
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public String toBestellString(){
 		return titel + " " + vorname + " " + name; 

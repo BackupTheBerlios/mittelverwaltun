@@ -30,7 +30,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt alle nicht gelöschten Benutzer im System zurück
 	 * @return Benutzer-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer[] getUsers () throws ApplicationServerException;
 	
@@ -138,7 +138,7 @@ public interface ApplicationServer extends Remote {
 	 * @param user = Benutzer, für den die Konten ermittelt werden sollen.
 	 * @return Institut-Array(1) mit den ermittelten Konten. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public Institut[] getFBKontenForUser(Benutzer user) throws ApplicationServerException;
 	
@@ -147,7 +147,7 @@ public interface ApplicationServer extends Remote {
 	 * @param institut = Institut von dem die KOnten abgefragt werden.
 	 * @return Liste FBHauptkonten, die zu einem bestimmten Institut angehören.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFBHauptkonten( Institut institut ) throws ApplicationServerException;
 	
@@ -157,7 +157,7 @@ public interface ApplicationServer extends Remote {
 	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
 	 * @return FBUnterkonten
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException;
 	
@@ -173,7 +173,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBHauptkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Hauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException;
 	
@@ -182,7 +182,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBUnterkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Unterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException;
 	
@@ -191,7 +191,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBHauptkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBHauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException;
 	
@@ -200,7 +200,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBUnterkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBUnterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException;
 	
@@ -209,7 +209,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBHauptkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBHauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException;
 	
@@ -218,14 +218,14 @@ public interface ApplicationServer extends Remote {
 	 * @param FBUnterkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBUnterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException;
 	
 	/**
 	 * Abfrage der ZVKonten mit den dazugehörigen ZVTiteln und ZVUntertiteln.
 	 * @return Liste mit den ZVKonten
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getZVKonten() throws ApplicationServerException;
 	
@@ -234,7 +234,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVKonto, welches eingefügt werden soll.
 	 * @return kontoId vom eingefügten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVKonto( ZVKonto zvKonto ) throws ApplicationServerException;
 	
@@ -243,7 +243,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVTitel, welcher erstellt werden soll
 	 * @return ZVTitelId vom erstellten ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVTitel( ZVTitel zvTitel ) throws ApplicationServerException;
 	
@@ -252,7 +252,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVUntertitel, welcher erstellt werden soll
 	 * @return ZVUntertitelId vom eingefügtem ZVUntertitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException;
 	
@@ -261,7 +261,7 @@ public interface ApplicationServer extends Remote {
 	 * Dabei müssen auch alle dazugehörigen ZVTitel und ZVUntertitel gelöscht werden.
 	 * @return ZVKontoId vom gelöschten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVKonto( ZVKonto zvKonto ) throws ApplicationServerException;
 	
@@ -270,7 +270,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVTitel, welcher gelöscht werden sollte.
 	 * @return ZVTitelId vom gelöschten ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVTitel( ZVTitel zvTitel ) throws ApplicationServerException;
 	
@@ -279,7 +279,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVUntertitel der gelöscht werden sollte.
 	 * @return ZVUntertitelId vom gelöschten ZVUntertitel.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException;
 	
@@ -289,7 +289,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVKonto, das aktualisiert werden soll.
 	 * @return zvKontoId des ZVKontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVKonto( ZVKonto zvKonto ) throws ApplicationServerException;
 	
@@ -299,7 +299,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVTitel, der aktualisiert werden soll
 	 * @return ZVTitelId des übergebenen ZVTitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVTitel( ZVTitel zvTitel ) throws ApplicationServerException;
 	
@@ -308,7 +308,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVUntertitel, der aktualisiert werden soll
 	 * @return ZVUntertitelId des aktualisierten ZVUntertitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException;
 	
@@ -317,7 +317,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVTitel, welcher abgefragt werden soll
 	 * @return ZVTitelId des ZVTitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getZVTitelId( ZVTitel zvTitel ) throws ApplicationServerException;
 	
@@ -327,21 +327,21 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVKonto für welches die Überprüfung durchgeführt werden soll
 	 * @return Zahl > 0, wenn das ZVKonto nicht zweckgebunden sein kann. Sonst Zahl = 0.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getNumberOfKontenzuordnungen( ZVKonto zvKonto ) throws ApplicationServerException;
 	
 	/**
 	 * Abfrage der id.
 	 * @return ID-Nummer des Servers.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int getId();
 	
 	/**
 	 * Die id des Servers setzen.
 	 * @param id = Neue ID-Nummer des Servers.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void setId(int id);
 	
@@ -351,7 +351,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVKonto auf das der Betrag gebucht wird.
 	 * @param Betrag, der auf das ZVKonto gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVKonto konto, float betrag ) throws ApplicationServerException;
 	/**
@@ -360,7 +360,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVTitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVTitel gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVTitel konto, float betrag ) throws ApplicationServerException;
 	/**
@@ -369,7 +369,7 @@ public interface ApplicationServer extends Remote {
 	 * @param ZVUntertitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVUntertitel gebucht wird.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, ZVUntertitel konto, float betrag ) throws ApplicationServerException;
 	/**
@@ -379,7 +379,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der von dem FBUnterkonto abgebucht wird und welchen das FBHauptkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws ApplicationServerException;
 	/**
@@ -389,7 +389,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom ersten FBHauptkonto abgebucht wird und welchen das zweite FBHauptkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBHauptkonto from, FBHauptkonto to, float betrag ) throws ApplicationServerException;
 	/**
@@ -399,7 +399,7 @@ public interface ApplicationServer extends Remote {
 	 * @param FBUnterkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom FBHauptkonto abgebucht wird und welchen das FBUnterkonto erhält.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void buche( Benutzer benutzer, FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws ApplicationServerException;
 	
@@ -414,7 +414,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt alle Aktivitäten die Rollen zugeordnet werden können.
 	 * @return Aktivitaet-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException;
 	
@@ -422,7 +422,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt alle Rollen mit allen zugehörigen Aktivitäten zurück
 	 * @return Rollen-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
   public Rolle[] getRollenFull () throws ApplicationServerException;
   
@@ -431,7 +431,7 @@ public interface ApplicationServer extends Remote {
    * @param rolle - Id der Rolle
    * @param aktivitaet - Id der Aktivität
    * @throws ApplicationServerException
-   * @author robert
+   * author robert
    */
   public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException;
   
@@ -440,7 +440,7 @@ public interface ApplicationServer extends Remote {
    * @param rolle - Id der Rolle
    * @param aktivitaet - Id der Aktivität
    * @throws ApplicationServerException
-   * @author robert
+   * author robert
    */
   public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException;
 
@@ -449,7 +449,7 @@ public interface ApplicationServer extends Remote {
 	 * @param rolle - neue Rolle
 	 * @return id - neue Id der Rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int addRolle(Rolle rolle) throws ApplicationServerException;
 	
@@ -458,7 +458,7 @@ public interface ApplicationServer extends Remote {
 	 * @param editedRolle - Rolle mit Änderungen
 	 * @param clientRolle - original Rolle beim Client
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws ApplicationServerException;
 	
@@ -466,7 +466,7 @@ public interface ApplicationServer extends Remote {
 	 * löscht eine Rolle
 	 * @param rolle - zu löschende Rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void delRolle(Rolle rolle) throws ApplicationServerException;
 	
@@ -476,7 +476,7 @@ public interface ApplicationServer extends Remote {
 	 * @param password
 	 * @return zugehörige Benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer getUser(String user, String password) throws ApplicationServerException;
 	
@@ -484,7 +484,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt nur die ZVKonten zurück ohne die Titel
 	 * @return ArrayList mit ZVKonten
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getZVKontenOnly() throws ApplicationServerException;
 
@@ -492,7 +492,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt Institute mit FBHauptkonten, FBHauptkonten sind mit ihren Kontenzuordnungen
 	 * @return Institut-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Institut[] getInstitutZuordnungen() throws ApplicationServerException;
 	
@@ -501,7 +501,7 @@ public interface ApplicationServer extends Remote {
 	 * @param fbKonto - FBKonto der Kontenzuordnung
 	 * @param clientZuordnung - ZVKonto und Status der Kontenzuordnung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws ApplicationServerException;
 	
@@ -510,7 +510,7 @@ public interface ApplicationServer extends Remote {
 	 * @param fbKonto
 	 * @param zvKonto
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException;
 	
@@ -519,7 +519,7 @@ public interface ApplicationServer extends Remote {
 	 * @param fbKonto
 	 * @param zvKonto
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException;
 	
@@ -528,7 +528,7 @@ public interface ApplicationServer extends Remote {
 	 * @param fbKontoId - Id des FBKontos
 	 * @return FBKonto als FBUnterkonto
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException;
 	
@@ -536,7 +536,7 @@ public interface ApplicationServer extends Remote {
 	 * Abfrage aller Firmen in der Datenbank.
 	 * @return Liste mit allen Firmen in der Datenbank.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getFirmen() throws ApplicationServerException;
 	
@@ -545,7 +545,7 @@ public interface ApplicationServer extends Remote {
 	 * @param Firma, die erstellt werden soll.
 	 * @return id der erstellten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int addFirma( Firma firma ) throws ApplicationServerException;
 	
@@ -554,7 +554,7 @@ public interface ApplicationServer extends Remote {
 	 * @param Firma, die aktualisiert werden soll.
 	 * @return id der aktualisierten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int setFirma( Firma firma ) throws ApplicationServerException;
 	
@@ -563,7 +563,7 @@ public interface ApplicationServer extends Remote {
 	 * @param Firma, die gelöscht werden soll.
 	 * @return id der gelöschten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int delFirma( Firma firma ) throws ApplicationServerException;
 	
@@ -604,7 +604,7 @@ public interface ApplicationServer extends Remote {
 	 * über alle _zweckungebundenen_ ZV-Konten
 	 * @return der Betrag des verteilungsfähigen zweckungebundenen Budgets
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	
 	public float getAvailableNoPurposeBudget() throws ApplicationServerException;
 	
@@ -613,7 +613,7 @@ public interface ApplicationServer extends Remote {
 	 * zugewiesen werden kann
 	 * @return der zuweisungsfähige Betrag
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException;
 	
@@ -622,7 +622,7 @@ public interface ApplicationServer extends Remote {
 	 * VORSICHT: Liefert nur korrekte Ergebnisse für _zweckgebundenen_ ZV-Konten!!!
 	 * @return der Betrag des verteilungsfähigen Budgets
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException;
 	
@@ -632,7 +632,7 @@ public interface ApplicationServer extends Remote {
 	 * @param acc - FBHauptkonto
 	 * @param remmitance - Betrag
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
  	public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException;
 
@@ -640,7 +640,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt ein Kostenarten-Array für die Standardbestellung 
 	 * @return Kostenarten ArrayList
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Kostenart[] getKostenarten() throws ApplicationServerException;
 	
@@ -649,7 +649,7 @@ public interface ApplicationServer extends Remote {
 	 * @param bestellung - Standardbestellung
 	 * @return id - gibt die neue Id der Bestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
 	
@@ -658,7 +658,7 @@ public interface ApplicationServer extends Remote {
 	 * @param bestellung - Standardbestellung
 	 * @return id - gibt die neue Id der Bestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
 	
@@ -667,7 +667,7 @@ public interface ApplicationServer extends Remote {
 	 * @param original - orginale Standardbestellung 
 	 * @param edited - geänderte Standardbestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws ApplicationServerException;
 	
@@ -676,7 +676,7 @@ public interface ApplicationServer extends Remote {
 	 * @param original - orginale ASKBestellung 
 	 * @param edited - geänderte ASKBestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
 	
@@ -685,7 +685,7 @@ public interface ApplicationServer extends Remote {
 	 * @param id - BestellungId
 	 * @return StandardBestellung mit der zugehörigen Id
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException;
 	
@@ -694,34 +694,34 @@ public interface ApplicationServer extends Remote {
 	 * @param id - BestellungId
 	 * @return ASKBestellung mit der zugehörigen Id
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException;
 	
 	/**
 	 * gibt Bestellungen ggf. eines bestimmten Typs zurück
 	 * @param filter
-	 * @return
+	 * @return ArrayList mit Bestellungen
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException;
 	
 	/**
 	 * gibt alle Bestellungen zurück
 	 * @param filter
-	 * @return
+	 * @return ArrayList mit Bestellungen
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	
 	public ArrayList getBestellungen() throws ApplicationServerException;
 	
 	/**
 	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts
 	 * @param subAccountsIncluded
-	 * @return
+	 * @return Intitut-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
 
@@ -729,7 +729,7 @@ public interface ApplicationServer extends Remote {
 	 * löscht eine StandardBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
 	 * @param delOrder - StandardBestellung die gelöscht werden soll
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException;
 
@@ -737,7 +737,7 @@ public interface ApplicationServer extends Remote {
 	 * löscht eine ASKBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
 	 * @param delOrder - ASKBestellung die gelöscht werden soll
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException;
 	
@@ -746,7 +746,7 @@ public interface ApplicationServer extends Remote {
 	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
 	 * @return Id der eingefügten Bestellung. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public int addKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
 	
@@ -754,7 +754,7 @@ public interface ApplicationServer extends Remote {
 	 * Alle Kleinbestellung auswählen.
 	 * @return Liste mit Bestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public ArrayList getKleinbestellungen() throws ApplicationServerException;
 
@@ -762,7 +762,7 @@ public interface ApplicationServer extends Remote {
 	 * Alle gelöschten Kleinbestellung auswählen.
 	 * @return Liste mit gelöschten Bestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public ArrayList getDelKleinbestellungen() throws ApplicationServerException;
 		
@@ -771,7 +771,7 @@ public interface ApplicationServer extends Remote {
 	 * @param Kleinbestellung, die gelöscht werden soll. 
 	 * @return Id der gelöschten Bestellung. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
 	
@@ -779,7 +779,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt alle Softwarebeauftragte des Fachbereichs
 	 * @return Benutzer-Array der SW-Beauftragten
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer[] getSwBeauftragte() throws ApplicationServerException;
 
@@ -787,7 +787,7 @@ public interface ApplicationServer extends Remote {
 	 * gibt die Firma für eine ASK-Bestellung zurück
 	 * @return ASK-Firma
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Firma getASKFirma() throws ApplicationServerException;
 
@@ -796,7 +796,7 @@ public interface ApplicationServer extends Remote {
 	 * @param Id des Kontos. 
 	 * @return Kleinbestellung die abgefragt wurde. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public KleinBestellung getKleinbestellung(int id) throws ApplicationServerException;
 
@@ -808,7 +808,7 @@ public interface ApplicationServer extends Remote {
 	 * @param bis - Datum für den Endpunkt
 	 * @return ArrayListe mit den Angaben für den Report siehe nähe Infos zu den Objekten in Reports
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList getReport(int typ, Date von, Date bis) throws ApplicationServerException;
 
@@ -818,7 +818,7 @@ public interface ApplicationServer extends Remote {
 	 * @param bis - Datum für den Endpunkt
 	 * @return	ArrayList
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList getLogList(Date von, Date bis) throws ApplicationServerException;
 

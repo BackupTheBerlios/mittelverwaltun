@@ -30,7 +30,7 @@ public class Database implements Serializable{
 	 * stellt eine Verbindung zur Datenbank her mit dem benutzernamen
 	 * @param user - benutzername
 	 * @throws ConnectionException
-	 * @author Mario
+	 * author Mario
 	 */
 	public void connect (String user) throws ConnectionException{
 		try{
@@ -62,7 +62,7 @@ public class Database implements Serializable{
 	/**
 	 * unterbricht die Verbindung mit der Datenbank
 	 * @throws ConnectionException
-	 * @author Mario
+	 * author Mario
 	 */
 	public void disconnect() throws ConnectionException{
 		try {
@@ -84,7 +84,7 @@ public class Database implements Serializable{
 	 * und nicht gelöscht sind.
 	 * @return Array mit den ermittelten Hauptkonten
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectFBHauptkonten( Institut institut ) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();	// Liste mit den Hauptkonten
@@ -123,7 +123,7 @@ public class Database implements Serializable{
 	 * @param FBHauptkonto
 	 * @return FBUnterkonten
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();		// FBUnterkonten
@@ -163,7 +163,7 @@ public class Database implements Serializable{
 	 * @param hauptkonto = FBHauptkonto, von dem die FBUnterkonten ermittelt werden müssen.
 	 * @return Liste mit den ermittelten FBUnterkonten. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectFBUnterkontenForUser(Benutzer user, FBHauptkonto hauptkonto) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();
@@ -201,7 +201,7 @@ public class Database implements Serializable{
 	 * @param FBHauptkonto
 	 * @return kontoId, des eingefügten FBHauptkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int insertFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		try{
@@ -225,7 +225,7 @@ public class Database implements Serializable{
 	 * @param FBUnterkonto, welches erstellt werden soll
 	 * @return KontoId, des erstellten FBUnterkontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	 public int insertFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		 try{
@@ -250,7 +250,7 @@ public class Database implements Serializable{
 	 * @param FBkonto
 	 * @return kontoId des FBKontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsFBKonto(FBUnterkonto konto) throws ApplicationServerException {
 		try{
@@ -279,7 +279,7 @@ public class Database implements Serializable{
 	 * @param Unterkonto
 	 * @return kontoId des FBKontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsFBKonto(int institutsId, String hauptkonto, String unterkonto ) throws ApplicationServerException {
 		try{
@@ -306,7 +306,7 @@ public class Database implements Serializable{
 	 * @param FBkonto
 	 * @return kontoId vom gelöschten FBKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsDeleteFBKonto(FBUnterkonto konto) throws ApplicationServerException {
 		try{
@@ -333,7 +333,7 @@ public class Database implements Serializable{
 	 * @param FBKonto, das gelöscht werden soll
 	 * @return Zeilennummer, des gelöschten FBKontos
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteFBKonto( FBUnterkonto konto ) throws ApplicationServerException {
 		try{
@@ -352,7 +352,7 @@ public class Database implements Serializable{
 	 * @param FBKonto
 	 * @return FBHauptkonto, welches aktualisiert werden soll
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public FBHauptkonto selectForUpdateFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		FBHauptkonto result = null;		// FBHauptkonto, welches aktualisiert werden soll
@@ -388,7 +388,7 @@ public class Database implements Serializable{
 	 * @param FBUnterkonto
 	 * @return FBUnterkonto, welches ausgewählt wurde
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public FBUnterkonto selectForUpdateFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		FBUnterkonto result = null;		// Das FBUnterkonto, welches aktualisiert werden soll
@@ -422,7 +422,7 @@ public class Database implements Serializable{
 	 * bei denen ein bestimmtes FBKonto angegeben wurde.
 	 * @param FBKonto, welches überprüft werden soll
 	 * @return Anzahl der Bestellungen bei denen, das FBKonto angegeben ist
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBestellungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -443,7 +443,7 @@ public class Database implements Serializable{
 	 * Anzahl der aktiven Bestellungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde.
 	 * @param FBKonto, welches überprüft werden soll
 	 * @return Anzahl der nicht abgeschlossenen Bestellungen
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countActiveBestellungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -464,7 +464,7 @@ public class Database implements Serializable{
 	 * Anzahl der aktiven Benutzer ermitteln, denen ein bestimmtes FBKonto zugeordnet ist.
 	 * @param FBKonto, für das die Überprüfung durch genommen wird.
 	 * @return Anzahl der Benutzer, die dieses Konto besitzen
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countActiveBenutzer( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -485,7 +485,7 @@ public class Database implements Serializable{
 	 * Anzahl der Benutzer(aktiv und gelöscht) ermitteln, denen ein bestimmtes FBKonto zugeordnet ist.
 	 * @param FBKonto, für das die Überprüfung durch genommen wird.
 	 * @return Anzahl der Benutzer, die dieses Konto besitzen
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBenutzer( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -506,7 +506,7 @@ public class Database implements Serializable{
 	 * Anzahl der Buchungen ermitteln, bei denen ein bestimmtes FBKonto benutzt wurde.
 	 * @param FBKonto, welches überprüft werden soll
 	 * @return Anzahl der Buchingen, bei denen das FBKonto benutzt wurde
-	 * @author w.flat 
+	 * author w.flat 
 	 */
 	public int countBuchungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -527,7 +527,7 @@ public class Database implements Serializable{
 	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde.
 	 * @param FBKonto welches überprüft werden soll.
 	 * @return Anzahl der Kontenzuordnungen, bei denen das FBKonto angegeben ist.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countKontenzuordnungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
@@ -549,7 +549,7 @@ public class Database implements Serializable{
 	 * @param FBHauptkonto
 	 * @return kontoId vom Hauptkonto, das aktulisiert wurde
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		try{
@@ -577,7 +577,7 @@ public class Database implements Serializable{
 	 * @param FBUnterkonto
 	 * @return kontoId vom Unterkonto, das aktulisiert wurde
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		try{
@@ -606,7 +606,7 @@ public class Database implements Serializable{
 	 * @param password
 	 * @return Benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer selectUser(String user, String password) throws ApplicationServerException{
 		Benutzer benutzer = null;
@@ -637,7 +637,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Benutzer aus der Datenbank für den Vergleich ob sich zwischenzeitlich was geändert hat
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer selectForUpdateUser(Benutzer benutzer) throws ApplicationServerException{
 		Benutzer b = null;
@@ -661,7 +661,7 @@ public class Database implements Serializable{
 	 * gibt alle Benutzer im System zurück
 	 * @return Benutzer-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer[] selectUsers() throws ApplicationServerException{
 		Benutzer[] benutzer = null;
@@ -696,7 +696,7 @@ public class Database implements Serializable{
 	 * gibt alle SwBeauftragte des Fachbereichs zurück
 	 * @return Benutzer-Array mit allen SwBeauftragten
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer[] selectSwBeauftragte() throws ApplicationServerException{
 		Benutzer[] benutzer = null;
@@ -727,7 +727,7 @@ public class Database implements Serializable{
 	 * @param empfaenger
 	 * @return TmpRolle-Array
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public TmpRolle[] selectTempRollen (int empfaenger) throws ApplicationServerException{
 
@@ -763,7 +763,7 @@ public class Database implements Serializable{
 	 * @param rollenId - Id der Rolle
 	 * @return int-Array mit allen Id´s der Aktivitäten
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public int[] selectAktivitaeten(int rollenId) throws ApplicationServerException{
 
@@ -796,7 +796,7 @@ public class Database implements Serializable{
 	 * gibt alle Fachbereiche zurück. Im Moment nur den Fachbereich Informatik
 	 * @return Fachberich-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Fachbereich[] selectFachbereiche() throws ApplicationServerException{
 		Fachbereich[] fachbereiche = null;
@@ -848,7 +848,7 @@ public class Database implements Serializable{
 	 * aktualisiert den übergebenen Fachberiech in der Datenbank
 	 * @param fachbereich
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateFachbereich(Fachbereich fachbereich) throws ApplicationServerException{
 		if(fachbereich != null){
@@ -870,7 +870,7 @@ public class Database implements Serializable{
 	 * gibt alle Institute des Fachbereichs zurück
 	 * @return Institut-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Institut[] selectInstitutes() throws ApplicationServerException{
 
@@ -902,7 +902,7 @@ public class Database implements Serializable{
 	 * @param id des Instituts
 	 * @return Institut
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Institut selectInstitute(int id) throws ApplicationServerException{
 		Institut institut = null;
@@ -926,7 +926,7 @@ public class Database implements Serializable{
 	 * löscht das übergebene Institut
 	 * @param institut
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteInstitute(Institut institut) throws ApplicationServerException{
 		try{
@@ -945,7 +945,7 @@ public class Database implements Serializable{
 	 * @param institut
 	 * @return Id - neue Id des Instituts
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int insertInstitute(Institut institut) throws ApplicationServerException{
 		if(checkInstitute(institut) == 0){
@@ -972,7 +972,7 @@ public class Database implements Serializable{
 	 * @param institut
 	 * @return Benutzer-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer[] selectUsers(Institut institut) throws ApplicationServerException{
 		Benutzer[] benutzer = null;
@@ -1008,7 +1008,7 @@ public class Database implements Serializable{
 	 * @param userId
 	 * @return Benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Benutzer selectUser(int userId) throws ApplicationServerException{
 		Benutzer benutzer = null;
@@ -1039,7 +1039,7 @@ public class Database implements Serializable{
 	 * @param institut
 	 * @return Institut aus der Datenbank für den Abgleich
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Institut selectForUpdateInstitute(Institut institut) throws ApplicationServerException{
 		Institut inst = null;
@@ -1062,7 +1062,7 @@ public class Database implements Serializable{
 	 * @param institut
 	 * @return Anzahl der gefundenen Institute ausser das übergebene Institut - bei 0 ist das Einfügen kein Problem
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int checkInstitute(Institut institut) throws ApplicationServerException{
 		try{
@@ -1079,7 +1079,7 @@ public class Database implements Serializable{
 	 * aktualisiert ein Institut
 	 * @param institut
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateInstitute(Institut institut) throws ApplicationServerException{
 		try{
@@ -1097,7 +1097,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Anzahl der Benutzer mit dem Benutzernamen
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	 public int checkUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		 try{
@@ -1117,7 +1117,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Anzahl der Benutzer mit dem gleichen Benutzernamen ausser der übergebene Benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	 public int checkUser(Benutzer benutzer) throws ApplicationServerException{
 		 try{
@@ -1136,7 +1136,7 @@ public class Database implements Serializable{
 	 * @param benutzer - aktualisierte Benutzer
 	 * @param oldBenutzer - alte Benutzername
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateUserMySQL(Benutzer benutzer, String oldBenutzer) throws ApplicationServerException{
 		try{
@@ -1153,7 +1153,7 @@ public class Database implements Serializable{
 	 * aktualisiert den übergebenen Benutzer in der Tabelle User
 	 * @param benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1179,7 +1179,7 @@ public class Database implements Serializable{
 	 * fügt einen neuen Benutzer in die MySQL-Datenbank hinzu
 	 * @param benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void insertUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1199,7 +1199,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Id in der Tabelle Benutzer des eingefügten Users 
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int insertUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1226,7 +1226,7 @@ public class Database implements Serializable{
 	 * löscht den übergebenen Benuter aus der MySQL-Datenbank
 	 * @param benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1243,7 +1243,7 @@ public class Database implements Serializable{
 	 * Löscht den Benutzer endgültig aus der Tabelle Benutzer
 	 * @param benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteUserFinal(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1260,7 +1260,7 @@ public class Database implements Serializable{
 	 * Löscht den Benutzer nicht aus der Tabelle sondern setzt das Flag geloescht auf 1
 	 * @param benutzer
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1447,7 +1447,7 @@ public class Database implements Serializable{
 	 * @param rollenId - Id der Rolle
 	 * @return Aktivitaet-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Aktivitaet[] selectAktivitaetenFull(int rollenId) throws ApplicationServerException{
  		Aktivitaet[] aktivitaeten = null;
@@ -1478,7 +1478,7 @@ public class Database implements Serializable{
 	 * gibt alle Aktivitäten zurück
 	 * @return Aktiviaet-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Aktivitaet[] selectAktivitaeten() throws ApplicationServerException{
 		Aktivitaet[] aktivitaeten = null;
@@ -1508,7 +1508,7 @@ public class Database implements Serializable{
 	 * @param rolle - Id der Rolle
 	 * @param aktivitaet - Id der Aktivität
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	 public void insertRollenAktivitaet(int rolle, int aktivitaet)  throws ApplicationServerException{
 		 try{
@@ -1524,7 +1524,7 @@ public class Database implements Serializable{
 	 * @param rolle - Id der Rolle
 	 * @param aktivitaet - Id der Aktivität
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	 public void deleteRollenAktivitaet(int rolle, int aktivitaet)  throws ApplicationServerException{
 		 try{
@@ -1539,7 +1539,7 @@ public class Database implements Serializable{
 	 * gibt alle Rollen mit allen Aktivitäten zurück
 	 * @return Rolle-Array
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Rolle[] selectRollenFull() throws ApplicationServerException{
 		Rolle[] rollen = null;
@@ -1568,7 +1568,7 @@ public class Database implements Serializable{
 	/**
 	 * Abfrage aller ZVKonten in der Datenbank.
 	 * @return Liste mit ZVKonten
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectZVKonten() throws ApplicationServerException {
 		ArrayList konten = new ArrayList();	// Liste für die ZVKonten
@@ -1599,7 +1599,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, zu dem die ZVTitel ermittelt werden sollen
 	 * @return Liste mit den ZVTiteln, die zu dem ZVKonto gehören
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectZVTitel( ZVKonto zvKonto ) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();	// Liste mit den ZVTiteln des ZVKontos
@@ -1631,7 +1631,7 @@ public class Database implements Serializable{
 	 * @param zvTitel, zu dem die ZVUntertitel ermittelt werden sollen
 	 * @return Liste mit den ZVUntertiteln, die zu dem ZVTitel gehören
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectZVUntertitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();		// Liste für die ermittelten ZVUntertitel
@@ -1664,7 +1664,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches erstellt werden soll
 	 * @return kontoId vom erstellten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int insertZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
@@ -1687,7 +1687,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches überprüft werden soll
 	 * @return kontoId vom übergebenen ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
@@ -1713,7 +1713,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches überprüft werden soll
 	 * @return kontoId vom ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsDeleteZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
@@ -1739,7 +1739,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel, das abgefragt werden soll
 	 * @return titelId vom ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsZVTitel( ZVTitel titel ) throws ApplicationServerException {
 		try{
@@ -1765,7 +1765,7 @@ public class Database implements Serializable{
 	 * @param zvTitel, der abgefragt werden soll
 	 * @return titelId vom ermittelten ZVTitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsDeleteZVTitel( ZVTitel titel ) throws ApplicationServerException {
 		try{
@@ -1838,7 +1838,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel/ZVUntertitel, der überprüft werden sollte
 	 * @return Anzahl der ermittelten Bestellungen
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBestellungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
@@ -1860,7 +1860,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel/ZVUntertitel, für welches die Überprüfung durchgeführt werden soll.
 	 * @return Anzahl der nicht abgeschlossenen Bestellungen mit diesem ZVTitel/ZVUntertitel.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countActiveBestellungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
@@ -1882,7 +1882,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel/ZVUntertitel, für welches die Überprüfung durchgeführt werden soll.
 	 * @return Anzahl der Buchungen mit diesem ZVTitel/ZVUntertitel.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBuchungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
@@ -1904,7 +1904,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches abgefragt werden soll
 	 * @return Anzahl der Kontenzuordnungen, bei denen das ZVKonto angegeben ist
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countKontenzuordnungen( ZVKonto konto )throws ApplicationServerException{
 		try{
@@ -1927,7 +1927,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto für welches die Überprüfung durchgeführt werden soll
 	 * @return Zahl > 0, wenn das ZVKonto nicht zweckgebunden sein kann. Sonst Zahl = 0.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countZVKonten( ZVKonto konto )throws ApplicationServerException{
 		try{
@@ -1970,7 +1970,7 @@ public class Database implements Serializable{
 	 * @param ZVUntertitel welcher erstellt werden soll
 	 * @return ZVUntertitelId vom erstellten ZVUntertitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int insertZVUntertitel( ZVUntertitel konto ) throws ApplicationServerException {
 		try{
@@ -1991,7 +1991,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto das gelöscht werden soll.
 	 * @return Die gelöschte Zeile in der ZVKonto-Tabelle
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
@@ -2009,7 +2009,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel das gelöscht werden soll.
 	 * @return Die gelöschte Zeile in der ZVTitel-Tabelle
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteZVTitel( ZVUntertitel titel ) throws ApplicationServerException {
 		try{
@@ -2027,7 +2027,7 @@ public class Database implements Serializable{
 	 * @param ZVUntertitel das gelöscht werden soll.
 	 * @return Die gelöschte Zeile in der ZVTitel-Tabelle
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteZVUntertitel( ZVUntertitel titel ) throws ApplicationServerException {
 		try{
@@ -2046,7 +2046,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches aktualisiert werden soll.
 	 * @return zvKontoId vom aktualisierten ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
@@ -2071,7 +2071,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel, welcher aktualisiert werden soll
 	 * @return zvTitelId des aktualisierten ZVTitels
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateZVTitel( ZVTitel titel ) throws ApplicationServerException {
 		try{
@@ -2096,7 +2096,7 @@ public class Database implements Serializable{
 	 * @param ZVUntertitel welcher aktualisiert werden soll
 	 * @return ZVUntertitelId vom aktualisierten ZVUntertitel
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateZVUntertitel( ZVUntertitel titel ) throws ApplicationServerException {
 		try{
@@ -2122,7 +2122,7 @@ public class Database implements Serializable{
 	 * @param ZVKonto, welches ausgewählt werden soll.
 	 * @return ZVKonto, das ausgewählt wurde
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ZVKonto selectForUpdateZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
 		ZVKonto result = null;		// Das ausgewählte ZVKonto
@@ -2153,7 +2153,7 @@ public class Database implements Serializable{
 	 * @param ZVTitel, der aktualisiert werden soll
 	 * @return ZVTitel der aktualisiert werden soll
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ZVTitel selectForUpdateZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		ZVTitel result = null;		// Der ausgewählte ZVTitel
@@ -2184,7 +2184,7 @@ public class Database implements Serializable{
 	 * @param Id des ZVTitels
 	 * @return Ermittelter ZVTitel. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ZVTitel selectZVTitel( int id ) throws ApplicationServerException {
 		ZVTitel result = null;		// Der ausgewählte ZVTitel
@@ -2215,7 +2215,7 @@ public class Database implements Serializable{
 	 * @param ZVUntertitel, der aktualisiert werden soll
 	 * @return ZVUntertitel der aktualisiert werden soll
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ZVUntertitel selectForUpdateZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
 		ZVUntertitel result = null;		// Der ausgewählte ZVUntertitel
@@ -2246,7 +2246,7 @@ public class Database implements Serializable{
    * @param rolle
    * @return Anzahl der gleichen Bezeichnungen einer Rollen ausser der übergebenen Rolle
    * @throws ApplicationServerException
-   * @author robert
+   * author robert
    */
   public int checkRolle(Rolle rolle) throws ApplicationServerException{
   	try{
@@ -2265,7 +2265,7 @@ public class Database implements Serializable{
 	 * @param rolle
 	 * @return Id - neue Id der Rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
   public int insertRolle(Rolle rolle) throws ApplicationServerException{
 		try{
@@ -2285,7 +2285,7 @@ public class Database implements Serializable{
 	 * aktualisiert eine Rolle
 	 * @param rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateRolle(Rolle rolle) throws ApplicationServerException{
 		try{
@@ -2301,7 +2301,7 @@ public class Database implements Serializable{
 	 * löscht eine Rolle
 	 * @param rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteRolle(Rolle rolle) throws ApplicationServerException{
 	  try{
@@ -2317,7 +2317,7 @@ public class Database implements Serializable{
 	 * löscht alle Zuordnungen der Aktivitäten zu einer Rolle
 	 * @param rolle - Id der Rolle
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteRollenAktivitaeten(int rolle)  throws ApplicationServerException{
 		 try{
@@ -2371,7 +2371,7 @@ public class Database implements Serializable{
  	 * @param benutzer
  	 * @return Anzahl der Bestellungen
  	 * @throws ApplicationServerException
- 	 * @author w.flat
+ 	 * author w.flat
  	 */
  	public int countAktiveBestellungen(Benutzer benutzer)throws ApplicationServerException{
 		 try{
@@ -2392,7 +2392,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Anzahl der Bestellungen eines Benutzers
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBuchungen(Benutzer benutzer)throws ApplicationServerException{
 		 try{
@@ -2412,7 +2412,7 @@ public class Database implements Serializable{
 	  * @param FBHauptkonto
 	  * @return Kontenzuordnungen[]
 	  * @throws ApplicationServerException
-	  * @author robert
+	  * author robert
 	  */
 	 public Kontenzuordnung[] selectKontenzuordnungen(FBHauptkonto konto)throws ApplicationServerException{
 		Kontenzuordnung[] zuordnung = null;
@@ -2447,7 +2447,7 @@ public class Database implements Serializable{
 	 * @param zvKontoId
 	 * @return Kontenzuordnung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Kontenzuordnung selectKontenzuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		Kontenzuordnung zuordnung = null;
@@ -2474,7 +2474,7 @@ public class Database implements Serializable{
 	 * @param fbKontoId - Id des FBKontos
 	 * @param zvKontoId - Id des ZVKontos
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void insertKontenZuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		try{
@@ -2491,7 +2491,7 @@ public class Database implements Serializable{
 	 * @param fbKontoId - Id des FBKontos
 	 * @param zvKontoId - Id des ZVKontos
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteKontenZuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		try{
@@ -2509,7 +2509,7 @@ public class Database implements Serializable{
 	 * @param zvKontoId - Id des ZVKontos
 	 * @param status
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateKontenZuordnung(int fbKontoId, int zvKontoId, short status)throws ApplicationServerException{
 		try{
@@ -2527,7 +2527,7 @@ public class Database implements Serializable{
 	 * @param zvKontoId - Id des ZVKontos
 	 * @return ZVKonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ZVKonto selectZVKonto(int zvKontoId) throws ApplicationServerException {
 		ZVKonto konto = null;
@@ -2555,7 +2555,7 @@ public class Database implements Serializable{
 	 * @param fbHauptKontoid - Id des FBHauptkontos
 	 * @return FBHauptkonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public FBHauptkonto selectFBHauptkonto(int fbHauptKontoid) throws ApplicationServerException {
 		FBHauptkonto konto = null;
@@ -2582,7 +2582,7 @@ public class Database implements Serializable{
 	 * @param fbKontoid - Id des FBUnterkontos
 	 * @return FBUnterkonto
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public FBUnterkonto selectFBKonto(int fbKontoid) throws ApplicationServerException {
 		FBUnterkonto konto = null;
@@ -2610,7 +2610,7 @@ public class Database implements Serializable{
 	 * Abfrage aller nicht gelöschter Firmen.
 	 * @return ArrayListe mit nicht gelöschten Firmen.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectFirmen() throws ApplicationServerException {
 		ArrayList firmen = new ArrayList();		// Liste mit den Firmen
@@ -2640,7 +2640,7 @@ public class Database implements Serializable{
 	 * @param id der Firma
 	 * @return Firma
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public Firma selectFirma(int id) throws ApplicationServerException {
 		Firma firma = null;		
@@ -2666,7 +2666,7 @@ public class Database implements Serializable{
 	 * gibt die Firma für eine ASK-Bestellung zurück
 	 * @return ASK-Firma
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public Firma selectASKFirma() throws ApplicationServerException {
 		Firma firma = null;		
@@ -2691,7 +2691,7 @@ public class Database implements Serializable{
 	 * Abfrage aller gelöschter Firmen.
 	 * @return ArrayList mit gelöschten Firmen.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectDelFirmen() throws ApplicationServerException {
 		ArrayList firmen = new ArrayList();		// Liste für die gelöschten Firmen
@@ -2722,7 +2722,7 @@ public class Database implements Serializable{
 	 * @param Firma, die ausgewählt werden soll.
 	 * @return Firma, die ausgewählt wurde.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public Firma selectForUpdateFirma( Firma firma ) throws ApplicationServerException {
 		Firma result = null;
@@ -2754,7 +2754,7 @@ public class Database implements Serializable{
 	 * @param Firma, die überprüft werden soll.
 	 * @return id von der Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsFirma( Firma firma ) throws ApplicationServerException {
 		try { 
@@ -2782,7 +2782,7 @@ public class Database implements Serializable{
 	 * @param Firma, die überprüft werden soll.
 	 * @return id von der Firma
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsDelFirma( Firma firma ) throws ApplicationServerException {
 		try{
@@ -2809,7 +2809,7 @@ public class Database implements Serializable{
 	 * @param Firma, die aktualisiert werden soll.
 	 * @return id von der Firma, die aktulisiert wurde.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateFirma( Firma firma ) throws ApplicationServerException {
 		try{
@@ -2834,7 +2834,7 @@ public class Database implements Serializable{
 	 * @param Firma, die erstellt werden soll.
 	 * @return id der erstellten Firma.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	 public int insertFirma( Firma firma ) throws ApplicationServerException {
 		 try{
@@ -2855,7 +2855,7 @@ public class Database implements Serializable{
 	 * @param Firma, die gelöscht werden soll.
 	 * @return Zeilenindex von der Firma, die gelöscht wurde.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteFirma( Firma firma ) throws ApplicationServerException {
 		try{
@@ -2874,7 +2874,7 @@ public class Database implements Serializable{
 	 * @param Firma, die überprüft werden soll.
 	 * @return Anzahl der Belege.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countBelege( Firma firma )throws ApplicationServerException{
 		 try{
@@ -2896,7 +2896,7 @@ public class Database implements Serializable{
 	 * @param Firma, die überprüft werden soll.
 	 * @return Anzahl der Angebote.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int countAngebote( Firma firma )throws ApplicationServerException{
 		 try{
@@ -2919,7 +2919,7 @@ public class Database implements Serializable{
 	  * @param rollenId - Id der Rolle
 	  * @return Benutzer-Array
 	  * @throws ApplicationServerException
-	  * @author Mario
+	  * author Mario
 	  */
 	 public Benutzer[] selectUsersByRole(Institut institut, int rollenId) throws ApplicationServerException{
 		 Benutzer[] benutzer = null;
@@ -2949,7 +2949,7 @@ public class Database implements Serializable{
 	   * Ermittelt die Summe der Budgets aller zweckungebundenen ZV-Konten
 	   * @return zweckungebundenes ZV-Budget
 	   * @throws ApplicationServerException
-	   * @author Mario
+	   * author Mario
 	   */	 	
 	 public float selectNoPurposeZVBudgetSum() throws ApplicationServerException{
 		 float result = 0;
@@ -2971,7 +2971,7 @@ public class Database implements Serializable{
 	 * zugeordnet sind.
 	 * @return zweckungebundenes FB-Budget
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	 	 
 	 public float selectNoPurposeFBBudgetSum() throws ApplicationServerException{
 		 float result = 0;
@@ -2993,7 +2993,7 @@ public class Database implements Serializable{
 	 * (= Budget aller Titel + Budget Titelgruppe)
 	 * @return Gesamtbudget
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	 
 	 public float selectTotalAccountBudget(ZVKonto acc) throws ApplicationServerException{
 		 float result = 0;
@@ -3018,7 +3018,7 @@ public class Database implements Serializable{
 	 * bereits verteilten Budgets des ZV-Kontos!!!
 	 * @return Budgetsumme aller zugeordneten FB-Konten
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */	 
 	 public float selectDistributedAccountBudget(ZVKonto acc) throws ApplicationServerException{
 		 float result = 0;
@@ -3040,7 +3040,7 @@ public class Database implements Serializable{
 	  * @param kontoID - Id des FBHauptkontos
 	  * @return FBHauptkonto
 	  * @throws ApplicationServerException
-	  * @author w.flat
+	  * author w.flat
 	  */
 	 public FBHauptkonto selectForUpdateFBHauptkonto(int kontoID) throws ApplicationServerException {
 		 FBHauptkonto konto = null;
@@ -3096,7 +3096,7 @@ public class Database implements Serializable{
 	 /**
 	  * gibt alle Kostenarten aus der SQL-Tabelle Kostenarten zurück
 	  * @return Kostenart-Array
-	  * @author robert
+	  * author robert
 	  */
 	 public Kostenart[] selectKostenarten() throws ApplicationServerException{
 			Kostenart[] kostenarten = null;
@@ -3126,7 +3126,7 @@ public class Database implements Serializable{
 	 * @param typ - gibt den Typ der Bestellung an 0 = Standard, 1 = ASK, 2 = Klein
 	 * @return Id der Bestellung in der Tabelle Bestellungen
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */ 
 	public int insertBestellung(Bestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
@@ -3153,9 +3153,8 @@ public class Database implements Serializable{
 	/**
 	 * fügt eine StandardBestellung in die Tabelle ASK_Standard_Bestellungen ein
 	 * @param bestellung - Standardbestellung
-	 * @return
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void insertStandardBestellung(StandardBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
@@ -3179,7 +3178,7 @@ public class Database implements Serializable{
 	 * @param bestellId der StandardBestellung
 	 * @return Standardbestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public StandardBestellung selectStandardBestellung(int bestellId) throws ApplicationServerException{
 		StandardBestellung bestellung = null;
@@ -3218,7 +3217,7 @@ public class Database implements Serializable{
 	 * @param bestellId der ASKBestellung
 	 * @return ASKbestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ASKBestellung selectASKBestellung(int bestellId) throws ApplicationServerException{
 		ASKBestellung bestellung = null;
@@ -3254,7 +3253,7 @@ public class Database implements Serializable{
 	/**
 	 * wählt eine StandardBestellung zum Aktualisieren
 	 * @param bestellId
-	 * @return
+	 * @return StandardBestellung
 	 * @throws ApplicationServerException
 	 */
 	public StandardBestellung selectForUpdateStandardBestellung(int bestellId) throws ApplicationServerException{
@@ -3330,7 +3329,7 @@ public class Database implements Serializable{
 	 * @param bestellung - ASKbestellung
 	 * @param angebotId - Id des dazugehörigen Angebots
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void insertASKBestellung(ASKBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
@@ -3354,7 +3353,7 @@ public class Database implements Serializable{
 	 * @param angenommen - sagt aus ob das Angebot ausgewählt wurde
 	 * @return Id des Angebots
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int insertAngebot(Angebot angebot, int bestellungId) throws ApplicationServerException{
 		if(angebot != null){
@@ -3381,7 +3380,7 @@ public class Database implements Serializable{
 	 * @param position 
 	 * @param angebotId - Id des zugehörigen Angbots
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void insertPosition(Position position, int angebotId) throws ApplicationServerException{
 		if(position != null){
@@ -3404,7 +3403,7 @@ public class Database implements Serializable{
 	 * @param bestellId - Id der Bestellung
 	 * @return ArrayListe von Angeboten
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList selectAngebote(int bestellId) throws ApplicationServerException {
 		ArrayList angebote = new ArrayList();	// Liste für die ZVKonten
@@ -3438,7 +3437,7 @@ public class Database implements Serializable{
 	 * @param angebotId - Id des Angebots
 	 * @return ArrayList von Positionen
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList selectPositionen(int angebotId) throws ApplicationServerException {
 		ArrayList positionen = new ArrayList();	// Liste für die ZVKonten
@@ -3468,7 +3467,7 @@ public class Database implements Serializable{
 	 * @param referenzNr der Bestellung
 	 * @return Anzahl der Bestellungen mit dieser ReferenzNr
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public int checkReferenzNr(String referenzNr) throws ApplicationServerException{
 	  try{
@@ -3487,7 +3486,7 @@ public class Database implements Serializable{
 	 * @param filter (=> Filterung anhand des Bestellungstyps
 	 * @return ArrayListe von Bestellungen
 	 * @throws ApplicationServerException
-	 * @author Mario
+	 * author Mario
 	 */
 	public ArrayList selectBestellungen(int filter) throws ApplicationServerException {
 		ArrayList bestellungen = new ArrayList();
@@ -3525,7 +3524,7 @@ public class Database implements Serializable{
  	 * aktualisiert eine StandardBestellung angand der bestellId
  	 * @param b - Standardbestellung
  	 * @throws ApplicationServerException
- 	 * @author robert
+ 	 * author robert
  	 */
 	public void updateStandardBestellung(StandardBestellung b) throws ApplicationServerException{
 		if(b != null){
@@ -3548,7 +3547,7 @@ public class Database implements Serializable{
 	 * aktualisiert eine ASKBestellung angand der bestellId
 	 * @param b - ASKBestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateASKBestellung(ASKBestellung b) throws ApplicationServerException{
 		if(b != null){
@@ -3571,7 +3570,7 @@ public class Database implements Serializable{
 	 * gelöscht werden.
 	 * @param bestellId
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteAngebote( int bestellId ) throws ApplicationServerException {
 		try{
@@ -3586,7 +3585,7 @@ public class Database implements Serializable{
 	 * löscht ein Angebot anhand der Id. VORSICHT: vorher dazugehörige Positionen löschen
 	 * @param angebotId Id des Angebots
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteAngebot( int angebotId ) throws ApplicationServerException {
 		try{
@@ -3601,7 +3600,7 @@ public class Database implements Serializable{
 	 * löscht alle Positionen aller Angebote einer Bestellung
 	 * @param bestellId
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deletePositions(int bestellId) throws ApplicationServerException {
 		try{
@@ -3616,7 +3615,7 @@ public class Database implements Serializable{
 	 * löscht alle Positionen eines Angebots
 	 * @param angebotId - Id des Angebots
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteOfferPositions(int angebotId) throws ApplicationServerException {
 		try{
@@ -3631,7 +3630,7 @@ public class Database implements Serializable{
 	 * löscht eine Position anhand der Id
 	 * @param id der Position
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deletePosition(int id) throws ApplicationServerException {
 		try{
@@ -3646,7 +3645,7 @@ public class Database implements Serializable{
 	 * aktualisiert ein Angebot
 	 * @param angebot
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateAngebot(Angebot angebot) throws ApplicationServerException{
 		if(angebot != null){
@@ -3666,7 +3665,7 @@ public class Database implements Serializable{
 	 * aktualisiert eine Position
 	 * @param position
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updatePosition(Position p) throws ApplicationServerException{
 		if(p != null){
@@ -3689,7 +3688,7 @@ public class Database implements Serializable{
 	 * @param beleg = Beleg der eingefügt werden soll.
 	 * @return Id des eingefügten Belges.  
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int insertBeleg(int bestellung, Beleg beleg) throws ApplicationServerException {
 		if(beleg == null)
@@ -3717,7 +3716,7 @@ public class Database implements Serializable{
 	 * @param beleg = Beleg der überprüft werden soll. 
 	 * @return Id des Belegs. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int existsBeleg(int bestellung, Beleg beleg) throws ApplicationServerException {
 		if(beleg == null)
@@ -3743,7 +3742,7 @@ public class Database implements Serializable{
 	 * Löschen aller Belege einer bestimmten Bestellung. 
 	 * @param bestellung = Id der Bestellung, von der die Belege gelöscht werden sollen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int deleteBelege(int bestellung) throws ApplicationServerException {
 		try{
@@ -3761,7 +3760,7 @@ public class Database implements Serializable{
 	 * @param bestellung = Beleg der eingefügt werden soll.  
 	 * @return Id des Belegs. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectBelege(int bestellung) throws ApplicationServerException {
 		ArrayList belege = new ArrayList();		// Liste mit Belegen
@@ -3791,7 +3790,7 @@ public class Database implements Serializable{
 	 * Abfrage von allen nicht gelöschten Kleinbestellungen. 
 	 * @return Liste mit Kleinbestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectKleinbestellungen() throws ApplicationServerException {
 		ArrayList bestellungen = new ArrayList();		// Liste mit Bestellungen
@@ -3822,7 +3821,7 @@ public class Database implements Serializable{
 	 * Abfrage von allen gelöschten Kleinbestellungen. 
 	 * @return Liste mit Kleinbestellungen. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList selectDelKleinbestellungen() throws ApplicationServerException {
 		ArrayList bestellungen = new ArrayList();		// Liste mit Bestellungen
@@ -3856,7 +3855,7 @@ public class Database implements Serializable{
 	 * @param Kleinbestellung, die aktualisiert werden soll.
 	 * @return Id von der Kleinbestellung, die aktulisiert wurde.
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public int updateKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
 		try{
@@ -3883,7 +3882,7 @@ public class Database implements Serializable{
 	 * Eine neue KleinBestellung erstellen.
 	 * @param KleinBestellung, die eingefügt werden soll. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void insertKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
 		try{
@@ -3902,7 +3901,7 @@ public class Database implements Serializable{
 	 * Eine KleinBestellung zum Aktualisieren auswählen.
 	 * @param KleinBestellung, die aktualisiert werden soll. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void selectForUpdateKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
 		try{
@@ -3920,7 +3919,7 @@ public class Database implements Serializable{
 	 * @param Id des Kontos. 
 	 * @return Kleinbestellung die abgefragt wurde. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */	
 	public KleinBestellung selectKleinbestellung( int id ) throws ApplicationServerException {
 		KleinBestellung bestellung = null;
@@ -3951,9 +3950,9 @@ public class Database implements Serializable{
 	/**
 	 * Positionen zum Aktualisieren auswählen
 	 * @param angebotId - Id des Angebots
-	 * @return
+	 * @return ArrayList mit Positionen
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList selectForUpdatePositionen(int angebotId) throws ApplicationServerException {
 		ArrayList positionen = new ArrayList();	// Liste für die ZVKonten
@@ -3981,9 +3980,9 @@ public class Database implements Serializable{
 	/**
 	 * Angebote zum Aktualisieren auswählen
 	 * @param bestellId
-	 * @return
+	 * @return ArrayList mit Angeboten
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public ArrayList selectForUpdateAngebote(int bestellId) throws ApplicationServerException {
 		ArrayList angebote = new ArrayList();	// Liste für die ZVKonten
@@ -4017,7 +4016,7 @@ public class Database implements Serializable{
 	 * VORSICHT ! Vorher die Bestellungen ASK, Standard bzw. Klein löschen.
 	 * @param bestellId - Id der Bestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteBestellung(int bestellId) throws ApplicationServerException{
 		try{
@@ -4034,7 +4033,7 @@ public class Database implements Serializable{
 	 * VORSICHT ! Vorher alle Angebote löschen.
 	 * @param bestellId - Id der Bestellung
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void deleteASK_Standard_Bestellung(int bestellId) throws ApplicationServerException{
 		try{
@@ -4074,7 +4073,7 @@ public class Database implements Serializable{
 	 * @param zvTitel
 	 * @param summand
 	 * @throws ApplicationServerException
-	 * @author robert
+	 * author robert
 	 */
 	public void updateVormerkungen(FBUnterkonto fbKonto, ZVUntertitel zvTitel, float summand) throws ApplicationServerException{
 		try{
@@ -4412,7 +4411,7 @@ public class Database implements Serializable{
 	 * @param konto = FBkonto, das bei der Bestellung angegeben wurde. 
 	 * @param betrag = Der Betrag, den der ZVTitel und das FBKonto bekommt. 
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void updateAccountStates(ZVKonto zvKonto, ZVUntertitel zvTitel, FBUnterkonto fbKonto, 
 							float betragZvKonto, float betragZvTitel, float betragFbKonto) throws ApplicationServerException{
@@ -4433,7 +4432,7 @@ public class Database implements Serializable{
 	 * @param typ = Der Typ der Buchung. 
 	 * @return Buchung, die ermittelt wurde
 	 * @throws ApplicationServerException
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public Buchung selectBuchung(int bestellungsId, String typ) throws ApplicationServerException{
 		Buchung buchung = null;

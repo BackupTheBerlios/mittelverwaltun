@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * @author robert *  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern: * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * author robert *  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern: * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 
 
@@ -127,7 +127,7 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 
 	/**
 	 * Die Unterkonten von dem Hauptkonto ermittteln
-	 * @return
+	 * @return ArrayList mit Unterkonten
 	 */
 	public ArrayList getUnterkonten() {
 		return unterkonten;

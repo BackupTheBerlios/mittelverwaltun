@@ -191,7 +191,7 @@ public class PositionsTableModel extends DefaultTableModel {
 	/**
 	 * gibt die Summe der Mehrwertsteuer der Positionen mit 7 %
 	 * @return Summe der 7 % Mehrwertsteuer
-	 * @author robert
+	 * author robert
 	 */
 	public float get7PercentSum(){
 	
@@ -222,7 +222,7 @@ public class PositionsTableModel extends DefaultTableModel {
 	/**
 	 * gibt die Summe der Mehrwertsteuer der Positionen mit 7 %
 	 * @return Summe der 7 % Mehrwertsteuer
-	 * @author robert
+	 * author robert
 	 */
 	public float get16PercentSum(){
 

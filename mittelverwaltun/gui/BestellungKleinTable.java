@@ -33,7 +33,7 @@ public class BestellungKleinTable extends JTable {
 	 * Es können die Belege der Auszahlungsanordnung gespeichert werden.
 	 * @param frame = BestellungKlein-Frame als ActionListener
 	 * @param firmen = Liste mit Firmen für die ComboBox
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public BestellungKleinTable(BestellungKlein frame, ArrayList firmen) {
 		this.frame = frame;		// ActionListener für die Löschen-Buttons
@@ -78,7 +78,7 @@ public class BestellungKleinTable extends JTable {
 	 * Erstellt eine Tabelle mit fünf Spalten für den BestellungKlein-Frame. <br>
 	 * Es werden die Belege angezeigt und können nicht verändert werden.
 	 * @param belege = Liste mit Belegen, die angezeigt werden sollen. 
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public BestellungKleinTable(ArrayList belege) {
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);		// Keine automatische Größen-Anpassung
@@ -119,7 +119,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Neue Zeile in der Tabelle einfügen.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void addRaw() {
 		Object[] o = {new Integer(this.getRowCount() + 1), (firmen.get(0)==null ? new Firma():firmen.get(0)), "", new Float(0)};
@@ -131,7 +131,7 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * Neue Zeile in der Tabelle einfügen.
 	 * @param beleg = Beleg, der eingefügt werden soll.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void addRaw(Beleg beleg) {
 		Object[] o = {new Integer(beleg.getNummer()), beleg.getFirma(), beleg.getArtikel(), new Float(beleg.getSumme())};
@@ -142,7 +142,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Error-String der Belege ermitteln.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public String getErrorString() {
 		String error = "";
@@ -171,7 +171,7 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * Generierung der Belge aus der Tabelle. 
 	 * @return Liste mit Belegen
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public ArrayList getBelege() {
 		ArrayList belege = new ArrayList();
@@ -188,7 +188,7 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * Die Summe aller Felder ermitteln. 
 	 * @return Summe aller Belege 
-	 * @author w.flat
+	 * author w.flat
 	 */ 
 	public float getSum() {
 		float sum = 0;
@@ -203,7 +203,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Die aktuelle Spalte löschen.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void delPresRaw() {
 		((DefaultTableModel)getModel()).removeRow(getSelectedRow());
@@ -215,7 +215,7 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * Neue Firmen speichern.
 	 * @param firmen = Neue Liste mit Firmen
-	 * @author w.flat
+	 * author w.flat
 	 */
 	public void setFirmen(ArrayList firmen) {
 		if(firmen == null || this.firmen == firmen)	// Wenn keine Firmen angegeben
@@ -226,7 +226,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Beleg-Nr. aktualisieren.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void setBelegNr() {
 		for(int i = 0; i < this.getRowCount(); i++) {
@@ -236,7 +236,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Die Struktur der Tabelle festlegen beim Anzeigen einer Bestellung.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void updateTableStructureDel() {
 		// Einstellungen der ersten Spalte = "Beleg-Nr"
@@ -263,7 +263,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * Die Struktur der Tabelle festlegen beim Erstellen einer Bestellung.
-	 * @author w.flat
+	 * author w.flat
 	 */
 	private void updateTableStructure(){
 		// Einstellungen der ersten Spalte = "Beleg-Nr"
@@ -305,7 +305,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * JButton-Renderer für die letzte Spalte.
-	 * @author w.flat
+	 * author w.flat
 	 * 02.03.2005
 	 */
 	private static class TableButtonCellRenderer implements TableCellRenderer {
@@ -323,7 +323,7 @@ public class BestellungKleinTable extends JTable {
 	
 	/**
 	 * JButton-CellEditor für die letzte Spalte.
-	 * @author w.flat
+	 * author w.flat
 	 * 02.03.2005
 	 */
 	private static class TableButtonCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {        

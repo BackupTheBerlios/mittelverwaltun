@@ -36,8 +36,7 @@ public class StartWindow extends JFrame implements ActionListener {
 	final static int WND_HEIGHT = 252;		// Höhe des Login-Fensters
 
 	/**
-	 * Erzeugt ein Fenster mit demm die Anmeldung im FBMittelverwaltungs-System erfolgt. 
-	 * @author w.flat
+	 * Erzeugt ein Fenster mit demm die Anmeldung im FBMittelverwaltungs-System erfolgt.
 	 */
 	public StartWindow() {
 		super("Login Mittelverwaltung");
@@ -136,7 +135,6 @@ public class StartWindow extends JFrame implements ActionListener {
 	/**
 	 * Reaktion auf die Button-Ereignisse. 
 	 * @param e = Ereignis, das ausgelöst wurde.
-	 * @author w.flat
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == butAbbrechen) {		// Wenn der Abbrechen-Button betätigt wurde

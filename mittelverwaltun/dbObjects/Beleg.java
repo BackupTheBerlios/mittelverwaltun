@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Klasse zum Speichern der Belege bei der Auszahlungsanordnung. 
- * @author w.flat
+ * author w.flat
  */
 public class Beleg implements Serializable {
 
@@ -40,7 +40,7 @@ public class Beleg implements Serializable {
 	 * @param firma = Die Firma bei der der Artikel gekauft wurde. 
 	 * @param artikel = Die Artikelbezeichnung.
 	 * @param summe = Der Preis des Artikels.
-	 * @author w.flat 
+	 * author w.flat 
 	 */
 	public Beleg(int id, int nummer, Firma firma, String artikel, float summe) {
 		this.id = id;
