@@ -2333,31 +2333,66 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement("SELECT " +
 																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
-																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk " +
+																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
 															  "WHERE i.id = ? " +
 																	"AND i.id = fbk.institutsId  " +
-																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND be.phase != 0 " +
+																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																	"AND be.phase != 0 " +
 																	"AND be.geloescht = '0'");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//336 Report 8 für ein Institut: FB-Konto, ZV-Konto, Einnahmen
 			ps = con.prepareStatement("SELECT " +
-																		"fbk.bezeichnung AS fbKonto, b.betragFbKonto1 " +
+																		"fbk.bezeichnung AS fbKonto, SUM(b.betragFbKonto1) " +
 																"FROM " +
-																	"Institute i, FBKonten fbk, Buchungen b " +
+																	"Institute i, FBKonten fbk, Buchungen b, Haushaltsjahre h " +
 															  "WHERE i.id = ? " +
 																	"AND i.id = fbk.institutsId  " +
 																	"AND b.fbKonto1 = fbk.id " +
-																	"AND b.typ = '5' ");
+																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																	"AND b.typ = '5' " +																"GROUP BY fbk.bezeichnung");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//337
-			statements[i++] = null;
+		{//337 Report 6
+			ps = con.prepareStatement("SELECT " +
+																		"zvk.bezeichnung AS zvKonto, SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben " +
+																"FROM " +
+																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
+																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
+															  "WHERE i.id = ? " +
+																	"AND i.id = fbk.institutsId  " +
+																	"AND be.fbKonto = fbk.id " +
+																	"AND be.zvTitel = zvt.id " +
+																	"AND zvt.zvKontoId = zvk.id " +
+																	"AND be.phase != 0 " +
+																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																	"AND be.geloescht = '0' " +																"GROUP BY zvk.bezeichnung");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//338
-			statements[i++] = null;
+		{//338 Report 5
+			ps = con.prepareStatement("SELECT " +
+																		"i.bezeichnung AS instiut, " +																		"SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"SUM(fbk.budget) AS kontostand " +																"FROM " +
+																	"ZVKontentitel zvt, ZVKonten zvk, " +
+																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
+															  "WHERE zvk.id = ? " +
+																	"AND i.id = fbk.institutsId  " +
+																	"AND be.fbKonto = fbk.id " +
+																	"AND be.zvTitel = zvt.id " +
+																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																	"AND be.geloescht = '0' " +																"GROUP BY i.bezeichnung");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//339
 			statements[i++] = null;

@@ -3926,7 +3926,7 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * gibt eine ArrayList von ArrayList für den Report7 zurück. Nähere Infos in gui.Reports Klasse
+	 * gibt eine ArrayList von ArrayList für den Report8 zurück. Nähere Infos in gui.Reports Klasse
 	 * @param i - Institut für diesen Report
 	 * @return
 	 * @throws ApplicationServerException
@@ -3952,6 +3952,70 @@ public class Database implements Serializable{
 			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 103, e.getMessage() );
+		}
+
+		return report;
+	}
+	
+	/**
+	 * gibt eine ArrayList von ArrayList für den Report6 zurück. Nähere Infos in gui.Reports Klasse
+	 * @param i - Institut für diesen Report
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectReport6(Institut i) throws ApplicationServerException {
+		ArrayList report = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			Object[] parameters = { new Integer(i.getId()) };
+			ResultSet rs = statements.get(337).executeQuery(parameters); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(2)));		// Ausgaben
+				
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 104, e.getMessage() );
+		}
+
+		return report;
+	}
+	
+	/**
+	 * gibt eine ArrayList von ArrayList für den Report5 zurück. Nähere Infos in gui.Reports Klasse
+	 * @param zvk - ZVKonto für den Report
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectReport5(ZVKonto zvk) throws ApplicationServerException {
+		ArrayList report = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			Object[] parameters = { new Integer(zvk.getId()) };
+			ResultSet rs = statements.get(338).executeQuery(parameters); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(2)));		// Ausgaben
+			
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 105, e.getMessage() );
 		}
 
 		return report;
