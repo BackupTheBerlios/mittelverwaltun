@@ -34,6 +34,21 @@ public class Bestellung implements Serializable {
 	
 	private char typ;
 
+	public Bestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
+				ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ){
+		this.id = id;
+		this.referenznr = referenznr;
+		this.huel = huel;
+		this.datum = datum;
+		this.besteller = besteller;
+		this.auftraggeber = auftraggeber;
+		this.empfaenger = empfaenger;
+		this.zvtitel = zvtitel;
+		this.fbkonto = fbkonto;
+		this.bestellwert = bestellwert;
+		this.phase = phase;
+		this.typ = typ;
+	}
 
 	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
 										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
