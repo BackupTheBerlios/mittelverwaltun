@@ -143,7 +143,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		buBestellen.addActionListener(this);
 		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
 		buFBKonto.addActionListener(this);
-
+		
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
@@ -254,7 +254,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     labInstitut2.setBounds(new Rectangle(7, 77, 89, 15));
     jLabel1.setFont(new java.awt.Font("Dialog", 3, 16));
     jLabel1.setText("Bestellung");
-    jLabel1.setBounds(new Rectangle(8, 7, 125, 28));
+    jLabel1.setBounds(new Rectangle(7, 6, 107, 28));
     jScrollPane1.setBounds(new Rectangle(6, 38, 589, 442));
     labBestellNr1.setFont(new java.awt.Font("Dialog", 0, 12));
     labBestellNr1.setBounds(new Rectangle(334, 9, 95, 23));
@@ -414,12 +414,12 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(jPanel1, null);
     oben.add(jLabel22, null);
     oben.add(jLabel22, null);
-    this.getContentPane().add(jLabel1, null);
     this.getContentPane().add(jScrollPane1, null);
     this.getContentPane().add(buSpeichern, null);
     this.getContentPane().add(buDrucken, null);
     this.getContentPane().add(buBestellen, null);
     this.getContentPane().add(buBeenden, null);
+    this.getContentPane().add(jLabel1, null);
     jScrollPane1.getViewport().add(panelBeilage, null);
 		panelBeilage.setSize(548, 800);
 		panelBeilage.setPreferredSize(new Dimension(548, 800));
@@ -480,7 +480,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		for(int i = 0; i < dtm.getRowCount(); i++){
 			Angebot angebot = (Angebot)dtm.getValueAt(i, 1);
-			
+
 			// ein Angebot hat mindestens eine Position auch wenn er nur die Summe hat
 			if(angebot.getPositionen().size() == 0){
 				ArrayList positionen = new ArrayList();
@@ -666,6 +666,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 		tpVerwendungszweck.setText(bestellung.getVerwendungszweck());
 		cbDrittelMittel.setSelected(bestellung.getPlanvorgabe());
+
 
 		ArrayList angebote = bestellung.getAngebote();
 		for(int i = 0; i < angebote.size(); i++){

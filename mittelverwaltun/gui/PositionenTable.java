@@ -28,8 +28,8 @@ import dbObjects.Position;
  */
 public class PositionenTable extends JTable {
 	ActionListener al;
-	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis","","Id"};
-	private Object[][] data = {{new Integer(1),"",new Float(0),new Float(0.16), new Float(0), new Float(0), new String("Del"), new Integer(0)}};
+	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis","","Object"};
+	private Object[][] data = {{new Integer(1),"",new Float(0),new Float(0.16), new Float(0), new Float(0), new String("Del"), new Position()}};
 	
 	public PositionenTable(){
 		setModel(new DefaultTableModel(title, 0){
@@ -96,13 +96,13 @@ public class PositionenTable extends JTable {
 			Position position = (Position)positions.get(i);
 			
 			data[i][0] = new Integer(position.getMenge());
-			data[i][1] = position;
+			data[i][1] = position.getArtikel();
 			data[i][2] = new Float(position.getEinzelPreis());
 			data[i][3] = new Float(position.getMwst());
 			data[i][4] = new Float(position.getRabatt());
 			data[i][5] = new Float(position.getGesamtpreis());
 			data[i][6] = new String("Del");
-			data[i][7] = new Integer(position.getId());
+			data[i][7] = position;
 		}
 
 		al = new ActionListener() {            

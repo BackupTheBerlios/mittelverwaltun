@@ -261,7 +261,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 			setAngebot();
 		}else if ( e.getSource() == buAddPosition ) {
 			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-			Object[] o = {new Integer(1),new Position(),new Float(0), new Float(0.16), new Float(0), new Float(0)};
+			Object[] o = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0),"Del",new Position()};
 
 			dtm.addRow(o);
 			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
@@ -287,7 +287,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																		  null);
 		else{
 			for(int i = 0; i < tablePositionen.getRowCount(); i++){
-				Position position = (Position)(dtm.getValueAt(i, 1));
+				Position position = (Position)(dtm.getValueAt(i, 7));
 				
 				position.setArtikel("" + (dtm.getValueAt(i, 1)));
 				position.setEinzelPreis(((Float)dtm.getValueAt(i, 2)).floatValue());
@@ -301,11 +301,21 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 			if(positionen.size() == 0){
 				if(angebot != null){
 					// die Bestellsumme neu setzen
-					((Position)angebot.getPositionen().get(0)).setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
-					positionen.add((Position)(angebot.getPositionen().get(0)));
+					Position pos = (Position)angebot.getPositionen().get(0);
+					if(pos.getMwst() != 0){
+						Position p = new Position();
+						p.setMenge(1);
+						p.setArtikel("");
+						p.setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
+						positionen.add(p);
+					}else{
+						pos.setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
+						positionen.add((Position)(angebot.getPositionen().get(0)));
+					}
 				}else{
 					Position pos = new Position();
 					pos.setMenge(1);
+					pos.setArtikel("");
 					pos.setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
 					positionen.add(pos);
 				}
