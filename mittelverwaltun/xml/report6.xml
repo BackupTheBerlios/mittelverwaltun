@@ -7,22 +7,16 @@
   <!-- REPORT HEADER -->
   <!-- This band appears once at the beginning of the report.  In this example, -->
   <!-- the header contains four labels. -->
-  <reportheader height="70" fontname="SansSerif" fontstyle="plain" fontsize="10">
+  <reportheader height="100" fontname="SansSerif" fontstyle="plain" fontsize="10">
 
-    <rectangle x="0" y="0" width="100%" height="30"
-      color="#6699CC" weight="0" draw="true" fill="true"/>
-		<rectangle x="0" y="0" width="100%" height="30"
+    <image-field x="1" y="1" width="295" height="80" fieldname="logo"/>
+    <rectangle x="0" y="0" width="100%" height="82"
       color="#000000" weight="0" draw="true" fill="false"/>
 		
-		<label fontname="Tahoma" fontstyle="bold" fontsize="18"
-      x="0" y="8" width="100%" height="18" alignment="center"
-      >FB-Mittelverwaltung Reports</label>
-		
-    <string-field fieldname="reportName" fontname="Tahoma" fontstyle="bold" 
-    	fontsize="12" x="3" y="40" width="100%" height="0"
-      alignment="left" dynamic="true"/>
-		<line x1="0" y1="60" x2="0" y2="60" color="#CCCCCC" weight="0.5"/>
-
+		<label fontname="Tahoma" fontstyle="bold-italic" fontsize="18"
+      x="310" y="35" width="100%" height="22" alignment="left"
+      >R E P O R T S</label>
+    
   </reportheader>
   
 	<!-- PAGE FOOTER -->
@@ -61,12 +55,9 @@
     <string-field x="0" y="7" width="100%" height="9" alignment="left"
       fontname="Tahoma" fontstyle="plain" fontsize="8"
       fieldname="ZV-Konto"/>
-
-    <string-field x="0" y="7" width="95%" height="9" alignment="right"
-      fontname="Tahoma"
-      fieldname="Ausgaben (Institut)"/>
-    <label fontname="Tahoma" fontsize="8" x="0" y="7" width="100%" height="9" alignment="right">Euro</label>
-
+		    
+		<number-field fontname="Tahoma" fontstyle="plain" fontsize="8" x="0" y="7" width="100%" height="9" alignment="right" 
+			format="#,##0.00 'Euro'" fieldname="Ausgaben (Institut)"/>
   </items>
 
   <!-- FUNCTIONS -->
@@ -76,12 +67,35 @@
 
     <function name="PageNumber" class="org.jfree.report.function.PageFunction"/>
 
-    <function name="OverallCount"
-      class="org.jfree.report.function.ItemCountFunction">
-      <properties>
-        <property name="field">Name</property>
-      </properties>
-    </function>
+    <function name="NameButton" class="org.jfree.report.function.PaintComponentFunction">
+	    <properties>
+	      <property name="field">CreateButton</property>
+	      <property name="element">nameField</property>
+	      <property name="scale">5</property>
+	    </properties>
+	  </function>
+	  <expression name="CreateButton" class="org.jfree.report.modules.misc.beanshell.BSHExpression">
+	    <properties>
+	      <property name="expression">
+					<![CDATA[
+						import javax.swing.JCheckBox;
+						
+						/**
+						 * Creates a SwingButton using the text of column "ZV-Konto" as ButtonText
+						 */
+						Object getValue(){
+						  // the dataRow is null during the initialization.
+						  if (dataRow == null) return null;
+							JCheckBox cb = new JCheckBox();
+							cb.setSelected(true);
+							cb.setBackground(Color.WHITE);
+						  
+						  return cb;
+						}
+						]]>
+      </property>
+    </properties>
+  </expression>
 
   </functions>
 
