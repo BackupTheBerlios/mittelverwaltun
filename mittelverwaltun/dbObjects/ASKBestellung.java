@@ -79,7 +79,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 						this.getId(), this.getReferenznr(), this.getHuel(), this.getDatum()==null?null:(Date)this.getDatum().clone(), 
 						this.getBesteller()==null?null:(Benutzer)this.getBesteller().clone(), this.getAuftraggeber()==null?null:(Benutzer)this.getAuftraggeber().clone(), 
 						this.getEmpfaenger()==null?null:(Benutzer)this.getEmpfaenger().clone(), t, k, this.getBestellwert(), this.getVerbindlichkeiten(),
-						this.getPhase(), this.getTyp(), this.angebot == null ? null : (Angebot)this.angebot.clone(), this.bemerkung,
+						this.getPhase(), this.angebot == null ? null : (Angebot)this.angebot.clone(), this.bemerkung,
 						this.swbeauftragter == null ? null : (Benutzer)this.swbeauftragter.clone());
 	}
 

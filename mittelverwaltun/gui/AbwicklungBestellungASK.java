@@ -532,7 +532,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 			ZVTitel t = new ZVTitel( 1, new ZVKonto ("","02436","",0), "", "24875", "00", 10000, "", "" );
 			FBUnterkonto k = new FBUnterkonto( "Institut für Entwicklung", i, "00", "0000" );
 			
-			ASKBestellung bestellung = new ASKBestellung(1, "100000", "", d, b, b, b, t, k, 500, 0,'1', '1', a, "keine Bemerkung", b);
+			ASKBestellung bestellung = new ASKBestellung(1, "100000", "", d, b, b, b, t, k, 500, 0,'1', a, "keine Bemerkung", b);
 			
 			AbwicklungBestellungASK iFrame= new AbwicklungBestellungASK(applicationServer, bestellung);
 			desk.add(iFrame);
