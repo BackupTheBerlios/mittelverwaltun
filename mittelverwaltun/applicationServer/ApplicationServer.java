@@ -35,6 +35,7 @@ public interface ApplicationServer extends Remote {
 	public ResultSet query(String query);
 	public void update(String query);
 
+	public Institut[] getFBKontenForUser(Benutzer user) throws ApplicationServerException;
 	public ArrayList getFBHauptkonten( Institut institut ) throws ApplicationServerException;
 	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException;
 	public Institut[] getInstitutesWithAccounts() throws ApplicationServerException;

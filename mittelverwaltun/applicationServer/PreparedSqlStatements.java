@@ -397,7 +397,21 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//56			(37)
-			statements[i++] = null;
+			/**
+			 * Abfrage der FBKonten die im bestimmten Institut sind und für Kleinbestellungen freigegeben sind. <br>
+			 * Diese Konten dürfen außer einem bestimmten Benutzer nicht zugeordnet sein.
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT id, haushaltsjahrId, institutsId, bezeichnung, " + 
+											"hauptkonto, unterkonto, budget, dispoLimit, vormerkungen, " + 											"pruefBedingung, kleinbestellungen, geloescht " + 
+										"FROM FBKonten " + 
+										"WHERE institutsId = ? AND hauptkonto = ? AND kleinbestellungen = '1' AND " + 											"geloescht = '0' AND unterkonto != \"0000\" AND " + 
+											"id NOT IN (SELECT DISTINCT(a.id) " + 														"FROM FBKonten a, Benutzer b " + 
+														"WHERE a.hauptkonto = ? AND a.unterkonto != \"0000\" AND " + 															"a.institutsId = b.institutsId AND " + 
+															"a.kleinbestellungen = '1' AND " + 															"a.id = b.privatKontoId AND " + 
+															"b.id != ? AND a.geloescht = '0')" ); 
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//57			(38)
 			statements[i++] = null;
@@ -935,8 +949,8 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT id, zvKontoID, bezeichnung, " +
-											"titel, untertitel, budget, " +
-											"bemerkung, pruefBedingung " +
+											"titel, untertitel, budget, vormerkungen, " +
+											"bemerkung, pruefBedingung, geloescht " +
 										"FROM ZVKontenTitel " +
 										"WHERE zvKontoId = ? "+
 											"AND untertitel = \"\" " +
@@ -950,8 +964,8 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT id, zvKontoID, bezeichnung, " +
-											"titel, untertitel, budget, " +
-											"bemerkung, pruefBedingung " +
+											"titel, untertitel, budget, vormerkungen, " +
+											"bemerkung, pruefBedingung, geloescht " +
 										"FROM ZVKontenTitel " +
 										"WHERE zvKontoId = ? " +
 											"AND NOT (untertitel = \"\") "+
@@ -981,11 +995,11 @@ public class PreparedSqlStatements {
 			 */
 			ps = con.prepareStatement( 	"INSERT " +
 										"INTO ZVKontenTitel " +
-											"(zvKontoID, bezeichnung, titel, " +
-											"untertitel, budget, bemerkung, pruefBedingung) " +
-										"VALUES (?,?,?,?,?,?,?)");
-			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.FLOAT, Types.VARCHAR, Types.VARCHAR};
+											"(zvKontoID, bezeichnung, titel, untertitel, " +
+											"budget, vormerkungen, bemerkung, pruefBedingung) " +
+										"VALUES (?,?,?,?,?,?,?,?)");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+							Types.FLOAT, Types.FLOAT, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//144		(48)
@@ -1004,11 +1018,11 @@ public class PreparedSqlStatements {
 			 */
 			ps = con.prepareStatement( 	"UPDATE ZVKontenTitel " +
 										"SET zvKontoID = ?, bezeichnung = ?, titel = ?, " +
-											"untertitel = ?, budget = ?, bemerkung = ?, " +
+											"untertitel = ?, budget = ?, vormerkungen = ?, bemerkung = ?, " +
 											"pruefBedingung = ?, geloescht = ? " +
 										"WHERE id = ?");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.FLOAT, Types.VARCHAR,
+							Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.VARCHAR,
 							Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1018,7 +1032,7 @@ public class PreparedSqlStatements {
 			 * @author w.flat 
 			 */
 			ps = con.prepareStatement( "SELECT zvKontoID, bezeichnung, " +
-											 "titel, untertitel, budget, " +
+											 "titel, untertitel, budget, vormerkungen, " +
 											 "bemerkung, pruefBedingung, geloescht " +
 										"FROM ZVKontenTitel " +
 										"WHERE id = ? FOR UPDATE" );
@@ -1046,7 +1060,7 @@ public class PreparedSqlStatements {
 			 * @author w.flat 
 			 */
 			ps = con.prepareStatement( "SELECT zvKontoID, bezeichnung, " +
-											 "titel, untertitel, budget, " +
+											 "titel, untertitel, budget, vormerkungen, " +
 											 "bemerkung, pruefBedingung, geloescht " +
 										"FROM ZVKontenTitel " +
 										"WHERE id = ? " );

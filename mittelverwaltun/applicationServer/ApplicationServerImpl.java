@@ -245,9 +245,57 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException {
 		return db.selectFBUnterkonten( institut, hauptkonto );	// Die ermittelten Konten zurückgeben
 	}
+
+	/**
+	 * Abfrage der FBKonten, die ein Benutzer für seine Kleinbestellung verwenden kann.
+	 * @param user = Benutzer, für den die Konten ermittelt werden sollen.
+	 * @return Institut-Array(1) mit den ermittelten Konten. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public Institut[] getFBKontenForUser(Benutzer user) throws ApplicationServerException {
+		if(user == null)		// Wenn kein User angegeben
+			return null;
+		// Institut mit Hauptkonten
+		Institut[] inst = getInstituteWithAccounts(user.getKostenstelle(), false);
+		ArrayList hauptkonten = inst[0].getHauptkonten();	// Die Hauptkonten eines Instituts
+		FBHauptkonto hauptkonto;
+		for(int i = 0; i < hauptkonten.size(); i++) {
+			if((hauptkonto = (FBHauptkonto)hauptkonten.get(i)) == null)	// Kein FBHauptkonto vorhanden
+				continue;
+			hauptkonto.setUnterkonten(db.selectFBUnterkontenForUser(user, hauptkonto));
+		}
+		int temp = 0;
+		// Löschen der nicht benötigten FBHauptkonten
+		while(temp < hauptkonten.size()) {
+			if((hauptkonto = (FBHauptkonto)hauptkonten.get(temp)) == null) {	// Kein FBHauptkonto vorhanden
+				hauptkonten.remove(temp);		// Dieses Hauptkonto löschen
+				continue;
+			}
+			// Wenn das FBHauptkonto für Kleinbestellungen freigegeben ist oder 
+			// das FBHauptkonto FBUnterkonten enthält, dann wird das FBHauptkonto nicht gelöscht
+			if(hauptkonto.getKleinbestellungen() || hauptkonto.getUnterkonten().size() > 0) {
+				temp++;
+			} else {
+				hauptkonten.remove(temp);
+			}
+		}
+		// Kontenzuordnungen ermitteln
+		for(int i = 0; i < hauptkonten.size(); i++) {
+			hauptkonto = (FBHauptkonto)hauptkonten.get(i);
+			Kontenzuordnung[] zuordnungen = db.selectKontenzuordnungen(hauptkonto);
+			hauptkonto.setZuordnung(zuordnungen);
+			for(int j = 0; j < hauptkonto.getUnterkonten().size(); j++) {
+				((FBUnterkonto)hauptkonto.getUnterkonten().get(i)).setZuordnung(zuordnungen);
+			}
+		}
+
+		return inst;
+	}
 	
 	/**
 	 * Ein neues FBHauptkonto erstellen.
+	 * @param FBHauptkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Hauptkontos
 	 * @throws ApplicationServerException
 	 * @author w.flat
@@ -277,6 +325,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	/**
 	 * Ein neues FBUnterkonto erstellen.
+	 * @param FBUnterkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Unterkontos
 	 * @throws ApplicationServerException
 	 * @author w.flat
@@ -305,6 +354,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	/**
 	 * Ein FBHauptkonto löschen. Dabei werden auch die Unterkonten gelöscht.
+	 * @param FBHauptkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBHauptkontos
 	 * @throws ApplicationServerException
 	 * @author w.flat
@@ -375,6 +425,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Ein FBUnterkonto löschen.
+	 * @param FBUnterkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBUnterkontos
 	 * @throws ApplicationServerException
 	 * @author w.flat
