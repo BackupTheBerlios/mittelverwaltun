@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 
-
 import dbObjects.*;
 
 
@@ -53,7 +52,7 @@ public class Database implements Serializable{
 			statements = new PreparedSqlStatements(con);	//
 			System.out.println("Done.");
 		}catch (ClassNotFoundException e){
-			throw new ConnectionException("Connection Exception: Invalid database driver.");
+			throw new ConnectionException("Connection Exception: Invalid database driver." + e.getMessage());
 		}catch (SQLException e){
 			throw new ConnectionException("Connection Exception: Connection refused.");
 		} 

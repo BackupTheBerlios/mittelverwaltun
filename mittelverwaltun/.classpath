@@ -8,8 +8,5 @@
     <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jfreereport-0.8.4_10-all.jar"/>
     <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jcommon-0.9.3a.jar"/>
     <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/pixie-0.8.1.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/poi-2.0-RC1-20031102.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/bsh-1.2b6.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/gnujaxp.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
