@@ -149,34 +149,39 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 /**
 	  * Budget eines FBHauptkontos aktualisieren.
 	  */
-	 public void setAccountBudget ( FBHauptkonto acc, float budget ) throws ApplicationServerException{
-
-		 //TODO: Parameter nicht budget sondern überweisungebetrag, dann test auf maximal zuweisungsfähigen betrag?!
-		 FBHauptkonto accOld = db.selectForUpdateFBHauptkonto(acc.getId());
-
-		 if (accOld == null){
-			 throw new ApplicationServerException(64);
-			 //Konto existiert nicht mehr 64
-		 }else if (accOld.getGeloescht()){
-			 throw new ApplicationServerException(152);
-			 //Konto wurde geloescht 152
-		 }else if (acc.is(accOld)){
-			 if (acc.getBudget() == accOld.getBudget()){
-				 accOld.setBudget(budget);
-				 if(db.updateFBHauptkonto(accOld)!=1){
-					 throw new ApplicationServerException(155);
+	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException{
+	 	try{
+			 //TODO: Test auf maximal zuweisungsfähigen betrag?!
+			 FBHauptkonto accOld = db.selectForUpdateFBHauptkonto(acc.getId());
+	
+			 if (accOld == null){
+				 throw new ApplicationServerException(64);
+				 //Konto existiert nicht mehr 64
+			 }else if (accOld.getGeloescht()){
+				 throw new ApplicationServerException(152);
+				 //Konto wurde geloescht 152
+			 }else if (acc.is(accOld)){
+				 if (acc.getBudget() == accOld.getBudget()){
+					 accOld.setBudget(accOld.getBudget() + remmitance);
+					 if(db.updateFBHauptkonto(accOld)!=1){
+						 throw new ApplicationServerException(155);
+					 }
+					 bucheMittelverteilung(b, accOld, remmitance);
+				 }else{
+					 acc.setBudget(accOld.getBudget());
+					 throw new ApplicationServerException(153);
+					 //Budget wurde zwischenzeitlich aktualisiert 153
 				 }
 			 }else{
-				 acc.setBudget(accOld.getBudget());
-				 throw new ApplicationServerException(153);
-				 //Budget wurde zwischenzeitlich aktualisiert 153
+				 throw new ApplicationServerException(154);
+				 // Konten stimmen nicht überein
 			 }
-		 }else{
-			 throw new ApplicationServerException(154);
-			 // Konten stimmen nicht überein
-		 }
-		 
-		 db.commit();
+			 
+			 db.commit();
+	 	}catch(ApplicationServerException e){
+	 		db.rollback();
+	 		throw e;
+	 	}
 	 }
 	 
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
@@ -1885,10 +1890,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					dBestellwert = -original.getBestellwert();
 				else dBestellwert = edited.getBestellwert() - original.getBestellwert();
 				
-				System.out.println("dBestellwert = "+dBestellwert);
 				// Bestimme Zahlungsdifferenz
 				float dZahlung = ( edited.getBestellwert() - edited.getVerbindlichkeiten()) - (original.getBestellwert() - original.getVerbindlichkeiten());
-				System.out.println("dZahlung = " + dZahlung);
+			
 				// Aktualisiere Kontenstände
 				if (dBestellwert != 0){ // => Bestellungsänderung
 					
@@ -1901,17 +1905,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					
 					if (original.getZvtitel().getBudget() > original.getZvtitel().getVormerkungen())
 						availableZvBudget += (original.getZvtitel().getBudget() - original.getZvtitel().getVormerkungen());
-					System.out.println("availableZvBudget = " + availableZvBudget);
 					// Bestimme verfügbares FB-Budget
 					float availableFbBudget = original.getFbkonto().getBudget() - original.getFbkonto().getVormerkungen();
 					
 					if ((dBestellwert > availableZvBudget)||(dBestellwert > availableFbBudget)){
-						System.out.println("keine Deckung");//Error keine Deckung => rollback
 						throw new ApplicationServerException( 162 );
 					}
 					else {
 						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
-						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
 						if (edited.getPhase() != '3')
 							bucheBestellungsaenderung(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
 						else bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
@@ -1922,7 +1923,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					float tgrEntry, titelEntry;
 					if (dZahlung < 0){
 						float tgrExpenses = db.getTgrExpensesForOrder(original.getId());
-						System.out.println("tgrExpenses: " + tgrExpenses);
 						if (tgrExpenses > 0){
 							tgrEntry = (tgrExpenses + dZahlung) > 0 ? -dZahlung : tgrExpenses;
 							titelEntry = -(tgrEntry + dZahlung);
@@ -1943,7 +1943,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					}
 					
 					db.updateAccountStates(original.getZvtitel(), tgrEntry, titelEntry, original.getFbkonto(), -dZahlung);
-					System.out.println("db.updateAccountStates(original.getZvtitel(), " + tgrEntry + ", " + titelEntry + ", original.getFbkonto(), "+ (-dZahlung) + ");");
 					ZVKonto zvk;
 					if(original.getZvtitel() instanceof ZVTitel)
 						zvk = ((ZVTitel)original.getZvtitel()).getZVKonto();

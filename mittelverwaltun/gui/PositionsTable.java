@@ -90,6 +90,7 @@ public class PositionsTable extends JTable implements ActionListener {
 		TableButtonCellRenderer() {            
 			button = new JButton(Functions.getRowDeleteIcon(this.getClass()));
 			button.setActionCommand("deletePosition");
+			button.setToolTipText("Position löschen");
 			button.setMargin(new Insets(2,2,2,2));         
 		}        
 	
@@ -105,7 +106,8 @@ public class PositionsTable extends JTable implements ActionListener {
 		        
 		TableButtonCellEditor(ActionListener callback) {            
 			button = new JButton(Functions.getRowDeleteIcon(this.getClass()));
-			button.setActionCommand("deletePosition");           
+			button.setActionCommand("deletePosition"); 
+			button.setToolTipText("Position löschen");
 			this.callback = callback;  
 			button.setMargin(new Insets(2,2,2,2));         
 			button.addActionListener(this);        

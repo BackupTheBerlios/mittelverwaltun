@@ -24,6 +24,15 @@ public class Functions {
 	  return null;
 	}
 	
+	static public ImageIcon getImportIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Import.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
 	static public ImageIcon getFHLogo(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","fhlogo.gif", clazz);

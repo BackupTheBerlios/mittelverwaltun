@@ -236,7 +236,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miFBKontenUmbuchen ) {
 			frame.addChild( new FBKontenUmbuchen( frame ) );
 		}else if ( e.getSource() == miFBKontenZuweisen ) {
-				frame.addChild( new RemmitanceToFBHauptkontoFrame( frame.getApplicationServer() ) );
+				frame.addChild( new RemmitanceToFBHauptkontoFrame( frame ) );
 		}else if ( e.getSource() == miFBKontenZuweisenProf ) {
 			frame.addChild( new ProfBudgetFrame( frame.getApplicationServer() ) );
 		} else if ( e.getSource() == miBenutzer ) {

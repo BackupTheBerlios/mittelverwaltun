@@ -2792,8 +2792,8 @@ public class Database implements Serializable{
 			 ResultSet rs = statements.get(58).executeQuery(parameters);
 
 			 if( rs.next() ){
-				 konto = new FBHauptkonto( kontoID, rs.getInt(1), new Institut(rs.getInt(2),null,null), rs.getString(3),rs.getString(4), rs.getString(5),
-											 rs.getFloat(6), rs.getFloat(7), rs.getString(8), !rs.getString(9).equalsIgnoreCase( "0" ) );
+				 konto = new FBHauptkonto( kontoID, rs.getInt(1), new Institut(rs.getInt(2),null,null), rs.getString(3), rs.getString(4), rs.getString(5),
+				 		rs.getFloat(6), rs.getFloat(7), rs.getFloat(8), rs.getString(9), !rs.getString(10).equalsIgnoreCase( "0" ), !rs.getString(11).equalsIgnoreCase( "0" ) );
 			 }
 
 			 rs.close();

@@ -71,21 +71,21 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			
 			Institut[] institutes = as.getInstitutes();
 			
-			//System.out.println("Institute: "+ institutes.length);
+			System.out.println("Institute: "+ institutes.length);
 			
 			for (int i=0; i<institutes.length; i++){
 				
 				ArrayList accounts = as.getNoPurposeFBHauptkonten(institutes[i]);	
-				//System.out.println("Konten: "+ accounts.size());;
+				System.out.println("Konten: "+ accounts.size());;
 				Benutzer[] users = as.getUsersByRole(institutes[i], 5);
-				//System.out.println("Benutzer: " + ((users!=null)? ""+users.length : "null"));
+				System.out.println("Benutzer: " + ((users!=null)? ""+users.length : "null"));
 				if ((!accounts.isEmpty()) && (users!=null)){
 					Object[] r = {institutes[i], accounts.toArray(), users};
 					pnData.add(r);
 				}
 			}
 			
-			//System.out.println("Panels: "+ pnData.size());
+			System.out.println("Panels: "+ pnData.size());
 			
 			pnInstitute.setLayout(new GridLayout(pnData.size(),1));		
 			budgetPanels = new ProfBudgetPanel[pnData.size()];
@@ -145,6 +145,7 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   
 	   btBuchen.setBounds(new Rectangle(144, 10, 100, 25));
 	   btBuchen.setText("Buchen");
+	   btBuchen.addActionListener(this);
 	   btCancel.setBounds(new Rectangle(254, 10, 100, 25));
 	   btCancel.setText("Abbrechen");
 	   btCancel.addActionListener(this);
@@ -220,6 +221,11 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			this.calculateOverallBudget();
 		}else if (cmd.equals("Abbrechen")){
 			this.dispose();
+		}else if (cmd.equals("Buchen")){
+			for (int i=0; i<budgetPanels.length; i++){
+				//if (budgetPanels[i]!=null)
+					//budgetPanels[i].setStandardBudget(((Float)tfPauschBudget.getValue()).floatValue());
+			}
 		}
 	}
 

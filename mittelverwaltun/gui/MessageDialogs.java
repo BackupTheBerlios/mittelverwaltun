@@ -77,12 +77,15 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		cp.add(butOk);
 		
 		butDetails = new JButton("Details anzeigen", Functions.getDown24Icon(getClass()));
+		butDetails.setEnabled(!((details==null)||(details.equals(""))));
 		butDetails.addActionListener(this);
 		butDetails.setBounds(35,61,170,25);
 		cp.add(butDetails);
 	
 		JTextArea jta = new JTextArea(details);
 		jta.setEditable(false);
+		jta.setLineWrap(true);
+		
 		jsp = new JScrollPane(jta);
 		jsp.setVisible(false);
 		jsp.setBounds(35,95,300,69);

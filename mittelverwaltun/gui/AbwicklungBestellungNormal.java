@@ -5,10 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.rmi.Naming;
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.text.JTextComponent;
+
 import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
 import applicationServer.CentralServer;
@@ -26,13 +30,15 @@ import dbObjects.ZVTitel;
  * @version 1.0
  */
 
-public class AbwicklungBestellungNormal extends JInternalFrame implements TableModelListener, ActionListener{
+public class AbwicklungBestellungNormal extends JInternalFrame implements TableModelListener, ActionListener, FocusListener{
   
   MainFrame frame;
   ApplicationServer as;
   StandardBestellung origin;
   
-  // Dialogelemente	
+  // Dialogelemente
+  JTextField tfPhase = new JTextField();
+  JLabel lbPhase = new JLabel();
   JTextField tfReferenzNr = new JTextField();
   JTextFieldExt tfHuelNr = new JTextFieldExt(6);
   JLabel lbHuelNr = new JLabel();
@@ -97,7 +103,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   
   private void jbInit() throws Exception {
     this.setSize(675,671);
-    this.setTitle("Abwicklung Standardbestellung");
+    this.setTitle("Standardbestellung");
     this.getContentPane().setLayout(null);
 
     titledBorderPanel1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Allgemeine Informationen");
@@ -113,12 +119,21 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbDatum.setFont(new java.awt.Font("Dialog", 1, 11));
 	
 	    tfDatum.setBounds(new Rectangle(110, 22, 81, 21));
-	    tfDatum.setDisabledTextColor(Color.black);
 	    tfDatum.setValue(origin.getDatum());
 	    tfDatum.setColumns(10);
-	    tfDatum.setEnabled(false);
-	    tfDatum.setBackground(UIManager.getColor("Viewport.background"));
+	    tfDatum.setEditable(false);
+	    	    
+	    lbPhase.setFont(new java.awt.Font("Dialog", 1, 11));
+	    lbPhase.setHorizontalAlignment(SwingConstants.RIGHT);
+	    lbPhase.setHorizontalTextPosition(SwingConstants.RIGHT);
+	    lbPhase.setText("Status:");
+	    lbPhase.setBounds(new Rectangle(288, 22, 105, 21));
 	
+	    tfPhase.setFont(new java.awt.Font("Dialog", 1, 12));
+	    tfPhase.setEditable(false);
+	    tfPhase.setBorder(null);
+	    tfPhase.setBounds(new Rectangle(397, 22, 90, 21));
+	    
 	    lbHuelNr.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbHuelNr.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbHuelNr.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -126,7 +141,6 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbHuelNr.setBounds(new Rectangle(10, 53, 95, 21));
 	
 	    tfHuelNr.setEnabled(true);
-	    tfHuelNr.setDisabledTextColor(Color.black);
 	    tfHuelNr.setText(origin.getHuel());
 	    tfHuelNr.setBounds(new Rectangle(110, 53, 130, 21));
 	
@@ -136,10 +150,10 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbReferenzNr.setText("Referenz-Nummer");
 	    lbReferenzNr.setBounds(new Rectangle(248, 53, 105, 21));
 	
-	    tfReferenzNr.setBackground(UIManager.getColor("Viewport.background"));
-	    tfReferenzNr.setEnabled(false);
-	    tfReferenzNr.setDisabledTextColor(Color.black);
+	    tfReferenzNr.setEditable(false);
 	    tfReferenzNr.setText(origin.getReferenznr());
+	    tfReferenzNr.setCaretPosition(0);
+	    tfReferenzNr.addFocusListener(this);
 	    tfReferenzNr.setColumns(6);
 	    tfReferenzNr.setBounds(new Rectangle(357, 53, 130, 21));
 	
@@ -149,10 +163,11 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbBesteller.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbBesteller.setHorizontalTextPosition(SwingConstants.RIGHT);
 	
-	    tfBesteller.setBackground(UIManager.getColor("Viewport.background"));
-	    tfBesteller.setEnabled(false);
+	    tfBesteller.setEditable(false);
 	    tfBesteller.setText(origin.getBesteller().getName() + ", " + origin.getBesteller().getVorname());
-	    tfBesteller.setDisabledTextColor(Color.black);
+	    tfBesteller.setToolTipText(origin.getBesteller().getName() + ", " + origin.getBesteller().getVorname());
+	    tfBesteller.setCaretPosition(0);
+	    tfBesteller.addFocusListener(this);
 	    tfBesteller.setBounds(new Rectangle(110, 84, 130, 21));
 	
 	    lbAuftraggeber.setBounds(new Rectangle(248, 84, 105, 21));
@@ -161,22 +176,24 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbAuftraggeber.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbAuftraggeber.setHorizontalTextPosition(SwingConstants.RIGHT);
 	
-	    tfAuftraggeber.setBackground(UIManager.getColor("Viewport.background"));
-	    tfAuftraggeber.setEnabled(false);
+	    tfAuftraggeber.setEditable(false);
 	    tfAuftraggeber.setText(origin.getAuftraggeber().getName() + ", " + origin.getAuftraggeber().getVorname());
-	    tfAuftraggeber.setDisabledTextColor(Color.black);
+	    tfAuftraggeber.setToolTipText(origin.getAuftraggeber().getName() + ", " + origin.getAuftraggeber().getVorname());
+	    tfAuftraggeber.setCaretPosition(0);
+	    tfAuftraggeber.addFocusListener(this);
 	    tfAuftraggeber.setBounds(new Rectangle(357, 84, 130, 21));
-	
+	    
 	    lbKonto.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbKonto.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbKonto.setHorizontalTextPosition(SwingConstants.RIGHT);
 	    lbKonto.setText("Kostenstelle");
 	    lbKonto.setBounds(new Rectangle(10, 115, 95, 21));
 	
-	    tfKonto.setBackground(UIManager.getColor("Viewport.background"));
-	    tfKonto.setEnabled(false);
-	    tfKonto.setDisabledTextColor(Color.black);
+	    tfKonto.setEditable(false);
 	    tfKonto.setText(origin.getFbkonto().toString());
+	    tfKonto.setToolTipText(origin.getFbkonto().getBezeichnung() + ", Kostenstelle: " + origin.getFbkonto().getInstitut().getKostenstelle() + ", Hauptkonto: "+origin.getFbkonto().getHauptkonto() + ", Unterkonto: "+origin.getFbkonto().getUnterkonto());
+	    tfKonto.setCaretPosition(0);
+	    tfKonto.addFocusListener(this);
 	    tfKonto.setBounds(new Rectangle(110, 115, 377, 21));
 
 	    lbZvTitel.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -192,14 +209,18 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbKapitel.setBounds(new Rectangle(110, 146, 35, 21));
 	
 	    tfKapitel.setBounds(new Rectangle(150, 146, 70, 21));
-	    tfKapitel.setDisabledTextColor(Color.black);
-	    if(origin.getZvtitel() instanceof ZVTitel)
+	    String titelToolTip = origin.getZvtitel().getBezeichnung() + ", Kapitel: ";
+	    if(origin.getZvtitel() instanceof ZVTitel){
 	    	tfKapitel.setText(((ZVTitel)origin.getZvtitel()).getZVKonto().getKapitel());
-	    else
+	    	titelToolTip += ((ZVTitel)origin.getZvtitel()).getZVKonto().getKapitel();
+	    }else{
 			tfKapitel.setText(origin.getZvtitel().getZVTitel().getZVKonto().getKapitel());
-	    tfKapitel.setEnabled(false);
-	    tfKapitel.setBackground(UIManager.getColor("Viewport.background"));
-	
+			titelToolTip += ((ZVTitel)origin.getZvtitel()).getZVKonto().getKapitel();
+	    }
+	    tfKapitel.setCaretPosition(0);
+	    tfKapitel.addFocusListener(this);
+		tfKapitel.setEditable(false);
+	    	
 	    lbTitel.setFont(new java.awt.Font("Dialog", 0, 11));
 	    lbTitel.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbTitel.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -207,11 +228,12 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbTitel.setBounds(new Rectangle(225, 146, 20, 21));
 	
 	    tfTitel.setBounds(new Rectangle(250, 146, 70, 21));
-	    tfTitel.setDisabledTextColor(Color.black);
 	    tfTitel.setText(origin.getZvtitel().getTitel());
-	    tfTitel.setEnabled(false);
-	    tfTitel.setBackground(UIManager.getColor("Viewport.background"));
-	
+	    tfTitel.setEditable(false);
+	    tfTitel.setCaretPosition(0);
+	    tfTitel.addFocusListener(this);
+	    titelToolTip += ", Titel: " + origin.getZvtitel().getTitel();
+	   	
 	    lbUntertitel.setFont(new java.awt.Font("Dialog", 0, 11));    
 	    lbUntertitel.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbUntertitel.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -219,11 +241,16 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbUntertitel.setBounds(new Rectangle(325, 146, 50, 21));
 	
 	    tfUntertitel.setBounds(new Rectangle(380, 146, 70, 21));
-	    tfUntertitel.setDisabledTextColor(Color.black);
 	    tfUntertitel.setText(origin.getZvtitel().getUntertitel().equals("")?"00":origin.getZvtitel().getUntertitel());
-	    tfUntertitel.setEnabled(false);
-	    tfUntertitel.setBackground(UIManager.getColor("Viewport.background"));
-	
+	    tfUntertitel.setEditable(false);
+	    tfUntertitel.setCaretPosition(0);
+	    tfUntertitel.addFocusListener(this);
+	    titelToolTip += ", Untertitel: " + (origin.getZvtitel().getUntertitel().equals("")?"00":origin.getZvtitel().getUntertitel());
+	    
+	    tfKapitel.setToolTipText(titelToolTip);
+	    tfTitel.setToolTipText(titelToolTip);
+	    tfUntertitel.setToolTipText(titelToolTip);
+	    
 	    lbKostenart.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbKostenart.setHorizontalAlignment(SwingConstants.RIGHT);
 	    
@@ -231,20 +258,25 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbKostenart.setBounds(new Rectangle(10, 177, 95, 21));
 	
 	    tfKostenart.setBounds(new Rectangle(110, 177, 210, 21));
-	    tfKostenart.setDisabledTextColor(Color.black);
+	    //tfKostenart.setDisabledTextColor(Color.black);
 	    tfKostenart.setText(origin.getKostenart().getBeschreibung());
-	    tfKostenart.setEnabled(false);
-	    tfKostenart.setBackground(UIManager.getColor("Viewport.background"));
+	    //tfKostenart.setEnabled(false);
+	    tfKostenart.setEditable(false);
+	    tfKostenart.setCaretPosition(0);
+	    tfKostenart.addFocusListener(this);
+	    //tfKostenart.setBackground(UIManager.getColor("Viewport.background"));
 	    
     panelBasisinfos.add(tfDatum, null);
+    panelBasisinfos.add(lbPhase, null);
+    panelBasisinfos.add(tfPhase, null);
     panelBasisinfos.add(lbHuelNr, null);
     panelBasisinfos.add(tfHuelNr, null);
     panelBasisinfos.add(lbReferenzNr, null);
     panelBasisinfos.add(tfReferenzNr, null);
-    panelBasisinfos.add(tfAuftraggeber, null);
-    panelBasisinfos.add(lbAuftraggeber, null);
     panelBasisinfos.add(tfBesteller, null);
     panelBasisinfos.add(lbBesteller, null);
+    panelBasisinfos.add(tfAuftraggeber, null);
+    panelBasisinfos.add(lbAuftraggeber, null);
     panelBasisinfos.add(lbKonto, null);
     panelBasisinfos.add(tfKonto, null);
     panelBasisinfos.add(lbZvTitel, null);
@@ -285,8 +317,8 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    if ((fbs != null) && (fbs.length > 0))
 	       	tpAnschrift.setText(fbs[0].getFhBezeichnung() + "\n" +
 	    						fbs[0].getFbBezeichnung() + "\n" +
-								"   z.Hd. " + origin.getEmpfaenger().getVorname() + " " + origin.getEmpfaenger().getName() + "\n" +
-								"   Bau " + origin.getEmpfaenger().getBau() + ", " + "Raum " + origin.getEmpfaenger().getRaum() + "\n" +
+								"z.Hd. " + origin.getEmpfaenger().getVorname() + " " + origin.getEmpfaenger().getName() + "\n" +
+								((((origin.getEmpfaenger().getBau()!=null) && !origin.getEmpfaenger().getBau().equalsIgnoreCase(""))) ? "   Bau " + origin.getEmpfaenger().getBau() + (((origin.getEmpfaenger().getRaum()!=null)&&(!origin.getEmpfaenger().getRaum().equalsIgnoreCase(""))) ? ", " + "Raum " + origin.getEmpfaenger().getRaum() : "") + "\n"  : "") +
 								fbs[0].getStrasseHausNr() + "\n" +
 								fbs[0].getPlzOrt());
 	    else tpAnschrift.setText("");
@@ -327,11 +359,11 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfFirma.setBounds(new Rectangle(66, 25, 185, 21));
 	    tfFirma.setText(angebot.getAnbieter().getName());
-	    tfFirma.setColumns(0);
-	    tfFirma.setDisabledTextColor(Color.black);
-	    tfFirma.setEnabled(false);
-	    tfFirma.setBackground(UIManager.getColor("Viewport.background"));
-	
+	    tfFirma.setToolTipText(angebot.getAnbieter().getName() + ", " + angebot.getAnbieter().getOrt());
+	    tfFirma.setEditable(false);
+	    tfFirma.setCaretPosition(0);
+	    tfFirma.addFocusListener(this);
+	    	
 	    btFirma.setText("Details");
 	    btFirma.setFont(new java.awt.Font("Dialog", 1, 11));
 	    btFirma.setBounds(new Rectangle(255, 23, 100, 27));
@@ -364,6 +396,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tfSumme.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfSumme.setBackground(UIManager.getColor("Viewport.background"));
 	    tfSumme.setEnabled(false);
+	    tfSumme.setEditable(false);
 	    tfSumme.setDisabledTextColor(Color.black);
 	    tfSumme.setValue(new Float(tabPositionen.getOrderSum()));
 	    tfSumme.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -377,6 +410,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfVerbindlichkeiten.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfVerbindlichkeiten.setBackground(UIManager.getColor("Viewport.background"));
+	    tfVerbindlichkeiten.setEditable(false);
 	    tfVerbindlichkeiten.setEnabled(false);
 	    tfVerbindlichkeiten.setValue(new Float(tabPositionen.getOrderDebit()));
 	    if (((Float)tfVerbindlichkeiten.getValue()).floatValue() > 0)
@@ -400,24 +434,28 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     btAbschlieﬂen.setBounds(new Rectangle(525, 25, 125, 27));
     btAbschlieﬂen.setFont(new java.awt.Font("Dialog", 1, 11));
     btAbschlieﬂen.setText("Abschlieﬂen");
+    btAbschlieﬂen.setToolTipText("Alle offenen Positionen begleichen, Abwicklung abschlieﬂen und Bestellung speichern");
     btAbschlieﬂen.setActionCommand("completeOrder");
     btAbschlieﬂen.addActionListener(this);
     
     btSpeichern.setBounds(new Rectangle(525, 60, 125, 27));
     btSpeichern.setFont(new java.awt.Font("Dialog", 1, 11));
     btSpeichern.setText("Speichern");
+    btSpeichern.setToolTipText("Bestellung speichern");
     btSpeichern.setActionCommand("saveOrder");
     btSpeichern.addActionListener(this);
 
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
     btStorno.setText("Storno");
+    btStorno.setToolTipText("Bestellung stornieren");
     btStorno.setActionCommand("revokeOrder");
     btStorno.addActionListener(this);
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
     btDrucken.setText("Drucken");
+    btDrucken.setToolTipText("Bestellung drucken");
 
     btBeenden.setBounds(new Rectangle(525, 165, 125, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -436,6 +474,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     this.getContentPane().add(btStorno, null);
     
     updateComponentEnabling();
+    updatePhase();
     
   }
   
@@ -506,6 +545,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
+			updatePhase();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
@@ -530,6 +570,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
+			updatePhase();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
@@ -552,6 +593,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
+			updatePhase();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
@@ -577,5 +619,26 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		btSpeichern.setEnabled(enable);
 		
 		btStorno.setEnabled(origin.getPhase() != '3');
+	}
+	
+	private void updatePhase(){
+		if (origin.getPhase()=='1'){
+			tfPhase.setForeground(Color.GREEN);
+			tfPhase.setText("Abwicklung");
+		} else if (origin.getPhase()=='2'){
+			tfPhase.setForeground(Color.ORANGE);
+			tfPhase.setText("Abgeschlossen");
+		} else if (origin.getPhase()=='3'){
+			tfPhase.setForeground(Color.RED);
+			tfPhase.setText("Storniert");
+		}  
+	}
+
+	public void focusGained(FocusEvent e) {
+		((JTextComponent)(e.getSource())).getCaret().setVisible(true);
+	}
+
+	public void focusLost(FocusEvent e) {
+		((JTextComponent)(e.getSource())).getCaret().setVisible(false);
 	}
 }

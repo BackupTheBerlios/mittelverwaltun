@@ -12,11 +12,11 @@ public class Server extends JFrame implements ActionListener {
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
 
-//	String rmiregistry = "C:\\Programme\\Java\\j2re1.4.2_05\\bin\\rmiregistry.exe ";
-//	String classpath = "-J-classpath -J\"C:\\Programme\\Java\\j2re1.4.2_05\\lib";
+	String rmiregistry = "C:\\Programme\\Java\\j2re1.4.2_05\\bin\\rmiregistry.exe ";
+	String classpath = "-J-classpath -J\"C:\\Programme\\Java\\j2re1.4.2_05\\lib";
 
-	String rmiregistry = "C:\\j2sdk1.4.0\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.0\\lib";
+//	String rmiregistry = "C:\\j2sdk1.4.0\\bin\\rmiregistry.exe ";
+//	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.0\\lib";
 
 	final int delay = 3000;
 	JScrollPane scrollList = new JScrollPane();
