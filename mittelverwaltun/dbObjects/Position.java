@@ -114,5 +114,24 @@ public class Position implements Serializable{
 	public void setArtikel(String artikel) {
 		this.artikel = artikel;
 	}
+	
+	public boolean equals(Object o){
+		if(o != null){
+			Position position = (Position)o;
+			if( id == position.getId() &&
+					einzelPreis == position.getEinzelPreis() &&
+					menge == position.getMenge() &&
+					rabatt == position.getRabatt() &&
+					mwst == position.getMwst() &&
+					beglichen == position.getBeglichen() &&
+					(institut == null || position.getInstitut() == null) ? true : institut == position.getInstitut() &&
+					artikel == position.getArtikel()
+				)
+				return true;
+			else
+				return false;
+		}else
+			return false;
+	}
 
 }

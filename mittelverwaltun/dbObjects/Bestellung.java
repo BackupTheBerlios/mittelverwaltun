@@ -146,5 +146,5 @@ public class Bestellung implements Serializable {
 	public void setBestellwert(float bestellwert) {
 		this.bestellwert = bestellwert;
 	}
-
+	
 }

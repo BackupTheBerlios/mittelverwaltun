@@ -191,5 +191,37 @@ public class StandardBestellung extends Bestellung {
 	public void setBemerkung(String bemerkung) {
 		this.bemerkung = bemerkung;
 	}
-
+	
+	public boolean equals(Object o){
+		if(o != null){
+			StandardBestellung bestellung = (StandardBestellung)o;
+			if( this.auswahl == bestellung.getAuswahl() &&
+					this.kostenart == bestellung.getKostenart() &&
+					this.ersatzbeschaffung == bestellung.getErsatzbeschaffung() &&
+					this.ersatzbeschreibung == bestellung.getErsatzbeschreibung() &&
+					this.inventarNr == bestellung.getInventarNr() &&
+					this.verwendungszweck == bestellung.getVerwendungszweck() &&
+					this.planvorgabe == bestellung.getPlanvorgabe() &&
+					this.begruendung == bestellung.getBegruendung() &&
+					this.bemerkung == this.bemerkung && 
+					// Bestellung
+					getId() == bestellung.getId() &&
+					getReferenznr() == bestellung.getReferenznr() &&
+					getHuel() == bestellung.getHuel() &&
+					getDatum() == bestellung.getDatum() &&
+					getBesteller() == bestellung.getBesteller() &&
+					getPhase() == bestellung.getPhase() &&
+					getAuftraggeber() == bestellung.getAuftraggeber() &&
+					getEmpfaenger() == bestellung.getEmpfaenger() &&
+					getZvtitel() == bestellung.getZvtitel() &&
+					getFbkonto() == bestellung.getFbkonto() &&
+					getBestellwert() == bestellung.getBestellwert()
+					)
+					
+				return true;
+			else
+				return false;
+		}else
+			return false;
+	}
 }

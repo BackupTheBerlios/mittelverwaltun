@@ -104,5 +104,20 @@ public class Angebot {
 	public void setSumme(float summe) {
 		this.summe = summe;
 	}
+	
+	public boolean equals(Object o){
+		if(o != null){
+			Angebot angebot = (Angebot)o;
+			if( ((positionen != null) ? false : (positionen == angebot.getPositionen())) &&
+					id == angebot.getId() &&
+					anbieter == angebot.getAnbieter() &&
+					datum == angebot.getDatum() &&
+					summe == angebot.getSumme() )
+				return true;
+			else
+				return false;
+		}else
+			return false;
+	}
 
 }
