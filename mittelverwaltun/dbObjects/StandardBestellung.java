@@ -65,6 +65,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		this.planvorgabe = planvorgabe;
 		this.begruendung = begruendung;
 		this.bemerkung = bemerkung;
+		setTyp('0');
 	}
 	
 	/**
@@ -104,6 +105,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		this.planvorgabe = planvorgabe;
 		this.begruendung = begruendung;
 		this.bemerkung = bemerkung;
+		setTyp('0');
 	}
 	
 	/**
@@ -140,6 +142,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		this.planvorgabe = planvorgabe;
 		this.begruendung = begruendung;
 		this.bemerkung = bemerkung;
+		setTyp('0');
 	}
 
 	public ArrayList getAngebote() {

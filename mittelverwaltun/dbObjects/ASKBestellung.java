@@ -39,6 +39,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 	
 	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten) {
 		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, verbindlichkeiten);
+		setTyp('1');
 		// TODO Automatisch erstellter Konstruktoren-Stub
 	}
 

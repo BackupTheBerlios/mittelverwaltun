@@ -105,9 +105,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		this.setClosable(true);
 		this.setIconifiable(true);
 
-
-		//cbInstitut.addPropertyChangeListener(this);
-
 		init();
   }
 
@@ -120,7 +117,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		init();
 		setOrderData();
-		//cbInstitut.addPropertyChangeListener(this);
   }
 
   private void init(){
@@ -177,26 +173,53 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   }
 
   public static void main(String[] args) {
-		 MainFrame test = new MainFrame("FBMittelverwaltung");
-		 try{
-			 CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			 ApplicationServer applicationServer = server.getMyApplicationServer();
-			 test.setApplicationServer(applicationServer);
-			 PasswordEncrypt pe = new PasswordEncrypt();
-			 String psw = pe.encrypt(new String("a").toString());
-			 test.setBenutzer(applicationServer.login("test", psw));
-		   test.setBounds(100,100,800,900);
-			 test.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-			 test.setJMenuBar( new MainMenu( test ) );
-			 StandardBestellung best = applicationServer.getStandardBestellung(13);
-			 BestellungNormal bestellung = new BestellungNormal(test, best);
-			 test.addChild(bestellung);
-			 test.show();
-				bestellung.show();
-		 }catch(Exception e){
-				 System.out.println(e);
-		 }
+		MainFrame test = new MainFrame("FBMittelverwaltung");
+		BestellungNormal bestellung;
+	 	try{
+		 	CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+		 	ApplicationServer applicationServer = server.getMyApplicationServer();
+		 	test.setApplicationServer(applicationServer);
+		 	PasswordEncrypt pe = new PasswordEncrypt();
+		 	String psw = pe.encrypt(new String("a").toString());
+		 	test.setBenutzer(applicationServer.login("test", psw));
+	   	test.setBounds(100,100,800,900);
+		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
+	
+		 	test.setJMenuBar( new MainMenu( test ) );
+		 	StandardBestellung best = applicationServer.getStandardBestellung(18);
+		 
+			bestellung = new BestellungNormal(test, best);
+		 	test.addChild(bestellung);
+		 	test.show();
+			bestellung.show();
+	 }catch(Exception e){
+			bestellung = new BestellungNormal(test);
+			test.addChild(bestellung);
+			test.show();
+			bestellung.show();
+			System.out.println(e);
+	 }
+  }
+  
+  private void clearInputFields(){
+  	tfAngebotNr.setText("");
+  	tfErsatzText.setText("");
+  	tfFBKonto.setText("");
+  	tfInventarNr.setText("");
+  	tfReferenzNr.setText("");
+		labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
+		labKapitel.setText("");
+		labTitel.setText("");
+		labUT.setText("");
+  	bestellung = null;
+		fbKonto = null;
+		zvTitel = null;
+  	angebotNr = 0;
+  	buBestellen.setEnabled(false);
+  	cbDrittelMittel.setSelected(false);
+  	rbAngebotGuenstig.doClick();
+  	rbErstbeschaffung.doClick();
+  	tableAngebote.removeAll();
   }
 
   private void jbInit() throws Exception {
@@ -477,8 +500,26 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 						  "Warnung",
 						  JOptionPane.ERROR_MESSAGE);
 			}
+		}else if ( e.getSource() == buDelete ) {
+			int answer = JOptionPane.showConfirmDialog(
+						getComponent(0), "Soll die Bestellung wirklich gelöscht werden ? ", "Warnung",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+			if(answer == 0){
+				delOrder();
+			}
 		}else if ( e.getSource() == buBeenden ) {
 			dispose();
+		}
+	}
+	
+	private void delOrder(){
+		try {
+			if(bestellung != null)
+				frame.getApplicationServer().delBestellung(bestellung);
+				clearInputFields();
+		} catch (ApplicationServerException e) {
+			MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
+			e.printStackTrace();
 		}
 	}
 
@@ -507,16 +548,21 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
-																				(new String("0")).charAt(0), "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																				'0', "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, fbKonto, 0, 0);
+		int id = 0;																		
 		try {
 			if(bestellung != null){
 				newBestellung.setId(bestellung.getId());
 				newBestellung.setBesteller(bestellung.getBesteller());
 				newBestellung.setHuel(bestellung.getHuel());
+				id = bestellung.getId();
 				frame.getApplicationServer().setBestellung(bestellung, newBestellung);
-			}else
-				frame.getApplicationServer().addBestellung(newBestellung);
+			}else{
+				id = frame.getApplicationServer().addBestellung(newBestellung);
+			}
+				
+			bestellung = frame.applicationServer.getStandardBestellung(id);
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
@@ -524,7 +570,59 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	private void bestellen(){
+		
+		DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
+		ArrayList angebote = new ArrayList();
 
+		for(int i = 0; i < dtm.getRowCount(); i++){
+			Angebot angebot = (Angebot)dtm.getValueAt(i, 1);
+
+			// ein Angebot hat mindestens eine Position auch wenn er nur die Summe hat
+			if(angebot.getPositionen().size() == 0){
+				ArrayList positionen = new ArrayList();
+				Position position = new Position("", angebot.getSumme(), 1, 0, 0, bestellung.getFbkonto().getInstitut());
+				positionen.add(position);
+				angebot.setPositionen(positionen);
+			}
+			angebot.setAngenommen(((Boolean)(dtm.getValueAt(i, 4))).booleanValue());
+			angebote.add(angebot);
+		}
+
+		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
+		Date sqlDate = new Date(datum.getTime());
+		
+		
+
+		StandardBestellung newBestellung = new StandardBestellung(angebote, (Kostenart)cbKostenart.getSelectedItem(),
+																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
+																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
+																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
+																				'1', "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																				zvTitel, fbKonto, 0, 0);
+																				
+		float betrag = ((Angebot)newBestellung.getAngebote().get(newBestellung.getAngenommenesAngebot())).getSumme();
+		newBestellung.setVerbindlichkeiten(betrag);
+		newBestellung.setBestellwert(betrag);
+		newBestellung.getZvtitel().setVormerkungen(betrag);
+		newBestellung.getFbkonto().setVormerkungen(betrag);
+				
+		int id = 0;			
+		try {
+			if(bestellung != null){
+				newBestellung.setId(bestellung.getId());
+				newBestellung.setBesteller(bestellung.getBesteller());
+				newBestellung.setHuel(bestellung.getHuel());
+				id = bestellung.getId();
+				frame.getApplicationServer().setBestellung(bestellung, newBestellung);
+			}else{
+				id = frame.getApplicationServer().addBestellung(newBestellung);
+			}
+				
+			bestellung = frame.applicationServer.getStandardBestellung(id);
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
+				e.printStackTrace();
+		}
 	}
 
 	private void printBestellung(){

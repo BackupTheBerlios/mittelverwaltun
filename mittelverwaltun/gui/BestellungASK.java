@@ -586,8 +586,25 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 						 "Warnung",
 						 JOptionPane.ERROR_MESSAGE);
 		  }
-	  }else if ( e.getSource() == buBeenden ) {
+	  }else if ( e.getSource() == buDelete ) {
+			int answer = JOptionPane.showConfirmDialog(
+						getComponent(0), "Soll die Bestellung wirklich gelöscht werden ? ", "Warnung",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+			if(answer == 0){
+				delOrder();
+			}
+		}else if ( e.getSource() == buBeenden ) {
 		  dispose();
+	  }
+  }
+  
+  private void delOrder(){
+	  try {
+		  if(bestellung != null)
+			  frame.getApplicationServer().delBestellung(bestellung);
+	  } catch (ApplicationServerException e) {
+		  MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
+		  e.printStackTrace();
 	  }
   }
 
