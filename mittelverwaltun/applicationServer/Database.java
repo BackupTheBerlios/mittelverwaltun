@@ -1939,7 +1939,8 @@ public class Database implements Serializable{
 				rs.beforeFirst();		// Vor die erste Zeile springen
 				rs.next();				// Die N‰chste Zeile
 				// Neuen ZVTitel erstellen
-				result = new ZVTitel( id, null, rs.getString(2), rs.getString(3),rs.getString(4),
+				ZVKonto zvKonto = selectZVKonto(rs.getInt(1));
+				result = new ZVTitel( id, zvKonto, rs.getString(2), rs.getString(3),rs.getString(4),
 									rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
 			}
 			rs.close();		// Abfrage schlieﬂen
@@ -2263,7 +2264,8 @@ public class Database implements Serializable{
 			ResultSet rs = statements.get(69).executeQuery(parameters);
 
 			if( rs.next() ){
-				konto = new FBUnterkonto( rs.getInt(1), rs.getInt(2), null, rs.getString(4), rs.getString(5),
+				Institut institut = selectInstitute(rs.getInt(3));
+				konto = new FBUnterkonto( rs.getInt(1), rs.getInt(2), institut, rs.getString(4), rs.getString(5),
 											rs.getString(6), rs.getFloat(7));
 			}
 

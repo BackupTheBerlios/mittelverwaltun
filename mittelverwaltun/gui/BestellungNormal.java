@@ -19,8 +19,6 @@ import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -33,8 +31,7 @@ import java.util.ArrayList;
  * Klasse für die StandardBestellung wird für die Sondierungsphase und die Bestellphase benutzt.
  * Diese Bestellung kann nur ein Admin oder ein Institutsadmin durchführen.
  */
-public class BestellungNormal extends JInternalFrame implements ActionListener, ItemListener, ZVKontoSelectable, FBKontoSelectable,
-																												 PropertyChangeListener{
+public class BestellungNormal extends JInternalFrame implements ActionListener, ItemListener, ZVKontoSelectable, FBKontoSelectable {
 
   JLabel labKoSt = new JLabel();
   JTextPane tpAuftragGrund = new JTextPane();
@@ -107,13 +104,40 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		this.setClosable(true);
 		this.setIconifiable(true);
 
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-    
+		try {
+			jbInit();
+		 }
+		 catch(Exception e) {
+			e.printStackTrace();
+		 }
+		cbInstitut.addItemListener(this);
+		//cbInstitut.addPropertyChangeListener(this);
+		
+		init();
+  }
+  
+  public BestellungNormal(MainFrame frame, StandardBestellung bestellung) {
+	  this.frame = frame;
+	  this.setClosable(true);
+	  this.setIconifiable(true);
+	  this.bestellung = bestellung;
+
+		try {
+			jbInit();
+		 }
+		 catch(Exception e) {
+			e.printStackTrace();
+		 }
+	  
+		setOrderData();
+		init();
+		cbInstitut.addItemListener(this);
+		//cbInstitut.addPropertyChangeListener(this);
+  }
+  
+  private void init(){
+		
+ 
 		buDrucken.addActionListener(this);
 		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
@@ -125,22 +149,16 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		buBestellen.addActionListener(this);
 		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
 		buFBKonto.addActionListener(this);
-	
-		cbInstitut.addItemListener(this);
-		cbInstitut.addPropertyChangeListener(this);
-//			cbAuftraggeber.addItemListener(this);
-//			cbAuftraggeber.addPropertyChangeListener(this);
-//			cbEmpfaenger.addItemListener(this);
-//			cbEmpfaenger:addPropertyChangeListener(this);
+
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
 		rbAuftragGrund.addActionListener(this);
-		
+	
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
 		setData();
 
-//	TODO Admin durch die Aktivität austauschen
+//		TODO Admin durch die Aktivität austauschen
 		if(!frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
 			cbInstitut.setVisible(false);
 			labInstitut.setVisible(false);
@@ -155,12 +173,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
   	error += (tfReferenzNr.getText().equals("") ? " - ReferenzNr \n" : "");
   	error += (zvTitel == null ? " - zvTitel \n" : "");
+		error += (fbKonto == null ? " - fbKonto \n" : "");
 
   	return error;
   }
-
-
-
+  
   public static void main(String[] args) {
 		 MainFrame test = new MainFrame("FBMittelverwaltung");
 		 try{
@@ -174,9 +191,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			 test.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 			 test.setJMenuBar( new MainMenu( test ) );
-			 BestellungNormal bestellung = new BestellungNormal(test);
+			 StandardBestellung best = applicationServer.getStandardBestellung(13);
+			 BestellungNormal bestellung = new BestellungNormal(test, best);
 			 test.addChild(bestellung);
-			 //StandardBestellung best = applicationServer.getStandardBestellung(13);
 			 test.show();
 				bestellung.show();
 		 }catch(Exception e){
@@ -414,6 +431,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
   }
 	public void actionPerformed(ActionEvent e) {
+		String error = "";
 		if ( e.getSource() == rbErsatz ) {
 			panelErsatz.setVisible(true);
 		}else if ( e.getSource() == rbErstbeschaffung ) {
@@ -435,9 +453,27 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}else if ( e.getSource() == buDrucken ) {
 			printBestellung();
 		}else if ( e.getSource() == buBestellen ) {
-			bestellen();
-		}else if ( e.getSource() == buSpeichern ) {
-			saveBestellung();
+			error = checkData();
+			if(error.equals("")){
+				bestellen();
+			}else{
+				JOptionPane.showMessageDialog(
+						  this,
+						  error,
+						  "Warnung",
+						  JOptionPane.ERROR_MESSAGE);
+			}
+  	}else if ( e.getSource() == buSpeichern ) {
+			error = checkData();
+			if(error.equals("")){
+				saveBestellung();
+			}else{
+				JOptionPane.showMessageDialog(
+						  this,
+						  error,
+						  "Warnung",
+						  JOptionPane.ERROR_MESSAGE);
+			}
 		}else if ( e.getSource() == buBeenden ) {
 			dispose();
 		}
@@ -447,8 +483,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 		ArrayList angebote = new ArrayList();
 
-		for(int i = 0; i < dtm.getRowCount(); i++)
-			angebote.add((Angebot)dtm.getValueAt(i, 1));
+		for(int i = 0; i < dtm.getRowCount(); i++){
+			Angebot angebot = (Angebot)dtm.getValueAt(i, 1);
+			angebot.setAngenommen(((Boolean)(dtm.getValueAt(i, 4))).booleanValue());
+			angebote.add(angebot);
+		}
 
 		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
 		Date sqlDate = new Date(datum.getTime());
@@ -612,7 +651,39 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 	}
 
-
+	private void setOrderData(){
+		tfReferenzNr.setText(bestellung.getReferenznr());
+		tfBestellDatum.setValue(bestellung.getDatum());
+		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
+		cbEmpfaenger.setSelectedItem(bestellung.getEmpfaenger());
+		cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+		rbErsatz.setSelected((bestellung.getErsatzbeschaffung()) ? false : true);
+		if(rbErsatz.isSelected()){
+			panelErsatz.setVisible(true);
+		}
+		tpVerwendungszweck.setText(bestellung.getVerwendungszweck());
+		cbDrittelMittel.setSelected(bestellung.getPlanvorgabe());
+		
+		ArrayList angebote = bestellung.getAngebote();
+		for(int i = 0; i < angebote.size(); i++){
+			Angebot angebot = (Angebot)angebote.get(i);
+			
+			if(((Position)angebot.getPositionen().get(0)).getMwst() == 0.0){
+				angebot.setSumme(((Position)angebot.getPositionen().get(0)).getEinzelPreis());
+				angebot.getPositionen().remove(0);
+			}
+			
+			insertAngebot(angebot, -1);
+		}
+		
+		rbAuftragGrund.setSelected(!bestellung.getBegruendung().equals(""));
+		if(rbAuftragGrund.isSelected())
+			tpAuftragGrund.setVisible(true);
+		tpAuftragGrund.setText(bestellung.getBegruendung());
+		tpBemerkungen.setText(bestellung.getBemerkung());		
+		setFBKonto(bestellung.getFbkonto());
+		setZVKonto(bestellung.getZvtitel());
+	}
 
 	private void setData(){
 		loadUsers();
@@ -624,6 +695,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == cbInstitut){
 			fbKonto = null;
+			zvTitel = null;
 			tfFBKonto.setText("");
 			labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
 			labKapitel.setText("");
@@ -642,27 +714,16 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 
 		if(angebotNr == -1){
-			Object[] o = {new Integer(dtm.getRowCount()+1), angebot, angebot.getDatum(), new Float(angebot.getSumme()), new Boolean(false)};
+			Object[] o = {new Integer(dtm.getRowCount()+1), angebot, angebot.getDatum(), new Float(angebot.getSumme()), new Boolean(angebot.getAngenommen())};
 			dtm.addRow(o);
 		}else{
-			Object[] o = {new Integer(angebotNr + 1), angebot, angebot.getDatum(), new Float(angebot.getSumme()), new Boolean(false)};
+			Object[] o = {new Integer(angebotNr + 1), angebot, angebot.getDatum(), new Float(angebot.getSumme()), new Boolean(angebot.getAngenommen())};
 
 			dtm.insertRow(angebotNr, o);
 			dtm.removeRow(angebotNr + 1);
 		}
 
 		dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
-	}
-
-	public void propertyChange(PropertyChangeEvent e) {
-		if(e.getSource() == cbInstitut){
-			fbKonto = null;
-			tfFBKonto.setText("");
-			labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
-			labKapitel.setText("");
-			labTitel.setText("");
-			labUT.setText("");
-		}
 	}
 
 	/* (Kein Javadoc)
