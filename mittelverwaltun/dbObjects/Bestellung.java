@@ -89,7 +89,7 @@ public class Bestellung implements Serializable {
 	}
 	
 	public Bestellung(Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
-										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
+										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
 		this.datum = datum;
 		this.besteller = besteller;
 		this.phase = phase;
@@ -204,7 +204,7 @@ public class Bestellung implements Serializable {
 		return zvtitel;
 	}
 
-	public void setZvtitel(ZVTitel zvtitel) {
+	public void setZvtitel(ZVUntertitel zvtitel) {
 		this.zvtitel = zvtitel;
 	}
 
