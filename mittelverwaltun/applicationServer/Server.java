@@ -13,8 +13,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
 
-	String rmiregistry = "C:\\j2sdk1.4.0\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.0\\lib";
+	String rmiregistry = "C:\\j2sdk1.4.2\\bin\\rmiregistry.exe ";
+	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2\\lib";
 
 	final int delay = 3000;
 	JScrollPane scrollList = new JScrollPane();
@@ -35,10 +35,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	SystemTrayIconManager sysTrayMgr;
 	int icons[] = new int[3];
 	int presIcon;
-	String toolTips[] = {"Registry gestopt.\nServer gestopt.", 
-							"Registry gestartet.\nServer gestopt.", 
-							"Registry gestartet.\nServer gestartet."};
-	String presToolTip = toolTips[0];
+	String presToolTip = "FB-Mittelverwaltung\nFH-Mannheim SS 2005";
 	
 	
 	public Server() {
@@ -275,7 +272,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					miRegistry.setText( "Stop Registry" );
 					miServer.setEnabled( true );
 					presIcon = icons[1];
-					presToolTip = toolTips[1];
 					statusBar.showTextForMilliseconds( "RMI-Registry wurde gestartet.", delay );
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -290,7 +286,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				miRegistry.setText( "Start Registry" );
 				miServer.setEnabled( false );
 				presIcon = icons[0];
-				presToolTip = toolTips[0];
 			} else if( rmiProcess != null && centralServer != null ) {
 				JOptionPane.showMessageDialog( this, "Sie müssen zuerst den Server aus der Registry entfernen !",
 														"Fehler !", JOptionPane.ERROR_MESSAGE );
@@ -310,7 +305,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					miRegistry.setEnabled( false );
 					miServer.setText( "Server entfernen" );
 					presIcon = icons[2];
-					presToolTip = toolTips[2];
 					statusBar.showTextForMilliseconds( "Server wurde registriert.", delay );
 				} catch(Exception ex) {
 					ex.printStackTrace();
@@ -325,7 +319,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					miRegistry.setEnabled( true );
 					miServer.setText( "Server registrieren" );
 					presIcon = icons[1];
-					presToolTip = toolTips[1];
 					statusBar.showTextForMilliseconds( "Server wurde entfernt.", delay );
 				} catch(Exception ex) {
 					ex.printStackTrace();
