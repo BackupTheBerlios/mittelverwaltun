@@ -18,7 +18,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 	private Benutzer swbeauftragter;
 	
 	public ASKBestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
-			ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
+			ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
 		
 		super(id, referenznr, huel, datum, besteller, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, phase, typ);
 		this.angebot = angebot;
