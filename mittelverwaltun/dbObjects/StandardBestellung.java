@@ -1,5 +1,6 @@
 package dbObjects;
 
+import java.sql.Date;
 import java.util.ArrayList;
 /**
  * @author robert
@@ -29,6 +30,87 @@ public class StandardBestellung extends Bestellung {
 	private boolean planvorgabe;
 
 	private String begruendung;
+	
+	private String bemerkung;
+
+	/**
+	 * 
+	 * @param angebote
+	 * @param auswahl
+	 * @param kostenart
+	 * @param ersatzbeschaffung
+	 * @param ersatzbeschreibung
+	 * @param inventarNr
+	 * @param verwendungszweck
+	 * @param planvorgabe
+	 * @param begruendung
+	 * @param bemerkung
+	 * @param referenznr
+	 * @param datum
+	 * @param besteller
+	 * @param phase
+	 * @param auftraggeber
+	 * @param empfaenger
+	 * @param zvtitel
+	 * @param fbkonto
+	 * @param bestellwert
+	 */
+	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
+														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+														String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		this.angebote = angebote;
+		this.auswahl = auswahl;
+		this.kostenart = kostenart;
+		this.ersatzbeschaffung = ersatzbeschaffung;
+		this.ersatzbeschreibung = ersatzbeschreibung;
+		this.inventarNr = inventarNr;
+		this.verwendungszweck = verwendungszweck;
+		this.planvorgabe = planvorgabe;
+		this.begruendung = begruendung;
+		this.bemerkung = bemerkung;
+	}
+	
+	/**
+	 * 
+	 * @param angebote
+	 * @param auswahl
+	 * @param kostenart
+	 * @param ersatzbeschaffung
+	 * @param ersatzbeschreibung
+	 * @param inventarNr
+	 * @param verwendungszweck
+	 * @param planvorgabe
+	 * @param begruendung
+	 * @param bemerkung
+	 * @param id
+	 * @param referenznr
+	 * @param datum
+	 * @param besteller
+	 * @param phase
+	 * @param auftraggeber
+	 * @param empfaenger
+	 * @param zvtitel
+	 * @param fbkonto
+	 * @param bestellwert
+	 */
+	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
+														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+														int id, String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		this.angebote = angebote;
+		this.auswahl = auswahl;
+		this.kostenart = kostenart;
+		this.ersatzbeschaffung = ersatzbeschaffung;
+		this.ersatzbeschreibung = ersatzbeschreibung;
+		this.inventarNr = inventarNr;
+		this.verwendungszweck = verwendungszweck;
+		this.planvorgabe = planvorgabe;
+		this.begruendung = begruendung;
+		this.bemerkung = bemerkung;
+	}
 
 	public ArrayList getAngebote() {
 		return angebote;
@@ -100,6 +182,14 @@ public class StandardBestellung extends Bestellung {
 
 	public void setBegruendung(String begruendung) {
 		this.begruendung = begruendung;
+	}
+
+	public String getBemerkung() {
+		return bemerkung;
+	}
+
+	public void setBemerkung(String bemerkung) {
+		this.bemerkung = bemerkung;
 	}
 
 }

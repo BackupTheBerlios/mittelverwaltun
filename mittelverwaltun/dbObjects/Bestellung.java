@@ -32,7 +32,32 @@ public class Bestellung implements Serializable {
 
 	private float bestellwert;
 
-	public Bestellung(){}
+	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+		this.id = id;
+		this.referenznr = referenznr;
+		this.datum = datum;
+		this.besteller = besteller;
+		this.phase = phase;
+		this.auftraggeber = auftraggeber;
+		this.empfaenger = empfaenger;
+		this.zvtitel = zvtitel;
+		this.fbkonto = fbkonto;
+		this.bestellwert = bestellwert;
+	}
+	
+	public Bestellung(String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+		this.referenznr = referenznr;
+		this.datum = datum;
+		this.besteller = besteller;
+		this.phase = phase;
+		this.auftraggeber = auftraggeber;
+		this.empfaenger = empfaenger;
+		this.zvtitel = zvtitel;
+		this.fbkonto = fbkonto;
+		this.bestellwert = bestellwert;
+	}
 	
 	public int getId() {
 		return id;

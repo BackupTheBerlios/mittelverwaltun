@@ -1,5 +1,7 @@
 package dbObjects;
 
+import java.sql.Date;
+
 /**
  * @author robert
  *
@@ -7,6 +9,22 @@ package dbObjects;
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class ASKBestellung extends Bestellung {
+
+	/**
+	 * @param referenznr
+	 * @param datum
+	 * @param besteller
+	 * @param phase
+	 * @param auftraggeber
+	 * @param empfaenger
+	 * @param zvtitel
+	 * @param fbkonto
+	 * @param bestellwert
+	 */
+	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
+		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		// TODO Automatisch erstellter Konstruktoren-Stub
+	}
 
 	private Angebot angebot;
 

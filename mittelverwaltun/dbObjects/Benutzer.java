@@ -218,8 +218,8 @@ public class Benutzer implements Serializable{
 					this.titel.equals(((Benutzer)benutzer).getTitel()) &&
 					this.email.equals(((Benutzer)benutzer).getEmail()) &&
 					this.privatKonto == (((Benutzer)benutzer).getPrivatKonto()) &&
-					this.rolle.equals(((Benutzer)benutzer).getRolle()) &&
-					this.kostenstelle.equals(((Benutzer)benutzer).getKostenstelle()) &&
+					(this.rolle == null || ((Benutzer)benutzer).getRolle() == null) ? true : this.rolle.equals(((Benutzer)benutzer).getRolle()) &&
+					(this.kostenstelle == null || ((Benutzer)benutzer).getKostenstelle() == null) ? true : this.kostenstelle.equals(((Benutzer)benutzer).getKostenstelle()) &&
 					this.bau.equals(((Benutzer)benutzer).getBau()) &&
 					this.raum.equals(((Benutzer)benutzer).getRaum()) &&
 					this.telefon.equals(((Benutzer)benutzer).getTelefon()) &&
