@@ -23,7 +23,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 	 * @param bestellwert
 	 */
 	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
-		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		// TODO Automatisch erstellter Konstruktoren-Stub
 	}
 

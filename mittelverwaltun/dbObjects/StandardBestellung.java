@@ -53,9 +53,9 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 */
 	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
+														String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
@@ -92,9 +92,9 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 */
 	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
+														int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
@@ -129,9 +129,9 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 */
 	public StandardBestellung(Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
+														int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
 		this.ersatzbeschreibung = ersatzbeschreibung;

@@ -37,4 +37,17 @@ public class Kostenart implements Serializable {
 	public String toString(){
 		return beschreibung;
 	}
+	
+	public boolean equals(Object o){
+		if(o != null){
+			Kostenart k = (Kostenart)o;
+			if( (id == k.getId()) &&
+					((beschreibung == null || k.getBeschreibung() == null) ? true : beschreibung.equals(k.getBeschreibung()))
+				)
+				return true;
+			else
+				return false;
+		}else
+			return false;
+	}
 }
