@@ -1462,7 +1462,7 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//239	gibt alle Kostenarten zurück mit id, beschreibung
-			ps = con.prepareStatement( "SELECT * FROM Kostenart");
+			ps = con.prepareStatement( "SELECT * FROM kostenarten");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		

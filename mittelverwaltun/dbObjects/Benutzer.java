@@ -206,14 +206,20 @@ public class Benutzer implements Serializable{
 	public boolean equals(Object benutzer){
 		if(benutzer != null){
 			if( this.id == ((Benutzer)benutzer).getId() && 
-				this.benutzername.equals(((Benutzer)benutzer).getBenutzername())&&
-				this.name.equals(((Benutzer)benutzer).getName())&&
-				this.vorname.equals(((Benutzer)benutzer).getVorname())&&
-				this.titel.equals(((Benutzer)benutzer).getTitel())&&
-				this.email.equals(((Benutzer)benutzer).getEmail())&&
-				this.privatKonto == (((Benutzer)benutzer).getPrivatKonto()) &&
-				this.rolle.equals(((Benutzer)benutzer).getRolle())&&
-				this.kostenstelle.equals(((Benutzer)benutzer).getKostenstelle()))
+					this.benutzername.equals(((Benutzer)benutzer).getBenutzername()) &&
+					this.name.equals(((Benutzer)benutzer).getName()) &&
+					this.vorname.equals(((Benutzer)benutzer).getVorname()) && 
+					this.titel.equals(((Benutzer)benutzer).getTitel()) &&
+					this.email.equals(((Benutzer)benutzer).getEmail()) &&
+					this.privatKonto == (((Benutzer)benutzer).getPrivatKonto()) &&
+					this.rolle.equals(((Benutzer)benutzer).getRolle()) &&
+					this.kostenstelle.equals(((Benutzer)benutzer).getKostenstelle()) &&
+					this.bau.equals(((Benutzer)benutzer).getBau()) &&
+					this.raum.equals(((Benutzer)benutzer).getRaum()) &&
+					this.telefon.equals(((Benutzer)benutzer).getTelefon()) &&
+					this.fax.equals(((Benutzer)benutzer).getFax()) &&
+					this.swBeauftragter == ((Benutzer)benutzer).getSwBeauftragter() 
+				)
 				return true;
 			else
 				return false;
