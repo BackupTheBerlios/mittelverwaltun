@@ -142,7 +142,11 @@ public class Firma implements Serializable {
 	 * Ermittlung ob zwei Firmen gleich sind. Dabei ist der Name, Straﬂe, PLZ und Ort entscheidend.
 	 */
 	public boolean equals( Firma firma ) {
-		if( this.name == firma.name && this.strasseNr == firma.strasseNr && this.plz == firma.plz && this.ort == firma.ort )
+		if( ((name == null || firma.getName() == null) ? true : name.equals(firma.getName())) && 
+				((strasseNr == null || firma.getStrasseNr() == null) ? true : strasseNr.equals(firma.getStrasseNr())) && 
+				((plz == null || firma.getPlz() == null) ? true : plz.equals(firma.getPlz())) && 
+				((ort == null || firma.getOrt() == null) ? true : ort.equals(firma.getOrt()))
+			 )
 			return true;
 		else
 			return false;

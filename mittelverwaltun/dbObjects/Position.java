@@ -110,7 +110,7 @@ public class Position implements Serializable {
 	
 	
 	public String toString(){
-		return "";
+		return artikel;
 	}
   
 	public int getId() {
@@ -190,8 +190,8 @@ public class Position implements Serializable {
 					rabatt == position.getRabatt() &&
 					mwst == position.getMwst() &&
 					beglichen == position.getBeglichen() &&
-					(institut == null || position.getInstitut() == null) ? true : institut == position.getInstitut() &&
-					artikel == position.getArtikel()
+					((institut == null || position.getInstitut() == null) ? true : institut.equals(position.getInstitut()))  &&
+					((artikel == null || position.getArtikel() == null) ? true : artikel.equals(position.getArtikel()))
 				)
 				return true;
 			else

@@ -115,10 +115,10 @@ public class Angebot implements Serializable {
 	public boolean equals(Object o){
 		if(o != null){
 			Angebot angebot = (Angebot)o;
-			if( ((positionen != null) ? false : (positionen == angebot.getPositionen())) &&
+			if( ((positionen == null || angebot.getPositionen() == null) ? true : positionen.equals(angebot.getPositionen())) &&
 					id == angebot.getId() &&
-					anbieter == angebot.getAnbieter() &&
-					datum == angebot.getDatum() &&
+					((anbieter == null || angebot.getAnbieter() == null) ? true : (anbieter.getId() == angebot.getAnbieter().getId())) &&
+					datum.equals(angebot.getDatum()) &&
 					summe == angebot.getSumme() )
 				return true;
 			else
