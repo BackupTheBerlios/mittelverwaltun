@@ -315,35 +315,35 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		if(r == "Report_1"){
 			cbReportFilter.setToolTipText(tooltips[0]);
 			report = REPORT_1;
-			xmlFile = "report1.xml";
+			xmlFile = "/xml/report1.xml";
 		}else if(r == "Report_2"){
 			cbReportFilter.setToolTipText(tooltips[1]);
 			report = REPORT_2;
-			xmlFile = "report2.xml";
+			xmlFile = "/xml/report2.xml";
 		}else if(r == "Report_3"){
 			cbReportFilter.setToolTipText(tooltips[2]);
 			report = REPORT_3;
-			xmlFile = "report3.xml";
+			xmlFile = "/xml/report3.xml";
 		}else if(r == "Report_4"){
 			cbReportFilter.setToolTipText(tooltips[3]);
 			report = REPORT_4;
-			xmlFile = "report4.xml";
+			xmlFile = "/xml/report4.xml";
 		}else if(r == "Report_5"){
 			cbReportFilter.setToolTipText(tooltips[4]);
 			report = REPORT_5;
-			xmlFile = "report5.xml";
+			xmlFile = "/xml/report5.xml";
 		}else if(r == "Report_6"){
 			cbReportFilter.setToolTipText(tooltips[5]);
 			report = REPORT_6;
-			xmlFile = "report6.xml";
+			xmlFile = "/xml/report6.xml";
 		}else if(r == "Report_7"){
 			cbReportFilter.setToolTipText(tooltips[6]);
 			report = REPORT_7;
-			xmlFile = "report7.xml";
+			xmlFile = "/xml/report7.xml";
 		}else if(r == "Report_8"){
 			cbReportFilter.setToolTipText(tooltips[7]);
 			report = REPORT_8;
-			xmlFile = "report8.xml";
+			xmlFile = "/xml/report8.xml";
 		}
 
 		if(e.getSource() == cbReportFilter){
