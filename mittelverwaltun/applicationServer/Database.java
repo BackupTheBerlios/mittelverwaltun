@@ -3765,26 +3765,6 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * addiert die Vormerkungen auf die existierenden Vormerkungen des jeweiligen FBKontos bzw.
-	 * ZVTitels
-	 * @param fbKonto
-	 * @param zvTitel
-	 * @throws ApplicationServerException
-	 * @author robert
-	 */
-	public void updateVormerkungen(FBUnterkonto fbKonto, ZVUntertitel zvTitel) throws ApplicationServerException{
-		try{
-			Object[] parameters = { new Float(fbKonto.getVormerkungen()), new Float(zvTitel.getVormerkungen()), 
-															new Integer(fbKonto.getId()), new Integer(zvTitel.getId()) };
-			if(statements.get(310).executeUpdate(parameters) == 0)
-				throw new ApplicationServerException(99);
-
-		} catch (SQLException e){
-			throw new ApplicationServerException(98, e.getMessage());
-		}
-	}
-	
-	/**
 	 * fügt eine neue Buchung ein
 	 * @param b - Buchung
 	 * @throws ApplicationServerException
@@ -3804,7 +3784,15 @@ public class Database implements Serializable{
 		}
 	}
 
-
+	/**
+	 * setzt den Summand auf die existierenden Vormerkungen des jeweiligen FBKontos bzw.
+	 * ZVTitels
+	 * @param fbKonto
+	 * @param zvTitel
+	 * @param summand
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateVormerkungen(FBUnterkonto fbKonto, ZVUntertitel zvTitel, float summand) throws ApplicationServerException{
 		try{
 			Object[] parameters = { new Float(summand), new Float(summand), new Integer(fbKonto.getId()), new Integer(zvTitel.getId()) };
@@ -3866,7 +3854,6 @@ public class Database implements Serializable{
 		} catch (SQLException e){
 			throw new ApplicationServerException(98, e.getMessage());
 		}
-		
 	}
 
 

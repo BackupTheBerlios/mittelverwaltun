@@ -1913,6 +1913,7 @@ public class PreparedSqlStatements {
 										  "AND o.besteller = u1.id " +
 										  "AND o.auftraggeber = u2.id " +
 										  "AND o.empfaenger = u3.id " +
+										  "AND o.geloescht = '0' " +
 										  "ORDER BY datum DESC");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -1928,7 +1929,7 @@ public class PreparedSqlStatements {
 										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
 										"WHERE o.besteller = u1.id " +
 										  "AND o.auftraggeber = u2.id " +
-										  "AND o.empfaenger = u3.id " +
+										  "AND o.empfaenger = u3.id " +										  "AND o.geloescht = '0' " +
 										  "ORDER BY datum DESC");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}

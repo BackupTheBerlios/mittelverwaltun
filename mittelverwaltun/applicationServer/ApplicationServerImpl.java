@@ -1790,7 +1790,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(bestellung.getPhase() == '1'){
 			// Vormerkungen bei FBKonto und ZVTitel setzen
-			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel());
+			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
 				// ? Vormerkungen Buchen ?
 		}
 		
@@ -1826,7 +1826,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(bestellung.getPhase() == '1'){
 			// Vormerkungen bei FBKonto und ZVTitel setzen
-			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel());
+			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
 				// ? Vormerkungen Buchen ?
 		}
 		
@@ -1870,7 +1870,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 				if(edited.getPhase() == '1'){
 					//	Vormerkungen bei FBKonto und ZVTitel setzen
-					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
 					// ? Vormerkungen Buchen ?
 				}
 			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
@@ -2096,13 +2096,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				// es wurde auf den Button Bestellen gedrückt
 				if(edited.getPhase() == '1'){
 					// Vormerkungen bei FBKonto und ZVTitel setzen
-					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
 					// ? Vormerkungen Buchen ?
 				}
 			
 			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
 				db.updateASKBestellung(edited);
-				// TODO nur ein Angebot aktualisieren
 				actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
 	
 				// Bestimme Bestellwertdifferenz
