@@ -28,8 +28,11 @@ public class StartWindow extends JFrame implements ActionListener {
 	ApplicationServer applicationServer;
 	CentralServer centralServer;
 	Benutzer benutzer;
-	final static String host = "localhost";				// Adresse und
+	final static String host = "localhost";					// Adresse und
 	final static String serverName = "mittelverwaltung";	// ServerName
+	
+	final static int WND_WIDTH = 320;		// Breite des Login-Fensters
+	final static int WND_HEIGHT = 252;		// Höhe des Login-Fensters
 
 	/**
 	 * Erzeugt ein Fenster mit demm die Anmeldung im FBMittelverwaltungs-System erfolgt. 
@@ -40,7 +43,8 @@ public class StartWindow extends JFrame implements ActionListener {
 		try {
 			this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
 			this.setResizable( false );
-			this.setBounds(new Rectangle(200, 200, 322, 252));
+			Dimension size = this.getToolkit().getScreenSize();		// Login-Fenster in der Mitte des Bildschirms
+			this.setBounds(new Rectangle((int)((size.width - WND_WIDTH) / 2), (int)((size.height - WND_HEIGHT) / 2), 322, 252));
 			this.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
