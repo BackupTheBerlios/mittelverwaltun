@@ -2,7 +2,7 @@
 <!DOCTYPE report PUBLIC "-//JFreeReport//DTD report definition//EN//simple"
                         "./report.dtd">
 
-<report name="FB-Mittelverwaltung Report" pageformat="A4" leftmargin="72" topmargin="72" orientation="landscape">
+<report name="FB-Mittelverwaltung Report" pageformat="A4" leftmargin="72" topmargin="72" >
   
   <!-- REPORT HEADER -->
   <!-- This band appears once at the beginning of the report.  In this example, -->
@@ -39,22 +39,14 @@
   </pagefooter>
 	
 	<groups>
-    <group name="Institut Group">
-      <groupheader height="40" fontname="SansSerif" fontstyle="bold" fontsize="12" pagebreak="false">
-        <string-field x="0" y="11" width="250" height="12" alignment="left" fieldname="Institut"/>
-        <line x1="0" y1="23" x2="0" y2="23" weight="0.5"/>
-        <rectangle x="0" y="30" width="100%" height="15" color="#CCCCCC" weight="0"/>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="33" width="100%" height="10" alignment="left">ZV-Konto</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="235" y="33" width="100%" height="10" alignment="left">Referenznr.</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="310" y="33" width="100%" height="10" alignment="left">Hül-Nr</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="370" y="33" width="100%" height="10" alignment="left">Typ</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="460" y="33" width="100%" height="10" alignment="left">Datum</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="520" y="33" width="100%" height="10" alignment="left">Status</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="0" y="33" width="100%" height="10" alignment="right">Ausgaben (Institut) </label>
+    <group name="ZVKonto Group">
+      <groupheader height="20" fontname="SansSerif" fontstyle="bold" fontsize="12" pagebreak="false">
+        <rectangle x="0" y="10" width="100%" height="15" color="#CCCCCC" weight="0"/>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="13" width="100%" height="10" alignment="left">ZV-Konto</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="180" y="13" width="100" height="10" alignment="left">zugewiesene Mittel</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="312" y="13" width="100" height="10" alignment="left">Ausgaben</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="0" y="13" width="100%" height="10" alignment="right">Kontostand </label>
       </groupheader>
-      <fields>
-        <field>Institut</field>
-      </fields>
     </group>
   </groups>
 
@@ -63,28 +55,23 @@
   <items height="0"
     fontname="Tahoma" fontstyle="plain" fontsize="9">
 
-    <string-field x="0" y="7" width="20%" height="9" alignment="left"
+    <string-field x="0" y="7" width="100%" height="9" alignment="left"
       fontname="Tahoma" fontstyle="plain" fontsize="8"
       fieldname="ZV-Konto"/>
-    <string-field x="250" y="7" width="15%" height="9" alignment="left"
-      fontname="Tahoma"
-      fieldname="Referenznr."/>
-    <string-field x="310" y="7" width="10%" height="9" alignment="left"
-      fontname="Tahoma"
-      fieldname="Hül-Nr"/>
-    <string-field x="370" y="7" width="20%" height="9" alignment="left"
-      fontname="Tahoma"
-      fieldname="Typ"/>
-    <string-field x="460" y="7" width="15%" height="9" alignment="left"
-      fontname="Tahoma"
-      fieldname="Datum"/>
-    <string-field x="520" y="7" width="20%" height="9" alignment="left"
-      fontname="Tahoma"
-      fieldname="Status"/>
+
+		<string-field x="155" y="7" width="100" height="9" alignment="right"
+      fontname="Tahoma" fontstyle="plain" fontsize="8"
+      fieldname="zugewiesene Mittel"/>
+		<label fontname="Tahoma" fontsize="8" x="260" y="7" width="20" height="9" alignment="left">Euro</label>
+
+		<string-field x="245" y="7" width="100" height="9" alignment="right"
+      fontname="Tahoma" fontstyle="plain" fontsize="8"
+      fieldname="Ausgaben"/>
+		<label fontname="Tahoma" fontsize="8" x="350" y="7" width="20" height="9" alignment="left">Euro</label>
+
     <string-field x="0" y="7" width="95%" height="9" alignment="right"
       fontname="Tahoma"
-      fieldname="Ausgaben (Bestellung)"/>
-    
+      fieldname="Kontostand"/>
     <label fontname="Tahoma" fontsize="8" x="0" y="7" width="100%" height="9" alignment="right">Euro</label>
 
   </items>
