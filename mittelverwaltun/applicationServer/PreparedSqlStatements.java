@@ -1343,11 +1343,17 @@ public class PreparedSqlStatements {
 		}
 		
 		{//218
-			statements[i++] = null;
+			ps = con.prepareStatement("INSERT " +
+																"INTO Bestellungen " +
+																	 "( id, angebot, bemerkungen, swBeauftragter, kostenar, ersatzbeschaffung, ersatzbeschreibung, " +																	 "ersatzInventarNr, verwendungszweck, planvorgabe, begruendung) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//219
 			ps = con.prepareStatement("INSERT " +
-																"INTO Bestellungen " +
+																"INTO ASK_Standard_Bestellungen " +
 																	 "(besteller, auftraggeber, empfaenger, referenzNr, typ, phase, " +																	 "datum, zvTitel, fbKont, bestellwert, verbindlichkeiten) " +
 															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 															  Statement.RETURN_GENERATED_KEYS);
