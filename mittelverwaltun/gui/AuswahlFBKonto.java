@@ -23,13 +23,21 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
   JButton buBeenden = new JButton();
   Component parent;
   ApplicationServer applicationServer;
+  boolean hauptKonto;
 
 
-
-  public AuswahlFBKonto(Component parent, boolean modal, ApplicationServer applicationServer) {
+	/**
+	 * 
+	 * @param parent
+	 * @param modal
+	 * @param applicationServer
+	 * @param hauptKonto - sollen auch HauptKonten ausgewählt werden können
+	 */
+  public AuswahlFBKonto(Component parent, boolean modal, ApplicationServer applicationServer, boolean hauptKonto) {
 		super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
 		this.parent = parent;
 		this.applicationServer = applicationServer;
+		this.hauptKonto = hauptKonto;
 
 		try {
 		  jbInit();
@@ -53,10 +61,11 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	  this.setBounds(0,0,460, 320);
  }
  
- 	public AuswahlFBKonto(Component parent, Institut institut, boolean modal, ApplicationServer applicationServer) {
+ 	public AuswahlFBKonto(Component parent, Institut institut, boolean modal, ApplicationServer applicationServer, boolean hauptKonto) {
 		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
 		 this.parent = parent;
 		 this.applicationServer = applicationServer;
+		 this.hauptKonto = hauptKonto;
 		
 		 try {
 			jbInit();
@@ -109,7 +118,7 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	}
 
 	void setAuswahl(){
-		if(treeKonten.fbHauptkontoIsSelected() || treeKonten.fbUnterkontoIsSelected()){
+		if(treeKonten.fbUnterkontoIsSelected() || (treeKonten.fbHauptkontoIsSelected() && hauptKonto)){
 			FBUnterkonto fbKonto = (FBUnterkonto)treeKonten.getCurrentNode().getUserObject();
 			((FBKontoSelectable)parent).setFBKonto(fbKonto);
 			this.dispose();
@@ -118,7 +127,7 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );
-		if(treeKonten.fbHauptkontoIsSelected() || treeKonten.fbUnterkontoIsSelected()){
+		if(treeKonten.fbUnterkontoIsSelected() || (treeKonten.fbHauptkontoIsSelected() && hauptKonto)){
 			buAuswahl.setEnabled(true);
 			FBUnterkonto fbKonto = (FBUnterkonto)treeKonten.getCurrentNode().getUserObject();
 			tfKonto.setText(fbKonto.getBezeichnung());

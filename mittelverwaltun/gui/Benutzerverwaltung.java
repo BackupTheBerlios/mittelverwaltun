@@ -443,7 +443,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			loadRollen();
 			loadUsers();
 		} else if ( e.getSource() == buKontoAuswahl ) {
-			AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, false, applicationServer);
+			AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, applicationServer, false);
 			kontoAuswahl.show();
 		}else if ( e.getSource() == buKontoEntfernen ) {
 			privatKonto = 0;

@@ -98,6 +98,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   StandardBestellung bestellung;
   JTextField tfFBKonto = new JTextField();
   JButton buFBKonto = new JButton();
+  JButton buDelete = new JButton();
 
   public BestellungNormal(MainFrame frame) {
   	this.frame = frame;
@@ -136,14 +137,17 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
 		buAddAngebot.addActionListener(this);
-		buAddAngebot.setIcon(Functions.getExpandIcon(getClass()));
+		buAddAngebot.setIcon(Functions.getAddIcon(getClass()));
 		buBeenden.addActionListener(this);
 		buBeenden.setIcon(Functions.getCloseIcon(this.getClass()));
 		buSpeichern.addActionListener(this);
+		buSpeichern.setIcon(Functions.getSaveIcon(this.getClass()));
 		buBestellen.addActionListener(this);
 		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
 		buFBKonto.addActionListener(this);
-		
+		buDelete.addActionListener(this);
+		buDelete.setIcon(Functions.getDelIcon(getClass()));
+
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
@@ -196,7 +200,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   }
 
   private void jbInit() throws Exception {
-		this.setSize(new Dimension(604, 545));
+		this.setSize(new Dimension(608, 545));
     labInstitut.setFont(new java.awt.Font("Dialog", 0, 12));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(7, 106, 50, 15));
@@ -225,7 +229,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     tfAngebotNr.setEditable(false);
     buBeenden.setBounds(new Rectangle(483, 486, 112, 25));
     buBeenden.setText("Beenden");
-    buSpeichern.setBounds(new Rectangle(164, 486, 112, 25));
+    buSpeichern.setBounds(new Rectangle(125, 486, 112, 25));
     buSpeichern.setText("Speichern");
     buBestellen.setBounds(new Rectangle(5, 486, 112, 25));
     buBestellen.setText("Bestellen");
@@ -267,6 +271,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     buFBKonto.setBounds(new Rectangle(438, 132, 109, 21));
     buFBKonto.setText("FBKonto");
     jTextPane1.setEditable(false);
+    buDelete.setText("Löschen");
+    buDelete.setBounds(new Rectangle(244, 486, 112, 25));
     unten.add(tpAuftragGrund, null);
     unten.add(jLabel14, null);
     unten.add(tfAngebotNr, null);
@@ -389,7 +395,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		tfInventarNr.setBounds(new Rectangle(377, 8, 77, 21));
     tfAngebotNr.setText("");
 		tfAngebotNr.setBounds(new Rectangle(185, 23, 47, 21));
-    buDrucken.setBounds(new Rectangle(324, 486, 112, 25));
+    buDrucken.setBounds(new Rectangle(364, 486, 112, 25));
 		buDrucken.setText("Drucken");
     buTitel.setBounds(new Rectangle(438, 186, 109, 21));
     buTitel.setActionCommand("buTitel");
@@ -415,11 +421,12 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(jLabel22, null);
     oben.add(jLabel22, null);
     this.getContentPane().add(jScrollPane1, null);
-    this.getContentPane().add(buSpeichern, null);
-    this.getContentPane().add(buDrucken, null);
     this.getContentPane().add(buBestellen, null);
     this.getContentPane().add(buBeenden, null);
     this.getContentPane().add(jLabel1, null);
+    this.getContentPane().add(buDrucken, null);
+    this.getContentPane().add(buDelete, null);
+    this.getContentPane().add(buSpeichern, null);
     jScrollPane1.getViewport().add(panelBeilage, null);
 		panelBeilage.setSize(548, 800);
 		panelBeilage.setPreferredSize(new Dimension(548, 800));
@@ -436,7 +443,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}else if ( e.getSource() == rbAuftragGrund ) {
 			tpAuftragGrund.setVisible(true);
 		}else if ( e.getSource() == buFBKonto ) {
-			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer());
+			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
 			fbKontoAuswahl.show();
 		}else if ( e.getSource() == buTitel ) {
 			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
