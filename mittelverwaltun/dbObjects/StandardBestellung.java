@@ -13,11 +13,6 @@ public class StandardBestellung extends Bestellung implements Serializable {
 
 	private ArrayList angebote;
 
-	/**
-	 * Die ID des ausgewählten Angebots
-	 */
-	private int auswahl;
-
 	private Kostenart kostenart;
 
 	private boolean ersatzbeschaffung;
@@ -56,13 +51,12 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 * @param fbkonto
 	 * @param bestellwert
 	 */
-	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
+	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
 														String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
-		this.auswahl = auswahl;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
 		this.ersatzbeschreibung = ersatzbeschreibung;
@@ -96,13 +90,12 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 * @param fbkonto
 	 * @param bestellwert
 	 */
-	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
+	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
 														int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
-		this.auswahl = auswahl;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
 		this.ersatzbeschreibung = ersatzbeschreibung;
@@ -155,14 +148,6 @@ public class StandardBestellung extends Bestellung implements Serializable {
 
 	public void setAngebote(ArrayList angebote) {
 		this.angebote = angebote;
-	}
-
-	public int getAuswahl() {
-		return auswahl;
-	}
-
-	public void setAuswahl(int auswahl) {
-		this.auswahl = auswahl;
 	}
 
 	public Kostenart getKostenart() {
@@ -231,30 +216,28 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	
 	public boolean equals(Object o){
 		if(o != null){
-			StandardBestellung bestellung = (StandardBestellung)o;
-			if( this.auswahl == bestellung.getAuswahl() &&
-					this.kostenart == bestellung.getKostenart() &&
-					this.ersatzbeschaffung == bestellung.getErsatzbeschaffung() &&
-					this.ersatzbeschreibung == bestellung.getErsatzbeschreibung() &&
-					this.inventarNr == bestellung.getInventarNr() &&
-					this.verwendungszweck == bestellung.getVerwendungszweck() &&
-					this.planvorgabe == bestellung.getPlanvorgabe() &&
-					this.begruendung == bestellung.getBegruendung() &&
-					this.bemerkung == this.bemerkung && 
+			StandardBestellung b = (StandardBestellung)o;
+			if( ((kostenart == null || b.getKostenart() == null) ? true : kostenart.equals(b.getKostenart())) &&
+					ersatzbeschaffung == b.getErsatzbeschaffung() &&
+					((ersatzbeschreibung == null || b.getErsatzbeschreibung() == null) ? true : ersatzbeschreibung.equals(b.getErsatzbeschreibung())) &&
+					((inventarNr == null || b.getInventarNr() == null) ? true : inventarNr.equals(b.getInventarNr())) &&
+					((verwendungszweck == null || b.getVerwendungszweck() == null) ? true : verwendungszweck.equals(b.getVerwendungszweck())) &&
+					planvorgabe == b.getPlanvorgabe() &&
+					((begruendung == null || b.getBegruendung() == null) ? true : begruendung.equals(b.getBegruendung())) &&
+					((bemerkung == null || b.getBegruendung() == null) ? true : bemerkung.equals(b.getBemerkung())) && 
 					// Bestellung
-					getId() == bestellung.getId() &&
-					getReferenznr() == bestellung.getReferenznr() &&
-					getHuel() == bestellung.getHuel() &&
-					getDatum() == bestellung.getDatum() &&
-					getBesteller() == bestellung.getBesteller() &&
-					getPhase() == bestellung.getPhase() &&
-					getAuftraggeber() == bestellung.getAuftraggeber() &&
-					getEmpfaenger() == bestellung.getEmpfaenger() &&
-					getZvtitel() == bestellung.getZvtitel() &&
-					getFbkonto() == bestellung.getFbkonto() &&
-					getBestellwert() == bestellung.getBestellwert()
+					getId() == b.getId() &&
+					((getReferenznr() == null || b.getReferenznr() == null) ? true : getReferenznr().equals(b.getReferenznr())) &&
+					((getHuel() == null || b.getHuel() == null) ? true : getHuel().equals(b.getHuel())) &&
+					((getDatum() == null || b.getDatum() == null) ? true : getDatum().equals(b.getDatum())) &&
+					((getBesteller() == null || b.getBesteller() == null) ? true : getBesteller().equals(b.getBesteller())) &&
+					getPhase() == b.getPhase() &&
+					((getAuftraggeber() == null || b.getAuftraggeber() == null) ? true : getAuftraggeber().equals(b.getAuftraggeber())) &&
+					((getEmpfaenger() == null || b.getEmpfaenger() == null) ? true : getEmpfaenger().equals(b.getEmpfaenger())) &&
+					((getZvtitel() == null || b.getZvtitel() == null) ? true : getZvtitel().equals(b.getZvtitel())) &&
+					((getFbkonto() == null || b.getFbkonto() == null) ? true : getFbkonto().equals(b.getFbkonto())) &&
+					getBestellwert() == b.getBestellwert()
 					)
-					
 				return true;
 			else
 				return false;
