@@ -52,6 +52,7 @@ public class StartWindow extends JFrame implements ActionListener {
 			});
 			this.show();
 			jbInit();
+			tfBenutzername.requestFocus();
 			centralServer = (CentralServer)Naming.lookup("//" + host + "/" + serverName);
 			InetAddress addr = InetAddress.getLocalHost();
 			applicationServer = centralServer.getMyApplicationServer( addr.getHostName(), addr.getHostAddress() );
