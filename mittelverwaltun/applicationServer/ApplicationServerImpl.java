@@ -1766,7 +1766,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(c > 0)
 			throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
-		int newBestellungId = db.insertBestellung(bestellung, 0);
+		int newBestellungId = db.insertBestellung(bestellung);
 		int newAngebotId = 0;
 		
 		// fügt die Standardbestellung ein
@@ -1796,7 +1796,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
 	
-		int newBestellungId = db.insertBestellung(bestellung, 0);
+		int newBestellungId = db.insertBestellung(bestellung);
 		int newAngebotId = 0;
 		
 		// fügt die ASKbestellung ein
@@ -2176,7 +2176,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		try {
 			// Bestellung einfügen in der Bestellungs-Tabelle und Id speichern
-			bestellung.setId(db.insertBestellung(bestellung, 2));
+			bestellung.setId(db.insertBestellung(bestellung));
 			// Bestellung in der Kleinbestellung-Tabelle speichern
 			db.insertKleinbestellung(bestellung);
 			// Belege speichern
@@ -2321,7 +2321,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#getASKFirma()
 	 */
 	public Firma getASKFirma() throws ApplicationServerException {
-		return null;
+		return db.selectASKFirma();
 	}
 }
 

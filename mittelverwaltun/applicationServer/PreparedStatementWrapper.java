@@ -145,7 +145,7 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 						;
 				case Types.VARCHAR:
 						{
-							String v = parameters[i].toString();
+							String v = (String)parameters[i];
 							if (v == null)
 								stmt.setNull(i+1, Types.NULL);
 							else
@@ -252,7 +252,7 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 						;
 				case Types.VARCHAR:
 						{
-							String v = parameters[i].toString();
+							String v = (String)parameters[i];
 							if (v == null)
 								stmt.setNull(i+1, Types.NULL);
 							else

@@ -2874,17 +2874,13 @@ public class Database implements Serializable{
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */ 
-	public int insertBestellung(Bestellung bestellung, int typ) throws ApplicationServerException{
+	public int insertBestellung(Bestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
-				float vb = 0f; // Verbindlichkeiten
-				if(typ != 2 && bestellung.getPhase() != 0)
-					vb = bestellung.getBestellwert();
-				
 				Object[] parameters = { new Integer(bestellung.getBesteller().getId()), new Integer(bestellung.getAuftraggeber().getId()),
-																new Integer(bestellung.getEmpfaenger().getId()), bestellung.getReferenznr(), "" + typ,
+																new Integer(bestellung.getEmpfaenger().getId()), bestellung.getReferenznr(), "" + bestellung.getTyp(),
 																"" + bestellung.getPhase(), bestellung.getDatum(), new Integer(bestellung.getZvtitel().getId()), 
-																new Integer(bestellung.getFbkonto().getId()), new Float(bestellung.getBestellwert()), new Float(vb)};
+																new Integer(bestellung.getFbkonto().getId()), new Float(bestellung.getBestellwert()), new Float(bestellung.getVerbindlichkeiten())};
 				statements.get(219).executeUpdate(parameters);
 				ResultSet rs = statements.get(219).getGeneratedKeys();
 
