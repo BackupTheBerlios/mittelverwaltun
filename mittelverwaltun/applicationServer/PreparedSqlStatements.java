@@ -1756,20 +1756,15 @@ public class PreparedSqlStatements {
 		{//250 fügt eine StandardBestellung in die ASK_Standard_Bestellungen Tabelle ein
 			ps = con.prepareStatement("INSERT " +
 																"INTO ASK_Standard_Bestellungen " +
-																	 "( id, bemerkungen, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +
+																	 "( id, bemerkungen, swBeauftragter, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +
 																	 "ersatzInventarNr, verwendungszweck, planvorgabe, begruendung) " +
-															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//251 fügt eine ASKBestellung in die ASK_Standard_Bestellungen Tabelle ein
-			ps = con.prepareStatement("INSERT " +
-																"INTO ASK_Standard_Bestellungen " +
-																	 "( id, bemerkungen, swBeauftragter) " +
-															  "VALUES (?, ?, ?)");
-			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER};
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+			statements[i++] = null;
 		}
 		{//252
 			statements[i++] = null;
@@ -1816,11 +1811,7 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//262
-			/**
-			 * Anzahl der Angebote bei denen eine bestimmte Firma verwendet wurde.
-			 * @author w.flat
-			 */
+		{//262 Anzahl der Angebote bei denen eine bestimmte Firma verwendet wurde.
 			ps = con.prepareStatement(	"SELECT COUNT(a.id)" +
 										"FROM Angebote a, Firmen b " +
 										"WHERE b.id = ? AND a.anbieter = b.id" );
@@ -1841,7 +1832,7 @@ public class PreparedSqlStatements {
 		}
 		/******************************************/
 		/* Tabelle: Positionen 1               	  */
-		/* Indizes: 260-264                       */
+		/* Indizes: 265-269                       */
 		/******************************************/
 		{//265 fügt eine Positon in die Tabelle Positionen ein
 			ps = con.prepareStatement("INSERT " +
@@ -1859,15 +1850,15 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//267 löscht alle Positionen von allen Angeboten zu einer Bestellung
-			ps = con.prepareStatement("DELETE FROM Positionen WHERE " +																		"angebot = (SELECT id FROM Angebote WHERE bestellung = ?) ");
+			ps = con.prepareStatement("DELETE FROM Positionen WHERE " +																		"angebot IN (SELECT id FROM Angebote WHERE bestellung = ?) ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//268 aktualisiert eine Position anhand der Id
 			ps = con.prepareStatement("UPDATE Positionen " +
 																"SET institut = ?, menge = ?, artikel = ?, einzelPreis = ?, mwSt = ?, rabatt = ?, beglichen = ? " +
-																"WHERE id = ?" );
-			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.VARCHAR};
+																"WHERE id = ? " );
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//269 löscht eine Position anhand der Id

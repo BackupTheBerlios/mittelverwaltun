@@ -2765,14 +2765,14 @@ public class Database implements Serializable{
 	public void insertStandardBestellung(StandardBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
-				Object[] parameters = { new Integer(bestellung.getId()), bestellung.getBemerkung(),
+				Object[] parameters = { new Integer(bestellung.getId()), bestellung.getBemerkung(), null,
 																new Integer(bestellung.getKostenart().getId()), (bestellung.getErsatzbeschaffung() ? "1" : "0"),
 																bestellung.getErsatzbeschreibung(), bestellung.getInventarNr(), bestellung.getVerwendungszweck(),
 																(bestellung.getPlanvorgabe() ? "1" : "0"), bestellung.getBegruendung()};
 				statements.get(250).executeUpdate(parameters);
 				
 			} catch (SQLException e){
-				//rollback();
+				rollback();
 				setAutoCommit(true);
 				throw new ApplicationServerException(66, e.getMessage());
 			}
@@ -2832,10 +2832,10 @@ public class Database implements Serializable{
 	public void insertASKBestellung(ASKBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
-				Object[] parameters = {new Integer(bestellung.getId()), 
-																bestellung.getBemerkung(), new Integer(bestellung.getSwbeauftragter().getId())};
-				statements.get(251).executeUpdate(parameters);
-			
+				Object[] parameters = { new Integer(bestellung.getId()), bestellung.getBemerkung(),  new Integer(bestellung.getSwbeauftragter().getId()),
+																null, null, null, null, null, null, null};
+				statements.get(250).executeUpdate(parameters);
+				
 			} catch (SQLException e){
 				throw new ApplicationServerException(69, e.getMessage());
 			}
@@ -2883,7 +2883,7 @@ public class Database implements Serializable{
 	public void insertPosition(Position position, int angebotId) throws ApplicationServerException{
 		if(position != null){
 			try{
-				Object[] parameters = { new Integer(angebotId), new Integer(position.getInstitut().getId()), new Integer(position.getMenge()),
+				Object[] parameters = { new Integer(angebotId), ((position.getInstitut() == null) ? null : new Integer(position.getInstitut().getId())), new Integer(position.getMenge()),
 																position.getArtikel(), new Float(position.getEinzelPreis()), new Float(position.getMwst()),
 																new Float(position.getRabatt()) };
 				statements.get(265).executeUpdate(parameters);
@@ -3044,7 +3044,7 @@ public class Database implements Serializable{
 			Object[] parameters = {new Integer(bestellId)};
 			statements.get(267).executeUpdate(parameters);
 		} catch (SQLException e){
-			throw new ApplicationServerException( 80, e.getMessage() );
+			throw new ApplicationServerException( 86, e.getMessage() );
 		}
 	}
 	
@@ -3072,9 +3072,9 @@ public class Database implements Serializable{
 	public void deletePosition(int id) throws ApplicationServerException {
 		try{
 			Object[] parameters = {new Integer(id)};
-			statements.get(267).executeUpdate(parameters);
+			statements.get(269).executeUpdate(parameters);
 		} catch (SQLException e){
-			throw new ApplicationServerException( 80, e.getMessage() );
+			throw new ApplicationServerException( 88, e.getMessage() );
 		}
 	}
 	
@@ -3106,8 +3106,8 @@ public class Database implements Serializable{
 	 */
 	public void updatePosition(Position p) throws ApplicationServerException{
 		if(p != null){
-			try{//institut = ?, menge = ?, artikel = ?, einzelPreis = ?, mwSt = ?, rabatt = ?, beglichen = ?
-				Object[] parameters = { new Integer(p.getInstitut().getId()), new Integer(p.getMenge()), p.getArtikel(),
+			try{
+				Object[] parameters = { ((p.getInstitut() == null) ? null : new Integer(p.getInstitut().getId())), new Integer(p.getMenge()), p.getArtikel(),
 																new Float(p.getEinzelPreis()), new Float(p.getMwst()), new Float(p.getRabatt()),
 																(p.getBeglichen() ? "1" : "0"), new Integer(p.getId()) };
 				if(statements.get(268).executeUpdate(parameters) == 0)

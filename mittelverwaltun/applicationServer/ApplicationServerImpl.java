@@ -1820,41 +1820,51 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
 		if(!(oldOffers.equals(newOffers))){
-			int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
+			//int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
 		
-			for(int i = 0; i < listIndex; i++){
-				Angebot oldOffer = (Angebot)oldOffers.get(i); 
+			while((oldOffers.size() > 0) || (newOffers.size() > 0)){
+				Angebot oldOffer = null;
+				Angebot newOffer = null;
+				
+				if(oldOffers.size() > 0)
+					oldOffer = (Angebot)oldOffers.get(0); // altes Angebot
 	
-				if(newOffers.size() == 0){ // alle Angebote gelöscht
-					db.deletePositions(bestellId);
-					db.deleteAngebote(bestellId);
+				if(newOffers.size() > 0)
+					newOffer = (Angebot)newOffers.get(0); // neues Angebot
+					
+				if(oldOffer == null){
+					if(newOffer.getId() == 0){ // neues Angebot
+						int offerId = db.insertAngebot(newOffer, bestellId);
+						
+						for(int j = 0; j < newOffer.getPositionen().size(); j++){ // Positionen einfügen
+							Position p = (Position)newOffer.getPositionen().get(j);
+							db.insertPosition(p, offerId);
+						}
+						newOffers.remove(newOffer);
+					}
 				}else{
-		
-					if(oldOffers.size() == 0){ // nur neue Angebote
-						db.insertAngebot((Angebot)newOffers.get(i), bestellId);
+					if(newOffer == null){ // altes Angebot löschen
+						db.deleteOfferPositions(oldOffer.getId());
+						db.deleteAngebot(oldOffer.getId());
+						oldOffers.remove(oldOffer);
 					}else{
-		
-						if(i >= newOffers.size()){ // restliche alte Angebote löschen
-							db.deleteOfferPositions(oldOffer.getId());
-							db.deleteAngebot(oldOffer.getId());
+						if(newOffer.getId() == 0){ // neues Angebot
+							int offerId = db.insertAngebot(newOffer, bestellId);
+							
+							for(int j = 0; j < newOffer.getPositionen().size(); j++){ // Positionen einfügen
+								Position p = (Position)newOffer.getPositionen().get(j);
+								db.insertPosition(p, offerId);
+							}
+							newOffers.remove(newOffer);
 						}else{
-							Angebot newOffer = (Angebot)newOffers.get(i);
-			
-							if(newOffer.getId() == 0){ // neues Angebot
-								if(oldOffer != null){
-									db.deleteOfferPositions(oldOffer.getId());
-									db.deleteAngebot(oldOffer.getId());
-								}
-								db.insertAngebot(newOffer, bestellId);
+							if(oldOffer.getId() != newOffer.getId()){
+								db.deleteOfferPositions(oldOffer.getId());
+								db.deleteAngebot(oldOffer.getId());
+								oldOffers.remove(oldOffer);
 							}else{
-								if(oldOffer != null){
-									if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Angebote -> altes Angebot löschen
-										db.deleteOfferPositions(oldOffer.getId());
-										db.deleteAngebot(oldOffer.getId());
-									}else{
-										actualizeAngebot(oldOffer, newOffer, bestellId); // gleiche Angebote
-									}
-								}
+								actualizeAngebot(oldOffer, newOffer, bestellId);
+								oldOffers.remove(oldOffer);
+								newOffers.remove(newOffer);
 							}
 						}
 					}
@@ -1880,41 +1890,82 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			ArrayList oldPs = oldOffer.getPositionen(); // alte Positionen
 			ArrayList newPs = newOffer.getPositionen(); // neue Positionen
 			
-			int posIndex = (oldPs.size() > newPs.size()) ? oldPs.size() : newPs.size(); // der grössere Anzahl der Positionen
+			//int posIndex = (oldPs.size() > newPs.size()) ? oldPs.size() : newPs.size(); // der grössere Anzahl der Positionen
 			
-			for(int i = 0; i < posIndex; i++){
-				Position oldP = (Position)oldPs.get(i); 
-				
-				// nur neue Positionen hinzugefügt(mindestens 1)
-				if(((Position)newPs.get(0)).getId() == 0){
-					db.deleteOfferPositions(oldOffer.getId()); // alte Positionen löschen
-					
-					for(int j = 0; j < newPs.size(); j++) // neue Positionen
-							db.insertPosition((Position)newPs.get(j), newOffer.getId());
-					break;
-				}
-				
-				if(i >= newPs.size()){ // restliche Position im alten Angebot löschen
-					db.deletePosition(oldP.getId());
-				}else{
-					Position newP = (Position)newPs.get(i);
-				
-					if(newP.getId() == 0){ // neue Positionen
-						if(oldP != null)
-							db.deletePosition(oldP.getId());
+			while((oldPs.size() > 0) || (newPs.size() > 0)){
+				Position oldP = null;
+				Position newP = null;
+
+				if(oldPs.size() > 0)
+					oldP = (Position)oldPs.get(0); // alte Position
+
+				if(newPs.size() > 0)
+					newP = (Position)newPs.get(0); // neue Position
+	
+				if(oldP == null){
+					if(newP.getId() == 0){ // neues Angebot
 						db.insertPosition(newP, newOffer.getId());
+						newPs.remove(newP);
+					}
+				}else{
+					if(newP == null){ // altes Angebot löschen
+						db.deletePosition(oldP.getId());
+						oldPs.remove(oldP);
 					}else{
-						if(oldP != null){
-							if(oldP.getId() != newP.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
+						if(newP.getId() == 0){ // neues Angebot
+							db.insertPosition(newP, newOffer.getId());
+							newPs.remove(newP);
+						}else{
+							if(oldP.getId() != newP.getId()){
 								db.deletePosition(oldP.getId());
-							}else{	// gleiche Position
+								oldPs.remove(oldP);
+							}else{
 								if(!oldP.equals(newP)) // Position geändert
 									db.updatePosition(newP);
+								oldPs.remove(oldP);
+								newPs.remove(newP);
 							}
 						}
 					}
 				}
 			}
+			
+//			for(int i = 0; i < posIndex; i++){
+//				Position oldP = null;
+//				
+//				if(i < oldPs.size())
+//					oldP = (Position)oldPs.get(i); 
+//				
+//				// nur neue Positionen hinzugefügt(mindestens 1)
+//				if(((Position)newPs.get(0)).getId() == 0){
+//					db.deleteOfferPositions(oldOffer.getId()); // alte Positionen löschen
+//					
+//					for(int j = 0; j < newPs.size(); j++) // neue Positionen
+//							db.insertPosition((Position)newPs.get(j), newOffer.getId());
+//					break;
+//				}
+//				
+//				if(i >= newPs.size()){ // restliche Position im alten Angebot löschen
+//					db.deletePosition(oldP.getId());
+//				}else{
+//					Position newP = (Position)newPs.get(i);
+//				
+//					if(newP.getId() == 0){ // neue Positionen
+//						if(oldP != null)
+//							db.deletePosition(oldP.getId());
+//						db.insertPosition(newP, newOffer.getId());
+//					}else{
+//						if(oldP != null){
+//							if(oldP.getId() != newP.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
+//								db.deletePosition(oldP.getId());
+//							}else{	// gleiche Position
+//								if(!oldP.equals(newP)) // Position geändert
+//									db.updatePosition(newP);
+//							}
+//						}
+//					}
+//				}
+//			}
 		}
 	}
 

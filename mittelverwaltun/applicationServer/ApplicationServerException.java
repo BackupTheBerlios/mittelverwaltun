@@ -145,6 +145,7 @@ public class ApplicationServerException extends Exception {
 		messages[85] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteOfferPositions";
 		messages[86] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deletePositions";
 		messages[87] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteAngebot";
+		messages[88] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deletePosition";
 			
 //		Exception Ende ROBERT von 50-99
 
