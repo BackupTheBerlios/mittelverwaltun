@@ -1487,7 +1487,6 @@ public class Database implements Serializable{
 			
 			return existsZVKonto( konto );	// KontoId ermitteln und zurückgeben
 		} catch (SQLException e){
-			rollback();		
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1512,7 +1511,6 @@ public class Database implements Serializable{
 				return rs.getInt(1);	// Rückgabe der kontoId
 			}
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
@@ -1772,7 +1770,6 @@ public class Database implements Serializable{
 			statements.get(143).executeUpdate(parameters);
 			return existsZVTitel( konto );		// ZVTitelId ermitteln und zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1794,7 +1791,6 @@ public class Database implements Serializable{
 			statements.get(143).executeUpdate(parameters);
 			return existsZVUntertitel( konto );		// ZVUntertitelId ermitteln und zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1813,7 +1809,6 @@ public class Database implements Serializable{
 			// SQL-Statement mit der Nummer 123 ausführen
 			return statements.get(123).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1832,7 +1827,6 @@ public class Database implements Serializable{
 			// SQL-Statement mit der Nummer 144 ausführen
 			return statements.get(144).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1851,7 +1845,6 @@ public class Database implements Serializable{
 			// SQL-Statement mit der Nummer 144 ausführen
 			return statements.get(144).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 
@@ -1878,7 +1871,6 @@ public class Database implements Serializable{
 			else
 				return existsZVKonto( konto );			// Sonst von aktiven ZVKonto
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1904,7 +1896,6 @@ public class Database implements Serializable{
 			else
 				return existsZVTitel( titel );			// Sonst vom aktiven ZVTitel
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1930,7 +1921,6 @@ public class Database implements Serializable{
 			else
 				return existsZVUntertitel( titel );			// Sonst vom aktiven ZVUntertitel
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1961,7 +1951,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
@@ -1993,7 +1982,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
@@ -2025,7 +2013,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	
@@ -2057,7 +2044,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
@@ -2495,7 +2481,6 @@ public class Database implements Serializable{
 			}
 			rs.close();			// Abfrage schließen
 		} catch (SQLException e){
-			rollback();
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
@@ -2600,7 +2585,6 @@ public class Database implements Serializable{
 			statements.get(246).executeUpdate(parameters);
 			return existsFirma( firma );	// Id von der Firma
 		} catch (SQLException e){
-			rollback();
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -2620,7 +2604,6 @@ public class Database implements Serializable{
 			statements.get(247).executeUpdate(parameters);
 			return firma.getId();		// FirmenId zurückgeben
 		} catch (SQLException e){
-			rollback();
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -2905,12 +2888,9 @@ public class Database implements Serializable{
 				statements.get(250).executeUpdate(parameters);
 				
 			} catch (SQLException e){
-				rollback();
-				setAutoCommit(true);
 				throw new ApplicationServerException(66, e.getMessage());
 			}
 		}else{
-			setAutoCommit(true);
 			throw new ApplicationServerException(66);
 		}
 	}
@@ -3448,7 +3428,6 @@ public class Database implements Serializable{
 			}
 			return 0;
 		} catch(SQLException e) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException(1, e.getMessage());
 		}
 	} 
@@ -3495,7 +3474,6 @@ public class Database implements Serializable{
 			// SQL-Statement ausführen
 			return statements.get(278).executeUpdate(parameters);	// Zeilenanzahl der gelöschten Belege
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	} 
@@ -3619,7 +3597,6 @@ public class Database implements Serializable{
 			statements.get(291).executeUpdate(parameters);
 			return bestellung.getId();	// Id von der aktualisierung KleinBestellung
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -3639,7 +3616,6 @@ public class Database implements Serializable{
 			// SQL-Statement ausführen
 			statements.get(290).executeUpdate(parameters);
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -3657,7 +3633,6 @@ public class Database implements Serializable{
 			// SQL-Statement ausführen
 			statements.get(294).executeQuery(parameters);
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -3691,7 +3666,6 @@ public class Database implements Serializable{
 			rs.close();					// Die Abfrage schließen
 			return bestellung;
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
