@@ -38,7 +38,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "ROLLBACK");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//3
+		{//3 setzt autocommit auf 0 (ist für ein Rollback gedacht, damit die geänderten Daten auch rückgängig gemacht werden können
 			ps = con.prepareStatement( "SET AUTOCOMMIT = 0");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
@@ -46,9 +46,9 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "BEGIN");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-//		Ende Robert 08.09.2004
-		{//5
-			statements[i++] = null;
+		{//5 setzt autocommit auf 1
+			ps = con.prepareStatement( "SET AUTOCOMMIT = 1");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//6
 			statements[i++] = null;
@@ -160,7 +160,8 @@ public class PreparedSqlStatements {
 										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, 
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//25			(5)
@@ -1263,20 +1264,20 @@ public class PreparedSqlStatements {
 		/* Tabelle: Bestellungen				  */
 		/* Indizes: 210-219                       */
 		/******************************************/
-		{//210
+		{//210 gibt Anzahl der Bestellungen eines Benutzers
 			ps = con.prepareStatement( "SELECT COUNT(b.id) " +
 										 "FROM Benutzer a, Bestellungen b " +
 										"WHERE a.id = ? " +
-										"AND a.id = b.bestellerid " );
+										"AND a.id = b.besteller " );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//211
+		{//211 gibt Anzahl der aktiven Bestellungen eines Benutzers
 			ps = con.prepareStatement( "SELECT COUNT(b.id) " +
 										"FROM Benutzer a, Bestellungen b " +
 										"WHERE a.id = ? " +
-										"AND a.id = b.bestellerid " +
-										"AND b.status != '0'" );
+										"AND a.id = b.besteller " +
+										"AND b.phase != '2'" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1294,7 +1295,7 @@ public class PreparedSqlStatements {
 										"FROM FBKonten a, Bestellungen b " +
 										"WHERE a.id = ? " +
 										"AND a.id = b.fbKontoId " +
-										"AND b.status != '0'" );
+										"AND b.phase != '2'" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

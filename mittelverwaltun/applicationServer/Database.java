@@ -763,7 +763,7 @@ public class Database implements Serializable{
 
 	public void updateUserMySQL(Benutzer benutzer, String oldBenutzer) throws ApplicationServerException{
 		try{
-			setAutoCommit();
+			//setAutoCommit();
 			Object[] param1 ={benutzer.getBenutzername(), oldBenutzer};
 			statements.get(94).executeUpdate(param1);
 			statements.get(95).executeUpdate(param1);
@@ -808,11 +808,11 @@ public class Database implements Serializable{
 		try{
 			Object[] param ={benutzer.getBenutzername()};
 
-			setAutoCommit();
+			//setAutoCommit();
 			statements.get(90).executeUpdate(param);
 			statements.get(91).executeUpdate(param);
 			statements.get(92).executeUpdate(param);
-			commit();
+			//commit();
 
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
@@ -821,6 +821,12 @@ public class Database implements Serializable{
 		}
 	}
 
+	/**
+	 * fügt einen Benutzer in die Tabelle Benutzer ein
+	 * @param benutzer
+	 * @return Id in der Tabelle Benutzer des eingefügten Users 
+	 * @throws ApplicationServerException
+	 */
 	public int insertUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
 			Object[] param ={benutzer.getBenutzername()};
@@ -844,12 +850,14 @@ public class Database implements Serializable{
 	    }
 
 			ResultSet rs = stmt.getGeneratedKeys();
-
+			
 	    if (rs.next()) {
 	        return rs.getInt(1);
 	    }else
 	        return 0;
 		} catch (SQLException e){
+			rollback();
+			setAutoCommit(true);
 			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1, e.getMessage());
 		}
@@ -859,10 +867,10 @@ public class Database implements Serializable{
 		try{
 
 			Object[] param ={benutzer.getBenutzername()};
-			setAutoCommit();
+			//setAutoCommit();
 			statements.get(96).executeUpdate(param);
 			statements.get(97).executeUpdate(param);
-			commit();
+			//commit();
 		} catch (SQLException e){
 			throw new ApplicationServerException(1, e.getMessage());
 		}
@@ -912,9 +920,12 @@ public class Database implements Serializable{
 		}
 	}
 
-	public void setAutoCommit() throws ApplicationServerException{
+	public void setAutoCommit(boolean commit) throws ApplicationServerException{
 		try{
-			statements.get(3).executeQuery();
+			if(commit)
+				statements.get(5).executeQuery();
+			else
+				statements.get(3).executeQuery();
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1, e.getMessage());

@@ -165,6 +165,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			 throw new ApplicationServerException(154);
 			 // Konten stimmen nicht überein
 		 }
+		 
+		 db.commit();
 	 }
 	 
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
@@ -240,7 +242,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( (id = db.existsDeleteFBKonto( konto )) > 0 ){
 			konto.setId( id );
 			db.selectForUpdateFBHauptkonto( konto );
-			return db.updateFBHauptkonto( konto );
+			int hkId = db.updateFBHauptkonto( konto );
+			db.commit();
+			return hkId;
 		}
 		
 		return db.insertFBHauptkonto( konto );
@@ -261,7 +265,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( (id = db.existsDeleteFBKonto( konto )) > 0 ){
 			konto.setId( id );
 			db.selectForUpdateFBUnterkonto( konto );
-			return db.updateFBUnterkonto( konto );
+			int ukId = db.updateFBUnterkonto( konto );
+			db.commit();
+			return ukId;
 		}
 		
 		return db.insertFBUnterkonto( konto );
@@ -280,7 +286,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 20 );
 		if( db.countKontenzuordnungen( konto ) > 0 )		// Wenn Kontenzuordnungen existieren
 			throw new ApplicationServerException( 21 );
-		
+	
 		ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
 		// Nachsehen ob sich bei den Unterkonten Fehler ergeben
 		if( temp != null ) {		// Es gibt Unterkonten
@@ -1179,6 +1185,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.deleteUser(dbUser);
 			else
 				db.deleteUserFinal(dbUser);		// Kann definitiv gelöscht werden
+				
+		  db.commit();
 		}
 	}
 
@@ -1186,9 +1194,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addUser(Benutzer benutzer) throws ApplicationServerException {
 		if(db.checkUserMySQL(benutzer) > 0)		// benutzer bereits in der MySQL-DB vorhanden
 			throw new ApplicationServerException(54);
-
-		db.insertUserMySQL(benutzer);
-
+		
 		//	benutzer bereits in der FBMittelvewaltung-DB vorhanden
 		if(db.checkUser(benutzer) > 0)
 			throw new ApplicationServerException(5);
@@ -1199,8 +1205,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(privatKonto == null)
 				throw new ApplicationServerException(64);
 		}
-
-		return db.insertUser(benutzer);
+		db.setAutoCommit(false);
+		
+		db.insertUserMySQL(benutzer);
+		int newID = db.insertUser(benutzer);
+		
+		db.setAutoCommit(true);
+		return newID;
 	}
 
 
