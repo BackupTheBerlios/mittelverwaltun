@@ -38,6 +38,10 @@ public class Kostenart implements Serializable {
 		return beschreibung;
 	}
 	
+	public Object clone(){
+		return new Kostenart(this.id, this.beschreibung);
+	}
+	
 	public boolean equals(Object o){
 		if(o != null){
 			Kostenart k = (Kostenart)o;

@@ -52,10 +52,10 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 * @param bestellwert
 	 */
 	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
-														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+							String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+							String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
+							Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
+		super(referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, verbindlichkeiten);
 		this.angebote = angebote;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
@@ -91,10 +91,10 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 * @param bestellwert
 	 */
 	public StandardBestellung(ArrayList angebote, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
-														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+							String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+							int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
+							Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
+		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, verbindlichkeiten);
 		this.angebote = angebote;
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
@@ -128,10 +128,10 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	 * @param bestellwert
 	 */
 	public StandardBestellung(Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
-														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
-		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+							String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+							int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
+							Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
+		super(id, referenznr, datum, besteller, phase, huel, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, verbindlichkeiten);
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
 		this.ersatzbeschreibung = ersatzbeschreibung;
@@ -231,6 +231,39 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		return result;
 	}
 	
+	public Object clone(){
+		ArrayList angeboteClone = null;
+		
+		if ( angebote!= null ){
+			angeboteClone = new ArrayList();
+			for (int i=0; i<angebote.size(); i++)
+				angeboteClone.add(((Angebot)angebote.get(i)).clone());
+		}
+		
+		ZVUntertitel t = null;
+		
+		if (getZvtitel() != null){
+			if (getZvtitel().getClass().getName().equalsIgnoreCase(ZVUntertitel.class.getName())){
+				t = (ZVUntertitel)getZvtitel().clone();
+			}else t = (ZVTitel)getZvtitel().clone();
+		}
+		
+		FBUnterkonto k = null;
+		
+		if (getFbkonto() != null){
+			if (getFbkonto().getClass().getName().equalsIgnoreCase(FBUnterkonto.class.getName())){
+				k = (FBUnterkonto)getFbkonto().clone();
+			}else k = (FBHauptkonto)getFbkonto().clone();
+		}
+		
+		return new StandardBestellung(
+						angeboteClone, this.kostenart==null?null:(Kostenart)this.kostenart.clone(),
+						this.ersatzbeschaffung, this.ersatzbeschreibung, this.inventarNr, this.verwendungszweck, this.planvorgabe, this.begruendung,
+						this.bemerkung, this.getId(), this.getReferenznr(), this.getDatum()==null?null:(Date)this.getDatum().clone(), 
+						this.getBesteller()==null?null:(Benutzer)this.getBesteller().clone(), this.getPhase(), this.getHuel(),
+						this.getAuftraggeber()==null?null:(Benutzer)this.getAuftraggeber().clone(), 
+						this.getEmpfaenger()==null?null:(Benutzer)this.getEmpfaenger().clone(), t, k, this.getBestellwert(), this.getVerbindlichkeiten());
+	}
 	
 	public boolean equals(Object o){
 		if(o != null){
@@ -243,6 +276,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 					planvorgabe == b.getPlanvorgabe() &&
 					((begruendung == null || b.getBegruendung() == null) ? true : begruendung.equals(b.getBegruendung())) &&
 					((bemerkung == null || b.getBegruendung() == null) ? true : bemerkung.equals(b.getBemerkung())) && 
+					((angebote == null || b.getAngebote() == null) ? true : angebote.equals(b.getAngebote())) &&
 					// Bestellung
 					getId() == b.getId() &&
 					((getReferenznr() == null || b.getReferenznr() == null) ? true : getReferenznr().equals(b.getReferenznr())) &&
@@ -254,7 +288,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 					((getEmpfaenger() == null || b.getEmpfaenger() == null) ? true : getEmpfaenger().equals(b.getEmpfaenger())) &&
 					((getZvtitel() == null || b.getZvtitel() == null) ? true : getZvtitel().equals(b.getZvtitel())) &&
 					((getFbkonto() == null || b.getFbkonto() == null) ? true : getFbkonto().equals(b.getFbkonto())) &&
-					getBestellwert() == b.getBestellwert()
+					getBestellwert() == b.getBestellwert() && getVerbindlichkeiten()==b.getVerbindlichkeiten()
 					)
 				return true;
 			else

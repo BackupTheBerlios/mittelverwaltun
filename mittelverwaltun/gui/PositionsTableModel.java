@@ -179,4 +179,20 @@ public class PositionsTableModel extends DefaultTableModel {
 		return debit;
 	}
 
+	public ArrayList getOrderPositions(){
+		if ((type==ANZEIGE)||(type==STD_ABWICKLUNG)){
+			ArrayList positions = new ArrayList();
+				for (int i=0; i < getRowCount(); i++){
+					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
+												((Float)getValueAt(i,2)).floatValue(), ((Integer)getValueAt(i,0)).intValue(),
+												((Float)getValueAt(i,3)).floatValue(), ((Float)getValueAt(i,4)).floatValue())
+								);
+				}
+			return positions;
+		}
+		else if (type==ASK_ABWICKLUNG)
+			return null;
+		else return null;
+	}
+	
 }

@@ -500,7 +500,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
 																				(new String("0")).charAt(0), "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
-																				zvTitel, fbKonto, 0);
+																				zvTitel, fbKonto, 0, 0);
 		try {
 			if(bestellung != null){
 				newBestellung.setId(bestellung.getId());

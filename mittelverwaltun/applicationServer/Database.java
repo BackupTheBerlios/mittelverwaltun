@@ -2887,7 +2887,7 @@ public class Database implements Serializable{
 																						rs.getString("ersatzInventarNr"), rs.getString("verwendungszweck"), !rs.getString("planvorgabe").equalsIgnoreCase("0"), 
 																						rs.getString("begruendung"), rs.getString("bemerkungen"), bestellId, 
 																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), rs.getString("huelNr"), auftraggeber,
-																						empfaenger, zvTitel, fbkonto, rs.getInt("bestellwert") );
+																						empfaenger, zvTitel, fbkonto, rs.getInt("bestellwert"), rs.getInt("verbindlichkeiten") );
 			}else {
 				throw new ApplicationServerException(70);
 			}
@@ -3052,7 +3052,7 @@ public class Database implements Serializable{
 		    ResultSet rs = statements.get(218).executeQuery(parameters);
 			  rs.last();
 	
-			 return rs.getRow();
+			 return rs.getInt(1);
 		 } catch (SQLException e){
 			  throw new ApplicationServerException(77, e.getMessage());
 		 }
@@ -3082,7 +3082,7 @@ public class Database implements Serializable{
 				rs.beforeFirst();		// Vor die erste Zeile springen
 			
 				while( rs.next() ){		// Solange es n‰chste Abfragezeile gibt
-					bestellungen.add( new Bestellung(rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), new Benutzer(rs.getString(5),rs.getString(6)), new Benutzer(rs.getString(7),rs.getString(8)), new Benutzer(rs.getString(9),rs.getString(10)), rs.getFloat(11)));
+					bestellungen.add( new Bestellung(rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), new Benutzer(rs.getString(5),rs.getString(6)), new Benutzer(rs.getString(7),rs.getString(8)), new Benutzer(rs.getString(9),rs.getString(10)), rs.getFloat(11), rs.getFloat(12)));
 				}
 			}
 			rs.close();		// Abfrage schlieﬂen
@@ -3100,11 +3100,11 @@ public class Database implements Serializable{
  	 * @throws ApplicationServerException
  	 * @author robert
  	 */
-	public void updateStandardBestellung(StandardBestellung b, float verbindlichkeiten) throws ApplicationServerException{
+	public void updateStandardBestellung(StandardBestellung b/*, float verbindlichkeiten*/) throws ApplicationServerException{
 		if(b != null){
 			try{
 				Object[] parameters = { new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
-																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(verbindlichkeiten),
+																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
 																b.getBemerkung(), new Integer(b.getKostenart().getId()), (b.getErsatzbeschaffung() ? "1" : "0"), b.getErsatzbeschreibung(), b.getInventarNr(),
 																b.getVerwendungszweck(), (b.getPlanvorgabe() ? "1" : "0"), b.getBegruendung(), new Integer(b.getId()) };
 				if(statements.get(271).executeUpdate(parameters) == 0)

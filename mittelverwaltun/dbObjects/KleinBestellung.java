@@ -30,7 +30,7 @@ public class KleinBestellung extends Bestellung implements Serializable {
 	public KleinBestellung(int id, Date datum, Benutzer besteller, Benutzer empfaenger, 
 							ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, String projektNr, 
 							String verwendungszweck, String labor, String kartei, String verzeichnis, ArrayList belege) {
-		super(id, "", datum, besteller, '2', "", empfaenger, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(id, "", datum, besteller, '2', "", empfaenger, empfaenger, zvtitel, fbkonto, bestellwert, 0f);
 		this.belege = belege;
 		this.projektNr = projektNr;
 		this.verwendungszweck = verwendungszweck;

@@ -57,4 +57,8 @@ public class Aktivitaet implements Serializable {
 		else
 			return false;
 	}
+	
+	public Object clone(){
+		return new Aktivitaet(this.id, this.bemerkung, this.bezeichnung);
+	}
 }

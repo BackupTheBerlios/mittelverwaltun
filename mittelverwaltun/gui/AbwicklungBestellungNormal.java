@@ -6,12 +6,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.Naming;
-
-
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import applicationServer.ApplicationServer;
+import applicationServer.ApplicationServerException;
 import applicationServer.CentralServer;
 import dbObjects.Angebot;
 import dbObjects.Fachbereich;
@@ -83,9 +82,9 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   JLabel lbVerbindlichkeiten = new JLabel();
   CurrencyTextField tfVerbindlichkeiten = new CurrencyTextField();
 
-  public AbwicklungBestellungNormal(/*MainFrame frame*/ ApplicationServer as, StandardBestellung b) {
-  	//  this.frame = frame;
-    this.as = as;
+  public AbwicklungBestellungNormal(MainFrame frame, StandardBestellung b) {
+  	this.frame = frame;
+    this.as = frame.applicationServer;
     this.origin = b;
   	
     try {
@@ -408,6 +407,8 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     btSpeichern.setFont(new java.awt.Font("Dialog", 1, 11));
     //btSpeichern.setHorizontalAlignment(SwingConstants.LEFT);
     btSpeichern.setText("Speichern");
+    btSpeichern.setActionCommand("saveOrder");
+    btSpeichern.addActionListener(this);
 
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -454,10 +455,10 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			String psw = pe.encrypt(new String("m.schmitt").toString());
 			applicationServer.login("m.schmitt", psw);
 			StandardBestellung bestellung = applicationServer.getStandardBestellung(1);
-			AbwicklungBestellungNormal iFrame= new AbwicklungBestellungNormal(applicationServer, bestellung);
-			desk.add(iFrame);
-			test.show();
-			iFrame.show();
+//			AbwicklungBestellungNormal iFrame= new AbwicklungBestellungNormal(applicationServer, bestellung);
+//			desk.add(iFrame);
+//			test.show();
+//			iFrame.show();
 		}catch(Exception e){
 				System.out.println(e);
 		}
@@ -486,9 +487,31 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		}else if (e.getActionCommand() == "showOffers"){
 			AngebotsUebersicht dialog = new AngebotsUebersicht(this, "Angebotsvergleich", true, origin.getAngebote());
 			dialog.show();
+		}else if (e.getActionCommand() == "saveOrder"){
+			saveOrder();
 		}
 			
 		
 	}
 
+	private void saveOrder(){
+		
+		StandardBestellung editedOrder = (StandardBestellung)origin.clone();
+		((Angebot)editedOrder.getAngebote().get(editedOrder.getAngenommenesAngebot())).setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		
+		
+		
+		try {
+			
+			frame.getApplicationServer().setBestellung(origin, editedOrder);
+			
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				e.printStackTrace();
+		}
+	}
 }

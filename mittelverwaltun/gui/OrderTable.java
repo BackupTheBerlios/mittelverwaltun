@@ -29,6 +29,13 @@ import javax.swing.table.TableCellRenderer;
  */
 public class OrderTable extends JTable{
 	
+	static final int STD_TYP = 0;
+	static final int ASK_TYP = 1;
+	static final int ZA_TYP = 2;
+	static final int SONDIERUNG = 0;
+	static final int ABWICKLUNG = 1;
+	static final int ABGESCHLOSSEN = 2;
+	
 	private ActionListener actionListener;
 
 	public OrderTable(ActionListener listener, ArrayList orders){
@@ -84,6 +91,14 @@ public class OrderTable extends JTable{
 	
 	public int getSelectedOrderID(){
 		return ((OrderTableModel)getModel()).getId(getSelectedRow());
+	}
+	
+	public int getSelectedOrderType(){
+		return ((OrderTableModel)getModel()).getType(getSelectedRow());
+	}
+	
+	public int getSelectedOrderPhase(){
+		return ((OrderTableModel)getModel()).getPhase(getSelectedRow());
 	}
 	
 	private void applyTableRendering(){

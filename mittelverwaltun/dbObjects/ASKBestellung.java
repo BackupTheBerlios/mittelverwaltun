@@ -20,7 +20,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 	public ASKBestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
 			ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
 		
-		super(id, referenznr, huel, datum, besteller, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, phase, typ);
+		super(id, referenznr, huel, datum, besteller, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, 0f, phase, typ);
 		this.angebot = angebot;
 		this.bemerkung = bemerkung;
 		this.swbeauftragter = swbeauftragter;
@@ -29,7 +29,7 @@ public class ASKBestellung extends Bestellung implements Serializable {
 	
 	
 	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
-		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, 0f);
 		// TODO Automatisch erstellter Konstruktoren-Stub
 	}
 

@@ -45,6 +45,13 @@ public class Rolle implements Serializable {
 	}
 //	Änderung Ende 01.09.2004
 	
+	public Rolle(int id, String bezeichnung, Aktivitaet[] aktivitaetenFull, int[] aktivitaeten){			
+		this.id = id;
+		this.aktivitaetenFull = aktivitaetenFull;
+		this.bezeichnung = bezeichnung;
+		this.aktivitaeten = aktivitaeten;
+	}	
+	
 	public String toString(){
 		return bezeichnung;
 	}
@@ -91,4 +98,20 @@ public class Rolle implements Serializable {
 		this.aktivitaetenFull = aktivitaetenFull;
 	}
 
+	public Object clone(){
+		int[] a = null;
+		Aktivitaet[] af = null;
+		
+		if (this.aktivitaeten!=null){
+			a = new int[aktivitaeten.length];
+			for (int i=0; i<aktivitaeten.length;i++)
+				a[i] = aktivitaeten[i];
+		}
+		if (this.aktivitaetenFull!=null){
+			af = new Aktivitaet[aktivitaetenFull.length];
+			for (int i=0; i<aktivitaeten.length;i++)
+				af[i] = (Aktivitaet)aktivitaetenFull[i].clone();
+		}
+		return new Rolle(this.id, this.bezeichnung, af, a);
+	}
 }

@@ -131,12 +131,19 @@ public class ZVUntertitel implements Serializable {
 	 * @return boolean
 	 */
 	public boolean equals( ZVUntertitel zvUntertitel ) {
-		if( this.zvTitel.getZVKonto().getKapitel().equalsIgnoreCase( zvUntertitel.getZVTitel().getZVKonto().getKapitel() ) &&
-			this.zvTitel.getTitel().equalsIgnoreCase( zvUntertitel.getZVTitel().getTitel() ) &&
-			this.getUntertitel().equalsIgnoreCase( zvUntertitel.getUntertitel() ) )
-			return true;
-		else
-			return false;
+		
+		if(zvUntertitel.getClass().getName().equalsIgnoreCase(this.getClass().getName()))
+			if (this.getClass().getName().equalsIgnoreCase(ZVTitel.class.getName())){
+				return((ZVTitel)this).equals((ZVTitel)zvUntertitel);
+			}else{
+				if( this.zvTitel.getZVKonto().getKapitel().equalsIgnoreCase( zvUntertitel.getZVTitel().getZVKonto().getKapitel() ) &&
+						this.zvTitel.getTitel().equalsIgnoreCase( zvUntertitel.getZVTitel().getTitel() ) &&
+						this.getUntertitel().equalsIgnoreCase( zvUntertitel.getUntertitel() ) )
+						return true;
+					else
+						return false;
+			}
+		else return false;
 	}
 	
 	/**

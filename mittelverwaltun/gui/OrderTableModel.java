@@ -20,6 +20,13 @@ import dbObjects.Bestellung;
  */
 public class OrderTableModel extends DefaultTableModel {
 	
+	static final int STD_TYP = 0;
+	static final int ASK_TYP = 1;
+	static final int ZA_TYP = 2;
+	static final int SONDIERUNG = 0;
+	static final int ABWICKLUNG = 1;
+	static final int ABGESCHLOSSEN = 2;
+	
 	ArrayList identifiers;
 		
 	public OrderTableModel (ArrayList orders){
@@ -69,6 +76,36 @@ public class OrderTableModel extends DefaultTableModel {
 		if ((row < this.getRowCount())&& (row >= 0))
 			return ((Integer)identifiers.get(row)).intValue();
 		else return 0;
+			
+	}
+	
+	public int getType (int row){
+		
+		if ((row < this.getRowCount())&& (row >= 0)){
+			String type = (String)getValueAt(row, 1);
+			if (type.equals("Standardbestellung"))
+				return STD_TYP;
+			else if (type.equals("ASK-Bestellung"))
+				return ASK_TYP;
+			else if (type.equals("Zahlungsanforderung"))
+				return ZA_TYP;
+			else return -1;
+		} else return -1;
+			
+	}
+	
+	public int getPhase (int row){
+		
+		if ((row < this.getRowCount())&& (row >= 0)){
+			String type = (String)getValueAt(row, 2);
+			if (type.equals("Sondierung"))
+				return SONDIERUNG;
+			else if (type.equals("Abwicklung"))
+				return ABWICKLUNG;
+			else if (type.equals("Abgeschlossen"))
+				return ABGESCHLOSSEN;
+			else return -1;
+		} else return -1;
 			
 	}
 	

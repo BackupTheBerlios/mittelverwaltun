@@ -35,7 +35,6 @@ public class Benutzer implements Serializable {
 	private boolean geloescht;
 
 	private boolean geaendert;
-
 	
 	private String telefon;
 
@@ -47,6 +46,29 @@ public class Benutzer implements Serializable {
 
 	private boolean swBeauftragter;
 
+	public Benutzer(int id, String benutzername, String passwort, Rolle rolle, TmpRolle[] tmpRollen, Institut kostenstelle, String titel,
+			String vorname, String name, String email, int privatKonto, String telefon, String fax, String bau, String raum, boolean swBeauftragter, 
+			boolean geloescht, boolean geaendert){
+		this.id = id;
+		this.benutzername = benutzername;
+		this.passwort = passwort;
+		this.rolle = rolle;
+		this.tmpRollen = tmpRollen;
+		this.kostenstelle = kostenstelle;
+		this.titel = titel;
+		this.vorname = vorname;
+		this.name = name;
+		this.email = email;
+		this.privatKonto = privatKonto;
+		this.telefon = telefon;
+		this.fax = fax;
+		this.bau = bau;
+		this.raum = raum;
+		this.swBeauftragter = swBeauftragter;
+		this.geloescht = geloescht;
+		this.geaendert = geaendert;
+	}
+	
 	public Benutzer(String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
 									String titel, String name, String vorname, String email, int privatKonto, 
 									String telefon, String fax, String bau, String raum, boolean swBeauftragter){
@@ -288,4 +310,19 @@ public class Benutzer implements Serializable {
 		this.swBeauftragter = swBeauftragter;
 	}
 
+	public Object clone(){
+		TmpRolle[] tr = null;
+		
+		if (this.tmpRollen != null){
+			tr = new TmpRolle[this.tmpRollen.length];
+			for (int i=0; i<this.tmpRollen.length; i++)
+				tr[i] = (TmpRolle)tmpRollen[i].clone();
+		}
+		
+		return new Benutzer(
+						this.id, this.benutzername, this.passwort, rolle==null?null:(Rolle)rolle.clone(), tr, kostenstelle==null?null:(Institut)kostenstelle.clone(),
+						this.titel, this.vorname, this.name, this.email, this.privatKonto, this.telefon, this.fax, this.bau, this.raum, this.swBeauftragter, 
+						this.geloescht, this.geaendert);
+	}
+	
 }

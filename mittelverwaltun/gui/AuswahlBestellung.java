@@ -18,7 +18,8 @@ import java.awt.event.ActionListener;
  */
 
 public class AuswahlBestellung extends JInternalFrame implements ActionListener{
-  
+	
+	
 	MainFrame frame;
 	
 	JButton btBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
@@ -76,9 +77,21 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand() == "showOrder"){
-			
-			System.out.println("" + tabBestellungen.getSelectedOrderID());
-		
+	
+			if (tabBestellungen.getSelectedOrderType()==OrderTable.STD_TYP){
+				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.SONDIERUNG)
+					try {
+						frame.addChild( new BestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+				else
+					try {
+						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();
 			try {

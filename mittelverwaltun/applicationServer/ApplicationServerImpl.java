@@ -1771,7 +1771,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
 		// ReferenzNr prüfen
-		if(db.checkReferenzNr(bestellung.getReferenznr()) > 0)
+		System.out.println(bestellung.getReferenznr());
+		int c = db.checkReferenzNr(bestellung.getReferenznr());
+		System.out.println("count="+c);
+		if(c > 0)
 			throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 		db.setAutoCommit(false);
@@ -1851,10 +1854,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 		if(edited.getPhase() == '0'){
-			db.updateStandardBestellung(edited, 0f);
+			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 		}else if(edited.getPhase() == '1'){
-
+			db.updateStandardBestellung(edited);
+			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 		}else if(edited.getPhase() == '2'){
 		
 		}

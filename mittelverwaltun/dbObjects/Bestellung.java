@@ -29,6 +29,8 @@ public class Bestellung implements Serializable {
 	private FBUnterkonto fbkonto;
 
 	private float bestellwert;
+	
+	private float verbindlichkeiten;
 
 	private char phase;
 	
@@ -37,7 +39,7 @@ public class Bestellung implements Serializable {
 	private boolean geloescht;
 
 	public Bestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
-				ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ){
+				ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten, char phase, char typ){
 		this.id = id;
 		this.referenznr = referenznr;
 		this.huel = huel;
@@ -48,12 +50,13 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = verbindlichkeiten;
 		this.phase = phase;
 		this.typ = typ;
 	}
 	
 	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
 		this.id = id;
 		this.referenznr = referenznr;
 		this.datum = datum;
@@ -65,11 +68,12 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = verbindlichkeiten;
 		this.geloescht = false;
 	}
 	
 	public Bestellung(String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
 		this.referenznr = referenznr;
 		this.datum = datum;
 		this.besteller = besteller;
@@ -80,11 +84,12 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = verbindlichkeiten;
 		this.geloescht = false;
 	}
 	
 	public Bestellung(Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
-										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten){
 		this.datum = datum;
 		this.besteller = besteller;
 		this.phase = phase;
@@ -93,11 +98,12 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = verbindlichkeiten;
 		this.geloescht = false;
 	}
 
 	public Bestellung(int id, Date datum, char typ, char phase, Benutzer besteller, Benutzer auftraggeber,
-					  Benutzer empfaenger, float bestellwert){
+					  Benutzer empfaenger, float bestellwert, float verbindlichkeiten){
 		this.id = id;
 		this.datum = datum;
 		this.typ = typ;
@@ -106,6 +112,7 @@ public class Bestellung implements Serializable {
 		this.auftraggeber = auftraggeber;
 		this.empfaenger = empfaenger;
 		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = verbindlichkeiten;
 		this.geloescht = false;
 	}
 	
@@ -215,6 +222,14 @@ public class Bestellung implements Serializable {
 
 	public void setBestellwert(float bestellwert) {
 		this.bestellwert = bestellwert;
+	}
+	
+	public float getVerbindlichkeiten() {
+		return verbindlichkeiten;
+	}
+
+	public void setVerbindlichkeiten(float verbindlichkeiten) {
+		this.verbindlichkeiten = verbindlichkeiten;
 	}
 	
 }

@@ -231,4 +231,9 @@ public class PositionsTable extends JTable implements ActionListener {
 		
 		return model.getOrderDebit();
 	}
+	
+	public ArrayList getOrderPositions(){
+		PositionsTableModel model = (PositionsTableModel)getModel();
+		return model.getOrderPositions();
+	}
 }

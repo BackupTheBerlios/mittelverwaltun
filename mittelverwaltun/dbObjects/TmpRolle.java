@@ -31,7 +31,7 @@ public class TmpRolle extends Rolle implements Serializable {
 		this.besitzer = besitzer;
 		this.gueltigBis = gueltigBis;
 	}
-
+	
 	public Date getGueltigBis() {
 		return gueltigBis;
 	}
@@ -46,5 +46,22 @@ public class TmpRolle extends Rolle implements Serializable {
 
 	public void setBesitzer(int besitzer) {
 		this.besitzer = besitzer;
+	}
+	
+	public Object clone(){
+		int[] a = null;
+		Aktivitaet[] af = null;
+		
+		if (this.getAktivitaeten()!=null){
+			a = new int[this.getAktivitaeten().length];
+			for (int i=0; i<this.getAktivitaeten().length;i++)
+				a[i] = this.getAktivitaeten()[i];
+		}
+//		if (this.aktivitaetenFull!=null){
+//			af = new Aktivitaet[aktivitaetenFull.length];
+//			for (int i=0; i<aktivitaeten.length;i++)
+//				af[i] = (Aktivitaet)aktivitaetenFull[i].clone();
+//		}
+		return new TmpRolle(this.getId(), this.getBezeichnung(), a, this.besitzer, (Date)this.gueltigBis.clone());
 	}
 }

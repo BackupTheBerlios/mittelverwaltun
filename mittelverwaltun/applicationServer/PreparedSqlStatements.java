@@ -1876,7 +1876,7 @@ public class PreparedSqlStatements {
 		/**************************************************/
 		{//270 gibt die StandardBestellung mit der zugehörigen Id zurück. Es werden nur BenutzerId ermittelt
 			ps = con.prepareStatement("SELECT " +																		"k.id, k.beschreibung," +																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
-																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert, a.verbindlichkeiten " +
 																"FROM Bestellungen a, ASK_Standard_Bestellungen b, Kostenarten k " +
 															  "WHERE a.id = ? " +															  		"AND a.id = b.id " +															  		"AND a.typ = '0' " +															  		"AND a.geloescht = '0' " +															  		"AND k.id = b.kostenart");
 			int[] param = {	Types.INTEGER };
@@ -1901,7 +1901,8 @@ public class PreparedSqlStatements {
 											"u1.name, u1.vorname, " +
 											"u2.name, u2.vorname, " +
 											"u3.name, u3.vorname, " +
-											"o.bestellwert " +
+											"o.bestellwert, " +
+											"o.verbindlichkeiten " +
 										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
 										"WHERE o.typ = ? " +
 										  "AND o.besteller = u1.id " +
@@ -1917,7 +1918,8 @@ public class PreparedSqlStatements {
 											"u1.name, u1.vorname, " +
 											"u2.name, u2.vorname, " +
 											"u3.name, u3.vorname, " +
-											"o.bestellwert " +
+											"o.bestellwert, " +
+											"o.verbindlichkeiten " +
 										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
 										"WHERE o.besteller = u1.id " +
 										  "AND o.auftraggeber = u2.id " +
