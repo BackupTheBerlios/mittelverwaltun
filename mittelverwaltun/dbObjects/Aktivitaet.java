@@ -38,6 +38,10 @@ public class Aktivitaet implements Serializable {
 		this.id = id;
 	}
 
+/**
+ * 
+ * @return
+ */
 	public String getBezeichnung() {
 		return bezeichnung;
 	}
