@@ -152,4 +152,12 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException;
+	
+	/**
+	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts
+	 * @param subAccountsIncluded
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
 }

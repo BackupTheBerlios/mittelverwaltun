@@ -10,6 +10,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import dbObjects.FBHauptkonto;
+import dbObjects.FBUnterkonto;
 import dbObjects.Kontenzuordnung;
 import dbObjects.ZVKonto;
 import dbObjects.ZVUntertitel;
@@ -33,6 +34,7 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
     this.parent = parent;
     this.frame = frame;
     this.hauptkonto = hauptkonto;
+    FBUnterkonto test ;
 
     try {
       jbInit();

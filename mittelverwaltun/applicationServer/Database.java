@@ -2960,7 +2960,7 @@ public class Database implements Serializable{
 	public int checkReferenzNr(String referenzNr) throws ApplicationServerException{
 	  try{
 		  Object[] parameters = { referenzNr };
-			  ResultSet rs = statements.get(218).executeQuery(parameters);
+		    ResultSet rs = statements.get(218).executeQuery(parameters);
 			  rs.last();
 	
 			 return rs.getRow();

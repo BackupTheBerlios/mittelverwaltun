@@ -1713,6 +1713,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
+		// ReferenzNr prüfen
+		if(db.checkReferenzNr(bestellung.getReferenznr()) > 0)
+			throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
+		
 		db.setAutoCommit(false);
 		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
@@ -1752,6 +1756,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+	
 		db.setAutoCommit(false);
 		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
@@ -1791,7 +1796,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 		// die Referenznummer der Bestellung hat sich geändert
 		if(!original.getReferenznr().equals(edited.getReferenznr()));
-		
+			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
+				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 	}
 
@@ -1836,6 +1842,40 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException {
 	
 		return null;
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getInstituteWithAccounts(dbObjects.Institut, boolean)
+	 */
+	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException {
+		Institut[] instituts = {institute};
+		
+		 ArrayList hauptkonten;
+
+		 if( instituts == null )		// Keine Institute vorhanden
+			 return null;
+
+		 // Schleife zur Ermittlung der FBHauptkonten eines Instituts
+		 for( int i = 0; i < instituts.length; i++ ) {
+			 if( instituts[i] == null )	// kein Institut
+				 continue;
+
+			 instituts[i].setHauptkonten( hauptkonten = db.selectFBHauptkonten( instituts[i] ) );
+
+			 if (( subAccountsIncluded )&& ( hauptkonten != null )){
+				 // Schleife zur Ermittlung aller FBUnterkonten von einem FBHauptkonto
+				 for( int j = 0; j < hauptkonten.size(); j++ ) {
+					 if( hauptkonten.get(j)== null )	// kein FBHauptkonto
+						 continue;
+					 // Ermittlung der Unterkonten vom Hauptkonto
+					 ((FBHauptkonto)hauptkonten.get(j)).setUnterkonten( db.selectFBUnterkonten( instituts[i],
+																		 (FBHauptkonto)hauptkonten.get(j) ) );
+				 }
+			 }
+		 }
+
+		 return instituts;
 	}
 
 }

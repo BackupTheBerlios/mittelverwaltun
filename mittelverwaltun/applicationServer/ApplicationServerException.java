@@ -134,6 +134,7 @@ public class ApplicationServerException extends Exception {
 		messages[75] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFirma";
 		messages[76] = "Application Server Error: Die Bestellung hat sich zwischenzeitlich geändert";
 		messages[77] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkReferenzNr";
+		messages[78] = "Application Server Error: Die ReferenzNr der Bestellung ist schon vergeben";
 				
 //		Exception Ende ROBERT von 50-99
 

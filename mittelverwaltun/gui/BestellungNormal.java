@@ -106,13 +106,16 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		this.setIconifiable(true);
 
 		buDrucken.addActionListener(this);
+		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
 		buAddAngebot.addActionListener(this);
+		buAddAngebot.setIcon(Functions.getExpandIcon(getClass()));
 		buBeenden.addActionListener(this);
 		buBeenden.setIcon(Functions.getCloseIcon(this.getClass()));
 		buSpeichern.addActionListener(this);
 		buBestellen.addActionListener(this);
-
+		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
+		
 		cbKostenstelle.addItemListener(this);
 		cbKostenstelle.addPropertyChangeListener(this);
 		cbInstitut.addItemListener(this);
