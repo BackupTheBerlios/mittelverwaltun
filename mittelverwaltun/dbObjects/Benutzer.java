@@ -110,6 +110,15 @@ public class Benutzer implements Serializable {
 		return vorname + " " + name + ", " + benutzername; 
 	}
 
+	/**
+	 * Ausgabe für die Bestellung. 
+	 * @return Name und Vorname als String
+	 * @author w.flat
+	 */
+	public String toBestellString(){
+		return titel + " " + vorname + " " + name; 
+	}
+
 	public int getId() {
 		return id;
 	}

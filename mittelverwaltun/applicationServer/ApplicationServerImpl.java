@@ -34,7 +34,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return id;
 	}
 
-
 	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException{
 
 		db.connect(user);
@@ -2060,11 +2059,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return null;
 	}
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
-		return db.selectBestellungen(filter);
+//		return db.selectBestellungen(filter);
+		return null;
 	}
 
 	public ArrayList getBestellungen() throws ApplicationServerException{
-		return db.selectBestellungen(-1);
+//		return db.selectBestellungen(-1);
+		return null;
 	}
 	
 	/* (Kein Javadoc)

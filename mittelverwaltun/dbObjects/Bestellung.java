@@ -24,7 +24,7 @@ public class Bestellung implements Serializable {
 
 	private Benutzer empfaenger;
 
-	private ZVTitel zvtitel;
+	private ZVUntertitel zvtitel;
 
 	private FBUnterkonto fbkonto;
 
@@ -36,7 +36,7 @@ public class Bestellung implements Serializable {
 
 
 	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
-										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		this.id = id;
 		this.referenznr = referenznr;
 		this.datum = datum;
@@ -88,6 +88,9 @@ public class Bestellung implements Serializable {
 		this.bestellwert = bestellwert;
 	}
 	
+	
+	public Bestellung() {
+	}
 	
 	public int getId() {
 		return id;
@@ -161,7 +164,7 @@ public class Bestellung implements Serializable {
 		this.empfaenger = empfaenger;
 	}
 
-	public ZVTitel getZvtitel() {
+	public ZVUntertitel getZvtitel() {
 		return zvtitel;
 	}
 

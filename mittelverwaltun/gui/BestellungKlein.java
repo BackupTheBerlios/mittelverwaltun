@@ -1,9 +1,8 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
 import dbObjects.*;
 import applicationServer.*;
@@ -13,12 +12,13 @@ import java.awt.event.*;
 import java.awt.print.*;
 import java.beans.*;
 import java.rmi.*;
-import java.text.NumberFormat;
-import java.util.ArrayList;
+import java.sql.Date;
+import java.text.*;
 
 
 public class BestellungKlein extends JInternalFrame implements ActionListener, ItemListener, 
-																ZVKontoSelectable, PropertyChangeListener {
+																PropertyChangeListener, ZVKontoSelectable {
+	
 	JLabel labTextKostenstelle = new JLabel();
 	JLabel labTextKapitel = new JLabel();
 	JButton buBestellen = new JButton();
@@ -47,7 +47,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	JPanel panelProjekt = new JPanel();
 	JTextField tfProjektNr = new JTextField();
 	JLabel labProjektNr = new JLabel();
-	JTextField tfDatum = new JTextField();
+	JFormattedTextField tfDatum = new JFormattedTextField(DateFormat.getDateInstance());
 	JLabel labDatum = new JLabel();
 	JLabel labKostenstelle = new JLabel();
 	JLabel labTextHauptkonto = new JLabel();
@@ -63,12 +63,17 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	JButton butZVTitelAuswahl = new JButton();
 	JButton butStornieren = new JButton();
 	MainFrame frame;
-	Firma presFirma = null;
 	FBUnterkonto fbKonto;
 	ZVUntertitel zvTitel;
+	KleinBestellung bestellung;
 
+	/**
+	 * Konstruktor zum Durchühren einer neun Auszahlungsanordnung. 
+	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
+	 * @author w.flat
+	 */
 	public BestellungKlein(MainFrame frame) {
-		super("Auszahlungsanordnung erstellen");
+		super("Auszahlungsanordnung Erstellen");
 		this.frame = frame;
 		this.setClosable(true);
 		this.setIconifiable(true);
@@ -96,9 +101,69 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
 
 		butStornieren.setVisible(false);
-		tableBelege.addPropertyChangeListener(this);
+		tfDatum.setValue(new Date(System.currentTimeMillis()));
 		
 		loadUsers();
+	}
+	
+	/**
+	 * Konstruktor zum Anzeigen und Stornieren einer Auszahlunganordnung. 
+	 * @param frame = welches den ApplicationServer besitzt. 
+	 * @param bestellung = KleinBestellung die angezeigt werden soll und welche storniert werden kann. 
+	 * @author w.flat
+	 */
+	public BestellungKlein(MainFrame frame, KleinBestellung bestellung) {
+		super("Auszahlungsanordnung Anzeigen/Stornieren");
+		this.frame = frame;
+		this.bestellung = bestellung;
+		this.setClosable(true);
+		this.setIconifiable(true);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(50,50,630,555);
+		
+		try {
+			tableBelege = new BestellungKleinTable(bestellung.getBelege());
+			jbInit();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		buAbbrechen.addActionListener(this);
+		buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
+		butStornieren.addActionListener(this);
+		butStornieren.setIcon(Functions.getDelIcon(getClass()));
+		buDrucken.addActionListener(this);
+		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+		buAddRow.addActionListener(this);
+		buAddRow.setIcon(Functions.getExpandIcon(getClass()));
+		buAddRow.setEnabled(false);
+		butFBKontoAuswahl.addActionListener(this);
+		butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
+		butFBKontoAuswahl.setEnabled(false);
+		butZVTitelAuswahl.addActionListener(this);
+		butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
+		butZVTitelAuswahl.setEnabled(false);
+		buBestellen.setVisible(false);
+		
+		// Beschriften der Labels
+		setFBKonto(bestellung.getFbkonto());
+		setZVKonto(bestellung.getZvtitel());
+		labGesamt.setText(NumberFormat.getCurrencyInstance().format(bestellung.getBestellwert()));
+		// Beschriften der TextFelder
+		comboBenutzer.insertItemAt(bestellung.getAuftraggeber(), 0);
+		comboBenutzer.setSelectedIndex(0);
+		comboBenutzer.setEnabled(false);
+		tfProjektNr.setText(bestellung.getProjektNr());
+		tfDatum.setValue(bestellung.getDatum());
+		tfDatum.setEnabled(false);
+		tpVerwendung.setText(bestellung.getVerwendungszweck());
+		tpVerwendung.setEnabled(false);
+		tfKartei.setText(bestellung.getLabor());
+		tfKartei.setEnabled(false);
+		tfKarteiNr.setText(bestellung.getKartei());
+		tfKarteiNr.setEnabled(false);
+		tfTitelVerzNr.setText(bestellung.getVerzeichnis());
+		tfTitelVerzNr.setEnabled(false);
 	}
 
 	/**
@@ -185,7 +250,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		labTextKostenstelle.setText("Kostenstelle");
 		labTextKostenstelle.setBounds(new Rectangle(10, 40, 80, 15));
 		this.getContentPane().setLayout(null);
-		this.setTitle("");
 		labTextKapitel.setText("Kapitel");
 		labTextKapitel.setBounds(new Rectangle(10, 70, 80, 15));
 		buBestellen.setBounds(new Rectangle(10, 490, 150, 25));
@@ -207,7 +271,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		labMaterial.setText("In Material/Geräte-Kartei");
 		labMaterial.setBounds(new Rectangle(6, 6, 160, 15));
 		labLaborNr.setAlignmentX((float) 0.0);
-		labLaborNr.setText("Labor, Nr.");
+		labLaborNr.setText(" -Labor, Nr.");
 		labLaborNr.setBounds(new Rectangle(281, 6, 80, 15));
 		tfKartei.setText("");
 		tfKartei.setBounds(new Rectangle(171, 5, 100, 21));
@@ -220,7 +284,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		panelTitelVerzNr.setLayout(null);
 		tfTitelVerzNr.setText("");
 		tfTitelVerzNr.setBounds(new Rectangle(131, 5, 150, 21));
-		labTitelVerzNr.setText("Titel. Verz. Nr.");
+		labTitelVerzNr.setText("Titl. Verz. Nr.");
 		labTitelVerzNr.setBounds(new Rectangle(6, 7, 120, 15));
 		panelTable.setBorder(BorderFactory.createLineBorder(Color.black));
 		panelTable.setBounds(new Rectangle(10, 140, 600, 200));
@@ -317,15 +381,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 		scrollBelege.getViewport().add(tableBelege, null);		
 		comboBenutzer.addItemListener(this);
-		comboBenutzer.addPropertyChangeListener(this);
-	}
-	
-	/**
-	 * Aktuell ausgewählten User ermitteln. 
-	 * @author w.flat
-	 */
-	private Benutzer getPresUser() {
-		return (Benutzer)comboBenutzer.getSelectedItem();
 	}
 	
 	/**
@@ -350,10 +405,18 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
 			kontoAuswahl.show();
 		} else if( e.getSource() == butFBKontoAuswahl ) {
-			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, getPresUser());
+			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, (Benutzer)comboBenutzer.getSelectedItem());
 		} else if( e.getSource() == buAddRow ) {
 			tableBelege.addRaw();
 		} else if ( e.getSource() == buDrucken ) {
+			String error = getErrorString();
+			if(!error.equalsIgnoreCase("")) {	// Wenn Fehler im Formular aufgetreten sind
+				error = "Folgende Fehler sind aufgetreten:\n" + error;
+				// Fehlermeldung ausgeben
+				JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+				return;		// Srung aus der Methode
+			}
+			// Wenn keine Fehler beim Formular, dann Drucken
 			PrinterJob pJob = PrinterJob.getPrinterJob();
 			pJob.setJobName("Kleinbestellung");
 
@@ -362,7 +425,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			paper.setImageableArea(35,90,560,712) ;
 			paper.setSize(595,842);
 			pf.setPaper(paper);
-			BestellungKleinPrint printFrame = new BestellungKleinPrint();
+			BestellungKleinPrint printFrame = new BestellungKleinPrint(getKleinBestellung());
 			printFrame.show();
 			printFrame.setVisible(false);
 
@@ -380,35 +443,96 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			pJob.cancel();
 			if(pJob.isCancelled())
 				printFrame.dispose();
-		}else if ( e.getSource() == buAbbrechen ) {
+		} else if ( e.getSource() == buAbbrechen ) {
 			this.dispose();
+		} else if( e.getSource() == buBestellen ) {
+			String error = getErrorString();
+			if(!error.equalsIgnoreCase("")) {		// Fehler im Bestell-Formular
+				error = "Folgende Fehler sind aufgetreten:\n" + error;
+				JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+			} else {	// Sonst Bestellung durchführen
+				
+			}
+		} else if( e.getSource() == butStornieren ) {
+			int answer = JOptionPane.showConfirmDialog(
+						getComponent(0),
+						"Soll die Bestellung wirklich gelöscht werden ? ",
+						"Warnung",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null);
+			if(answer == 0){
+				// Die Bestellung löschen
+			}			
 		}
 	}
-
+	
 	/**
-	 * Wenn in der Combo-Box-Benutzer anderer Eintrag ausgewählt wurde. 
+	 * Eine Kleinbestellung generieren aus dem Formular. 
+	 * @return Kleinbestellung, die generiert wurde. 
+	 * @author w.flat
 	 */
-	public void propertyChange(PropertyChangeEvent e) {
-//		if(e.getSource() == comboBenutzer) {
-//			clearLabels();
-//		}
+	private KleinBestellung getKleinBestellung() {
+	    java.util.Date datum = (java.util.Date)tfDatum.getValue();
+		Date sqlDate = new Date(datum.getTime());
+
+		return new KleinBestellung(0, sqlDate, frame.getBenutzer(), (Benutzer)comboBenutzer.getSelectedItem(), 
+									zvTitel, fbKonto, tableBelege.getSum(), tfProjektNr.getText(), tpVerwendung.getText(),
+									tfKartei.getText(), tfKarteiNr.getText(), tfTitelVerzNr.getText(), tableBelege.getBelege() );
 	}
 
 	/**
 	 * Wenn in der Combo-Box-Benutzer anderer Eintrag ausgewählt wurde. 
+	 * @author w.flat
 	 */
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == comboBenutzer) {
 			clearLabels();
-		}	
+		}
+	}
+	
+	/**
+	 * Ermitteln aller Fehler beim Bestellungsformular. 
+	 * @return String mit Fehlern
+	 * @author w.flat
+	 */
+	private String getErrorString() {
+		String error = "";
+		
+		if(tfProjektNr.getText().equalsIgnoreCase("")) {
+			error += " - Die Projektnummer darf nicht leer sein.\n";
+		}
+		if(tfKartei.getText().equalsIgnoreCase("")) {
+			error += " - Die Laborbezeichnung darf nicht leer sein.\n";
+		}
+		if(tfKarteiNr.getText().equalsIgnoreCase("")) {
+			error += " - Die Karteinummer darf nicht leer sein.\n";
+		}
+		if(tfTitelVerzNr.getText().equalsIgnoreCase("")) {
+			error += " - Die Titl.Verz.Nr. darf nicht leer sein.\n";
+		}
+		if(tpVerwendung.getText().equalsIgnoreCase("")) {
+			error += " - Das Verwendungsfeld darf nicht leer sein.\n";
+		}
+		if(fbKonto == null) {
+			error += " - Es wurde kein FBKonto angegeben.\n";
+		}
+		if(zvTitel == null) {
+			error += " - Es wurde kein ZVTitel angegeben.\n";
+		}
+		error += tableBelege.getErrorString();
+
+		return error;
 	}
 
 	/**
 	 * Das FBKonto für die Bestellung festlegen.  
+	 * @author w.flat
 	 */
 	public void setFBKonto(FBUnterkonto fbKonto) {
 		clearLabels();
 		this.fbKonto = fbKonto;
+		this.zvTitel = null;
 		labKostenstelle.setText(fbKonto.getInstitut().getKostenstelle());
 		labHauptkonto.setText(fbKonto.getHauptkonto());
 		labUnterkonto.setText(fbKonto.getUnterkonto());
@@ -416,6 +540,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 
 	/**
 	 * Den ZVTitel für die Bestellung festlegen. 
+	 * @author w.flat
 	 */
 	public void setZVKonto(ZVUntertitel zvTitel) {
 		this.zvTitel = zvTitel;
@@ -425,6 +550,16 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
 		labTitel.setText(zvTitel.getTitel());
 		labUntertitel.setText(zvTitel.getUntertitel());
+	}
+
+	/**
+	 * Reaktion auf die Veränderungen im Betrag Feld. 
+	 * @author w.flat
+	 */
+	public void propertyChange(PropertyChangeEvent evt) {
+		if(evt.getSource() == tableBelege) {
+			labGesamt.setText(NumberFormat.getCurrencyInstance().format(tableBelege.getSum()));
+		}
 	}
 }
 
@@ -514,17 +649,9 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	 */
 	private void checkKonto() {
 		if(treeKonten.fbHauptkontoIsSelected()) {
-			if(treeKonten.getFBHauptkonto().getKleinbestellungen()) {
-				butSelect.setEnabled(true);
-			} else {
-				butSelect.setEnabled(false);
-			}
+			butSelect.setEnabled(treeKonten.getFBHauptkonto().getKleinbestellungen());
 		} else if(treeKonten.fbUnterkontoIsSelected()) {
-			if(treeKonten.getFBUnterkonto().getKleinbestellungen()) {
-				butSelect.setEnabled(true);
-			} else {
-				butSelect.setEnabled(false);
-			}
+			butSelect.setEnabled(treeKonten.getFBUnterkonto().getKleinbestellungen());
 		} else {
 			butSelect.setEnabled(false);
 		}

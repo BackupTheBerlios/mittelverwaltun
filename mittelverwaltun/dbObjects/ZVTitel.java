@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class ZVTitel extends ZVUntertitel implements Serializable {
 	
-	// CHANGE
 
 	private ArrayList untertitel = new ArrayList();
 	private ZVKonto zvKonto = null;

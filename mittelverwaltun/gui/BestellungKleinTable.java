@@ -26,6 +26,7 @@ public class BestellungKleinTable extends JTable {
 	 * Die Spalten-Namen
 	 */
 	private static String[] title = {"Beleg-Nr", "Firma", "Artikel, Gegenstand", "Preis", ""};
+	private static String[] titleDel = {"Beleg-Nr", "Firma", "Artikel, Gegenstand", "Preis"};
 	
 	/**
 	 * Erstellt eine Tabelle mit fünf Spalten für den BestellungKlein-Frame. <br>
@@ -52,7 +53,7 @@ public class BestellungKleinTable extends JTable {
 											else if(c == 4)
 												return JButton.class;
 											else
-												return JTextField.class;
+												return String.class;
 										}
 										
 										public boolean isCellEditable(int rowIndex, int columnIndex){
@@ -70,6 +71,50 @@ public class BestellungKleinTable extends JTable {
 		setDefaultRenderer(Integer.class, dtcr);
 		// Festlegen der Tabellen-Eigenschaften
 		updateTableStructure();
+		this.addPropertyChangeListener(frame);
+	}
+	
+	/**
+	 * Erstellt eine Tabelle mit fünf Spalten für den BestellungKlein-Frame. <br>
+	 * Es werden die Belege angezeigt und können nicht verändert werden.
+	 * @param belege = Liste mit Belegen, die angezeigt werden sollen. 
+	 * @author w.flat
+	 */
+	public BestellungKleinTable(ArrayList belege) {
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);		// Keine automatische Größen-Anpassung
+		
+		// TableModel festlegen. Dabei wird bei DefaultTableModel nur die Methoden
+		// getColumnClass und isCellEditable überschrieben
+		setModel(new DefaultTableModel(titleDel, 0) {
+										public Class getColumnClass(int c) {
+											if(c == 0)
+												return Integer.class;
+											else if(c == 1)
+												return JComboBox.class;
+											else if(c == 3)
+												return Float.class;
+											else
+												return String.class;
+										}
+										// Tabelle ist nicht editierbar
+										public boolean isCellEditable(int rowIndex, int columnIndex){
+											return false;
+										}
+								}
+						);
+		// CellEditor und CellRenderer für Float-Klasse festlegen
+		setDefaultEditor(Float.class, new JTableFloatEditor(0));
+		setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
+		// CellEditor und CellRenderer für Integer-Klasse festlegen
+		setDefaultEditor(Integer.class, new JTableIntegerEditor(1));
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		setDefaultRenderer(Integer.class, dtcr);
+		// Festlegen der Tabellen-Eigenschaften
+		updateTableStructureDel();
+		for(int i = 0; i < belege.size(); i++) {
+			addRaw((Beleg)belege.get(i));
+		}
 	}
 	
 	/**
@@ -81,6 +126,79 @@ public class BestellungKleinTable extends JTable {
 		((DefaultTableModel)this.getModel()).addRow(o);
 		((DefaultTableModel)this.getModel()).fireTableRowsInserted(	((DefaultTableModel)this.getModel()).getRowCount(), 
 																	((DefaultTableModel)this.getModel()).getRowCount());
+	}
+	
+	/**
+	 * Neue Zeile in der Tabelle einfügen.
+	 * @param beleg = Beleg, der eingefügt werden soll.
+	 * @author w.flat
+	 */
+	public void addRaw(Beleg beleg) {
+		Object[] o = {new Integer(beleg.getNummer()), beleg.getFirma(), beleg.getArtikel(), new Float(beleg.getSumme())};
+		((DefaultTableModel)this.getModel()).addRow(o);
+		((DefaultTableModel)this.getModel()).fireTableRowsInserted(	((DefaultTableModel)this.getModel()).getRowCount(), 
+																	((DefaultTableModel)this.getModel()).getRowCount());
+	}
+	
+	/**
+	 * Error-String der Belege ermitteln.
+	 * @author w.flat
+	 */
+	public String getErrorString() {
+		String error = "";
+		
+		DefaultTableModel model = (DefaultTableModel)this.getModel();
+		for(int i = 0; i < this.getRowCount(); i++) {
+			String temp = "";
+			if(((String)model.getValueAt(i, 2)).equalsIgnoreCase("")) {
+				temp += "     * Artikel darf nicht leer sein.\n";
+			}
+			if(((Float)model.getValueAt(i, 3)).floatValue() <= 0.0) {
+				temp += "     * Betrag muss größer als 0.0 sein.\n";
+			}
+			if(!temp.equalsIgnoreCase("")) {
+				temp = " - Beleg-Nr. " + (i + 1) + " : \n" + temp;
+			}
+			error += temp;
+		}
+		if(this.getRowCount() <= 0) {
+			error += " - Es sind keine Belege vorhanden.\n";
+		}
+		
+		return error;
+	}
+	
+	/**
+	 * Generierung der Belge aus der Tabelle. 
+	 * @return Liste mit Belegen
+	 * @author w.flat
+	 */
+	public ArrayList getBelege() {
+		ArrayList belege = new ArrayList();
+		
+		DefaultTableModel model = (DefaultTableModel)this.getModel();
+		for(int i = 0; i < this.getRowCount(); i++) {
+			belege.add(new Beleg(0, ((Integer)model.getValueAt(i, 0)).intValue(), (Firma)model.getValueAt(i, 1),
+									(String)model.getValueAt(i, 2), ((Float)model.getValueAt(i, 3)).floatValue()));
+		}
+		
+		return belege;
+	}
+	
+	/**
+	 * Die Summe aller Felder ermitteln. 
+	 * @return Summe aller Belege 
+	 * @author w.flat
+	 */ 
+	public float getSum() {
+		float sum = 0;
+		
+		DefaultTableModel model = (DefaultTableModel)this.getModel();
+		for(int i = 0; i < this.getRowCount(); i++) {
+			sum += ((Float)model.getValueAt(i, 3)).floatValue();
+		}
+		
+		return sum;
 	}
 	
 	/**
@@ -117,7 +235,34 @@ public class BestellungKleinTable extends JTable {
 	}
 	
 	/**
-	 * Die Struktur der Tabelle festlegen.
+	 * Die Struktur der Tabelle festlegen beim Anzeigen einer Bestellung.
+	 * @author w.flat
+	 */
+	private void updateTableStructureDel() {
+		// Einstellungen der ersten Spalte = "Beleg-Nr"
+		getColumnModel().getColumn(0).setMinWidth(50);
+		getColumnModel().getColumn(0).setWidth(60);
+		getColumnModel().getColumn(0).setPreferredWidth(60);
+		getColumnModel().getColumn(0).setMaxWidth(70);
+		// Einstellen der zweiten Spalte = "Firma"
+		getColumnModel().getColumn(1).setMinWidth(200);		// Größe festlegen
+		getColumnModel().getColumn(1).setWidth(200);
+		getColumnModel().getColumn(1).setPreferredWidth(200);
+		getColumnModel().getColumn(1).setMaxWidth(250);
+		// Einstellen der dritten Spalte = "Artikel"
+		getColumnModel().getColumn(2).setMinWidth(240);
+		getColumnModel().getColumn(2).setWidth(240);
+		getColumnModel().getColumn(2).setPreferredWidth(240);
+		getColumnModel().getColumn(2).setMaxWidth(300);
+		// Einstellen der vierten Spalte = "Preis"
+		getColumnModel().getColumn(3).setMinWidth(60);
+		getColumnModel().getColumn(3).setWidth(80);
+		getColumnModel().getColumn(3).setPreferredWidth(80);
+		getColumnModel().getColumn(3).setMaxWidth(100);
+	}
+	
+	/**
+	 * Die Struktur der Tabelle festlegen beim Erstellen einer Bestellung.
 	 * @author w.flat
 	 */
 	private void updateTableStructure(){
@@ -144,7 +289,6 @@ public class BestellungKleinTable extends JTable {
 		getColumnModel().getColumn(2).setWidth(190);
 		getColumnModel().getColumn(2).setPreferredWidth(190);
 		getColumnModel().getColumn(2).setMaxWidth(250);
-		getColumnModel().getColumn(2).setCellRenderer(new MultiLineRenderer());
 		// Einstellen der vierten Spalte = "Preis"
 		getColumnModel().getColumn(3).setMinWidth(60);
 		getColumnModel().getColumn(3).setWidth(80);

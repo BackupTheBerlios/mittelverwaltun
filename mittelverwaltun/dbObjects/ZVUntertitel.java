@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 public class ZVUntertitel implements Serializable {
 	
-	// CHANGE
 
 	private int id;
 	private ZVTitel zvTitel;

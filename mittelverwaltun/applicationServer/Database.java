@@ -3230,4 +3230,110 @@ public class Database implements Serializable{
 			}
 		}
 	}
+	
+	/**
+	 * Einen Beleg in die Datenbank einfügen.
+	 * @param bestellung = Id der Bestellung, zu der dieser Beleg gehört. 
+	 * @param beleg = Beleg der eingefügt werden soll.
+	 * @return Id des eingefügten Belges.  
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public int insertBeleg(int bestellung, Beleg beleg) throws ApplicationServerException {
+		if(beleg == null)
+			return 0;
+		try {
+			// Prameter für das SQL-Statement
+			Object[] parameters = {new Integer(bestellung), "" + beleg.getNummer(), new Integer(beleg.getFirma().getId()), 
+									beleg.getArtikel(), new Float(beleg.getSumme())};
+			// SQL-Statement mit der Nummer 276 ausführen
+			statements.get(276).executeUpdate(parameters);
+			return existsBeleg(bestellung, beleg);		// Id des eingefügten Belegs ermitteln
+		} catch(SQLException e) {
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+	} 
+	
+	/**
+	 * Abfrage der Id eines bestimmten Belegs. <br>
+	 * Beleg von einer bestimmten Bestellung und mit einer bestimmten Beleg-Nummer.
+	 * @param bestellung = Id der Bestellung, zu der dieser Beleg gehört. 
+	 * @param beleg = Beleg der überprüft werden soll. 
+	 * @return Id des Belegs. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public int existsBeleg(int bestellung, Beleg beleg) throws ApplicationServerException {
+		if(beleg == null)
+			return 0;
+		try {
+			// Prameter für das SQL-Statement
+			Object[] parameters = {new Integer(bestellung), "" + beleg.getNummer()};
+			// SQL-Statement mit der Nummer 279 ausführen
+			ResultSet rs = statements.get(279).executeQuery(parameters);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+				return rs.getInt(1);// Id des Belegs
+			}
+			return 0;
+		} catch(SQLException e) {
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+	} 
+
+	/**
+	 * Löschen aller Belege einer bestimmten Bestellung. 
+	 * @param bestellung = Id der Bestellung, von der die Belege gelöscht werden sollen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public int deleteBelege(int bestellung) throws ApplicationServerException {
+		try{
+			// Parameter für das SQL-Statement
+			Object[] parameters ={ new Integer(bestellung)};
+			// SQL-Statement ausführen
+			return statements.get(278).executeUpdate(parameters);	// Zeilenanzahl der gelöschten Belege
+		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	} 
+
+	/**
+	 * Abfrage aller Belege einer bestimmten Bestellung. 
+	 * @param bestellung = Beleg der eingefügt werden soll.  
+	 * @return Id des Belegs. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ArrayList selectBelege(int bestellung) throws ApplicationServerException {
+		ArrayList belege = new ArrayList();		// Liste mit Belegen
+		try {
+			// Prameter für das SQL-Statement
+			Object[] parameters = {new Integer(bestellung)};
+			// SQL-Statement mit der Nummer 277 ausführen
+			ResultSet rs = statements.get(277).executeQuery(parameters);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+				while( rs.next() ){		// Wenn es noch Zeilen gibt
+					// Neuen Beleg erzeugen und die Liste einfügen
+					belege.add( new Beleg( rs.getInt(1), (new Integer(rs.getString(3))).intValue(), 
+												selectFirma(rs.getInt(4)), rs.getString(5), rs.getFloat(6) ) );
+				}
+			}
+			rs.close();					// Die Abfrage schließen
+		} catch(SQLException e) {
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+		
+		return belege;
+	} 
+
 }
+
+

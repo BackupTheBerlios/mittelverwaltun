@@ -3,29 +3,11 @@ package dbObjects;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
+
 /**
  * @author robert
- *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class KleinBestellung extends Bestellung implements Serializable {
-
-	/**
-	 * @param referenznr
-	 * @param datum
-	 * @param besteller
-	 * @param phase
-	 * @param auftraggeber
-	 * @param empfaenger
-	 * @param zvtitel
-	 * @param fbkonto
-	 * @param bestellwert
-	 */
-	public KleinBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
-		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
-		// TODO Automatisch erstellter Konstruktoren-Stub
-	}
 
 	private ArrayList belege;
 
@@ -38,6 +20,24 @@ public class KleinBestellung extends Bestellung implements Serializable {
 	private String kartei;
 
 	private String verzeichnis;
+	
+	public KleinBestellung() {
+	}
+
+	/**
+	 * Konstruktor zum Erstellen einer Kleinbestellung. 
+	 */
+	public KleinBestellung(int id, Date datum, Benutzer besteller, Benutzer empfaenger, 
+							ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, String projektNr, 
+							String verwendungszweck, String labor, String kartei, String verzeichnis, ArrayList belege) {
+		super(id, "", datum, besteller, '2', "", empfaenger, empfaenger, zvtitel, fbkonto, bestellwert);
+		this.belege = belege;
+		this.projektNr = projektNr;
+		this.verwendungszweck = verwendungszweck;
+		this.labor = labor;
+		this.kartei = kartei;
+		this.verzeichnis = verzeichnis;
+	}
 
 	public ArrayList getBelege() {
 		return belege;

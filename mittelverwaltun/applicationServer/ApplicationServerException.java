@@ -1,6 +1,5 @@
 package applicationServer;
 
-//CHANGE Classe ApplicationServerException
 public class ApplicationServerException extends Exception {
 
 	private static int NOM = 200;

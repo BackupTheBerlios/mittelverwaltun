@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[290];
+		statements = new PreparedStatementWrapper[300];
 		int i = 0;
 
 		/**************************************/
@@ -443,7 +443,6 @@ public class PreparedSqlStatements {
 		}
 		
 		{//60
-			//CHANGE PreparedSqlStatements: Start
 			ps = con.prepareStatement( "SELECT " +
 											  "distinct fbk.id, fbk.haushaltsjahrId, fbk.institutsId, fbk.bezeichnung, " +
 												  "fbk.hauptkonto, fbk.unterkonto, fbk.budget, fbk.dispoLimit, fbk.pruefBedingung " +
@@ -456,7 +455,6 @@ public class PreparedSqlStatements {
 										  "AND zvk.zweckgebunden = \"0\" ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
-//		CHANGE PreparedSqlStatements: End
 		}
 		{//61
 			statements[i++] = null;
@@ -1116,7 +1114,6 @@ public class PreparedSqlStatements {
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		//CHANGE PreparedSqlStatements: Start
 		{//161
 			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
 										 "FROM ZVKontentitel t, ZVKonten k " +
@@ -1127,8 +1124,6 @@ public class PreparedSqlStatements {
 										"GROUP BY k.id");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-//CHANGE PreparedSqlStatements: End
-//CHANGE PreparedSqlStatements: Start
 		{//162
 			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
 										 "FROM ZVKontentitel t, ZVKonten k " +
@@ -1140,8 +1135,6 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-//CHANGE PreparedSqlStatements: End
-//CHANGE PreparedSqlStatements: Start
 		{//163
 			ps = con.prepareStatement( "SELECT DISTINCT fb2.id, fb2.budget " +
 										 "FROM kontenzuordnung z, zvkonten zv, fbkonten fb1, fbkonten fb2 " +
@@ -1156,8 +1149,6 @@ public class PreparedSqlStatements {
 										  "AND fb2.geloescht=\"0\" ");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-//CHANGE PreparedSqlStatements: End
-//CHANGE PreparedSqlStatements: Start
 		{//164
 			ps = con.prepareStatement( "SELECT DISTINCT fb2.id, fb2.budget " +
 										 "FROM kontenzuordnung z, fbkonten fb1, fbkonten fb2 " +
@@ -1171,7 +1162,6 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-//CHANGE PreparedSqlStatements: End
 		{//165
 			statements[i++] = null;
 		}
@@ -1954,16 +1944,46 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//276
-			statements[i++] = null;
+			/**
+			 * Ein Beleg in die Tabelle einfügen. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"INSERT INTO belege " +
+										"(bestellung, nr, firma, artikel, belegsumme) " +
+										"VALUES (?,?,?,?,?)" );
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.FLOAT};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//277
-			statements[i++] = null;
+			/**
+			 * Abfrage aller Belege einer angegebenen Bestellung. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT id, bestellung, nr, firma, artikel, belegsumme " +
+										"FROM belege " +
+										"WHERE bestellung = ?" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//278
-			statements[i++] = null;
+			/**
+			 * Löschen aller Belege einer angegebenen Bestellung. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"DELETE FROM belege WHERE bestellung = ?" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//279
-			statements[i++] = null;
+			/**
+			 * Abfrage der Id eines bestimmten Belegs einer bestimmten Bestellung und bestimmten Beleg-Nummer. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT id " +
+										"FROM belege " +
+										"WHERE bestellung = ? AND nr = ?" );
+			int[] param = {Types.INTEGER, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/******************************************/
 		/* Tabelle: Positionen 2               	  */
@@ -2005,6 +2025,40 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//289
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: Bestellungen 2                */
+		/* Indizes: 290-299                       */
+		/******************************************/
+		{//290 
+			statements[i++] = null;
+		}
+		{//291
+			statements[i++] = null;
+		}
+		{//292
+			statements[i++] = null;
+		}
+		{//293
+			statements[i++] = null;
+		}
+		{//294
+			statements[i++] = null;
+		}
+		{//295 
+			statements[i++] = null;
+		}
+		{//296
+			statements[i++] = null;
+		}
+		{//297
+			statements[i++] = null;
+		}
+		{//298
+			statements[i++] = null;
+		}
+		{//299
 			statements[i++] = null;
 		}
 	}

@@ -16,6 +16,7 @@ import applicationServer.CentralServer;
 import dbObjects.Angebot;
 import dbObjects.Fachbereich;
 import dbObjects.StandardBestellung;
+import dbObjects.ZVTitel;
 
 /**
  * <p>Title: Mittelverwaltung - GUI</p>
@@ -189,7 +190,10 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfKapitel.setBounds(new Rectangle(141, 115, 70, 21));
 	    tfKapitel.setDisabledTextColor(Color.black);
-	    tfKapitel.setText(origin.getZvtitel().getZVKonto().getKapitel());
+	    if(origin.getZvtitel() instanceof ZVTitel)
+	    	tfKapitel.setText(((ZVTitel)origin.getZvtitel()).getZVKonto().getKapitel());
+	    else
+			tfKapitel.setText(origin.getZvtitel().getZVTitel().getZVKonto().getKapitel());
 	    tfKapitel.setEnabled(false);
 	    tfKapitel.setBackground(UIManager.getColor("Viewport.background"));
 	
