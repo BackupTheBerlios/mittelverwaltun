@@ -1,7 +1,7 @@
 package dbObjects;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 /**
  * @author robert
  *
@@ -14,8 +14,6 @@ public class Angebot {
 
 	private ArrayList positionen;
 	
-	private Date datum;
-
 	private Firma anbieter;
 
 	private int id;
@@ -24,6 +22,8 @@ public class Angebot {
 	 * Falls keine Positionen Angegeben wurden kann trotzdem eine Summe für das Angebot abgegeben werden
 	 */
 	private float summe;
+
+	private java.sql.Date datum;
 
 	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter){
 		this.id = id;
@@ -53,11 +53,11 @@ public class Angebot {
 		this.summe = summe;
 	}
 
-	public Date getDatum() {
+	public java.sql.Date getDatum() {
 		return datum;
 	}
 
-	public void setDatum(Date datum) {
+	public void setDatum(java.sql.Date datum) {
 		this.datum = datum;
 	}
 
