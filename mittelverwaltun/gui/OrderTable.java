@@ -40,7 +40,7 @@ public class OrderTable extends JTable{
 		final JButton button;        
 		
 		TableButtonCellRenderer() {            
-			button = new JButton(Functions.getZoomInIcon(this.getClass()));
+			button = new JButton(Functions.getOpenIcon(this.getClass()));
 			button.setActionCommand("showOrder");
 			button.setMargin(new Insets(2,2,2,2));         
 		}        
@@ -56,7 +56,7 @@ public class OrderTable extends JTable{
 		final ActionListener callback;
 		        
 		TableButtonCellEditor(ActionListener callback) {            
-			button = new JButton(Functions.getZoomInIcon(this.getClass()));
+			button = new JButton(Functions.getOpenIcon(this.getClass()));
 			button.setActionCommand("showOrder");           
 			this.callback = callback;  
 			button.setMargin(new Insets(2,2,2,2));         

@@ -78,6 +78,24 @@ public class Functions {
 	  return null;
 	}
 	
+	static public ImageIcon getOpenIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Open.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	static public ImageIcon getSaveIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Save.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
 	static public ImageIcon getRefreshIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","refresh.gif", clazz);
@@ -87,6 +105,24 @@ public class Functions {
 	  return null;
 	}
 
+	static public ImageIcon getRowInsertAfterIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","RowInsertAfter.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	static public ImageIcon getRowDeleteIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","RowDelete.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
 	static public ImageIcon getAddIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","add.gif", clazz);
@@ -176,10 +212,56 @@ public class Functions {
 	  }catch (IOException e){};
 		return null;
 	}
-
-	static public ImageIcon getStop24Icon(Class clazz){
+	
+	static public ImageIcon getNewIcon(Class clazz){
 		try{
-		  Image img = Functions.loadImageResource("image","Stop24.gif", clazz);
+		  Image img = Functions.loadImageResource("image","New.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+
+	static public ImageIcon getPasteIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Paste.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+
+	
+	static public ImageIcon getCopyIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Copy.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+
+	static public ImageIcon getZoomIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Zoom.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+	
+	static public ImageIcon getPropertiesIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Properties.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+	
+	static public ImageIcon getStopIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Stop.gif", clazz);
 		  if (img != null)
 			  return  new ImageIcon(img);
 	  }catch (IOException e){};

@@ -11,27 +11,27 @@ import java.sql.Date;
  */
 public class ASKBestellung extends Bestellung implements Serializable {
 
-	/**
-	 * @param referenznr
-	 * @param datum
-	 * @param besteller
-	 * @param phase
-	 * @param auftraggeber
-	 * @param empfaenger
-	 * @param zvtitel
-	 * @param fbkonto
-	 * @param bestellwert
-	 */
-	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
-		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
-		// TODO Automatisch erstellter Konstruktoren-Stub
-	}
-
 	private Angebot angebot;
 
 	private String bemerkung;
 
 	private Benutzer swbeauftragter;
+	
+	public ASKBestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
+			ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
+		
+		super(id, referenznr, huel, datum, besteller, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, phase, typ);
+		this.angebot = angebot;
+		this.bemerkung = bemerkung;
+		this.swbeauftragter = swbeauftragter;
+		
+	}
+	
+	
+	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert) {
+		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
+		// TODO Automatisch erstellter Konstruktoren-Stub
+	}
 
 	public Angebot getAngebot() {
 		return angebot;

@@ -24,15 +24,11 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		
 	// Das Menü "Bestellung"
 	JMenu menuBestellung = new JMenu("Bestellung");
-		JMenu menuAuszahlungsanordnung = new JMenu("Auszahlungsanordnung");
-			JMenuItem miAADurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
-			JMenuItem miAAAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen/Stornieren");
-		JMenu menuStandardbestellung = new JMenu("Standardbestellung");
-			JMenuItem miSBDurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
-			JMenuItem miSBAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
-		JMenu menuASKBestellung = new JMenu("ASK Bestellung");
-			JMenuItem miASKDurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
-			JMenuItem miASKAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
+		JMenu menuBestellungErstellen = new JMenu("Neu...");
+			JMenuItem miAAErstellen = new JActivityRelatedMenuItem(17, "Auszahlungsanforderung");
+			JMenuItem miSBErstellen = new JActivityRelatedMenuItem(17, "Standardbestellung");
+			JMenuItem miASKErstellen = new JActivityRelatedMenuItem(17, "ASK-Bestellung");
+		JMenuItem miBestellungenAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
 		
 	// Das Menü "Mittelverwaltung"
 	JMenu menuMittelverwaltung = new JMenu("Mittelverwaltung");
@@ -115,28 +111,22 @@ public class MainMenu extends JMenuBar implements ActionListener {
 					
 		// Das Menü "Bestellung"
 		add( menuBestellung );
-			menuBestellung.add( menuAuszahlungsanordnung );
-				menuAuszahlungsanordnung.add(miAADurchführen);
-				activityRelItems.add( miAADurchführen );
-				miAADurchführen.addActionListener(this);
-				menuAuszahlungsanordnung.add(miAAAnzeigen);
-				miAAAnzeigen.addActionListener(this);
-				activityRelItems.add( miAAAnzeigen );
-			menuBestellung.add( menuStandardbestellung );
-				menuStandardbestellung.add(miSBDurchführen);
-				miSBDurchführen.addActionListener(this);
-				activityRelItems.add( miSBDurchführen );
-				menuStandardbestellung.add(miSBAnzeigen);
-				miSBAnzeigen.addActionListener(this);
-				activityRelItems.add( miSBAnzeigen );
-			menuBestellung.add( menuASKBestellung );
-				menuASKBestellung.add(miASKDurchführen);
-				miASKDurchführen.addActionListener(this);
-				activityRelItems.add( miASKDurchführen );
-				menuASKBestellung.add(miASKAnzeigen);
-				miASKAnzeigen.addActionListener(this);
-				activityRelItems.add( miASKAnzeigen );
-		
+			menuBestellung.add( menuBestellungErstellen );
+				menuBestellungErstellen.add(miAAErstellen);
+				menuBestellungErstellen.setIcon(Functions.getNewIcon(this.getClass()));
+				activityRelItems.add( miAAErstellen );
+				miAAErstellen.addActionListener(this);
+				menuBestellungErstellen.add(miSBErstellen);
+				activityRelItems.add( miSBErstellen );
+				miSBErstellen.addActionListener(this);
+				menuBestellungErstellen.add(miASKErstellen);
+				activityRelItems.add( miASKErstellen );
+				miASKErstellen.addActionListener(this);
+			menuBestellung.add ( miBestellungenAnzeigen);
+			activityRelItems.add( miBestellungenAnzeigen );
+			miBestellungenAnzeigen.setIcon(Functions.getPasteIcon(this.getClass()));
+			miBestellungenAnzeigen.addActionListener(this);
+						
 		// Das Menü "Mittelverwaltung"
 		add( menuMittelverwaltung );
 			menuMittelverwaltung.add( menuZenralverwaltung );
@@ -233,16 +223,14 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());	//
 		} else if ( e.getSource() ==  miLogoutBeenden ) {					//
 			frame.onWindowClosing();
-		} else if ( e.getSource() == miAADurchführen ) {
+		} else if ( e.getSource() == miAAErstellen ) {
 			frame.addChild( new BestellungKlein( frame ) );
-		} else if ( e.getSource() == miAAAnzeigen ) {
-		} else if ( e.getSource() == miSBDurchführen ) {
+		} else if ( e.getSource() == miSBErstellen ) {
 			frame.addChild( new BestellungNormal( frame ) );
-		} else if ( e.getSource() == miSBAnzeigen ) {
-			frame.addChild( new AuswahlBestellung( frame ) );
-		} else if ( e.getSource() == miASKDurchführen ) {
+		} else if ( e.getSource() == miASKErstellen ) {
 			frame.addChild( new BestellungASK( frame ) );
-		} else if ( e.getSource() == miASKAnzeigen ) {
+		} else if ( e.getSource() == miBestellungenAnzeigen ) {
+			frame.addChild( new AuswahlBestellung( frame ) );
 		} else if ( e.getSource() == miKontenbudgetsFestlegen ) {
 			frame.addChild( new ZVMittelFestlegen( frame ) );
 		} else if ( e.getSource() == miFBKontenUmbuchen ) {

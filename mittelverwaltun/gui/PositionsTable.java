@@ -18,6 +18,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 
 import javax.swing.JTable;
 import javax.swing.event.TableModelListener;
@@ -25,6 +26,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import dbObjects.Institut;
 
 /**
  * @author Mario
@@ -36,9 +39,11 @@ public class PositionsTable extends JTable implements ActionListener {
 	
 	public static final int ANZEIGE = 0;
 	public static final int STD_ABWICKLUNG = 1;
+	public static final int ASK_ABWICKLUNG = 2;
 	
 	int type = 0;
 	TableModelListener tml = null;
+	Institut[] institutes = null;
 	
 	public PositionsTable(int type, TableModelListener tml, ArrayList positions){
 		
@@ -48,14 +53,29 @@ public class PositionsTable extends JTable implements ActionListener {
 		PositionsTableModel model = new PositionsTableModel(type, positions);
 		model.addTableModelListener(tml);
 		setModel(model);
-		
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		applyTableRendering();
 	}
 
+	public PositionsTable(int type, TableModelListener tml, ArrayList positions, Institut[] institutes){
+		this.type = type;
+		this.tml = tml;
+		this.institutes = institutes;
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		PositionsTableModel model = new PositionsTableModel(type, positions);
+		model.addTableModelListener(tml);
+		setModel(model);
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		applyTableRendering();
+	}
+	
 	public PositionsTable(int type, ArrayList positions){
 		
 		PositionsTableModel model = new PositionsTableModel(type, positions);
 		setModel(model);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		applyTableRendering();
 	}
@@ -63,7 +83,7 @@ public class PositionsTable extends JTable implements ActionListener {
 	private static class TableButtonCellRenderer implements TableCellRenderer {        
 		final JButton button;        
 		TableButtonCellRenderer() {            
-			button = new JButton(Functions.getDelIcon(this.getClass()));
+			button = new JButton(Functions.getRowDeleteIcon(this.getClass()));
 			button.setActionCommand("deletePosition");
 			button.setMargin(new Insets(2,2,2,2));         
 		}        
@@ -79,7 +99,7 @@ public class PositionsTable extends JTable implements ActionListener {
 		final ActionListener callback;
 		        
 		TableButtonCellEditor(ActionListener callback) {            
-			button = new JButton(Functions.getDelIcon(this.getClass()));
+			button = new JButton(Functions.getRowDeleteIcon(this.getClass()));
 			button.setActionCommand("deletePosition");           
 			this.callback = callback;  
 			button.setMargin(new Insets(2,2,2,2));         
@@ -102,6 +122,8 @@ public class PositionsTable extends JTable implements ActionListener {
 	
 	private void applyTableRendering(){
 		
+		setRowHeight(20);
+		
 		setDefaultEditor(Float.class, new JTableFloatEditor(0));
 	  	setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
 	  	
@@ -110,13 +132,51 @@ public class PositionsTable extends JTable implements ActionListener {
 	  	dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 	  	setDefaultRenderer(Integer.class, dtcr);
 		
-	  	JComboBox cb = new JComboBox();
-		cb.addItem(new Float(0.07));
-		cb.addItem(new Float(0.16));
-		getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(cb));
-		getColumnModel().getColumn(3).setCellRenderer(new JTablePercentRenderer());
-		
-		if (type == 1){
+	  	getColumnModel().getColumn(0).setPreferredWidth(45);	// Menge
+	  	getColumnModel().getColumn(1).setPreferredWidth(127);	// Artikelbezeichnung	
+	  	
+	  	if (type == PositionsTable.ASK_ABWICKLUNG){
+	 		
+	  		getColumnModel().getColumn(2).setPreferredWidth(130);	// Institut
+	  		JComboBox cbInstitutes = new JComboBox();
+	  		if (institutes != null){
+	  			for(int i=0; i<institutes.length;i++){
+	  				System.out.println(institutes[i]);
+	  				cbInstitutes.addItem(institutes[i]);
+	  			}
+	  				
+	  		}
+	  		getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(cbInstitutes));
+	  		getColumnModel().getColumn(2).setCellRenderer(new DefaultTableCellRenderer());
+	  		
+	  		getColumnModel().getColumn(3).setPreferredWidth(90);	// Einzelpreis	
+		  	
+		  	getColumnModel().getColumn(4).setPreferredWidth(40);	// Mehrwertsteuer
+		  	JComboBox mwst = new JComboBox();
+			mwst.addItem(new Float(0.07));
+			mwst.addItem(new Float(0.16));
+			getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(mwst));
+			getColumnModel().getColumn(4).setCellRenderer(new JTablePercentRenderer());
+			
+			getColumnModel().getColumn(5).setPreferredWidth(90);	// Gesamt	  		
+	  	
+	  	}else{
+	  		getColumnModel().getColumn(2).setPreferredWidth(100);	// Einzelpreis	
+		  	
+		  	getColumnModel().getColumn(3).setPreferredWidth(45);	// Mehrwertsteuer
+		  	JComboBox mwst = new JComboBox();
+			mwst.addItem(new Float(0.07));
+			mwst.addItem(new Float(0.16));
+			getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(mwst));
+			getColumnModel().getColumn(3).setCellRenderer(new JTablePercentRenderer());
+			
+			getColumnModel().getColumn(4).setPreferredWidth(100);	// Rabatt
+			getColumnModel().getColumn(5).setPreferredWidth(100);	// Gesamt
+	  	}
+	  	
+		if (type != PositionsTable.ANZEIGE){
+			getColumnModel().getColumn(6).setPreferredWidth(70);
+			getColumnModel().getColumn(7).setPreferredWidth(25);
 			getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor(this));
 			getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer());
 		}

@@ -53,7 +53,7 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 	
 		Icon i = null;
 		switch (icon){
-			case ERROR_ICON:	i = Functions.getStop24Icon(getClass());
+			case ERROR_ICON:	i = Functions.getStopIcon(getClass());
 								break;
 			case WARNING_ICON:	i = Functions.getTipOfTheDay24Icon(getClass());
 								break;

@@ -43,7 +43,7 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	    this.setTitle("Bestellungsauswahl");
 	    this.getContentPane().setLayout(null);
 	
-		String[] items = {"kein Filter", "Standardbestellungen", "ASK-Bestellungen", "Zahlungsanforderungen"};
+		String[] items = {"kein Filter", "Standardbestellungen", "ASK-Bestellungen", "Ausahlungsanforderungen"};
 	
 	    cbFilter = new JComboBox(items);
 	    cbFilter.setBounds(new Rectangle(15, 12, 180, 27));
@@ -88,7 +88,7 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(0));
 				}else if (filter.equals("ASK-Bestellungen")){
 					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(1));
-				}else if (filter.equals("Zahlungsanforderungen")){
+				}else if (filter.equals("Ausahlungsanforderungen")){
 					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(2));
 				}
 			} catch (ApplicationServerException e1) {
