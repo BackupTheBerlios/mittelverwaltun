@@ -22,6 +22,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	/**
 	 * Die id des Servers setzen.
+	 * @param id = Neue ID-Nummer des Servers.
+	 * @author w.flat
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -29,6 +31,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	/**
 	 * Abfrage der id.
+	 * @return ID-Nummer des Servers.
+	 * @author w.flat
 	 */
 	public int getId() {
 		return id;
@@ -240,6 +244,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Abfrage von Hauptkonten eines bestimmten Insituts.
+	 * @param institut = Institut von dem die KOnten abgefragt werden.
 	 * @return Liste FBHauptkonten, die zu einem bestimmten Institut angehören.
 	 * @throws ApplicationServerException
 	 * @author w.flat
@@ -259,8 +264,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	/**
 	 * Abfrage von Unterkonten eines bestimmten Instituts von einem bestimmten Hauptkonto.
-	 * @param institut
-	 * @param hauptkonto
+	 * @param institut = Institut, welchem die FBKonten zugeordnet sind.
+	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
 	 * @return FBUnterkonten
 	 * @throws ApplicationServerException
 	 * @author w.flat
@@ -327,10 +332,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )		// Kein konto übergeben
 			return 0;
 
-		if( db.existsFBKonto(konto) > 0 )				// Wenn dieses FBHauptkonto bereits existiert 
-			throw new ApplicationServerException( 17 );	// dann kann man es nicht mehr erstellen
-		
 		try {
+			if( db.existsFBKonto(konto) > 0 )				// Wenn dieses FBHauptkonto bereits existiert 
+				throw new ApplicationServerException( 17 );	// dann kann man es nicht mehr erstellen
+		
 			int id = 0;
 			if( (id = db.existsDeleteFBKonto( konto )) > 0 ) {	// Existiert schon ein gelöschtes FBKonto
 				konto.setId( id );		// KontoId beim Konto setzen
@@ -339,6 +344,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.insertFBHauptkonto( konto );			// Sonst ein neues FBHauptkonto erstellen
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -354,10 +362,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Wenn kein Konto übergeben wurde
 			return 0;
-		if( db.existsFBKonto( konto ) > 0 )		// Wenn ein FBUnterkonto bereits existiert
-			throw new ApplicationServerException( 19 );
-		
 		try {
+			if( db.existsFBKonto( konto ) > 0 )		// Wenn ein FBUnterkonto bereits existiert
+				throw new ApplicationServerException( 19 );
+			
 			int id = 0;
 			if( (id = db.existsDeleteFBKonto( konto )) > 0 ){	// Gibt es ein solches gelöschtes Konto
 				konto.setId( id );		// Id des gelöschten Kontos an das neue Konto übergeben
@@ -366,6 +374,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.insertFBUnterkonto( konto );			// Sonst ein neues FBUnterkonto erstellen
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -382,25 +393,25 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )		// Kein FBHauptkonto
 			return 0;
 		
-		if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
-			throw new ApplicationServerException( 20 );
-		if( db.countKontenzuordnungen( konto ) > 0 )		// Wenn Kontenzuordnungen existieren
-			throw new ApplicationServerException( 21 );
-	
-		ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
-		// Nachsehen ob sich bei den Unterkonten Fehler(Exception) ergeben
-		if( temp != null ) {		// Gibt es Unterkonten
-			for( int i = 0; i < temp.size(); i++ ) {
-				if( temp.get(i) == null )	// Kein Unterkonto
-					continue;
-				if( db.countActiveBenutzer( (FBUnterkonto)temp.get(i) ) >  0 )		// Unterkonto ist einem Benutzer zugeordnet
-					throw new ApplicationServerException( 22 );
-				if( db.countActiveBestellungen( (FBUnterkonto)temp.get(i) ) > 0 )	// Es gibt Bestellungen 
-					throw new ApplicationServerException( 20 );
-			}
-		}
-		
 		try {
+			if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
+				throw new ApplicationServerException( 20 );
+			if( db.countKontenzuordnungen( konto ) > 0 )		// Wenn Kontenzuordnungen existieren
+				throw new ApplicationServerException( 21 );
+		
+			ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
+			// Nachsehen ob sich bei den Unterkonten Fehler(Exception) ergeben
+			if( temp != null ) {		// Gibt es Unterkonten
+				for( int i = 0; i < temp.size(); i++ ) {
+					if( temp.get(i) == null )	// Kein Unterkonto
+						continue;
+					if( db.countActiveBenutzer( (FBUnterkonto)temp.get(i) ) >  0 )		// Unterkonto ist einem Benutzer zugeordnet
+						throw new ApplicationServerException( 22 );
+					if( db.countActiveBestellungen( (FBUnterkonto)temp.get(i) ) > 0 )	// Es gibt Bestellungen 
+						throw new ApplicationServerException( 20 );
+				}
+			}
+		
 			boolean delFBHauptkonto = true;	// Variable zur Ermittlung ob das FBHauptkonto ganz gelöscht werden sollte
 			// Löschen der Unterkonten
 			if( temp != null ) {	// Es gibt Unterkonten
@@ -435,6 +446,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return konto.getId();
 			else
 				return 0;
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -450,13 +464,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int delFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )		// Kein FBUnterkonto
 			return 0;
-
-		if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
-			throw new ApplicationServerException( 20 );
-		if( db.countActiveBenutzer( konto ) >  0 )			// Unterkonto ist einem Benutzer zugeordnet
-			throw new ApplicationServerException( 22 );
 		
 		try {
+			if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
+				throw new ApplicationServerException( 20 );
+			if( db.countActiveBenutzer( konto ) >  0 )			// Unterkonto ist einem Benutzer zugeordnet
+				throw new ApplicationServerException( 22 );
+				
 			// Es gibt abgeschlossene Bestellungen noch oder Buchungen oder Benutzer
 			if( (db.countBestellungen( konto ) > 0) || (db.countBuchungen( konto ) > 0) || (db.countBenutzer( konto ) > 0) ) {
 				db.selectForUpdateFBUnterkonto( konto );	// Das FBUnterkonto zum Aktualisieren auswählen
@@ -468,6 +482,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return konto.getId();
 			else
 				return 0;
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -528,6 +545,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.updateFBHauptkonto( konto );	// Sonst kann das FBHauptkonto aktualisiert werden
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();			
 		}
@@ -563,6 +583,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.updateFBUnterkonto( konto );		// Sonst kann das FBUnterkonto aktualisiert werden
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -570,13 +593,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget von einem FBHauptkonto auf ein FBUnterkonto buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param FBHauptkonto, von dem der Betrag abgebucht wird.
 	 * @param FBUnterkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom FBHauptkonto abgebucht wird und welchen das FBUnterkonto erhält.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws ApplicationServerException {
 		if( haupt == null || unter == null )	// Ein Konto wurde nicht angegeben
 			return;
 		try {
@@ -605,6 +629,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			// Das FBUnterkonto aktualisieren
 			unter.setBudget( unter.getBudget() + betrag );	// Betrag gutschreiben
 			db.updateFBUnterkonto( unter );			// In der Datenbank aktualisieren
+			bucheUmverteilung(benutzer, haupt, unter, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -612,13 +640,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget von einem FBHauptkonto auf ein anderes FBHauptkonto buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param FBHauptkonto, von dem der Betrag abgebucht wird.
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom ersten FBHauptkonto abgebucht wird und welchen das zweite FBHauptkonto erhält.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( FBHauptkonto from, FBHauptkonto to, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBHauptkonto from, FBHauptkonto to, float betrag ) throws ApplicationServerException {
 		if( from == null || to == null )
 			return;
 		try {
@@ -647,6 +676,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			// Das zweite FBHauptkonto aktualisieren
 			to.setBudget( to.getBudget() + betrag );		// Betrag gutschreiben
 			db.updateFBHauptkonto( to );					// In der Datenbank aktualisieren
+			bucheUmverteilung(benutzer, from, to, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -654,13 +687,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget von einem FBUnterkonto auf ein FBHauptkonto buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param FBUnterkonto, von dem der Betrag abgebucht wird.
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der von dem FBUnterkonto abgebucht wird und welchen das FBHauptkonto erhält.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws ApplicationServerException {
 		if( unter == null || haupt == null )
 			return;
 		try {
@@ -689,6 +723,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			// Das FBHauptkonto aktualisieren
 			haupt.setBudget( haupt.getBudget() + betrag );	// Betrag abbuchen
 			db.updateFBHauptkonto( haupt );			// In der Datenbank aktualisieren
+			bucheUmverteilung(benutzer, unter, haupt, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -737,14 +775,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto
 			return 0;
-		if( db.existsZVKonto( zvKonto ) > 0 )		// Wenn das ZVKonto bereits existiert
-			throw new ApplicationServerException( 11 );
-		if( !zvKonto.isTGRKonto() ) {			// Ist das ZVKonto ein TitelGruppenKonto
-			if( db.existsZVTitel( (ZVTitel)zvKonto.getSubTitel().get(0) ) > 0 )		// Wenn das ZVTitel bereits existiert
-				throw new ApplicationServerException( 11 );
-		}
-		
 		try {
+			if( db.existsZVKonto( zvKonto ) > 0 )		// Wenn das ZVKonto bereits existiert
+				throw new ApplicationServerException( 11 );
+			if( !zvKonto.isTGRKonto() ) {			// Ist das ZVKonto ein TitelGruppenKonto
+				if( db.existsZVTitel( (ZVTitel)zvKonto.getSubTitel().get(0) ) > 0 )		// Wenn das ZVTitel bereits existiert
+					throw new ApplicationServerException( 11 );
+			}
+			
 			int zvKontoId = 0;
 			if( (zvKontoId = db.existsDeleteZVKonto( zvKonto )) > 0 ){	// Wenn ein gelöschtes ZVKonto exitiert, dann aktualisieren
 				zvKonto.setId( zvKontoId );				// Im neuem ZVKonto id setzen
@@ -778,6 +816,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				
 				return zvKontoId;	// Und die ZVKontoId zurückgeben
 			}
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -804,10 +845,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
 		if( zvTitel == null )		// Wenn kein ZVTitel
 			return 0;
-		if( db.existsZVTitel( zvTitel ) > 0 )		// Wenn der ZVTitel bereits existiert
-			throw new ApplicationServerException( 11 );
-			
 		try {
+			if( db.existsZVTitel( zvTitel ) > 0 )		// Wenn der ZVTitel bereits existiert
+				throw new ApplicationServerException( 11 );
+			
 			int id = 0;
 			if( (id = db.existsDeleteZVTitel( zvTitel )) > 0 )	{	// Wenn ein gelöschtes ZVTitel exitiert, dann aktualisieren
 				zvTitel.setId( id );		// Id setzen
@@ -816,6 +857,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.insertZVTitel( zvTitel );		// Sonst einen neuen ZVTitel erstellen
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -831,10 +875,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
 		if( zvUntertitel == null )		// Wenn kein ZVUntertitel
 			return 0;
-		if( db.existsZVUntertitel( zvUntertitel ) > 0 )		// Wenn der ZVUntertitel bereits existiert
-			throw new ApplicationServerException( 11 );
-			
 		try {
+			if( db.existsZVUntertitel( zvUntertitel ) > 0 )		// Wenn der ZVUntertitel bereits existiert
+				throw new ApplicationServerException( 11 );
+			
 			int id = 0;
 			// Wenn ein gelöschtes ZVUntertitel exitiert, dann aktualisieren
 			if( (id = db.existsDeleteZVUntertitel( zvUntertitel )) > 0 ) {
@@ -844,6 +888,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.insertZVUntertitel( zvUntertitel );	// Sonst neuen ZVUntertitel erstellen
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -860,33 +907,33 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvKonto == null )	// Kein ZVKonto
 			return 0;
 		
-		if( db.countKontenzuordnungen( zvKonto ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(21);
-		
-		ArrayList zvTitel = zvKonto.getSubTitel();
-		// Nachsehen ob es beim Löschen von ZVTiteln Fehler entstehen
-		if( zvTitel != null ) {		// Gibt es ZVTitel
-			for( int i = 0; i < zvTitel.size(); i++ ) {
-				if( zvTitel.get(i) == null )	// kein zvTitel
-					continue;
-				if( db.countActiveBestellungen( (ZVTitel)zvTitel.get(i) ) > 0 )		// Wenn es noch laufende Bestellungen gibt
-					throw new ApplicationServerException(20);
-
-				ArrayList zvUntertitel = ((ZVTitel)zvTitel.get(i)).getSubUntertitel();
-				// Nachsehen ob es beim Löschen von ZVUntertiteln Fehler entstehen
-				if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
-					for( int j = 0; j < zvUntertitel.size(); j++ ) {
-						if( zvUntertitel.get(j) == null )	// kein ZVUntertitel
-							continue;
-						// Wenn es noch laufende Bestellungen gibt
-						if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-							throw new ApplicationServerException(20);
-					}	// Ende for zvUntertitel
-				}	// Ende if( zvUntertitel != null )
-			}	// Ende for zvTitel
-		}	// Ende if( zvTitel != null )
-		
 		try {
+			if( db.countKontenzuordnungen( zvKonto ) > 0 )		// Wenn es Kontenzuordnungen gibt
+				throw new ApplicationServerException(21);
+		
+			ArrayList zvTitel = zvKonto.getSubTitel();
+			// Nachsehen ob es beim Löschen von ZVTiteln Fehler entstehen
+			if( zvTitel != null ) {		// Gibt es ZVTitel
+				for( int i = 0; i < zvTitel.size(); i++ ) {
+					if( zvTitel.get(i) == null )	// kein zvTitel
+						continue;
+					if( db.countActiveBestellungen( (ZVTitel)zvTitel.get(i) ) > 0 )		// Wenn es noch laufende Bestellungen gibt
+						throw new ApplicationServerException(20);
+
+					ArrayList zvUntertitel = ((ZVTitel)zvTitel.get(i)).getSubUntertitel();
+					// Nachsehen ob es beim Löschen von ZVUntertiteln Fehler entstehen
+					if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
+						for( int j = 0; j < zvUntertitel.size(); j++ ) {
+							if( zvUntertitel.get(j) == null )	// kein ZVUntertitel
+								continue;
+							// Wenn es noch laufende Bestellungen gibt
+							if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
+								throw new ApplicationServerException(20);
+						}	// Ende for zvUntertitel
+					}	// Ende if( zvUntertitel != null )
+				}	// Ende for zvTitel
+			}	// Ende if( zvTitel != null )
+		
 			boolean delZVKonto = true;	// Variable um festzustellen ob das ZVKonto ganz gelöscht werden sollte
 			// Alle ZVTitel und die dazugehörigen ZVUntertitel löschen
 			// Dabei wird geschaut ob noch irgendwelche abgeschlossenen Bestellungen und Buchungen gibt
@@ -943,6 +990,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				zvKonto.setGeloescht( true );				// Flag-Gelöscht setzen
 				return db.updateZVKonto( zvKonto );	// Das ZVKonto aktualisieren und ZVKontoId zurückgeben
 			}
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -971,22 +1021,22 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvTitel == null )	// Kein ZVTitel
 			return 0;
 		
-		if( db.countActiveBestellungen( zvTitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(21);
-
-		ArrayList zvUntertitel = zvTitel.getSubUntertitel();
-		// Nachsehen ob es beim Löschen von ZVUntertiteln Fehler entstehen
-		if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
-			for( int j = 0; j < zvUntertitel.size(); j++ ) {
-				if( zvUntertitel.get(j) == null )	// kein ZVUntertitel
-					continue;
-				// Wenn es noch laufende Bestellungen gibt
-				if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-					throw new ApplicationServerException(20);
-			}	// Ende for zvUntertitel
-		}	// Ende if( zvUntertitel != null )
-		
 		try {
+			if( db.countActiveBestellungen( zvTitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
+				throw new ApplicationServerException(21);
+
+			ArrayList zvUntertitel = zvTitel.getSubUntertitel();
+			// Nachsehen ob es beim Löschen von ZVUntertiteln Fehler entstehen
+			if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
+				for( int j = 0; j < zvUntertitel.size(); j++ ) {
+					if( zvUntertitel.get(j) == null )	// kein ZVUntertitel
+						continue;
+					// Wenn es noch laufende Bestellungen gibt
+					if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
+						throw new ApplicationServerException(20);
+				}	// Ende for zvUntertitel
+			}	// Ende if( zvUntertitel != null )
+		
 			// Löschen von ZVUntertiteln 
 			boolean delZVTitel = true; 	// Variable um festzustellen ob der ZVTitel ganz gelöscht werden sollte
 			if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
@@ -1020,6 +1070,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return zvTitel.getId();	// ZVTitelId zurückgeben
 			else
 				return 0;				// Sonst Rückgabe = 0
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1036,10 +1089,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvUntertitel == null )	// Kein ZVTitel
 			return 0;
 		
-		if( db.countActiveBestellungen( zvUntertitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(21);
-
 		try {
+			if( db.countActiveBestellungen( zvUntertitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
+				throw new ApplicationServerException(21);
+
 			// Wenn es abgeschlossene Bestellungen oder Buchungen gibt
 			if( (db.countBestellungen( zvUntertitel ) > 0) || (db.countBuchungen( zvUntertitel ) > 0) ) {
 				db.selectForUpdateZVUntertitel( zvUntertitel );		// ZVUntertitel zum Aktualisieren auswählen
@@ -1052,6 +1105,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return zvUntertitel.getId();		// ZVUntertitelId zurückgeben
 			else
 				return 0;		// Sonst Rückgabe = 0
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1124,6 +1180,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}	// Ende if( zvTitel != null )
 			
 			return db.updateZVKonto( zvKonto );
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1177,6 +1236,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}	// Ende if( zvUntertitel != null )
 	
 			return db.updateZVTitel( zvTitel );
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1209,6 +1271,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 20 );
 			
 			return db.updateZVUntertitel( zvUntertitel );
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1216,12 +1281,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget auf ein ZVKonto buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVKonto auf das der Betrag gebucht wird.
 	 * @param Betrag, der auf das ZVKonto gebucht wird.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( ZVKonto konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVKonto konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1235,6 +1301,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 35 );
 			konto.setTgrBudget( konto.getTgrBudget() + betrag );
 			db.updateZVKonto( konto );
+			bucheMittelzuweisungZVTitelgruppe(benutzer, konto, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1242,12 +1312,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget auf einen ZVTitel buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVTitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVTitel gebucht wird.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( ZVTitel konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVTitel konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1260,6 +1331,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 36 );
 			konto.setBudget( konto.getBudget() + betrag );
 			db.updateZVTitel( konto );
+			bucheMittelzuweisungZVTitel(benutzer, konto, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1267,12 +1342,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Budget auf einen ZVUntertitel buchen.
+	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVUntertitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVUntertitel gebucht wird.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void buche( ZVUntertitel konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVUntertitel konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1286,6 +1362,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 37 );
 			konto.setBudget( konto.getBudget() + betrag );
 			db.updateZVUntertitel( konto );
+			bucheMittelzuweisungZVTitel(benutzer, konto, betrag);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1686,9 +1766,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
-		if( db.existsFirma( firma ) > 0 )				// Wenn diese Firma bereits existiert 
-			throw new ApplicationServerException( 38 );	// dann kann man es nicht mehr erstellen
 		try {
+			if( db.existsFirma( firma ) > 0 )				// Wenn diese Firma bereits existiert 
+				throw new ApplicationServerException( 38 );	// dann kann man es nicht mehr erstellen
 			int id = 0;		// id der Firma
 			if( (id = db.existsDelFirma( firma )) > 0 ) {	// Es gibt eine gelöschte Firma
 				firma.setId( id );		// Id der gelöschten Firma ist jetzt id der neuen Firma
@@ -1697,6 +1777,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			
 			return db.insertFirma( firma );			// Sonst neu erstellen
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1712,12 +1795,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int setFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
-		if( db.existsDelFirma( firma ) > 0 )			// Wenn diese Firma bereits gelöscht ist
-			throw new ApplicationServerException( 39 );	// dann kann man es nicht aktualisieren
-		
 		try {
+			if( db.existsDelFirma( firma ) > 0 )			// Wenn diese Firma bereits gelöscht ist
+				throw new ApplicationServerException( 39 );	// dann kann man es nicht aktualisieren
+		
 			db.selectForUpdateFirma( firma );		// Firma zu aktualisieren auswählen
 			return db.updateFirma( firma );			// Firma aktualisieren und Id zurückgeben
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}
@@ -1734,12 +1820,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int delFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )					// Wurde eine Firma angegeben
 			return 0;
-		// Gibt es Belege oder Angebote, die an die angegebene Firma gehen
-		if( db.countBelege( firma ) > 0 || db.countAngebote( firma ) > 0 )
-			throw new ApplicationServerException( 42 );		// dann kann man es nicht löschen
-		
 		try {
+			// Gibt es Belege oder Angebote, die an die angegebene Firma gehen
+			if( db.countBelege( firma ) > 0 || db.countAngebote( firma ) > 0 )
+				throw new ApplicationServerException( 42 );		// dann kann man es nicht löschen
+		
 			return db.deleteFirma( firma );			// Sonst wird die Firma aus der Datenbank gelöscht
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}

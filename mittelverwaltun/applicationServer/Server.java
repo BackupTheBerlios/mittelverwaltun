@@ -90,12 +90,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		miClose.addActionListener( this );
 		miClose.setIcon(Functions.getCloseIcon(getClass()));
 
-		if (!SystemTrayIconManager.initializeSystemDependent()) {
+		if (!SystemTrayIconManager.initializeSystemDependent(this.getClass())) {
 			throw new Exception("No DesktopIndicator.dll - File.");
 		}
-		presIcon = icons[0] = SystemTrayIconManager.loadImage("./image/traf_red.ico");
-		icons[1] = SystemTrayIconManager.loadImage("./image/traf_yellow.ico");
-		icons[2] = SystemTrayIconManager.loadImage("./image/traf_green.ico");
+		presIcon = icons[0] = loadIcon("traf_red.ICO", getClass());
+		icons[1] = loadIcon("traf_yellow.ICO", getClass());
+		icons[2] = loadIcon("traf_green.ICO", getClass());
 		for(int i = 0; i < icons.length; i++) {
 			if(icons[i] == -1) {
 				throw new Exception("No Icon.");
@@ -106,6 +106,30 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		sysTrayMgr.setRightClickView(sysTrayMenu);
 		sysTrayMgr.setVisible(true);
 		sysTrayMgr.setVisible(false);
+	}
+	
+	private int loadIcon(String fileName, Class clazz) {
+		try {
+			File file = new File(".\\image\\");
+			if(!file.exists()) {
+				file.mkdir();
+			}
+			file = new File(".\\image\\" + fileName);
+			if(!file.exists()) {
+				InputStream in = clazz.getResourceAsStream("/image/" + fileName);
+				FileOutputStream out = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+				  out.write(buf, 0, len);
+				}
+				out.close();
+				in.close();        		
+			}
+			return SystemTrayIconManager.loadImage("./image/" + fileName);
+		} catch( Exception x ) {
+			return -1;
+		}
 	}
 	
 	public void synchronize() {

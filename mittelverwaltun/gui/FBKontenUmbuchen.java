@@ -211,7 +211,8 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 			error += " - Der Betrag ist zu hoch.\n";
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
-				frame.getApplicationServer().buche( (FBHauptkonto)from.clone(), (FBHauptkonto)to.clone(), amount );
+				frame.getApplicationServer().buche( frame.getBenutzer(), (FBHauptkonto)from.clone(), 
+																			(FBHauptkonto)to.clone(), amount );
 				from.setBudget( from.getBudget() - amount );
 				to.setBudget( to.getBudget() + amount );
 				tfKontostandVon.setValue( new Float( from.getBudget() ) );
@@ -239,7 +240,8 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 			error += " - Der Betrag ist zu hoch.\n";
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
-				frame.getApplicationServer().buche( (FBHauptkonto)from.clone(), (FBUnterkonto)to.clone(), amount );
+				frame.getApplicationServer().buche( frame.getBenutzer(), (FBHauptkonto)from.clone(), 
+																			(FBUnterkonto)to.clone(), amount );
 				from.setBudget( from.getBudget() - amount );
 				to.setBudget( to.getBudget() + amount );
 				tfKontostandVon.setValue( new Float( from.getBudget() ) );
@@ -267,7 +269,8 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 			error += " - Der Betrag ist zu hoch.\n";
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
-				frame.getApplicationServer().buche( (FBUnterkonto)from.clone(), (FBHauptkonto)to.clone(), amount );
+				frame.getApplicationServer().buche( frame.getBenutzer(), (FBUnterkonto)from.clone(), 
+																			(FBHauptkonto)to.clone(), amount );
 				from.setBudget( from.getBudget() - amount );
 				to.setBudget( to.getBudget() + amount );
 				tfKontostandVon.setValue( new Float( from.getBudget() ) );

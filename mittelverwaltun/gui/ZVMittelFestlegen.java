@@ -145,7 +145,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
 				ZVKonto copy = (ZVKonto)treeKonten.getZVKonto().clone();
-				frame.getApplicationServer().buche( copy, ((Float)tfBetrag.getValue()).floatValue() );
+				frame.getApplicationServer().buche( frame.getBenutzer(), copy, ((Float)tfBetrag.getValue()).floatValue() );
 				treeKonten.getZVKonto().setTgrBudget( treeKonten.getZVKonto().getTgrBudget() +
 														((Float)tfBetrag.getValue()).floatValue() );
 				showAmount();
@@ -171,7 +171,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
 				ZVTitel copy = (ZVTitel)treeKonten.getZVTitel().clone();
-				frame.getApplicationServer().buche( copy, ((Float)tfBetrag.getValue()).floatValue() );
+				frame.getApplicationServer().buche( frame.getBenutzer(), copy, ((Float)tfBetrag.getValue()).floatValue() );
 				treeKonten.getZVTitel().setBudget( treeKonten.getZVTitel().getBudget() +
 														((Float)tfBetrag.getValue()).floatValue() );
 				showAmount();
@@ -197,7 +197,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 		if( error.equalsIgnoreCase( "" ) ) {
 			try {
 				ZVUntertitel copy = (ZVUntertitel)treeKonten.getZVUntertitel().clone();
-				frame.getApplicationServer().buche( copy, ((Float)tfBetrag.getValue()).floatValue() );
+				frame.getApplicationServer().buche( frame.getBenutzer(), copy, ((Float)tfBetrag.getValue()).floatValue() );
 				treeKonten.getZVUntertitel().setBudget( treeKonten.getZVUntertitel().getBudget() +
 														((Float)tfBetrag.getValue()).floatValue() );
 				showAmount();
