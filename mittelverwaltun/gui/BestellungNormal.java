@@ -471,10 +471,12 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			tpAuftragGrund.setVisible(true);
 		}else if ( e.getSource() == buFBKonto ) {
 			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
-			fbKontoAuswahl.show();
+			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		  fbKontoAuswahl.show();
 		}else if ( e.getSource() == buTitel ) {
 			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
-			kontoAuswahl.show();
+			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		  kontoAuswahl.show();
 		}else if ( e.getSource() == buAddAngebot ) {
 			DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 			AngebotFrame angebot = new AngebotFrame(this);

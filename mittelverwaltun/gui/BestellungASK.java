@@ -161,6 +161,15 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   }
 
   private void setOrderData(){
+		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
+		cbEmpfaenger.setSelectedItem(bestellung.getEmpfaenger());
+		cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+		cbSwBeauftragter.setSelectedItem(bestellung.getSwbeauftragter());
+		tfBestellDatum.setValue(bestellung.getDatum());
+		labFirma.setText("" + bestellung.getAngebot().getAnbieter());
+		setFBKonto(bestellung.getFbkonto());
+		setZVKonto(bestellung.getZvtitel());
+		tpBemerkungen.setText(bestellung.getBemerkung());
   }
 
   private void loadInstituts(){
@@ -251,6 +260,18 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 				e.printStackTrace();
 		}
  }
+ 
+ 	private void clearInputFields(){
+ 		tableBestellung.removeAll();
+	 	labKapitel.setText("");
+		labTitel.setText("");
+		labUT.setText("");
+		tpBemerkungen.setText("");
+		bestellung = null;
+		fbKonto = null;
+		zvTitel = null;
+	 	buBestellen.setEnabled(false);
+	}
 
 	/**
 	 * lädt User für die Auswahl des Auftraggebers und Empfängers. Falls der User ein Institutssdmin ist,
@@ -304,6 +325,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 
   public static void main(String[] args) {
 		MainFrame test = new MainFrame("FBMittelverwaltung");
+		BestellungASK bestellung;
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
 			ApplicationServer applicationServer = server.getMyApplicationServer();
@@ -314,13 +336,19 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			test.setBounds(100,100,800,900);
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 			test.setJMenuBar( new MainMenu( test ) );
-			BestellungASK bestellung = new BestellungASK(test);
+			
+			ASKBestellung best = applicationServer.getASKBestellung(22);
+			bestellung = new BestellungASK(test, best);
 			test.addChild(bestellung);
 
 			test.show();
 			bestellung.show();
 		}catch(Exception e){
-				System.out.println(e);
+			bestellung = new BestellungASK(test);
+			test.addChild(bestellung);
+			test.show();
+			bestellung.show();
+			System.out.println(e);
 		}
 	 }
 
@@ -558,9 +586,11 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  String error = "";
 	  if ( e.getSource() == buFBKonto ) {
 		  AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
+			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 		  fbKontoAuswahl.show();
 	  }else if ( e.getSource() == buTitel ) {
 		  AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
+			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 		  kontoAuswahl.show();
 	  }else if ( e.getSource() == buDrucken ) {
 		  printBestellung();

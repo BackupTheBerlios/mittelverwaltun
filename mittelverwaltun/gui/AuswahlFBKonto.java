@@ -59,7 +59,7 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	  buBeenden.addActionListener( this );
 
 	  this.setBounds(0,0,460, 320);
- }
+}
  
  	public AuswahlFBKonto(Component parent, Institut institut, boolean modal, ApplicationServer applicationServer, boolean hauptKonto) {
 		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
