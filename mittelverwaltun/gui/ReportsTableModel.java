@@ -14,11 +14,15 @@ import javax.swing.table.DefaultTableModel;
 public class ReportsTableModel extends DefaultTableModel {
 		
 	private int type = 0;
+	private String filter = "";
+	private ArrayList content;
 	ArrayList identifiers;
 		
-	public ReportsTableModel (int type, ArrayList content){
+	public ReportsTableModel (int type, String filter, ArrayList content){
 		super();
 		this.type = type;
+		this.filter = filter;
+		this.content = content;
 		identifiers = new ArrayList();
 		
 		if (type == Reports.REPORT_1){
@@ -31,19 +35,19 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_4){
-			String[] colheads = {"FB-Konto", "ZV-Konto", "Ausgaben"}; 
+			String[] colheads = {"FB-Konto", "ZV-Konto", "Ausgaben (FB-Konto)"}; 
 			setColumnIdentifiers(colheads);
 		} else if  (type == Reports.REPORT_5){
-			String[] colheads = {"ZVKonto", "Institut", "Institut-Ausgaben", "Institut-Kontostand"};
+			String[] colheads = {"ZVKonto", "Institut", "Ausgaben (Institut)", "Kontostand (Institut)"};
 			setColumnIdentifiers(colheads);
 		}	else if (type == Reports.REPORT_6){
-			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben"}; 
+			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben (Institut)"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_7){
-			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
+			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben (Bestellung)", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_8){
-			String[] colheads = {"Instiut", "FB-Konto", "Einnahmen"}; 
+			String[] colheads = {"Instiut", "FB-Konto", "Einnahmen (Institut)"}; 
 			setColumnIdentifiers(colheads);
 		}
 		
@@ -92,54 +96,59 @@ public class ReportsTableModel extends DefaultTableModel {
 				data[2] = (Float)row.get(2);							// Ausgaben
 				
 			} else if (type == Reports.REPORT_5){
-				data[0] = (String)row.get(0);							// Institut
-				data[1] = (String)row.get(1);							// Institut
-				data[2] = (Float)row.get(2);							// Ausgaben
-				data[3] = (Float)row.get(3);							// Kontostand
-					
+				if(filter.equals("") || filter.equals((String)row.get(0))){
+					data[0] = (String)row.get(0);							// Institut
+					data[1] = (String)row.get(1);							// Institut
+					data[2] = (Float)row.get(2);							// Ausgaben
+					data[3] = (Float)row.get(3);							// Kontostand
+				}
 			} else if (type == Reports.REPORT_6){
-				data[0] = (String)row.get(0);							// Institut
-				data[1] = (String)row.get(1);							// ZV-Konto
-				data[2] = (Float)row.get(2);							// Ausgaben
-						
+				if(filter.equals("") || filter.equals((String)row.get(0))){
+					data[0] = (String)row.get(0);							// Institut
+					data[1] = (String)row.get(1);							// ZV-Konto
+					data[2] = (Float)row.get(2);							// Ausgaben
+				}		
 			} else if (type == Reports.REPORT_7){
-				data[0] = (String)row.get(0);							// Institut
-				data[1] = (String)row.get(1);							// ZV-Konto
-				data[2] = (Float)row.get(2);							// Ausgaben
-				data[3] = (String)row.get(3);							// FBI-Schlüsselnummer
-				data[4] = (String)row.get(4);							// Hül-Nr
-				
-				if (row.get(5).equals("0"))										// Typ
-					data[5] = "Standardbestellung";
-				else if (row.get(5).equals("1"))
-					data[5] = "ASK-Bestellung";
-				else if (row.get(5).equals("2"))
-					data[5] = "Zahlungsanforderung";
-				else data[5] = "n.a.";
-
-				data[6] = ((Date)row.get(6)).toString();								// Datum
-				
-				if (row.get(7).equals("0"))											// Phase
-					data[7] = (String)"Sondierung";
-				else if (row.get(7).equals("1"))
-					data[7] = (String)"Abwicklung";
-				else if (row.get(7).equals("2"))
-					data[7] = (String)"Abgeschlossen";
-				else if (row.get(7).equals("3"))
-					data[7] = (String)"Storniert";
-				else data[7] = (String)"unbekannt";
-				
-				data[8] = new String("X");								// Button anzeigen
-				identifiers.add((Integer)row.get(8));			// Id der Bestellung
-							
+				if(filter.equals("") || filter.equals((String)row.get(0))){
+					data[0] = (String)row.get(0);							// Institut
+					data[1] = (String)row.get(1);							// ZV-Konto
+					data[2] = (Float)row.get(2);							// Ausgaben
+					data[3] = (String)row.get(3);							// FBI-Schlüsselnummer
+					data[4] = (String)row.get(4);							// Hül-Nr
+					
+					if (row.get(5).equals("0"))										// Typ
+						data[5] = "Standardbestellung";
+					else if (row.get(5).equals("1"))
+						data[5] = "ASK-Bestellung";
+					else if (row.get(5).equals("2"))
+						data[5] = "Zahlungsanforderung";
+					else data[5] = "n.a.";
+	
+					data[6] = ((Date)row.get(6)).toString();								// Datum
+					
+					if (row.get(7).equals("0"))											// Phase
+						data[7] = (String)"Sondierung";
+					else if (row.get(7).equals("1"))
+						data[7] = (String)"Abwicklung";
+					else if (row.get(7).equals("2"))
+						data[7] = (String)"Abgeschlossen";
+					else if (row.get(7).equals("3"))
+						data[7] = (String)"Storniert";
+					else data[7] = (String)"unbekannt";
+					
+					data[8] = new String("X");								// Button anzeigen
+					identifiers.add((Integer)row.get(8));			// Id der Bestellung
+				}		
 			} else if (type == Reports.REPORT_8){
-				data[0] = (String)row.get(0);							// Institut
-				data[1] = (String)row.get(1);							// FB-Konto
-				data[2] = (Float)row.get(2);							// Einnahmen
-							
+				if(filter.equals("") || filter.equals((String)row.get(0))){
+					data[0] = (String)row.get(0);							// Institut
+					data[1] = (String)row.get(1);							// FB-Konto
+					data[2] = (Float)row.get(2);							// Einnahmen
+				}		
 			}
 						
-			addRow(data);
+			if(data[0] != null)
+				addRow(data);
 		}
 	}
 	
@@ -179,7 +188,6 @@ public class ReportsTableModel extends DefaultTableModel {
 	}
 	
 	public int getId (int row){
-	
 		if ((row < this.getRowCount())&& (row >= 0))
 			return ((Integer)identifiers.get(row)).intValue();
 		else return 0;

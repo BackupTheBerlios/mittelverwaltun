@@ -31,6 +31,8 @@ public class ReportsTable extends JTable{
 		
 	private int type = 0;
 	private ActionListener actionListener;
+	private String filter = "";
+	private ArrayList content;	// Inhalt des Reports
 	
 	/**
 	 * Konstruktor für ein Report
@@ -40,7 +42,7 @@ public class ReportsTable extends JTable{
 	public ReportsTable(ActionListener listener){
 		this.actionListener = listener;
 		
-		//setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+//		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
@@ -82,9 +84,11 @@ public class ReportsTable extends JTable{
 	 * füllt die Tabelle mit dem Inhalt der ArrayListe
 	 * @param content - ArrayListe mit dem Inhalt für den Report
 	 */
-	public void fillReport(int type, ArrayList content){
+	public void fillReport(int type, String filter, ArrayList content){
 		this.type = type;
-		ReportsTableModel model = new ReportsTableModel(type, content);
+		this.content = content;
+		this.filter = filter;
+		ReportsTableModel model = new ReportsTableModel(type, filter, content);
 		setModel(model);
 		applyTableRendering();
 	}
@@ -143,8 +147,17 @@ public class ReportsTable extends JTable{
 		return ((ReportsTableModel)getModel()).getPhase(getSelectedRow());
 	}
 	
-	public void setReport(int type, ArrayList orders){
-		setModel(new ReportsTableModel(type, orders));
+	public int getReportType(){
+		return this.type;
+	}
+	
+	/**
+	 * filtert die Anzeige des Reports
+	 * @param filter
+	 */
+	public void filterView(String filter){
+		ReportsTableModel model = new ReportsTableModel(type, filter, content);
+		setModel(model);
 		applyTableRendering();
 	}
 	

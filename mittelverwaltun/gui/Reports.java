@@ -79,7 +79,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	JButton btBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
 	JScrollPane spReport = new JScrollPane();
 	JComboBox cbReportFilter;
-	JButton btAktualisieren = new JButton(Functions.getRefreshIcon(this.getClass()));
+	JButton btAktualisieren = new JButton(Functions.getFindIcon(this.getClass()));
 	ReportsTable tabReport;
   JLabel labInstitut = new JLabel();
   JComboBox cbZVKonten = new JComboBox();
@@ -101,6 +101,8 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 												"Für jedes Instiut ein Report über die Einnahmen"};
   JButton btDrucken = new JButton(Functions.getPrintIcon(this.getClass()));
   JComboBox cbInstitut = new JComboBox();
+  String filter = "";
+  JButton buReportInfo = new JButton(Functions.getInformation24Icon(this.getClass()));
 
 	public Reports(MainFrame frame) {
 		this.frame = frame;
@@ -121,9 +123,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     this.getContentPane().setLayout(null);
 
     cbReportFilter = new JComboBox(items);
-    cbReportFilter.setBounds(new Rectangle(15, 12, 180, 27));
+    cbReportFilter.setBounds(new Rectangle(15, 12, 91, 27));
     cbReportFilter.setFont(new java.awt.Font("Dialog", 1, 11));
 	  cbReportFilter.setRenderer(new MyComboBoxRenderer());
+	  cbReportFilter.setToolTipText(tooltips[0]);
 	  cbReportFilter.setActionCommand("selectReport");
 	  cbReportFilter.addItemListener(this);
 
@@ -143,7 +146,9 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     labInstitut.setVisible(false);
 		cbZVKonten.setBounds(new Rectangle(278, 12, 363, 27));
 		cbZVKonten.setVisible(false);
-    btDrucken.setText("Drucken");
+		cbZVKonten.setActionCommand("selectZVKonto");
+		cbZVKonten.addItemListener(this);
+		btDrucken.setText("Drucken");
     btDrucken.addActionListener(this);
     btDrucken.setActionCommand("dispose");
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -158,15 +163,23 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
     cbInstitut.setBounds(new Rectangle(278, 12, 363, 27));
     cbInstitut.setVisible(false);
+	 	cbInstitut.setActionCommand("selectInstitut");
+	 	cbInstitut.addItemListener(this);
+    buReportInfo.setBounds(new Rectangle(110, 12, 28, 27));
+    buReportInfo.setText("");
+	 	buReportInfo.setActionCommand("showReportInfo");
+		buReportInfo.addActionListener(this);
+
     this.getContentPane().add(spReport, null);
     spReport.getViewport().add(tabReport, null);
     this.getContentPane().add(btBeenden, null);
-    this.getContentPane().add(cbReportFilter, null);
 	 	this.getContentPane().add(cbZVKonten, null);
     this.getContentPane().add(labInstitut, null);
     this.getContentPane().add(btDrucken, null);
     this.getContentPane().add(btAktualisieren, null);
     this.getContentPane().add(cbInstitut, null);
+    this.getContentPane().add(cbReportFilter, null);
+    this.getContentPane().add(buReportInfo, null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -198,29 +211,29 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 				if(cbReportFilter.getSelectedItem() == "Report_5"){
 					if(cbZVKonten.getSelectedItem() != null){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_5);
-							tabReport.fillReport(REPORT_5, content);
+							tabReport.fillReport(REPORT_5, filter, content);
 					}
 				} else if(cbReportFilter.getSelectedItem() == "Report_6"){
 					if(cbInstitut.getSelectedItem() != null){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_6);
-							tabReport.fillReport(REPORT_6, content);
+							tabReport.fillReport(REPORT_6, filter, content);
 					}
 				} else if(cbReportFilter.getSelectedItem() == "Report_7"){
 					if(cbInstitut.getSelectedItem() != null){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_7);
-							tabReport.fillReport(REPORT_7, content);
+							tabReport.fillReport(REPORT_7, filter, content);
 					}
 				} else if(cbReportFilter.getSelectedItem() == "Report_8"){
 					if(cbInstitut.getSelectedItem() != null){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_8);
-							tabReport.fillReport(REPORT_8, content);
+							tabReport.fillReport(REPORT_8, filter, content);
 					}
 				}
 			} catch (ApplicationServerException exception) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 			}
-		} else if(e.getActionCommand() == "refresh"){
-
+		} else if(e.getActionCommand() == "showReportInfo"){
+			;
 		} else if(e.getActionCommand() == "dispose"){
 			this.dispose();
 		}
@@ -234,10 +247,11 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 			  if(instituts != null){
 				  cbInstitut.removeAllItems();
-					 cbInstitut.addItem("alle");
-					 for(int i = 0; i < instituts.length; i++){
-						  cbInstitut.addItem(instituts[i]);
-					 }
+				  Institut institut = new Institut(0, "alle", "00000");
+				  cbInstitut.addItem(institut);
+				  for(int i = 0; i < instituts.length; i++){
+					  cbInstitut.addItem(instituts[i]);
+				  }
 			  }
 			}else{
 				Institut institut = frame.getBenutzer().getKostenstelle();
@@ -254,8 +268,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   private void loadZVKonten(){
 		try {
 			ArrayList zvKonten = frame.getApplicationServer().getZVKonten();
-			 if(zvKonten.size() > 0){
-				 cbZVKonten.removeAllItems();
+			  if(zvKonten.size() > 0){
+				  cbZVKonten.removeAllItems();
+				  ZVKonto zvKonto = new ZVKonto("alle", "", "", 0);
+				  cbZVKonten.addItem(zvKonto);
 					for(int i = 0; i < zvKonten.size(); i++){
 						cbZVKonten.addItem((ZVKonto)zvKonten.get(i));
 					}
@@ -291,7 +307,8 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   }
 
   class MyComboBoxRenderer extends BasicComboBoxRenderer {
-	  public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+  	
+  	public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		  if (isSelected) {
 			  setBackground(list.getSelectionBackground());
 			  setForeground(list.getSelectionForeground());
@@ -310,8 +327,38 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   }
 
 	public void itemStateChanged(ItemEvent e) {
+		String r = (String)cbReportFilter.getSelectedItem();
+		int report = 0;
+
+		if(r == "Report_1"){
+			cbReportFilter.setToolTipText(tooltips[0]);
+			report = REPORT_1;
+		}else if(r == "Report_2"){
+			cbReportFilter.setToolTipText(tooltips[1]);
+			report = REPORT_2;
+		}else if(r == "Report_3"){
+			cbReportFilter.setToolTipText(tooltips[2]);
+			report = REPORT_3;
+		}else if(r == "Report_4"){
+			cbReportFilter.setToolTipText(tooltips[3]);
+			report = REPORT_4;
+		}else if(r == "Report_5"){	
+			cbReportFilter.setToolTipText(tooltips[4]);
+			report = REPORT_5;
+		}else if(r == "Report_6"){
+			cbReportFilter.setToolTipText(tooltips[5]);
+			report = REPORT_6;
+		}else if(r == "Report_7"){
+			cbReportFilter.setToolTipText(tooltips[6]);
+			report = REPORT_7;
+		}else if(r == "Report_8"){
+			cbReportFilter.setToolTipText(tooltips[7]);
+			report = REPORT_8;
+		}
+		
 		if(e.getSource() == cbReportFilter){
-			String r = (String)cbReportFilter.getSelectedItem();
+			tabReport.fillReport(0,"", new ArrayList());
+			filter = "";
 			if(r == "Report_6" || r == "Report_7" || r == "Report_8"){
 				loadInstituts();
 				labInstitut.setVisible(true);
@@ -326,6 +373,27 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 				labInstitut.setVisible(false);
 				cbInstitut.setVisible(false);
 			}
+		}else if(e.getSource() == cbInstitut){
+			Institut i = (Institut)cbInstitut.getSelectedItem();
+
+			if(i.getBezeichnung().equals("alle"))
+				this.filter = "";
+			else
+				this.filter = i.getBezeichnung();
+
+			if(report == tabReport.getReportType())
+				tabReport.filterView(this.filter);
+
+		}else if(e.getSource() == cbZVKonten){
+			ZVKonto zvk = (ZVKonto)cbZVKonten.getSelectedItem();
+
+			if(zvk.getBezeichnung().equals("alle"))
+				this.filter = "";
+			else
+				this.filter = zvk.getBezeichnung();
+
+			if(report == tabReport.getReportType())
+				tabReport.filterView(this.filter);
 		}
 	}
 }
