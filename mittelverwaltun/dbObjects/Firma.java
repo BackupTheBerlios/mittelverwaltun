@@ -128,7 +128,6 @@ public class Firma implements Serializable {
 		this.faxNr = firma.faxNr;
 		this.eMail = firma.eMail;
 		this.www = firma.www;
-		this.ask = firma.ask;
 		this.geloescht = firma.geloescht;
 	}
 	

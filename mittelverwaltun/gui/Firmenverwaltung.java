@@ -193,6 +193,10 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 		this.tfFaxNr.setText( firma.getFaxNr() );
 		this.tfEMail.setText( firma.getEMail() );
 		this.tfWWW.setText( firma.getWWW() );
+		if(firma.getASK())
+			this.buLoeschen.setEnabled(false);
+		else
+			this.buLoeschen.setEnabled(true);
 	}
 	
 	/**
@@ -264,8 +268,9 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	 * @return die Neue Firma.
 	 */
 	Firma getNewFirma() {
-		return new Firma( tfFirma.getText(), tfStrasseNr.getText(), tfPLZ.getText(), tfOrt.getText(),
-						tfKundenNr.getText(), tfTelNr.getText(), tfFaxNr.getText(), tfEMail.getText(), tfWWW.getText() );
+		return new Firma( 0, tfFirma.getText(), tfStrasseNr.getText(), tfPLZ.getText(), tfOrt.getText(),
+						tfKundenNr.getText(), tfTelNr.getText(), tfFaxNr.getText(), 
+						tfEMail.getText(), tfWWW.getText(), false, false );
 	}
 	
 	/**
