@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[300];
+		statements = new PreparedStatementWrapper[310];
 		int i = 0;
 
 		/**************************************/
@@ -1369,7 +1369,7 @@ public class PreparedSqlStatements {
 		}
 
 		/******************************************/
-		/* Tabelle: Bestellungen				  */
+		/* Tabelle: Bestellungen	1			  				*/
 		/* Indizes: 210-219                       */
 		/******************************************/
 		{//210 gibt Anzahl der Bestellungen eines Benutzers
@@ -1389,7 +1389,6 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		
 		{//212
 			/**
 			 * Anzahl der Bestellungen(aktiv und abgeschlossen) bei denen <br>
@@ -2112,6 +2111,41 @@ public class PreparedSqlStatements {
 		{//299
 			statements[i++] = null;
 		}
+		/******************************************/
+		/* Tabelle: Bestellungen 2            		*/
+		/* Indizes: 300-309                       */
+		/******************************************/
+		{//300 
+			statements[i++] = null;
+		}
+		{//301
+			statements[i++] = null;
+		}
+		{//302
+			statements[i++] = null;
+		}
+		{//303
+			statements[i++] = null;
+		}
+		{//304
+			statements[i++] = null;
+		}
+		{//305 
+			statements[i++] = null;
+		}
+		{//306
+			statements[i++] = null;
+		}
+		{//307
+			statements[i++] = null;
+		}
+		{//308
+			statements[i++] = null;
+		}
+		{//309
+			statements[i++] = null;
+		}
+		
 	}
 
 	public void release() throws SQLException{
