@@ -1868,8 +1868,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
 		if(!(oldOffers.equals(newOffers))){
-			//int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
-		
+			
 			while((oldOffers.size() > 0) || (newOffers.size() > 0)){
 				Angebot oldOffer = null;
 				Angebot newOffer = null;
@@ -1968,10 +1967,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 							}else{
 								if(!oldP.equals(newP)){ // Position geändert
 									db.updatePosition(newP); // aktualisieren
-									
-									oldPs.remove(oldP);
-									newPs.remove(newP);
 								}
+								oldPs.remove(oldP);
+								newPs.remove(newP);
 							}
 						}
 					}
