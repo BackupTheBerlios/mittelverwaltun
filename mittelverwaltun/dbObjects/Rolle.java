@@ -50,8 +50,9 @@ public class Rolle implements Serializable {
 	}
 
 	public boolean equals(Object rolle){
-		if( this.id == ((Rolle)rolle).getId() && 
-			this.bezeichnung.equals(((Rolle)rolle).getBezeichnung()))
+		if( (id == ((Rolle)rolle).getId()) && 
+				((bezeichnung == null || ((Rolle)rolle).getBezeichnung() == null) ? true : bezeichnung.equals(((Rolle)rolle).getBezeichnung()))
+			)
 			return true;
 		else
 			return false;

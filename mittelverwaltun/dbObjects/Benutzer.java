@@ -209,22 +209,23 @@ public class Benutzer implements Serializable {
 		this.geaendert = geaendert;
 	}
 	
-	public boolean equals(Object benutzer){
-		if(benutzer != null){
-			if( this.id == ((Benutzer)benutzer).getId() && 
-					this.benutzername.equals(((Benutzer)benutzer).getBenutzername()) &&
-					this.name.equals(((Benutzer)benutzer).getName()) &&
-					this.vorname.equals(((Benutzer)benutzer).getVorname()) && 
-					this.titel.equals(((Benutzer)benutzer).getTitel()) &&
-					this.email.equals(((Benutzer)benutzer).getEmail()) &&
-					this.privatKonto == (((Benutzer)benutzer).getPrivatKonto()) &&
-					(this.rolle == null || ((Benutzer)benutzer).getRolle() == null) ? true : this.rolle.equals(((Benutzer)benutzer).getRolle()) &&
-					(this.kostenstelle == null || ((Benutzer)benutzer).getKostenstelle() == null) ? true : this.kostenstelle.equals(((Benutzer)benutzer).getKostenstelle()) &&
-					this.bau.equals(((Benutzer)benutzer).getBau()) &&
-					this.raum.equals(((Benutzer)benutzer).getRaum()) &&
-					this.telefon.equals(((Benutzer)benutzer).getTelefon()) &&
-					this.fax.equals(((Benutzer)benutzer).getFax()) &&
-					this.swBeauftragter == ((Benutzer)benutzer).getSwBeauftragter() 
+	public boolean equals(Object o){
+		if(o != null){
+			Benutzer user = (Benutzer)o;
+			if( (id == user.getId()) &&
+					((benutzername == null || user.getBenutzername() == null) ? true : benutzername.equals(user.getBenutzername())) &&
+					((name == null || user.getName() == null) ? true : name.equals(user.getName())) &&
+					((vorname == null || user.getVorname() == null) ? true : vorname.equals(user.getVorname())) && 
+					((titel == null || user.getTitel() == null) ? true : titel.equals(user.getTitel())) &&
+					((email == null || user.getEmail() == null) ? true : email.equals(user.getEmail())) &&
+					 (privatKonto == (user.getPrivatKonto())) &&
+					((rolle == null || user.getRolle() == null) ? true : rolle.equals(user.getRolle())) &&
+					((kostenstelle == null || user.getKostenstelle() == null) ? true : kostenstelle.equals(user.getKostenstelle())) &&
+					((bau == null || user.getBau() == null) ? true : bau.equals(user.getBau())) &&
+					((raum == null || user.getRaum() == null) ? true : raum.equals(user.getRaum())) &&
+					((telefon == null || user.getTelefon() == null) ? true : telefon.equals(user.getTelefon())) &&
+					((fax == null || user.getFax() == null) ? true : fax.equals(user.getFax())) &&
+					(swBeauftragter == user.getSwBeauftragter()) 
 				)
 				return true;
 			else

@@ -99,11 +99,13 @@ public class Institut implements Serializable {
 	}
 
 	
-	public boolean equals(Object inst){
-		if(inst != null){
-			if( this.id == ((Institut)inst).getId() &&
-				this.bezeichnung.equals(((Institut)inst).getBezeichnung())&&
-				this.kostenstelle.equals(((Institut)inst).getKostenstelle()))
+	public boolean equals(Object o){
+		if(o != null){
+			Institut inst = (Institut)o;
+			if( (id == inst.getId()) &&
+					((bezeichnung == null || inst.getBezeichnung() == null) ? true : bezeichnung.equals(inst.getBezeichnung())) &&
+					((kostenstelle == null || inst.getKostenstelle() == null) ? true : kostenstelle.equals(inst.getKostenstelle()))
+				)
 				return true;
 			else
 				return false;
