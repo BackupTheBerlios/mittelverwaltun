@@ -582,8 +582,13 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//86
-			statements[i++] = null;
+		{//86 gibt ein Institut mit Institutsleiter anhand der id zurück
+			ps = con.prepareStatement("SELECT a.id, a.bezeichnung, a.kostenstelle, a.institutsleiter, " +
+																			 "b.id, b.benutzername, b.name, b.vorname " +
+																"FROM institute a, Benutzer b " + 
+																"WHERE b.id = a.institutsleiter " +																		"AND a.id = ?");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//87
 			statements[i++] = null;
@@ -1828,8 +1833,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//266
-			statements[i++] = null;
+		{//266 gibt alle Positionen zu einem Angebot anhand der angebotId zurück
+			ps = con.prepareStatement("SELECT id, institut, artikel, einzelPreis, menge, mwSt, rabatt, beglichen" +
+																"FROM Positionen " +
+															  "WHERE angebot = ?");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//267
 			statements[i++] = null;
