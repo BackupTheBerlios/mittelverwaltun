@@ -7,7 +7,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
   JLabel labMwSt16 = new JLabel();
   JLabel labMwSt7 = new JLabel();
   JLabel jLabel9 = new JLabel();
-  JTextField tfDate = new JTextField();
+  JFormattedTextField tfDate = new JFormattedTextField(DateFormat.getDateInstance());
   BestellungNormal frame = null;
   int angebotNr = -1;
   JLabel jLabel10 = new JLabel();
@@ -67,7 +68,8 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
     catch(Exception ex) {
       ex.printStackTrace();
     }
-
+    tfDate.setValue(new Date(System.currentTimeMillis()));
+	
 		tablePositionen.addPropertyChangeListener(this);
 		buSpeichern.addActionListener( this );
 		buAddPosition.addActionListener(this);
@@ -98,7 +100,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 			catch(Exception ex) {
 			  ex.printStackTrace();
 			}
-
+			
 		  buSpeichern.addActionListener( this );
 		  buAddPosition.addActionListener(this);
 		  buBeenden.setIcon(Functions.getCloseIcon(getClass()));
@@ -108,21 +110,18 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 		  this.setBounds(100,100,540, 480);
 			loadFirmen();
 			setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+			
 	 }
 
 	 private void setData(Angebot angebot){
 	 	  cbFirmen.setSelectedItem(angebot.getAnbieter());
-	 		tfDate.setText("" + angebot.getDatum());
+	 		tfDate.setValue(angebot.getDatum());
 			tfBestellsumme.setValue(new Float(angebot.getSumme()));
 	 }
 
 	private String checkData(){
 		String error = "";
 
-		error += (tfFirma.getText().equals("") ? "- Firma \n" : "");
-		error += (tfStrasse.getText().equals("") ? "- Strasse \n" : "");
-		error += (tfPLZ.getText().equals("") ? "- PLZ \n" : "");
-		error += (tfOrt.getText().equals("") ? "- Ort \n" : "");
 		error += (tfDate.getText().equals("") ? "- Datum \n" : "");
 		error += (tfBestellsumme.getText().equals("") ? "- Bestellsumme \n" : "");
 
@@ -211,7 +210,6 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
     labMwSt16.setBounds(new Rectangle(330, 358, 117, 15));
     jLabel9.setText("Angebot vom:(Datum)");
     jLabel9.setBounds(new Rectangle(402, 75, 127, 15));
-    tfDate.setText("");
     tfDate.setBounds(new Rectangle(400, 95, 105, 21));
     jLabel10.setBounds(new Rectangle(212, 358, 79, 15));
     jLabel10.setText("16 % MwSt.");
@@ -292,8 +290,11 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 					positionen.add(position);
 			 }
 				Angebot angebot = null;
-
-				angebot = new Angebot(positionen, Date.valueOf(tfDate.getText()), (Firma)cbFirmen.getSelectedItem());
+				Object o = tfDate.getValue();
+				if(positionen.size() == 0)
+					angebot = new Angebot(positionen, (Date)tfDate.getValue(), (Firma)cbFirmen.getSelectedItem(), ((Float)(tfBestellsumme.getValue())).floatValue());
+				else
+					angebot = new Angebot(positionen, (Date)tfDate.getValue(), (Firma)cbFirmen.getSelectedItem());
 					
 				frame.insertAngebot(angebot, angebotNr);
 				this.dispose();
@@ -327,11 +328,11 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 		  labNetto.setText(NumberFormat.getCurrencyInstance().format(netto));
 		  labMwSt7.setText(NumberFormat.getCurrencyInstance().format(mwst7));
 		  labMwSt16.setText(NumberFormat.getCurrencyInstance().format(mwst16));
-		  tfBestellsumme.setText(NumberFormat.getCurrencyInstance().format(sum));
+		  tfBestellsumme.setValue(new Float(sum));
 		  if(tablePositionen.getRowCount() == 0)
-			tfBestellsumme.setEditable(true);
+				tfBestellsumme.setEditable(true);
 		  else
-			tfBestellsumme.setEditable(false);
+				tfBestellsumme.setEditable(false);
 		}
 	}
 

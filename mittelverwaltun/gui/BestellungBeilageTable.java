@@ -48,9 +48,11 @@ public class BestellungBeilageTable extends JTable {
 										public void setValueAt(Object aValue, int rowIndex, int columnIndex){
 										  if(columnIndex  == 4){
 												for(int i = 0; i < getRowCount(); i++){
+													super.setValueAt(new Integer(i+1), i, 0);
 													super.setValueAt(new Boolean(false), i, 4);
 												}
 												getFrame().tfAngebotNr.setText(((Boolean)aValue).booleanValue() == true ? "" + (rowIndex + 1) : "");
+												getFrame().angebotNr = ((Boolean)aValue).booleanValue() == true ? (rowIndex + 1) : 0;
 										  }
 										  super.setValueAt(aValue,rowIndex,columnIndex);
 										  fireTableRowsUpdated(rowIndex,rowIndex);
@@ -77,6 +79,10 @@ public class BestellungBeilageTable extends JTable {
 																			null);
 									if(answer == 0){
 										((DefaultTableModel)getModel()).removeRow(getSelectedRow());
+										for(int i = 0; i < getRowCount(); i++){
+											setValueAt(new Integer(i+1), i, 0);
+											setValueAt(new Boolean(false), i, 4);
+										}
 										((DefaultTableModel)getModel()).fireTableStructureChanged();
 										updateTableStructur2();
 									}
@@ -99,16 +105,16 @@ public class BestellungBeilageTable extends JTable {
 		
 		Object[][] data = new Object[positions.length][5];
 		
-//		for(int i = 0; i < positions.length; i++){
-//			data[i][0] = new Integer(positions[i].getMenge());
-//			data[i][1] = positions[i].getBeschreibung();
-//			data[i][2] = new Float(positions[i].getEinzelPreis());
-//			data[i][3] = new Float(positions[i].getMwst());
-//			data[i][4] = new Float((positions[i].getMenge() * positions[i].getEinzelPreis()));
-//			data[i][5] = new String("Speichern");
-//			data[i][6] = new String("Löschen");
-//			data[i][7] = new Integer(positions[i].getId());
-//		}
+		for(int i = 0; i < positions.length; i++){
+			data[i][0] = new Integer(positions[i].getMenge());
+			data[i][1] = positions[i].getArtikel();
+			data[i][2] = new Float(positions[i].getEinzelPreis());
+			data[i][3] = new Float(positions[i].getMwst());
+			data[i][4] = new Float((positions[i].getMenge() * positions[i].getEinzelPreis()));
+			data[i][5] = new String("Speichern");
+			data[i][6] = new String("Löschen");
+			data[i][7] = new Integer(positions[i].getId());
+		}
 
 		al = new ActionListener() {            
 					public void actionPerformed(ActionEvent e) { 
