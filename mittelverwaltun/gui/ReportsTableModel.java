@@ -5,11 +5,6 @@ import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-import dbObjects.FBUnterkonto;
-import dbObjects.Firma;
-import dbObjects.Institut;
-import dbObjects.ZVKonto;
-
 /**
  * <p>TableModel für die Tabelle ReportsTable<p>
  * 
@@ -73,53 +68,53 @@ public class ReportsTableModel extends DefaultTableModel {
 			ArrayList row = (ArrayList)content.get(i);
 			
 			if (type == Reports.REPORT_1){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = (Float)row.get(1);											// zugewiesene Mittel
-				data[2] = (Float)row.get(2);											// Ausgaben
-				data[3] = (Float)row.get(3);											// Kontostand
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (Float)row.get(1);							// zugewiesene Mittel
+				data[2] = (Float)row.get(2);							// Ausgaben
+				data[3] = (Float)row.get(3);							// Kontostand
 				
 			} else if (type == Reports.REPORT_2){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = (Float)row.get(1);											// zugewiesene Mittel
-				data[2] = (Float)row.get(2);											// Ausgaben
-				data[3] = (Float)row.get(3);											// Verteilungen
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (Float)row.get(1);							// zugewiesene Mittel
+				data[2] = (Float)row.get(2);							// Ausgaben
+				data[3] = (Float)row.get(3);							// Verteilungen
 				
 			} else if (type == Reports.REPORT_3){
-				data[0] = ((FBUnterkonto)row.get(0)).getBezeichnung();// FB-Konto
-				data[1] = (Float)row.get(1);													// verteilte Mittel
-				data[2] = (Float)row.get(2);													// Ausgaben
-				data[3] = (Float)row.get(3);													// Kontostand
+				data[0] = (String)row.get(0);							// FB-Konto
+				data[1] = (Float)row.get(1);							// verteilte Mittel
+				data[2] = (Float)row.get(2);							// Ausgaben
+				data[3] = (Float)row.get(3);							// Kontostand
 				
 			} else if (type == Reports.REPORT_4){
-				data[0] = ((FBUnterkonto)row.get(0)).getBezeichnung();// FB-Konto
-				data[1] = ((ZVKonto)row.get(1)).getBezeichnung();			// ZV-Konto
-				data[2] = (Float)row.get(2);													// Ausgaben
+				data[0] = (String)row.get(0);							// FB-Konto
+				data[1] = (String)row.get(1);							// ZV-Konto
+				data[2] = (Float)row.get(2);							// Ausgaben
 				
 			} else if (type == Reports.REPORT_5){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = ((Institut)row.get(1)).getBezeichnung();// Institut
-				data[2] = (Float)row.get(2);											// Ausgaben
-				data[3] = (Float)row.get(3);											// Kontostand
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (String)row.get(1);							// Institut
+				data[2] = (Float)row.get(2);							// Ausgaben
+				data[3] = (Float)row.get(3);							// Kontostand
 					
 			} else if (type == Reports.REPORT_6){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = (Float)row.get(1);											// Ausgaben
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (Float)row.get(1);							// Ausgaben
 						
 			} else if (type == Reports.REPORT_7){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = (Float)row.get(1);											// Ausgaben
-				data[2] = (String)row.get(2);											// FBI-Schlüsselnummer
-				data[3] = (String)row.get(3);										  // Hül-Nr
-				data[4] = (Date)row.get(4);												// Datum 
-				data[5] = ((Firma)row.get(5)).getName();					// Firma
-				data[6] = (String)row.get(6);											// Status
-				data[7] = new String("X");												// Button anzeigen
-				
-				identifiers.add((Integer)row.get(7));
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (Float)row.get(1);							// Ausgaben
+				data[2] = (String)row.get(2);							// FBI-Schlüsselnummer
+				data[3] = (String)row.get(3);							// Hül-Nr
+				data[3] = (String)row.get(4);							// Typ
+				data[4] = (Date)row.get(5);								// Datum 
+				data[5] = (String)row.get(6);							// Firma
+				data[6] = (String)row.get(7);							// Status
+				data[7] = new String("X");								// Button anzeigen
+				identifiers.add((Integer)row.get(8));			// Id der Bestellung
 							
 			} else if (type == Reports.REPORT_8){
-				data[0] = ((ZVKonto)row.get(0)).getBezeichnung();	// ZV-Konto
-				data[1] = (Float)row.get(1);											// Einnahmen
+				data[0] = (String)row.get(0);							// ZV-Konto
+				data[1] = (Float)row.get(1);							// Einnahmen
 							
 			}
 						
