@@ -2281,6 +2281,33 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * gibt eine Firma anhand der id zurück
+	 * @param id der Firma
+	 * @return Firma
+	 * @throws ApplicationServerException
+	 */
+	public Firma selectFirma(int id) throws ApplicationServerException {
+		Firma firma = null;		
+		try{
+			Object[] parameters = { new Integer(id) };
+			ResultSet rs = statements.get(248).executeQuery(parameters);
+			rs.last();		
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
+											rs.getString(12).equalsIgnoreCase( "1" ) );
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 1, e.getMessage() );
+		}
+	
+		return firma;		// Die Firmen zurückgeben
+	}
+	
+	/**
 	 * Abfrage aller gelöschter Firmen.
 	 * @return ArrayList mit gelöschten Firmen.
 	 * @throws ApplicationServerException
@@ -2727,16 +2754,17 @@ public class Database implements Serializable{
 		}
 	}
 	
+	/**
+	 * gibt eine StandardBestellung mit der bestellerId zurück. Angebote und Auswahl sind nicht gesetzt
+	 * @param bestellId der StandardBestellung
+	 * @return Standardbestellung
+	 * @throws ApplicationServerException
+	 */
 	public StandardBestellung selectStandardBestellung(int bestellId) throws ApplicationServerException{
 		StandardBestellung bestellung = null;
 
 		try{
 			Object[] parameters = { new Integer(bestellId) };
-//			"k.id, k.beschreibung," +
-//			"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +
-//			"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
-//			"a.besteller, a.auftraggeber, a.empfaenger, " +
-//			"a.referenzNr, a.huelNr, a.phase, a.datum, a.zvTitel, a.fbKonto, " +
 			ResultSet rs = statements.get(270).executeQuery(parameters);
 
 			if (rs.next()){
@@ -2834,5 +2862,30 @@ public class Database implements Serializable{
 		}else{
 			throw new ApplicationServerException(68);
 		}
+	}
+	
+	public ArrayList selectAngebote(int bestellId) throws ApplicationServerException {
+		ArrayList angebote = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			ResultSet rs = statements.get(120).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					
+					// id, anbieter, datum, angenommen
+					Firma anbieter = selectFirma(rs.getInt("anbieter"));
+					angebote.add( new Angebot( rs.getInt("0"), null, rs.getDate("2"), anbieter, !rs.getString(3).equalsIgnoreCase("0")));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 1, e.getMessage() );
+		}
+	
+		return angebote;
 	}
 }

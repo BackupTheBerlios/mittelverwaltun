@@ -1731,8 +1731,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//248
-			statements[i++] = null;
+		{//248 gibt eine Firma anhand der id zurück
+			ps = con.prepareStatement( 	"SELECT id, name, strassenr, plz, ort, kundennr, " +
+											"telnr, faxnr, email, www, ask, geloescht " +
+										"FROM firmen WHERE id = ? AND geloescht = '0'" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//249
 			statements[i++] = null;
@@ -1796,8 +1800,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.DATE, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//261
-			statements[i++] = null;
+		{//261 gibt die Angebote zur eine Bestellung mit bestellId zurück
+			ps = con.prepareStatement("SELECT id, anbieter, datum, angenommen" +
+																"FROM Angebote " +
+															  "WHERE bestellung = ?");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//262
 			statements[i++] = null;
