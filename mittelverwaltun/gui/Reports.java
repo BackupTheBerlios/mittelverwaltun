@@ -8,19 +8,17 @@ import org.jfree.report.ReportProcessingException;
 import org.jfree.report.modules.gui.base.PreviewInternalFrame;
 import org.jfree.report.modules.parser.base.ReportGenerator;
 import org.jfree.report.util.Log;
+import org.jfree.report.util.WaitingImageObserver;
 
 import dbObjects.Institut;
 import dbObjects.ZVKonto;
 
 import applicationServer.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.rmi.Naming;
 import java.util.ArrayList;
@@ -396,42 +394,6 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		 component.setToolTipText(oldToolTipText);
 	}
 	
-	private InputStream getResourceStream (String pkgname, String fname){
-		 String resname = "/" + pkgname.replace('.','/')+ "/" + fname;
-		 Class clazz = getClass();
-		 InputStream is = clazz.getResourceAsStream(resname);
-		 return is;
-	}
-
-	private Image loadImageResource (String pkgname, String fname) throws IOException{
-		 Image ret = null;
-
-		 InputStream is = getResourceStream(pkgname, fname);
-
-		 if (is != null){
-
-			byte[] buffer = new byte[0];
-			byte[] tmpbuf = new byte[1024];
-
-			while (true){
-					  int len = is.read(tmpbuf);
-					  if (len<=0){
-								 break;
-					  }
-					  byte[] newbuf = new byte[buffer.length + len];
-					  System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
-					  System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
-					  buffer = newbuf;
-			}
-
-			// create image
-			ret = Toolkit.getDefaultToolkit().createImage(buffer);
-			is.close();
-		}
-
-		return ret;
-	}
-	
 	private void showReport(){
 		try {
 			if(cbReportFilter.getSelectedItem() == "Report_1"){
@@ -496,27 +458,24 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			System.out.println("xml not found");
 			return;
 		}
+		JCheckBox test = new JCheckBox();
+		test.setSelected(true);
+		test.setBackground(Color.WHITE);
 	
 		JFreeReport report = new JFreeReport();
-	
+		
 		report = parseReport(in);
-		report.setName("Report");
 		report.setData(tabReport.getModel());
 	
-	//					Image image = null;
-	//					try{
-	//						image = loadImageResource("image","fhlogo.gif");
-	//					}catch (IOException ex){
-	//						System.out.println("Grafik nicht geladen");
-	//					};
-//		final URL imageURL = getClass().getResource("../image/fhlogo.jpg");
-//		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
-//		final WaitingImageObserver obs = new WaitingImageObserver(image);
-//		obs.waitImageLoaded();
-//		report.setProperty("logo", image);
-//		report.setPropertyMarked("logo", true);
-		report.setProperty("reportName", (String)cbReportFilter.getSelectedItem());
-		report.setPropertyMarked("reportName", true);
+		final URL imageURL = getClass().getResource("../image/fhlogo.jpg");
+		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
+		final WaitingImageObserver obs = new WaitingImageObserver(image);
+		obs.waitImageLoaded();
+		report.setProperty("logo", image);
+		report.setPropertyMarked("logo", true);
+		
+		report.setProperty("description", "adresse\ntest\nbla\n");
+		report.setPropertyMarked("description", true);
 	
 		try {
 			final PreviewInternalFrame preview = new PreviewInternalFrame(report);
@@ -524,11 +483,9 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			preview.setPreferredSize(new Dimension(700,600));
 			preview.setClosable(true);
 			preview.setResizable(true);
-			preview.setVisible(true);
-			//preview(DO_NOTHING_ON_CLOSE);
 			preview.pack();
 			frame.addChild(preview);
-//			preview.requestFocus();
+			preview.setVisible(true);
 	
 		} catch (ReportProcessingException e1) {
 			e1.printStackTrace();

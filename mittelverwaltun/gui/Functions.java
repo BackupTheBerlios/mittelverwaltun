@@ -53,7 +53,7 @@ public class Functions {
 	
 	static public ImageIcon getZoomInIcon(Class clazz){
 		try{
-		  Image img = Functions.loadImageResource("image","zoomIn.gif", clazz);
+		  Image img = Functions.loadImageResource("image","ZoomIn16.gif", clazz);
 		  if (img != null)
 			  return  new ImageIcon(img);
 	  }catch (IOException e){};
@@ -80,7 +80,7 @@ public class Functions {
 	
 	static public ImageIcon getPrintIcon(Class clazz){
 		try{
-		  Image img = Functions.loadImageResource("image","print.gif", clazz);
+		  Image img = Functions.loadImageResource("image","PrintPreview16.gif", clazz);
 		  if (img != null)
 			  return  new ImageIcon(img);
 	  }catch (IOException e){};

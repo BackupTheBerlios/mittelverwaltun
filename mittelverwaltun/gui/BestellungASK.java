@@ -391,7 +391,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     buDelete.setText("Löschen");
     buDelete.setBounds(new Rectangle(242, 576, 112, 25));
     buDrucken.setBounds(new Rectangle(360, 576, 112, 25));
-    buDrucken.setText("Drucken");
+    buDrucken.setText("Vorschau");
     buBestellen.setBounds(new Rectangle(4, 576, 112, 25));
     buBestellen.setText("Bestellen");
     buSpeichern.setBounds(new Rectangle(123, 576, 112, 25));
@@ -565,7 +565,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   }
 
   private void printBestellung(){
-	  PrintASKBestellung printOrder = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
+	  PrintASKBestellung printOrder = new PrintASKBestellung(this.bestellung, frame);
   }
 
   public void actionPerformed(ActionEvent e) {

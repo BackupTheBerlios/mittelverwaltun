@@ -2,10 +2,13 @@ package gui;
 
 import javax.swing.*;
 
-import applicationServer.ApplicationServerException;
+
+import applicationServer.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.Naming;
 
 
 /**
@@ -131,4 +134,28 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 			this.dispose();
 		}
 	}
+	
+	public static void main(String[] args) {
+		MainFrame test = new MainFrame("FBMittelverwaltung");
+		
+		try{
+			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+			ApplicationServer applicationServer = server.getMyApplicationServer();
+			test.setApplicationServer(applicationServer);
+			PasswordEncrypt pe = new PasswordEncrypt();
+			String psw = pe.encrypt(new String("r.driesner").toString());
+			test.setBenutzer(applicationServer.login("r.driesner", psw));
+			test.setBounds(100,100,800,900);
+			test.setExtendedState(Frame.MAXIMIZED_BOTH);
+
+			test.setJMenuBar( new MainMenu( test ) );
+
+			AuswahlBestellung ab = new AuswahlBestellung(test);
+			test.addChild(ab);
+			test.show();
+			ab.show();
+	 }catch(Exception e){
+			System.out.println(e);
+	 }
+  }
 }

@@ -4,7 +4,14 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import org.jfree.report.JFreeReport;
+import org.jfree.report.ReportProcessingException;
+import org.jfree.report.modules.gui.base.PreviewInternalFrame;
+import org.jfree.report.modules.parser.base.ReportGenerator;
+import org.jfree.report.util.WaitingImageObserver;
+
 import applicationServer.ApplicationServer;
+import applicationServer.ApplicationServerException;
 
 import dbObjects.ASKBestellung;
 import dbObjects.Fachbereich;
@@ -17,10 +24,11 @@ import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.net.URL;
 import java.util.ArrayList;
 
 
-public class PrintASKBestellung extends JFrame implements Printable {
+public class PrintASKBestellung extends JFrame /*implements Printable*/ {
   JLabel jLabel4 = new JLabel();
   JLabel labKostenstelle = new JLabel();
   JLabel labKoSt = new JLabel();
@@ -62,12 +70,14 @@ public class PrintASKBestellung extends JFrame implements Printable {
   JPanel printPanel = new JPanel();
   ASKBestellung order;
   ApplicationServer as;
+  MainFrame frame;
   JLabel labFirma = new JLabel();
   JLabel labAuftragsNr = new JLabel();
 
-  public PrintASKBestellung(ASKBestellung order, ApplicationServer as) {
+  public PrintASKBestellung(ASKBestellung order, MainFrame frame) {
   	this.order = order;
-  	this.as = as;
+  	this.frame = frame;
+  	this.as = frame.getApplicationServer();
     try {
       jbInit();
     }
@@ -75,30 +85,32 @@ public class PrintASKBestellung extends JFrame implements Printable {
       e.printStackTrace();
     }
 		createTable(order.getAngebot().getPositionen());
-		show();
-		setVisible(false);
+//		show();
+//		setVisible(false);
 		
-		PrinterJob pJob = PrinterJob.getPrinterJob();
+//		PrinterJob pJob = PrinterJob.getPrinterJob();
+//
+//	  PageFormat pf = new PageFormat();
+//	  Paper paper = pf.getPaper() ;
+//	  paper.setImageableArea(25,30,560,800) ;
+//	  paper.setSize(595,842);
+//	  pf.setPaper(paper);
+//
+//	  pJob.setJobName("ASK Bestellung");
+//	  if(pJob.printDialog()){
+//		  try{
+//			  pJob.setPrintable(this, pf);
+//			  pJob.print();
+//		  }catch(PrinterException pexc){
+//			  System.out.println("Fehler beim Drucken");
+//		  }
+//	  }
+//	  pJob.cancel();
+//	  if(pJob.isCancelled()){
+//			this.dispose();
+//	  }
 
-	  PageFormat pf = new PageFormat();
-	  Paper paper = pf.getPaper() ;
-	  paper.setImageableArea(25,30,560,800) ;
-	  paper.setSize(595,842);
-	  pf.setPaper(paper);
-
-	  pJob.setJobName("ASK Bestellung");
-	  if(pJob.printDialog()){
-		  try{
-			  pJob.setPrintable(this, pf);
-			  pJob.print();
-		  }catch(PrinterException pexc){
-			  System.out.println("Fehler beim Drucken");
-		  }
-	  }
-	  pJob.cancel();
-	  if(pJob.isCancelled()){
-			this.dispose();
-	  }
+		printReport();
   }
 
   private void jbInit() throws Exception {
@@ -366,35 +378,141 @@ public class PrintASKBestellung extends JFrame implements Printable {
 			printPanel.setBounds(4,5,547, 800);
 		}
 	}
+	
+	/**
+	* Reads the report from the specified template file.
+	*
+	* @param templateURL  the template location.
+	*
+	* @return a report.
+	*/
+  private JFreeReport parseReport(final URL templateURL)
+  {
 
+	 JFreeReport result = null;
+	 final ReportGenerator generator = ReportGenerator.getInstance();
+	 try
+	 {
+		result = generator.parseReport(templateURL);
+	 }
+	 catch (Exception e)
+	 {
+		System.out.println("Failed to parse the report definition");
+	 }
+	 return result;
 
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-		Graphics2D g2d = (Graphics2D) graphics;
+  }
+	
+	private void printReport(){
+		final URL in = getClass().getResource("/xml/askBestellung.xml");
+		System.setProperty("org.jfree.report.targets.G2OutputTarget.isBuggyFRC","true");
+		
+		if (in == null){
+			System.out.println("xml not found");
+			return;
+		}
+		JCheckBox test = new JCheckBox();
+		test.setSelected(true);
+		test.setBackground(Color.WHITE);
 
-		double pageHeight = pageFormat.getImageableHeight();
-		double pageWidth = pageFormat.getImageableWidth();
+		JFreeReport report = new JFreeReport();
+	
+		report = parseReport(in);
+		report.setData(tableBestellung.getModel());
+		createOrder(report);
+		
+		try {
+			final PreviewInternalFrame preview = new PreviewInternalFrame(report);
+			preview.getBase().setToolbarFloatable(true);
+			preview.setPreferredSize(new Dimension(700,600));
+			preview.setClosable(true);
+			preview.setResizable(true);
+			preview.pack();
+			frame.addChild(preview);
+			preview.setVisible(true);
 
-		// Height of all components
-//		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight();
-		int heightAll = printPanel.getHeight();
-
-		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
-
-		if(pageIndex  >= totalNumPages) {
-			return NO_SUCH_PAGE;
-		}else{
-			
-			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
-//			if(totalNumPages > 1)
-//				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
-
-			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
-
-			printPanel.printAll(g2d);
-
-			return Printable.PAGE_EXISTS;
+		} catch (ReportProcessingException e1) {
+			e1.printStackTrace();
 		}
 	}
+	
+	private void createOrder(JFreeReport report){
+		// FH-Logo einfügen
+		final URL imageURL = getClass().getResource("../image/fhlogoklein.gif");
+		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
+		final WaitingImageObserver obs = new WaitingImageObserver(image);
+		obs.waitImageLoaded();
+		report.setProperty("logo", image);
+		report.setPropertyMarked("logo", true);
+		
+		try {
+			// FH-Anschrift
+			Fachbereich[] fbs = as.getFachbereiche();
+			report.setProperty("fhAnschrift", fbs[0].getFbBezeichnung() + "\n" +
+																				fbs[0].getStrasseHausNr() + "\n" +
+																				fbs[0].getPlzOrt());
+			report.setPropertyMarked("fhAnschrift", true);
+			
+			// Firmen Name
+			report.setProperty("firma", order.getAngebot().getAnbieter().getName());
+			report.setPropertyMarked("firma", true);
+			
+			// Firmen-Anschrift
+			report.setProperty("firmaAnschrift", order.getAngebot().getAnbieter().getStrasseNr() + "\n" +
+																					 order.getAngebot().getAnbieter().getPlz() + " " + 
+																					 order.getAngebot().getAnbieter().getOrt() + "\n" +
+																					 "Fax: " + order.getAngebot().getAnbieter().getFaxNr());
+			report.setPropertyMarked("firmaAnschrift", true);
+		
+			report.setProperty("kostenstelle", order.getFbkonto().getInstitut().getBezeichnung());
+			report.setPropertyMarked("kostenstelle", true);
+			report.setProperty("kostenstelleNr", order.getFbkonto().getInstitut().getKostenstelle());
+			report.setPropertyMarked("kostenstelleNr", true);
+			report.setProperty("swBeauftragter", order.getSwbeauftragter().getName() + ", " + order.getSwbeauftragter().getVorname());
+			report.setPropertyMarked("swBeauftragter", true);
+			report.setProperty("kapitel", order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
+			report.setPropertyMarked("kapitel", true);
+			report.setProperty("titel", order.getZvtitel().getTitel());
+			report.setPropertyMarked("titel", true);
+			report.setProperty("ut", order.getZvtitel().getUntertitel());
+			report.setPropertyMarked("ut", true);
+			report.setProperty("auftragsNr", order.getReferenznr());
+			report.setPropertyMarked("auftragsNr", true);
+			
+		} catch (ApplicationServerException e) {
+			// TODO Automatisch erstellter Catch-Block
+			e.printStackTrace();
+		}
+	}
+
+
+//	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+//		Graphics2D g2d = (Graphics2D) graphics;
+//
+//		double pageHeight = pageFormat.getImageableHeight();
+//		double pageWidth = pageFormat.getImageableWidth();
+//
+//		// Height of all components
+////		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight();
+//		int heightAll = printPanel.getHeight();
+//
+//		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
+//
+//		if(pageIndex  >= totalNumPages) {
+//			return NO_SUCH_PAGE;
+//		}else{
+//			
+//			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+////			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
+////			if(totalNumPages > 1)
+////				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
+//
+//			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
+//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
+//
+//			printPanel.printAll(g2d);
+//
+//			return Printable.PAGE_EXISTS;
+//		}
+//	}
 }
