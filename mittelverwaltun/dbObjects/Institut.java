@@ -35,13 +35,22 @@ public class Institut implements Serializable{
 	 */
 	private boolean geloescht;
 
+	private Benutzer institutsleiter;
+
 	/**
 	 */
 	public int getId() {
 		return id;
 	}
 
-
+	public Institut(int id, String bezeichnung, String kostenstelle, Benutzer institutsleiter, boolean geloescht){
+		this.id = id;
+		this.bezeichnung = bezeichnung;
+		this.kostenstelle = kostenstelle;
+		this.institutsleiter = institutsleiter;
+		this.geloescht = geloescht;
+	}
+	
 	public Institut(int id, String bezeichnung, String kostenstelle, boolean geloescht){
 		this.id = id;
 		this.bezeichnung = bezeichnung;
@@ -53,6 +62,13 @@ public class Institut implements Serializable{
 		this.id = id;
 		this.bezeichnung = bezeichnung;
 		this.kostenstelle = kostenstelle;
+	}
+	
+	public Institut(int id, String bezeichnung, String kostenstelle, Benutzer institutsleiter){
+		this.id = id;
+		this.bezeichnung = bezeichnung;
+		this.kostenstelle = kostenstelle;
+		this.institutsleiter = institutsleiter;
 	}
 
 	public Institut( String bezeichnung, String kostenstelle ) {
@@ -147,6 +163,14 @@ public class Institut implements Serializable{
 	 */
 	public void setGeloescht(boolean geloescht) {
 		this.geloescht = geloescht;
+	}
+
+	public Benutzer getInstitutsleiter() {
+		return institutsleiter;
+	}
+
+	public void setInstitutsleiter(Benutzer institutsleiter) {
+		this.institutsleiter = institutsleiter;
 	}
 
 }
