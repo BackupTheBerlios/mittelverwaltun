@@ -100,7 +100,7 @@ public class BestellungASKTable extends JTable {
 		for(int i = 0; i < positions.size(); i++){
 			Position position = (Position)positions.get(i);
 			data[i][0] = new Integer(position.getMenge());
-			data[i][1] = position.getBeschreibung();
+			data[i][1] = position.getArtikel();
 			data[i][2] = new Float(position.getEinzelPreis());
 			data[i][3] = new Float((position.getMenge() * position.getEinzelPreis()));
 			data[i][4] = new String("");

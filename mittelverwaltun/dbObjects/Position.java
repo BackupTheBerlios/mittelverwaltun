@@ -25,7 +25,22 @@ public class Position implements Serializable{
 
 	private String artikel;
 
-	public Position(int id){}
+	public Position(int id, String artikel, float einzelPreis, int menge, float mwst, float rabatt){
+		this.menge = menge;
+		this.artikel = artikel;
+		this.einzelPreis = einzelPreis;
+		this.mwst = mwst;
+		this.rabatt = rabatt;
+		this.id = id;
+	}
+	
+	public Position(String artikel, float einzelPreis, int menge, float mwst, float rabatt){
+		this.menge = menge;
+		this.artikel = artikel;
+		this.einzelPreis = einzelPreis;
+		this.mwst = mwst;
+		this.rabatt = rabatt;
+	}
 	
 	
 	public String toString(){

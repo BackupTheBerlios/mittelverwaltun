@@ -7,8 +7,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.Date;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -111,12 +111,9 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 	 }
 
 	 private void setData(Angebot angebot){
-	 		tfFirma.setText(angebot.getFirma());
-	 		tfStrasse.setText(angebot.getStrasse());
-	 		tfPLZ.setText(angebot.getPlz());
-	 		tfOrt.setText(angebot.getOrt());
-	 		tfDate.setText(angebot.getDatum());
-			tfBestellsumme.setText(NumberFormat.getCurrencyInstance().format(angebot.getSumme()));
+	 	  cbFirmen.setSelectedItem(angebot.getAnbieter());
+	 		tfDate.setText("" + angebot.getDatum());
+			tfBestellsumme.setValue(new Float(angebot.getSumme()));
 	 }
 
 	private String checkData(){
@@ -287,26 +284,19 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																		  null);
 		else{
 			for(int i = 0; i < tablePositionen.getRowCount(); i++){
-							Position position = new Position(		(String)(dtm.getValueAt(i, 1)),
-																									((Float)dtm.getValueAt(i, 2)).floatValue(),
-																									((Integer)dtm.getValueAt(i, 0)).intValue(),
-																									((Float)dtm.getValueAt(i, 3)).floatValue(),
-																									((Float)dtm.getValueAt(i, 4)).floatValue());
-							positionen.add(position);
-					 }
-					Angebot angebot = null;
+					Position position = new Position(		(String)(dtm.getValueAt(i, 1)),
+																							((Float)dtm.getValueAt(i, 2)).floatValue(),
+																							((Integer)dtm.getValueAt(i, 0)).intValue(),
+																							((Float)dtm.getValueAt(i, 3)).floatValue(),
+																							((Float)dtm.getValueAt(i, 4)).floatValue());
+					positionen.add(position);
+			 }
+				Angebot angebot = null;
 
-						try {
-							angebot = new Angebot(tfDate.getText(), tfFirma.getText(), tfStrasse.getText(), tfPLZ.getText(),
-																		tfOrt.getText(), positionen, NumberFormat.getCurrencyInstance().parse(tfBestellsumme.getText()).floatValue());
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-
-
-
-					frame.insertAngebot(angebot, angebotNr);
-					this.dispose();
+				angebot = new Angebot(positionen, Date.valueOf(tfDate.getText()), (Firma)cbFirmen.getSelectedItem());
+					
+				frame.insertAngebot(angebot, angebotNr);
+				this.dispose();
 		}
 	}
 

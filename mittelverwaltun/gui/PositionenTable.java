@@ -97,7 +97,7 @@ public class PositionenTable extends JTable {
 			Position position = (Position)positions.get(i);
 			float gesamt = position.getMenge() * position.getEinzelPreis();
 			data[i][0] = new Integer(position.getMenge());
-			data[i][1] = position.getBeschreibung();
+			data[i][1] = position.getArtikel();
 			data[i][2] = new Float(position.getEinzelPreis());
 			data[i][3] = new Float(position.getMwst());
 			data[i][4] = new Float(position.getRabatt());
@@ -112,12 +112,12 @@ public class PositionenTable extends JTable {
 						if(e.getActionCommand() == "Save"){
 							int row = getSelectedRow();
 							Position position = new Position(((Integer)getValueAt(row, 7)).intValue(), 
-															getValueAt(row, 1).toString(), 
-															((Float)getValueAt(row, 2)).floatValue(),
-															((Integer)getValueAt(row, 0)).intValue(), 
-															((Float)getValueAt(row, 3)).floatValue(),
-															((Float)getValueAt(row, 4)).floatValue()
-															);
+																									getValueAt(row, 1).toString(), 
+																									((Float)getValueAt(row, 2)).floatValue(),
+																									((Integer)getValueAt(row, 0)).intValue(), 
+																									((Float)getValueAt(row, 3)).floatValue(),
+																									((Float)getValueAt(row, 4)).floatValue()
+																									);
 							//useCase.updatePosition(position);
 						}else if(e.getActionCommand() == "Del"){
 							int answer = JOptionPane.showConfirmDialog(

@@ -20,10 +20,18 @@ public class Angebot {
 
 	private int id;
 
-	public Angebot(){
+	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter){
+		this.id = id;
+		this.positionen = positionen;
+		this.datum = datum;
+		this.anbieter = anbieter;
 	}
 	
-	
+	public Angebot(ArrayList positionen, Date datum, Firma anbieter){
+		this.positionen = positionen;
+		this.datum = datum;
+		this.anbieter = anbieter;
+	}
 
 	public Date getDatum() {
 		return datum;
