@@ -368,7 +368,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
 
 		 for(int i = 0; i < angebote.size(); i++){
 		 	 Angebot a = (Angebot)angebote.get(i);
-			 data[i][0] = new Integer(i);
+			 data[i][0] = new Integer(i+1);
 			 data[i][1] = a.getAnbieter().toString();
 			 data[i][2] = a.getDatum();
 			 data[i][3] = new Float(a.getSumme());
@@ -460,7 +460,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
 	  cbDrittelMittel.setSelected(order.getPlanvorgabe());
 
 	  // Auftrag
-	  labAngebotNr.setText("" + order.getAngenommenesAngebot());
+	  labAngebotNr.setText("" + (1 + order.getAngenommenesAngebot()));
 
 	  // Entscheidung für
 	 if(order.getBegruendung().equals(""))

@@ -220,7 +220,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	public int getAngenommenesAngebot(){
 		int result = -1;
 		
-		if (getPhase() != '0'){
+		if(getPhase() != '0'){
 			if (angebote != null){
 				for (int i=0; i<angebote.size();i++){
 					Angebot a = (Angebot)angebote.get(i);
@@ -232,6 +232,46 @@ public class StandardBestellung extends Bestellung implements Serializable {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * gibt die Summe der 7 % - igen MwSt der Positionen zurück
+	 * @return 7 % MwSt-Summe aller Positionen
+	 */
+	public float get7PercentSum(){
+		float mwst7 = 0;
+		
+		if(getPhase() != '0'){
+			Angebot a = (Angebot)getAngebote().get(getAngenommenesAngebot());
+			
+			for(int i = 0; i < a.getPositionen().size(); i++){
+				Position p = (Position)a.getPositionen().get(i);
+				
+				if(p.getMwst() == 0.07f)
+					mwst7 += (p.getMenge() * p.getEinzelPreis() * p.getMwst());
+			}
+		}
+		return mwst7;
+	}
+	
+	/**
+	 * gibt die Summe der 16 % - igen MwSt der Positionen zurück
+	 * @return 16 % MwSt-Summe aller Positionen
+	 */
+	public float get16PercentSum(){
+		float mwst16 = 0;
+	
+		if(getPhase() != '0'){
+			Angebot a = (Angebot)getAngebote().get(getAngenommenesAngebot());
+		
+			for(int i = 0; i < a.getPositionen().size(); i++){
+				Position p = (Position)a.getPositionen().get(i);
+			
+				if(p.getMwst() == 0.16f)
+					mwst16 += (p.getMenge() * p.getEinzelPreis() * p.getMwst());
+			}
+		}
+		return mwst16;
 	}
 	
 	public Object clone(){
