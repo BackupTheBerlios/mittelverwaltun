@@ -1802,50 +1802,44 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 76 );
 			
 		// die Referenznummer der Bestellung hat sich geändert
-		if(!original.getReferenznr().equals(edited.getReferenznr()));
+		if(!(original.getReferenznr().equals(edited.getReferenznr())))
 			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
-		switch(edited.getPhase()){
-			case 0:{
-							db.updateStandardBestellung(edited, 0f);
-							if(!original.getAngebote().equals(edited.getAngebote())){ // die  haben sich geändert
-								db.deleteAngebote(edited.getId()); // löscht alle Angebote
-								
-								ArrayList angebote = edited.getAngebote();
-								int newAngebotId = 0;
-								for(int i = 0; i < angebote.size(); i++){
-									Angebot angebot = (Angebot)edited.getAngebote().get(i);
-									ArrayList positionen = angebot.getPositionen();
+		if(edited.getPhase() == '0'){
+			
+			db.updateStandardBestellung(edited, 0f);
+			if(!original.getAngebote().equals(edited.getAngebote())){ // die  haben sich geändert
+				db.deleteAngebote(edited.getId()); // löscht alle Angebote
+				
+				ArrayList angebote = edited.getAngebote();
+				int newAngebotId = 0;
+				for(int i = 0; i < angebote.size(); i++){
+					Angebot angebot = (Angebot)edited.getAngebote().get(i);
+					ArrayList positionen = angebot.getPositionen();
 
-									newAngebotId = db.insertAngebot(angebot, edited.getId());
+					newAngebotId = db.insertAngebot(angebot, edited.getId());
 
-									// fügt alle Positionen ein
-									for(int j = 0; j < positionen.size(); j++){
-										Position position = (Position)positionen.get(j);
-	
-										db.insertPosition(position, newAngebotId);
-									}
-									// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
-									if(positionen.size() == 0){
-										Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, edited.getFbkonto().getInstitut());
-	
-										db.insertPosition(position, newAngebotId);
-									}
-								}
-							}
-							break;
-						 }
-			case 1:{
-//							float v = ((Angebot)edited.getAngebote().get(edited.getAuswahl())).getSumme();
-//							db.updateStandardBestellung(edited, 0f);
-							break;
-						 }
-			case 2:{
-							break;
-						 }
-		}
-		
+					// fügt alle Positionen ein
+					for(int j = 0; j < positionen.size(); j++){
+						Position position = (Position)positionen.get(j);
+
+						db.insertPosition(position, newAngebotId);
+					}
+					// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
+					if(positionen.size() == 0){
+						Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, edited.getFbkonto().getInstitut());
+
+						db.insertPosition(position, newAngebotId);
+					}
+				}
+			}
+			}else if(edited.getPhase() == '1'){
+//				float v = ((Angebot)edited.getAngebote().get(edited.getAuswahl())).getSumme();
+//			db.updateStandardBestellung(edited, 0f);
+			}else if(edited.getPhase() == '2'){
+			
+			}
 	}
 
 

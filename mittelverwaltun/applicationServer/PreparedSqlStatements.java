@@ -1827,8 +1827,10 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//263 
-			statements[i++] = null;
+		{//263 löscht alle Angebote zu einer Bestellung
+			ps = con.prepareStatement("DELETE FROM Angebote WHERE bestellung = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//264
 			statements[i++] = null;
@@ -1852,8 +1854,8 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//267 löscht alle Positionen und alle Angebote zu einer Bestellung
-			ps = con.prepareStatement("DELETE " +																"FROM Angebote a, Positionen p " +																"WHERE a.bestellung = ? " +																		"AND a.id = b.angebot ");
+		{//267 löscht alle Positionen von allen Angeboten zu einer Bestellung
+			ps = con.prepareStatement("DELETE FROM Positionen WHERE " +																		"angebot = (SELECT id FROM Angebote WHERE bestellung = ?) ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1869,7 +1871,7 @@ public class PreparedSqlStatements {
 		/**************************************************/
 		{//270 gibt die StandardBestellung mit der zugehörigen Id zurück. Es werden nur BenutzerId ermittelt
 			ps = con.prepareStatement("SELECT " +																		"k.id, k.beschreibung," +																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
-																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.datum, a.zvTitel, a.fbKonto, a.bestellwert " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert " +
 																"FROM Bestellungen a, ASK_Standard_Bestellungen b, Kostenarten k " +
 															  "WHERE a.id = ? " +															  		"AND a.id = b.id " +															  		"AND a.typ = '0' " +															  		"AND a.geloescht = '0' " +															  		"AND k.id = b.kostenart");
 			int[] param = {	Types.INTEGER };

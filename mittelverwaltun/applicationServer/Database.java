@@ -2807,7 +2807,7 @@ public class Database implements Serializable{
 				bestellung = new StandardBestellung(kostenart, !rs.getString("ersatzbeschaffung").equalsIgnoreCase("0"), rs.getString("ersatzbeschreibung"),
 																						rs.getString("ersatzInventarNr"), rs.getString("verwendungszweck"), !rs.getString("planvorgabe").equalsIgnoreCase("0"), 
 																						rs.getString("begruendung"), rs.getString("bemerkungen"), bestellId, 
-																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), auftraggeber,
+																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), rs.getString("huelNr"), auftraggeber,
 																						empfaenger, zvTitel, fbkonto, rs.getInt("bestellwert") );
 			}else {
 				throw new ApplicationServerException(70);
@@ -3003,12 +3003,27 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * löscht alle Angebote mit Positionen zu einer Bestellung
+	 * löscht alle Angebote zu einer Bestellung
 	 * @param bestellId
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
 	public void deleteAngebote( int bestellId ) throws ApplicationServerException {
+		try{
+			deletePositions(bestellId);
+			Object[] parameters = {new Integer(bestellId)};
+			statements.get(263).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException( 80, e.getMessage() );
+		}
+	}
+	
+	/**
+	 * löscht alle Positionen zu einem Angebot
+	 * @param bestellId
+	 * @throws ApplicationServerException
+	 */
+	public void deletePositions(int bestellId) throws ApplicationServerException {
 		try{
 			Object[] parameters = {new Integer(bestellId)};
 			statements.get(267).executeUpdate(parameters);
