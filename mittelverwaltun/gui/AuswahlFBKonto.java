@@ -8,8 +8,9 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import dbObjects.FBHauptkonto;
 import dbObjects.FBUnterkonto;
+import dbObjects.Institut;
+import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
 
 
@@ -17,30 +18,60 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
   JScrollPane scrollTree = new JScrollPane();
   FBKontenTree treeKonten;
   JLabel jLabel1 = new JLabel();
-  JTextField tfPrivatKonto = new JTextField();
+  JTextField tfKonto = new JTextField();
   JButton buAuswahl = new JButton();
   JButton buBeenden = new JButton();
-  Benutzerverwaltung benutzerverwaltung;
-  
+  Component parent;
+  ApplicationServer applicationServer;
 
-  public AuswahlFBKonto(Frame frame, String title, boolean modal, Benutzerverwaltung benutzerverwaltung) {
-    super(frame, title, modal);
-    this.benutzerverwaltung = benutzerverwaltung;
-    
-    try {
-      jbInit();
-      pack();
-    }
-    catch(Exception ex) {
-      ex.printStackTrace();
-    }
-    
+
+
+  public AuswahlFBKonto(Component parent, boolean modal, ApplicationServer applicationServer) {
+		super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
+		this.parent = parent;
+		this.applicationServer = applicationServer;
+
 		try {
-			treeKonten.loadInstituts( benutzerverwaltung.applicationServer.getInstitutesWithAccounts() );
-		} catch (ApplicationServerException e1) {
+		  jbInit();
+		  pack();
+		}
+		catch(Exception ex) {
+		  ex.printStackTrace();
 		}
 		
-		tfPrivatKonto.setEnabled(false);
+		try {
+			treeKonten.loadInstituts( applicationServer.getInstitutesWithAccounts() );
+		} catch (ApplicationServerException e1) {
+		}
+
+	  tfKonto.setEnabled(false);
+	  buAuswahl.addActionListener( this );
+
+	  buBeenden.setIcon(Functions.getCloseIcon(getClass()));
+	  buBeenden.addActionListener( this );
+
+	  this.setBounds(0,0,460, 320);
+ }
+ 
+ 	public AuswahlFBKonto(Component parent, Institut institut, boolean modal, ApplicationServer applicationServer) {
+		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
+		 this.parent = parent;
+		 this.applicationServer = applicationServer;
+		
+		 try {
+			jbInit();
+			pack();
+		 }
+		 catch(Exception ex) {
+			ex.printStackTrace();
+		 }
+		
+		 try {
+			 treeKonten.loadInstituts( applicationServer.getInstituteWithAccounts(institut, true) );
+		 } catch (ApplicationServerException e1) {
+		 }
+
+		tfKonto.setEnabled(false);
 		buAuswahl.addActionListener( this );
 
 		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
@@ -48,15 +79,15 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 
 		this.setBounds(0,0,460, 320);
   }
-
+ 
   
   private void jbInit() throws Exception {
     this.getContentPane().setLayout(null);
     scrollTree.setBounds(new Rectangle(10, 9, 437, 208));
     jLabel1.setText("FBPrivatKonto:");
     jLabel1.setBounds(new Rectangle(49, 231, 98, 15));
-    tfPrivatKonto.setText("");
-    tfPrivatKonto.setBounds(new Rectangle(175, 228, 246, 21));
+		tfKonto.setText("");
+		tfKonto.setBounds(new Rectangle(175, 228, 246, 21));
     buAuswahl.setBounds(new Rectangle(86, 260, 103, 25));
     buAuswahl.setText("Auswählen");
     buBeenden.setBounds(new Rectangle(270, 259, 120, 25));
@@ -65,7 +96,7 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		scrollTree.getViewport().add(treeKonten = new FBKontenTree( this, "FBKonten" ) , null);
     this.getContentPane().add(buAuswahl, null);
     this.getContentPane().add(buBeenden, null);
-    this.getContentPane().add(tfPrivatKonto, null);
+    this.getContentPane().add(tfKonto, null);
     this.getContentPane().add(jLabel1, null);
   }
 
@@ -76,46 +107,23 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 			this.dispose();	
 		}
 	}
-	
+
 	void setAuswahl(){
-		String error = "";
-		if( treeKonten.fbHauptkontoIsSelected() ){
-			FBHauptkonto fbKonto = ( (FBHauptkonto)treeKonten.getCurrentNode().getUserObject() );
-			if(fbKonto != null){
-				error = benutzerverwaltung.setPrivatKonto(fbKonto.getId());
-				if(error.equals(""))
-					benutzerverwaltung.tfKonto.setText(fbKonto.getBezeichnung());
-			}
-				
-		}else if(treeKonten.fbUnterkontoIsSelected()){
-			FBUnterkonto fbKonto = ( (FBUnterkonto)treeKonten.getCurrentNode().getUserObject() );
-			if(fbKonto != null){
-				error = benutzerverwaltung.setPrivatKonto(fbKonto.getId());
-				if(error.equals(""))
-					benutzerverwaltung.tfKonto.setText(fbKonto.getBezeichnung());	
-			}
-		}	
-		if(!error.equals(""))
-			JOptionPane.showMessageDialog(
-					this,
-					error,
-					"Warnung",
-					JOptionPane.ERROR_MESSAGE);
-		else
+		if(treeKonten.fbHauptkontoIsSelected() || treeKonten.fbUnterkontoIsSelected()){
+			FBUnterkonto fbKonto = (FBUnterkonto)treeKonten.getCurrentNode().getUserObject();
+			((FBKontoSelectable)parent).setFBKonto(fbKonto);
 			this.dispose();
+		}
 	}
-	
+
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );
-		if( treeKonten.fbHauptkontoIsSelected() ){
-			FBHauptkonto fbKonto = ( (FBHauptkonto)treeKonten.getCurrentNode().getUserObject() );
-			if(fbKonto != null)
-				tfPrivatKonto.setText(fbKonto.getBezeichnung());	
-		}else if(treeKonten.fbUnterkontoIsSelected()){
-			FBUnterkonto fbKonto = ( (FBUnterkonto)treeKonten.getCurrentNode().getUserObject() );
-			if(fbKonto != null)
-				tfPrivatKonto.setText(fbKonto.getBezeichnung());	
+		if(treeKonten.fbHauptkontoIsSelected() || treeKonten.fbUnterkontoIsSelected()){
+			buAuswahl.setEnabled(true);
+			FBUnterkonto fbKonto = (FBUnterkonto)treeKonten.getCurrentNode().getUserObject();
+			tfKonto.setText(fbKonto.getBezeichnung());
+		}else{
+			buAuswahl.setEnabled(false);
 		}
-		
 	}
 }

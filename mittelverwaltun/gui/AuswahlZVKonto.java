@@ -9,7 +9,6 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import dbObjects.FBHauptkonto;
 import dbObjects.FBUnterkonto;
 import dbObjects.Kontenzuordnung;
 import dbObjects.ZVKonto;
@@ -26,14 +25,14 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
   JButton buBeenden = new JButton();
   Component parent;
   MainFrame frame;
-  FBHauptkonto hauptkonto;
+  FBUnterkonto fbKonto;
 
 
-  public AuswahlZVKonto(Component parent, FBHauptkonto hauptkonto, boolean modal, MainFrame frame) {
+  public AuswahlZVKonto(Component parent, FBUnterkonto fbKonto, boolean modal, MainFrame frame) {
     super(JOptionPane.getFrameForComponent(parent), "ZVKonto Auswahl", modal);
     this.parent = parent;
     this.frame = frame;
-    this.hauptkonto = hauptkonto;
+    this.fbKonto = fbKonto;
     FBUnterkonto test ;
 
     try {
@@ -63,8 +62,8 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
 			  treeKonten.delTree();
 			  ArrayList institute = frame.getApplicationServer().getZVKonten();
 
-			  if(hauptkonto != null){
-					Kontenzuordnung[] zuordnungen = hauptkonto.getZuordnung();
+			  if(fbKonto != null){
+					Kontenzuordnung[] zuordnungen = fbKonto.getZuordnung();
 
 			  	if(zuordnungen != null){
 			  		for(int i = 0; i < institute.size(); i++){

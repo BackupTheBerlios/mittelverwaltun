@@ -20,7 +20,7 @@ import java.rmi.Naming;
  * @version 1.0
  */
 
-public class Benutzerverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener {
+public class Benutzerverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener, FBKontoSelectable {
 
   ApplicationServer applicationServer;
   MainFrame frame = null;
@@ -443,7 +443,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			loadRollen();
 			loadUsers();
 		} else if ( e.getSource() == buKontoAuswahl ) {
-			AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(null, "Privatkonto Auswahl", false, this);
+			AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, false, applicationServer);
 			kontoAuswahl.show();
 		}else if ( e.getSource() == buKontoEntfernen ) {
 			privatKonto = 0;
@@ -519,5 +519,15 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 				System.out.println(e);
 		}
   }
+
+	/* (Kein Javadoc)
+	 * @see gui.FBKontoSelectable#setFBKonto(dbObjects.FBUnterkonto)
+	 */
+	public void setFBKonto(FBUnterkonto fbKonto) {
+		if(fbKonto != null){
+			setPrivatKonto(fbKonto.getId());
+			tfKonto.setText(fbKonto.getBezeichnung());
+		}
+	}
 }
 

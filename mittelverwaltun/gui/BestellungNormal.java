@@ -27,13 +27,14 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 
 /**
- * 
+ *
  * @author robert
  *
  * Klasse für die StandardBestellung wird für die Sondierungsphase und die Bestellphase benutzt.
  * Diese Bestellung kann nur ein Admin oder ein Institutsadmin durchführen.
  */
-public class BestellungNormal extends JInternalFrame implements ActionListener, ItemListener, ZVKontoSelectable, PropertyChangeListener{
+public class BestellungNormal extends JInternalFrame implements ActionListener, ItemListener, ZVKontoSelectable, FBKontoSelectable,
+																												 PropertyChangeListener{
 
   JLabel labKoSt = new JLabel();
   JTextPane tpAuftragGrund = new JTextPane();
@@ -67,7 +68,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
   MainFrame frame;
   JButton buTitel = new JButton();
-  JComboBox cbKostenstelle = new JComboBox();
   JLabel labInstitut = new JLabel();
   JComboBox cbInstitut = new JComboBox();
   JButton buAddAngebot = new JButton();
@@ -99,12 +99,21 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   ZVTitel zvTitel;
   FBUnterkonto fbKonto;
   StandardBestellung bestellung;
+  JTextField tfFBKonto = new JTextField();
+  JButton buFBKonto = new JButton();
 
   public BestellungNormal(MainFrame frame) {
   	this.frame = frame;
 		this.setClosable(true);
 		this.setIconifiable(true);
 
+    try {
+      jbInit();
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+    }
+    
 		buDrucken.addActionListener(this);
 		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
@@ -115,27 +124,19 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		buSpeichern.addActionListener(this);
 		buBestellen.addActionListener(this);
 		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
-		
-		cbKostenstelle.addItemListener(this);
-		cbKostenstelle.addPropertyChangeListener(this);
+		buFBKonto.addActionListener(this);
+	
 		cbInstitut.addItemListener(this);
 		cbInstitut.addPropertyChangeListener(this);
-//		cbAuftraggeber.addItemListener(this);
-//		cbAuftraggeber.addPropertyChangeListener(this);
-//		cbEmpfaenger.addItemListener(this);
-//		cbEmpfaenger:addPropertyChangeListener(this);
+//			cbAuftraggeber.addItemListener(this);
+//			cbAuftraggeber.addPropertyChangeListener(this);
+//			cbEmpfaenger.addItemListener(this);
+//			cbEmpfaenger:addPropertyChangeListener(this);
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
 		rbAuftragGrund.addActionListener(this);
-
-
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
+		
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
 		setData();
 
@@ -175,7 +176,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			 test.setJMenuBar( new MainMenu( test ) );
 			 BestellungNormal bestellung = new BestellungNormal(test);
 			 test.addChild(bestellung);
-			 StandardBestellung best = applicationServer.getStandardBestellung(13);
+			 //StandardBestellung best = applicationServer.getStandardBestellung(13);
 			 test.show();
 				bestellung.show();
 		 }catch(Exception e){
@@ -185,12 +186,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
   private void jbInit() throws Exception {
 		this.setSize(new Dimension(604, 545));
-    cbKostenstelle.setBounds(new Rectangle(93, 131, 345, 21));
     labInstitut.setFont(new java.awt.Font("Dialog", 0, 12));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(7, 106, 50, 15));
     cbInstitut.setBounds(new Rectangle(93, 103, 345, 21));
-    buAddAngebot.setBounds(new Rectangle(1, 0, 148, 21));
+    buAddAngebot.setBounds(new Rectangle(1, 0, 170, 21));
     buAddAngebot.setText("Angebot hinzufügen");
     tpVerwendungszweck.setText("");
     rbErstbeschaffung.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -250,6 +250,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     labBestellNr1.setText(" Bestell-Datum:");
     labBestellNr1.setBorder(null);
     tfBestellDatum.setBounds(new Rectangle(422, 10, 72, 20));
+    tfFBKonto.setEditable(false);
+    tfFBKonto.setText("");
+    tfFBKonto.setBounds(new Rectangle(93, 132, 345, 21));
+    buFBKonto.setBounds(new Rectangle(438, 132, 101, 21));
+    buFBKonto.setText("FBKonto");
     unten.add(tpAuftragGrund, null);
     unten.add(jLabel14, null);
     unten.add(tfAngebotNr, null);
@@ -265,6 +270,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     jPanel1.add(jTextPane1, null);
     jPanel1.add(tpVerwendungszweck, null);
     jPanel1.add(cbDrittelMittel, null);
+    oben.add(buFBKonto, null);
+    oben.add(tfFBKonto, null);
     oben.add(labKoSt, null);
     oben.add(tfReferenzNr, null);
     oben.add(labBestellNr1, null);
@@ -390,7 +397,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(jLabel24, null);
     oben.add(jLabel10, null);
     oben.add(labTitel, null);
-    oben.add(cbKostenstelle, null);
     oben.add(rbErsatz, null);
     oben.add(labKapitel, null);
     oben.add(jPanel1, null);
@@ -416,9 +422,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			tpAuftragGrund.setVisible(false);
 		}else if ( e.getSource() == rbAuftragGrund ) {
 			tpAuftragGrund.setVisible(true);
+		}else if ( e.getSource() == buFBKonto ) {
+			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer());
+			fbKontoAuswahl.show();
 		}else if ( e.getSource() == buTitel ) {
-			AuswahlZVKonto kontoAuswahl;
-			kontoAuswahl = new AuswahlZVKonto(this, (FBHauptkonto)cbKostenstelle.getSelectedItem(), false, frame);
+			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
 			kontoAuswahl.show();
 		}else if ( e.getSource() == buAddAngebot ) {
 			DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
@@ -444,26 +452,25 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
 		Date sqlDate = new Date(datum.getTime());
-				
+
 		StandardBestellung newBestellung = new StandardBestellung(angebote, angebotNr, (Kostenart)cbKostenart.getSelectedItem(),
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
-																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(), 
+																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
 																				(new String("0")).charAt(0), (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
-																				zvTitel, (FBUnterkonto)cbKostenstelle.getSelectedItem(), 
-																				(angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
-																				
+																				zvTitel, fbKonto, (angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
+
 		if(bestellung != null){
-			
+
 		}else{
 			try {
 				frame.getApplicationServer().addBestellung(newBestellung);
 			} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
-			}	
+			}
 		}
-		
+
 	}
 
 	private void bestellen(){
@@ -605,51 +612,23 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 	}
 
-	private void loadHauptkonten(){
-		try {
-			Institut institut = null;
-			// TODO Admin durch die Aktivität austauschen
-			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-				institut = (Institut)cbInstitut.getSelectedItem();
-			else
-				institut = frame.getBenutzer().getKostenstelle();
 
-			if(institut != null){
-				ArrayList hauptKonten = frame.getApplicationServer().getFBHauptkonten(institut);
-
-				if(hauptKonten != null){
-					cbKostenstelle.removeAllItems();
-					  for(int i = 0; i < hauptKonten.size(); i++){
-
-							cbKostenstelle.addItem(hauptKonten.get(i));
-					  }
-				}
-			}
-		} catch (ApplicationServerException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private void setData(){
 		loadUsers();
 		loadInstituts();
-		loadHauptkonten();
 		loadKostenart();
 	}
 
 
 	public void itemStateChanged(ItemEvent e) {
-		if(e.getSource() == cbKostenstelle){
-			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-
-			if(kostenstelle != null){
-				labKoSt.setText("KoSt: " + kostenstelle.getInstitut().getKostenstelle());
-				labKapitel.setText("");
-				labTitel.setText("");
-				labUT.setText("");
-			}
-		}else if(e.getSource() == cbInstitut){
-			loadHauptkonten();
+		if(e.getSource() == cbInstitut){
+			fbKonto = null;
+			tfFBKonto.setText("");
+			labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
+			labKapitel.setText("");
+			labTitel.setText("");
+			labUT.setText("");
 		}
 	}
 
@@ -676,19 +655,22 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		if(e.getSource() == cbKostenstelle){
-			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-
-			if(kostenstelle != null){
-				labKoSt.setText("KoSt: " + kostenstelle.getInstitut().getKostenstelle());
-				labKapitel.setText("");
-				labTitel.setText("");
-				labUT.setText("");
-			}
-		}else if(e.getSource() == cbInstitut){
-			loadHauptkonten();
+		if(e.getSource() == cbInstitut){
+			fbKonto = null;
+			tfFBKonto.setText("");
+			labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
+			labKapitel.setText("");
+			labTitel.setText("");
+			labUT.setText("");
 		}
+	}
 
+	/* (Kein Javadoc)
+	 * @see gui.FBKontoSelectable#setFBKonto(dbObjects.FBUnterkonto)
+	 */
+	public void setFBKonto(FBUnterkonto fbKonto) {
+		this.fbKonto = fbKonto;
+		tfFBKonto.setText(fbKonto.toString());
 	}
 
 }
