@@ -121,4 +121,11 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
+	
+	/**
+	 * speichert eine ASKBestellung
+	 * @param bestellung - Standardbestellung
+	 * @throws ApplicationServerException
+	 */
+	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
 }

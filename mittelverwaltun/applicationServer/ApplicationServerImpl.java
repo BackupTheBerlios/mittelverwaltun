@@ -1534,4 +1534,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		db.insertStandardBestellung(bestellung);
 	}
 
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
+	 */
+	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+		// TODO Automatisch erstellter Methoden-Stub
+		
+	}
+
 }
