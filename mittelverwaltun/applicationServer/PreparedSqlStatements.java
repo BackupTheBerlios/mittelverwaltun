@@ -191,7 +191,7 @@ public class PreparedSqlStatements {
 				statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//28 Gibt die Benutzer eines Instituts zurück
-			ps = con.prepareStatement("SELECT b.* " +
+			ps = con.prepareStatement("SELECT b.benutzername, b.passwort, b.vorname, b.name " +
 										"FROM Benutzer b, Institute a " +
 									   "WHERE a.id = ? AND a.id = b.institutsid AND b.geloescht = '0'");
 			int[] param = {Types.INTEGER};
@@ -1068,6 +1068,7 @@ public class PreparedSqlStatements {
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
 											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
 										"FROM Benutzer b, Institute i, Rollen r " +
 									   "WHERE b.institutsId = i.id " +
 									     "AND b.rollenId = r.id " +
@@ -1082,6 +1083,7 @@ public class PreparedSqlStatements {
 									   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
 									   		  "i.id, i.bezeichnung, i.kostenstelle, " +
 									   		  "r.id, r.bezeichnung " +
+													"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
 										"FROM Benutzer b, Institute i, Rollen r " +
 									   "WHERE b.institutsId = i.id " +
 										 "AND b.geloescht = 0 " +
@@ -1093,6 +1095,7 @@ public class PreparedSqlStatements {
 										  "r.id, r.bezeichnung, " +
 										  "i.id, i.bezeichnung, i.kostenstelle, " +
 										  "b.titel, b.name, b.vorname, b.email, b.privatKontoId " +
+											"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
 									"FROM Benutzer b, Institute i, Rollen r " +
 								   "WHERE b.institutsId = i.id " +
 									 "AND b.rollenId = r.id " +
