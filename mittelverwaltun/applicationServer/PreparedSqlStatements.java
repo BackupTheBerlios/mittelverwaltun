@@ -2159,8 +2159,14 @@ public class PreparedSqlStatements {
 		/* Join: FBKonten, ZVKontentitel  */
 		/* Indizes: 310-324					      */
 		/**********************************/
-		{//310 löscht eine Bestellung aus der Tabelle Bestellungen anhand der Id
-			statements[i++] = null;
+		{//310 Addition eine Betrags auf die Vormerkungen
+			ps = con.prepareStatement("UPDATE FBKonten k, ZVKontentitel t " +
+																"SET k.vormerkungen = (k.vormerkungen + ?), t.vormerkungen = (t.vormerkungen + ?) " +
+																"WHERE k.id = ? " +
+																	"AND t.id = ? " +
+																	"AND k.geloescht = '0' " +																	"AND t.geloescht = '0' ");
+			int[] param = {	Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//311
 			statements[i++] = null;

@@ -1845,12 +1845,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 		if(original.getPhase() == '0'){
-			
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 		}else if(original.getPhase() == '1'){
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
+			
+			// noch keine Buchungen
+			
+			
 		}else if(original.getPhase() == '2'){
 		
 		}
@@ -2273,14 +2276,19 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(!delOrder.equals(dbOriginal))
 			throw new ApplicationServerException( 76 );
 		
-		// alle Position aller Angebote der Bestellung löschen
-		db.deletePositions(delOrder.getId());
-		// alle Angebote der Bestellung löschen
-		db.deleteAngebote(delOrder.getId());
-		// die StandardBestellung löschen
-		db.deleteASK_Standard_Bestellung(delOrder.getId());
-		// die Bestellung löschen
-		db.deleteBestellung(delOrder.getId());
+		if(delOrder.getPhase() == '0'){
+			// alle Position aller Angebote der Bestellung löschen
+			db.deletePositions(delOrder.getId());
+			// alle Angebote der Bestellung löschen
+			db.deleteAngebote(delOrder.getId());
+			// die StandardBestellung löschen
+			db.deleteASK_Standard_Bestellung(delOrder.getId());
+			// die Bestellung löschen
+			db.deleteBestellung(delOrder.getId());
+		}else{
+			delOrder.setGeloescht(true);
+			db.updateStandardBestellung(delOrder); // Flag gelöscht setzen
+		}
 		
 		db.commit();
 	}
@@ -2305,14 +2313,19 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(!delOrder.equals(dbOriginal))
 			throw new ApplicationServerException( 76 );
 		
-		// alle Position aller Angebote der Bestellung löschen
-		db.deletePositions(delOrder.getId());
-		// alle Angebote der Bestellung löschen
-		db.deleteAngebote(delOrder.getId());
-		// die StandardBestellung löschen
-		db.deleteASK_Standard_Bestellung(delOrder.getId());
-		// die Bestellung löschen
-		db.deleteBestellung(delOrder.getId());
+		if(delOrder.getPhase() == '0'){
+			// alle Position aller Angebote der Bestellung löschen
+			db.deletePositions(delOrder.getId());
+			// alle Angebote der Bestellung löschen
+			db.deleteAngebote(delOrder.getId());
+			// die StandardBestellung löschen
+			db.deleteASK_Standard_Bestellung(delOrder.getId());
+			// die Bestellung löschen
+			db.deleteBestellung(delOrder.getId());
+		}else{
+			delOrder.setGeloescht(true);
+			db.updateASKBestellung(delOrder); // Flag gelöscht setzen
+		}
 		
 		db.commit();
 	}
