@@ -56,6 +56,15 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JButton buRefresh = new JButton();
   int privatKonto;
   JButton buKontoEntfernen = new JButton();
+  JTextField tfTelefon = new JTextField();
+  JTextField tfFax = new JTextField();
+  JLabel jLabel12 = new JLabel();
+  JLabel jLabel13 = new JLabel();
+  JTextField tfBau = new JTextField();
+  JTextField tfRaum = new JTextField();
+  JLabel jLabel14 = new JLabel();
+  JLabel jLabel15 = new JLabel();
+  JCheckBox cbSoftBeauftragter = new JCheckBox();
 
   public Benutzerverwaltung(MainFrame frame){
 		super( "Account ändern" );
@@ -113,9 +122,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     catch(Exception e) {
       e.printStackTrace();
     }
-		
+
 		tfKonto.setEnabled(false);
-		
+
 		buRefresh.setBorder(null);
     buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
 		buRefresh.addActionListener( this );
@@ -149,99 +158,130 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     this.setTitle("Benutzerverwaltung");
     this.getContentPane().setLayout(null);
-    jScrollPane1.setBounds(new Rectangle(6, 26, 217, 247));
-    buAnlegen.setBounds(new Rectangle(229, 247, 110, 25));
+    jScrollPane1.setBounds(new Rectangle(6, 31, 217, 327));
+    buAnlegen.setBounds(new Rectangle(229, 335, 110, 25));
     buAnlegen.setText("Anlegen");
-    buAendern.setBounds(new Rectangle(377, 247, 110, 25));
+    buAendern.setBounds(new Rectangle(377, 335, 110, 25));
     buAendern.setText("Ändern");
-    buLoeschen.setBounds(new Rectangle(526, 247, 110, 25));
+    buLoeschen.setBounds(new Rectangle(526, 335, 110, 25));
     buLoeschen.setText("Löschen");
-    buBeenden.setBounds(new Rectangle(674, 247, 110, 25));
+    buBeenden.setBounds(new Rectangle(674, 335, 110, 25));
     buBeenden.setText("Beenden");
-    buKontoAuswahl.setBounds(new Rectangle(516, 202, 115, 25));
+    buKontoAuswahl.setBounds(new Rectangle(516, 289, 115, 25));
     buKontoAuswahl.setText("auswählen");
-    jLabel2.setBounds(new Rectangle(236, 64, 116, 15));
+    jLabel2.setBounds(new Rectangle(236, 61, 116, 15));
     jLabel2.setText("Passwort(*)");
     jLabel2.setPreferredSize(new Dimension(100, 16));
     tfBenutzername.setText("");
-    tfBenutzername.setBounds(new Rectangle(341, 25, 165, 22));
+    tfBenutzername.setBounds(new Rectangle(334, 25, 165, 22));
     jLabel3.setPreferredSize(new Dimension(100, 16));
     jLabel3.setText("Passwort-Wdhl(*)");
-    jLabel3.setBounds(new Rectangle(512, 64, 116, 15));
-    tfPasswort.setBounds(new Rectangle(341, 60, 165, 22));
+    jLabel3.setBounds(new Rectangle(512, 61, 116, 15));
+    tfPasswort.setBounds(new Rectangle(334, 57, 165, 22));
     tfPasswort.setText("");
-    tfPasswortWdhl.setBounds(new Rectangle(619, 60, 165, 22));
+    tfPasswortWdhl.setBounds(new Rectangle(619, 57, 165, 22));
     tfPasswortWdhl.setText("");
-    tfName.setBounds(new Rectangle(341, 96, 165, 22));
+    tfName.setBounds(new Rectangle(334, 89, 165, 22));
     tfName.setText("");
     jLabel4.setPreferredSize(new Dimension(100, 16));
     jLabel4.setText("Name(*)");
-    jLabel4.setBounds(new Rectangle(236, 100, 116, 15));
+    jLabel4.setBounds(new Rectangle(236, 93, 116, 15));
     jLabel5.setPreferredSize(new Dimension(100, 16));
     jLabel5.setText("Vorname(*)");
-    jLabel5.setBounds(new Rectangle(512, 100, 116, 15));
+    jLabel5.setBounds(new Rectangle(512, 93, 116, 15));
     jLabel6.setPreferredSize(new Dimension(100, 16));
     jLabel6.setText("Titel");
-    jLabel6.setBounds(new Rectangle(236, 135, 116, 15));
+    jLabel6.setBounds(new Rectangle(236, 125, 116, 15));
     jLabel7.setPreferredSize(new Dimension(100, 16));
     jLabel7.setText("Email");
-    jLabel7.setBounds(new Rectangle(512, 135, 116, 15));
+    jLabel7.setBounds(new Rectangle(512, 126, 116, 15));
     jLabel8.setPreferredSize(new Dimension(100, 16));
     jLabel8.setText("Institut(*)");
-    jLabel8.setBounds(new Rectangle(236, 171, 116, 15));
+    jLabel8.setBounds(new Rectangle(236, 262, 116, 15));
     jLabel9.setPreferredSize(new Dimension(100, 16));
     jLabel9.setText("Rollen(*)");
-    jLabel9.setBounds(new Rectangle(512, 171, 116, 15));
+    jLabel9.setBounds(new Rectangle(512, 262, 116, 15));
     jLabel10.setPreferredSize(new Dimension(100, 16));
     jLabel10.setText("Privatkonto");
-    jLabel10.setBounds(new Rectangle(236, 206, 116, 15));
+    jLabel10.setBounds(new Rectangle(236, 294, 116, 15));
     tfVorname.setText("");
-    tfVorname.setBounds(new Rectangle(619, 96, 165, 22));
+    tfVorname.setBounds(new Rectangle(619, 89, 165, 22));
     tfTitel.setText("");
-    tfTitel.setBounds(new Rectangle(341, 131, 165, 22));
+    tfTitel.setBounds(new Rectangle(334, 122, 165, 22));
     tfEMail.setText("");
-    tfEMail.setBounds(new Rectangle(619, 131, 165, 22));
+    tfEMail.setBounds(new Rectangle(619, 122, 165, 22));
     tfKonto.setText("");
-    tfKonto.setBounds(new Rectangle(341, 202, 165, 22));
-    cbInstitut.setBounds(new Rectangle(341, 167, 165, 22));
-    cbRollen.setBounds(new Rectangle(619, 167, 165, 22));
+    tfKonto.setBounds(new Rectangle(341, 290, 165, 22));
+    cbInstitut.setBounds(new Rectangle(341, 258, 165, 22));
+    cbRollen.setBounds(new Rectangle(619, 258, 165, 22));
     jLabel11.setBounds(new Rectangle(6, 8, 116, 15));
     jLabel11.setText("Benutzer");
     jLabel11.setPreferredSize(new Dimension(100, 16));
     buRefresh.setBounds(new Rectangle(134, 3, 20, 20));
     buRefresh.setToolTipText("Aktualisieren");
     buRefresh.setText("");
-    buKontoEntfernen.setBounds(new Rectangle(651, 202, 115, 25));
+    buKontoEntfernen.setBounds(new Rectangle(669, 289, 115, 25));
     buKontoEntfernen.setText("entziehen");
-    this.getContentPane().add(tfName, null);
+    tfTelefon.setBounds(new Rectangle(334, 154, 165, 22));
+    tfTelefon.setText("");
+    tfFax.setBounds(new Rectangle(619, 154, 165, 22));
+    tfFax.setText("");
+    jLabel12.setBounds(new Rectangle(236, 158, 116, 15));
+    jLabel12.setText("Telefon");
+    jLabel12.setPreferredSize(new Dimension(100, 16));
+    jLabel13.setBounds(new Rectangle(512, 158, 116, 15));
+    jLabel13.setText("Fax");
+    jLabel13.setPreferredSize(new Dimension(100, 16));
+    tfBau.setBounds(new Rectangle(334, 186, 165, 22));
+    tfBau.setText("");
+    tfRaum.setBounds(new Rectangle(619, 186, 165, 22));
+    tfRaum.setText("");
+    jLabel14.setBounds(new Rectangle(236, 190, 116, 15));
+    jLabel14.setText("Bau");
+    jLabel14.setPreferredSize(new Dimension(100, 16));
+    jLabel15.setBounds(new Rectangle(512, 190, 116, 15));
+    jLabel15.setText("Raum");
+    jLabel15.setPreferredSize(new Dimension(100, 16));
+    cbSoftBeauftragter.setText("Softwarebeauftragter");
+    cbSoftBeauftragter.setBounds(new Rectangle(236, 222, 182, 23));
     this.getContentPane().add(jLabel1, null);
     this.getContentPane().add(jLabel5, null);
-    this.getContentPane().add(jScrollPane1, null);
-    this.getContentPane().add(jLabel10, null);
     this.getContentPane().add(jLabel2, null);
-    this.getContentPane().add(buAendern, null);
     this.getContentPane().add(tfPasswortWdhl, null);
-    this.getContentPane().add(buLoeschen, null);
-    this.getContentPane().add(cbRollen, null);
     this.getContentPane().add(jLabel7, null);
     this.getContentPane().add(tfVorname, null);
-    this.getContentPane().add(buAnlegen, null);
     this.getContentPane().add(tfEMail, null);
     this.getContentPane().add(jLabel3, null);
-    this.getContentPane().add(cbInstitut, null);
-    this.getContentPane().add(buBeenden, null);
 		this.getContentPane().add(buRefresh, null);
-    this.getContentPane().add(tfBenutzername, null);
-    this.getContentPane().add(tfTitel, null);
-    this.getContentPane().add(tfPasswort, null);
-    this.getContentPane().add(jLabel9, null);
-    this.getContentPane().add(jLabel8, null);
     this.getContentPane().add(jLabel6, null);
-    this.getContentPane().add(tfKonto, null);
     this.getContentPane().add(jLabel4, null);
     this.getContentPane().add(jLabel11, null);
+    this.getContentPane().add(tfFax, null);
+    this.getContentPane().add(jLabel12, null);
+    this.getContentPane().add(jLabel13, null);
+    this.getContentPane().add(jLabel14, null);
+    this.getContentPane().add(jLabel15, null);
+    this.getContentPane().add(tfRaum, null);
+    this.getContentPane().add(buBeenden, null);
+    this.getContentPane().add(buLoeschen, null);
+    this.getContentPane().add(jLabel10, null);
+    this.getContentPane().add(buAendern, null);
+    this.getContentPane().add(cbRollen, null);
+    this.getContentPane().add(buAnlegen, null);
+    this.getContentPane().add(cbInstitut, null);
+    this.getContentPane().add(jLabel9, null);
+    this.getContentPane().add(tfKonto, null);
     this.getContentPane().add(buKontoAuswahl, null);
     this.getContentPane().add(buKontoEntfernen, null);
+    this.getContentPane().add(jLabel8, null);
+    this.getContentPane().add(cbSoftBeauftragter, null);
+    this.getContentPane().add(tfBenutzername, null);
+    this.getContentPane().add(tfPasswort, null);
+    this.getContentPane().add(tfName, null);
+    this.getContentPane().add(tfTitel, null);
+    this.getContentPane().add(tfTelefon, null);
+    this.getContentPane().add(tfBau, null);
+    this.getContentPane().add(jScrollPane1, null);
     jScrollPane1.getViewport().add(listBenutzer, null);
   }
 
@@ -310,7 +350,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 
 				  Benutzer benutzer = new Benutzer(tfBenutzername.getText(), psw, (Rolle)cbRollen.getSelectedItem(),
 																					(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
-																					tfVorname.getText(), tfEMail.getText(), privatKonto);
+																					tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
+																					tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
 					int key = applicationServer.addUser(benutzer);
 					benutzer.setId(key);
 				  listModel.addElement(benutzer);
@@ -370,7 +411,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 
 				Benutzer benutzer = new Benutzer(currBenutzer.getId(), tfBenutzername.getText(), passwort, (Rolle)cbRollen.getSelectedItem(),
 																				(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
-																				tfVorname.getText(), tfEMail.getText(), privatKonto);
+																				tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
+																				tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
 				applicationServer.setUser(benutzer, currBenutzer);
 				listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
 				if(frame != null)
@@ -410,7 +452,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		  this.dispose();
 	  }
 	  if(!error.equals("")){
-	  	
+
 		JOptionPane.showMessageDialog(
 			  this,
 			  error,
@@ -427,6 +469,12 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			tfName.setText(benutzer.getName());
 			tfVorname.setText(benutzer.getVorname());
 			tfEMail.setText(benutzer.getEmail());
+			tfTelefon.setText(benutzer.getTelefon());
+			tfFax.setText(benutzer.getFax());
+			tfBau.setText(benutzer.getBau());
+			tfRaum.setText(benutzer.getRaum());
+			cbSoftBeauftragter.setSelected(benutzer.getSoftBeauftragter());
+			
 			if(benutzer.getPrivatKonto() != 0){
 				try {
 					FBUnterkonto fbKonto = applicationServer.getFBKonto(benutzer.getPrivatKonto());
