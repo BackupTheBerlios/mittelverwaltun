@@ -1906,10 +1906,34 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//272
-			statements[i++] = null;
+			ps = con.prepareStatement(	"SELECT " + 
+											"o.id, o.datum, o.typ, o.phase, " +
+											"u1.name, u1.vorname, " +
+											"u2.name, u2.vorname, " +
+											"u3.name, u3.vorname, " +
+											"o.bestellwert " +
+										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
+										"WHERE o.typ = ? " +
+										  "AND o.besteller = u1.id " +
+										  "AND o.auftraggeber = u2.id " +
+										  "AND o.empfaenger = u3.id " +
+										  "ORDER BY datum DESC");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//273
-			statements[i++] = null;
+			ps = con.prepareStatement(	"SELECT " + 
+											"o.id, o.datum, o.typ, o.phase, " +
+											"u1.name, u1.vorname, " +
+											"u2.name, u2.vorname, " +
+											"u3.name, u3.vorname, " +
+											"o.bestellwert " +
+										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
+										"WHERE o.besteller = u1.id " +
+										  "AND o.auftraggeber = u2.id " +
+										  "AND o.empfaenger = u3.id " +
+										  "ORDER BY datum DESC");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//274
 			statements[i++] = null;
