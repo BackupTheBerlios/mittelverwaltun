@@ -19,6 +19,7 @@ public class ReportsTableModel extends DefaultTableModel {
 	public ReportsTableModel (int type, ArrayList content){
 		super();
 		this.type = type;
+		identifiers = new ArrayList();
 		
 		if (type == Reports.REPORT_1){
 			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "Ausgaben", "Kontostand"}; 
@@ -39,7 +40,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZV-Konto", "Ausgaben"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_7){
-			String[] colheads = {"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Datum", "Firma", "Status", ""}; 
+			String[] colheads = {"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_8){
 			String[] colheads = {"ZV-Konto", "Einnahmen"}; 
@@ -62,7 +63,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			else if(type == Reports.REPORT_6 || type == Reports.REPORT_8)
 				data = new Object[3];
 			else if(type == Reports.REPORT_7)
-				data = new Object[9];
+				data = new Object[8];
 			
 			// eine Zeile des Reports
 			ArrayList row = (ArrayList)content.get(i);
@@ -105,12 +106,29 @@ public class ReportsTableModel extends DefaultTableModel {
 				data[1] = (Float)row.get(1);							// Ausgaben
 				data[2] = (String)row.get(2);							// FBI-Schlüsselnummer
 				data[3] = (String)row.get(3);							// Hül-Nr
-				data[3] = (String)row.get(4);							// Typ
-				data[4] = (Date)row.get(5);								// Datum 
-				data[5] = (String)row.get(6);							// Firma
-				data[6] = (String)row.get(7);							// Status
+				
+				if (row.get(4).equals("0"))										// Typ
+					data[4] = "Standardbestellung";
+				else if (row.get(4).equals("1"))
+					data[4] = "ASK-Bestellung";
+				else if (row.get(4).equals("2"))
+					data[4] = "Zahlungsanforderung";
+				else data[4] = "n.a.";
+
+				data[5] = ((Date)row.get(5)).toString();								// Datum
+				
+				if (row.get(6).equals("0"))											// Phase
+					data[6] = (String)"Sondierung";
+				else if (row.get(6).equals("1"))
+					data[6] = (String)"Abwicklung";
+				else if (row.get(6).equals("2"))
+					data[6] = (String)"Abgeschlossen";
+				else if (row.get(6).equals("3"))
+					data[6] = (String)"Storniert";
+				else data[6] = (String)"unbekannt";
+				
 				data[7] = new String("X");								// Button anzeigen
-				identifiers.add((Integer)row.get(8));			// Id der Bestellung
+				identifiers.add((Integer)row.get(7));			// Id der Bestellung
 							
 			} else if (type == Reports.REPORT_8){
 				data[0] = (String)row.get(0);							// ZV-Konto
@@ -122,6 +140,41 @@ public class ReportsTableModel extends DefaultTableModel {
 		}
 	}
 	
+	public int getType (int row){
+		if(type == Reports.REPORT_7){
+			if ((row < this.getRowCount())&& (row >= 0)){
+				String type = (String)getValueAt(row, 4);
+				if (type.equals("Standardbestellung"))
+					return OrderTableModel.STD_TYP;
+				else if (type.equals("ASK-Bestellung"))
+					return OrderTableModel.ASK_TYP;
+				else if (type.equals("Zahlungsanforderung"))
+					return OrderTableModel.ZA_TYP;
+				else return -1;
+			} else return -1;
+		}else
+			return -1;		
+	}
+	
+	
+	public int getPhase (int row){
+		if(type == Reports.REPORT_7){
+			if ((row < this.getRowCount())&& (row >= 0)){
+				String type = (String)getValueAt(row, 6);
+				if (type.equals("Sondierung"))
+					return OrderTableModel.SONDIERUNG;
+				else if (type.equals("Abwicklung"))
+					return OrderTableModel.ABWICKLUNG;
+				else if (type.equals("Abgeschlossen"))
+					return OrderTableModel.ABGESCHLOSSEN;
+				else if (type.equals("Storniert"))
+					return OrderTableModel.STORNIERT;
+				else return -1;
+			} else return -1;
+		}else
+			return -1;
+	}
+	
 	public int getId (int row){
 	
 		if ((row < this.getRowCount())&& (row >= 0))
@@ -131,10 +184,14 @@ public class ReportsTableModel extends DefaultTableModel {
 	}
 	
 	public boolean isCellEditable(int rowIndex, int colIndex) {
-		return false;
+		if(type == Reports.REPORT_7 && colIndex == 7)
+			return true;
+		else
+			return false;
 	}
 
 	public Class getColumnClass(int colIndex) {
+		System.out.println("" + colIndex);
 		return getValueAt(0, colIndex).getClass();
 	}
 	

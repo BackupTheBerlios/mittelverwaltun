@@ -37,16 +37,12 @@ public class ReportsTable extends JTable{
 	 * @param type - Typ des Reports (REPORT_1, .., REPORT_7)
 	 * @param report - ArrayList mit den 
 	 */
-	public ReportsTable(int type, ArrayList content, ActionListener listener){
+	public ReportsTable(ActionListener listener){
 		this.actionListener = listener;
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		applyTableRendering();
-	}
-	
-	public ReportsTable(){
 	}
 	
 	private void applyTableRendering(){
@@ -71,16 +67,22 @@ public class ReportsTable extends JTable{
 			
 		}else if(type == Reports.REPORT_7){
 			
+			getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor(actionListener));
+			getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer());
+			
 		}else if(type == Reports.REPORT_8){
 			
 		}
+		
+		
 	}
 	
 	/**
 	 * füllt die Tabelle mit dem Inhalt der ArrayListe
 	 * @param content - ArrayListe mit dem Inhalt für den Report
 	 */
-	public void fillReport(ArrayList content){
+	public void fillReport(int type, ArrayList content){
+		this.type = type;
 		ReportsTableModel model = new ReportsTableModel(type, content);
 		setModel(model);
 		applyTableRendering();
@@ -130,6 +132,19 @@ public class ReportsTable extends JTable{
 	
 	public int getSelectedOrderID(){
 		return ((ReportsTableModel)getModel()).getId(getSelectedRow());
+	}
+	
+	public int getSelectedOrderType(){
+		return ((ReportsTableModel)getModel()).getType(getSelectedRow());
+	}
+
+	public int getSelectedOrderPhase(){
+		return ((ReportsTableModel)getModel()).getPhase(getSelectedRow());
+	}
+	
+	public void setReport(int type, ArrayList orders){
+		setModel(new ReportsTableModel(type, orders));
+		applyTableRendering();
 	}
 	
 }

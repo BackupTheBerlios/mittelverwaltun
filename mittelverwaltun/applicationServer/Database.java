@@ -3864,14 +3864,21 @@ public class Database implements Serializable{
 
 		try{
 			Object[] parameters = { new Integer(i.getId()) };
-			ResultSet rs = statements.get(267).executeQuery(parameters); // Statement fehlt noch !!!!
+			ResultSet rs = statements.get(335).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
 		
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
-				
 					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(2)));		// Ausgaben
+					row.add((rs.getString(3) == null ? "" : rs.getString(3)));							// FBI-Schlüsselnummer
+					row.add((rs.getString(4) == null ? "" : rs.getString(4)));							// Hül-Nr
+					row.add(rs.getString(5));							// Typ
+					row.add(rs.getDate(6));								// Datum
+					row.add(rs.getString(7));							// Status
+					row.add(new Integer(rs.getInt(8)));		// Id Bestellung
 					
 					report.add( row );
 				}

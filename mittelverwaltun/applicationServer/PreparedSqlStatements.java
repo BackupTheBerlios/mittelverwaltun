@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[335];
+		statements = new PreparedStatementWrapper[350];
 		int i = 0;
 
 		/**************************************/
@@ -2299,6 +2299,65 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//334
+			statements[i++] = null;
+		}
+		/**************************/
+		/* Reports 								*/
+		/* Indizes: 335-349				*/
+		/**************************/
+		{//335 
+//			"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", "Id"
+			ps = con.prepareStatement("SELECT " +
+																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
+																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk " +
+															  "WHERE i.id = ? " +
+																	"AND i.id = fbk.institutsId  " +
+																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND be.phase != 0 " +
+																	"AND be.geloescht = '0'");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//336
+			statements[i++] = null;
+		}
+		{//337
+			statements[i++] = null;
+		}
+		{//338
+			statements[i++] = null;
+		}
+		{//339
+			statements[i++] = null;
+		}
+		{//340 
+			statements[i++] = null;
+		}
+		{//341
+			statements[i++] = null;
+		}
+		{//342
+			statements[i++] = null;
+		}
+		{//343
+			statements[i++] = null;
+		}
+		{//344
+			statements[i++] = null;
+		}
+		{//345 
+			statements[i++] = null;
+		}
+		{//346
+			statements[i++] = null;
+		}
+		{//347
+			statements[i++] = null;
+		}
+		{//348
+			statements[i++] = null;
+		}
+		{//349
 			statements[i++] = null;
 		}
 	}

@@ -2559,7 +2559,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public ArrayList getReport(int typ, Institut institut) throws ApplicationServerException {
 		
 		if(typ == 7){
-			
+			return db.selectReport7(institut);
 		}
 		
 		return null;

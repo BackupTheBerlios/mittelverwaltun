@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.rmi.Naming;
+import java.util.ArrayList;
 
 
 /**
@@ -60,7 +61,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	public static final int REPORT_6 = 6;
 	
 	/**
-	 * Für jedes Instiut ein detaillierter Report über die Einnahmen und Ausgaben mit FBI-Schlüsselnummer,
+	 * Für jedes Instiut ein detaillierter Report über die Ausgaben mit FBI-Schlüsselnummer,
 	 * Hüll-Nr, Datum, welches Konto der Zentralverwaltung belastet wurde, Firma, Beschreibung des bestellten Artikels, 
 	 * Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung
 	 */
@@ -92,7 +93,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 												"<html><p>Ein Report von jedem Konto aus der Zentralverwaltung mit Ausgaben jedes Instituts <br>" +
 														"und aktueller Kontostände</p></html>",
 												"Für jedes Institut ein Report mit Ausgaben sortiert nach Verwaltungskonen",
-												"<html><p>Für jedes Instiut ein detaillierter Report über die Einnahmen und Ausgaben mit FBI-Schlüsselnummer, <br>" +
+												"<html><p>Für jedes Instiut ein detaillierter Report über die Ausgaben mit FBI-Schlüsselnummer, <br>" +
 														"Hüll-Nr, Datum, welches Konto der Zentralverwaltung belastet wurde, Firma, Beschreibung des bestellten Artikels, <br>" +
 														"Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung</p></html>",
 												"Für jedes Instiut ein Report über die Einnahmen"};
@@ -126,10 +127,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     btAktualisieren.setBounds(new Rectangle(410, 12, 113, 27));
     btAktualisieren.setFont(new java.awt.Font("Dialog", 1, 11));
     btAktualisieren.setText("Anzeigen");
-    btAktualisieren.setActionCommand("refresh");
+    btAktualisieren.setActionCommand("showReport");
     btAktualisieren.addActionListener(this);
 
-    tabReport = new ReportsTable();
+    tabReport = new ReportsTable(this);
     tabReport.setFont(new java.awt.Font("Dialog", 0, 11));
 
     spReport.setBounds(new Rectangle(15, 49,760, 150));
@@ -164,8 +165,39 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand() == "showOrder"){
-
-
+			if (tabReport.getSelectedOrderType()==OrderTable.STD_TYP){
+				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
+					try {
+						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabReport.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+			}else if (tabReport.getSelectedOrderType()==OrderTable.ASK_TYP){
+				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
+					try {
+						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabReport.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+			}else if (tabReport.getSelectedOrderType()==OrderTable.ZA_TYP){
+				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
+					;
+			}
+		} else if(e.getActionCommand() == "showReport"){
+			if(cbReportFilter.getSelectedItem() == "Report_7"){
+				if(cbInstitut.getSelectedItem() != null){
+//					tabReport.removeAll();
+					try {
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_7, (Institut)cbInstitut.getSelectedItem());
+//						tabReport = new ReportsTable(REPORT_7, content, this);
+						
+						tabReport.fillReport(REPORT_7, content);
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+					
+				}
+			}
 		} else if(e.getActionCommand() == "refresh"){
 
 		} else if(e.getActionCommand() == "dispose"){
