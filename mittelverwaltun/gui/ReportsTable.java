@@ -40,8 +40,7 @@ public class ReportsTable extends JTable{
 	public ReportsTable(ActionListener listener){
 		this.actionListener = listener;
 		
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		//setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
@@ -66,7 +65,8 @@ public class ReportsTable extends JTable{
 		}else if(type == Reports.REPORT_6){
 			
 		}else if(type == Reports.REPORT_7){
-			
+			getColumnModel().getColumn(7).setPreferredWidth(20);
+			getColumnModel().getColumn(7).setMaxWidth(20);
 			getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor(actionListener));
 			getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer());
 			

@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.rmi.*;
 import applicationServer.*;
 import dbObjects.Benutzer;
@@ -13,6 +15,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	CentralServer centralServer;
 	JDesktopPane desk;
 	Benutzer benutzer;
+	Image bg;
+	ImageIcon bgIcon;
 
 	
 	final String host = "localhost";				// Adresse und
@@ -24,8 +28,17 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.centralServer = centralServer;
 			this.applicationServer = applicationServer;
 			this.benutzer = benutzer;
+			bg = loadImageResource("image","bg.jpg");
+			if (bg != null)
+				bgIcon =  new ImageIcon(bg);
+				
 			setJMenuBar( new MainMenu( this ) );
-			this.desk = new JDesktopPane();
+			this.desk = new JDesktopPane(){
+													public void paintComponent(Graphics g) {
+													  super.paintComponent(g);
+														g.drawImage(bg, getWidth()/2 - 240, getHeight()/2 - 180, 480, 353, this);
+													}
+											};
 			desk.setDesktopManager(new DefaultDesktopManager());
 			setContentPane(desk);
 			setBounds( 50, 50, 800, 600 );
@@ -36,6 +49,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			} );
 			this.setExtendedState(Frame.MAXIMIZED_BOTH);
 			this.show();
+			this.doLayout();
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(
 				this,
@@ -113,6 +127,42 @@ public class MainFrame extends JFrame implements ActionListener {
 	
 	public void actionPerformed( ActionEvent e ) {
 		
+	}
+	
+	private Image loadImageResource (String pkgname, String fname) throws IOException{
+	 Image ret = null;
+
+	 InputStream is = getResourceStream(pkgname, fname);
+
+	 if (is != null){
+
+		byte[] buffer = new byte[0];
+		byte[] tmpbuf = new byte[1024];
+
+		while (true){
+				  int len = is.read(tmpbuf);
+				  if (len<=0){
+							 break;
+				  }
+				  byte[] newbuf = new byte[buffer.length + len];
+				  System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
+				  System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
+				  buffer = newbuf;
+		}
+
+		// create image
+		ret = Toolkit.getDefaultToolkit().createImage(buffer);
+		is.close();
+	 }
+
+	 return ret;
+  }
+	  
+	private InputStream getResourceStream (String pkgname, String fname){
+		 String resname = "/" + pkgname.replace('.','/')+ "/" + fname;
+		 Class clazz = getClass();
+		 InputStream is = clazz.getResourceAsStream(resname);
+		 return is;
 	}
 
 }

@@ -116,7 +116,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		this.setFrameIcon(null);
     this.setTitle("Reports");
     this.getContentPane().setLayout(null);
-
+    
     cbReportFilter = new JComboBox(items);
     cbReportFilter.setBounds(new Rectangle(15, 12, 180, 27));
     cbReportFilter.setFont(new java.awt.Font("Dialog", 1, 11));
