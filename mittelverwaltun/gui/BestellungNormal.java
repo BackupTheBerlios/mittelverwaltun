@@ -93,7 +93,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   JLabel labBestellNr1 = new JLabel();
   JFormattedTextField tfBestellDatum = new JFormattedTextField(DateFormat.getDateInstance());
   int angebotNr;
-  ZVTitel zvTitel;
+  ZVUntertitel zvTitel;
   FBUnterkonto fbKonto;
   StandardBestellung bestellung;
   JTextField tfFBKonto = new JTextField();
@@ -432,6 +432,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		panelBeilage.setPreferredSize(new Dimension(548, 800));
 
   }
+  
 	public void actionPerformed(ActionEvent e) {
 		String error = "";
 		if ( e.getSource() == rbErsatz ) {

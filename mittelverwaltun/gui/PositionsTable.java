@@ -40,6 +40,7 @@ public class PositionsTable extends JTable implements ActionListener {
 	public static final int ANZEIGE = 0;
 	public static final int STD_ABWICKLUNG = 1;
 	public static final int ASK_ABWICKLUNG = 2;
+	public static final int ASK_STANDARD = 3;
 	
 	private boolean editable = true;
 	private int type = 0;
@@ -125,9 +126,9 @@ public class PositionsTable extends JTable implements ActionListener {
 	
 	private void applyTableRendering(){
 		
-		setRowHeight(20);
+			setRowHeight(20);
 		
-		setDefaultEditor(Float.class, new JTableFloatEditor(0));
+			setDefaultEditor(Float.class, new JTableFloatEditor(0));
 	  	setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
 	  	
 	  	setDefaultEditor(Integer.class, new JTableIntegerEditor(1));
@@ -138,7 +139,7 @@ public class PositionsTable extends JTable implements ActionListener {
 	  	getColumnModel().getColumn(0).setPreferredWidth(45);	// Menge
 	  	getColumnModel().getColumn(1).setPreferredWidth(127);	// Artikelbezeichnung	
 	  	
-	  	if (type == PositionsTable.ASK_ABWICKLUNG){
+	  	if (type == PositionsTable.ASK_ABWICKLUNG || type == PositionsTable.ASK_STANDARD){
 	 		
 	  		getColumnModel().getColumn(2).setPreferredWidth(130);	// Institut
 	  		JComboBox cbInstitutes = new JComboBox();
@@ -156,28 +157,32 @@ public class PositionsTable extends JTable implements ActionListener {
 		  	
 		  	getColumnModel().getColumn(4).setPreferredWidth(40);	// Mehrwertsteuer
 		  	JComboBox mwst = new JComboBox();
-			mwst.addItem(new Float(0.07));
-			mwst.addItem(new Float(0.16));
-			getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(mwst));
-			getColumnModel().getColumn(4).setCellRenderer(new JTablePercentRenderer());
-			
-			getColumnModel().getColumn(5).setPreferredWidth(90);	// Gesamt	  		
+				mwst.addItem(new Float(0.07));
+				mwst.addItem(new Float(0.16));
+				getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(mwst));
+				getColumnModel().getColumn(4).setCellRenderer(new JTablePercentRenderer());
+				
+				getColumnModel().getColumn(5).setPreferredWidth(90);	// Gesamt	  		
 	  	
 	  	}else{
 	  		getColumnModel().getColumn(2).setPreferredWidth(100);	// Einzelpreis	
 		  	
 		  	getColumnModel().getColumn(3).setPreferredWidth(45);	// Mehrwertsteuer
 		  	JComboBox mwst = new JComboBox();
-			mwst.addItem(new Float(0.07));
-			mwst.addItem(new Float(0.16));
-			getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(mwst));
-			getColumnModel().getColumn(3).setCellRenderer(new JTablePercentRenderer());
-			
-			getColumnModel().getColumn(4).setPreferredWidth(100);	// Rabatt
-			getColumnModel().getColumn(5).setPreferredWidth(100);	// Gesamt
+				mwst.addItem(new Float(0.07));
+				mwst.addItem(new Float(0.16));
+				getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(mwst));
+				getColumnModel().getColumn(3).setCellRenderer(new JTablePercentRenderer());
+				
+				getColumnModel().getColumn(4).setPreferredWidth(100);	// Rabatt
+				getColumnModel().getColumn(5).setPreferredWidth(100);	// Gesamt
 	  	}
 	  	
-		if (type != PositionsTable.ANZEIGE){
+		if(type == PositionsTable.ASK_STANDARD){ 
+			getColumnModel().getColumn(6).setPreferredWidth(25);
+			getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor(this));
+			getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer());
+		}else if(type != PositionsTable.ANZEIGE){
 			getColumnModel().getColumn(6).setPreferredWidth(70);
 			getColumnModel().getColumn(7).setPreferredWidth(25);
 			getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor(this));
