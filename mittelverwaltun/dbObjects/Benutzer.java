@@ -45,11 +45,11 @@ public class Benutzer implements Serializable{
 
 	private String raum;
 
-	private boolean softBeauftragter;
+	private boolean swBeauftragter;
 
 	public Benutzer(String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
 									String titel, String name, String vorname, String email, int privatKonto, 
-									String telefon, String fax, String bau, String raum, boolean softBeauftragter){
+									String telefon, String fax, String bau, String raum, boolean swBeauftragter){
 		this.id = 0;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -64,12 +64,12 @@ public class Benutzer implements Serializable{
 		this.fax = fax;
 		this.bau = bau;
 		this.raum = raum;
-		this.softBeauftragter = softBeauftragter;
+		this.swBeauftragter = swBeauftragter;
 	}
 	
 	public Benutzer(int id, String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
 									String titel, String name, String vorname, String email, int privatKonto, 
-									String telefon, String fax, String bau, String raum, boolean softBeauftragter){
+									String telefon, String fax, String bau, String raum, boolean swBeauftragter){
 		this.id = id;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -84,7 +84,7 @@ public class Benutzer implements Serializable{
 		this.fax = fax;
 		this.bau = bau;
 		this.raum = raum;
-		this.softBeauftragter = softBeauftragter;
+		this.swBeauftragter = swBeauftragter;
 	}
 	
 	
@@ -253,12 +253,12 @@ public class Benutzer implements Serializable{
 		this.raum = raum;
 	}
 
-	public boolean getSoftBeauftragter() {
-		return softBeauftragter;
+	public boolean getSwBeauftragter() {
+		return swBeauftragter;
 	}
 
-	public void setSoftBeauftragter(boolean softBeauftragter) {
-		this.softBeauftragter = softBeauftragter;
+	public void setSwBeauftragter(boolean swBeauftragter) {
+		this.swBeauftragter = swBeauftragter;
 	}
 
 }

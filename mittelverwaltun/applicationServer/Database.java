@@ -774,14 +774,14 @@ public class Database implements Serializable{
 					Object[] param2 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
 														benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
 														benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
-														(benutzer.getSoftBeauftragter() ? "1" : "0"), new Integer(benutzer.getId())};
+														(benutzer.getSwBeauftragter() ? "1" : "0"), new Integer(benutzer.getId())};
 					if(statements.get(22).executeUpdate(param2) == 0)
 						throw new ApplicationServerException(2);
 				}else{
 					Object[] param3 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
 															benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
 															new Integer(benutzer.getPrivatKonto()), benutzer.getTelefon(), benutzer.getFax(), 
-															benutzer.getBau(), benutzer.getRaum(), (benutzer.getSoftBeauftragter() ? "1" : "0"),
+															benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0"),
 															new Integer(benutzer.getId())};
 					if(statements.get(21).executeUpdate(param3) == 0)
 						throw new ApplicationServerException(2);
@@ -823,7 +823,7 @@ public class Database implements Serializable{
 	        Object[] param2 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
 	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
 	                          benutzer.getVorname(), benutzer.getEmail(), benutzer.getTelefon(), benutzer.getFax(),
-	                          benutzer.getBau(), benutzer.getRaum(), (benutzer.getSoftBeauftragter() ? "1" : "0")};
+	                          benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0")};
 	        stmt = statements.get(25);
 	        stmt.executeUpdate(param2);
 	    }else{
@@ -831,7 +831,7 @@ public class Database implements Serializable{
 	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
 	                          benutzer.getVorname(), benutzer.getEmail(), new Integer(benutzer.getPrivatKonto()), 
 	                          benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
-	                          (benutzer.getSoftBeauftragter() ? "1" : "0")};
+	                          (benutzer.getSwBeauftragter() ? "1" : "0")};
 	    		stmt = statements.get(24);
 	        stmt.executeUpdate(param3);
 	    }

@@ -121,7 +121,7 @@ public class PreparedSqlStatements {
 												"name = ?, " +
 												"vorname = ?, " +
 												"email = ?, " +
-												"privatKontoId = ?, telefon = ?, fax = ?, bau = ?, raum = ?, softwarebeauftragter = ?" +
+												"privatKontoId = ?, telefon = ?, fax = ?, bau = ?, raum = ?, swBeauftragter = ?" +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
@@ -138,7 +138,7 @@ public class PreparedSqlStatements {
 												"name = ?, " +
 												"vorname = ?, " +
 												"email = ?, " +
-												"privatKontoId = NULL, telefon = ?, fax = ?, bau = ?, raum = ?, softwarebeauftragter = ?" +
+												"privatKontoId = NULL, telefon = ?, fax = ?, bau = ?, raum = ?, swBeauftragter = ?" +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
@@ -156,7 +156,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email, privatKontoId, telefon, fax, bau, raum, softwarebeauftragter)" +
+												"name, vorname, email, privatKontoId, telefon, fax, bau, raum, swBeauftragter)" +
 										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
@@ -167,7 +167,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email, telefon, fax, bau, raum, softwarebeauftragter) " +
+												"name, vorname, email, telefon, fax, bau, raum, swBeauftragter) " +
 										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
@@ -1071,7 +1071,7 @@ public class PreparedSqlStatements {
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
 											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-											  "b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
 										"FROM Benutzer b, Institute i, Rollen r " +
 									   "WHERE b.institutsId = i.id " +
 									     "AND b.rollenId = r.id " +
@@ -1086,7 +1086,7 @@ public class PreparedSqlStatements {
 															   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
 															   		  "i.id, i.bezeichnung, i.kostenstelle, " +
 															   		  "r.id, r.bezeichnung, " +
-																			"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
+																			"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
 																"FROM Benutzer b, Institute i, Rollen r " +
 															   "WHERE b.institutsId = i.id " +
 																 "AND b.geloescht = 0 " +
@@ -1098,7 +1098,7 @@ public class PreparedSqlStatements {
 																	  "r.id, r.bezeichnung, " +
 																	  "i.id, i.bezeichnung, i.kostenstelle, " +
 																	  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-																		"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
+																		"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
 																"FROM Benutzer b, Institute i, Rollen r " +
 															   "WHERE b.institutsId = i.id " +
 																 "AND b.rollenId = r.id " +

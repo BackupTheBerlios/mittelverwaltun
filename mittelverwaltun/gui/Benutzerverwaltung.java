@@ -473,7 +473,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			tfFax.setText(benutzer.getFax());
 			tfBau.setText(benutzer.getBau());
 			tfRaum.setText(benutzer.getRaum());
-			cbSoftBeauftragter.setSelected(benutzer.getSoftBeauftragter());
+			cbSoftBeauftragter.setSelected(benutzer.getSwBeauftragter());
 			
 			if(benutzer.getPrivatKonto() != 0){
 				try {
