@@ -1346,7 +1346,14 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//219
-			statements[i++] = null;
+			ps = con.prepareStatement("INSERT " +
+																"INTO Bestellungen " +
+																	 "(besteller, auftraggeber, empfaenger, referenzNr, typ, phase, " +																	 "datum, zvTitel, fbKont, bestellwert, verbindlichkeiten) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+															  Statement.RETURN_GENERATED_KEYS);
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,  Types.VARCHAR,  Types.VARCHAR,
+										 Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 
 		/******************************************/
