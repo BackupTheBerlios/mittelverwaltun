@@ -676,7 +676,7 @@ public class Database implements Serializable{
 		try{
 			Object[] parameters = { new Integer(institut.getId()) };
 
-			ResultSet rs = statements.get(28).executeQuery(parameters);
+			ResultSet rs = statements.get(173).executeQuery(parameters);
 			rs.last();
 			int count = rs.getRow();
 			rs.beforeFirst();
@@ -684,7 +684,12 @@ public class Database implements Serializable{
 				benutzer = new Benutzer[count];
 				int i = 0;
 				while (rs.next()){
-					benutzer[i] = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),rs.getString(4));
+					benutzer[i] = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),
+																			new Rolle(rs.getInt(4), rs.getString(5)), 
+																			new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
+																			rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
+																			rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),
+																			!rs.getString(18).equalsIgnoreCase( "0" ));
 					i++;
 				}
 			}

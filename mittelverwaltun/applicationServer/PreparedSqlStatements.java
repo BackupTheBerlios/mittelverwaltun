@@ -194,12 +194,8 @@ public class PreparedSqlStatements {
 				int[] param = {Types.INTEGER, Types.VARCHAR};
 				statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//28 Gibt die Benutzer eines Instituts zurück
-			ps = con.prepareStatement("SELECT b.id, b.benutzername, b.name, b.vorname " +
-										"FROM Benutzer b, Institute a " +
-									   "WHERE a.id = ? AND a.id = b.institutsid AND b.geloescht = '0'");
-			int[] param = {Types.INTEGER};
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+		{//28 
+			statements[i++] = null;
 		}
 		{//29
 			ps = con.prepareStatement("UPDATE Benutzer " +
@@ -1088,7 +1084,7 @@ public class PreparedSqlStatements {
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//171		(25)
+		{//171 gibt alle Benutzer zurück
 			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, b.rollenId, " +
 															   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
 															   		  "i.id, i.bezeichnung, i.kostenstelle, " +
@@ -1115,8 +1111,19 @@ public class PreparedSqlStatements {
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//173
-			statements[i++] = null;
+		{//173 gibt alle Benutzer eines Instituts zurück
+			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, " +
+																	  "r.id, r.bezeichnung, " +
+																	  "i.id, i.bezeichnung, i.kostenstelle, " +
+																	  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
+																	  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+																"FROM Benutzer b, Institute i, Rollen r " +
+															   "WHERE b.institutsId = i.id " +
+															     "AND i.id = ? " +
+															     "AND b.rollenId = r.id " +
+															     "AND b.geloescht = 0 " );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//174
 			statements[i++] = null;
