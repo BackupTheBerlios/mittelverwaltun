@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[310];
+		statements = new PreparedStatementWrapper[325];
 		int i = 0;
 
 		/**************************************/
@@ -1838,7 +1838,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//267 löscht alle Positionen von allen Angeboten zu einer Bestellung
-			ps = con.prepareStatement("DELETE FROM Positionen WHERE " +																		"angebot IN (SELECT id FROM Angebote WHERE bestellung = ?) ");
+			ps = con.prepareStatement("DELETE FROM Positionen WHERE " +																	"angebot IN (SELECT id FROM Angebote WHERE bestellung = ?)");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1867,13 +1867,13 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//271 aktualisiert die ASK- bzw. StandardBestellung
-			ps = con.prepareStatement("UPDATE Bestellungen a, ASK_Standard_Bestellungen b " +																"SET a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, a.huelNr = ?, a.phase = ?, " +
+			ps = con.prepareStatement("UPDATE Bestellungen a, ASK_Standard_Bestellungen b " +																"SET a.geloescht = ?, a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, a.huelNr = ?, a.phase = ?, " +
 																		"a.datum = ?, a.zvTitel = ?, a.fbKonto = ?, a.bestellwert = ?, a.verbindlichkeiten = ?, " +																		"b.bemerkungen = ?, b.kostenart = ?, b.ersatzbeschaffung = ?, b.ersatzbeschreibung = ?, b.ersatzInventarNr = ?, " +
 																		"b.verwendungszweck = ?, b.planvorgabe = ?, b.begruendung = ?, b.swBeauftragter = ? " +
 																"WHERE a.id = ? " +
 																	"AND a.id = b.id " +
 																	"AND a.geloescht = '0' ");
-			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
+			int[] param = {	Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
 											Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT,
 											Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 											Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
@@ -2155,7 +2155,55 @@ public class PreparedSqlStatements {
 		{//309
 			statements[i++] = null;
 		}
-		
+		/**********************************/
+		/* Join: FBKonten, ZVKontentitel  */
+		/* Indizes: 310-324					      */
+		/**********************************/
+		{//310 löscht eine Bestellung aus der Tabelle Bestellungen anhand der Id
+			statements[i++] = null;
+		}
+		{//311
+			statements[i++] = null;
+		}
+		{//312
+			statements[i++] = null;
+		}
+		{//313
+			statements[i++] = null;
+		}
+		{//314
+			statements[i++] = null;
+		}
+		{//315 
+			statements[i++] = null;
+		}
+		{//316
+			statements[i++] = null;
+		}
+		{//317
+			statements[i++] = null;
+		}
+		{//318
+			statements[i++] = null;
+		}
+		{//319
+			statements[i++] = null;
+		}
+		{//320 
+			statements[i++] = null;
+		}
+		{//321
+			statements[i++] = null;
+		}
+		{//322
+			statements[i++] = null;
+		}
+		{//323
+			statements[i++] = null;
+		}
+		{//324
+			statements[i++] = null;
+		}
 	}
 
 	public void release() throws SQLException{
