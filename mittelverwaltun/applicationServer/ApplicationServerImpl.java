@@ -167,7 +167,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			 }else if (acc.is(accOld)){
 				 if (acc.getBudget() == accOld.getBudget()){
 					 accOld.setBudget(accOld.getBudget() + remmitance);
-					 if(db.updateFBHauptkonto(accOld)!=1){
+					 if(db.updateFBHauptkonto(accOld)==0){
 						 throw new ApplicationServerException(155);
 					 }
 					 bucheMittelverteilung(b, accOld, remmitance);
@@ -2715,14 +2715,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getReport(int, dbObjects.Institut)
 	 */
-	public ArrayList getReport(int typ, Institut institut) throws ApplicationServerException {
+	public ArrayList getReport(int typ) throws ApplicationServerException {
 		
-		if(typ == 6){
-			return db.selectReport6(institut);
+		if(typ == 5){
+			return db.selectReport5();
+		}else if(typ == 6){
+			return db.selectReport6();
 		}else if(typ == 7){
-			return db.selectReport7(institut);
+			return db.selectReport7();
 		}else if(typ == 8){
-			return db.selectReport8(institut);
+			return db.selectReport8();
 		}
 		
 		return null;

@@ -2329,43 +2329,38 @@ public class PreparedSqlStatements {
 		/* Reports 								*/
 		/* Indizes: 335-349				*/
 		/**************************/
-		{//335 Report 7 für ein Institut: "ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", "Id"
+		{//335 Report 7 für alle Institute siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"i.bezeichnung AS instiut, " +																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
 																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE i.id = ? " +
-																	"AND i.id = fbk.institutsId  " +
+															  "WHERE i.id = fbk.institutsId  " +
 																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																	"AND be.phase != 0 " +
-																	"AND be.geloescht = '0'");
-			int[] param = {	Types.INTEGER };
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+																	"AND be.geloescht = '0'" +																"ORDER BY i.bezeichnung");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//336 Report 8 für ein Institut: FB-Konto, ZV-Konto, Einnahmen
+		{//336 Report 8 für alle Institute: FB-Konto, ZV-Konto, Einnahmen siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"fbk.bezeichnung AS fbKonto, SUM(b.betragFbKonto1) " +
+																		"i.bezeichnung AS institut, fbk.bezeichnung AS fbKonto, SUM(b.betragFbKonto1) " +
 																"FROM " +
 																	"Institute i, FBKonten fbk, Buchungen b, Haushaltsjahre h " +
-															  "WHERE i.id = ? " +
-																	"AND i.id = fbk.institutsId  " +
+															  "WHERE i.id = fbk.institutsId  " +
 																	"AND b.fbKonto1 = fbk.id " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND b.typ = '5' " +																"GROUP BY fbk.bezeichnung");
-			int[] param = {	Types.INTEGER };
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+																	"AND b.typ = '5' " +																"GROUP BY i.bezeichnung, fbk.bezeichnung");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//337 Report 6
+		{//337 Report 6 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"zvk.bezeichnung AS zvKonto, SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben " +
+																		"i.bezeichnung AS institut, zvk.bezeichnung AS zvKonto, SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben " +
 																"FROM " +
 																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE i.id = ? " +
-																	"AND i.id = fbk.institutsId  " +
+															  "WHERE i.id = fbk.institutsId  " +
 																	"AND be.fbKonto = fbk.id " +
 																	"AND be.zvTitel = zvt.id " +
 																	"AND zvt.zvKontoId = zvk.id " +
@@ -2373,29 +2368,50 @@ public class PreparedSqlStatements {
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND be.geloescht = '0' " +																"GROUP BY zvk.bezeichnung");
-			int[] param = {	Types.INTEGER };
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+																	"AND be.geloescht = '0' " +																"GROUP BY i.bezeichnung, zvk.bezeichnung");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//338 Report 5
-			ps = con.prepareStatement("SELECT " +
-																		"i.bezeichnung AS instiut, " +																		"SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
-																		"SUM(fbk.budget) AS kontostand " +																"FROM " +
-																	"ZVKontentitel zvt, ZVKonten zvk, " +
+		{//338 Report 5 siehe gui.Reports.java
+		ps = con.prepareStatement("SELECT " +
+																		"zvk.bezeichnung AS zvKonto, " +
+																		"i.bezeichnung AS institut, " +
+																		"SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"(fbk.budget) AS kontostand " +
+																"FROM " +
+																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE zvk.id = ? " +
-																	"AND i.id = fbk.institutsId  " +
+															  "WHERE i.id = fbk.institutsId  " +
+																	"AND zvt.zvKontoId = zvk.id " +
 																	"AND be.fbKonto = fbk.id " +
 																	"AND be.zvTitel = zvt.id " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND be.geloescht = '0' " +																"GROUP BY i.bezeichnung");
+																	"AND be.geloescht = '0' " +																"GROUP BY zvk.bezeichnung, i.bezeichnung");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps);
+		}
+		{//339 Report 4 siehe gui.Reports.java
+			/**
+			 * Ein Report, der die Ausgaben bei den institutsinternen Konten nach Verwaltungskonten sortiert
+			 */
+			ps = con.prepareStatement("SELECT " +
+																		"fbk.bezeichnung AS fbKonto, " +
+																		"zvk.bezeichnung AS zvKonto, " +
+																		"SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																"FROM " +
+																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
+																	"FBKonten fbk, Haushaltsjahre h " +
+															  "WHERE zvt.zvKontoId = zvk.id " +
+																	"AND be.fbKonto = fbk.id " +
+																	"AND be.zvTitel = zvt.id " +
+																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																	"AND be.geloescht = '0' " +
+																"GROUP BY i.bezeichnung");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
-		}
-		{//339
-			statements[i++] = null;
 		}
 		{//340 
 			statements[i++] = null;

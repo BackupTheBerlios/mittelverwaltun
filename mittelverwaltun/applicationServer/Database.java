@@ -3889,30 +3889,29 @@ public class Database implements Serializable{
 	
 	/**
 	 * gibt eine ArrayList von ArrayList für den Report7 zurück. Nähere Infos in gui.Reports Klasse
-	 * @param i - Institut für diesen Report
-	 * @return
+	 * @return Report 7 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport7(Institut i) throws ApplicationServerException {
+	public ArrayList selectReport7() throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			Object[] parameters = { new Integer(i.getId()) };
-			ResultSet rs = statements.get(335).executeQuery(parameters); 
+			ResultSet rs = statements.get(335).executeQuery(); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
 		
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					ArrayList row = new ArrayList();
-					row.add(rs.getString(1)); 						// ZV-Konto
-					row.add(new Float(rs.getFloat(2)));		// Ausgaben
-					row.add((rs.getString(3) == null ? "" : rs.getString(3)));							// FBI-Schlüsselnummer
-					row.add((rs.getString(4) == null ? "" : rs.getString(4)));							// Hül-Nr
-					row.add(rs.getString(5));							// Typ
-					row.add(rs.getDate(6));								// Datum
-					row.add(rs.getString(7));							// Status
-					row.add(new Integer(rs.getInt(8)));		// Id Bestellung
+					row.add(rs.getString(1)); 						// Institut
+					row.add(rs.getString(2)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(3)));		// Ausgaben
+					row.add((rs.getString(4) == null ? "" : rs.getString(3)));							// FBI-Schlüsselnummer
+					row.add((rs.getString(5) == null ? "" : rs.getString(4)));							// Hül-Nr
+					row.add(rs.getString(6));							// Typ
+					row.add(rs.getDate(7));								// Datum
+					row.add(rs.getString(8));							// Status
+					row.add(new Integer(rs.getInt(9)));		// Id Bestellung
 					
 					report.add( row );
 				}
@@ -3927,24 +3926,23 @@ public class Database implements Serializable{
 	
 	/**
 	 * gibt eine ArrayList von ArrayList für den Report8 zurück. Nähere Infos in gui.Reports Klasse
-	 * @param i - Institut für diesen Report
-	 * @return
+	 * @return Report 8 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport8(Institut i) throws ApplicationServerException {
+	public ArrayList selectReport8() throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			Object[] parameters = { new Integer(i.getId()) };
-			ResultSet rs = statements.get(336).executeQuery(parameters); 
+			ResultSet rs = statements.get(336).executeQuery(); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
 	
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					ArrayList row = new ArrayList();
-					row.add(rs.getString(1)); 						// FB-Konto
-					row.add(new Float(rs.getFloat(2)));		// Einnahmen
+					row.add(rs.getString(1)); 						// Institut
+					row.add(rs.getString(2)); 						// FB-Konto
+					row.add(new Float(rs.getFloat(3)));		// Einnahmen
 					
 					report.add( row );
 				}
@@ -3959,24 +3957,23 @@ public class Database implements Serializable{
 	
 	/**
 	 * gibt eine ArrayList von ArrayList für den Report6 zurück. Nähere Infos in gui.Reports Klasse
-	 * @param i - Institut für diesen Report
-	 * @return
+	 * @return Report 6 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport6(Institut i) throws ApplicationServerException {
+	public ArrayList selectReport6() throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			Object[] parameters = { new Integer(i.getId()) };
-			ResultSet rs = statements.get(337).executeQuery(parameters); 
+			ResultSet rs = statements.get(337).executeQuery(); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
 
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					ArrayList row = new ArrayList();
-					row.add(rs.getString(1)); 						// ZV-Konto
-					row.add(new Float(rs.getFloat(2)));		// Ausgaben
+					row.add(rs.getString(1)); 						// Institut
+					row.add(rs.getString(2)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(3)));		// Ausgaben
 				
 					report.add( row );
 				}
@@ -3991,24 +3988,24 @@ public class Database implements Serializable{
 	
 	/**
 	 * gibt eine ArrayList von ArrayList für den Report5 zurück. Nähere Infos in gui.Reports Klasse
-	 * @param zvk - ZVKonto für den Report
-	 * @return
+	 * @return Report 5 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport5(ZVKonto zvk) throws ApplicationServerException {
+	public ArrayList selectReport5() throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			Object[] parameters = { new Integer(zvk.getId()) };
-			ResultSet rs = statements.get(338).executeQuery(parameters); 
+			ResultSet rs = statements.get(338).executeQuery(); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
 
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					ArrayList row = new ArrayList();
-					row.add(rs.getString(1)); 						// ZV-Konto
-					row.add(new Float(rs.getFloat(2)));		// Ausgaben
+					row.add(rs.getString(1)); 						// zvKonto
+					row.add(rs.getString(2)); 						// institut
+					row.add(new Float(rs.getFloat(3)));		// ausgaben
+					row.add(new Float(rs.getFloat(4)));		// kontostand
 			
 					report.add( row );
 				}

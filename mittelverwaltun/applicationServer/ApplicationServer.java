@@ -529,11 +529,10 @@ public interface ApplicationServer extends Remote {
 	 * Gibt eine ArrayList mit Inhalten für den entsprechenden Report zurück, siehe Reports Klasse für
 	 * den Aufbau der ArrayListe
 	 * @param typ	- Typen der Reports z.B. Reports.REPORT_1
-	 * @param institut - wird nur für manche Reports benutzt, sonst kann einfach null übergeben werden
 	 * @return ArrayListe mit den Angaben für den Report siehe nähe Infos zu den Objekten in Reports
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public ArrayList getReport(int typ, Institut institut) throws ApplicationServerException;
+	public ArrayList getReport(int typ) throws ApplicationServerException;
 
 }
