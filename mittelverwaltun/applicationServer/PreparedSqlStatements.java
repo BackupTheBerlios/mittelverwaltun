@@ -121,10 +121,11 @@ public class PreparedSqlStatements {
 												"name = ?, " +
 												"vorname = ?, " +
 												"email = ?, " +
-												"privatKontoId = ? " +
+												"privatKontoId = ?, telefon = ?, fax = ?, bau = ?, raum = ?, softwarebeauftragter = ?" +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
+										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//22			(2)
@@ -137,10 +138,11 @@ public class PreparedSqlStatements {
 												"name = ?, " +
 												"vorname = ?, " +
 												"email = ?, " +
-												"privatKontoId = NULL " +
+												"privatKontoId = NULL, telefon = ?, fax = ?, bau = ?, raum = ?, softwarebeauftragter = ?" +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//23			(3)
@@ -154,8 +156,8 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email, privatKontoId)" +
-										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+												"name, vorname, email, privatKontoId, telefon, fax, bau, raum, softwarebeauftragter)" +
+										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
 							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
@@ -165,11 +167,12 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email) " +
-										"VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+												"name, vorname, email, telefon, fax, bau, raum, softwarebeauftragter) " +
+										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+										 Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 
@@ -1067,8 +1070,8 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, " +
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
-											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId " +
-											  "b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
+											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
 										"FROM Benutzer b, Institute i, Rollen r " +
 									   "WHERE b.institutsId = i.id " +
 									     "AND b.rollenId = r.id " +
@@ -1080,28 +1083,28 @@ public class PreparedSqlStatements {
 		}
 		{//171		(25)
 			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, b.rollenId, " +
-									   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
-									   		  "i.id, i.bezeichnung, i.kostenstelle, " +
-									   		  "r.id, r.bezeichnung " +
-													"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
-										"FROM Benutzer b, Institute i, Rollen r " +
-									   "WHERE b.institutsId = i.id " +
-										 "AND b.geloescht = 0 " +
-										 "AND b.rollenId = r.id" );
+															   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
+															   		  "i.id, i.bezeichnung, i.kostenstelle, " +
+															   		  "r.id, r.bezeichnung, " +
+																			"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
+																"FROM Benutzer b, Institute i, Rollen r " +
+															   "WHERE b.institutsId = i.id " +
+																 "AND b.geloescht = 0 " +
+																 "AND b.rollenId = r.id" );
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//172
 			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, " +
-										  "r.id, r.bezeichnung, " +
-										  "i.id, i.bezeichnung, i.kostenstelle, " +
-										  "b.titel, b.name, b.vorname, b.email, b.privatKontoId " +
-											"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter" +
-									"FROM Benutzer b, Institute i, Rollen r " +
-								   "WHERE b.institutsId = i.id " +
-									 "AND b.rollenId = r.id " +
-									 "AND b.benutzername = ? " +
-									 "AND b.passwort = ? " +
-									 "AND b.geloescht = 0 FOR UPDATE");
+																	  "r.id, r.bezeichnung, " +
+																	  "i.id, i.bezeichnung, i.kostenstelle, " +
+																	  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
+																		"b.telefon, b.fax, b.bau, b.raum, b.softwarebeauftragter " +
+																"FROM Benutzer b, Institute i, Rollen r " +
+															   "WHERE b.institutsId = i.id " +
+																 "AND b.rollenId = r.id " +
+																 "AND b.benutzername = ? " +
+																 "AND b.passwort = ? " +
+																 "AND b.geloescht = 0 FOR UPDATE");
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
