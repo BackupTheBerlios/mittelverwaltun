@@ -3906,8 +3906,8 @@ public class Database implements Serializable{
 					row.add(rs.getString(1)); 						// Institut
 					row.add(rs.getString(2)); 						// ZV-Konto
 					row.add(new Float(rs.getFloat(3)));		// Ausgaben
-					row.add((rs.getString(4) == null ? "" : rs.getString(3)));							// FBI-Schlüsselnummer
-					row.add((rs.getString(5) == null ? "" : rs.getString(4)));							// Hül-Nr
+					row.add((rs.getString(4) == null ? "" : rs.getString(4)));							// FBI-Schlüsselnummer
+					row.add((rs.getString(5) == null ? "" : rs.getString(5)));							// Hül-Nr
 					row.add(rs.getString(6));							// Typ
 					row.add(rs.getDate(7));								// Datum
 					row.add(rs.getString(8));							// Status
@@ -4090,27 +4090,27 @@ public class Database implements Serializable{
 	public ArrayList selectReport2() throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
-		try{
-			ResultSet rs = statements.get(341).executeQuery(); 
-			rs.last();	
-			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
-				rs.beforeFirst();		// Vor die erste Zeile springen
-
-				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
-					ArrayList row = new ArrayList();
-					row.add(rs.getString(1)); 						// Institut
-					row.add(rs.getString(2)); 						// FB-Konto
-					row.add(new Float(rs.getFloat(3))); 	// verteilte Mittel
-					row.add(new Float(rs.getFloat(4)));		// Ausgaben 
-					row.add(new Float(rs.getFloat(5)));		// Kontostand
-
-					report.add( row );
-				}
-			}
-			rs.close();		// Abfrage schließen
-		} catch (SQLException e){
-			throw new ApplicationServerException( 108, e.getMessage() );
-		}
+//		try{
+//			ResultSet rs = statements.get(342).executeQuery(); 
+//			rs.last();	
+//			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+//				rs.beforeFirst();		// Vor die erste Zeile springen
+//
+//				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+//					ArrayList row = new ArrayList();
+////					row.add(rs.getString(1)); 						// Institut
+////					row.add(rs.getString(2)); 						// FB-Konto
+////					row.add(new Float(rs.getFloat(3))); 	// verteilte Mittel
+////					row.add(new Float(rs.getFloat(4)));		// Ausgaben 
+////					row.add(new Float(rs.getFloat(5)));		// Kontostand
+//
+//					report.add( row );
+//				}
+//			}
+//			rs.close();		// Abfrage schließen
+//		} catch (SQLException e){
+//			throw new ApplicationServerException( 108, e.getMessage() );
+//		}
 
 		return report;
 	}
