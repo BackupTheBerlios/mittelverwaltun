@@ -1509,9 +1509,29 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
 		
-		int newId = db.insertBestellung(bestellung, 0);
+		int newBestellungId = db.insertBestellung(bestellung, 0);
+		int newAngebotId = 0;
 		
 		
+		// Fügt alle Angebote ein
+		for(int i = 0; i < bestellung.getAngebote().size(); i++){
+			Angebot angebot = (Angebot)bestellung.getAngebote().get(i);
+			ArrayList positionen = angebot.getPositionen();
+			
+			newAngebotId = db.insertAngebot(angebot, newBestellungId, (bestellung.getAuswahl() == (i + 1)) ? true : false);
+			
+			// fügt alle Positionen ein
+			for(int j = 0; j < positionen.size(); j++){
+				Position position = (Position)positionen.get(j);
+				
+				db.insertPosition(position, newAngebotId);
+			}
+		}
+		
+		// fügt die Standardbestellung ein
+		bestellung.setId(newBestellungId);
+		bestellung.setAuswahl(newAngebotId);	// setzt die Id auf ein Angebot
+		db.insertStandardBestellung(bestellung);
 	}
 
 }

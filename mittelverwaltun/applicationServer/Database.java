@@ -2496,11 +2496,19 @@ public class Database implements Serializable{
 		return 0;
 	}
 
-	public void insertPosition(Position position) throws ApplicationServerException{
+	/**
+	 * fügt eine Position in die Tabelle Positionen ein
+	 * @param position 
+	 * @param angebotId - Id des zugehörigen Angbots
+	 * @throws ApplicationServerException
+	 */
+	public void insertPosition(Position position, int angebotId) throws ApplicationServerException{
 		if(position != null){
 			try{
-				Object[] parameters = { };
-				statements.get(250).executeUpdate(parameters);
+				Object[] parameters = { new Integer(angebotId), new Integer(position.getInstitut().getId()), new Integer(position.getMenge()),
+																position.getArtikel(), new Float(position.getEinzelPreis()), new Float(position.getMwst()),
+																new Float(position.getRabatt()) };
+				statements.get(265).executeUpdate(parameters);
 		
 			} catch (SQLException e){
 				throw new ApplicationServerException(68, e.getMessage());
