@@ -133,7 +133,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		
 		cbInstitut.addItemListener(this);
 		buDrucken.addActionListener(this);
-		buDrucken.setEnabled(false);
 		buTitel.addActionListener(this);
 		buAddPosition.addActionListener(tableBestellung);
 		buAddPosition.setActionCommand("addPosition");
@@ -164,6 +163,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		setFBKonto(bestellung.getFbkonto());
 		setZVKonto(bestellung.getZvtitel());
 		tpBemerkungen.setText(bestellung.getBemerkung());
+		tfAuftragsnummer.setText(bestellung.getReferenznr());
 
 		PositionsTableModel ptm = (PositionsTableModel)tableBestellung.getModel();
 
@@ -284,7 +284,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			
 			buDelete.setEnabled(true);
 			if(phase == 1){
-				buDrucken.setEnabled(true);
 				buBestellen.setEnabled(false);
 			}
 				
@@ -371,7 +370,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 			test.setJMenuBar( new MainMenu( test ) );
 
-			ASKBestellung best = applicationServer.getASKBestellung(16);
+			ASKBestellung best = applicationServer.getASKBestellung(8);
 			bestellung = new BestellungASK(test, best);
 			test.addChild(bestellung);
 
@@ -575,19 +574,17 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 
 	  PageFormat pf = new PageFormat();
 	  Paper paper = pf.getPaper() ;
-	  paper.setImageableArea(35,90,560,712) ;
+	  paper.setImageableArea(25,30,560,712) ;
 	  paper.setSize(595,842);
 	  pf.setPaper(paper);
-	  PrintSTDVordruck bestellung = new PrintSTDVordruck();
-	  bestellung.show();
-	  bestellung.setVisible(false);
-		PrintASKBestellung beilage = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
-	  beilage.show();
-	  beilage.setVisible(false);
+	  PrintASKBestellung print = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
+		print.show();
+		print.setVisible(false);
+	  
 
-	  pJob.setJobName("Bestellung");
+	  pJob.setJobName("ASK Bestellung");
 	  Book book = new Book();
-	  book.append(bestellung, pf);
+	  book.append(print, pf);
 	  if(pJob.printDialog()){
 		  try{
 			  pJob.setPageable(book);
@@ -598,23 +595,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  }
 	  pJob.cancel();
 	  if(pJob.isCancelled()){
-		  bestellung.dispose();
-	  }
-
-	  pJob.setJobName("Beilage ASK zur Bestellung");
-	  book = new Book();
-	  book.append(beilage, pf);
-	  if(pJob.printDialog()){
-		  try{
-			  pJob.setPageable(book);
-			  pJob.print();
-		  }catch(PrinterException pexc){
-			  System.out.println("Fehler beim Drucken");
-		  }
-	  }
-	  pJob.cancel();
-	  if(pJob.isCancelled()){
-		  beilage.dispose();
+			print.dispose();
 	  }
   }
 

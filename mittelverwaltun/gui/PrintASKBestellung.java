@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.Document;
 
 import applicationServer.ApplicationServer;
 
@@ -110,14 +109,13 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel7.setText("des Fachbereichs Informatik");
     jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
     labKapitel.setBounds(new Rectangle(224, 240, 49, 15));
-    labKapitel.setText(order.getZvtitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
+    labKapitel.setText(order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
     labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
 		tpAnschrift.setBounds(new Rectangle(14, 35, 304, 66));
 		tpAnschrift.setFont(new java.awt.Font("Dialog", 1, 12));
 		Fachbereich[] fbs = as.getFachbereiche();
 		if ((fbs != null) && (fbs.length > 0))
-			tpAnschrift.setText(fbs[0].getFhBezeichnung() + "\n" +
-													fbs[0].getFbBezeichnung() + "\n" +
+			tpAnschrift.setText(fbs[0].getFbBezeichnung() + "\n" +
 													fbs[0].getStrasseHausNr() + "\n" +
 													fbs[0].getPlzOrt());
 		else
@@ -157,7 +155,7 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel6.setText("Software-beauftragte/r:");
     jLabel6.setBounds(new Rectangle(14, 214, 135, 15));
     labSoftwarebeauftragter.setFont(new java.awt.Font("Dialog", 0, 12));
-    labSoftwarebeauftragter.setText("");
+    labSoftwarebeauftragter.setText(order.getSwbeauftragter().getName() + ", " + order.getSwbeauftragter().getVorname());
     labSoftwarebeauftragter.setBounds(new Rectangle(146, 214, 161, 15));
     jLabel9.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel9.setText("Titel:");
@@ -184,16 +182,17 @@ public class PrintASKBestellung extends JFrame implements Printable {
     labUnterschrift1.setText("");
     labUnterschrift1.setFont(new java.awt.Font("Dialog", 0, 12));
     labDatum1.setBounds(new Rectangle(56, 155, 131, 15));
-    labDatum1.setText("01.01.2004");
     labDatum1.setFont(new java.awt.Font("Dialog", 0, 12));
+    labDatum1.setText("");
     jLabel16.setBorder(BorderFactory.createLineBorder(Color.black));
     jLabel16.setText("");
     jLabel16.setBounds(new Rectangle(355, 18, 182, 41));
     jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel11.setText("Datum:");
     jLabel11.setBounds(new Rectangle(12, 12, 40, 15));
+    jLabel13.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel13.setText("Ist von der Technischen Betriebsleitung auszufüllen!");
-    jLabel13.setBounds(new Rectangle(5, 0, 268, 15));
+    jLabel13.setBounds(new Rectangle(5, 0, 328, 15));
     jLabel18.setFont(new java.awt.Font("Dialog", 0, 10));
     jLabel18.setText("Unterschrift");
     jLabel18.setBounds(new Rectangle(362, 39, 68, 15));
@@ -201,7 +200,6 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel17.setText("Datum");
     jLabel17.setBounds(new Rectangle(189, 40, 40, 15));
     labDatum.setFont(new java.awt.Font("Dialog", 0, 12));
-    labDatum.setText("01.01.2004");
     labDatum.setBounds(new Rectangle(59, 12, 131, 15));
     jLabel14.setBorder(BorderFactory.createLineBorder(Color.black));
     jLabel14.setText("");
@@ -209,11 +207,11 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel110.setBounds(new Rectangle(206, 155, 77, 15));
     jLabel110.setText("Unterschrift:");
     jLabel110.setFont(new java.awt.Font("Dialog", 0, 12));
-    jTextPane3.setBackground(Color.lightGray);
+    jTextPane3.setBackground(new Color(225, 225, 225));
     jTextPane3.setFont(new java.awt.Font("Dialog", 0, 10));
     jTextPane3.setText("Auftrags- nummer");
-    jTextPane3.setBounds(new Rectangle(7, 22, 59, 34));
-    jPanel2.setBackground(Color.lightGray);
+    jTextPane3.setBounds(new Rectangle(7, 22, 52, 34));
+    jPanel2.setBackground(new Color(225, 225, 225));
     jPanel2.setBounds(new Rectangle(7, 38, 539, 64));
     jPanel2.setLayout(null);
     jLabel15.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -223,12 +221,12 @@ public class PrintASKBestellung extends JFrame implements Printable {
     labUnterschrift.setText("");
     labUnterschrift.setBounds(new Rectangle(290, 12, 177, 15));
 		printPanel.setBackground(Color.white);
-		labFirma.setBounds(new Rectangle(214, 111, 329, 23));
+		labFirma.setBounds(new Rectangle(222, 111, 321, 23));
 		labFirma.setFont(new java.awt.Font("Dialog", 3, 16));
 		labFirma.setText(order.getAngebot().getAnbieter().getName());
 		labAuftragsNr.setFont(new java.awt.Font("Dialog", 0, 12));
     labAuftragsNr.setText(order.getReferenznr());
-		labAuftragsNr.setBounds(new Rectangle(57, 26, 115, 27));
+		labAuftragsNr.setBounds(new Rectangle(60, 26, 112, 27));
     jScrollPane1.getViewport().add(tableBestellung);
     jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -280,18 +278,18 @@ public class PrintASKBestellung extends JFrame implements Printable {
     oben.add(labFirma, null);
 
   }
-  
+
   private void createTable(ArrayList positions){
 		String[] cols = {"Menge", "Produkt", "Einzelpreis", "Gesamtpreis", "für Institut"};
-		String[][] data = new String[positions.size()][cols.length];
+		Object[][] data = new Object[positions.size()][cols.length];
 
 		for(int i = 0; i < positions.size(); i++){
 			Position p = (Position)positions.get(i);
-			
-			data[i][0] = "" + p.getMenge();
+
+			data[i][0] = new Integer(p.getMenge());
 			data[i][1] = p.getArtikel();
-			data[i][2] = "" + p.getEinzelPreis() + (p.getEinzelPreis() * p.getMwst());
-			data[i][3] = "" + p.getGesamtpreis();
+			data[i][2] = new Float(p.getEinzelPreis() + (p.getEinzelPreis() * p.getMwst()));
+			data[i][3] = new Float(p.getGesamtpreis());
 			data[i][4] = p.getInstitut().getBezeichnung();
 		}
 	  DefaultTableModel tableModel = new DefaultTableModel(data, cols){
@@ -300,22 +298,28 @@ public class PrintASKBestellung extends JFrame implements Printable {
 				}
 
 				public Class getColumnClass(int col)  {
-					return String.class;
+					return getValueAt(0, col).getClass();
 				}
 			};
 
 		tableBestellung = new JTable(tableModel);
 		tableBestellung.getTableHeader().setFont(new Font("Arial", Font.BOLD, 11));
 		tableBestellung.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
-		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
-		render.setVerticalAlignment(DefaultTableCellRenderer.TOP);
-		render.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-		tableBestellung.getColumnModel().getColumn(0).setCellRenderer(new MultiLineRenderer()); tableBestellung.getColumnModel().getColumn(0).setMaxWidth(50);
-		tableBestellung.getColumnModel().getColumn(1).setCellRenderer(new MultiLineRenderer());
+		tableBestellung.getTableHeader().setBackground(new Color(225,225,225));
+		tableBestellung.getTableHeader().setPreferredSize(new Dimension(640, 30));
+
+		tableBestellung.setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
+		tableBestellung.setDefaultRenderer(String.class, new MultiLineRenderer());
+
+	  DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		tableBestellung.setDefaultRenderer(Integer.class, dtcr);
+
+		tableBestellung.getColumnModel().getColumn(0).setMaxWidth(50);
 		tableBestellung.getColumnModel().getColumn(1).setMaxWidth(300);
-		tableBestellung.getColumnModel().getColumn(2).setCellRenderer(render); tableBestellung.getColumnModel().getColumn(2).setMaxWidth(80);
-		tableBestellung.getColumnModel().getColumn(3).setCellRenderer(render); tableBestellung.getColumnModel().getColumn(3).setMaxWidth(100);
-		tableBestellung.getColumnModel().getColumn(4).setCellRenderer(new MultiLineRenderer()); tableBestellung.getColumnModel().getColumn(4).setMaxWidth(120);
+		tableBestellung.getColumnModel().getColumn(2).setMaxWidth(80);
+		tableBestellung.getColumnModel().getColumn(3).setMaxWidth(100);
+		tableBestellung.getColumnModel().getColumn(4).setMaxWidth(120);
 
 		tableBestellung.setGridColor(Color.white);
 		tableBestellung.setRowHeight(30);
@@ -356,12 +360,4 @@ public class PrintASKBestellung extends JFrame implements Printable {
 			return Printable.PAGE_EXISTS;
 		}
 	}
-
-	private void insertText(Document doc, String string) {
-		try {
-			doc.insertString(doc.getLength(), string, null);
-		}catch(Throwable t) {
-			t.printStackTrace();
-		}
-  }
 }
