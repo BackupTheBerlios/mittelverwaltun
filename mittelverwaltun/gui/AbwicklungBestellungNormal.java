@@ -3,18 +3,19 @@ package gui;
 import javax.swing.*;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.Naming;
+
 
 import javax.swing.border.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
-
-import dbObjects.Position;
+import applicationServer.ApplicationServer;
+import applicationServer.CentralServer;
+import dbObjects.Angebot;
+import dbObjects.Fachbereich;
+import dbObjects.StandardBestellung;
 
 /**
  * <p>Title: Mittelverwaltung - GUI</p>
@@ -25,8 +26,13 @@ import dbObjects.Position;
  * @version 1.0
  */
 
-public class AbwicklungBestellungNormal extends JInternalFrame implements TableModelListener{
+public class AbwicklungBestellungNormal extends JInternalFrame implements TableModelListener, ActionListener{
   
+  MainFrame frame;
+  ApplicationServer as;
+  StandardBestellung origin;
+  
+  // Dialogelemente	
   JTextField tfReferenzNr = new JTextField();
   JTextFieldExt tfHuelNr = new JTextFieldExt(6);
   JLabel lbHuelNr = new JLabel();
@@ -50,7 +56,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   JButton btDrucken = new JButton();
   JButton btBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
   JLabel lbDatum = new JLabel();
-  JTextField tfDatum = new JTextField();
+  JFormattedTextField tfDatum = new JFormattedTextField();
   JTabbedPane tabbedZusatzinfos = new JTabbedPane();
   JTextPane tpVerwendungszweck = new JTextPane();
   JTextPane tpBegruendung = new JTextPane();
@@ -66,18 +72,18 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   JTextField tfFirma = new JTextField();
   JButton btFirma = new JButton();
   JScrollPane spPositionen = new JScrollPane();
-  //String[] colheads = {"Menge", "Artikel", "Einzelpreis", "Mwst", "Rabatt", "Gesamt", "Beglichen", "Löschen" };
-  //String[][] data = {{"", "", "", "", "", "", "", "" }};
-  
-  
-  StandardPositionsTable tabPositionen;
+  PositionsTable tabPositionen;
   JButton btNeuePosition = new JButton(Functions.getAddIcon(this.getClass()));
   JLabel lbSumme = new JLabel();
   CurrencyTextField tfSumme = new CurrencyTextField();
   JLabel lbVerbindlichkeiten = new JLabel();
   CurrencyTextField tfVerbindlichkeiten = new CurrencyTextField();
 
-  public AbwicklungBestellungNormal() {
+  public AbwicklungBestellungNormal(/*MainFrame frame*/ ApplicationServer as, StandardBestellung b) {
+  	//  this.frame = frame;
+    this.as = as;
+    this.origin = b;
+  	
     try {
       jbInit();
     }
@@ -104,7 +110,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfDatum.setBounds(new Rectangle(101, 146, 81, 21));
 	    tfDatum.setDisabledTextColor(Color.black);
-	    tfDatum.setText("");
+	    tfDatum.setValue(origin.getDatum());
 	    tfDatum.setColumns(10);
 	    tfDatum.setEnabled(false);
 	    tfDatum.setBackground(UIManager.getColor("Viewport.background"));
@@ -117,7 +123,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfHuelNr.setEnabled(true);
 	    tfHuelNr.setDisabledTextColor(Color.black);
-	    tfHuelNr.setText("");
+	    tfHuelNr.setText(origin.getHuel());
 	    tfHuelNr.setBounds(new Rectangle(101, 22, 120, 21));
 	
 	    lbReferenzNr.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -129,7 +135,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tfReferenzNr.setBackground(UIManager.getColor("Viewport.background"));
 	    tfReferenzNr.setEnabled(false);
 	    tfReferenzNr.setDisabledTextColor(Color.black);
-	    tfReferenzNr.setText("");
+	    tfReferenzNr.setText(origin.getReferenznr());
 	    tfReferenzNr.setColumns(6);
 	    tfReferenzNr.setBounds(new Rectangle(338, 22, 120, 21));
 	
@@ -141,7 +147,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfBesteller.setBackground(UIManager.getColor("Viewport.background"));
 	    tfBesteller.setEnabled(false);
-	    tfBesteller.setText("");
+	    tfBesteller.setText(origin.getBesteller().getName() + ", " + origin.getBesteller().getVorname());
 	    tfBesteller.setDisabledTextColor(Color.black);
 	    tfBesteller.setBounds(new Rectangle(101, 53, 120, 21));
 	
@@ -153,7 +159,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfAuftraggeber.setBackground(UIManager.getColor("Viewport.background"));
 	    tfAuftraggeber.setEnabled(false);
-	    tfAuftraggeber.setText("");
+	    tfAuftraggeber.setText(origin.getAuftraggeber().getName() + ", " + origin.getAuftraggeber().getVorname());
 	    tfAuftraggeber.setDisabledTextColor(Color.black);
 	    tfAuftraggeber.setBounds(new Rectangle(338, 53, 120, 21));
 	
@@ -166,7 +172,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tfKonto.setBackground(UIManager.getColor("Viewport.background"));
 	    tfKonto.setEnabled(false);
 	    tfKonto.setDisabledTextColor(Color.black);
-	    tfKonto.setText("");
+	    tfKonto.setText(origin.getFbkonto().toString());
 	    tfKonto.setBounds(new Rectangle(101, 84, 200, 21));
 	
 	    lbZvTitel.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -183,7 +189,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfKapitel.setBounds(new Rectangle(141, 115, 70, 21));
 	    tfKapitel.setDisabledTextColor(Color.black);
-	    tfKapitel.setText("");
+	    tfKapitel.setText(origin.getZvtitel().getZVKonto().getKapitel());
 	    tfKapitel.setEnabled(false);
 	    tfKapitel.setBackground(UIManager.getColor("Viewport.background"));
 	
@@ -195,7 +201,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfTitel.setBounds(new Rectangle(241, 115, 70, 21));
 	    tfTitel.setDisabledTextColor(Color.black);
-	    tfTitel.setText("");
+	    tfTitel.setText(origin.getZvtitel().getTitel());
 	    tfTitel.setEnabled(false);
 	    tfTitel.setBackground(UIManager.getColor("Viewport.background"));
 	
@@ -207,7 +213,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	    tfUntertitel.setBounds(new Rectangle(371, 115, 70, 21));
 	    tfUntertitel.setDisabledTextColor(Color.black);
-	    tfUntertitel.setText("");
+	    tfUntertitel.setText(origin.getZvtitel().getUntertitel().equals("")?"00":origin.getZvtitel().getUntertitel());
 	    tfUntertitel.setEnabled(false);
 	    tfUntertitel.setBackground(UIManager.getColor("Viewport.background"));
 
@@ -238,31 +244,50 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     tabbedZusatzinfos.setBounds(new Rectangle(15, 187, 640, 100));
     tabbedZusatzinfos.setFont(new java.awt.Font("Dialog", 0, 11));
     
-	    tpVerwendungszweck.setEnabled(false);
+    	tpVerwendungszweck.setFont(new java.awt.Font("Dialog", 0, 11));
+    	tpVerwendungszweck.setEnabled(false);
 	    tpVerwendungszweck.setEditable(false);
-	    tpVerwendungszweck.setText("Verwendungszweck");
+	    tpVerwendungszweck.setText(origin.getVerwendungszweck());
 	
-	    tpBegruendung.setText("Entscheidungsbegründung");
+	    tpBegruendung.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpBegruendung.setText(origin.getBegruendung());
 	    tpBegruendung.setEditable(false);
 	    tpBegruendung.setEnabled(false);
 	
-	    tpBemerkungen.setText("Bemerkungen");
+	    tpBemerkungen.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpBemerkungen.setText(origin.getBemerkung());
 	    tpBemerkungen.setEditable(false);
 	    tpBemerkungen.setEnabled(false);
-	
-	    tpAnschrift.setText("Lieferanschrift");
+		
+	    tpAnschrift.setFont(new java.awt.Font("Dialog", 0, 11));
+	    Fachbereich[] fbs = as.getFachbereiche();
+	    if ((fbs != null) && (fbs.length > 0))
+	       	tpAnschrift.setText(fbs[0].getFhBezeichnung() + "\n" +
+	    						fbs[0].getFbBezeichnung() + "\n" +
+								"   z.Hd. " + origin.getEmpfaenger().getVorname() + " " + origin.getEmpfaenger().getName() + "\n" +
+								"   Bau " + origin.getEmpfaenger().getBau() + ", " + "Raum " + origin.getEmpfaenger().getRaum() + "\n" +
+								fbs[0].getStrasseHausNr() + "\n" +
+								fbs[0].getPlzOrt());
+	    else tpAnschrift.setText("");
+	    
 	    tpAnschrift.setEditable(false);
 	    tpAnschrift.setEnabled(false);
 	
-	    tpErsatz.setText("Details Ersatzbeschaffung");
+	    tpErsatz.setFont(new java.awt.Font("Dialog", 0, 11));
+	    if (origin.getErsatzbeschaffung())
+	    	tpErsatz.setText("Ersatzbeschreibung: " + origin.getErsatzbeschreibung() + "\n" +
+	    					 "Inventarnummer: " + origin.getInventarNr());
+	    else
+	    	tpErsatz.setText("");
 	    tpErsatz.setEditable(false);
 	    tpErsatz.setEnabled(false);
 
-    tabbedZusatzinfos.add(tpAnschrift, "Lieferanschrift");
-    tabbedZusatzinfos.add(tpVerwendungszweck, "Verwendungszweck");
-    tabbedZusatzinfos.add(tpBegruendung, "Angebotswahl");
-    tabbedZusatzinfos.add(tpBemerkungen, "Bemerkungen");
-    tabbedZusatzinfos.add(tpErsatz, "Ersatzbeschaffung");
+    tabbedZusatzinfos.add(new JScrollPane(tpAnschrift), "Lieferanschrift");
+    tabbedZusatzinfos.add(new JScrollPane(tpVerwendungszweck), "Verwendungszweck");
+    tabbedZusatzinfos.add(new JScrollPane(tpBegruendung), "Angebotswahl");
+    tabbedZusatzinfos.add(new JScrollPane(tpBemerkungen), "Bemerkungen");
+    if (origin.getErsatzbeschaffung()) 
+    	tabbedZusatzinfos.add(tpErsatz, "Ersatzbeschaffung");
 
     titledBorderPanel2 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Angebotsdetails");
     titledBorderPanel2.setTitleFont(new java.awt.Font("Dialog", 1, 11));
@@ -270,7 +295,9 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     panelAngebot.setBorder(titledBorderPanel2);
     panelAngebot.setBounds(new Rectangle(15,292, 640, 309));
     panelAngebot.setLayout(null);
-
+    
+    Angebot angebot = (Angebot)origin.getAngebote().get(origin.getAuswahl()-1);
+    
 	    lbFirma.setBounds(new Rectangle(9, 25, 54, 21));
 	    lbFirma.setText("Anbieter");
 	    lbFirma.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -278,7 +305,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbFirma.setFont(new java.awt.Font("Dialog", 1, 11));
 	
 	    tfFirma.setBounds(new Rectangle(66, 25, 185, 21));
-	    tfFirma.setText("");
+	    tfFirma.setText(angebot.getAnbieter().getName());
 	    tfFirma.setColumns(0);
 	    tfFirma.setDisabledTextColor(Color.black);
 	    tfFirma.setEnabled(false);
@@ -287,14 +314,17 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    btFirma.setText("Details");
 	    btFirma.setFont(new java.awt.Font("Dialog", 1, 11));
 	    btFirma.setBounds(new Rectangle(255, 23, 83, 27));
-	
+	    btFirma.setActionCommand("details");
+	    btFirma.addActionListener(this);
+	    
 	    btAngebote.setBounds(new Rectangle(446, 23, 184, 27));
 	    btAngebote.setFont(new java.awt.Font("Dialog", 1, 11));
-	    btAngebote.setText("Alternative Angebote");
+	    btAngebote.setText("Angebotsvergleich");
+	    btAngebote.setActionCommand("showOffers");
+	    btAngebote.addActionListener(this);
 	
-	    ArrayList pos = new ArrayList();
-	    pos.add(new Position(1, "Testartikel", 100.00f, 10, 0.16f, 10.00f));
-	    StandardPositionsTable tabPositionen = new StandardPositionsTable(this, pos);
+	    tabPositionen = new PositionsTable(PositionsTable.STD_ABWICKLUNG, this, angebot.getPositionen());
+	       
 	    spPositionen.getViewport().add(tabPositionen, null);
 		spPositionen.setBounds(new Rectangle(10, 58, 620, 180));
 	   
@@ -310,6 +340,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbSumme.setText("Bestellsumme (Brutto)");
 	    lbSumme.setBounds(new Rectangle(334, 242, 138, 21));
 	
+	    tfSumme.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfSumme.setBackground(UIManager.getColor("Viewport.background"));
 	    tfSumme.setEnabled(false);
 	    tfSumme.setDisabledTextColor(Color.black);
@@ -323,10 +354,15 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    lbVerbindlichkeiten.setText("Verbindlichkeiten");
 	    lbVerbindlichkeiten.setBounds(new Rectangle(334, 271, 138, 21));
 	
+	    tfVerbindlichkeiten.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfVerbindlichkeiten.setBackground(UIManager.getColor("Viewport.background"));
 	    tfVerbindlichkeiten.setEnabled(false);
-	    tfVerbindlichkeiten.setDisabledTextColor(Color.black);
+	    //tfVerbindlichkeiten.setDisabledTextColor(Color.black);
 	    tfVerbindlichkeiten.setValue(new Float(tabPositionen.getOrderDebit()));
+	    if (((Float)tfVerbindlichkeiten.getValue()).floatValue() > 0)
+	    	tfVerbindlichkeiten.setDisabledTextColor(Color.RED);
+	    else
+	    	tfVerbindlichkeiten.setDisabledTextColor(Color.BLACK);
 	    tfVerbindlichkeiten.setHorizontalAlignment(SwingConstants.RIGHT);
 	    tfVerbindlichkeiten.setBounds(new Rectangle(483, 271, 147, 21));
 
@@ -356,6 +392,8 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     btBeenden.setBounds(new Rectangle(535, 143, 115, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
     btBeenden.setText("Beenden");
+    btBeenden.setActionCommand("dispose");
+    btBeenden.addActionListener(this);
 
     this.getContentPane().add(panelBasisinfos, null);
     this.getContentPane().add(tabbedZusatzinfos, null);
@@ -378,12 +416,13 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		test.setContentPane(desk);
 		test.setBounds(100,100,800,800);
 		try{
-//			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-//			ApplicationServer applicationServer = server.getMyApplicationServer();
-//			PasswordEncrypt pe = new PasswordEncrypt();
-//			String psw = pe.encrypt(new String("r.driesner").toString());
-//			applicationServer.login("r.driesner", psw);
-			AbwicklungBestellungNormal iFrame= new AbwicklungBestellungNormal();
+			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+			ApplicationServer applicationServer = server.getMyApplicationServer();
+			PasswordEncrypt pe = new PasswordEncrypt();
+			String psw = pe.encrypt(new String("m.schmitt").toString());
+			applicationServer.login("m.schmitt", psw);
+			StandardBestellung bestellung = applicationServer.getStandardBestellung(1);
+			AbwicklungBestellungNormal iFrame= new AbwicklungBestellungNormal(applicationServer, bestellung);
 			desk.add(iFrame);
 			test.show();
 			iFrame.show();
@@ -397,6 +436,27 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	public void tableChanged(TableModelEvent e) {
 		tfSumme.setValue(new Float(((PositionsTableModel)e.getSource()).getOrderSum()));
 		tfVerbindlichkeiten.setValue(new Float(((PositionsTableModel)e.getSource()).getOrderDebit()));
+		if (((Float)tfVerbindlichkeiten.getValue()).floatValue() > 0)
+	    	tfVerbindlichkeiten.setDisabledTextColor(Color.RED);
+	    else
+	    	tfVerbindlichkeiten.setDisabledTextColor(Color.BLACK);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand() == "details"){
+			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, ((Angebot)origin.getAngebote().get(origin.getAuswahl()-1)).getAnbieter());
+			dialog.show();
+		}else if (e.getActionCommand() == "dispose"){
+			this.dispose();
+		}else if (e.getActionCommand() == "showOffers"){
+			AngebotsUebersicht dialog = new AngebotsUebersicht(this, "Angebotsvergleich", true, origin.getAngebote());
+			dialog.show();
+		}
+			
+		
 	}
 
 }

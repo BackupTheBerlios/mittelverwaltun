@@ -239,7 +239,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miSBDurchführen ) {
 			frame.addChild( new BestellungNormal( frame ) );
 		} else if ( e.getSource() == miSBAnzeigen ) {
-			frame.addChild( new BestellungStorno( frame ) );
+			frame.addChild( new AuswahlBestellung( frame ) );
 		} else if ( e.getSource() == miASKDurchführen ) {
 			frame.addChild( new BestellungASK( frame ) );
 		} else if ( e.getSource() == miASKAnzeigen ) {
