@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class Aktivitaet implements Serializable {
-
+//hjsdfklhdl
 	private int id;
 
 	private String bezeichnung;
