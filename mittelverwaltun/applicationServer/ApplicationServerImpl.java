@@ -2059,13 +2059,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return null;
 	}
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
-//		return db.selectBestellungen(filter);
-		return null;
+		return db.selectBestellungen(filter);
 	}
 
 	public ArrayList getBestellungen() throws ApplicationServerException{
-//		return db.selectBestellungen(-1);
-		return null;
+		return db.selectBestellungen(-1);
 	}
 	
 	/* (Kein Javadoc)
@@ -2181,4 +2179,87 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	}
 
+	/**
+	 * Eine Kleinbestellung in die Datenbank einfügen.
+	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
+	 * @return Id der eingefügten Bestellung. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public int addKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
+		if(bestellung == null)		// keine Bestellung angegeben
+			return 0;
+		try {
+			db.setAutoCommit(false);
+			// Bestellung einfügen in der Bestellungs-Tabelle und Id speichern
+			bestellung.setId(db.insertBestellung(bestellung, 2));
+			// Bestellung in der Kleinbestellung-Tabelle speichern
+			db.insertKleinbestellung(bestellung);
+			// Belege speichern
+			for(int i = 0; i < bestellung.getBelege().size(); i++) {
+				db.insertBeleg(bestellung.getId(), (Beleg)bestellung.getBelege().get(i));
+			}
+			// TODO Buchung durchführen
+			return bestellung.getId();
+		} finally {
+			db.setAutoCommit(true);
+			db.commit();
+		}		
+	}
+
+	/**
+	 * Alle Kleinbestellung auswählen.
+	 * @return Liste mit Bestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public ArrayList getKleinbestellungen() throws ApplicationServerException {
+		ArrayList bestellungen = db.selectKleinbestellungen();	// Liste mit Bestellungen
+		KleinBestellung temp;		// temporäres Objekt zum Auswaählen der Belege
+		for(int i = 0; i < bestellungen.size(); i++) {
+			temp = (KleinBestellung)bestellungen.get(i);
+			temp.setBelege(db.selectBelege(temp.getId()));	// Belege der Bestelllung ermitteln
+		}
+		return bestellungen;
+	}
+
+	/**
+	 * Alle gelöschten Kleinbestellung auswählen.
+	 * @return Liste mit gelöschten Bestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public ArrayList getDelKleinbestellungen() throws ApplicationServerException {
+		ArrayList bestellungen = db.selectDelKleinbestellungen();	// Liste mit Bestellungen
+		KleinBestellung temp;		// temporäres Objekt zum Auswaählen der Belege
+		for(int i = 0; i < bestellungen.size(); i++) {
+			temp = (KleinBestellung)bestellungen.get(i);
+			temp.setBelege(db.selectBelege(temp.getId()));	// Belege der Bestelllung ermitteln
+		}
+		return bestellungen;
+	}
+	
+	/**
+	 * Eine Kleinbestellung löschen. 
+	 * @param Kleinbestellung, die gelöscht werden soll. 
+	 * @return Id der gelöschten Bestellung. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
+		if(bestellung == null)		// keine Bestellung angegeben
+			return 0;
+		try {
+			db.setAutoCommit(false);
+			bestellung.setGeloescht(true);				// Flag gelöscht setzen
+			db.selectForUpdateKleinbestellung(bestellung);	// Zum Aktualisieren auswählen
+			db.updateKleinbestellung(bestellung);		// Bestellung aktualisieren(löschen)
+			// TODO Buchung durchführen
+			return bestellung.getId();
+		} finally {
+			db.setAutoCommit(true);
+			db.commit();
+		}		
+	}
 }
+

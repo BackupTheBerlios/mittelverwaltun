@@ -183,4 +183,38 @@ public interface ApplicationServer extends Remote {
 	 * @author robert
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
+	
+	/**
+	 * Eine Kleinbestellung in die Datenbank einfügen.
+	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
+	 * @return Id der eingefügten Bestellung. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public int addKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
+	
+	/**
+	 * Alle Kleinbestellung auswählen.
+	 * @return Liste mit Bestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public ArrayList getKleinbestellungen() throws ApplicationServerException;
+
+	/**
+	 * Alle gelöschten Kleinbestellung auswählen.
+	 * @return Liste mit gelöschten Bestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public ArrayList getDelKleinbestellungen() throws ApplicationServerException;
+		
+	/**
+	 * Eine Kleinbestellung löschen. 
+	 * @param Kleinbestellung, die gelöscht werden soll. 
+	 * @return Id der gelöschten Bestellung. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
 }

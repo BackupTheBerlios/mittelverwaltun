@@ -2017,7 +2017,7 @@ public class Database implements Serializable{
 				// Neuen ZVTitel erstellen
 				ZVKonto zvKonto = selectZVKonto(rs.getInt(1));
 				result = new ZVTitel( id, zvKonto, rs.getString(2), rs.getString(3),rs.getString(4),
-									rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
+									rs.getFloat(5), rs.getString(6), rs.getString(7), rs.getString(8).equalsIgnoreCase( "1" ) );
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
@@ -2389,6 +2389,7 @@ public class Database implements Serializable{
 	 * @param id der Firma
 	 * @return Firma
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public Firma selectFirma(int id) throws ApplicationServerException {
 		Firma firma = null;		
@@ -2398,12 +2399,13 @@ public class Database implements Serializable{
 			rs.last();		
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();
 				firma = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
 											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
 											rs.getString(12).equalsIgnoreCase( "1" ) );
 			}
-			rs.close();		// Abfrage schließen
+			//rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 75, e.getMessage() );
 		}
@@ -3248,7 +3250,11 @@ public class Database implements Serializable{
 									beleg.getArtikel(), new Float(beleg.getSumme())};
 			// SQL-Statement mit der Nummer 276 ausführen
 			statements.get(276).executeUpdate(parameters);
-			return existsBeleg(bestellung, beleg);		// Id des eingefügten Belegs ermitteln
+			ResultSet rs = statements.get(276).getGeneratedKeys();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+			return 0;
 		} catch(SQLException e) {
 			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException(1, e.getMessage());
@@ -3319,7 +3325,6 @@ public class Database implements Serializable{
 			rs.last();	// Auf die letzte Zeile springen
 			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
 				rs.beforeFirst();	// Vor die erste Zeile springen
-				rs.next();			// Nächste Zeile
 				while( rs.next() ){		// Wenn es noch Zeilen gibt
 					// Neuen Beleg erzeugen und die Liste einfügen
 					belege.add( new Beleg( rs.getInt(1), (new Integer(rs.getString(3))).intValue(), 
@@ -3333,7 +3338,137 @@ public class Database implements Serializable{
 		
 		return belege;
 	} 
+	
+	/**
+	 * Abfrage von allen nicht gelöschten Kleinbestellungen. 
+	 * @return Liste mit Kleinbestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ArrayList selectKleinbestellungen() throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();		// Liste mit Bestellungen
+		KleinBestellung temp;
+		try {
+			// SQL-Statement mit der Nummer 292 ausführen
+			ResultSet rs = statements.get(292).executeQuery();
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				while( rs.next() ){		// Wenn es noch Zeilen gibt
+					// Neuen Beleg erzeugen und die Liste einfügen
+					bestellungen.add( temp = new KleinBestellung( rs.getInt(1), rs.getDate(4), selectUser(rs.getInt(2)), 
+												selectUser(rs.getInt(3)), selectZVTitel(rs.getInt(5)), 
+												selectFBKonto(rs.getInt(6)), rs.getFloat(7), rs.getString(8),
+												rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), null ) );
+				}
+			}
+			rs.close();					// Die Abfrage schließen
+		} catch(SQLException e) {
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+		
+		return bestellungen;
+	} 
 
+	/**
+	 * Abfrage von allen gelöschten Kleinbestellungen. 
+	 * @return Liste mit Kleinbestellungen. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ArrayList selectDelKleinbestellungen() throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();		// Liste mit Bestellungen
+		KleinBestellung temp;
+		
+		try {
+			// SQL-Statement mit der Nummer 293 ausführen
+			ResultSet rs = statements.get(293).executeQuery();
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				while( rs.next() ){		// Wenn es noch Zeilen gibt
+					// Neuen Beleg erzeugen und die Liste einfügen
+					bestellungen.add( temp = new KleinBestellung( rs.getInt(1), rs.getDate(4), selectUser(rs.getInt(2)), 
+												selectUser(rs.getInt(3)), selectZVTitel(rs.getInt(6)), 
+												selectFBKonto(rs.getInt(5)), rs.getFloat(7), rs.getString(8),
+												rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), null ) );
+					temp.setGeloescht(true);
+				}
+			}
+			rs.close();					// Die Abfrage schließen
+		} catch(SQLException e) {
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+		
+		return bestellungen;
+	} 
+	
+	/**
+	 * Eine Kleinbestellung in der Datenbank aktualisieren.
+	 * @param Kleinbestellung, die aktualisiert werden soll.
+	 * @return Id von der Kleinbestellung, die aktulisiert wurde.
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public int updateKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
+		try{
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(bestellung.getBesteller().getId()), 
+									new Integer(bestellung.getAuftraggeber().getId()), 
+									new Integer(bestellung.getEmpfaenger().getId()), 
+									"", bestellung.getHuel(), bestellung.getDatum(), 
+									new Integer(bestellung.getZvtitel().getId()), 
+									new Integer(bestellung.getFbkonto().getId()),
+									new Float(bestellung.getBestellwert()), new Float(0), 
+									new String(bestellung.getGeloescht() ? "1" : "0"), bestellung.getProjektNr(), 
+									bestellung.getVerwendungszweck(), bestellung.getLabor(), bestellung.getKartei(), 
+									bestellung.getVerzeichnis(), new Integer(bestellung.getId()) };
+			// SQL-Satement mit der Nummer 291 ausführen
+			statements.get(291).executeUpdate(parameters);
+			return bestellung.getId();	// Id von der aktualisierung KleinBestellung
+		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	}
+	
+	/**
+	 * Eine neue KleinBestellung erstellen.
+	 * @param KleinBestellung, die eingefügt werden soll. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public void insertKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
+		try{
+			// Parameter an das SQL-Statement
+			Object[] parameters = {new Integer(bestellung.getId()), bestellung.getProjektNr(),
+									bestellung.getVerwendungszweck(), bestellung.getLabor(), 
+									bestellung.getKartei(), bestellung.getVerzeichnis()};
+			// SQL-Statement ausführen
+			statements.get(290).executeUpdate(parameters);
+		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	}
+
+	/**
+	 * Eine KleinBestellung zum Aktualisieren auswählen.
+	 * @param KleinBestellung, die aktualisiert werden soll. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public void selectForUpdateKleinbestellung( KleinBestellung bestellung ) throws ApplicationServerException {
+		try{
+			// Parameter an das SQL-Statement
+			Object[] parameters = {new Integer(bestellung.getId())};
+			// SQL-Statement ausführen
+			statements.get(294).executeUpdate(parameters);
+		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	}
 }
 
 

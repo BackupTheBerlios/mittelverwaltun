@@ -115,14 +115,20 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	public BestellungKlein(MainFrame frame, KleinBestellung bestellung) {
 		super("Auszahlungsanordnung Anzeigen/Stornieren");
 		this.frame = frame;
-		this.bestellung = bestellung;
+		
+		try{
+			this.bestellung = (KleinBestellung)frame.getApplicationServer().getKleinbestellungen().get(0);
+		} catch(Exception e) {
+			this.bestellung = null;
+		}
+		
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setBounds(50,50,630,555);
 		
 		try {
-			tableBelege = new BestellungKleinTable(bestellung.getBelege());
+			tableBelege = new BestellungKleinTable(this.bestellung.getBelege());
 			jbInit();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -146,23 +152,24 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		buBestellen.setVisible(false);
 		
 		// Beschriften der Labels
-		setFBKonto(bestellung.getFbkonto());
-		setZVKonto(bestellung.getZvtitel());
-		labGesamt.setText(NumberFormat.getCurrencyInstance().format(bestellung.getBestellwert()));
+		setFBKonto(this.bestellung.getFbkonto());
+		setZVKonto(this.bestellung.getZvtitel());
+		labGesamt.setText(NumberFormat.getCurrencyInstance().format(this.bestellung.getBestellwert()));
 		// Beschriften der TextFelder
-		comboBenutzer.insertItemAt(bestellung.getAuftraggeber(), 0);
+		comboBenutzer.insertItemAt(this.bestellung.getAuftraggeber(), 0);
 		comboBenutzer.setSelectedIndex(0);
 		comboBenutzer.setEnabled(false);
-		tfProjektNr.setText(bestellung.getProjektNr());
-		tfDatum.setValue(bestellung.getDatum());
+		tfProjektNr.setText(this.bestellung.getProjektNr());
+		tfProjektNr.setEnabled(false);
+		tfDatum.setValue(this.bestellung.getDatum());
 		tfDatum.setEnabled(false);
-		tpVerwendung.setText(bestellung.getVerwendungszweck());
+		tpVerwendung.setText(this.bestellung.getVerwendungszweck());
 		tpVerwendung.setEnabled(false);
-		tfKartei.setText(bestellung.getLabor());
+		tfKartei.setText(this.bestellung.getLabor());
 		tfKartei.setEnabled(false);
-		tfKarteiNr.setText(bestellung.getKartei());
+		tfKarteiNr.setText(this.bestellung.getKartei());
 		tfKarteiNr.setEnabled(false);
-		tfTitelVerzNr.setText(bestellung.getVerzeichnis());
+		tfTitelVerzNr.setText(this.bestellung.getVerzeichnis());
 		tfTitelVerzNr.setEnabled(false);
 	}
 
@@ -451,7 +458,14 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				error = "Folgende Fehler sind aufgetreten:\n" + error;
 				JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
 			} else {	// Sonst Bestellung durchführen
-				
+				bestellung = getKleinBestellung();
+				try {
+					bestellung.setId(frame.getApplicationServer().addKleinbestellung(bestellung));
+					buBestellen.setEnabled(false);
+				} catch(ApplicationServerException exc) {
+					error = "Fehler bein Generieren der Bestellung:\n" + exc.toString();
+					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+				}
 			}
 		} else if( e.getSource() == butStornieren ) {
 			int answer = JOptionPane.showConfirmDialog(
@@ -461,8 +475,15 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE,
 						null);
-			if(answer == 0){
-				// Die Bestellung löschen
+			if(answer == 0) {	// Die Bestellung löschen
+				try {
+					frame.getApplicationServer().delKleinbestellung(bestellung);
+					butStornieren.setEnabled(false);
+					buDrucken.setEnabled(false);
+				} catch(ApplicationServerException exc) {
+					String error = "Fehler beim Löschen der Bestellung:\n" + exc.toString();
+					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+				}
 			}			
 		}
 	}
@@ -533,9 +554,9 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		clearLabels();
 		this.fbKonto = fbKonto;
 		this.zvTitel = null;
-		labKostenstelle.setText(fbKonto.getInstitut().getKostenstelle());
-		labHauptkonto.setText(fbKonto.getHauptkonto());
-		labUnterkonto.setText(fbKonto.getUnterkonto());
+		labKostenstelle.setText(this.fbKonto.getInstitut().getKostenstelle());
+		labHauptkonto.setText(this.fbKonto.getHauptkonto());
+		labUnterkonto.setText(this.fbKonto.getUnterkonto());
 	}
 
 	/**
@@ -545,11 +566,11 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	public void setZVKonto(ZVUntertitel zvTitel) {
 		this.zvTitel = zvTitel;
 		if(zvTitel instanceof ZVTitel)
-			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
+			labKapitel.setText(((ZVTitel)this.zvTitel).getZVKonto().getKapitel());
 		else
-			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
-		labTitel.setText(zvTitel.getTitel());
-		labUntertitel.setText(zvTitel.getUntertitel());
+			labKapitel.setText(this.zvTitel.getZVTitel().getZVKonto().getKapitel());
+		labTitel.setText(this.zvTitel.getTitel());
+		labUntertitel.setText(this.zvTitel.getUntertitel());
 	}
 
 	/**

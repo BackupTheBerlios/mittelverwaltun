@@ -33,6 +33,8 @@ public class Bestellung implements Serializable {
 	private char phase;
 	
 	private char typ;
+	
+	private boolean geloescht;
 
 	public Bestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
 				ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, char phase, char typ){
@@ -49,7 +51,7 @@ public class Bestellung implements Serializable {
 		this.phase = phase;
 		this.typ = typ;
 	}
-
+	
 	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
 										Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		this.id = id;
@@ -63,6 +65,7 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.geloescht = false;
 	}
 	
 	public Bestellung(String referenznr, Date datum, Benutzer besteller, char phase, String huel, Benutzer auftraggeber,
@@ -77,6 +80,7 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.geloescht = false;
 	}
 	
 	public Bestellung(Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
@@ -89,6 +93,7 @@ public class Bestellung implements Serializable {
 		this.zvtitel = zvtitel;
 		this.fbkonto = fbkonto;
 		this.bestellwert = bestellwert;
+		this.geloescht = false;
 	}
 
 	public Bestellung(int id, Date datum, char typ, char phase, Benutzer besteller, Benutzer auftraggeber,
@@ -101,6 +106,7 @@ public class Bestellung implements Serializable {
 		this.auftraggeber = auftraggeber;
 		this.empfaenger = empfaenger;
 		this.bestellwert = bestellwert;
+		this.geloescht = false;
 	}
 	
 	
@@ -113,6 +119,14 @@ public class Bestellung implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public void setGeloescht(boolean geloescht) {
+		this.geloescht = geloescht;
+	}
+
+	public boolean getGeloescht() {
+		return geloescht;
 	}
 
 	public String getReferenznr() {

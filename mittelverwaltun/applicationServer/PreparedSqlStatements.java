@@ -1950,7 +1950,7 @@ public class PreparedSqlStatements {
 			 */
 			ps = con.prepareStatement(	"INSERT INTO belege " +
 										"(bestellung, nr, firma, artikel, belegsumme) " +
-										"VALUES (?,?,?,?,?)" );
+										"VALUES (?,?,?,?,?)");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.FLOAT};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2028,23 +2028,67 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/******************************************/
-		/* Tabelle: Bestellungen 2                */
+		/* Tabelle: Kleinbestellungen             */
 		/* Indizes: 290-299                       */
 		/******************************************/
 		{//290 
-			statements[i++] = null;
+			/**
+			 * Eine Kleinbestellung einfügen. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"INSERT INTO kleinbestellungen " +
+										"(id, projektNr, verwendungszweck, labor, kartei, verzeichnis) " +
+										"VALUES (?,?,?,?,?,?)" );
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//291
-			statements[i++] = null;
+			/**
+			 * Kleinbestellung aktualisieren. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"UPDATE Bestellungen a, Kleinbestellungen b " +
+										"SET a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, " +											"a.huelNr = ?, a.phase = ?, a.datum = ?, a.zvTitel = ?, a.fbKonto = ?, " +											"a.bestellwert = ?, a.verbindlichkeiten = ?, a.geloescht = ?, " +
+											"b.projektNr = ?, b.verwendungszweck = ?, b.labor = ?, b.kartei = ?, " +											"b.verzeichnis = ? " +
+										"WHERE a.id = ? AND a.id = b.id AND a.geloescht = '0' ");
+			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
+								Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT, Types.VARCHAR, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//292
-			statements[i++] = null;
+			/**
+			 * Alle nicht gelöschten Kleinbestellung abfragen. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT a.id, a.besteller, a.empfaenger, a.datum, a.zvTitel, a.fbKonto, " +
+											"a.bestellwert, " +
+											"b.projektNr, b.verwendungszweck, b.labor, b.kartei, b.verzeichnis " +
+										"FROM Bestellungen a, Kleinbestellungen b " + 
+										"WHERE a.id = b.id AND a.geloescht = '0' ");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//293
-			statements[i++] = null;
+			/**
+			 * Alle gelöschten Kleinbestellung abfragen. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT a.id, a.besteller, a.empfaenger, a.datum, a.zvTitel, a.fbKonto, " +
+											"a.bestellwert, " +
+											"b.projektNr, b.verwendungszweck, b.labor, b.kartei, b.verzeichnis " +
+										"FROM Bestellungen a, Kleinbestellungen b " + 
+										"WHERE a.id = b.id AND a.geloescht = '1' ");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//294
-			statements[i++] = null;
+			/**
+			 * Eine Kleinbestellung zu Aktualisieren auswählen. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT * FROM Bestellungen a, Kleinbestellungen b " + 
+										"WHERE a.id = b.id AND a.id = ? ");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//295 
 			statements[i++] = null;
