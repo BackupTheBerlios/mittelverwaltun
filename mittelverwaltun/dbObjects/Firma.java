@@ -1,11 +1,13 @@
 package dbObjects;
 
+import java.io.Serializable;
+
 
 /**
  * @author w.flat
  * 17.10.2004
  */
-public class Firma {
+public class Firma implements Serializable {
 	
 	/**
 	 * Eindeutige Id zur Identifizierung der Firma.

@@ -1,6 +1,7 @@
 package dbObjects;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 import java.sql.Date;
 /**
  * @author robert
@@ -10,7 +11,7 @@ import java.sql.Date;
  */
 
 
-public class Angebot {
+public class Angebot implements Serializable {
 
 	private ArrayList positionen;
 	

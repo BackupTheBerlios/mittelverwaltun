@@ -1,5 +1,6 @@
 package dbObjects;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.sql.Date;
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
-public class ASKBestellung extends Bestellung {
+public class ASKBestellung extends Bestellung implements Serializable {
 
 	/**
 	 * @param referenznr

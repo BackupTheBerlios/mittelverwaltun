@@ -1,11 +1,13 @@
 package dbObjects;
 
+import java.io.Serializable;
+
 /**
  * @author robert
  *
  * Kostenart für die Standardbestellung
  */
-public class Kostenart {
+public class Kostenart implements Serializable {
 
 	private int id;
 
