@@ -24,7 +24,7 @@ public class Angebot implements Serializable {
 	 */
 	private float summe;
 
-	private java.sql.Date datum;
+	private Date datum;
 
 	private boolean angenommen;
 

@@ -1737,7 +1737,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
 			if(positionen.size() == 0){
-				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f);
+				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, bestellung.getFbkonto().getInstitut());
 				
 				db.insertPosition(position, newAngebotId);
 			}
@@ -1795,15 +1795,26 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 	}
 	
-	/**
-	 * gibt eine StandardBestellung mit allen Objekten zurück
-	 * @param id - BestellungId
-	 * @return StandardBestellung mit der zugehörigen Id
-	 * @throws ApplicationServerException
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getStandardBestellung(int)
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException {
+		StandardBestellung bestellung = db.selectStandardBestellung(id);
+		ArrayList angebote = db.selectAngebote(id);
 		
-		return null;
+		for(int i = 0; i < angebote.size(); i++){
+			Angebot angebot = (Angebot)angebote.get(i);
+			
+			if(angebot.getAngenommen())	// Auswahl bei der Bestellung setzen falls ein Angebot angenommen wurde
+				bestellung.setAuswahl(i+1);
+				
+			angebot.setPositionen(db.selectPositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		}
+		
+		bestellung.setAngebote(angebote); // Angebote hinzufügen
+		
+		return bestellung;
 	}
 	
 	/**

@@ -1806,7 +1806,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//261 gibt die Angebote zur eine Bestellung mit bestellId zurück
-			ps = con.prepareStatement("SELECT id, anbieter, datum, angenommen" +
+			ps = con.prepareStatement("SELECT id, anbieter, datum, angenommen " +
 																"FROM Angebote " +
 															  "WHERE bestellung = ?");
 			int[] param = {Types.INTEGER};

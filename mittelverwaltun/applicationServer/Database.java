@@ -2329,7 +2329,7 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schlieﬂen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 1, e.getMessage() );
+			throw new ApplicationServerException( 75, e.getMessage() );
 		}
 	
 		return firma;		// Die Firmen zur¸ckgeben
@@ -2903,7 +2903,7 @@ public class Database implements Serializable{
 
 		try{
 			Object[] parameters = { new Integer(bestellId) };
-			ResultSet rs = statements.get(120).executeQuery(parameters);
+			ResultSet rs = statements.get(261).executeQuery(parameters);
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen grˆﬂer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -2911,12 +2911,12 @@ public class Database implements Serializable{
 				while( rs.next() ){		// Solange es n‰chste Abfragezeile gibt
 					
 					Firma anbieter = selectFirma(rs.getInt("anbieter"));
-					angebote.add( new Angebot( rs.getInt("0"), null, rs.getDate("2"), anbieter, !rs.getString(3).equalsIgnoreCase("0")));
+					angebote.add( new Angebot( rs.getInt(0), null, rs.getDate(2), anbieter, !rs.getString(3).equalsIgnoreCase("0")));
 				}
 			}
 			rs.close();		// Abfrage schlieﬂen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 1, e.getMessage() );
+			throw new ApplicationServerException( 73, e.getMessage() );
 		}
 	
 		return angebote;
@@ -2946,7 +2946,7 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schlieﬂen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 1, e.getMessage() );
+			throw new ApplicationServerException( 74, e.getMessage() );
 		}
 
 		return positionen;

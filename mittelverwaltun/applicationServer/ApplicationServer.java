@@ -145,5 +145,11 @@ public interface ApplicationServer extends Remote {
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
 	
-	
+	/**
+	 * gibt eine StandardBestellung mit allen Objekten zurück
+	 * @param id - BestellungId
+	 * @return StandardBestellung mit der zugehörigen Id
+	 * @throws ApplicationServerException
+	 */
+	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException;
 }

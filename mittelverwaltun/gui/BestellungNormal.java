@@ -117,10 +117,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		cbKostenstelle.addPropertyChangeListener(this);
 		cbInstitut.addItemListener(this);
 		cbInstitut.addPropertyChangeListener(this);
-		cbAuftraggeber.addItemListener(this);
-		cbAuftraggeber.addPropertyChangeListener(this);
-		cbEmpfaenger.addItemListener(this);
-		cbEmpfaenger:addPropertyChangeListener(this);
+//		cbAuftraggeber.addItemListener(this);
+//		cbAuftraggeber.addPropertyChangeListener(this);
+//		cbEmpfaenger.addItemListener(this);
+//		cbEmpfaenger:addPropertyChangeListener(this);
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
@@ -146,14 +146,14 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
   }
 
-//  private String checkData(){
-//  	String error = "";
-//
-//  	error += (tpAdresse.getText().equals("") ? " - Firma \n" : "");
-//  	error += (tpLieferadresse.getText().equals("") ? " - Lieferadresse \n" : "");
-//
-//  	return error;
-//  }
+  private String checkData(){
+  	String error = "";
+
+  	error += (tfReferenzNr.getText().equals("") ? " - ReferenzNr \n" : "");
+  	error += (zvTitel == null ? " - zvTitel \n" : "");
+
+  	return error;
+  }
 
 
 
@@ -172,6 +172,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			 test.setJMenuBar( new MainMenu( test ) );
 			 BestellungNormal bestellung = new BestellungNormal(test);
 			 test.addChild(bestellung);
+			 StandardBestellung best = applicationServer.getStandardBestellung(13);
 			 test.show();
 				bestellung.show();
 		 }catch(Exception e){
@@ -444,8 +445,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		StandardBestellung newBestellung = new StandardBestellung(angebote, angebotNr, (Kostenart)cbKostenart.getSelectedItem(),
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
-																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
-																				(char)0, (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(), 
+																				(new String("0")).charAt(0), (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, (FBUnterkonto)cbKostenstelle.getSelectedItem(), 
 																				(angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
 																				
@@ -609,7 +610,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 				institut = (Institut)cbInstitut.getSelectedItem();
 			else
 				institut = frame.getBenutzer().getKostenstelle();
-
 
 			if(institut != null){
 				ArrayList hauptKonten = frame.getApplicationServer().getFBHauptkonten(institut);
