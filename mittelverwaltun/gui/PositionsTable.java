@@ -229,6 +229,18 @@ public class PositionsTable extends JTable implements ActionListener {
 		return model.getOrderSum();
 	}
 	
+	public float get7PercentSum(){
+		PositionsTableModel model = (PositionsTableModel)getModel();
+		
+		return model.get7PercentSum();
+	}
+	
+	public float get16PercentSum(){
+		PositionsTableModel model = (PositionsTableModel)getModel();
+	
+		return model.get16PercentSum();
+	}
+	
 	public float getOrderDebit(){
 		
 		PositionsTableModel model = (PositionsTableModel)getModel();

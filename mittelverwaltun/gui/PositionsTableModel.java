@@ -183,6 +183,68 @@ public class PositionsTableModel extends DefaultTableModel {
 		return sum;
 	}
 	
+	/**
+	 * gibt die Summe der Mehrwertsteuer der Positionen mit 7 %
+	 * @return Summe der 7 % Mehrwertsteuer
+	 * @author robert
+	 */
+	public float get7PercentSum(){
+	
+		float mwst7 = 0.0f;
+	
+		for (int i=0; i<getRowCount();i++){
+			float mwst = 0.0f;
+			float preis = 0.0f;
+			
+			if (type==STD_ABWICKLUNG){
+				mwst = ((Float)getValueAt(i, 3)).floatValue();
+				preis = ((Float)getValueAt(i, 2)).floatValue();
+			}else if (type==ASK_ABWICKLUNG || type==ASK_STANDARD){
+				mwst = ((Float)getValueAt(i, 4)).floatValue();
+				preis = ((Float)getValueAt(i, 3)).floatValue();
+			}
+		
+			if(mwst == 0.07f){
+				int menge = ((Integer)getValueAt(i,0)).intValue();
+
+				mwst7 += (menge * preis * mwst);
+			}
+		}
+	
+		return mwst7;
+	}
+	
+	/**
+	 * gibt die Summe der Mehrwertsteuer der Positionen mit 7 %
+	 * @return Summe der 7 % Mehrwertsteuer
+	 * @author robert
+	 */
+	public float get16PercentSum(){
+
+		float mwst16 = 0.0f;
+							
+		for (int i=0; i<getRowCount();i++){
+			float mwst = 0.0f;
+			float preis = 0.0f;
+			
+			if (type==STD_ABWICKLUNG){
+				mwst = ((Float)getValueAt(i, 3)).floatValue();
+				preis = ((Float)getValueAt(i, 2)).floatValue();
+			}else if (type==ASK_ABWICKLUNG || type==ASK_STANDARD){
+				mwst = ((Float)getValueAt(i, 4)).floatValue();
+				preis = ((Float)getValueAt(i, 3)).floatValue();
+			}
+		
+			if(mwst == 0.16f){
+				int menge = ((Integer)getValueAt(i,0)).intValue();
+
+				mwst16 += (menge * preis * mwst);
+			}
+		}
+
+		return mwst16;
+	}
+	
 	public float getOrderDebit(){
 		
 		float debit = 0.0f;
