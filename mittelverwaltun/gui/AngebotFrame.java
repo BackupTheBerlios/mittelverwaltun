@@ -290,6 +290,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																							frame.frame.getBenutzer().getKostenstelle());
 					positionen.add(position);
 			 }
+			 	
 				Angebot angebot = null;
 				Object o = tfDate.getValue();
 				

@@ -57,7 +57,7 @@ public class StandardBestellung extends Bestellung {
 	 */
 	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+														String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		super(referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
@@ -97,11 +97,47 @@ public class StandardBestellung extends Bestellung {
 	 */
 	public StandardBestellung(ArrayList angebote, int auswahl, Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
 														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
-														int id, String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+														int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.angebote = angebote;
 		this.auswahl = auswahl;
+		this.kostenart = kostenart;
+		this.ersatzbeschaffung = ersatzbeschaffung;
+		this.ersatzbeschreibung = ersatzbeschreibung;
+		this.inventarNr = inventarNr;
+		this.verwendungszweck = verwendungszweck;
+		this.planvorgabe = planvorgabe;
+		this.begruendung = begruendung;
+		this.bemerkung = bemerkung;
+	}
+	
+	/**
+	 * Konstruktor ohne positionen und auswahl
+	 * @param kostenart
+	 * @param ersatzbeschaffung
+	 * @param ersatzbeschreibung
+	 * @param inventarNr
+	 * @param verwendungszweck
+	 * @param planvorgabe
+	 * @param begruendung
+	 * @param bemerkung
+	 * @param id
+	 * @param referenznr
+	 * @param datum
+	 * @param besteller
+	 * @param phase
+	 * @param auftraggeber
+	 * @param empfaenger
+	 * @param zvtitel
+	 * @param fbkonto
+	 * @param bestellwert
+	 */
+	public StandardBestellung(Kostenart kostenart, boolean ersatzbeschaffung, String ersatzbeschreibung,
+														String inventarNr, String verwendungszweck, boolean planvorgabe, String begruendung, String bemerkung,
+														int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
+														Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
+		super(id, referenznr, datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert);
 		this.kostenart = kostenart;
 		this.ersatzbeschaffung = ersatzbeschaffung;
 		this.ersatzbeschreibung = ersatzbeschreibung;

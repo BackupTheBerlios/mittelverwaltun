@@ -128,4 +128,22 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
+	
+	/**
+	 * speichert die Standardbestellung
+	 * @param original - orginale Standardbestellung 
+	 * @param edited - geänderte Standardbestellung
+	 * @throws ApplicationServerException
+	 */
+	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException;
+	
+	/**
+	 * speichert die ASKBestellung
+	 * @param original - orginale ASKBestellung 
+	 * @param edited - geänderte ASKBestellung
+	 * @throws ApplicationServerException
+	 */
+	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
+	
+	
 }

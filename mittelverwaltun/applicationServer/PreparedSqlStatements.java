@@ -535,7 +535,7 @@ public class PreparedSqlStatements {
 		/* Tabelle: Institute                 */
 		/* Indizes: 80-89					  */
 		/**************************************/
-		{//80			(17)
+		{//80		gibt alle Institute zurück
 			ps = con.prepareStatement("SELECT a.id, a.bezeichnung, a.kostenstelle, a.institutsleiter, " +
 																			 "b.id, b.benutzername, b.name, b.vorname " +
 																"FROM institute a, Benutzer b " + 
@@ -1036,7 +1036,17 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//148
-			statements[i++] = null;
+			/**
+			 * Abfrage des ZVTitels mit einer bestimmter titelId.
+			 * @author w.flat 
+			 */
+			ps = con.prepareStatement( "SELECT zvKontoID, bezeichnung, " +
+											 "titel, untertitel, budget, " +
+											 "bemerkung, pruefBedingung, geloescht " +
+										"FROM ZVKontenTitel " +
+										"WHERE id = ? " );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//149
 			statements[i++] = null;
@@ -1164,7 +1174,7 @@ public class PreparedSqlStatements {
 		/* Join: Benutzer, Institute, Rollen  */
 		/* Indizes: 170-179					  */
 		/**************************************/
-		{//170		(24)
+		{//170	gibt den Benutzer anhand von: benutzername, passwort
 			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, " +
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
@@ -1220,8 +1230,18 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//174
-			statements[i++] = null;
+		{//174 gibt den Benutzer anhand einer userId zurück mit allen Objekten
+			ps = con.prepareStatement( "SELECT b.id, b.benutzername, b.passwort, " +
+											  "r.id, r.bezeichnung, " +
+											  "i.id, i.bezeichnung, i.kostenstelle, " +
+											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+										"FROM Benutzer b, Institute i, Rollen r " +
+										"WHERE b.id = ? " +											"AND b.institutsId = i.id " +
+										  "AND b.rollenId = r.id " +
+										  "AND b.geloescht = '0' ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//175
 			statements[i++] = null;
@@ -1816,8 +1836,13 @@ public class PreparedSqlStatements {
 		/* Join: Bestellungen, ASK_Standard_Bestellungen  */
 		/* Indizes: 270-274					                      */
 		/**************************************************/
-		{//270 
-			statements[i++] = null;
+		{//270 gibt die StandardBestellung mit der zugehörigen Id zurück. Es werden nur BenutzerId ermittelt
+			ps = con.prepareStatement("SELECT " +																		"k.id, k.beschreibung," +																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.datum, a.zvTitel, a.fbKonto, a.bestellwert " +
+																"FROM Bestellungen a, ASK_Standard_Bestellungen b, Kostenarten k " +
+															  "WHERE a.id = ? " +															  		"AND a.id = b.id " +															  		"AND a.typ = '0' " +															  		"AND a.geloescht = '0' " +															  		"AND k.id = b.kostenart");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//271
 			statements[i++] = null;

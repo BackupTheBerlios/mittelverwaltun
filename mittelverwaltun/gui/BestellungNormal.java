@@ -445,7 +445,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
-																				(short)0, (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																				(char)0, (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, (FBUnterkonto)cbKostenstelle.getSelectedItem(), 
 																				(angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
 																				

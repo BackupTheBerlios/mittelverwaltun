@@ -25,6 +25,16 @@ public class Position implements Serializable{
 
 	private String artikel;
 
+	/**
+	 * Konstruktor für die Position mit allen Attributen
+	 * @param id
+	 * @param artikel
+	 * @param einzelPreis
+	 * @param menge
+	 * @param mwst
+	 * @param rabatt
+	 * @param institut
+	 */
 	public Position(int id, String artikel, float einzelPreis, int menge, float mwst, float rabatt, Institut institut){
 		this.menge = menge;
 		this.artikel = artikel;
@@ -35,6 +45,15 @@ public class Position implements Serializable{
 		this.institut = institut;
 	}
 	
+	/**
+	 * Konstruktor für die Position ohne die institut
+	 * @param id
+	 * @param artikel
+	 * @param einzelPreis
+	 * @param menge
+	 * @param mwst
+	 * @param rabatt
+	 */
 	public Position(int id, String artikel, float einzelPreis, int menge, float mwst, float rabatt){
 		this.menge = menge;
 		this.artikel = artikel;
@@ -44,6 +63,15 @@ public class Position implements Serializable{
 		this.id = id;
 	}
 	
+	/**
+	 * Konstruktor für die Position ohne die Id
+	 * @param artikel
+	 * @param einzelPreis
+	 * @param menge
+	 * @param mwst
+	 * @param rabatt
+	 * @param institut
+	 */
 	public Position(String artikel, float einzelPreis, int menge, float mwst, float rabatt, Institut institut){
 		this.menge = menge;
 		this.artikel = artikel;
@@ -53,6 +81,14 @@ public class Position implements Serializable{
 		this.institut = institut;
 	}
 	
+	/**
+	 * Konstruktor für die Position ohne die Id, institut
+	 * @param artikel
+	 * @param einzelPreis
+	 * @param menge
+	 * @param mwst
+	 * @param rabatt
+	 */
 	public Position(String artikel, float einzelPreis, int menge, float mwst, float rabatt){
 		this.menge = menge;
 		this.artikel = artikel;

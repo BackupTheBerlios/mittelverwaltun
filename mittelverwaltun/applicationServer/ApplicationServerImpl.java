@@ -1740,6 +1740,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				
 				db.insertPosition(position, newAngebotId);
 			}
+			// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
+			if(positionen.size() == 0){
+				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f);
+				
+				db.insertPosition(position, newAngebotId);
+			}
 		}
 		db.commit();
 		
@@ -1751,6 +1757,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+		db.setAutoCommit(false);
+		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
 		
@@ -1770,8 +1778,48 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			db.insertPosition(position, newAngebotId);
 		}
+		db.commit();
+		db.setAutoCommit(true);
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
+	 */
+	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
+		// TODO Automatisch erstellter Methoden-Stub
 		
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
+	 */
+	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
+		// TODO Automatisch erstellter Methoden-Stub
 		
+	}
+	
+	/**
+	 * gibt eine StandardBestellung mit allen Objekten zurück
+	 * @param id - BestellungId
+	 * @return StandardBestellung mit der zugehörigen Id
+	 * @throws ApplicationServerException
+	 */
+	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException {
+		
+		return null;
+	}
+	
+	/**
+	 * gibt eine ASKBestellung mit allen Objekten zurück
+	 * @param id - BestellungId
+	 * @return ASKBestellung mit der zugehörigen Id
+	 * @throws ApplicationServerException
+	 */
+	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException {
+	
+		return null;
 	}
 
 }

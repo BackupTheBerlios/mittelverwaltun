@@ -20,8 +20,6 @@ public class Bestellung implements Serializable {
 
 	private Benutzer besteller;
 
-	private short phase;
-
 	private Benutzer auftraggeber;
 
 	private Benutzer empfaenger;
@@ -32,7 +30,9 @@ public class Bestellung implements Serializable {
 
 	private float bestellwert;
 
-	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+	private char phase;
+
+	public Bestellung(int id, String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		this.id = id;
 		this.referenznr = referenznr;
@@ -46,7 +46,7 @@ public class Bestellung implements Serializable {
 		this.bestellwert = bestellwert;
 	}
 	
-	public Bestellung(String referenznr, Date datum, Benutzer besteller, short phase, Benutzer auftraggeber,
+	public Bestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber,
 										Benutzer empfaenger, ZVTitel zvtitel, FBUnterkonto fbkonto, float bestellwert){
 		this.referenznr = referenznr;
 		this.datum = datum;
@@ -99,11 +99,11 @@ public class Bestellung implements Serializable {
 		this.besteller = besteller;
 	}
 
-	public short getPhase() {
+	public char getPhase() {
 		return phase;
 	}
 
-	public void setPhase(short phase) {
+	public void setPhase(char phase) {
 		this.phase = phase;
 	}
 

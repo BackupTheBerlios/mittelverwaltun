@@ -805,6 +805,36 @@ public class Database implements Serializable{
 			throw new ApplicationServerException(1, e.getMessage());
 		}
 	}
+	
+	/**
+	 * gibt einen Benutzer anhand einer userId zurück mit allen Attributen
+	 * @param userId
+	 * @return Benutzer
+	 * @throws ApplicationServerException
+	 */
+	public Benutzer selectUser(int userId) throws ApplicationServerException{
+		Benutzer benutzer = null;
+
+		try{
+			Object[] parameters = { new Integer(userId) };
+			ResultSet rs = statements.get(174).executeQuery(parameters);
+
+			if (rs.next()){
+				benutzer = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),
+										new Rolle(rs.getInt(4), rs.getString(5)), new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
+										rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
+										rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
+			}else {
+				throw new ApplicationServerException(2);
+			}
+
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(72,e.getMessage());
+		}
+
+		return benutzer;
+	}
 
 	public Institut selectForUpdateInstitute(Institut institut) throws ApplicationServerException{
 		Institut inst = null;
@@ -1868,6 +1898,35 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * einen ZVTitle aus ZVKontenTitle mit der entsprechenden id zurückgeben
+	 * @param id des ZVTitels
+	 * @return ZVTitel
+	 * @throws ApplicationServerException
+	 */
+	public ZVTitel selectZVTitel( int id ) throws ApplicationServerException {
+		ZVTitel result = null;		// Der ausgewählte ZVTitel
+		try {
+			Object[] parameters = {new Integer( id )};
+			ResultSet rs = statements.get(148).executeQuery(parameters);
+			
+			rs.last();		// In die letzte Abfragezeile springen 
+			if ( rs.getRow() > 0 ) {	// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die Nächste Zeile
+				// Neuen ZVTitel erstellen
+				result = new ZVTitel( id, null, rs.getString(2), rs.getString(3),rs.getString(4),
+									rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
+			}
+			rs.close();		// Abfrage schließen
+		} catch(SQLException e) {
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	
+		return result;		// ZVtitel zurückgeben
+	}
+	
+	/**
 	 * Einen ZVUntertitel zum Aktualisieren auswählen
 	 * @param ZVUntertitel, der aktualisiert werden soll
 	 * @return ZVUntertitel der aktualisiert werden soll
@@ -2666,7 +2725,44 @@ public class Database implements Serializable{
 			setAutoCommit(true);
 			throw new ApplicationServerException(66);
 		}
-	}	
+	}
+	
+	public StandardBestellung selectStandardBestellung(int bestellId) throws ApplicationServerException{
+		StandardBestellung bestellung = null;
+
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+//			"k.id, k.beschreibung," +
+//			"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +
+//			"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
+//			"a.besteller, a.auftraggeber, a.empfaenger, " +
+//			"a.referenzNr, a.huelNr, a.phase, a.datum, a.zvTitel, a.fbKonto, " +
+			ResultSet rs = statements.get(270).executeQuery(parameters);
+
+			if (rs.next()){
+				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
+				Benutzer besteller = selectUser(rs.getInt("besteller"));
+				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
+				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
+				ZVTitel zvTitel = selectZVTitel(rs.getInt("zvTitel"));
+				FBUnterkonto fbkonto = selectFBKonto(rs.getInt("fbKonto"));
+				
+				bestellung = new StandardBestellung(kostenart, !rs.getString("ersatzbeschaffung").equalsIgnoreCase("0"), rs.getString("ersatzbeschreibung"),
+																						rs.getString("ersatzInventarNr"), rs.getString("verwendungszweck"), !rs.getString("planvorgabe").equalsIgnoreCase("0"), 
+																						rs.getString("begruendung"), rs.getString("bemerkungen"), bestellId, 
+																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), auftraggeber,
+																						empfaenger, zvTitel, fbkonto, rs.getInt("bestellwert") );
+			}else {
+				throw new ApplicationServerException(70);
+			}
+
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(71,e.getMessage());
+		}
+
+		return bestellung;
+	}
 	
 	/**
 	 * fügt eine ASKBestellung in die Tabelle ASK_Standard_Bestellungen ein
