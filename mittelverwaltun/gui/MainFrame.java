@@ -28,7 +28,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.desk = new JDesktopPane();
 			desk.setDesktopManager(new DefaultDesktopManager());
 			setContentPane(desk);
-			setBounds( 50, 50, 850, 400 );
+			setBounds( 50, 50, 800, 600 );
 			this.addWindowListener( new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					((MainFrame)e.getSource()).onWindowClosing();
@@ -64,7 +64,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.desk = new JDesktopPane();
 		desk.setDesktopManager(new DefaultDesktopManager());
 		setContentPane(desk);
-
+		this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				((MainFrame)e.getSource()).onWindowClosing();
