@@ -127,6 +127,7 @@ public class ApplicationServerException extends Exception {
 		messages[65] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertBestellung.";
 		messages[66] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertStandardBestellung.";
 		messages[67] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAngebot.";
+		messages[68] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertPosition.";
 
 //		Exception Ende ROBERT von 50-99
 
