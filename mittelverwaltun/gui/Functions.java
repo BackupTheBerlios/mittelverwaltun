@@ -24,6 +24,15 @@ public class Functions {
 	  return null;
 	}
 	
+	static public ImageIcon getZoomInIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","zoomIn.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
 	static public ImageIcon getBestellIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","cart.gif", clazz);
