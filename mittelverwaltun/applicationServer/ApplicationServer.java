@@ -106,12 +106,10 @@ public interface ApplicationServer extends Remote {
 	 public void setAccountBudget ( FBHauptkonto acc, float budget ) throws ApplicationServerException;
 
 	/**
-	 * @author robert
-	 * 
 	 * gibt ein Kostenarten-Array für die Standardbestellung 
-	 * 
 	 * @return Kostenarten ArrayList
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Kostenart[] getKostenarten() throws ApplicationServerException;
 	
@@ -119,6 +117,7 @@ public interface ApplicationServer extends Remote {
 	 * speichert eine StandardBestellung
 	 * @param bestellung - Standardbestellung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
 	
@@ -126,6 +125,7 @@ public interface ApplicationServer extends Remote {
 	 * speichert eine ASKBestellung
 	 * @param bestellung - Standardbestellung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
 	
@@ -134,6 +134,7 @@ public interface ApplicationServer extends Remote {
 	 * @param original - orginale Standardbestellung 
 	 * @param edited - geänderte Standardbestellung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException;
 	
@@ -142,6 +143,7 @@ public interface ApplicationServer extends Remote {
 	 * @param original - orginale ASKBestellung 
 	 * @param edited - geänderte ASKBestellung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
 	
@@ -150,6 +152,7 @@ public interface ApplicationServer extends Remote {
 	 * @param id - BestellungId
 	 * @return StandardBestellung mit der zugehörigen Id
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException;
 	
@@ -158,6 +161,7 @@ public interface ApplicationServer extends Remote {
 	 * @param subAccountsIncluded
 	 * @return
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
 }
