@@ -1873,8 +1873,18 @@ public class PreparedSqlStatements {
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//271
-			statements[i++] = null;
+		{//271 aktualisiert die StandardBestellung
+			ps = con.prepareStatement("UPDATE Bestellungen a, ASK_Standard_Bestellungen b " +																"SET a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, a.huelNr = ?, a.phase = ?, " +
+																		"a.datum = ?, a.zvTitel = ?, a.fbKonto = ?, a.bestellwert = ?, a.verbindlichkeiten = ?, a.geloescht = ?, " +																		"b.bemerkungen = ?, b.kostenart = ?, b.ersatzbeschaffung = ?, b.ersatzbeschreibung = ?, b.ersatzInventarNr = ?, " +
+																		"b.verwendungszweck = ?, b.planvorgabe = ?, b.begruendung = ? " +
+																"WHERE a.id = ? " +
+																	"AND a.id = b.id " +
+																	"AND a.geloescht = '0' ");
+			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
+											Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT, Types.VARCHAR,
+											Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+											Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//272
 			statements[i++] = null;
