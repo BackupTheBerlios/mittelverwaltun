@@ -1940,7 +1940,7 @@ public class PreparedSqlStatements {
 		/* Tabelle: Positionen 2               	  */
 		/* Indizes: 280-284                       */
 		/******************************************/
-		{//280 
+		{//280 löscht alle Positionen eines Angebots
 			ps = con.prepareStatement("DELETE FROM Positionen WHERE angebot = ? ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);

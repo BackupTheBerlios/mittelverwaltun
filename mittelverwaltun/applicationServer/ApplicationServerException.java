@@ -142,7 +142,9 @@ public class ApplicationServerException extends Exception {
 		messages[82] = "Application Server Error: Angebot existiert nicht mehr";
 		messages[83] = "Application Server Error: Position existiert nicht mehr";
 		messages[84] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updatePosition";
-					
+		messages[85] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteOfferPositions";
+		messages[86] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deletePositions";
+			
 //		Exception Ende ROBERT von 50-99
 
 //		Exception Anfang WALDEMAR von 100-149

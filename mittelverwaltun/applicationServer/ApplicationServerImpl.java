@@ -1858,12 +1858,35 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
 		
 		for(int i = 0; i < listIndex; i++){
+			Angebot oldOffer = (Angebot)oldOffers.get(i); 
 			
-			if(newOffers.size() == 0){
+			if(newOffers.size() == 0){ // alle Angebote gelöscht
 				db.deletePositions(bestellId);
 				db.deleteAngebote(bestellId);
+			}else{
+				
+//				if(i >= newOffers.size()){ // restliche alte Angebote löschen
+//					db.deleteOfferPositions(oldOffer.getId());
+//					// db.deleteAngebot(oldOffer.getId());
+//				}else{
+//					Angebot newOffer = (Angebot)newOffers.get(i);
+//				
+//					if(newOffer.getId() == 0){ // neue Positionen
+//						if(oldOffer != null)
+//							//db.deleteAngebot(oldOffer.getId());
+//						db.insertAngebot(newOffer, bestellId);
+//					}else{
+//						if(oldOffer != null){
+//							if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
+//								//db.deleteAngebot(oldOffer.getId());
+//							}else{	// gleiche Position
+//								if(!oldOffer.equals(newOffer)) // Position geändert
+//									db.updateAngebot(newOffer);
+//							}
+//						}
+//					}
+//				}
 			}
-			
 		}
 	}
 	
@@ -1891,7 +1914,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				
 				// alle Positionen gelöscht und nur die Summe angegeben oder neue Positionen hinzugefügt
 				if(newPs.size() == 0 || ((Position)newPs.get(0)).getId() == 0){
-					db.deletePositions(bestellId);
+					db.deleteOfferPositions(oldOffer.getId()); // alte Positionen löschen
 					
 					if(newPs.size() == 0){ // keine Positionen
 						Position position = new Position("", newOffer.getSumme(), 1, 0f, 0f, oldP.getInstitut());
