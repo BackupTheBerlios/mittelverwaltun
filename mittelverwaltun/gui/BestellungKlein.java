@@ -83,27 +83,28 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		try {
 			tableBelege = new BestellungKleinTable(this, frame.getApplicationServer().getFirmen());
 			jbInit();
+			
+			// Einrichtung der Buttons
+			buAbbrechen.addActionListener(this);
+			buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
+			buBestellen.addActionListener(this);
+			buBestellen.setIcon(Functions.getBestellIcon(getClass()));
+			buDrucken.addActionListener(this);
+			buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+			buAddRow.addActionListener(this);
+			buAddRow.setIcon(Functions.getExpandIcon(getClass()));
+			butFBKontoAuswahl.addActionListener(this);
+			butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
+			butZVTitelAuswahl.addActionListener(this);
+			butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
+
+			butStornieren.setVisible(false);
+			tfDatum.setValue(new Date(System.currentTimeMillis()));
+		
+			loadUsers();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-		buAbbrechen.addActionListener(this);
-		buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
-		buBestellen.addActionListener(this);
-		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
-		buDrucken.addActionListener(this);
-		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
-		buAddRow.addActionListener(this);
-		buAddRow.setIcon(Functions.getExpandIcon(getClass()));
-		butFBKontoAuswahl.addActionListener(this);
-		butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
-		butZVTitelAuswahl.addActionListener(this);
-		butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
-
-		butStornieren.setVisible(false);
-		tfDatum.setValue(new Date(System.currentTimeMillis()));
-		
-		loadUsers();
 	}
 	
 	/**
@@ -115,13 +116,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	public BestellungKlein(MainFrame frame, KleinBestellung bestellung) {
 		super("Auszahlungsanordnung Anzeigen/Stornieren");
 		this.frame = frame;
-		
-		try{
-			this.bestellung = (KleinBestellung)frame.getApplicationServer().getKleinbestellungen().get(0);
-		} catch(Exception e) {
-			this.bestellung = null;
-		}
-		
+		this.bestellung = bestellung;
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -130,47 +125,47 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		try {
 			tableBelege = new BestellungKleinTable(this.bestellung.getBelege());
 			jbInit();
+			
+			// Einrichtung der Buttons
+			buAbbrechen.addActionListener(this);
+			buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
+			butStornieren.addActionListener(this);
+			butStornieren.setIcon(Functions.getDelIcon(getClass()));
+			buDrucken.addActionListener(this);
+			buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+			buAddRow.addActionListener(this);
+			buAddRow.setIcon(Functions.getExpandIcon(getClass()));
+			buAddRow.setEnabled(false);
+			butFBKontoAuswahl.addActionListener(this);
+			butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
+			butFBKontoAuswahl.setEnabled(false);
+			butZVTitelAuswahl.addActionListener(this);
+			butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
+			butZVTitelAuswahl.setEnabled(false);
+			buBestellen.setVisible(false);
+		
+			// Beschriften der TextFelder
+			comboBenutzer.insertItemAt(this.bestellung.getAuftraggeber(), 0);
+			comboBenutzer.setSelectedIndex(0);
+			comboBenutzer.setEnabled(false);
+			tfProjektNr.setText(this.bestellung.getProjektNr());
+			tfProjektNr.setEnabled(false);
+			tfDatum.setValue(this.bestellung.getDatum());
+			tfDatum.setEnabled(false);
+			tpVerwendung.setText(this.bestellung.getVerwendungszweck());
+			tpVerwendung.setEnabled(false);
+			tfKartei.setText(this.bestellung.getLabor());
+			tfKartei.setEnabled(false);
+			tfKarteiNr.setText(this.bestellung.getKartei());
+			tfKarteiNr.setEnabled(false);
+			tfTitelVerzNr.setText(this.bestellung.getVerzeichnis());
+			tfTitelVerzNr.setEnabled(false);
+			// Beschriften der Labels
+			setFBKonto(this.bestellung.getFbkonto());
+			setZVKonto(this.bestellung.getZvtitel());
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-		buAbbrechen.addActionListener(this);
-		buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
-		butStornieren.addActionListener(this);
-		butStornieren.setIcon(Functions.getDelIcon(getClass()));
-		buDrucken.addActionListener(this);
-		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
-		buAddRow.addActionListener(this);
-		buAddRow.setIcon(Functions.getExpandIcon(getClass()));
-		buAddRow.setEnabled(false);
-		butFBKontoAuswahl.addActionListener(this);
-		butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
-		butFBKontoAuswahl.setEnabled(false);
-		butZVTitelAuswahl.addActionListener(this);
-		butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
-		butZVTitelAuswahl.setEnabled(false);
-		buBestellen.setVisible(false);
-		
-		// Beschriften der Labels
-		setFBKonto(this.bestellung.getFbkonto());
-		setZVKonto(this.bestellung.getZvtitel());
-		labGesamt.setText(NumberFormat.getCurrencyInstance().format(this.bestellung.getBestellwert()));
-		// Beschriften der TextFelder
-		comboBenutzer.insertItemAt(this.bestellung.getAuftraggeber(), 0);
-		comboBenutzer.setSelectedIndex(0);
-		comboBenutzer.setEnabled(false);
-		tfProjektNr.setText(this.bestellung.getProjektNr());
-		tfProjektNr.setEnabled(false);
-		tfDatum.setValue(this.bestellung.getDatum());
-		tfDatum.setEnabled(false);
-		tpVerwendung.setText(this.bestellung.getVerwendungszweck());
-		tpVerwendung.setEnabled(false);
-		tfKartei.setText(this.bestellung.getLabor());
-		tfKartei.setEnabled(false);
-		tfKarteiNr.setText(this.bestellung.getKartei());
-		tfKarteiNr.setEnabled(false);
-		tfTitelVerzNr.setText(this.bestellung.getVerzeichnis());
-		tfTitelVerzNr.setEnabled(false);
 	}
 
 	/**
@@ -484,7 +479,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 					String error = "Fehler beim Löschen der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
 				}
-			}			
+			}
 		}
 	}
 	

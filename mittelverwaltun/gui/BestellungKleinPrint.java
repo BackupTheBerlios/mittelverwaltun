@@ -221,7 +221,7 @@ public class BestellungKleinPrint extends JFrame implements Printable {
 		labKarteiNr.setBounds(new Rectangle(314, 9, 99, 15));
 		labAuszahlungsanordnung.setFont(new java.awt.Font("Dialog", 1, 14));
 		labAuszahlungsanordnung.setText("Auszahlungsanordnung");
-		labAuszahlungsanordnung.setBounds(new Rectangle(230, 249, 176, 15));
+		labAuszahlungsanordnung.setBounds(new Rectangle(230, 249, 176, 20));
 		labVerwendung.setFont(new java.awt.Font("Dialog", 1, 11));
 		labVerwendung.setText("Verwendung oder Begründung");
 		labVerwendung.setBounds(new Rectangle(5, 3, 187, 15));

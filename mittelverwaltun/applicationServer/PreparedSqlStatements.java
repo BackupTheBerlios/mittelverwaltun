@@ -2051,9 +2051,12 @@ public class PreparedSqlStatements {
 										"SET a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, " +											"a.huelNr = ?, a.phase = ?, a.datum = ?, a.zvTitel = ?, a.fbKonto = ?, " +											"a.bestellwert = ?, a.verbindlichkeiten = ?, a.geloescht = ?, " +
 											"b.projektNr = ?, b.verwendungszweck = ?, b.labor = ?, b.kartei = ?, " +											"b.verzeichnis = ? " +
 										"WHERE a.id = ? AND a.id = b.id AND a.geloescht = '0' ");
-			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
-								Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT, Types.VARCHAR, 
-								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, 
+								Types.VARCHAR,  Types.VARCHAR, Types.DATE, Types.INTEGER, Types.INTEGER, 
+								Types.FLOAT, Types.FLOAT, Types.VARCHAR, 
+								Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
+								Types.VARCHAR, 
+								Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//292
@@ -2086,7 +2089,7 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement(	"SELECT * FROM Bestellungen a, Kleinbestellungen b " + 
-										"WHERE a.id = b.id AND a.id = ? ");
+										"WHERE a.id = b.id AND a.id = ? FOR UPDATE");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

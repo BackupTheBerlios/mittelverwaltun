@@ -3416,8 +3416,8 @@ public class Database implements Serializable{
 			Object[] parameters = { new Integer(bestellung.getBesteller().getId()), 
 									new Integer(bestellung.getAuftraggeber().getId()), 
 									new Integer(bestellung.getEmpfaenger().getId()), 
-									"", bestellung.getHuel(), bestellung.getDatum(), 
-									new Integer(bestellung.getZvtitel().getId()), 
+									new String(""), bestellung.getHuel(), new String(bestellung.getProjektNr()), 
+									bestellung.getDatum(), new Integer(bestellung.getZvtitel().getId()), 
 									new Integer(bestellung.getFbkonto().getId()),
 									new Float(bestellung.getBestellwert()), new Float(0), 
 									new String(bestellung.getGeloescht() ? "1" : "0"), bestellung.getProjektNr(), 
@@ -3463,7 +3463,7 @@ public class Database implements Serializable{
 			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer(bestellung.getId())};
 			// SQL-Statement ausführen
-			statements.get(294).executeUpdate(parameters);
+			statements.get(294).executeQuery(parameters);
 		} catch (SQLException e){
 			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
