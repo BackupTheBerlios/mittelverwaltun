@@ -1445,38 +1445,42 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public void setUser(Benutzer editedUser, Benutzer clientUser) throws ApplicationServerException {
 		if(editedUser != null && clientUser != null){
-
-			Benutzer dbUser = db.selectForUpdateUser(clientUser);
-
-			// Benuter existiert nicht mehr
-			if(dbUser == null || dbUser.getGeloescht())
-				throw new ApplicationServerException(2);
-
-			//Benuter hat sich zwischenzeitlich geändert
-			if(!dbUser.equals(clientUser))
-				throw new ApplicationServerException(55);
-
-			// Benutzername wird in der MySQL geändert
-			if(!editedUser.getBenutzername().equals(clientUser.getBenutzername())){
-				if(db.checkUserMySQL(editedUser) > 0)		// Benutzername in der MySQL schon vorhanden
-					throw new ApplicationServerException(54);
-
-				db.updateUserMySQL(editedUser, dbUser.getBenutzername());
+			try{
+				Benutzer dbUser = db.selectForUpdateUser(clientUser);
+	
+				// Benuter existiert nicht mehr
+				if(dbUser == null || dbUser.getGeloescht())
+					throw new ApplicationServerException(2);
+	
+				//Benuter hat sich zwischenzeitlich geändert
+				if(!dbUser.equals(clientUser))
+					throw new ApplicationServerException(55);
+	
+				// Benutzername wird in der MySQL geändert
+				if(!editedUser.getBenutzername().equals(clientUser.getBenutzername())){
+					if(db.checkUserMySQL(editedUser) > 0)		// Benutzername in der MySQL schon vorhanden
+						throw new ApplicationServerException(54);
+	
+					db.updateUserMySQL(editedUser, dbUser.getBenutzername());
+				}
+	
+				// Benutername schon vorhanden
+				if(db.checkUser(editedUser) > 0)
+					throw new ApplicationServerException(5);
+	
+				// FBKonto existiert nicht mehr
+				if(dbUser.getPrivatKonto() != 0){
+					FBUnterkonto privatKonto = db.selectFBKonto(dbUser.getPrivatKonto());
+					if(privatKonto == null)
+						throw new ApplicationServerException(64);
+				}
+				db.updateUser(editedUser);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
 			}
-
-			// Benutername schon vorhanden
-			if(db.checkUser(editedUser) > 0)
-				throw new ApplicationServerException(5);
-
-			// FBKonto existiert nicht mehr
-			if(dbUser.getPrivatKonto() != 0){
-				FBUnterkonto privatKonto = db.selectFBKonto(dbUser.getPrivatKonto());
-				if(privatKonto == null)
-					throw new ApplicationServerException(64);
-			}
-			db.updateUser(editedUser);
-			
-			db.setAutoCommit(false);
 		}
 	}
 
@@ -1592,8 +1596,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 
 	public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
-		db.insertRollenAktivitaet(rolle, aktivitaet);
-		db.commit();
+		try{	
+			db.insertRollenAktivitaet(rolle, aktivitaet);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
@@ -1607,9 +1617,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public int addRolle(Rolle rolle) throws ApplicationServerException {
 		if(db.checkRolle(rolle) == 0){
-			int id = db.insertRolle(rolle);
-			db.commit();
-			return id;
+			try{
+				return db.insertRolle(rolle);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}else
 			throw new ApplicationServerException(8);
 	}
@@ -1714,29 +1729,36 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 
 	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
-		Kontenzuordnung zuordnung = db.selectKontenzuordnung(fbKonto.getId(), zvKonto.getId());
-
-		if(zuordnung != null)	// Zuordnung existiert schon
-			throw new ApplicationServerException(62);
-
-		ZVKonto dbZVKonto = db.selectZVKonto(zvKonto.getId());
-		if(dbZVKonto == null)		// ZVKonto existiert nicht mehr
-			throw new ApplicationServerException(63);
-
-		FBHauptkonto dbFBKonto = db.selectFBHauptkonto(fbKonto.getId());
-		if(dbFBKonto == null)	// FBKonto existiert nicht mehr
-			throw new ApplicationServerException(64);
-
-		Kontenzuordnung[] zuordnungen = db.selectKontenzuordnungen(fbKonto);
-
-		if(zuordnungen != null){	// es existieren Zuordnungen
-			if(zuordnungen[0].getZvKonto().getZweckgebunden()) 	// nur ein zweckgebundenes ZVKonto
-				throw new ApplicationServerException(61);
-			if(dbZVKonto.getZweckgebunden())		// ZVKonto ist zweckgebunden ?
-				throw new ApplicationServerException(61);
-		}
-		db.insertKontenZuordnung(fbKonto.getId(), zvKonto.getId());
-		db.commit();
+		try{	
+			Kontenzuordnung zuordnung = db.selectKontenzuordnung(fbKonto.getId(), zvKonto.getId());
+	
+			if(zuordnung != null)	// Zuordnung existiert schon
+				throw new ApplicationServerException(62);
+	
+			ZVKonto dbZVKonto = db.selectZVKonto(zvKonto.getId());
+			if(dbZVKonto == null)		// ZVKonto existiert nicht mehr
+				throw new ApplicationServerException(63);
+	
+			FBHauptkonto dbFBKonto = db.selectFBHauptkonto(fbKonto.getId());
+			if(dbFBKonto == null)	// FBKonto existiert nicht mehr
+				throw new ApplicationServerException(64);
+	
+			Kontenzuordnung[] zuordnungen = db.selectKontenzuordnungen(fbKonto);
+	
+			if(zuordnungen != null){	// es existieren Zuordnungen
+				if(zuordnungen[0].getZvKonto().getZweckgebunden()) 	// nur ein zweckgebundenes ZVKonto
+					throw new ApplicationServerException(61);
+				if(dbZVKonto.getZweckgebunden())		// ZVKonto ist zweckgebunden ?
+					throw new ApplicationServerException(61);
+			}
+			db.insertKontenZuordnung(fbKonto.getId(), zvKonto.getId());
+		
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}	
 	}
 
 
