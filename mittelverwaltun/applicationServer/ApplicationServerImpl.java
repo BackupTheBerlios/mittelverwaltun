@@ -118,7 +118,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					 if( hauptkonten.get(j)== null )	// kein FBHauptkonto
 						 continue;
 					 // Ermittlung der Unterkonten vom Hauptkonto
-					 	Kontenzuordnung[] zuordnung = db.selectKontenzuordnungen( ((FBHauptkonto)hauptkonten.get(j)));
+						Kontenzuordnung[] zuordnung = db.selectKontenzuordnungen( ((FBHauptkonto)hauptkonten.get(j)));
 						((FBHauptkonto)hauptkonten.get(j)).setZuordnung( zuordnung );
 						
 						ArrayList unterkonten = db.selectFBUnterkonten( instituts[i], (FBHauptkonto)hauptkonten.get(j));
@@ -150,7 +150,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	  * Budget eines FBHauptkontos aktualisieren.
 	  */
 	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException{
-	 	try{
+		try{
 			 //TODO: Test auf maximal zuweisungsfähigen betrag?!
 			 FBHauptkonto accOld = db.selectForUpdateFBHauptkonto(acc.getId());
 	
@@ -178,10 +178,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			 }
 			 
 			 db.commit();
-	 	}catch(ApplicationServerException e){
-	 		db.rollback();
-	 		throw e;
-	 	}
+		}catch(ApplicationServerException e){
+			db.rollback();
+			throw e;
+		}
 	 }
 	 
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
