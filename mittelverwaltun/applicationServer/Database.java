@@ -3838,7 +3838,7 @@ public class Database implements Serializable{
 		
 		try{
 			Object[] parameters = { new Integer(orderID) };
-			ResultSet rs = statements.get(223).executeQuery(parameters);
+			ResultSet rs = statements.get(224).executeQuery(parameters);
 			rs.last();	
 			if ( rs.getRow() > 0 ) {// Bestellung vorhanden
 				expenses = -rs.getFloat(1);

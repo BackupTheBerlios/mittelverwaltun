@@ -1143,7 +1143,15 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//165
-			statements[i++] = null;
+			ps = con.prepareStatement(	"SELECT k.tgrbudget - SUM( IF(t.budget < t.vormerkungen, t.vormerkungen - t.budget, 0) ) " +
+										  "FROM zvkonten k, zvkontentitel t " +
+										 "WHERE k.id = ? " +  
+										   "AND k.id = t.zvkontoid " +
+										   "AND k.geloescht=\"0\" " +
+										   "AND t.geloescht=\"0\" " +
+										"GROUP BY k.id" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//166
 			statements[i++] = null;
@@ -1534,7 +1542,12 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//224
-			statements[i++] = null;
+			ps = con.prepareStatement(	"SELECT SUM( betragZVKonto ) " +
+					  "FROM buchungen " +
+                  "WHERE bestellung = ? " +
+					"AND typ = '9'"); 
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//225
 			statements[i++] = null;
@@ -2177,7 +2190,21 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//311
-			statements[i++] = null;
+			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKonten zvk, ZVKontentitel t " +	
+										   "SET " +
+										       "fbk.vormerkungen = (fbk.vormerkungen + ?), " + 
+										       "fbk.budget = (fbk.budget + ?), " +
+										       "zvk.tgrbudget = (zvk.tgrbudget + ?), " +
+										       "t.vormerkungen = (t.vormerkungen + ?), " +
+										       "t.budget = (t.budget + ?) " +
+										 "WHERE fbk.id = ? " +
+										   "AND zvk.id = ? " +
+										   "AND t.id = ? " +
+										   "AND fbk.geloescht = '0' " +
+										   "AND zvk.geloescht = '0' " +
+										   "AND t.geloescht = '0'");
+			int[] param = {	Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//312
 			statements[i++] = null;

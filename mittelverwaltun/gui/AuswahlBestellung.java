@@ -91,19 +91,19 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					}
-			}else if(tabBestellungen.getSelectedOrderType()==OrderTable.ASK_TYP){
+			}else if (tabBestellungen.getSelectedOrderType()==OrderTable.ASK_TYP){
 				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.SONDIERUNG)
 					try {
 						frame.addChild( new BestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					}
-				else ;
-//					try {
-//						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
-//					} catch (ApplicationServerException exception) {
-//						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-//					}
+				else
+					try {
+						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
 			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();
@@ -120,10 +120,8 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 			} catch (ApplicationServerException e1) {
 				e1.printStackTrace();
 			}
-			
 		} else if(e.getActionCommand() == "dispose"){
 			this.dispose();
 		}
 	}
-
 }
