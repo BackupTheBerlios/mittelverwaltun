@@ -45,12 +45,19 @@ public class BestellungBeilageTable extends JTable {
 										}
 										public void setValueAt(Object aValue, int rowIndex, int columnIndex){
 										  if(columnIndex  == 4){
+												getFrame().buBestellen.setEnabled(false);
 												for(int i = 0; i < getRowCount(); i++){
 													super.setValueAt(new Integer(i+1), i, 0);
 													super.setValueAt(new Boolean(false), i, 4);
 													((Angebot)super.getValueAt(i, 1)).setAngenommen(false);
 												}
-												getFrame().angebotNr = ((Boolean)aValue).booleanValue() == true ? (rowIndex + 1) : 0;
+												
+												if(((Boolean)aValue).booleanValue() == true){
+													getFrame().angebotNr = (rowIndex + 1);
+													getFrame().buBestellen.setEnabled(true);
+												}else{
+													getFrame().angebotNr = 0;
+												}
 												((Angebot)super.getValueAt(rowIndex, 1)).setAngenommen(((Boolean)aValue).booleanValue());
 										  }
 										  super.setValueAt(aValue,rowIndex,columnIndex);
