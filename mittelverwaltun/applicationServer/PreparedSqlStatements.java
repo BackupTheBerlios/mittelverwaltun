@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[265];
+		statements = new PreparedStatementWrapper[270];
 		int i = 0;
 
 		/**************************************/
@@ -1587,11 +1587,17 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/******************************************/
-		/* Tabelle: Angebote 	  */
+		/* Tabelle: Angebote 	                    */
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//260 fügt ein Angebot in die Tabelle Angebot ein
-			statements[i++] = null;
+			ps = con.prepareStatement("INSERT " +
+																"INTO Angebote " +
+																	 "( bestellung, anbieter, datum, angenommen) " +
+															  "VALUES (?, ?, ?, ?)",
+																Statement.RETURN_GENERATED_KEYS);
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.DATE, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//261
 			statements[i++] = null;
@@ -1603,6 +1609,25 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//264
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: Positonen                 	  */
+		/* Indizes: 260-264                       */
+		/******************************************/
+		{//265 fügt eine Positon in die Tabelle Positionen ein
+			statements[i++] = null;
+		}
+		{//266
+			statements[i++] = null;
+		}
+		{//267
+			statements[i++] = null;
+		}
+		{//268
+			statements[i++] = null;
+		}
+		{//269
 			statements[i++] = null;
 		}
 	}
