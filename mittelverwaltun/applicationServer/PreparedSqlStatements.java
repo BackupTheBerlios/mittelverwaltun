@@ -255,9 +255,12 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "UPDATE Fachbereiche " +
 										  "SET institutsid = ?, " +
 											  "bezeichnung = ?, " +
-											  "profPauschale = ? " +
-										"WHERE institutsId = ?");
-			int[] param = {Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.INTEGER};
+											  "profPauschale = ?, " +
+												"anschrift_1 = ?, " +
+												"anschrift_2 = ?, " +
+												"hochschule_1 = ?, " +
+												"hochschule_2 = ? ");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//41
@@ -501,24 +504,27 @@ public class PreparedSqlStatements {
 		/* Indizes: 80-89					  */
 		/**************************************/
 		{//80			(17)
-			ps = con.prepareStatement("SELECT * FROM Institute");
+			ps = con.prepareStatement("SELECT a.id, a.bezeichnung, a.kostenstelle, a.institutsleiter, " +
+																			 "b.id, b.benutzername, b.name, b.vorname " +
+																"FROM institute a, Benutzer b " + 
+																"WHERE b.id = a.institutsleiter");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//81			(18)
 			ps = con.prepareStatement("UPDATE Institute " +
-										 "SET bezeichnung = ?, kostenstelle = ? " +
+										 "SET bezeichnung = ?, kostenstelle = ? , institutsleiter = ? " +
 									   "WHERE id = ?");
-			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER};
+			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 
 		{//82			(19)
 			ps = con.prepareStatement("INSERT " +
 										"INTO Institute " +
-											 "(bezeichnung ,kostenstelle) " +
-									  "VALUES (?, ?)",
+											 "(bezeichnung ,kostenstelle, institutsleiter) " +
+									  "VALUES (?, ?, ?)",
 									  Statement.RETURN_GENERATED_KEYS);
-			int[] param = {Types.VARCHAR, Types.INTEGER};
+			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//83			(20)
@@ -538,7 +544,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//85  SELECT FOR UPDATE
-			ps = con.prepareStatement("SELECT * " +
+			ps = con.prepareStatement("SELECT id, bezeichnung, kostenstelle, geloescht " +
 										"FROM Institute " +
 									   "WHERE id = ? FOR UPDATE");
 			int[] param = {Types.INTEGER};
@@ -1135,14 +1141,14 @@ public class PreparedSqlStatements {
 		/**************************************/
 		{//180			(26)
 			ps = con.prepareStatement( "SELECT a.institutsId, a.bezeichnung AS hochschule, a.profPauschale, " +
-											  "b.bezeichnung, b.kostenstelle " +
+											  "b.bezeichnung, b.kostenstelle, a.anschrift_1, a.anschrift_2, a.hochschule_1, a.hochschule_2 " +
 										 "FROM Fachbereiche a, Institute b " +
 										"WHERE a.institutsid = b.id" );
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//181 SELECT FOR UPDATE
 			ps = con.prepareStatement( "SELECT a.institutsId, a.bezeichnung AS hochschule, a.profPauschale, " +
-											  "b.bezeichnung, b.kostenstelle " +
+											  "b.bezeichnung, b.kostenstelle, a.anschrift_1, a.anschrift_2, a.hochschule_1, a.hochschule_2 " +
 										 "FROM Fachbereiche a, Institute b " +
 										"WHERE a.institutsid = b.id FOR UPDATE" );
 			statements[i++] = new PreparedStatementWrapper(ps);
