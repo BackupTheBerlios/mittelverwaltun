@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 
-public class FBHauptkonto extends FBUnterkonto implements Serializable{
+public class FBHauptkonto extends FBUnterkonto implements Serializable {
 
 	/**
 	 * DispositionsKredit, den ein FBHauptkonto verwenden kann. 

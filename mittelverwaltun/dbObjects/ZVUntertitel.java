@@ -3,7 +3,7 @@ package dbObjects;
 import java.io.Serializable;
 
 
-public class ZVUntertitel implements Serializable{
+public class ZVUntertitel implements Serializable {
 	
 	// CHANGE
 

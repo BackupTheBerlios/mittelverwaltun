@@ -8,7 +8,7 @@ import java.sql.Date;
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
-public class TmpRolle extends Rolle implements Serializable{
+public class TmpRolle extends Rolle implements Serializable {
 
 	private Date gueltigBis = null;
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 
-public class Institut implements Serializable{
+public class Institut implements Serializable {
 
 	/**
 	 * 

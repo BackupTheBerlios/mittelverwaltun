@@ -8,7 +8,7 @@ import java.io.Serializable;
  * oder einem Mitarbeiter eines Institus zugeordnet ist. <br>
  * @author w.flat
  */
-public class FBUnterkonto implements Serializable{
+public class FBUnterkonto implements Serializable {
 
 	/**
 	 * Eideutige Id zur Identifizierung des FB-Unterkontos.

@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 
-public class ZVKonto implements Serializable{
+public class ZVKonto implements Serializable {
 
 // CHANGE
 	private int id;

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
-public class Benutzer implements Serializable{
+public class Benutzer implements Serializable {
 
 	private int id;
 

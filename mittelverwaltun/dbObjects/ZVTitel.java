@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 
-public class ZVTitel extends ZVUntertitel implements Serializable{
+public class ZVTitel extends ZVUntertitel implements Serializable {
 	
 	// CHANGE
 

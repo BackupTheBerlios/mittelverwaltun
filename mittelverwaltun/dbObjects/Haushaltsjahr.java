@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
-public class Haushaltsjahr implements Serializable{
+public class Haushaltsjahr implements Serializable {
 
 	private String beschreibung;
 	private String von;
