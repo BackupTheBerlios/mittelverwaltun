@@ -37,8 +37,19 @@ public class Benutzer implements Serializable{
 	private boolean geaendert;
 
 	
+	private String telefon;
+
+	private String fax;
+
+	private String bau;
+
+	private String raum;
+
+	private boolean softBeauftragter;
+
 	public Benutzer(String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
-					String titel, String name, String vorname, String email, int privatKonto){
+									String titel, String name, String vorname, String email, int privatKonto, 
+									String telefon, String fax, String bau, String raum, boolean softBeauftragter){
 		this.id = 0;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -49,10 +60,16 @@ public class Benutzer implements Serializable{
 		this.name = name;
 		this.email = email;
 		this.privatKonto = privatKonto;
+		this.telefon = telefon;
+		this.fax = fax;
+		this.bau = bau;
+		this.raum = raum;
+		this.softBeauftragter = softBeauftragter;
 	}
 	
 	public Benutzer(int id, String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
-						String titel, String name, String vorname, String email, int privatKonto){
+									String titel, String name, String vorname, String email, int privatKonto, 
+									String telefon, String fax, String bau, String raum, boolean softBeauftragter){
 		this.id = id;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -63,6 +80,11 @@ public class Benutzer implements Serializable{
 		this.name = name;
 		this.email = email;
 		this.privatKonto = privatKonto;
+		this.telefon = telefon;
+		this.fax = fax;
+		this.bau = bau;
+		this.raum = raum;
+		this.softBeauftragter = softBeauftragter;
 	}
 	
 	
@@ -197,6 +219,46 @@ public class Benutzer implements Serializable{
 				return false;
 		}else
 			return false;
+	}
+
+	public String getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
+	}
+
+	public String getFax() {
+		return fax;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+
+	public String getBau() {
+		return bau;
+	}
+
+	public void setBau(String bau) {
+		this.bau = bau;
+	}
+
+	public String getRaum() {
+		return raum;
+	}
+
+	public void setRaum(String raum) {
+		this.raum = raum;
+	}
+
+	public boolean getSoftBeauftragter() {
+		return softBeauftragter;
+	}
+
+	public void setSoftBeauftragter(boolean softBeauftragter) {
+		this.softBeauftragter = softBeauftragter;
 	}
 
 }
