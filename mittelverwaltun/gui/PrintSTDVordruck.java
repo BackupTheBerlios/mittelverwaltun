@@ -65,7 +65,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
   	this.order = order;
   	this.as = as;
   	try{
-				img = loadImageResource("image","fh-header2.gif");
+				img = loadImageResource("image","fhlogo.gif");
 				if (img != null)
 						  logoIcon =  new ImageIcon(img);
 	 }catch (IOException e){
@@ -75,7 +75,8 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 	 logo = new JPanel(){
 		public void paintComponent(Graphics g) {
 		  super.paintComponent(g);
-			g.drawImage(img, 0, 0, 675, 84, this);
+//			g.drawImage(img, 0, 0, 675, 84, this);
+			g.drawImage(img, 0, 0, 295, 80, this);
 		}
 	 };
 
