@@ -177,15 +177,49 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   private String checkData(){
 	  String error = "";
 
-//	  error += (tpAdresse.getText().equals("") ? " - Firma \n" : "");
-//	  error += (tpLieferadresse.getText().equals("") ? " - Lieferadresse \n" : "");
+	  error += (tfBestellDatum.getValue() == null ? " - Datum \n" : "");
+	  error += (fbKonto == null ? " - Kostenstelle \n" : "");
+		error += (zvTitel == null ? " - Haushaltstitel \n" : "");
 
 	  return error;
 	 }
 
 	private void setData(){
 	 loadUsers();
+	 loadSwBeauftragte();
 	 loadInstituts();
+ }
+ 
+  private void saveOrder(){
+		ASKBestellung editedOrder = null;
+  	
+  	if(bestellung == null){
+			editedOrder = new ASKBestellung("", (Date)tfBestellDatum.getValue(), (Benutzer)frame.getBenutzer(), 
+																		  '0', (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																		  zvTitel, fbKonto, ((Float)tfBestellsumme.getValue()).floatValue(), 0);
+  	}else{
+			editedOrder = (ASKBestellung)bestellung.clone();
+		  editedOrder.getAngebot().setPositionen(tableBestellung.getOrderPositions());
+		  editedOrder.setBestellwert(tableBestellung.getOrderSum());
+		  editedOrder.setAuftraggeber((Benutzer)cbAuftraggeber.getSelectedItem());
+		  editedOrder.setBemerkung(tpBemerkungen.getText());
+		  editedOrder.setDatum((Date)tfBestellDatum.getValue());
+		  editedOrder.setEmpfaenger((Benutzer)cbEmpfaenger.getSelectedItem());
+		  editedOrder.setFbkonto(fbKonto);
+		  editedOrder.setZvtitel(zvTitel);
+  	}
+	
+		try {
+			if(bestellung == null)
+				frame.getApplicationServer().addBestellung(editedOrder);
+			else
+				frame.getApplicationServer().setBestellung(bestellung, editedOrder);
+	
+			bestellung = editedOrder;
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				e.printStackTrace();
+		}
  }
 
 	/**
@@ -212,6 +246,26 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 					cbAuftraggeber.setSelectedItem(frame.getBenutzer());
 					cbEmpfaenger.setSelectedItem(frame.getBenutzer());
 			  }
+		}catch(Exception e){
+			 System.out.println(e);
+		}
+
+	}
+	
+	/**
+	 * lädt alle Softwarebeauftragte
+	 *
+	 */
+	private void loadSwBeauftragte(){
+		try{
+			Benutzer[] users = frame.getApplicationServer().getSwBeauftragte();
+
+		  if(users != null){
+			  cbSwBeauftragter.removeAllItems();
+				 for(int i = 0; i < users.length; i++){
+					cbSwBeauftragter.addItem(users[i]);
+				 }
+		  }
 		}catch(Exception e){
 			 System.out.println(e);
 		}
@@ -383,10 +437,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
     scrollTable.setBounds(new Rectangle(5, 210, 583, 156));
   }
-
-  private void saveBestellung(){
-
-  }
+  
 
   private void bestellen(){
 
@@ -461,10 +512,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 						 "Warnung",
 						 JOptionPane.ERROR_MESSAGE);
 		  }
-  }else if ( e.getSource() == buSpeichern ) {
+  	}else if ( e.getSource() == buSpeichern ) {
 		  error = checkData();
 		  if(error.equals("")){
-			  saveBestellung();
+			  saveOrder();
 		  }else{
 			  JOptionPane.showMessageDialog(
 						 this,
