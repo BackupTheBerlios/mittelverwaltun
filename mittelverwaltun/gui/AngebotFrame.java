@@ -7,7 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -286,15 +286,20 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																							((Float)dtm.getValueAt(i, 2)).floatValue(),
 																							((Integer)dtm.getValueAt(i, 0)).intValue(),
 																							((Float)dtm.getValueAt(i, 3)).floatValue(),
-																							((Float)dtm.getValueAt(i, 4)).floatValue());
+																							((Float)dtm.getValueAt(i, 4)).floatValue(),
+																							frame.frame.getBenutzer().getKostenstelle());
 					positionen.add(position);
 			 }
 				Angebot angebot = null;
 				Object o = tfDate.getValue();
+				
+				java.util.Date datum = (java.util.Date)tfDate.getValue();
+				Date sqlDate = new Date(datum.getTime());
+				
 				if(positionen.size() == 0)
-					angebot = new Angebot(positionen, (Date)tfDate.getValue(), (Firma)cbFirmen.getSelectedItem(), ((Float)(tfBestellsumme.getValue())).floatValue());
+					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), ((Float)(tfBestellsumme.getValue())).floatValue());
 				else
-					angebot = new Angebot(positionen, (Date)tfDate.getValue(), (Firma)cbFirmen.getSelectedItem());
+					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem());
 					
 				frame.insertAngebot(angebot, angebotNr);
 				this.dispose();

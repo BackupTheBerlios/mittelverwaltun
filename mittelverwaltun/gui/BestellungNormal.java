@@ -26,7 +26,13 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 
-
+/**
+ * 
+ * @author robert
+ *
+ * Klasse für die StandardBestellung wird für die Sondierungsphase und die Bestellphase benutzt.
+ * Diese Bestellung kann nur ein Admin oder ein Institutsadmin durchführen.
+ */
 public class BestellungNormal extends JInternalFrame implements ActionListener, ItemListener, ZVKontoSelectable, PropertyChangeListener{
 
   JLabel labKoSt = new JLabel();
@@ -92,6 +98,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   int angebotNr;
   ZVTitel zvTitel;
   FBUnterkonto fbKonto;
+  StandardBestellung bestellung;
 
   public BestellungNormal(MainFrame frame) {
   	this.frame = frame;
@@ -431,14 +438,28 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		for(int i = 0; i < dtm.getRowCount(); i++)
 			angebote.add((Angebot)dtm.getValueAt(i, 1));
 
-		StandardBestellung bestellung = new StandardBestellung(angebote, angebotNr, (Kostenart)cbKostenart.getSelectedItem(),
+		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
+		Date sqlDate = new Date(datum.getTime());
+				
+		StandardBestellung newBestellung = new StandardBestellung(angebote, angebotNr, (Kostenart)cbKostenart.getSelectedItem(),
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
-																				tfReferenzNr.getText(), (Date)tfBestellDatum.getValue(), frame.getBenutzer(),
+																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
 																				(short)0, (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, (FBUnterkonto)cbKostenstelle.getSelectedItem(), 
 																				(angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
-
+																				
+		if(bestellung != null){
+			
+		}else{
+			try {
+				frame.getApplicationServer().addBestellung(newBestellung);
+			} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
+				e.printStackTrace();
+			}	
+		}
+		
 	}
 
 	private void bestellen(){
@@ -503,6 +524,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
 			labTitel.setText(zvTitel.getTitel());
 			labUT.setText("");
+			this.zvTitel = (ZVTitel)zvTitel;
 		}
 	}
 
