@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE report PUBLIC "-//JFreeReport//DTD report definition//EN//simple"
+                        "/xml/report.dtd">
+
+<report name="FB-Mittelverwaltung Report" pageformat="A4" leftmargin="50" rightmargin="50" topmargin="40" bottommargin="40">
+  
+  <!-- REPORT HEADER -->
+  <!-- This band appears once at the beginning of the report.  In this example, -->
+  <!-- the header contains four labels. -->
+  <reportheader fontname="Tahoma" fontsize="11" >
+
+    <label fontstyle="bold" fontsize="14" x="0" y="0" width="100%" height="15" alignment="center">Fachhochschule Mannheim - Hochschule für Technik und Gestaltung</label>
+		<label fontstyle="italic" fontsize="20" x="0" y="30" width="200" height="20" alignment="left">Beilage zur Bestellung</label>
+		
+		<rectangle x="260" y="25" width="135" height="25" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="265" y="33" width="200" fontsize="12" height="12" alignment="left">Best.Nr.:</label>
+		<string-field fontsize="12" x="315" y="33" width="200" height="12" alignment="left" fieldname="bestNr" />
+    <rectangle x="395" y="25" width="100%" height="25" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="400" y="33" width="200" fontsize="12" height="12" alignment="left">KoSt:</label>
+		<string-field fontsize="12" x="430" y="33" width="200" height="12" alignment="left" fieldname="koSt" />
+    
+    <label x="0" y="60" width="400" height="12" alignment="left">Die bei der Bestellung aufgeführten Gegenstände werden für</label>
+		<label x="0" y="60" width="100%" height="12" alignment="right">beschafft.</label>
+		<line x1="300" y1="69" x2="440" y2="69" weight="0.5"/>
+    <string-field x="300" y="60" width="140" height="12" alignment="center" fieldname="kostenstelle" />
+    <label fontsize="8" x="350" y="72" width="100" height="12" alignment="left">(Kostenstelle)</label>
+    
+    <label fontstyle="bold" x="0" y="85" width="100%" height="12" alignment="left">Kostenart:</label>
+		<rectangle x="80" y="82" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="100" y="85" width="100" height="12" alignment="left">Investitionen</label>
+		<string-field fontsize="17" x="83" y="82" width="100" height="18" alignment="left" fieldname="investitionen"/>
+		<rectangle x="220" y="82" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="240" y="85" width="100" height="12" alignment="left">Reparatur</label>
+		<string-field fontsize="17" x="223" y="83" width="100" height="18" alignment="left" fieldname="reparatur"/>
+		<rectangle x="360" y="82" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="380" y="85" width="100" height="12" alignment="left">Verbrauchsmaterial</label>
+		<string-field fontsize="17" x="363" y="83" width="100" height="18" alignment="left" fieldname="verbrauchsmaterial"/>
+		
+		<label fontstyle="bold" x="0" y="110" width="100%" height="12" alignment="left">zu belastender Haushaltstitel:</label>
+		<label x="170" y="110" width="200" height="12" alignment="left">Kapitel:</label>
+		<string-field x="210" y="110" width="56" height="12" alignment="center" fieldname="kapitel" />
+    <line x1="210" y1="119" x2="266" y2="119" weight="0.5"/>
+    <label x="276" y="110" width="200" height="12" alignment="left">Titel:</label>
+		<string-field x="300" y="110" width="56" height="12" alignment="center" fieldname="titel" />
+    <line x1="300" y1="119" x2="356" y2="119" weight="0.5"/>
+    <label x="366" y="110" width="200" height="12" alignment="left">UT:</label>
+		<string-field x="386" y="110" width="20" height="12" alignment="center" fieldname="ut" />
+    <line x1="386" y1="119" x2="406" y2="119" weight="0.5"/>
+    
+    <rectangle x="0" y="130" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="20" y="131" width="100" height="12" alignment="left">Erstbeschaffung</label>
+		<string-field fontsize="17" x="3" y="130" width="100" height="18" alignment="left" fieldname="erstbeschaffung"/>
+		
+		<rectangle x="0" y="150" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="20" y="153" width="100" height="12" alignment="left">Ersatz für:</label>
+		<string-field fontsize="17" x="3" y="151" width="100" height="18" alignment="left" fieldname="ersatzX"/>
+		<string-field x="80" y="150" width="100" height="18" alignment="left" fieldname="ersatz"/>
+		<line x1="80" y1="162" x2="320" y2="162" weight="0.5"/>
+    <label x="330" y="153" width="100" height="12" alignment="left">Inventar-Nr.:</label>
+		<string-field x="400" y="150" width="100" height="18" alignment="left" fieldname="inventarNr"/>
+		<line x1="400" y1="162" x2="500" y2="162" weight="0.5"/>
+    
+    <rectangle x="0" y="175" width="100%" height="250" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label line-height="17" x="5" y="180" width="485" height="34" alignment="left">Begründung für die Notwendigkeit der Beschaffung und der zweckentsprechenden Verwendung gemäß 4.1 Beschaffungsrichtlinien.</label>
+		<rectangle x="0" y="410" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field line-height="17" x="5" y="220" width="485" height="180" alignment="left" fieldname="begruendung"/>
+		<label x="20" y="413" width="100%" height="12" alignment="left">Dritt- /HBFG-Mittel: Die Bestellung entspricht dem vorgelegten Finanzierungs- / Ausstattungsplan</label>
+		<string-field fontsize="17" x="3" y="411" width="100" height="18" alignment="left" fieldname="drittMittel"/>
+		
+		<label fontsize="11" fontstyle="bold" x="0" y="440" width="450" height="12" alignment="left">Angebote / Preisvergleiche wurden bei folgenden Firmen eingeholt</label>
+		<label fontsize="7" x="0" y="445" width="100%" height="7" alignment="right">(Angebote bitte beilegen!)     </label>
+		
+		<rectangle x="0" y="460" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="460" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="460" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="0" y="466" width="30" height="12" alignment="center">Nr.</label>
+		<label x="35" y="466" width="240" height="12" alignment="center">Firma, Ort</label>
+		<label x="290" y="466" width="485" height="12" alignment="left">Angebot vom</label>
+		<label x="370" y="466" width="485" height="12" alignment="left">Auftr.-Summe inkl. MwSt</label>
+		
+		<rectangle x="0" y="480" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="480" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="480" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="486" width="30" height="12" alignment="center" fieldname="nr1"/>
+		<string-field x="35" y="486" width="240" height="12" alignment="left" fieldname="firma1"/>
+		<string-field x="290" y="486" width="485" height="12" alignment="left" fieldname="angebot1"/>
+		<string-field x="370" y="486" width="485" height="12" alignment="left" fieldname="summe1"/>
+		
+		<rectangle x="0" y="500" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="500" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="500" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="506" width="30" height="12" alignment="center" fieldname="nr2"/>
+		<string-field x="35" y="506" width="240" height="12" alignment="left" fieldname="firma2"/>
+		<string-field x="290" y="506" width="485" height="12" alignment="left" fieldname="angebot2"/>
+		<string-field x="370" y="506" width="485" height="12" alignment="left" fieldname="summe2"/>
+		
+		<rectangle x="0" y="520" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="520" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="520" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="526" width="30" height="12" alignment="center" fieldname="nr3"/>
+		<string-field x="35" y="526" width="240" height="12" alignment="left" fieldname="firma3"/>
+		<string-field x="290" y="526" width="485" height="12" alignment="left" fieldname="angebot3"/>
+		<string-field x="370" y="526" width="485" height="12" alignment="left" fieldname="summe3"/>
+		
+		<rectangle x="0" y="540" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="540" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="540" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="546" width="30" height="12" alignment="center" fieldname="nr4"/>
+		<string-field x="35" y="546" width="240" height="12" alignment="left" fieldname="firma4"/>
+		<string-field x="290" y="546" width="485" height="12" alignment="left" fieldname="angebot4"/>
+		<string-field x="370" y="546" width="485" height="12" alignment="left" fieldname="summe4"/>
+		
+		<rectangle x="0" y="560" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="560" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="560" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="566" width="30" height="12" alignment="center" fieldname="nr5"/>
+		<string-field x="35" y="566" width="240" height="12" alignment="left" fieldname="firma5"/>
+		<string-field x="290" y="566" width="485" height="12" alignment="left" fieldname="angebot5"/>
+		<string-field x="370" y="566" width="485" height="12" alignment="left" fieldname="summe5"/>
+		
+		<rectangle x="0" y="580" width="100%" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="30" y="580" width="250" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<rectangle x="280" y="580" width="80" height="20" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field x="0" y="586" width="30" height="12" alignment="center" fieldname="nr6"/>
+		<string-field x="35" y="586" width="240" height="12" alignment="left" fieldname="firma6"/>
+		<string-field x="290" y="586" width="485" height="12" alignment="left" fieldname="angebot6"/>
+		<string-field x="370" y="586" width="485" height="12" alignment="left" fieldname="summe6"/>
+		
+		
+		<label x="0" y="620" width="400" height="24" alignment="left">Der Auftrag wird der oben unter          genannten Firma erteilt, da diese Firma</label>
+		<string-field x="160" y="620" width="25" height="18" alignment="center" fieldname="auftragNr"/>
+		<line x1="160" y1="629" x2="185" y2="629" weight="0.5"/>
+		
+		<rectangle x="0" y="640" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<label x="20" y="643" width="400" height="24" alignment="left">das preisgünstigste und wirtschaftlichste Angebot abgegeben hat.</label>
+		<string-field fontsize="17" x="3" y="641" width="100" height="18" alignment="left" fieldname="preisX"/>
+		
+		<rectangle x="0" y="660" width="15" height="15" color="#000000" weight="0" draw="true" fill="false"/>
+   	<string-field fontsize="17" x="3" y="661" width="100" height="18" alignment="left" fieldname="grundX"/>
+		<string-field line-height="17" x="20" y="663" width="470" height="34" alignment="left" fieldname="grund"/>
+		<line x1="220" y1="672" x2="500" y2="672" weight="0.5"/><line x1="20" y1="692" x2="500" y2="692" weight="0.5"/>
+		
+		<label x="0" y="710" width="485" height="24" alignment="left">Datum:</label>
+		<string-field x="40" y="710" width="100" height="18" alignment="left" fieldname="datum"/>
+		<line x1="40" y1="719" x2="140" y2="719" weight="0.5"/>
+    <label x="150" y="710" width="485" height="24" alignment="left">Name:</label>
+		<string-field x="185" y="710" width="100" height="18" alignment="left" fieldname="name"/>
+		<line x1="185" y1="719" x2="310" y2="719" weight="0.5"/>
+    <label x="320" y="710" width="485" height="24" alignment="left">Unterschrift:</label>
+		<line x1="385" y1="719" x2="500" y2="719" weight="0.5"/>
+		
+		<label x="0" y="735" width="485" height="24" alignment="left">Beschaffungsbeauftragter:</label>
+		<label fontsize="8" x="130" y="745" width="220" height="8" alignment="center">(Datum, Unterschrift)</label>
+		<line x1="130" y1="744" x2="350" y2="744" weight="0.5"/>
+		
+  </reportheader>
+  
+  <reportfooter fontname="Tahoma" fontsize="11" fixed-position="640">
+  	<line x1="0" y1="0" x2="500" y2="0" weight="0.5"/>
+  	<line x1="245" y1="0" x2="245" y2="100" weight="0.5"/>
+  	<string-field line-height="15" x="0" y="10" width="100" height="100" alignment="left" fieldname="kostenstelle1"/>
+		<string-field line-height="15" x="80" y="10" width="100" height="100" alignment="left" fieldname="kostenstelle2"/>
+		<label x="260" y="10" width="485" height="24" alignment="left">Unterschrift des Institutsleiters</label>
+		
+  </reportfooter>
+  
+  <!-- PAGE FOOTER -->
+  <!-- Displays the page number, centered at the bottom of the page. -->
+  <pagefooter height="14" onfirstpage="true" onlastpage="true" fontname="Tahoma" fontstyle="plain" fontsize="9">
+		<string-field fieldname="pageXofY" x="0" y="9" width="100%" height="18" alignment="center"/>
+  </pagefooter>
+	
+	<groups>
+    <group name="Vordruck">
+    
+      <groupheader fontname="Tahoma" fontsize="11" pagebreak="true" >
+      
+        <image-field x="0" y="0" width="295" height="80" fieldname="logo" alignment="right"/>
+        <label fontsize="8" x="0" y="90" width="485" height="8" alignment="left">Fachhochschule Mannheim - Windeckstaße 110 - 68163 Mannheim</label>
+				<string-field line-height="17" x="0" y="110" width="200" height="100" alignment="left" fieldname="adresse"/>
+				<string-field line-height="17" x="340" y="85" width="150" height="130" alignment="left" fieldname="besteller"/>
+		
+				<label fontsize="13" fontstyle="bold" x="0" y="200" width="485" height="14" alignment="left">Bestellung   Nr.:</label>
+				<string-field fontsize="13" fontstyle="bold" x="110" y="200" width="485" height="14" alignment="left" fieldname="bestellNr"/>
+				
+				<line x1="0" y1="230" x2="500" y2="230" weight="0.5"/>
+				<label fontstyle="bold" x="0" y="240" width="50" height="14" alignment="center">Menge</label>
+				<label fontstyle="bold" x="50" y="240" width="200" height="14" alignment="center">Artikel/Bestellnummer</label>
+				<label fontstyle="bold" x="250" y="240" width="40" height="14" alignment="right">MwSt</label>
+				<label fontstyle="bold" x="290" y="240" width="70" height="14" alignment="right">Einzelpreis</label>
+				<label fontstyle="bold" x="360" y="240" width="50" height="14" alignment="right">Rabatt</label>
+				<label fontstyle="bold" x="410" y="240" width="100%" height="14" alignment="right">Gesamtpreis</label>
+				<line x1="0" y1="260" x2="500" y2="260" weight="0.5"/>
+				 
+      </groupheader>
+      <groupfooter fontname="Tahoma" fontsize="11" pagebreak="false">
+        
+        <label x="330" y="10" width="100" height="14" alignment="right">Gesamtnettopreis</label>
+				<string-field x="410" y="10" width="100%" height="14" alignment="right" fieldname="netto"/>
+				<label x="330" y="30" width="100" height="14" alignment="right">7 % MwSt.</label>
+				<string-field x="410" y="30" width="100%" height="14" alignment="right" fieldname="mwst7"/>
+				<label x="330" y="50" width="100" height="14" alignment="right">16 % MwSt.</label>
+				<string-field x="410" y="50" width="100%" height="14" alignment="right" fieldname="mwst16"/>
+				<label fontstyle="bold" x="280" y="80" width="150" height="14" alignment="right">Bestellsumme inkl. MwSt.</label>
+				<string-field fontstyle="bold" x="410" y="80" width="100%" height="14" alignment="right" fieldname="gesamt"/>
+				
+				<label fontsize="10" fontstyle="bold" x="0" y="120" width="150" height="14" alignment="left">Bemerkungen:</label>
+				<string-field line-height="15" x="0" y="135" width="100%" height="30" alignment="left" fieldname="bemerkungen"/>
+				
+				<label fontsize="10" fontstyle="bold" x="0" y="175" width="150" height="14" alignment="left">Lieferanschrift</label>
+				<string-field line-height="15" x="0" y="190" width="170" height="30" alignment="left" fieldname="lieferanschrift"/>
+				
+      </groupfooter>
+    </group>
+  </groups>
+
+  <!-- THE ITEM BAND -->
+  <!-- This band is printed once for each row of data in the TableModel. -->
+  <items height="0" fontname="Tahoma" fontstyle="plain" fontsize="11">
+  	
+  	<string-field x="0" y="5" width="50" height="14" alignment="center" fieldname="Menge"/>
+		<string-field x="50" y="5" width="195" height="18" alignment="left" fieldname="Artikel/Bestellnummer" dynamic="true"/>
+		<string-field x="250" y="5" width="40" height="14" alignment="right" fieldname="MwSt"/>
+		<string-field x="290" y="5" width="70" height="14" alignment="right" fieldname="Einzelpreis"/>
+		<string-field x="360" y="5" width="50" height="14" alignment="right" fieldname="Rabatt"/>
+		<string-field x="410" y="5" width="100%" height="14" alignment="right" fieldname="Gesamtpreis"/>
+		
+  </items>
+
+  <!-- FUNCTIONS -->
+  <!-- Declares the functions used in this report. -->
+  <functions>
+    <property-ref name="report.date"/>
+
+    <function name="PageNumber" class="org.jfree.report.function.PageFunction"/>
+    <function name="PageTotal" class="org.jfree.report.function.PageTotalFunction"/>
+    <expression name="pageXofY" class="org.jfree.report.function.TextFormatExpression">
+      <properties>
+        <property name="pattern">Seite {0} von {1}</property>
+        <property name="0">PageNumber</property>
+        <property name="1">PageTotal</property>
+      </properties>
+    </expression>
+    
+  </functions>
+
+</report>

@@ -7,7 +7,7 @@
   <!-- REPORT HEADER -->
   <!-- This band appears once at the beginning of the report.  In this example, -->
   <!-- the header contains four labels. -->
-  <reportheader height="100" fontname="SansSerif" fontstyle="plain" fontsize="10">
+  <reportheader fontname="SansSerif" fontstyle="plain" fontsize="10">
 
     <image-field x="1" y="1" width="295" height="80" fieldname="logo"/>
     <rectangle x="0" y="0" width="100%" height="82"
@@ -16,20 +16,17 @@
 		<label fontname="Tahoma" fontstyle="bold-italic" fontsize="18"
       x="310" y="35" width="100%" height="22" alignment="left"
       >R E P O R T S</label>
+      
+    <label fontstyle="bold" fontsize="12" x="95" y="95" width="220" height="22" alignment="left">Zeitraum von                       bis</label>
+    <string-field fontstyle="bold" fontsize="12" x="180" y="95" width="100" height="12" alignment="left" fieldname="datumVon"/>
+    <string-field fontstyle="bold" fontsize="12" x="280" y="95" width="100" height="12" alignment="left" fieldname="datumBis"/>
     
   </reportheader>
   
 	<!-- PAGE FOOTER -->
   <!-- Displays the page number, centered at the bottom of the page. -->
-  <pagefooter height="14"
-    onfirstpage="true" onlastpage="true"
-    fontname="Tahoma" fontstyle="plain" fontsize="9">
-
-    <number-field fieldname="PageNumber"
-      format="Page 0"
-      x="0" y="3" width="100%" height="9"
-      alignment="center" nullstring="hull"/>
-
+  <pagefooter height="14" onfirstpage="true" onlastpage="true" fontname="Tahoma" fontstyle="plain" fontsize="9">
+		<string-field fieldname="pageXofY" x="0" y="9" width="100%" height="18" alignment="center"/>
   </pagefooter>
 	
 	<groups>
@@ -71,13 +68,14 @@
     <property-ref name="report.date"/>
 
     <function name="PageNumber" class="org.jfree.report.function.PageFunction"/>
-
-    <function name="OverallCount"
-      class="org.jfree.report.function.ItemCountFunction">
+    <function name="PageTotal" class="org.jfree.report.function.PageTotalFunction"/>
+    <expression name="pageXofY" class="org.jfree.report.function.TextFormatExpression">
       <properties>
-        <property name="field">Name</property>
+        <property name="pattern">Seite {0} von {1}</property>
+        <property name="0">PageNumber</property>
+        <property name="1">PageTotal</property>
       </properties>
-    </function>
+    </expression>
 
   </functions>
 

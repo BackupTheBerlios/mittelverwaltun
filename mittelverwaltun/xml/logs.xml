@@ -32,36 +32,29 @@
 	<groups>
     <group name="Logs Group">
       <groupheader height="40" fontname="SansSerif" fontstyle="bold" fontsize="12" pagebreak="false">
-        <label x="0" y="11" width="100%" height="12" alignment="left">ZVKonto: </label>
-        <string-field x="80" y="11" width="250" height="12" alignment="left" fieldname="ZVKonto"/>
+        <label x="0" y="11" width="100%" height="12" alignment="left">Typ: </label>
+        <string-field x="40" y="11" width="250" height="12" alignment="left" fieldname="Typ"/>
         <line x1="0" y1="23" x2="0" y2="23" weight="0.5"/>
         <rectangle x="0" y="30" width="100%" height="15" color="#CCCCCC" weight="0"/>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="33" width="100%" height="10" alignment="left">Institut</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="33" width="100%" height="10" alignment="center">Ausgaben (Institut)</label>
-        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="0" y="33" width="100%" height="10" alignment="right">Kontostand (Institut)  </label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="33" width="100%" height="10" alignment="left">Datum</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="70" y="33" width="100%" height="10" alignment="left">Benutzer</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="170" y="33" width="100%" height="10" alignment="left">Beschreibung  </label>
       </groupheader>
       <fields>
-        <field>ZVKonto</field>
+        <field>Typ</field>
       </fields>
     </group>
   </groups>
 
   <!-- THE ITEM BAND -->
   <!-- This band is printed once for each row of data in the TableModel. -->
-  <items height="0"
-    fontname="Tahoma" fontstyle="plain" fontsize="9">
+  <items height="0" fontname="Tahoma" fontstyle="plain" fontsize="9">
 
-    <string-field x="0" y="7" width="100%" height="9" alignment="left"
-      fontname="Tahoma" fontstyle="plain" fontsize="8"
-      fieldname="Institut"/>
+    <string-field x="0" y="7" width="100%" height="9" alignment="left" fieldname="Datum"/>
 
-		<number-field x="155" y="7" width="100" height="9" alignment="right" format="#,##0.00 'Euro'" 
-      fontname="Tahoma" fontstyle="plain" fontsize="8"
-      fieldname="Ausgaben (Institut)"/>
+		<string-field x="70" y="7" width="100" height="9" alignment="left" fieldname="Benutzer"/>
 		
-    <number-field x="0" y="7" width="100%" height="9" alignment="right" format="#,##0.00 'Euro'" 
-      fontname="Tahoma" fontstyle="plain" fontsize="8"
-      fieldname="Kontostand (Institut)"/>
+    <string-field x="170" y="7" width="100%" height="9" alignment="left" fieldname="Beschreibung" dynamic="true"/>
     
   </items>
 

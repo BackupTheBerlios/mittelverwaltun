@@ -190,6 +190,8 @@ public class Benutzer implements Serializable {
 	}
 
 	public String getTitel() {
+		if(titel == null)
+			return "";
 		return titel;
 	}
 
@@ -214,6 +216,8 @@ public class Benutzer implements Serializable {
 	}
 
 	public String getEmail() {
+		if(email == null)
+					return "";
 		return email;
 	}
 
@@ -271,6 +275,8 @@ public class Benutzer implements Serializable {
 	}
 
 	public String getTelefon() {
+		if(telefon == null)
+			return "";
 		return telefon;
 	}
 
@@ -279,6 +285,8 @@ public class Benutzer implements Serializable {
 	}
 
 	public String getFax() {
+		if(fax == null)
+			return "";
 		return fax;
 	}
 
