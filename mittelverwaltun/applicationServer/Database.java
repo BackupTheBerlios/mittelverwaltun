@@ -3279,7 +3279,7 @@ public class Database implements Serializable{
 		if(b != null){
 			try{
 				
-				Object[] parameters = { "" + b.getGeloescht(), new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
+				Object[] parameters = { (b.getGeloescht() ? "1" : "0"), new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
 																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
 																b.getBemerkung(), new Integer(b.getKostenart().getId()), (b.getErsatzbeschaffung() ? "1" : "0"), b.getErsatzbeschreibung(), b.getInventarNr(),
 																b.getVerwendungszweck(), (b.getPlanvorgabe() ? "1" : "0"), b.getBegruendung(), null, new Integer(b.getId()) };
@@ -3302,7 +3302,7 @@ public class Database implements Serializable{
 		if(b != null){
 			try{
 			
-				Object[] parameters = { "" + b.getGeloescht(), new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
+				Object[] parameters = { (b.getGeloescht() ? "1" : "0"), new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
 																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
 																b.getBemerkung(), null, null, null, null, null, null, null, null, new Integer(b.getId()) };
 				if(statements.get(271).executeUpdate(parameters) == 0)
@@ -3346,14 +3346,14 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * löscht alle Positionen zu allen Angeboten einer Bestellung
-	 * @param bestellId
+	 * löscht alle Positionen zu einem Angebot einer Bestellung
+	 * @param angebotId
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void deletePositions(int bestellId) throws ApplicationServerException {
+	public void deletePositions(int angebotId) throws ApplicationServerException {
 		try{
-			Object[] parameters = {new Integer(bestellId)};
+			Object[] parameters = {new Integer(angebotId)};
 			statements.get(267).executeUpdate(parameters);
 		} catch (SQLException e){
 			throw new ApplicationServerException( 86, e.getMessage() );

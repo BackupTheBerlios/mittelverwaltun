@@ -1758,7 +1758,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
-	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
+	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
 		// ReferenzNr prüfen
 		System.out.println(bestellung.getReferenznr());
 		int c = db.checkReferenzNr(bestellung.getReferenznr());
@@ -1787,14 +1787,22 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.insertPosition(position, newAngebotId);
 			}
 		}
+		
+		if(bestellung.getPhase() == '1'){
+			// Vormerkungen bei FBKonto und ZVTitel setzen
+			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel());
+				// ? Vormerkungen Buchen ?
+		}
+		
 		db.commit();
+		return newBestellungId;
 	}
 
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
 	 */
-	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
 	
 		int newBestellungId = db.insertBestellung(bestellung);
 		int newAngebotId = 0;
@@ -1816,6 +1824,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.insertPosition(position, newAngebotId);
 		}
 		db.commit();
+
+		return newBestellungId;
 	}
 
 
@@ -1844,17 +1854,23 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
-		if(original.getPhase() == '0'){
+		if(edited.getPhase() == '0'){
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
-		}else if(original.getPhase() == '1'){
+		}else if(edited.getPhase() == '1'){
 			db.updateStandardBestellung(edited);
+			// TODO nur ein Angebot aktualisieren
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 			
-			// noch keine Buchungen
+			// es wurde auf den Button Bestellen gedrückt
+			if(original.getPhase() == '0'){
+				// Vormerkungen bei FBKonto und ZVTitel setzen
+				db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+				// ? Vormerkungen Buchen ?
+			}
 			
 			
-		}else if(original.getPhase() == '2'){
+		}else if(edited.getPhase() == '2'){
 		
 		}
 		
@@ -2278,7 +2294,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(delOrder.getPhase() == '0'){
 			// alle Position aller Angebote der Bestellung löschen
-			db.deletePositions(delOrder.getId());
+			for(int i = 0 ; i < delOrder.getAngebote().size(); i++){
+				Angebot angebot = (Angebot)delOrder.getAngebote().get(i);
+				
+				db.deletePositions(angebot.getId());
+			}
 			// alle Angebote der Bestellung löschen
 			db.deleteAngebote(delOrder.getId());
 			// die StandardBestellung löschen
@@ -2314,9 +2334,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 76 );
 		
 		if(delOrder.getPhase() == '0'){
-			// alle Position aller Angebote der Bestellung löschen
-			db.deletePositions(delOrder.getId());
-			// alle Angebote der Bestellung löschen
+			// alle Position des Angebots der Bestellung löschen
+			db.deletePositions(delOrder.getAngebot().getId());
+			// das Angebot löschen
 			db.deleteAngebote(delOrder.getId());
 			// die StandardBestellung löschen
 			db.deleteASK_Standard_Bestellung(delOrder.getId());

@@ -117,18 +117,20 @@ public interface ApplicationServer extends Remote {
 	/**
 	 * speichert eine StandardBestellung
 	 * @param bestellung - Standardbestellung
+	 * @return id - gibt die neue Id der Bestellung
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
+	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
 	
 	/**
 	 * speichert eine ASKBestellung
 	 * @param bestellung - Standardbestellung
+	 * @return id - gibt die neue Id der Bestellung
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
+	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException;
 	
 	/**
 	 * speichert die Standardbestellung
