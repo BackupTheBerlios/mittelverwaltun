@@ -2,6 +2,7 @@ package gui;
 
 import applicationServer.ApplicationServer;
 import applicationServer.CentralServer;
+import dbObjects.Benutzer;
 import dbObjects.Institut;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -19,6 +20,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 
 	JTextField tfBezeichnung = new JTextField();
 	JTextField tfKostenstelle = new JTextField();
+	JComboBox cbInstitutsleiter = new JComboBox();
 
 	JButton buAnlegen = new JButton( "Anlegen" );
 	JButton buAendern = new JButton( "Ändern" );
@@ -46,18 +48,21 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	  Setting.setPosAndLoc( panel, new JLabel( "Bezeichnung" ), 170, 30, 100, 16 );
 	  Setting.setPosAndLoc( panel, tfBezeichnung, 280, 30, 140, 22 );
 		
-	  Setting.setPosAndLoc( panel, new JLabel( "Kostenstelle" ), 170, 70, 100, 16 );
-	  Setting.setPosAndLoc( panel, tfKostenstelle, 280, 70, 140, 22 );
+	  Setting.setPosAndLoc( panel, new JLabel( "Kostenstelle" ), 170, 60, 100, 16 );
+	  Setting.setPosAndLoc( panel, tfKostenstelle, 280, 60, 140, 22 );
+		
+	  Setting.setPosAndLoc( panel, new JLabel( "Institutsleiter" ), 170, 90, 100, 16 );
+		Setting.setPosAndLoc( panel, cbInstitutsleiter, 280, 90, 140, 22 );
 		
 	  Setting.setPosAndLoc( panel, buRefresh, 100, 5, 20, 20 );
 	  buRefresh.setBorder(null);
 		buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
 		buRefresh.setToolTipText("Aktualisieren");
 		buRefresh.addActionListener( this );
-		Setting.setPosAndLoc( panel, buAnlegen, 170, 110, 110, 25 );
+		Setting.setPosAndLoc( panel, buAnlegen, 170, 120, 110, 25 );
 	  buAnlegen.setIcon(Functions.getAddIcon(getClass()));
     buAnlegen.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buAendern, 310, 110, 110, 25 );
+	  Setting.setPosAndLoc( panel, buAendern, 310, 120, 110, 25 );
 	  buAendern.setIcon(Functions.getEditIcon(getClass()));
     buAendern.addActionListener( this );
 	  Setting.setPosAndLoc( panel, buLoeschen, 170, 155, 110, 25 );
@@ -68,9 +73,9 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
     buBeenden.addActionListener( this );
 	  listInstitute.addListSelectionListener(this);
 		listInstitute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 
 		loadInstitutes();
+		loadInstitutsleiter();
 	  this.setSize( 450, 235 );
 	
 	}
@@ -89,10 +94,28 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	  }
   }
   
+  private void loadInstitutsleiter(){
+		 try{
+			 Benutzer[] users = applicationServer.getUsers();
+
+			  if(users != null){
+				  cbInstitutsleiter.removeAllItems();
+					 for(int i = 0; i < users.length; i++){
+						 cbInstitutsleiter.addItem(users[i]);
+					 }
+			  }
+		 }catch(Exception e){
+			 System.out.println(e);
+		 }
+
+	 }
+  
   protected String changeInstitut(){
 		if(!listInstitute.isSelectionEmpty()){
 			Institut currInstitut = (Institut)listModel.getElementAt(listInstitute.getSelectedIndex());
-			Institut institut = new Institut(currInstitut.getId(), tfBezeichnung.getText(), tfKostenstelle.getText());
+			Benutzer institutsleiter = (Benutzer)cbInstitutsleiter.getSelectedItem();
+			
+			Institut institut = new Institut(currInstitut.getId(), tfBezeichnung.getText(), tfKostenstelle.getText(),institutsleiter);
 			try{
 				applicationServer.setInstitute(institut, currInstitut);	
 				listModel.setElementAt(institut, listInstitute.getSelectedIndex());
@@ -108,7 +131,8 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 		if(tfBezeichnung.getText().equals("") || tfKostenstelle.getText().equals("")){
 			return "Bezeichnung und Kostenstelle müssen ausgefüllt sein.";
 		}else{
-			Institut institut = new Institut(0, tfBezeichnung.getText(), tfKostenstelle.getText());
+			Benutzer institutsleiter = (Benutzer)cbInstitutsleiter.getSelectedItem();
+			Institut institut = new Institut(0, tfBezeichnung.getText(), tfKostenstelle.getText(), institutsleiter);
 			try{
 				int key = applicationServer.addInstitute(institut);
 				institut.setId(key);	
@@ -191,6 +215,15 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			
 			tfBezeichnung.setText(institut.getBezeichnung());
 			tfKostenstelle.setText(institut.getKostenstelle());
+			
+			for(int i = 0; i < cbInstitutsleiter.getItemCount(); i++){
+				Benutzer benutzer = (Benutzer)cbInstitutsleiter.getItemAt(i);
+				
+				if(institut.getInstitutsleiter().getId() == benutzer.getId()){
+					cbInstitutsleiter.setSelectedIndex(i);
+					break;
+				}
+			}
 		}
 	}
 }

@@ -1,197 +1,250 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import applicationServer.ApplicationServer;
 import applicationServer.CentralServer;
+
 import dbObjects.Fachbereich;
 import dbObjects.Institut;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.Naming;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
-public class Fachbereichverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener {
+public class Fachbereichverwaltung extends JInternalFrame implements ActionListener{
+  JPanel jPanel1 = new JPanel();
+  JLabel jLabel1 = new JLabel();
+  JButton buRefresh = new JButton();
+  JLabel jLabel2 = new JLabel();
+  JLabel jLabel3 = new JLabel();
+  JLabel jLabel4 = new JLabel();
+  JLabel jLabel5 = new JLabel();
+  JLabel jLabel6 = new JLabel();
+  JLabel jLabel7 = new JLabel();
+  JTextField tfFBBezeichnung = new JTextField();
+  CurrencyTextField tfProfBudget = new CurrencyTextField(0);
+  JTextField tfPlzOrt = new JTextField();
+  JTextField tfStrasseHausnr = new JTextField();
+  JTextField tfFHBezeichnung = new JTextField();
+  JTextField tfFHBeschreibung = new JTextField();
+  JLabel jLabel8 = new JLabel();
+  JComboBox cbInstitut = new JComboBox();
+  JButton buAendern = new JButton();
+  JButton buBeenden = new JButton();
 
-	JTextField tfBezeichnung = new JTextField();
-	CurrencyTextField tfProfBudget = new CurrencyTextField(0);
-	
-	JPanel panel = new JPanel();
-	
-	JScrollPane scrollPanel = new JScrollPane();
-	DefaultListModel listModel = new DefaultListModel();
-	JList listFachbereiche = new JList(listModel);
-	JComboBox cbInstitut = new JComboBox();
-  
-	JButton buAnlegen = new JButton( "Anlegen" );
-	JButton buAendern = new JButton( "Ändern" );
-	JButton buLoeschen = new JButton( "Löschen" );
-	JButton buBeenden = new JButton( "Beenden" );
-	JButton buRefresh = new JButton( "" );
-	
-	ApplicationServer applicationServer;
+  ApplicationServer applicationServer;
 	Container contentPane;
-	
-	public Fachbereichverwaltung(ApplicationServer applicationServer) {
-		super( "Fachbereichverwaltung" );
+	Fachbereich fachbereich;
+  JLabel jLabel9 = new JLabel();
+
+
+  public Fachbereichverwaltung(ApplicationServer applicationServer) {
+		 try {
+			jbInit();
+		 }
+		 catch(Exception e) {
+			e.printStackTrace();
+		 }
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.getContentPane().setLayout( null );
 		this.applicationServer = applicationServer;
-		
-		Setting.setPosAndLoc( this.getContentPane(), panel, 5, 5, 430, 195 );
-		panel.setBorder(BorderFactory.createEtchedBorder());
-		panel.setLayout( null );		
-		
-		Setting.setPosAndLoc( panel, new JLabel( "Fachbereiche" ), 10, 10, 100, 16 );
-		
-		Setting.setPosAndLoc( panel, new JLabel( "Bezeichnung" ), 170, 30, 100, 16 );
-		Setting.setPosAndLoc( panel, tfBezeichnung, 280, 30, 140, 22 );
-		
-		Setting.setPosAndLoc( panel, new JLabel( "Proffesor Budget" ), 170, 60, 100, 16 );
-		Setting.setPosAndLoc( panel, tfProfBudget, 280, 60, 140, 22 );
 
-		Setting.setPosAndLoc( panel, new JLabel( "Institut" ), 170, 90, 100, 16 );
-		Setting.setPosAndLoc( panel, cbInstitut, 280, 90, 140, 22 );
-
-		Setting.setPosAndLoc( panel, scrollPanel, 10, 30, 150, 150 );
-		scrollPanel.getViewport().add( listFachbereiche, null );
-		
-		Setting.setPosAndLoc( panel, buRefresh, 100, 5, 20, 20 );
-	  buRefresh.setBorder(null);
+		buRefresh.setBorder(null);
 		buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
 		buRefresh.setToolTipText("Aktualisieren");
 		buRefresh.addActionListener( this );
-		Setting.setPosAndLoc( panel, buAnlegen, 170, 120, 110, 25 );
-		buAnlegen.setIcon(Functions.getAddIcon(getClass()));
-    //buAnlegen.addActionListener( this );
-    buAnlegen.setEnabled(false);
-		Setting.setPosAndLoc( panel, buAendern, 310, 120, 110, 25 );
+
 		buAendern.setIcon(Functions.getEditIcon(getClass()));
-    buAendern.addActionListener( this );
-		Setting.setPosAndLoc( panel, buLoeschen, 170, 155, 110, 25 );
-		buLoeschen.setIcon(Functions.getDelIcon(getClass()));
-    //buLoeschen.addActionListener( this );
-    buLoeschen.setEnabled(false);
-		Setting.setPosAndLoc( panel, buBeenden, 310, 155, 110, 25 );
+		buAendern.addActionListener( this );
+
 		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-    buBeenden.addActionListener( this );
-		listFachbereiche.addListSelectionListener(this);
-	  listFachbereiche.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
-		loadInstituts();
+		buBeenden.addActionListener( this );
+
 		loadFachbereiche();
-		this.setSize( 450, 240 );
-	}
-	
-	private void loadFachbereiche(){
-		try{
-		  Fachbereich[] fachbereiche = applicationServer.getFachbereiche();
-			listModel.clear();
-		  for(int i = 0; i < fachbereiche.length; i++){
-			  listModel.addElement(fachbereiche[i]);
-		  }
-		  if(fachbereiche.length > 0)
-			  listFachbereiche.setSelectedIndex(0);
-	  }catch(Exception e){
-		  System.out.println(e);
-	  }
-	}
+		loadData();
+		loadInstituts();
+		this.setSize( 395, 350 );
+  }
 
-	private void loadInstituts(){
+  private void loadFachbereiche(){
 	  try{
-		  Institut[] institute = applicationServer.getInstitutes();
+		 Fachbereich[] fachbereiche = applicationServer.getFachbereiche();
 
-			if(institute != null){
-				cbInstitut.removeAllItems();
-				  for(int i = 0; i < institute.length; i++){
-					  cbInstitut.addItem(institute[i]);
-				  }
-			}
-	  }catch(Exception e){
-		  System.out.println(e);
-	  }
+		 fachbereich = fachbereiche[0];
+
+		 
+	 }catch(Exception e){
+		 System.out.println(e);
+	 }
   }
   
-  protected String changeFachbereich(){
-		Fachbereich currFachbereich = (Fachbereich)listModel.getElementAt(listFachbereiche.getSelectedIndex());
-		
+  private void loadData(){
+  	
+		 tfFBBezeichnung.setText(fachbereich.getFbBezeichnung());
+		 tfProfBudget.setValue(new Float(fachbereich.getProfPauschale()));
+		 tfStrasseHausnr.setText(fachbereich.getStrasseHausNr());
+		 tfPlzOrt.setText(fachbereich.getPlzOrt());
+		 tfFHBezeichnung.setText(fachbereich.getFhBezeichnung());
+		 tfFHBeschreibung.setText(fachbereich.getFhBeschreibung());
+  }
+
+  private void loadInstituts(){
+		 try{
+			 Institut[] institute = applicationServer.getInstitutes();
+
+			  if(institute != null){
+				  cbInstitut.removeAllItems();
+					 for(int i = 0; i < institute.length; i++){
+						 cbInstitut.addItem(institute[i]);
+					 }
+					Institut institut = new Institut(fachbereich.getId(), fachbereich.getBezeichnung(), fachbereich.getKostenstelle());
+					cbInstitut.setSelectedItem(institut);
+			  }
+		 }catch(Exception e){
+			 System.out.println(e);
+		 }
+	 }
+
+	protected String changeFachbereich(){
 		Number budget = null;
 		try {
 			budget = NumberFormat.getCurrencyInstance().parse(tfProfBudget.getText());
 		} catch (ParseException e) {
 			return e.getMessage();
 		}
-		Fachbereich fachbereich = new Fachbereich(currFachbereich.getId(), tfBezeichnung.getText(), budget.floatValue());
+		Fachbereich fachbereichNew = new Fachbereich(fachbereich.getId(), tfFBBezeichnung.getText(), budget.floatValue(),
+																								 tfStrasseHausnr.getText(),	tfPlzOrt.getText(), tfFHBezeichnung.getText(),
+																								 tfFHBeschreibung.getText());
 		try{
 			int institutsId = ((Institut)cbInstitut.getSelectedItem()).getId();
-			applicationServer.setFachbereich(fachbereich, institutsId);	
-			fachbereich.setId(institutsId);
-			listModel.setElementAt(fachbereich, listFachbereiche.getSelectedIndex());
+			fachbereichNew.setId(institutsId);
+			fachbereich = applicationServer.setFachbereich(fachbereichNew, fachbereich);
+			
 			return "";
 		}catch(Exception e){
 			return e.getMessage();
 		}
 	}
 
-	public void actionPerformed( ActionEvent e ) {
-		if(!listFachbereiche.isSelectionEmpty()){
-			String error = "";
-			if ( e.getSource() == buAnlegen ) {
-			} else if ( e.getSource() == buAendern ) {
-				error = changeFachbereich();
-			} else if ( e.getSource() == buLoeschen ) {
-				JOptionPane.showConfirmDialog(this, "Wollen Sie wirklich löschen ?", "Löschen",
-													JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-			} else if ( e.getSource() == buRefresh ) {
-				loadInstituts();
-				loadFachbereiche();
-			} else if ( e.getSource() == buBeenden ) {
-				this.dispose();
-			}
-			if(!error.equals("")){
-				JOptionPane.showMessageDialog(
-					 this,
-					 error,
-					 "Warnung",
-					 JOptionPane.ERROR_MESSAGE);
-				loadFachbereiche();
-			}
-		}
-	}
+	 public static void main(String[] args) {
+		  JFrame test = new JFrame("Fachbereichverwaltung Test");
+		  JDesktopPane desk = new JDesktopPane();
+		  desk.setDesktopManager(new DefaultDesktopManager());
+		  test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  test.setContentPane(desk);
+		  test.setBounds(100,100,800,700);
+		  try{
+			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+			  ApplicationServer applicationServer = server.getMyApplicationServer();
+			  PasswordEncrypt pe = new PasswordEncrypt();
+			  String psw = pe.encrypt(new String("r.driesner").toString());
+			  applicationServer.login("r.driesner", psw);
+			  Fachbereichverwaltung fachbereichverwaltung = new Fachbereichverwaltung(applicationServer);
+			  desk.add(fachbereichverwaltung);
+			  test.show();
+			  fachbereichverwaltung.show();
+		  }catch(Exception e){
+				  System.out.println(e);
+		  }
+	 }
 
-	public static void main(String[] args) {
-		JFrame test = new JFrame("Fachbereichverwaltung Test");
-		JDesktopPane desk = new JDesktopPane();
-		desk.setDesktopManager(new DefaultDesktopManager());
-		test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		test.setContentPane(desk);
-		test.setBounds(100,100,800,700);
-		try{
-			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
-			Fachbereichverwaltung fachbereichverwaltung = new Fachbereichverwaltung(applicationServer);
-			desk.add(fachbereichverwaltung);
-			test.show();
-			fachbereichverwaltung.show();
-		}catch(Exception e){
-				System.out.println(e);
-		}
+  private void jbInit() throws Exception {
+	 this.setTitle("Fachbereichverwaltung");
+	 jLabel9.setBounds(new Rectangle(8, 212, 95, 15));
+    jLabel9.setText("Bezeichnung");
+    jLabel9.setFont(new java.awt.Font("Dialog", 1, 12));
+    jPanel1.add(buRefresh, null);
+	 jPanel1.add(jLabel1, null);
+	 jPanel1.add(jLabel2, null);
+	 jPanel1.add(jLabel4, null);
+	 jPanel1.add(jLabel5, null);
+	 jPanel1.add(tfProfBudget, null);
+	 jPanel1.add(tfStrasseHausnr, null);
+	 jPanel1.add(tfPlzOrt, null);
+	 jPanel1.add(jLabel3, null);
+	 jPanel1.add(tfFHBezeichnung, null);
+	 jPanel1.add(tfFHBeschreibung, null);
+	 jPanel1.add(jLabel8, null);
+	 jPanel1.add(cbInstitut, null);
+	 jPanel1.add(tfFBBezeichnung, null);
+	 jPanel1.add(buAendern, null);
+	 jPanel1.add(buBeenden, null);
+    jPanel1.add(jLabel6, null);
+    jPanel1.add(jLabel7, null);
+    jPanel1.add(jLabel9, null);
+	 cbInstitut.setBounds(new Rectangle(146, 155, 199, 21));
+	 buAendern.setBounds(new Rectangle(35, 264, 128, 25));
+	 buAendern.setText("Ändern");
+	 buBeenden.setBounds(new Rectangle(202, 264, 126, 25));
+	 buBeenden.setText("Beenden");
+	 this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+	 this.getContentPane().setLayout(null);
+	 jPanel1.setBorder(BorderFactory.createEtchedBorder());
+	 jPanel1.setBounds(new Rectangle(6, 7, 372, 301));
+	 jPanel1.setLayout(null);
+	 jLabel1.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel1.setText("Fachbereich");
+	 jLabel1.setBounds(new Rectangle(8, 10, 95, 15));
+	 buRefresh.setBounds(new Rectangle(96, 6, 21, 21));
+	 buRefresh.setText("");
+	 jLabel2.setBounds(new Rectangle(8, 40, 85, 15));
+	 jLabel2.setText("Bezeichnung");
+	 jLabel2.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel3.setBounds(new Rectangle(8, 69, 122, 15));
+	 jLabel3.setText("Professor Pauschale");
+	 jLabel3.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel4.setBounds(new Rectangle(8, 99, 95, 15));
+	 jLabel4.setText("Straße Hausnr.");
+	 jLabel4.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel5.setBounds(new Rectangle(8, 128, 95, 15));
+	 jLabel5.setText("PLZ Ort");
+	 jLabel5.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel6.setBounds(new Rectangle(8, 187, 95, 15));
+	 jLabel6.setText("Hochschule");
+	 jLabel6.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel7.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel7.setText("Beschreibung");
+	 jLabel7.setBounds(new Rectangle(8, 236, 95, 15));
+	 tfFBBezeichnung.setText("");
+	 tfFBBezeichnung.setBounds(new Rectangle(146, 37, 199, 21));
+	 tfProfBudget.setBounds(new Rectangle(146, 67, 199, 21));
+	 tfPlzOrt.setText("");
+	 tfPlzOrt.setBounds(new Rectangle(146, 126, 199, 21));
+	 tfStrasseHausnr.setText("");
+	 tfStrasseHausnr.setBounds(new Rectangle(146, 96, 199, 21));
+	 tfFHBezeichnung.setText("");
+	 tfFHBezeichnung.setBounds(new Rectangle(146, 209, 199, 21));
+	 tfFHBeschreibung.setBounds(new Rectangle(146, 233, 199, 21));
+	 tfFHBeschreibung.setText("");
+	 jLabel8.setFont(new java.awt.Font("Dialog", 1, 12));
+	 jLabel8.setText("Institut");
+	 jLabel8.setBounds(new Rectangle(8, 158, 95, 15));
+	 this.getContentPane().add(jPanel1, null);
   }
 
-	public void valueChanged(ListSelectionEvent e) {
-		if(!listFachbereiche.isSelectionEmpty()){
-			Fachbereich fachbereich = (Fachbereich)listModel.getElementAt(listFachbereiche.getSelectedIndex());
-	
-			tfBezeichnung.setText(fachbereich.getHochschule());
-			tfProfBudget.setText(NumberFormat.getCurrencyInstance().format(fachbereich.getProfPauschale()));
-			Institut institut = new Institut(fachbereich.getId(), fachbereich.getBezeichnung(), fachbereich.getKostenstelle());
-			cbInstitut.setSelectedItem(institut);
+	public void actionPerformed( ActionEvent e ) {
+		String error = "";
+
+		if ( e.getSource() == buAendern ) {
+			error = changeFachbereich();
+		} else if ( e.getSource() == buRefresh ) {
+			loadFachbereiche();
+			loadData();
+			loadInstituts();
+		} else if ( e.getSource() == buBeenden ) {
+			this.dispose();
+		}
+		if(!error.equals("")){
+			JOptionPane.showMessageDialog(
+				 this,
+				 error,
+				 "Warnung",
+				 JOptionPane.ERROR_MESSAGE);
+			loadFachbereiche();
 		}
 	}
 }
