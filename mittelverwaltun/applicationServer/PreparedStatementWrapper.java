@@ -171,7 +171,11 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.DATALINK:
 							;
 				case Types.DATE:
-							;
+							{
+								Date v = (Date)parameters[i];
+								stmt.setDate(i+1, v);
+								break;
+							}
 				case Types.DECIMAL:
 							;
 				case Types.DISTINCT:
