@@ -1861,17 +1861,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
 		// original StandardBestellung in der Datenbank
-		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(id);
-	
-		ArrayList angebote = db.selectForUpdateAngebote(id);
-
-		for(int i = 0; i < angebote.size(); i++){
-			Angebot angebot = (Angebot)angebote.get(i);
-
-			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
-		}
-		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
+//		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(id);
+//	
+//		ArrayList angebote = db.selectForUpdateAngebote(id);
+//
+//		for(int i = 0; i < angebote.size(); i++){
+//			Angebot angebot = (Angebot)angebote.get(i);
+//
+//			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+//		}
+//		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
 		
+		StandardBestellung dbOriginal = getStandardBestellung(id);
 		
 		// die Bestellung hat sich zwischenzeitlich geändert
 		if(!original.equals(dbOriginal))
