@@ -3248,7 +3248,11 @@ public class Database implements Serializable{
 				rs.beforeFirst();		// Vor die erste Zeile springen
 			
 				while( rs.next() ){		// Solange es n‰chste Abfragezeile gibt
-					bestellungen.add( new Bestellung(rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), new Benutzer(rs.getString(5),rs.getString(6)), new Benutzer(rs.getString(7),rs.getString(8)), new Benutzer(rs.getString(9),rs.getString(10)), rs.getFloat(11), rs.getFloat(12)));
+					bestellungen.add( new Bestellung(	rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), 
+																						new Benutzer(rs.getString(5),rs.getString(6)), 
+																						new Benutzer(rs.getString(7),rs.getString(8)), 
+																						new Benutzer(rs.getString(9),rs.getString(10)), 
+																						rs.getFloat(11), rs.getFloat(12)));
 				}
 			}
 			rs.close();		// Abfrage schlieﬂen
