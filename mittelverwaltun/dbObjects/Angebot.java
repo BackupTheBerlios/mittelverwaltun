@@ -25,31 +25,37 @@ public class Angebot {
 
 	private java.sql.Date datum;
 
-	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter){
+	private boolean angenommen;
+
+	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter, boolean angenommen){
 		this.id = id;
 		this.positionen = positionen;
 		this.datum = datum;
 		this.anbieter = anbieter;
+		this.angenommen = angenommen;
 	}
 	
-	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter, float summe){
+	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter, boolean angenommen, float summe){
 		this.id = id;
 		this.positionen = positionen;
 		this.datum = datum;
 		this.anbieter = anbieter;
+		this.angenommen = angenommen;
 		this.summe = summe;
 	}
 	
-	public Angebot(ArrayList positionen, Date datum, Firma anbieter){
+	public Angebot(ArrayList positionen, Date datum, Firma anbieter, boolean angenommen){
 		this.positionen = positionen;
 		this.datum = datum;
 		this.anbieter = anbieter;
+		this.angenommen = angenommen;
 	}
 	
-	public Angebot(ArrayList positionen, Date datum, Firma anbieter, float summe){
+	public Angebot(ArrayList positionen, Date datum, Firma anbieter, boolean angenommen, float summe){
 		this.positionen = positionen;
 		this.datum = datum;
 		this.anbieter = anbieter;
+		this.angenommen = angenommen;
 		this.summe = summe;
 	}
 
@@ -118,6 +124,14 @@ public class Angebot {
 				return false;
 		}else
 			return false;
+	}
+
+	public boolean getAngenommen() {
+		return angenommen;
+	}
+
+	public void setAngenommen(boolean angenommen) {
+		this.angenommen = angenommen;
 	}
 
 }

@@ -298,9 +298,9 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 				Date sqlDate = new Date(datum.getTime());
 				
 				if(positionen.size() == 0)
-					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), ((Float)(tfBestellsumme.getValue())).floatValue());
+					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false, ((Float)(tfBestellsumme.getValue())).floatValue());
 				else
-					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem());
+					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false);
 					
 				frame.insertAngebot(angebot, angebotNr);
 				this.dispose();
