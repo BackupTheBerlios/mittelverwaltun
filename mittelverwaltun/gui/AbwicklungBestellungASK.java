@@ -197,7 +197,10 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	
 	    tfKapitel.setBounds(new Rectangle(150, 146, 70, 21));
 	    tfKapitel.setDisabledTextColor(Color.black);
-	    tfKapitel.setText(origin.getZvtitel().getZVKonto().getKapitel());
+	    if(origin.getZvtitel() instanceof ZVTitel)
+	    	tfKapitel.setText(((ZVTitel)origin.getZvtitel()).getZVKonto().getKapitel());
+	    else
+			tfKapitel.setText(origin.getZvtitel().getZVTitel().getZVKonto().getKapitel());
 	    tfKapitel.setEnabled(false);
 	    tfKapitel.setBackground(UIManager.getColor("Viewport.background"));
 	

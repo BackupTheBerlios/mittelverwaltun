@@ -180,8 +180,6 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tfKonto.setText(origin.getFbkonto().toString());
 	    tfKonto.setBounds(new Rectangle(110, 115, 377, 21));
 
-	    
-	    
 	    lbZvTitel.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbZvTitel.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbZvTitel.setHorizontalTextPosition(SwingConstants.RIGHT);
