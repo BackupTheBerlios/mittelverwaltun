@@ -208,7 +208,13 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} else if(e.getActionCommand() == "showReport"){
 			try {
-				if(cbReportFilter.getSelectedItem() == "Report_3"){
+				if(cbReportFilter.getSelectedItem() == "Report_1"){
+							ArrayList content = frame.getApplicationServer().getReport(REPORT_1);
+							tabReport.fillReport(REPORT_1, "", content);
+				} else if(cbReportFilter.getSelectedItem() == "Report_2"){
+							ArrayList content = frame.getApplicationServer().getReport(REPORT_2);
+							tabReport.fillReport(REPORT_2, filter, content);
+				} else if(cbReportFilter.getSelectedItem() == "Report_3"){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_3);
 							tabReport.fillReport(REPORT_3, filter, content);
 				} else if(cbReportFilter.getSelectedItem() == "Report_4"){

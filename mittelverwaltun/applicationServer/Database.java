@@ -4081,6 +4081,71 @@ public class Database implements Serializable{
 
 		return report;
 	}
+	
+	/**
+	 * gibt eine ArrayList von ArrayList für den Report2 zurück. Nähere Infos in gui.Reports Klasse
+	 * @return Report 2 als ArrayListe
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectReport2() throws ApplicationServerException {
+		ArrayList report = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			ResultSet rs = statements.get(341).executeQuery(); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// Institut
+					row.add(rs.getString(2)); 						// FB-Konto
+					row.add(new Float(rs.getFloat(3))); 	// verteilte Mittel
+					row.add(new Float(rs.getFloat(4)));		// Ausgaben 
+					row.add(new Float(rs.getFloat(5)));		// Kontostand
+
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 108, e.getMessage() );
+		}
+
+		return report;
+	}
+	
+	/**
+	 * gibt eine ArrayList von ArrayList für den Report1 zurück. Nähere Infos in gui.Reports Klasse
+	 * @return Report 1 als ArrayListe
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectReport1() throws ApplicationServerException {
+		ArrayList report = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			ResultSet rs = statements.get(342).executeQuery(); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(2))); 	// zugewiesene Mittel
+					row.add(new Float(rs.getFloat(3)));		// Ausgaben 
+					row.add(new Float(rs.getFloat(4)));		// Kontostand
+
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 109, e.getMessage() );
+		}
+
+		return report;
+	}
 
 	/**
 	 * Aktualisieren der Beträge auf dem ZVTitel und FBKonto bei der Stornierung einer Kleinbestellung. 

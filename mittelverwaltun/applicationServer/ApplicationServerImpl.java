@@ -2717,7 +2717,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public ArrayList getReport(int typ) throws ApplicationServerException {
 		
-		if(typ == 3){
+		if(typ == 1){
+			return db.selectReport1();
+		}if(typ == 2){
+			return db.selectReport2();
+		}if(typ == 3){
 			return db.selectReport3();
 		}else if(typ == 4){
 			return db.selectReport4();

@@ -2432,11 +2432,38 @@ public class PreparedSqlStatements {
 																"GROUP BY i.bezeichnung, fbk.bezeichnung");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//341
+		{//341 Report 2 siehe gui.Reports.java
+			/**
+			 * Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe
+			 * der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen
+			 */
 			statements[i++] = null;
 		}
-		{//342
-			statements[i++] = null;
+		{//342 Report 1 siehe gui.Reports.java
+			/**
+			 * Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel, die Summe
+			 * der Ausgaben und aktuellen Kontostände enthält
+			 */
+			ps = con.prepareStatement("SELECT " +
+																		"zvk.bezeichnung AS zvKonto, " +
+																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +
+																			"FROM Buchungen " +
+																			"WHERE typ IN (1, 2) " +
+																				"AND ( zvKonto = zvk.id " +
+																							"OR zvTitel1 IN " +
+																											"( SELECT id " +
+																												"FROM ZVKontentitel " +
+																												"WHERE zvKontoId = zvk.id " +
+																											")" +
+																						")" +
+																		") AS mittel, " +
+																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																											")" +																						")" +																		") AS ausgaben, " +
+																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel zvt1 " +																											"WHERE zvt1.zvKontoId  = zvk.id)" +																		") AS kontostand " +
+																"FROM " +
+																	"ZVKonten zvk, Haushaltsjahre h " +
+															  "WHERE h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 ");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//343
 			statements[i++] = null;
