@@ -1815,7 +1815,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
 		
 		
-		
 	}
 	
 	/*

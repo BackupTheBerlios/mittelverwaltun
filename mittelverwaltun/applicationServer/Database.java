@@ -2696,7 +2696,6 @@ public class Database implements Serializable{
 	 
 	 /**
 	  * @author robert
-	  * 
 	  * gibt alle Kostenarten aus der SQL-Tabelle Kostenarten
 	  * @return Kostenart Array
 	  */
@@ -2728,6 +2727,7 @@ public class Database implements Serializable{
 	 * @param typ - gibt den Typ der Bestellung an 0 = Standard, 1 = ASK, 2 = Klein
 	 * @return Id der Bestellung in der Tabelle Bestellungen
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */ 
 	public int insertBestellung(Bestellung bestellung, int typ) throws ApplicationServerException{
 		if(bestellung != null){
@@ -2760,6 +2760,7 @@ public class Database implements Serializable{
 	 * @param bestellung - Standardbestellung
 	 * @return
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void insertStandardBestellung(StandardBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
@@ -2786,6 +2787,7 @@ public class Database implements Serializable{
 	 * @param bestellId der StandardBestellung
 	 * @return Standardbestellung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public StandardBestellung selectStandardBestellung(int bestellId) throws ApplicationServerException{
 		StandardBestellung bestellung = null;
@@ -2825,6 +2827,7 @@ public class Database implements Serializable{
 	 * @param angebotId - Id des dazugehörigen Angebots
 	 * @return
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void insertASKBestellung(ASKBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
@@ -2848,6 +2851,7 @@ public class Database implements Serializable{
 	 * @param angenommen - sagt aus ob das Angebot ausgewählt wurde
 	 * @return Id des Angebots
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public int insertAngebot(Angebot angebot, int bestellungId, boolean angenommen) throws ApplicationServerException{
 		if(angebot != null){
@@ -2874,6 +2878,7 @@ public class Database implements Serializable{
 	 * @param position 
 	 * @param angebotId - Id des zugehörigen Angbots
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void insertPosition(Position position, int angebotId) throws ApplicationServerException{
 		if(position != null){
@@ -2896,6 +2901,7 @@ public class Database implements Serializable{
 	 * @param bestellId - Id der Bestellung
 	 * @return ArrayListe von Angeboten
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public ArrayList selectAngebote(int bestellId) throws ApplicationServerException {
 		ArrayList angebote = new ArrayList();	// Liste für die ZVKonten
@@ -2929,6 +2935,7 @@ public class Database implements Serializable{
 	 * @param angebotId - Id des Angebots
 	 * @return ArrayList von Positionen
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public ArrayList selectPositionen(int angebotId) throws ApplicationServerException {
 		ArrayList positionen = new ArrayList();	// Liste für die ZVKonten
@@ -2958,6 +2965,7 @@ public class Database implements Serializable{
 	 * @param referenzNr der Bestellung
 	 * @return Anzahl der Bestellungen mit dieser ReferenzNr
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public int checkReferenzNr(String referenzNr) throws ApplicationServerException{
 	  try{
@@ -2970,4 +2978,27 @@ public class Database implements Serializable{
 			  throw new ApplicationServerException(77, e.getMessage());
 		 }
  	}
+ 	
+ 	/**
+ 	 * aktualisiert eine StandardBestellung angand der bestellId
+ 	 * @param b - Standardbestellung
+ 	 * @param verbindlichkeiten
+ 	 * @throws ApplicationServerException
+ 	 * @author robert
+ 	 */
+	public void updateStandardBestellung(StandardBestellung b, float verbindlichkeiten) throws ApplicationServerException{
+		if(b != null){
+			try{
+				Object[] parameters = { new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
+																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(verbindlichkeiten),
+																b.getBemerkung(), new Integer(b.getKostenart().getId()), (b.getErsatzbeschaffung() ? "1" : "0"), b.getErsatzbeschreibung(), b.getInventarNr(),
+																b.getVerwendungszweck(), (b.getPlanvorgabe() ? "1" : "0"), b.getBegruendung(), new Integer(b.getId()) };
+				if(statements.get(271).executeUpdate(parameters) == 0)
+					throw new ApplicationServerException(78);
+
+			} catch (SQLException e){
+				throw new ApplicationServerException(79, e.getMessage());
+			}
+		}
+	}
 }

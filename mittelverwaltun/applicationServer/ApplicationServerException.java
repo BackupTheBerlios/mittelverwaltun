@@ -135,7 +135,9 @@ public class ApplicationServerException extends Exception {
 		messages[76] = "Application Server Error: Die Bestellung hat sich zwischenzeitlich geändert";
 		messages[77] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkReferenzNr";
 		messages[78] = "Application Server Error: Die ReferenzNr der Bestellung ist schon vergeben";
-				
+		messages[78] = "Application Server Error: Bestellung existiert nicht mehr";
+		messages[79] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateStandardBestellung";
+					
 //		Exception Ende ROBERT von 50-99
 
 //		Exception Anfang WALDEMAR von 100-149
