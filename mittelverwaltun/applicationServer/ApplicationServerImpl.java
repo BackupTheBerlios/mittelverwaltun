@@ -326,7 +326,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 17 );	// dann kann man es nicht mehr erstellen
 		
 		try {
-			db.setAutoCommit(false);
 			int id = 0;
 			if( (id = db.existsDeleteFBKonto( konto )) > 0 ) {	// Existiert schon ein gelöschtes FBKonto
 				konto.setId( id );		// KontoId beim Konto setzen
@@ -336,7 +335,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.insertFBHauptkonto( konto );			// Sonst ein neues FBHauptkonto erstellen
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -355,7 +353,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 19 );
 		
 		try {
-			db.setAutoCommit(false);
 			int id = 0;
 			if( (id = db.existsDeleteFBKonto( konto )) > 0 ){	// Gibt es ein solches gelöschtes Konto
 				konto.setId( id );		// Id des gelöschten Kontos an das neue Konto übergeben
@@ -365,7 +362,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.insertFBUnterkonto( konto );			// Sonst ein neues FBUnterkonto erstellen
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -400,7 +396,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 		
 		try {
-			db.setAutoCommit(false);
 			boolean delFBHauptkonto = true;	// Variable zur Ermittlung ob das FBHauptkonto ganz gelöscht werden sollte
 			// Löschen der Unterkonten
 			if( temp != null ) {	// Es gibt Unterkonten
@@ -436,7 +431,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			else
 				return 0;
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -458,7 +452,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 22 );
 		
 		try {
-			db.setAutoCommit(false);
 			// Es gibt abgeschlossene Bestellungen noch oder Buchungen oder Benutzer
 			if( (db.countBestellungen( konto ) > 0) || (db.countBuchungen( konto ) > 0) || (db.countBenutzer( konto ) > 0) ) {
 				db.selectForUpdateFBUnterkonto( konto );	// Das FBUnterkonto zum Aktualisieren auswählen
@@ -471,7 +464,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			else
 				return 0;
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -488,7 +480,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		try {
-			db.setAutoCommit(false);
 			FBHauptkonto old = db.selectForUpdateFBHauptkonto( konto );	// Zum aktualisieren auswählen
 			if( old == null ) {			// Kein FBHauptonto gefunden
 				throw new ApplicationServerException( 16 );
@@ -533,7 +524,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.updateFBHauptkonto( konto );	// Sonst kann das FBHauptkonto aktualisiert werden
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();			
 		}
 	}
@@ -549,7 +539,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )		// Kein Konto angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			FBUnterkonto old = db.selectForUpdateFBUnterkonto( konto );	// Zum aktualisieren auswählen
 			if( old == null ) {			// Kein FBUnterkonto gefunden
 				throw new ApplicationServerException( 18 );
@@ -570,7 +559,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.updateFBUnterkonto( konto );		// Sonst kann das FBUnterkonto aktualisiert werden
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -587,7 +575,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( haupt == null || unter == null )	// Ein Konto wurde nicht angegeben
 			return;
 		try {
-			db.setAutoCommit(false);
 			FBHauptkonto oldHaupt = db.selectForUpdateFBHauptkonto( haupt );	// Das FBHauptkonto auswählen
 			if( oldHaupt == null )				// Wenn kein FBHauptkonto in der Datenbank gefunden
 				throw new ApplicationServerException( 16 );
@@ -614,7 +601,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			unter.setBudget( unter.getBudget() + betrag );	// Betrag gutschreiben
 			db.updateFBUnterkonto( unter );			// In der Datenbank aktualisieren
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -631,7 +617,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( from == null || to == null )
 			return;
 		try {
-			db.setAutoCommit(false);
 			FBHauptkonto oldFrom = db.selectForUpdateFBHauptkonto( from );	// Das FBHauptkonto auswählen
 			if( oldFrom == null )				// Wenn kein FBHauptkonto in der Datenbank gefunden
 				throw new ApplicationServerException( 16 );
@@ -658,7 +643,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			to.setBudget( to.getBudget() + betrag );		// Betrag gutschreiben
 			db.updateFBHauptkonto( to );					// In der Datenbank aktualisieren
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -675,7 +659,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( unter == null || haupt == null )
 			return;
 		try {
-			db.setAutoCommit(false);
 			FBUnterkonto oldUnter = db.selectForUpdateFBUnterkonto( unter );	// Das FBUnterkonto auswählen
 			if( oldUnter == null )				// Wenn kein FBUnterkonto in der Datenbank gefunden
 				throw new ApplicationServerException( 18 );
@@ -702,7 +685,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			haupt.setBudget( haupt.getBudget() + betrag );	// Betrag abbuchen
 			db.updateFBHauptkonto( haupt );			// In der Datenbank aktualisieren
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -758,7 +740,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 		
 		try {
-			db.setAutoCommit(false);
 			int zvKontoId = 0;
 			if( (zvKontoId = db.existsDeleteZVKonto( zvKonto )) > 0 ){	// Wenn ein gelöschtes ZVKonto exitiert, dann aktualisieren
 				zvKonto.setId( zvKontoId );				// Im neuem ZVKonto id setzen
@@ -793,7 +774,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return zvKontoId;	// Und die ZVKontoId zurückgeben
 			}
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -823,7 +803,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 11 );
 			
 		try {
-			db.setAutoCommit(false);
 			int id = 0;
 			if( (id = db.existsDeleteZVTitel( zvTitel )) > 0 )	{	// Wenn ein gelöschtes ZVTitel exitiert, dann aktualisieren
 				zvTitel.setId( id );		// Id setzen
@@ -833,7 +812,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.insertZVTitel( zvTitel );		// Sonst einen neuen ZVTitel erstellen
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -852,7 +830,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 11 );
 			
 		try {
-			db.setAutoCommit(false);
 			int id = 0;
 			// Wenn ein gelöschtes ZVUntertitel exitiert, dann aktualisieren
 			if( (id = db.existsDeleteZVUntertitel( zvUntertitel )) > 0 ) {
@@ -863,7 +840,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.insertZVUntertitel( zvUntertitel );	// Sonst neuen ZVUntertitel erstellen
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -906,7 +882,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}	// Ende if( zvTitel != null )
 		
 		try {
-			db.setAutoCommit(false);
 			boolean delZVKonto = true;	// Variable um festzustellen ob das ZVKonto ganz gelöscht werden sollte
 			// Alle ZVTitel und die dazugehörigen ZVUntertitel löschen
 			// Dabei wird geschaut ob noch irgendwelche abgeschlossenen Bestellungen und Buchungen gibt
@@ -964,7 +939,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				return db.updateZVKonto( zvKonto );	// Das ZVKonto aktualisieren und ZVKontoId zurückgeben
 			}
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1008,7 +982,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}	// Ende if( zvUntertitel != null )
 		
 		try {
-			db.setAutoCommit(false);
 			// Löschen von ZVUntertiteln 
 			boolean delZVTitel = true; 	// Variable um festzustellen ob der ZVTitel ganz gelöscht werden sollte
 			if( zvUntertitel != null ) {	// Gibt es ZVUntertitel
@@ -1043,7 +1016,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			else
 				return 0;				// Sonst Rückgabe = 0
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1063,7 +1035,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException(21);
 
 		try {
-			db.setAutoCommit(false);
 			// Wenn es abgeschlossene Bestellungen oder Buchungen gibt
 			if( (db.countBestellungen( zvUntertitel ) > 0) || (db.countBuchungen( zvUntertitel ) > 0) ) {
 				db.selectForUpdateZVUntertitel( zvUntertitel );		// ZVUntertitel zum Aktualisieren auswählen
@@ -1077,7 +1048,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			else
 				return 0;		// Sonst Rückgabe = 0
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1094,7 +1064,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvKonto == null )		// Wenn kein ZVKonto angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			ZVKonto old = db.selectForUpdateZVKonto( zvKonto );	// Das ZVKonto in der Datenbank zum Aktualisieren auswählen
 			if( old == null )			// Wenn kein ZVKonto in der Datenbank gefunden
 				throw new ApplicationServerException( 10 );
@@ -1151,7 +1120,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.updateZVKonto( zvKonto );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1168,7 +1136,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvTitel == null )	// Kein ZVTitel angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			ZVTitel old = db.selectForUpdateZVTitel( zvTitel );	// Zum Aktualisieren auswählen
 			if( old == null )		// kein ZVTitel vorhanden
 				throw new ApplicationServerException( 12 );
@@ -1206,7 +1173,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 			return db.updateZVTitel( zvTitel );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1222,7 +1188,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( zvUntertitel == null )	// Kein ZVUntertitel angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			ZVUntertitel old = db.selectForUpdateZVUntertitel( zvUntertitel );	// Den ZVUntertitel zum aktualisieren auswählen
 			if( old == null )	// Kein ZVUntertitel gefunden
 				throw new ApplicationServerException( 14 );
@@ -1240,7 +1205,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.updateZVUntertitel( zvUntertitel );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1256,7 +1220,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )
 			return;
 		try {
-			db.setAutoCommit(false);
 			ZVKonto old = db.selectForUpdateZVKonto( konto );	// Das ZVKonto zum Aktualisieren auswählen
 			if( old == null )		// Wenn kein ZVKonto in der Datenbank gefunden
 				throw new ApplicationServerException( 10 );
@@ -1268,7 +1231,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			konto.setTgrBudget( konto.getTgrBudget() + betrag );
 			db.updateZVKonto( konto );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1284,7 +1246,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )
 			return;
 		try {
-			db.setAutoCommit(false);
 			ZVTitel old = db.selectForUpdateZVTitel( konto );	// Den ZVTitel zu aktualisieren auswählen
 			if( old == null )		// Wenn kein ZVTitel in der Datenbank gefunden
 				throw new ApplicationServerException( 12 );
@@ -1295,7 +1256,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			konto.setBudget( konto.getBudget() + betrag );
 			db.updateZVTitel( konto );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1311,7 +1271,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( konto == null )
 			return;
 		try {
-			db.setAutoCommit(false);
 			ZVUntertitel old = db.selectForUpdateZVUntertitel( konto );	// Den ZVUntertitel zu aktualisieren auswählen
 			if( old == null )		// Wenn kein ZVUntertitel in der Datenbank gefunden
 				throw new ApplicationServerException( 14 );
@@ -1323,7 +1282,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			konto.setBudget( konto.getBudget() + betrag );
 			db.updateZVUntertitel( konto );
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1348,6 +1306,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(4);
 
 			db.updateInstitute(editedInst);
+			
+			db.setAutoCommit(false);
 		}
 	}
 
@@ -1376,13 +1336,19 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(53);
 
 			db.deleteInstitute(clientInst);
+			
+			db.setAutoCommit(false);
 		}
 	}
 
 	// fügt ein neues Institut hinzu
 	public int addInstitute(Institut institut) throws ApplicationServerException {
 		if(db.checkInstitute(institut) == 0){
-			return db.insertInstitute(institut);
+			int id = db.insertInstitute(institut);
+			
+			db.setAutoCommit(false);
+			
+			return id;
 		}else
 			throw new ApplicationServerException(4);
 	}
@@ -1421,6 +1387,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					throw new ApplicationServerException(64);
 			}
 			db.updateUser(editedUser);
+			
+			db.setAutoCommit(false);
 		}
 	}
 
@@ -1468,12 +1436,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(privatKonto == null)
 				throw new ApplicationServerException(64);
 		}
-		db.setAutoCommit(false);
 		
 		db.insertUserMySQL(benutzer);
 		int newID = db.insertUser(benutzer);
 		
-		db.setAutoCommit(true);
+		db.commit();
 		return newID;
 	}
 
@@ -1537,10 +1504,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		db.insertRollenAktivitaet(rolle, aktivitaet);
+		db.commit();
 	}
 
 	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		db.deleteRollenAktivitaet(rolle, aktivitaet);
+		db.commit();
 	}
 
 	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException {
@@ -1549,7 +1518,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public int addRolle(Rolle rolle) throws ApplicationServerException {
 		if(db.checkRolle(rolle) == 0){
-			return db.insertRolle(rolle);
+			int id = db.insertRolle(rolle);
+			db.commit();
+			return id;
 		}else
 			throw new ApplicationServerException(8);
 	}
@@ -1568,6 +1539,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(8);
 
 			db.updateRolle(editedRolle);
+			db.commit();
 		}
 	}
 
@@ -1586,6 +1558,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 			db.deleteRollenAktivitaeten(rolle.getId());
 			db.deleteRolle(rolle);
+			db.commit();
 		}
 	}
 
@@ -1647,6 +1620,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 
 		db.updateKontenZuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId(), clientZuordnung.getStatus());
+		db.commit();
 	}
 
 
@@ -1673,11 +1647,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(61);
 		}
 		db.insertKontenZuordnung(fbKonto.getId(), zvKonto.getId());
+		db.commit();
 	}
 
 
 	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
 		db.deleteKontenZuordnung(fbKonto.getId(), zvKonto.getId());
+		db.commit();
 	}
 
 	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException {
@@ -1707,7 +1683,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( db.existsFirma( firma ) > 0 )				// Wenn diese Firma bereits existiert 
 			throw new ApplicationServerException( 38 );	// dann kann man es nicht mehr erstellen
 		try {
-			db.setAutoCommit(false);
 			int id = 0;		// id der Firma
 			if( (id = db.existsDelFirma( firma )) > 0 ) {	// Es gibt eine gelöschte Firma
 				firma.setId( id );		// Id der gelöschten Firma ist jetzt id der neuen Firma
@@ -1717,7 +1692,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			return db.insertFirma( firma );			// Sonst neu erstellen
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1736,11 +1710,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 39 );	// dann kann man es nicht aktualisieren
 		
 		try {
-			db.setAutoCommit(false);
 			db.selectForUpdateFirma( firma );		// Firma zu aktualisieren auswählen
 			return db.updateFirma( firma );			// Firma aktualisieren und Id zurückgeben
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1761,10 +1733,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 42 );		// dann kann man es nicht löschen
 		
 		try {
-			db.setAutoCommit(false);
 			return db.deleteFirma( firma );			// Sonst wird die Firma aus der Datenbank gelöscht
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
@@ -1884,6 +1854,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}else if(original.getPhase() == '2'){
 		
 		}
+		
+		db.commit();
 	}
 	
 	/**
@@ -2008,7 +1980,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
@@ -2028,22 +1999,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(!original.equals(dbOriginal))
 			throw new ApplicationServerException( 76 );
 			
-		ArrayList originalOffer = new ArrayList();
-		originalOffer.add(original.getAngebot());
-		
-		ArrayList editedOffer = new ArrayList();
-		editedOffer.add(edited.getAngebot());		
-			
 		if(original.getPhase() == '0'){
-			
 			db.updateASKBestellung(edited);
-			actualizeAngebote(originalOffer, editedOffer, edited.getId());
+			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
 		}else if(original.getPhase() == '1'){
 			db.updateASKBestellung(edited);
-			actualizeAngebote(originalOffer, editedOffer, edited.getId());
+			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
+			
 		}else if(original.getPhase() == '2'){
 		
 		}
+		
+		db.commit();
 	}
 	
 	/*
@@ -2210,7 +2177,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(bestellung == null)		// keine Bestellung angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			// Bestellung einfügen in der Bestellungs-Tabelle und Id speichern
 			bestellung.setId(db.insertBestellung(bestellung, 2));
 			// Bestellung in der Kleinbestellung-Tabelle speichern
@@ -2222,7 +2188,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			// TODO Buchung durchführen
 			return bestellung.getId();
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}		
 	}
@@ -2270,14 +2235,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(bestellung == null)		// keine Bestellung angegeben
 			return 0;
 		try {
-			db.setAutoCommit(false);
 			bestellung.setGeloescht(true);				// Flag gelöscht setzen
 			db.selectForUpdateKleinbestellung(bestellung);	// Zum Aktualisieren auswählen
 			db.updateKleinbestellung(bestellung);		// Bestellung aktualisieren(löschen)
 			// TODO Buchung durchführen
 			return bestellung.getId();
 		} finally {
-			db.setAutoCommit(true);
 			db.commit();
 		}		
 	}
