@@ -223,7 +223,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   	if(bestellung == null){
 			Angebot a = new Angebot(tableBestellung.getOrderPositions(), (Date)tfBestellDatum.getValue(), firma, true);
 			
-			editedOrder = new ASKBestellung("", "", (Date)tfBestellDatum.getValue(), (Benutzer)frame.getBenutzer(),
+			editedOrder = new ASKBestellung(null, null, (Date)tfBestellDatum.getValue(), (Benutzer)frame.getBenutzer(),
 																		  (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																		  zvTitel, fbKonto, ((Float)tfBestellsumme.getValue()).floatValue(), 0, '0', a, tpBemerkungen.getText(), 
 																			(Benutzer)cbSwBeauftragter.getSelectedItem());

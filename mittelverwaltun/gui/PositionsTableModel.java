@@ -293,7 +293,7 @@ public class PositionsTableModel extends DefaultTableModel {
 				}
 			return positions;
 
-		}else if (type==ASK_ABWICKLUNG){
+		}else if (type==ASK_STANDARD){
 			ArrayList positions = new ArrayList();
 				for (int i=0; i < getRowCount(); i++){
 					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
