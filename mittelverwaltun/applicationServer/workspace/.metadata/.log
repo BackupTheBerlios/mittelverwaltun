@@ -1,0 +1,65 @@
+!SESSION Sep 02, 2004 11:03:28.778 ---------------------------------------------
+java.version=1.4.0
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86, WS=win32, NL=de_DE
+Command-line arguments: -os win32 -ws win32 -arch x86 \\192.168.1.2\Projekt\applicationServer\Database.java -install file:D:/eclipse/
+!ENTRY org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Problems encountered loading the plug-in registry.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.mapping.ui" not found for fragment "org.eclipse.emf.mapping.ui.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.ecore.edit" not found for fragment "org.eclipse.emf.ecore.edit.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.xsd.source" not found for fragment "org.eclipse.xsd.source.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.xsd.test" not found for fragment "org.eclipse.xsd.test.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.xsd.edit" not found for fragment "org.eclipse.xsd.edit.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.codegen.ui" not found for fragment "org.eclipse.emf.codegen.ui.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.source" not found for fragment "org.eclipse.emf.source.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.xsd" not found for fragment "org.eclipse.xsd.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.edit.ui" not found for fragment "org.eclipse.emf.edit.ui.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.gef" not found for fragment "org.eclipse.gef.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf" not found for fragment "org.eclipse.emf.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.ecore.xmi" not found for fragment "org.eclipse.emf.ecore.xmi.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.draw2d" not found for fragment "org.eclipse.draw2d.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.xsd.editor" not found for fragment "org.eclipse.xsd.editor.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.mapping.xsd2ecore.editor" not found for fragment "org.eclipse.emf.mapping.xsd2ecore.editor.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.gef.doc.isv" not found for fragment "org.eclipse.gef.doc.isv.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.codegen.ecore" not found for fragment "org.eclipse.emf.codegen.ecore.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.778
+!MESSAGE Plug-in descriptor "org.eclipse.emf.mapping" not found for fragment "org.eclipse.emf.mapping.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.common" not found for fragment "org.eclipse.emf.common.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.ecore" not found for fragment "org.eclipse.emf.ecore.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.xsd.doc" not found for fragment "org.eclipse.xsd.doc.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.codegen" not found for fragment "org.eclipse.emf.codegen.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.mapping.xsd2ecore" not found for fragment "org.eclipse.emf.mapping.xsd2ecore.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.ecore.editor" not found for fragment "org.eclipse.emf.ecore.editor.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.doc" not found for fragment "org.eclipse.emf.doc.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.common.ui" not found for fragment "org.eclipse.emf.common.ui.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.gef.source" not found for fragment "org.eclipse.gef.source.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.edit" not found for fragment "org.eclipse.emf.edit.nl1".  Fragment ignored.
+!SUBENTRY 1 org.eclipse.core.runtime 2 1 Sep 02, 2004 11:03:28.794
+!MESSAGE Plug-in descriptor "org.eclipse.emf.codegen.ecore.ui" not found for fragment "org.eclipse.emf.codegen.ecore.ui.nl1".  Fragment ignored.

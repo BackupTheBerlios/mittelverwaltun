@@ -1,0 +1,8 @@
+
+
+Functions.java erweitert um getBackIcon und getForwardIcon
+
+Benutzerverwaltung geändert
+
+RollenAktivitaetenverwaltung neu
+

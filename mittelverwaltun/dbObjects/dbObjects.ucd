@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" size="1630,1358" id="notebookrobertMittelJBuilder4" metadata="nsuml-1.4" initialized="true" showWireOptions="7" scrolledY="-4">
+  <children xsi:type="editmodel:ClassEditModel" location="786,1112" size="136,211" id="notebookrobertMittelJBuilder156" runTimeClassModel="notebookrobertMittelJBuilder169;notebookrobertMittelJBuilder158;notebookrobertMittelJBuilder160;notebookrobertMittelJBuilder171;notebookrobertMittelJBuilder179;notebookrobertMittelJBuilder174;notebookrobertMittelJBuilder181;notebookrobertMittelJBuilder159;notebookrobertMittelJBuilder166;notebookrobertMittelJBuilder184;notebookrobertMittelJBuilder157;notebookrobertMittelJBuilder176;notebookrobertMittelJBuilder161">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,162">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder161"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder169"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder179"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder184"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder174"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder166"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder176"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder181"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder171"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="22,803" size="161,535" targetConnections="//@children.12/@sourceConnections.2 //@children.12/@sourceConnections.4" id="notebookrobertMittelJBuilder94" runTimeClassModel="notebookrobertMittelJBuilder196;notebookrobertMittelJBuilder240;notebookrobertMittelJBuilder232;notebookrobertMittelJBuilder255;notebookrobertMittelJBuilder267;notebookrobertMittelJBuilder197;notebookrobertMittelJBuilder245;notebookrobertMittelJBuilder202;notebookrobertMittelJBuilder193;notebookrobertMittelJBuilder217;notebookrobertMittelJBuilder250;notebookrobertMittelJBuilder235;notebookrobertMittelJBuilder189;notebookrobertMittelJBuilder818;notebookrobertMittelJBuilder191;notebookrobertMittelJBuilder212;notebookrobertMittelJBuilder269;notebookrobertMittelJBuilder204;notebookrobertMittelJBuilder247;notebookrobertMittelJBuilder225;notebookrobertMittelJBuilder215;notebookrobertMittelJBuilder190;notebookrobertMittelJBuilder222;notebookrobertMittelJBuilder192;notebookrobertMittelJBuilder203;notebookrobertMittelJBuilder237;notebookrobertMittelJBuilder816;notebookrobertMittelJBuilder788;notebookrobertMittelJBuilder227;notebookrobertMittelJBuilder206;notebookrobertMittelJBuilder220;notebookrobertMittelJBuilder242;notebookrobertMittelJBuilder264;notebookrobertMittelJBuilder198;notebookrobertMittelJBuilder194;notebookrobertMittelJBuilder195;notebookrobertMittelJBuilder252;notebookrobertMittelJBuilder230;notebookrobertMittelJBuilder262;notebookrobertMittelJBuilder258">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="138,486">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder206"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder230"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder245"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder215"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder262"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder250"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder204"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder220"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder255"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder267"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder225"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder240"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder235"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder232"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder247"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder212"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder264"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder252"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder217"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder222"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder258"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder269"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder227"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder242"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder237"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder816"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder818"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder198" connectionRouterKind="Manhattan" source="//@children.1" target="//@children.6" targetEnd="//@children.1/@sourceConnections.0/@children.0" sourceEnd="//@children.1/@sourceConnections.0/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder198" navigable="true" flags="2" multiplicityLabel="//@children.1/@sourceConnections.0/@children.0/@children.1" roleLabel="//@children.1/@sourceConnections.0/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="45,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="17,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-2" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder275" connectionRouterKind="Manhattan" source="//@children.1" target="//@children.6" targetEnd="//@children.1/@sourceConnections.1/@children.1" sourceEnd="//@children.1/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-2" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="605,27" size="136,283" id="notebookrobertMittelJBuilder492" runTimeClassModel="notebookrobertMittelJBuilder607;notebookrobertMittelJBuilder592;notebookrobertMittelJBuilder579;notebookrobertMittelJBuilder580;notebookrobertMittelJBuilder1469;notebookrobertMittelJBuilder599;notebookrobertMittelJBuilder604;notebookrobertMittelJBuilder1345;notebookrobertMittelJBuilder1481;notebookrobertMittelJBuilder609;notebookrobertMittelJBuilder578;notebookrobertMittelJBuilder1483;notebookrobertMittelJBuilder581;notebookrobertMittelJBuilder594;notebookrobertMittelJBuilder597;notebookrobertMittelJBuilder590;notebookrobertMittelJBuilder602;notebookrobertMittelJBuilder583">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="113,234">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder583"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1345"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder590"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder592"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder594"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder597"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder599"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder602"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder604"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder607"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder609"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1481"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1483"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="755,198" size="139,607" targetConnections="//@children.4/@sourceConnections.1 //@children.4/@sourceConnections.2" id="notebookrobertMittelJBuilder342" runTimeClassModel="notebookrobertMittelJBuilder356;notebookrobertMittelJBuilder420;notebookrobertMittelJBuilder357;notebookrobertMittelJBuilder423;notebookrobertMittelJBuilder411;notebookrobertMittelJBuilder445;notebookrobertMittelJBuilder448;notebookrobertMittelJBuilder346;notebookrobertMittelJBuilder401;notebookrobertMittelJBuilder406;notebookrobertMittelJBuilder383;notebookrobertMittelJBuilder433;notebookrobertMittelJBuilder455;notebookrobertMittelJBuilder358;notebookrobertMittelJBuilder458;notebookrobertMittelJBuilder428;notebookrobertMittelJBuilder414;notebookrobertMittelJBuilder443;notebookrobertMittelJBuilder393;notebookrobertMittelJBuilder355;notebookrobertMittelJBuilder371;notebookrobertMittelJBuilder348;notebookrobertMittelJBuilder352;notebookrobertMittelJBuilder438;notebookrobertMittelJBuilder453;notebookrobertMittelJBuilder408;notebookrobertMittelJBuilder345;notebookrobertMittelJBuilder450;notebookrobertMittelJBuilder389;notebookrobertMittelJBuilder391;notebookrobertMittelJBuilder440;notebookrobertMittelJBuilder398;notebookrobertMittelJBuilder425;notebookrobertMittelJBuilder343;notebookrobertMittelJBuilder354;notebookrobertMittelJBuilder430;notebookrobertMittelJBuilder403;notebookrobertMittelJBuilder344;notebookrobertMittelJBuilder353;notebookrobertMittelJBuilder359;notebookrobertMittelJBuilder435;notebookrobertMittelJBuilder396;notebookrobertMittelJBuilder418;notebookrobertMittelJBuilder360">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="116,558">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder360"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder383"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder371"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder458"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder396"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder438"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder453"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder448"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder391"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder418"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder433"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder401"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder443"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder406"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder423"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder411"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder428"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder398"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder440"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder455"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder450"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder393"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder420"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder435"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder403"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder445"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder408"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder425"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder414"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder430"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder389"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder470" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.10" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder348" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.8" targetEnd="//@children.3/@sourceConnections.1/@children.0" sourceEnd="//@children.3/@sourceConnections.1/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder348" navigable="true" flags="2" multiplicityLabel="//@children.3/@sourceConnections.1/@children.0/@children.1" roleLabel="//@children.3/@sourceConnections.1/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="54,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="17,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder352" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.10" targetEnd="//@children.3/@sourceConnections.2/@children.0" sourceEnd="//@children.3/@sourceConnections.2/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder352" navigable="true" flags="2" multiplicityLabel="//@children.3/@sourceConnections.2/@children.0/@children.1" roleLabel="//@children.3/@sourceConnections.2/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="65,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder346" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.7" targetEnd="//@children.3/@sourceConnections.3/@children.0" sourceEnd="//@children.3/@sourceConnections.3/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder346" navigable="true" flags="2" multiplicityLabel="//@children.3/@sourceConnections.3/@children.0/@children.1" roleLabel="//@children.3/@sourceConnections.3/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="28,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder466" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.8" targetEnd="//@children.3/@sourceConnections.4/@children.1" sourceEnd="//@children.3/@sourceConnections.4/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder468" connectionRouterKind="Manhattan" source="//@children.3" target="//@children.7" targetEnd="//@children.3/@sourceConnections.5/@children.1" sourceEnd="//@children.3/@sourceConnections.5/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="306,22" size="135,571" id="notebookrobertMittelJBuilder472" runTimeClassModel="notebookrobertMittelJBuilder493;notebookrobertMittelJBuilder505;notebookrobertMittelJBuilder543;notebookrobertMittelJBuilder485;notebookrobertMittelJBuilder476;notebookrobertMittelJBuilder1179;notebookrobertMittelJBuilder553;notebookrobertMittelJBuilder535;notebookrobertMittelJBuilder474;notebookrobertMittelJBuilder487;notebookrobertMittelJBuilder513;notebookrobertMittelJBuilder498;notebookrobertMittelJBuilder520;notebookrobertMittelJBuilder484;notebookrobertMittelJBuilder523;notebookrobertMittelJBuilder515;notebookrobertMittelJBuilder1284;notebookrobertMittelJBuilder530;notebookrobertMittelJBuilder478;notebookrobertMittelJBuilder550;notebookrobertMittelJBuilder508;notebookrobertMittelJBuilder1251;notebookrobertMittelJBuilder500;notebookrobertMittelJBuilder482;notebookrobertMittelJBuilder475;notebookrobertMittelJBuilder525;notebookrobertMittelJBuilder510;notebookrobertMittelJBuilder538;notebookrobertMittelJBuilder503;notebookrobertMittelJBuilder540;notebookrobertMittelJBuilder545;notebookrobertMittelJBuilder1281;notebookrobertMittelJBuilder528;notebookrobertMittelJBuilder518;notebookrobertMittelJBuilder481;notebookrobertMittelJBuilder495;notebookrobertMittelJBuilder473;notebookrobertMittelJBuilder477;notebookrobertMittelJBuilder548;notebookrobertMittelJBuilder488;notebookrobertMittelJBuilder555;notebookrobertMittelJBuilder483;notebookrobertMittelJBuilder533">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="112,522">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1179"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder493"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder495"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder498"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder500"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder503"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder505"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder508"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder510"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder513"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder515"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder518"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder520"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder523"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder525"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder528"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder530"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder533"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder535"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder538"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder540"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder543"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder545"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder548"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder550"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder553"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder555"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1281"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1284"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder574" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.11" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder568" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.1/@children.1" sourceEnd="//@children.4/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder488" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.2/@children.0" sourceEnd="//@children.4/@sourceConnections.2/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder488" navigable="true" flags="2" multiplicityLabel="//@children.4/@sourceConnections.2/@children.0/@children.1" roleLabel="//@children.4/@sourceConnections.2/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="49,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder487" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.11" targetEnd="//@children.4/@sourceConnections.3/@children.0" sourceEnd="//@children.4/@sourceConnections.3/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder487" navigable="true" flags="2" multiplicityLabel="//@children.4/@sourceConnections.3/@children.0/@children.1" roleLabel="//@children.4/@sourceConnections.3/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="46,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder485" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.5" targetEnd="//@children.4/@sourceConnections.4/@children.0" sourceEnd="//@children.4/@sourceConnections.4/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder485" navigable="true" flags="2" multiplicityLabel="//@children.4/@sourceConnections.4/@children.0/@children.1" roleLabel="//@children.4/@sourceConnections.4/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="39,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder570" connectionRouterKind="Manhattan" source="//@children.4" target="//@children.5" targetEnd="//@children.4/@sourceConnections.5/@children.1" sourceEnd="//@children.4/@sourceConnections.5/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-4" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="29,32" size="132,445" targetConnections="//@children.4/@sourceConnections.4 //@children.4/@sourceConnections.5 //@children.6/@sourceConnections.0 //@children.6/@sourceConnections.1 //@children.6/@sourceConnections.2" id="notebookrobertMittelJBuilder486" runTimeClassModel="notebookrobertMittelJBuilder745;notebookrobertMittelJBuilder723;notebookrobertMittelJBuilder686;notebookrobertMittelJBuilder730;notebookrobertMittelJBuilder681;notebookrobertMittelJBuilder708;notebookrobertMittelJBuilder738;notebookrobertMittelJBuilder691;notebookrobertMittelJBuilder740;notebookrobertMittelJBuilder689;notebookrobertMittelJBuilder688;notebookrobertMittelJBuilder690;notebookrobertMittelJBuilder683;notebookrobertMittelJBuilder682;notebookrobertMittelJBuilder718;notebookrobertMittelJBuilder693;notebookrobertMittelJBuilder715;notebookrobertMittelJBuilder705;notebookrobertMittelJBuilder698;notebookrobertMittelJBuilder687;notebookrobertMittelJBuilder733;notebookrobertMittelJBuilder700;notebookrobertMittelJBuilder710;notebookrobertMittelJBuilder728;notebookrobertMittelJBuilder684;notebookrobertMittelJBuilder743;notebookrobertMittelJBuilder703;notebookrobertMittelJBuilder685;notebookrobertMittelJBuilder725;notebookrobertMittelJBuilder713;notebookrobertMittelJBuilder735;notebookrobertMittelJBuilder720">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="109,396">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder691"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder693"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder708"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder728"/>
+      <children xsi:type="editmodel:MethodEditModel" location="223,367" id="notebookrobertMittelJBuilder718"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder723"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder743"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder738"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder698"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder733"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder703"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder713"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder705"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder730"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder720"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder725"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder745"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder740"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder700"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder735"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder710"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder715"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="23,555" size="137,175" targetConnections="//@children.1/@sourceConnections.0 //@children.1/@sourceConnections.1" id="notebookrobertMittelJBuilder201" runTimeClassModel="notebookrobertMittelJBuilder751;notebookrobertMittelJBuilder756;notebookrobertMittelJBuilder768;notebookrobertMittelJBuilder774;notebookrobertMittelJBuilder761;notebookrobertMittelJBuilder763;notebookrobertMittelJBuilder766;notebookrobertMittelJBuilder752;notebookrobertMittelJBuilder771;notebookrobertMittelJBuilder753">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="114,126">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder756"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder761"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder766"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder771"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder763"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder768"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder774"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" connectionRouterKind="Manual" source="//@children.6" target="//@children.5" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder781" connectionRouterKind="Manhattan" source="//@children.6" target="//@children.5" targetEnd="//@children.6/@sourceConnections.1/@children.1" sourceEnd="//@children.6/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder753" connectionRouterKind="Manhattan" source="//@children.6" target="//@children.5" targetEnd="//@children.6/@sourceConnections.2/@children.0" sourceEnd="//@children.6/@sourceConnections.2/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder753" navigable="true" flags="2" multiplicityLabel="//@children.6/@sourceConnections.2/@children.0/@children.1" roleLabel="//@children.6/@sourceConnections.2/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="68,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="17,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="1001,12" size="132,247" targetConnections="//@children.3/@sourceConnections.3 //@children.3/@sourceConnections.5 //@children.8/@sourceConnections.0" id="notebookrobertMittelJBuilder347" runTimeClassModel="notebookrobertMittelJBuilder658;notebookrobertMittelJBuilder622;notebookrobertMittelJBuilder626;notebookrobertMittelJBuilder633;notebookrobertMittelJBuilder629;notebookrobertMittelJBuilder623;notebookrobertMittelJBuilder639;notebookrobertMittelJBuilder644;notebookrobertMittelJBuilder656;notebookrobertMittelJBuilder646;notebookrobertMittelJBuilder649;notebookrobertMittelJBuilder627;notebookrobertMittelJBuilder641;notebookrobertMittelJBuilder652">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="109,198">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder629"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder633"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder627"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder641"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder649"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder656"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder644"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder652"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder658"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder646"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder639"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="1010,359" size="117,139" targetConnections="//@children.3/@sourceConnections.1 //@children.3/@sourceConnections.4" id="notebookrobertMittelJBuilder351" runTimeClassModel="notebookrobertMittelJBuilder666;notebookrobertMittelJBuilder675;notebookrobertMittelJBuilder664;notebookrobertMittelJBuilder670;notebookrobertMittelJBuilder668;notebookrobertMittelJBuilder673;notebookrobertMittelJBuilder665">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="94,90">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder666"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder673"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder668"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder675"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder670"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" connectionRouterKind="Manual" source="//@children.8" target="//@children.7" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="994,1120" size="139,211" id="notebookrobertMittelJBuilder312" runTimeClassModel="notebookrobertMittelJBuilder315;notebookrobertMittelJBuilder959;notebookrobertMittelJBuilder329;notebookrobertMittelJBuilder337;notebookrobertMittelJBuilder313;notebookrobertMittelJBuilder961;notebookrobertMittelJBuilder322;notebookrobertMittelJBuilder314;notebookrobertMittelJBuilder327;notebookrobertMittelJBuilder334;notebookrobertMittelJBuilder951;notebookrobertMittelJBuilder332">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="116,162">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder315"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder322"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder332"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder327"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder334"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder329"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder337"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder959"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder961"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" connectionRouterKind="Manual" source="//@children.9" target="//@children.10" targetEnd="//@children.9/@sourceConnections.0/@children.1" sourceEnd="//@children.9/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-2" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="997,741" size="144,337" targetConnections="//@children.11/@sourceConnections.0 //@children.11/@sourceConnections.1 //@children.12/@sourceConnections.5 //@children.9/@sourceConnections.0 //@children.3/@sourceConnections.0 //@children.3/@sourceConnections.2" id="notebookrobertMittelJBuilder8" runTimeClassModel="notebookrobertMittelJBuilder291;notebookrobertMittelJBuilder307;notebookrobertMittelJBuilder879;notebookrobertMittelJBuilder299;notebookrobertMittelJBuilder287;notebookrobertMittelJBuilder304;notebookrobertMittelJBuilder280;notebookrobertMittelJBuilder294;notebookrobertMittelJBuilder277;notebookrobertMittelJBuilder297;notebookrobertMittelJBuilder857;notebookrobertMittelJBuilder278;notebookrobertMittelJBuilder282;notebookrobertMittelJBuilder875;notebookrobertMittelJBuilder868;notebookrobertMittelJBuilder279;notebookrobertMittelJBuilder302;notebookrobertMittelJBuilder882;notebookrobertMittelJBuilder854;notebookrobertMittelJBuilder871;notebookrobertMittelJBuilder884">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="121,288">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder282"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder287"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder291"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder297"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder280"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder302"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder299"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder294"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder304"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder307"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder871"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder875"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder879"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder868"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder884"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder882"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="489,641" size="132,373" targetConnections="//@children.12/@sourceConnections.0 //@children.12/@sourceConnections.1 //@children.4/@sourceConnections.0 //@children.12/@sourceConnections.3 //@children.4/@sourceConnections.3" id="notebookrobertMittelJBuilder5" runTimeClassModel="notebookrobertMittelJBuilder6;notebookrobertMittelJBuilder24;notebookrobertMittelJBuilder46;notebookrobertMittelJBuilder12;notebookrobertMittelJBuilder56;notebookrobertMittelJBuilder34;notebookrobertMittelJBuilder15;notebookrobertMittelJBuilder26;notebookrobertMittelJBuilder41;notebookrobertMittelJBuilder29;notebookrobertMittelJBuilder51;notebookrobertMittelJBuilder9;notebookrobertMittelJBuilder17;notebookrobertMittelJBuilder39;notebookrobertMittelJBuilder36;notebookrobertMittelJBuilder14;notebookrobertMittelJBuilder59;notebookrobertMittelJBuilder7;notebookrobertMittelJBuilder49;notebookrobertMittelJBuilder16;notebookrobertMittelJBuilder64;notebookrobertMittelJBuilder13;notebookrobertMittelJBuilder44;notebookrobertMittelJBuilder61;notebookrobertMittelJBuilder31;notebookrobertMittelJBuilder54">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="109,324">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder17"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder44"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder49"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder59"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder54"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder34"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder24"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder29"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder39"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder46"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder51"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder61"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder56"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder36"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder26"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder31"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder41"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder64"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder7" connectionRouterKind="Manhattan" source="//@children.11" target="//@children.10" targetEnd="//@children.11/@sourceConnections.0/@children.0" sourceEnd="//@children.11/@sourceConnections.0/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder7" navigable="true" flags="2" multiplicityLabel="//@children.11/@sourceConnections.0/@children.0/@children.1" roleLabel="//@children.11/@sourceConnections.0/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="39,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="19,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder81" connectionRouterKind="Manhattan" source="//@children.11" target="//@children.10" targetEnd="//@children.11/@sourceConnections.1/@children.1" sourceEnd="//@children.11/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="291,976" size="150,337" id="notebookrobertMittelJBuilder83" runTimeClassModel="notebookrobertMittelJBuilder114;notebookrobertMittelJBuilder87;notebookrobertMittelJBuilder131;notebookrobertMittelJBuilder104;notebookrobertMittelJBuilder119;notebookrobertMittelJBuilder86;notebookrobertMittelJBuilder126;notebookrobertMittelJBuilder109;notebookrobertMittelJBuilder85;notebookrobertMittelJBuilder90;notebookrobertMittelJBuilder95;notebookrobertMittelJBuilder140;notebookrobertMittelJBuilder116;notebookrobertMittelJBuilder134;notebookrobertMittelJBuilder122;notebookrobertMittelJBuilder91;notebookrobertMittelJBuilder84;notebookrobertMittelJBuilder111;notebookrobertMittelJBuilder96;notebookrobertMittelJBuilder128;notebookrobertMittelJBuilder106;notebookrobertMittelJBuilder138;notebookrobertMittelJBuilder143">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="127,288">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder96"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder109"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder114"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder104"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder138"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder126"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder119"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder131"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder111"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder116"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder106"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder140"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder128"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder122"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder134"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder143"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" connectionRouterKind="Manual" source="//@children.12" target="//@children.11" targetEnd="//@children.12/@sourceConnections.0/@children.1" sourceEnd="//@children.12/@sourceConnections.0/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder154" connectionRouterKind="Manhattan" source="//@children.12" target="//@children.11" targetEnd="//@children.12/@sourceConnections.1/@children.1" sourceEnd="//@children.12/@sourceConnections.1/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder91" connectionRouterKind="Manhattan" source="//@children.12" target="//@children.1" targetEnd="//@children.12/@sourceConnections.2/@children.0" sourceEnd="//@children.12/@sourceConnections.2/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder91" navigable="true" flags="2" multiplicityLabel="//@children.12/@sourceConnections.2/@children.0/@children.1" roleLabel="//@children.12/@sourceConnections.2/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="60,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="17,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:AssociationEditModel" id="notebookrobertMittelJBuilder87" connectionRouterKind="Manhattan" source="//@children.12" target="//@children.11" targetEnd="//@children.12/@sourceConnections.3/@children.0" sourceEnd="//@children.12/@sourceConnections.3/@children.1">
+      <children xsi:type="editmodel:AssociationEndEditModel" id="notebookrobertMittelJBuilder87" navigable="true" flags="2" multiplicityLabel="//@children.12/@sourceConnections.3/@children.0/@children.1" roleLabel="//@children.12/@sourceConnections.3/@children.0/@children.0">
+        <children xsi:type="editmodel:LabelEditModel" size="65,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+        <children xsi:type="editmodel:LabelEditModel" size="17,14" fontInfo="Arial-8-0" anchorKind="LastPart"/>
+      </children>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder150" connectionRouterKind="Manhattan" source="//@children.12" target="//@children.1" targetEnd="//@children.12/@sourceConnections.4/@children.1" sourceEnd="//@children.12/@sourceConnections.4/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" id="notebookrobertMittelJBuilder152" connectionRouterKind="Manhattan" source="//@children.12" target="//@children.10" targetEnd="//@children.12/@sourceConnections.5/@children.1" sourceEnd="//@children.12/@sourceConnections.5/@children.0">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,-1" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="249,703" size="156,157" id="notebookrobertMittelJBuilder973" runTimeClassModel="notebookrobertMittelJBuilder976;notebookrobertMittelJBuilder985;notebookrobertMittelJBuilder987;notebookrobertMittelJBuilder982;notebookrobertMittelJBuilder977;notebookrobertMittelJBuilder979;notebookrobertMittelJBuilder1005;notebookrobertMittelJBuilder996">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="117,108">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder996"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1005"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder977"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder985"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder979"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder987"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" location="457,23" size="118,337" id="notebookrobertMittelJBuilder1007" runTimeClassModel="notebookrobertMittelJBuilder1044;notebookrobertMittelJBuilder1017;notebookrobertMittelJBuilder1049;notebookrobertMittelJBuilder1010;notebookrobertMittelJBuilder1034;notebookrobertMittelJBuilder1020;notebookrobertMittelJBuilder1306;notebookrobertMittelJBuilder1012;notebookrobertMittelJBuilder1027;notebookrobertMittelJBuilder1515;notebookrobertMittelJBuilder1022;notebookrobertMittelJBuilder1032;notebookrobertMittelJBuilder1519;notebookrobertMittelJBuilder1046;notebookrobertMittelJBuilder1501;notebookrobertMittelJBuilder1060;notebookrobertMittelJBuilder1138;notebookrobertMittelJBuilder1058;notebookrobertMittelJBuilder1141;notebookrobertMittelJBuilder1123;notebookrobertMittelJBuilder1517;notebookrobertMittelJBuilder1037;notebookrobertMittelJBuilder1009">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="95,234">
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1010"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1012"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1020"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1022"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1032"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1034"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1044"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1046"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1058"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1060"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1138"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1141"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1306"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1517"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1515"/>
+      <children xsi:type="editmodel:MethodEditModel" id="notebookrobertMittelJBuilder1519"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true"/>
+  </children>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showPublicMethods="true" showPackageMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showInterfaceStereotype="true" showClassStereotype="true" showPackageStereotype="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -1,0 +1,21 @@
+
+Database geändert:
+	- neue Methode getAktivitaetenFull(int rollenId)
+	- sqlGetAktivitaeten geändert
+	- neue Methode getRollenFull()
+	- addRollenAktivitaet(int rollen, int activitaet)
+	- delRollenAktivitaet(int rolle, int aktivitaet)
+	- getAktivitaeten()
+	- setUser Methode geändert, weil der Benutzer in der MySQL nur anhang des alten Benutzernamens geändert werden kann
+	
+ApplicationServerImpl:
+	- getRollenFull()
+	- addRollenAktivitaet(int rollen, int activitaet)
+	- delRollenAktivitaet(int rolle, int aktivitaet)
+	- getAktivitaeten()
+
+ApplicationServer:
+	- getRollenFull()
+	- addRollenAktivitaet(int rollen, int activitaet)
+	- delRollenAktivitaet(int rolle, int aktivitaet)
+	- getAktivitaeten()

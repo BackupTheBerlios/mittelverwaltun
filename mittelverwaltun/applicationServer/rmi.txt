@@ -1,0 +1,1 @@
+c:\j2sdk1.4.0\bin\rmic -classpath "C:\Dokumente und Einstellungen\robert\jbproject\Mittel\src" -d "C:\Dokumente und Einstellungen\robert\jbproject\Mittel\src" applicationServer.CentralServerImpl
