@@ -88,6 +88,8 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   TitledBorder titledBorderPanel2;
   TitledBorder titledBorderPanel3;
   JPanel jPanel1 = new JPanel();
+  JLabel labInstitut4 = new JLabel();
+  JTextField tfAuftragsnummer = new JTextField();
 
 
   public BestellungASK(MainFrame frame) {
@@ -168,7 +170,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		setFBKonto(bestellung.getFbkonto());
 		setZVKonto(bestellung.getZvtitel());
 		tpBemerkungen.setText(bestellung.getBemerkung());
-		
+
 		PositionsTableModel ptm = (PositionsTableModel)tableBestellung.getModel();
 
 		tfNetto.setValue(new Float(ptm.getOrderSum() - ptm.get7PercentSum() - ptm.get16PercentSum()));
@@ -226,6 +228,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  String error = "";
 
 	  error += (tfBestellDatum.getValue() == null ? " - Datum \n" : "");
+		error += (tfAuftragsnummer.getText().equals("") ? " - Auftragsnummer \n" : "");
 	  error += (fbKonto == null ? " - Kostenstelle \n" : "");
 		error += (zvTitel == null ? " - Haushaltstitel \n" : "");
 
@@ -241,16 +244,16 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 
   private void saveOrder( int phase){
 		ASKBestellung editedOrder = null;
-		
+
 		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
 		Date sqlDate = new Date(datum.getTime());
 
   	if(bestellung == null){
 			Angebot a = new Angebot(tableBestellung.getOrderPositions(), (Date)tfBestellDatum.getValue(), firma, true);
-			
-			editedOrder = new ASKBestellung(null, null, sqlDate, (Benutzer)frame.getBenutzer(),
+
+			editedOrder = new ASKBestellung(tfAuftragsnummer.getText(), null, sqlDate, (Benutzer)frame.getBenutzer(),
 																		  (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
-																		  zvTitel, fbKonto, ((Float)tfBestellsumme.getValue()).floatValue(), 0, '0', a, tpBemerkungen.getText(), 
+																		  zvTitel, fbKonto, ((Float)tfBestellsumme.getValue()).floatValue(), 0, '0', a, tpBemerkungen.getText(),
 																			(Benutzer)cbSwBeauftragter.getSelectedItem());
   	}else{
 			editedOrder = (ASKBestellung)bestellung.clone();
@@ -259,12 +262,13 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		  editedOrder.setAuftraggeber((Benutzer)cbAuftraggeber.getSelectedItem());
 		  editedOrder.setSwbeauftragter((Benutzer)cbSwBeauftragter.getSelectedItem());
 		  editedOrder.setBemerkung(tpBemerkungen.getText());
+		  editedOrder.setReferenznr(tfAuftragsnummer.getText());
 		  editedOrder.setDatum(sqlDate);
 		  editedOrder.setEmpfaenger((Benutzer)cbEmpfaenger.getSelectedItem());
 		  editedOrder.setFbkonto(fbKonto);
 		  editedOrder.setZvtitel(zvTitel);
   	}
-  	
+
   	if(phase == 1){
 			float betrag = tableBestellung.getOrderSum();
 			editedOrder.setPhase('1');
@@ -275,7 +279,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   	}
 
 		int id = 0;
-		
+
 		try {
 			if(bestellung == null)
 				id = frame.getApplicationServer().addBestellung(editedOrder);
@@ -293,7 +297,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 				e.printStackTrace();
 		}
  }
- 
+
  	private void clearInputFields(){
  		tableBestellung.removeAll();
 	 	labKapitel.setText("");
@@ -369,7 +373,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			test.setBounds(100,100,800,900);
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 			test.setJMenuBar( new MainMenu( test ) );
-			
+
 			ASKBestellung best = applicationServer.getASKBestellung(16);
 			bestellung = new BestellungASK(test, best);
 			test.addChild(bestellung);
@@ -390,7 +394,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     titledBorderPanel2 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Angebot");
     titledBorderPanel3 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Allgemeine Informationen");
     this.setBounds(50,50,605,635);
-    cbSwBeauftragter.setBounds(new Rectangle(122, 107, 281, 21));
+    cbSwBeauftragter.setBounds(new Rectangle(108, 107, 194, 21));
     buBeenden.setBounds(new Rectangle(479, 576, 112, 25));
     buBeenden.setText("Beenden");
     buDelete.setText("Löschen");
@@ -427,39 +431,39 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     labTitel.setFont(new java.awt.Font("Dialog", 0, 12));
     labInstitut1.setFont(new java.awt.Font("Dialog", 0, 12));
     labInstitut1.setText("Auftraggeber:");
-    labInstitut1.setBounds(new Rectangle(20, 53, 89, 15));
-    cbEmpfaenger.setBounds(new Rectangle(122, 81, 281, 21));
-    cbInstitut.setBounds(new Rectangle(122, 135, 438, 21));
+    labInstitut1.setBounds(new Rectangle(11, 80, 89, 15));
+    cbEmpfaenger.setBounds(new Rectangle(375, 79, 194, 21));
+    cbInstitut.setBounds(new Rectangle(108, 135, 460, 21));
     jLabel11.setBounds(new Rectangle(299, 194, 40, 15));
     jLabel11.setText("Titel");
     jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
-    cbAuftraggeber.setBounds(new Rectangle(122, 53, 281, 21));
+    cbAuftraggeber.setBounds(new Rectangle(108, 79, 194, 21));
     labKapitel.setBounds(new Rectangle(239, 194, 55, 15));
     labKapitel.setHorizontalAlignment(SwingConstants.CENTER);
     labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
     labBestellNr1.setBorder(null);
     labBestellNr1.setText(" Bestell-Datum:");
-    labBestellNr1.setBounds(new Rectangle(398, 23, 95, 23));
+    labBestellNr1.setBounds(new Rectangle(409, 19, 95, 23));
     labBestellNr1.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel12.setBounds(new Rectangle(20, 194, 185, 15));
+    jLabel12.setBounds(new Rectangle(11, 194, 185, 15));
     jLabel12.setText("zu belastender Haushaltstitel:");
     jLabel12.setFont(new java.awt.Font("Dialog", 0, 12));
-    labInstitut2.setBounds(new Rectangle(20, 81, 89, 15));
+    labInstitut2.setBounds(new Rectangle(309, 82, 89, 15));
     labInstitut2.setText("Empfänger:");
     labInstitut2.setFont(new java.awt.Font("Dialog", 0, 12));
     buFBKonto.setText("FBKonto");
-    buFBKonto.setBounds(new Rectangle(452, 165, 109, 21));
+    buFBKonto.setBounds(new Rectangle(459, 165, 109, 21));
     buTitel.setText("Titelauswahl");
     buTitel.setActionCommand("buTitel");
-    buTitel.setBounds(new Rectangle(451, 191, 109, 21));
-    tfFBKonto.setBounds(new Rectangle(122, 165, 330, 21));
+    buTitel.setBounds(new Rectangle(459, 191, 109, 21));
+    tfFBKonto.setBounds(new Rectangle(108, 165, 342, 21));
     tfFBKonto.setText("");
     tfFBKonto.setEditable(false);
-    tfBestellDatum.setBounds(new Rectangle(488, 24, 72, 20));
-    jLabel24.setBounds(new Rectangle(20, 166, 82, 15));
+    tfBestellDatum.setBounds(new Rectangle(497, 20, 72, 20));
+    jLabel24.setBounds(new Rectangle(11, 166, 82, 15));
     jLabel24.setText("Kostenstelle:");
     jLabel24.setFont(new java.awt.Font("Dialog", 0, 12));
-    labInstitut.setBounds(new Rectangle(20, 138, 50, 15));
+    labInstitut.setBounds(new Rectangle(11, 137, 50, 15));
     labInstitut.setText("Institut:");
     labInstitut.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel13.setBounds(new Rectangle(198, 194, 53, 15));
@@ -468,12 +472,12 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     jLabel14.setBounds(new Rectangle(378, 194, 33, 15));
     jLabel14.setText("UT");
     jLabel14.setFont(new java.awt.Font("Dialog", 0, 12));
-    labInstitut3.setBounds(new Rectangle(19, 25, 63, 15));
+    labInstitut3.setBounds(new Rectangle(11, 52, 63, 15));
     labInstitut3.setText("Anbieter:");
     labInstitut3.setFont(new java.awt.Font("Dialog", 0, 12));
     labFirma.setFont(new java.awt.Font("Dialog", 0, 12));
     labFirma.setText("");
-    labFirma.setBounds(new Rectangle(122, 24, 267, 15));
+    labFirma.setBounds(new Rectangle(108, 51, 460, 15));
     tfNetto.setEditable(false);
     tfNetto.setEnabled(false);
     tfNetto.setBounds(new Rectangle(433, 142, 117, 21));
@@ -499,6 +503,11 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     jPanel1.setBorder(titledBorderPanel3);
     jPanel1.setBounds(new Rectangle(4, 3, 587, 220));
     jPanel1.setLayout(null);
+    labInstitut4.setFont(new java.awt.Font("Dialog", 0, 12));
+    labInstitut4.setText("Auftragsnummer:");
+    labInstitut4.setBounds(new Rectangle(11, 23, 110, 15));
+    tfAuftragsnummer.setText("");
+    tfAuftragsnummer.setBounds(new Rectangle(108, 20, 130, 21));
     panelZusatz.add(jScrollPane1, null);
     panelZusatz.add(jLabel4, null);
     jScrollPane1.getViewport().add(tpBemerkungen, null);
@@ -517,7 +526,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     tpBemerkungen.setEditable(true);
     tpBemerkungen.setText("");
     tpBemerkungen.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel6.setBounds(new Rectangle(20, 110, 104, 15));
+    jLabel6.setBounds(new Rectangle(11, 109, 104, 15));
     jLabel6.setText("SW-Beauftragte/r:");
     jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
     scrollTable.setBounds(new Rectangle(15, 18, 556, 123));
@@ -538,28 +547,30 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     this.getContentPane().add(buDrucken, null);
     this.getContentPane().add(panelZusatz, null);
     jPanel1.add(buTitel, null);
-    jPanel1.add(labInstitut3, null);
-    jPanel1.add(labFirma, null);
-    jPanel1.add(labBestellNr1, null);
     jPanel1.add(tfBestellDatum, null);
-    jPanel1.add(labInstitut1, null);
-    jPanel1.add(cbAuftraggeber, null);
-    jPanel1.add(labInstitut2, null);
-    jPanel1.add(cbEmpfaenger, null);
-    jPanel1.add(jLabel24, null);
-    jPanel1.add(tfFBKonto, null);
-    jPanel1.add(buFBKonto, null);
-    jPanel1.add(jLabel12, null);
     jPanel1.add(jLabel13, null);
     jPanel1.add(labKapitel, null);
     jPanel1.add(jLabel11, null);
     jPanel1.add(labTitel, null);
     jPanel1.add(jLabel14, null);
     jPanel1.add(labUT, null);
-    jPanel1.add(cbInstitut, null);
-    jPanel1.add(cbSwBeauftragter, null);
-    jPanel1.add(labInstitut, null);
+    jPanel1.add(cbAuftraggeber, null);
+    jPanel1.add(labInstitut2, null);
+    jPanel1.add(cbEmpfaenger, null);
+    jPanel1.add(jLabel12, null);
     jPanel1.add(jLabel6, null);
+    jPanel1.add(labInstitut1, null);
+    jPanel1.add(labInstitut, null);
+    jPanel1.add(jLabel24, null);
+    jPanel1.add(tfFBKonto, null);
+    jPanel1.add(cbSwBeauftragter, null);
+    jPanel1.add(cbInstitut, null);
+    jPanel1.add(labInstitut4, null);
+    jPanel1.add(labFirma, null);
+    jPanel1.add(labInstitut3, null);
+    jPanel1.add(tfAuftragsnummer, null);
+    jPanel1.add(labBestellNr1, null);
+    jPanel1.add(buFBKonto, null);
   }
 
   private void printBestellung(){
@@ -655,7 +666,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		  dispose();
 	  }
   }
-  
+
   private void delOrder(){
 	  try {
 		  if(bestellung != null)

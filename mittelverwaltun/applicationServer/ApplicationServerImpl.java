@@ -2485,11 +2485,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(delOrder.getPhase() == '0'){
 			// alle Position aller Angebote der Bestellung löschen
-			for(int i = 0 ; i < delOrder.getAngebote().size(); i++){
-				Angebot angebot = (Angebot)delOrder.getAngebote().get(i);
-				
-				db.deletePositions(angebot.getId());
-			}
+			db.deletePositions(delOrder.getId());
 			// alle Angebote der Bestellung löschen
 			db.deleteAngebote(delOrder.getId());
 			// die StandardBestellung löschen
@@ -2526,7 +2522,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(delOrder.getPhase() == '0'){
 			// alle Position des Angebots der Bestellung löschen
-			db.deletePositions(delOrder.getAngebot().getId());
+			db.deletePositions(delOrder.getId());
 			// das Angebot löschen
 			db.deleteAngebote(delOrder.getId());
 			// die StandardBestellung löschen

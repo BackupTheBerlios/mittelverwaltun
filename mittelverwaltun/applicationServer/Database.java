@@ -3336,14 +3336,14 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * löscht alle Positionen zu einem Angebot einer Bestellung
-	 * @param angebotId
+	 * löscht alle Positionen aller Angebote einer Bestellung
+	 * @param bestellId
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void deletePositions(int angebotId) throws ApplicationServerException {
+	public void deletePositions(int bestellId) throws ApplicationServerException {
 		try{
-			Object[] parameters = {new Integer(angebotId)};
+			Object[] parameters = {new Integer(bestellId)};
 			statements.get(267).executeUpdate(parameters);
 		} catch (SQLException e){
 			throw new ApplicationServerException( 86, e.getMessage() );
