@@ -562,7 +562,8 @@ public class Database implements Serializable{
 				fachbereiche = new Fachbereich[count];
 				int i = 0;
 				while (rs.next()){
-					fachbereiche[i] = new Fachbereich(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getString(4), rs.getString(5));
+					fachbereiche[i] = new Fachbereich(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getString(4), rs.getString(5),
+																						rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
 					i++;
 				}
 			}
@@ -580,13 +581,14 @@ public class Database implements Serializable{
 	 * @return Fachbereich
 	 * @throws ApplicationServerException
 	 */
-	public Fachbereich selectForUpdateFachbereich(Fachbereich fachbereich, int institutsid) throws ApplicationServerException{
+	public Fachbereich selectForUpdateFachbereich() throws ApplicationServerException{
 		Fachbereich f = null;
 		try{
 			ResultSet rs = statements.get(181).executeQuery();
 
 			if(rs.next())
-				f = new Fachbereich(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getString(4), rs.getString(5));
+				f = new Fachbereich(rs.getInt(1), rs.getString(2), rs.getFloat(3), rs.getString(4), rs.getString(5),
+														rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9));
 			rs.close();
 		} catch (SQLException e){
 			throw new ApplicationServerException(1, e.getMessage());
@@ -594,11 +596,13 @@ public class Database implements Serializable{
 		return f;
 	}
 
-	public void updateFachbereich(Fachbereich fachbereich, int institutsid) throws ApplicationServerException{
+	public void updateFachbereich(Fachbereich fachbereich) throws ApplicationServerException{
 		if(fachbereich != null){
 			try{
 
-				Object[] parameters = { new Integer(institutsid), fachbereich.getHochschule(), new Float(fachbereich.getProfPauschale()), new Integer(fachbereich.getId()) };
+				Object[] parameters = { new Integer(fachbereich.getId()), fachbereich.getFbBezeichnung(), new Float(fachbereich.getProfPauschale()), 
+																fachbereich.getStrasseHausNr(), fachbereich.getPlzOrt(), fachbereich.getFhBezeichnung(),
+																fachbereich.getFhBeschreibung() };
 				if(statements.get(40).executeUpdate(parameters) == 0)
 					throw new ApplicationServerException(3);
 
@@ -620,7 +624,8 @@ public class Database implements Serializable{
 				institutes = new Institut[count];
 				int i = 0;
 				while (rs.next()){
-					institutes[i] = new Institut (rs.getInt(1), rs.getString(2), rs.getString(3));
+					institutes[i] = new Institut (rs.getInt(1), rs.getString(2), rs.getString(3),
+																				new Benutzer(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7)));
 					i++;
 				}
 			}
@@ -648,7 +653,8 @@ public class Database implements Serializable{
 	public int insertInstitute(Institut institut) throws ApplicationServerException{
 		if(checkInstitute(institut) == 0){
 			try{
-				Object[] parameters = { institut.getBezeichnung(), new Integer(institut.getKostenstelle()) };
+				Object[] parameters = { institut.getBezeichnung(), new Integer(institut.getKostenstelle()),
+																new Integer(institut.getInstitutsleiter().getId()) };
 				statements.get(82).executeUpdate(parameters);
 				ResultSet rs = statements.get(82).getGeneratedKeys();
 
@@ -718,7 +724,8 @@ public class Database implements Serializable{
 
 	public void updateInstitute(Institut institut) throws ApplicationServerException{
 		try{
-			Object[] parameters = {institut.getBezeichnung() ,new Integer(institut.getKostenstelle()), new Integer(institut.getId())};
+			Object[] parameters = {institut.getBezeichnung() ,new Integer(institut.getKostenstelle()), 
+														 new Integer(institut.getInstitutsleiter().getId()), new Integer(institut.getId())};
 				if(statements.get(81).executeUpdate(parameters) == 0)
 					throw new ApplicationServerException(3);
 		} catch (SQLException e){
