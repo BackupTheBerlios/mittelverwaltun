@@ -3003,14 +3003,14 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * löscht alle Angebote zu einer Bestellung
+	 * löscht alle Angebote zu einer Bestellung. Zugehörige Positionen müssen vorher
+	 * gelöscht werden.
 	 * @param bestellId
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
 	public void deleteAngebote( int bestellId ) throws ApplicationServerException {
 		try{
-			deletePositions(bestellId);
 			Object[] parameters = {new Integer(bestellId)};
 			statements.get(263).executeUpdate(parameters);
 		} catch (SQLException e){
@@ -3029,6 +3029,45 @@ public class Database implements Serializable{
 			statements.get(267).executeUpdate(parameters);
 		} catch (SQLException e){
 			throw new ApplicationServerException( 80, e.getMessage() );
+		}
+	}
+	
+	/**
+	 * aktualisiert ein Angebot
+	 * @param angebot
+	 * @throws ApplicationServerException
+	 */
+	public void updateAngebot(Angebot angebot) throws ApplicationServerException{
+		if(angebot != null){
+			try{
+				Object[] parameters = { new Integer(angebot.getAnbieter().getId()), angebot.getDatum(), 
+																(angebot.getAngenommen() ? "1" : "0"), new Integer(angebot.getId()) };
+				if(statements.get(264).executeUpdate(parameters) == 0)
+					throw new ApplicationServerException(82);
+
+			} catch (SQLException e){
+				throw new ApplicationServerException(81, e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * aktualisiert eine Position
+	 * @param position
+	 * @throws ApplicationServerException
+	 */
+	public void updatePosition(Position p) throws ApplicationServerException{
+		if(p != null){
+			try{//institut = ?, menge = ?, artikel = ?, einzelPreis = ?, mwSt = ?, rabatt = ?, beglichen = ?
+				Object[] parameters = { new Integer(p.getInstitut().getId()), new Integer(p.getMenge()), p.getArtikel(),
+																new Float(p.getEinzelPreis()), new Float(p.getMwst()), new Float(p.getRabatt()),
+																(p.getBeglichen() ? "1" : "0"), new Integer(p.getId()) };
+				if(statements.get(268).executeUpdate(parameters) == 0)
+					throw new ApplicationServerException(83);
+
+			} catch (SQLException e){
+				throw new ApplicationServerException(84, e.getMessage());
+			}
 		}
 	}
 }

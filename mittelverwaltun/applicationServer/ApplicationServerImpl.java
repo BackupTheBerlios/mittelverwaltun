@@ -1841,6 +1841,20 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			}
 	}
+	
+	/**
+	 * aktualisiert ein vorhandenes Angebot in der Datenbank. Dazu gehört auch löschen, hinzufügen und ändern
+	 * der Positionen.
+	 * @param angebot
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void actualizeAngebot(Angebot oldOffer, Angebot newOffer) throws ApplicationServerException {
+		if(!(oldOffer.equals(newOffer))){ // Angebot hat sich geändert
+			
+			
+		}
+	}
 
 
 	/* (Kein Javadoc)

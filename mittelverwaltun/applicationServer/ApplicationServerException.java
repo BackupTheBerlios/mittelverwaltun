@@ -138,6 +138,10 @@ public class ApplicationServerException extends Exception {
 		messages[78] = "Application Server Error: Bestellung existiert nicht mehr";
 		messages[79] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateStandardBestellung";
 		messages[80] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteAngebote";
+		messages[81] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateAngebot";
+		messages[82] = "Application Server Error: Angebot existiert nicht mehr";
+		messages[83] = "Application Server Error: Position existiert nicht mehr";
+		messages[84] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updatePosition";
 					
 //		Exception Ende ROBERT von 50-99
 

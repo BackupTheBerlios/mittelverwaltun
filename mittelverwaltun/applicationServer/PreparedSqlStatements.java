@@ -1832,8 +1832,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//264
-			statements[i++] = null;
+		{//264 aktualisiert ein Angebot anhand der Id
+			ps = con.prepareStatement("UPDATE Angebote " +
+																"SET anbieter = ?, datum = ?, angenommen = ? " +
+																"WHERE id = ?" );
+			int[] param = {Types.INTEGER, Types.DATE, Types.VARCHAR, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/******************************************/
 		/* Tabelle: Positionen                 	  */
@@ -1859,8 +1863,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//268
-			statements[i++] = null;
+		{//268 aktualisiert eine Position anhand der Id
+			ps = con.prepareStatement("UPDATE Positionen " +
+																"SET institut = ?, menge = ?, artikel = ?, einzelPreis = ?, mwSt = ?, rabatt = ?, beglichen = ? " +
+																"WHERE id = ?" );
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//269
 			statements[i++] = null;
