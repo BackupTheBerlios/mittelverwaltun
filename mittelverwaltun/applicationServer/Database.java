@@ -2668,6 +2668,12 @@ public class Database implements Serializable{
 		 }
 	 }
 
+	 /**
+	   * Ermittelt die Summe der Budgets aller zweckungebundenen ZV-Konten
+	   * @return zweckungebundenes ZV-Budget
+	   * @throws ApplicationServerException
+	   * @author Mario
+	   */	 	
 	 public float selectNoPurposeZVBudgetSum() throws ApplicationServerException{
 		 float result = 0;
 
@@ -2683,6 +2689,13 @@ public class Database implements Serializable{
 		 return result;
 	 }
 
+	/**
+	 * Ermittelt die Summe der Budgets aller FB-Konten die zweckungebundenen ZV-Konten
+	 * zugeordnet sind.
+	 * @return zweckungebundenes FB-Budget
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	 	 
 	 public float selectNoPurposeFBBudgetSum() throws ApplicationServerException{
 		 float result = 0;
 
@@ -2697,6 +2710,14 @@ public class Database implements Serializable{
 
 		 return result;
 	 }
+	 
+	/**
+	 * Ermittelt das Gesamtbudget des übergebenen ZV-Kontos
+	 * (= Budget aller Titel + Budget Titelgruppe)
+	 * @return Gesamtbudget
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	 
 	 public float selectTotalAccountBudget(ZVKonto acc) throws ApplicationServerException{
 		 float result = 0;
 		 Object[] parameters = {new Integer(acc.getId())};
@@ -2712,6 +2733,16 @@ public class Database implements Serializable{
 
 		 return result;
 	 }
+	 
+	/**
+	 * Ermittelt die Summe der Budgets aller FB-Konten die dem übergebenen ZV-Konto
+	 * durch die Tabelle Kontenzuordnungen zugeordnet sind.
+	 * => bei zweckgebundenen ZV-Konten ist das Ergebnis auch die Summe des
+	 * bereits verteilten Budgets des ZV-Kontos!!!
+	 * @return Budgetsumme aller zugeordneten FB-Konten
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	 
 	 public float selectDistributedAccountBudget(ZVKonto acc) throws ApplicationServerException{
 		 float result = 0;
 		 Object[] parameters = {new Integer(acc.getId())};

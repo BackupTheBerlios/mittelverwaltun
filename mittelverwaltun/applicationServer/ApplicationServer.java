@@ -101,7 +101,7 @@ public interface ApplicationServer extends Remote {
 	 public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws ApplicationServerException;
 	 public Institut[] getInstitutesWithMainAccounts () throws ApplicationServerException;
 	
-	 public float getNoPurposeBudgetAmount() throws ApplicationServerException;
+	 public float getAvailableNoPurposeBudget() throws ApplicationServerException;
 	 public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException;
 	 public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException;
 	 public void setAccountBudget ( FBHauptkonto acc, float budget ) throws ApplicationServerException;

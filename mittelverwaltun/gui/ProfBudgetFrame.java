@@ -133,7 +133,7 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   lbAvBudget.setText("Verfügbare freie Mittel");
 	   lbAvBudget.setBounds(new Rectangle(50, 350, 145, 20));
 	   try {
-			tfAvBudget.setValue(new Float(as.getNoPurposeBudgetAmount()));
+			tfAvBudget.setValue(new Float(as.getAvailableNoPurposeBudget()));
 		} catch (ApplicationServerException e1) {
 			tfAvBudget.setValue(new Float(0));
 	   }

@@ -183,7 +183,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		 return db.selectUsersByRole(i, rollenId);
 	 }
 	 
-	//TODO: Methode umbenennen -> getRemmitanceMax
+	/**
+	 * Ermittelt den größtmöglichen Betrag der dem übergebenen FB-Hauptkonto
+	 * zugewiesen werden kann
+	 * @return der zuweisungsfähige Betrag
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */
 	public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException{
 
 		Kontenzuordnung[] joins = null;
@@ -200,17 +206,30 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if (joins[0].getZvKonto().isZweckgebunden()){
 				return getAvailableAccountBudget(joins[0].getZvKonto());
 			} else {
-				return getNoPurposeBudgetAmount();
+				return getAvailableNoPurposeBudget();
 			}
 		} else return 0;
 	}
 	
+	/**
+	 * Ermittelt den Betrag des noch nicht an FB-Konten verteilten Budgets des übergebenen ZV-Kontos   
+	 * VORSICHT: Liefert nur korrekte Ergebnisse für _zweckgebundenen_ ZV-Konten!!!
+	 * @return der Betrag des verteilungsfähigen Budgets
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */
 	public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException{
 		return db.selectTotalAccountBudget(account) - db.selectDistributedAccountBudget(account);
 	}
 	
-	//TODO: Methode umbenennen -> getAvailableNoPurposeBudget
-	public float getNoPurposeBudgetAmount () throws ApplicationServerException{
+	/**
+	 * Ermittelt den Betrag des noch nicht an FB-Konten verteilten Budgets 
+	 * über alle _zweckungebundenen_ ZV-Konten
+	 * @return der Betrag des verteilungsfähigen zweckungebundenen Budgets
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	
+	public float getAvailableNoPurposeBudget () throws ApplicationServerException{
 		return (db.selectNoPurposeZVBudgetSum() - db.selectNoPurposeFBBudgetSum());
 	}
 	
