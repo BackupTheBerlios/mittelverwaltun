@@ -142,6 +142,56 @@ public class Database implements Serializable{
 		return konten;		// Ermittelten FBUnterkonten
 	}
 	
+	/**
+	 * Abfrage der FBKonten, die ein Benutzer für seine Kleinbestellung verwenden kann.
+	 * @param Benutzer, für die Konten ermittelt werden sollen.
+	 * @return Liste mit den ermittelten Konten. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ArrayList selectFBKontenForUser(Benutzer user) throws ApplicationServerException {
+		ArrayList konten = new ArrayList();
+		
+		try{
+			// Parameter an das SQL-Statement
+			Object[] parameters = { new Integer(user.getKostenstelle().getId()),
+									new Integer(user.getKostenstelle().getId()), new Integer(user.getId()) };
+			// SQL-Statement mit der Nummer 56 ausführen 
+			ResultSet rs = statements.get(56).executeQuery(parameters);
+			rs.last();		// An letzte Zeile springen
+			if(rs.getRow() > 0) {		// Wenn die Zeile größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ){		// Wenn es die nächste Zeile gibt
+					if(rs.getString(6).equalsIgnoreCase("0000")) {
+						// Neues FBHauptkonto erzeugen und in die Liste einfügen
+													// kontoId, hausHaltsJahrId, institut, bezeichnung
+						konten.add( new FBHauptkonto( rs.getInt(1), rs.getInt(2), user.getKostenstelle(), rs.getString(4),
+													// hauptkonto, unterkonto, budget, dispoLimit, 
+													rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getFloat(8),
+													// vormerkungen, pruefBedingung, kleinbestellungen, 
+													rs.getFloat(9), rs.getString(10), rs.getString(11).equalsIgnoreCase("1"), 
+													//  gelöscht
+													rs.getString(12).equalsIgnoreCase("1") ) );
+					} else {
+						// Neues FBUnterkonto erzeugen und in die Liste einfügen
+													// kontoId, hausHaltsJahrId, institut, bezeichnung
+						konten.add( new FBUnterkonto( rs.getInt(1), rs.getInt(2), user.getKostenstelle(), rs.getString(4),
+													// hauptkonto, unterkonto, budget, vormerkungen
+													rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getFloat(9),
+													// kleinbestellungen, 
+													rs.getString(9).equalsIgnoreCase("1"),
+													// gelöscht
+													rs.getString(10).equalsIgnoreCase("1") ) );
+					}
+				}
+			}
+			rs.close();					// Die Abfrage schließen
+		} catch (SQLException e) {
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+
+		return konten;		// Ermittelten Konten zurückgeben
+	}
 
 	/**
 	 * Ein neues FBHauptkonto erstellen.
@@ -205,6 +255,35 @@ public class Database implements Serializable{
 		try{
 			// Parameter für das SQL-Statement festlegen
 			Object[] parameters = {new Integer(konto.getInstitut().getId()), konto.getHauptkonto(), konto.getUnterkonto()};
+			// SQL-Statement mit der Nummer 53 ausführen
+			ResultSet rs = statements.get(53).executeQuery(parameters);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert das Konto
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+				return rs.getInt(1);// Id des FBKontos
+			}
+		} catch (SQLException e) {
+			throw new ApplicationServerException(0, e.getMessage());
+		}
+		
+		return 0;		// Sonst ist die Id 0 -> nicht gefunden
+	}
+
+	/**
+	 * Abfrage ob ein FBKonto schon existiert. Dabei ist die InstitutsId, <br>
+	 * das Hauptkonto und das Unterkonto entscheidend.
+	 * @param InstitutsId
+	 * @param Hauptkonto
+	 * @param Unterkonto
+	 * @return kontoId des FBKontos
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public int existsFBKonto(int institutsId, String hauptkonto, String unterkonto ) throws ApplicationServerException {
+		try{
+			// Parameter für das SQL-Statement festlegen
+			Object[] parameters = {new Integer(institutsId), hauptkonto, unterkonto};
 			// SQL-Statement mit der Nummer 53 ausführen
 			ResultSet rs = statements.get(53).executeQuery(parameters);
 			rs.last();	// Auf die letzte Zeile springen
@@ -1352,7 +1431,8 @@ public class Database implements Serializable{
 				rs.beforeFirst();		// Vor die erste Zeile springen
 				while( rs.next() ) {	// Solange es Zeilen gibt	
 					konten.add( new ZVTitel( rs.getInt(1), zvKonto, rs.getString(3), rs.getString(4), rs.getString(5),
-										rs.getFloat(6), rs.getString(7), rs.getString(8) ) );
+												rs.getFloat(6), rs.getFloat(7), rs.getString(8), rs.getString(9),
+												rs.getString(10).equalsIgnoreCase("1") ) );
 				}
 			}
 			rs.close();		// Abfrage schließen
@@ -1361,6 +1441,80 @@ public class Database implements Serializable{
 		}
 
 		return konten;		// Ermittelten ZVTitel zurückgeben
+	}
+	
+	/**
+	 * Abfrage aller ZVTitel die ein User für das angegebene FBKonto bei der Kleinbestellung verwenden kann.
+	 * @param FBKontoId vom FBKonto welches für die Kleinbestellung verwendet werden soll.
+	 * @return Liste mit den ZVTiteln, die für die Kleinbestellung verwendet werden können
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ArrayList selectZVTitelForUser(int fbKontoId) throws ApplicationServerException {
+		ArrayList konten = new ArrayList();	// Liste mit den ZVTiteln des ZVKontos
+
+		try{
+			// Parameter für das SQL-Statement 
+			Object[] parameters = {new Integer(fbKontoId)};
+			// SQL-Statement mit der Nummer 165 ausführen
+			ResultSet rs = statements.get(165).executeQuery(parameters);
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der abgefragten Zeilen größer 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ) {	// Solange es Zeilen gibt
+					if(rs.getString(7).equalsIgnoreCase("")) {
+						konten.add( new ZVTitel( rs.getInt(1), selectZVKonto(rs.getInt(2)), rs.getString(3),
+											rs.getString(4), rs.getString(5), rs.getFloat(6), rs.getFloat(7), 
+											rs.getString(8), rs.getString(9), 
+											rs.getString(10).equalsIgnoreCase("1") ) );
+					} else {
+						konten.add( new ZVUntertitel( rs.getInt(1), selectZVTitelWithZVKonto(rs.getInt(2), rs.getString(4)), 
+											rs.getString(3), rs.getString(4), rs.getString(5), rs.getFloat(6), rs.getFloat(7), 
+											rs.getString(8), rs.getString(9), 
+											rs.getString(10).equalsIgnoreCase("1") ) );
+					}
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 1, e.getMessage() );
+		}
+
+		return konten;		// Ermittelten ZVTitel zurückgeben
+	}	
+
+	/**
+	 * 
+	 * Abfrage eines nicht gelöschten ZVTitels mit einer bestimmter zvKontoId und einem bestimmten Titel. 
+	 * @param Id des ZVKontos.
+	 * @param Titel des ZVTitels.
+	 * @return Ermittelter ZVTitel. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public ZVTitel selectZVTitelWithZVKonto(int zvKonotId, String zvTitel) throws ApplicationServerException {
+		ZVTitel result = null;		// Der ausgewählte ZVTitel
+		
+		try {
+			// Parameter für das SQL-Statement
+			Object[] parameters = {new Integer( zvKonotId ), zvTitel};
+			// SQL-Statement mit der Nummer 149 ausführen
+			ResultSet rs = statements.get(149).executeQuery(parameters);
+			rs.last();		// In die letzte Abfragezeile springen 
+			if ( rs.getRow() > 0 ) {	// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die Nächste Zeile
+				// Neuen ZVTitel erstellen
+				result = new ZVTitel( rs.getInt(1), selectZVKonto(rs.getInt(2)), rs.getString(3), 
+									rs.getString(4), rs.getString(5), rs.getFloat(6), rs.getFloat(7), 
+									rs.getString(8), rs.getString(9), rs.getString(10).equalsIgnoreCase("1") );
+			}
+			rs.close();		// Abfrage schließen
+		} catch(SQLException e) {
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+			
+		return result;		// ZVtitel zurückgeben
 	}
 
 	/**
@@ -1384,7 +1538,8 @@ public class Database implements Serializable{
 				while( rs.next() ) {	// Solange es Abfragezeilen gibt
 					// ZVUntertitel erstellen und in die Liste einfügen
 					konten.add( new ZVUntertitel( rs.getInt(1), zvTitel, rs.getString(3), rs.getString(4), rs.getString(5),
-										rs.getFloat(6), rs.getString(7), rs.getString(8) ) );
+										rs.getFloat(6), rs.getFloat(7), rs.getString(8), rs.getString(9), 
+										rs.getString(10).equalsIgnoreCase("1") ) );
 				}
 			}
 			rs.close();		// Abfrage schließen
@@ -1693,7 +1848,8 @@ public class Database implements Serializable{
 		try{
 			// Parameter für das SQL-Statement
 			Object[] parameters ={new Integer(konto.getZVKonto().getId()), konto.getBezeichnung(), konto.getTitel(),
-								konto.getUntertitel(), new Float(konto.getBudget()), konto.getBemerkung(), konto.getBedingung()};
+									konto.getUntertitel(), new Float(konto.getBudget()), new Float(konto.getVormerkungen()),
+									konto.getBemerkung(), konto.getBedingung()};
 			// SQL-Statement mit der Nummer 143 ausführen
 			statements.get(143).executeUpdate(parameters);
 			return existsZVTitel( konto );		// ZVTitelId ermitteln und zurückgeben
@@ -1714,7 +1870,8 @@ public class Database implements Serializable{
 		try{
 			// Parameter für das SQL-Statement
 			Object[] parameters ={new Integer(konto.getZVTitel().getZVKonto().getId()), konto.getBezeichnung(), konto.getTitel(),
-								konto.getUntertitel(), new Float(konto.getBudget()), konto.getBemerkung(), konto.getBedingung()};
+								konto.getUntertitel(), new Float(konto.getBudget()), new Float(konto.getVormerkungen()), 
+								konto.getBemerkung(), konto.getBedingung()};
 			// SQL-Statement mit der Nummer 143 ausführen
 			statements.get(143).executeUpdate(parameters);
 			return existsZVUntertitel( konto );		// ZVUntertitelId ermitteln und zurückgeben
@@ -1819,8 +1976,9 @@ public class Database implements Serializable{
 		try{
 			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer(titel.getZVKonto().getId()), titel.getBezeichnung(), titel.getTitel(),
-							titel.getUntertitel(), new Float(titel.getBudget()), titel.getBemerkung(),
-							titel.getBedingung(), (titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
+							titel.getUntertitel(), new Float(titel.getBudget()), new Float(titel.getVormerkungen()), 
+							titel.getBemerkung(), titel.getBedingung(), 
+							(titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
 			// SQL-Statement mit der Nummer 145 ausführen
 			statements.get(145).executeUpdate(parameters);
 			if( titel.getGeloescht() )		// Wenn gelöschter ZVTitel
@@ -1844,8 +2002,9 @@ public class Database implements Serializable{
 		try{
 			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer( titel.getZVTitel().getZVKonto().getId()), titel.getBezeichnung(), titel.getTitel(),
-							titel.getUntertitel(), new Float(titel.getBudget()), titel.getBemerkung(),
-							titel.getBedingung(), (titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
+							titel.getUntertitel(), new Float(titel.getBudget()), new Float(titel.getVormerkungen()), 
+							titel.getBemerkung(), titel.getBedingung(),
+							(titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
 			// SQL-Statement mit der Nummer 145 ausführen
 			statements.get(145).executeUpdate(parameters);
 			if( titel.getGeloescht() )		// Wenn gelöschter ZVTitel
@@ -1910,8 +2069,9 @@ public class Database implements Serializable{
 				rs.beforeFirst();		// Vor die erste Zeile springen
 				rs.next();				// Die Nächste Zeile
 				// Neuen ZVTitel erstellen
-				result = new ZVTitel( zvTitel.getId(), zvTitel.getZVKonto(), rs.getString(2), rs.getString(3),rs.getString(4),
-									rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
+				result = new ZVTitel( zvTitel.getId(), zvTitel.getZVKonto(), rs.getString(2), rs.getString(3), rs.getString(4),
+									rs.getFloat(5), rs.getFloat(6), rs.getString(7), rs.getString(8), 
+									rs.getString(9).equalsIgnoreCase("1") );
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
@@ -1923,17 +2083,19 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * einen ZVTitle aus ZVKontenTitle mit der entsprechenden id zurückgeben
-	 * @param id des ZVTitels
-	 * @return ZVTitel
+	 * Einen ZVTitel mit der angegebenen zvTitelId ermitteln.
+	 * @param Id des ZVTitels
+	 * @return Ermittelter ZVTitel. 
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ZVTitel selectZVTitel( int id ) throws ApplicationServerException {
 		ZVTitel result = null;		// Der ausgewählte ZVTitel
 		try {
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer( id )};
+			// SQL-Statement mit der Nummer 148 ausführen
 			ResultSet rs = statements.get(148).executeQuery(parameters);
-			
 			rs.last();		// In die letzte Abfragezeile springen 
 			if ( rs.getRow() > 0 ) {	// Gibt es ein Ergebnis
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -1951,7 +2113,7 @@ public class Database implements Serializable{
 	
 		return result;		// ZVtitel zurückgeben
 	}
-	
+		
 	/**
 	 * Einen ZVUntertitel zum Aktualisieren auswählen
 	 * @param ZVUntertitel, der aktualisiert werden soll
@@ -1972,7 +2134,8 @@ public class Database implements Serializable{
 				rs.next();				// Die Nächste Zeile
 				// Neuen ZVUntertitel erstellen
 				result = new ZVUntertitel( zvUntertitel.getId(), zvUntertitel.getZVTitel(), rs.getString(2), rs.getString(3),
-					rs.getString(4), rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
+											rs.getString(4), rs.getFloat(5), rs.getFloat(6), rs.getString(7), rs.getString(8), 
+											rs.getString(9).equalsIgnoreCase("1") );
 			}
 			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
