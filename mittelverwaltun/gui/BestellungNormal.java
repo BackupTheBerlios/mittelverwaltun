@@ -104,40 +104,34 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		this.setClosable(true);
 		this.setIconifiable(true);
 
-		try {
-			jbInit();
-		 }
-		 catch(Exception e) {
-			e.printStackTrace();
-		 }
-		cbInstitut.addItemListener(this);
+
 		//cbInstitut.addPropertyChangeListener(this);
-		
+
 		init();
   }
-  
+
   public BestellungNormal(MainFrame frame, StandardBestellung bestellung) {
 	  this.frame = frame;
 	  this.setClosable(true);
 	  this.setIconifiable(true);
 	  this.bestellung = bestellung;
 
-		try {
-			jbInit();
-		 }
-		 catch(Exception e) {
-			e.printStackTrace();
-		 }
-	  
-		setOrderData();
+
 		init();
-		cbInstitut.addItemListener(this);
+		setOrderData();
 		//cbInstitut.addPropertyChangeListener(this);
   }
-  
+
   private void init(){
-		
- 
+
+
+	try {
+		jbInit();
+	 }
+	 catch(Exception e) {
+		e.printStackTrace();
+	 }
+		cbInstitut.addItemListener(this);
 		buDrucken.addActionListener(this);
 		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
@@ -154,7 +148,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
 		rbAuftragGrund.addActionListener(this);
-	
+
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
 		setData();
 
@@ -177,7 +171,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
   	return error;
   }
-  
+
   public static void main(String[] args) {
 		 MainFrame test = new MainFrame("FBMittelverwaltung");
 		 try{
@@ -270,8 +264,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     tfFBKonto.setEditable(false);
     tfFBKonto.setText("");
     tfFBKonto.setBounds(new Rectangle(93, 132, 345, 21));
-    buFBKonto.setBounds(new Rectangle(438, 132, 101, 21));
+    buFBKonto.setBounds(new Rectangle(438, 132, 109, 21));
     buFBKonto.setText("FBKonto");
+    jTextPane1.setEditable(false);
     unten.add(tpAuftragGrund, null);
     unten.add(jLabel14, null);
     unten.add(tfAngebotNr, null);
@@ -396,7 +391,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		tfAngebotNr.setBounds(new Rectangle(185, 23, 47, 21));
     buDrucken.setBounds(new Rectangle(324, 486, 112, 25));
 		buDrucken.setText("Drucken");
-    buTitel.setBounds(new Rectangle(422, 186, 110, 20));
+    buTitel.setBounds(new Rectangle(438, 186, 109, 21));
     buTitel.setActionCommand("buTitel");
     buTitel.setText("Titelauswahl");
     oben.add(jLabel22, null);
@@ -492,24 +487,24 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
 		Date sqlDate = new Date(datum.getTime());
 
-		StandardBestellung newBestellung = new StandardBestellung(angebote, angebotNr, (Kostenart)cbKostenart.getSelectedItem(),
+		StandardBestellung newBestellung = new StandardBestellung(angebote, (Kostenart)cbKostenart.getSelectedItem(),
 																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
-																				(new String("0")).charAt(0), (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
+																				(new String("0")).charAt(0), "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, fbKonto, (angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
-
-		if(bestellung != null){
-
-		}else{
-			try {
+		try {
+			if(bestellung != null){
+				newBestellung.setId(bestellung.getId());
+				newBestellung.setBesteller(bestellung.getBesteller());
+				newBestellung.setHuel(bestellung.getHuel());
+				frame.getApplicationServer().setBestellung(bestellung, newBestellung);
+			}else
 				frame.getApplicationServer().addBestellung(newBestellung);
-			} catch (ApplicationServerException e) {
+		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
-			}
 		}
-
 	}
 
 	private void bestellen(){
@@ -663,24 +658,27 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 		tpVerwendungszweck.setText(bestellung.getVerwendungszweck());
 		cbDrittelMittel.setSelected(bestellung.getPlanvorgabe());
-		
+
 		ArrayList angebote = bestellung.getAngebote();
 		for(int i = 0; i < angebote.size(); i++){
 			Angebot angebot = (Angebot)angebote.get(i);
-			
+
 			if(((Position)angebot.getPositionen().get(0)).getMwst() == 0.0){
 				angebot.setSumme(((Position)angebot.getPositionen().get(0)).getEinzelPreis());
 				angebot.getPositionen().remove(0);
 			}
-			
+			if(angebot.getAngenommen()){
+				tfAngebotNr.setText("" + (i+1));
+				angebotNr = i+1;
+			}
 			insertAngebot(angebot, -1);
 		}
-		
+
 		rbAuftragGrund.setSelected(!bestellung.getBegruendung().equals(""));
 		if(rbAuftragGrund.isSelected())
 			tpAuftragGrund.setVisible(true);
 		tpAuftragGrund.setText(bestellung.getBegruendung());
-		tpBemerkungen.setText(bestellung.getBemerkung());		
+		tpBemerkungen.setText(bestellung.getBemerkung());
 		setFBKonto(bestellung.getFbkonto());
 		setZVKonto(bestellung.getZvtitel());
 	}

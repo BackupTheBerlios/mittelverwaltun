@@ -106,9 +106,9 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 		  buBeenden.setIcon(Functions.getCloseIcon(getClass()));
 		  buBeenden.addActionListener( this );
 			buAddFirm.addActionListener(this);
+			loadFirmen();
 			setData(angebot);
 		  this.setBounds(100,100,540, 480);
-			loadFirmen();
 			setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 			
 	 }

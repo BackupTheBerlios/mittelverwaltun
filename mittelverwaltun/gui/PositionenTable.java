@@ -91,7 +91,7 @@ public class PositionenTable extends JTable {
 	}
 		
 	public PositionenTable(ArrayList positions){
-		Object[][] data = new Object[positions.size()][9];
+		Object[][] data = new Object[positions.size()][8];
 		
 		for(int i = 0; i < positions.size(); i++){
 			Position position = (Position)positions.get(i);
@@ -102,24 +102,13 @@ public class PositionenTable extends JTable {
 			data[i][3] = new Float(position.getMwst());
 			data[i][4] = new Float(position.getRabatt());
 			data[i][5] = new Float(position.getGesamtpreis());
-			data[i][6] = new String("Save");
-			data[i][7] = new String("Del");
-			data[i][8] = new Integer(position.getId());
+			data[i][6] = new String("Del");
+			data[i][7] = new Integer(position.getId());
 		}
 
 		al = new ActionListener() {            
 					public void actionPerformed(ActionEvent e) { 
-						if(e.getActionCommand() == "Save"){
-							int row = getSelectedRow();
-							Position position = new Position(((Integer)getValueAt(row, 7)).intValue(), 
-																									getValueAt(row, 1).toString(), 
-																									((Float)getValueAt(row, 2)).floatValue(),
-																									((Integer)getValueAt(row, 0)).intValue(), 
-																									((Float)getValueAt(row, 3)).floatValue(),
-																									((Float)getValueAt(row, 4)).floatValue()
-																									);
-							//useCase.updatePosition(position);
-						}else if(e.getActionCommand() == "Del"){
+						if(e.getActionCommand() == "Del"){
 							int answer = JOptionPane.showConfirmDialog(
 										getComponent(0),
 										"Soll die Position " + getSelectedRow() + " mit: \n"
@@ -130,7 +119,6 @@ public class PositionenTable extends JTable {
 										JOptionPane.QUESTION_MESSAGE,
 										null);
 							if(answer == 0){
-								//useCase.deletePosition(position);
 								((DefaultTableModel)getModel()).removeRow(getSelectedRow());
 								((DefaultTableModel)getModel()).fireTableStructureChanged();
 								updateTableStructur();
@@ -193,10 +181,8 @@ public class PositionenTable extends JTable {
 	
 	private void updateTableStructur(){
 		setUpMwStColumn(this, getColumnModel().getColumn(3));
-		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Save", al));
-		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Save"));
-		getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor("Del", al));
-		getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer("Del"));
+		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Del", al));
+		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Del"));
 		getColumnModel().getColumn(0).setMaxWidth(50);
 		getColumnModel().getColumn(2).setMaxWidth(100);
 		getColumnModel().getColumn(4).setMaxWidth(50);
@@ -215,6 +201,7 @@ public class PositionenTable extends JTable {
 		final JButton button;        
 		TableButtonCellRenderer(String buttonLabel) {            
 			button = new JButton(buttonLabel);  
+			button.setActionCommand(buttonLabel);
 			button.setMargin(new Insets(2,2,2,2));         
 		}        
 	
@@ -229,7 +216,8 @@ public class PositionenTable extends JTable {
 		        
 		TableButtonCellEditor(String buttonLabel, ActionListener callback) {            
 			button = new JButton(buttonLabel);            
-			this.callback = callback;  
+			this.callback = callback;
+			button.setActionCommand(buttonLabel);
 			button.setMargin(new Insets(2,2,2,2));         
 			button.addActionListener(this);        
 		}        
