@@ -2915,7 +2915,7 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * wählt eine Bestellung zum Aktualisieren
+	 * wählt eine StandardBestellung zum Aktualisieren
 	 * @param bestellId
 	 * @return
 	 * @throws ApplicationServerException
@@ -2924,7 +2924,7 @@ public class Database implements Serializable{
 		StandardBestellung bestellung = null;
 
 		try{
-			Object[] parameters = { new Integer(bestellId) };
+			Object[] parameters = { new Integer(bestellId), "0" };
 			ResultSet rs = statements.get(274).executeQuery(parameters);
 
 			if (rs.next()){
@@ -2947,6 +2947,43 @@ public class Database implements Serializable{
 			rs.close();
 		} catch (SQLException e){
 			throw new ApplicationServerException(71,e.getMessage());
+		}
+
+		return bestellung;
+	}
+	
+	/**
+	 * wählt eine ASKBestellung zum Aktualisieren
+	 * @param bestellId
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ASKBestellung selectForUpdateASKBestellung(int bestellId) throws ApplicationServerException{
+		ASKBestellung bestellung = null;
+
+		try{
+			Object[] parameters = { new Integer(bestellId), "1" };
+			ResultSet rs = statements.get(274).executeQuery(parameters);
+
+			if (rs.next()){
+				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
+				Benutzer besteller = selectUser(rs.getInt("besteller"));
+				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
+				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
+				Benutzer swBeauftragter = selectUser(rs.getInt("swBeauftragter"));
+				ZVTitel zvTitel = selectZVTitel(rs.getInt("zvTitel"));
+				FBUnterkonto fbkonto = selectFBKonto(rs.getInt("fbKonto"));
+		
+				bestellung = new ASKBestellung(bestellId, rs.getString("referenzNr"), rs.getString("huelNr"), rs.getDate("datum"), besteller, auftraggeber,
+																			 empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten"), rs.getString("phase").charAt(0),
+																			 null, rs.getString("bemerkungen"), swBeauftragter);
+			}else {
+				throw new ApplicationServerException(70);
+			}
+
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(93,e.getMessage());
 		}
 
 		return bestellung;
@@ -3148,23 +3185,44 @@ public class Database implements Serializable{
  	/**
  	 * aktualisiert eine StandardBestellung angand der bestellId
  	 * @param b - Standardbestellung
- 	 * @param verbindlichkeiten
  	 * @throws ApplicationServerException
  	 * @author robert
  	 */
-	public void updateStandardBestellung(StandardBestellung b/*, float verbindlichkeiten*/) throws ApplicationServerException{
+	public void updateStandardBestellung(StandardBestellung b) throws ApplicationServerException{
 		if(b != null){
 			try{
 				
 				Object[] parameters = { new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
 																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
 																b.getBemerkung(), new Integer(b.getKostenart().getId()), (b.getErsatzbeschaffung() ? "1" : "0"), b.getErsatzbeschreibung(), b.getInventarNr(),
-																b.getVerwendungszweck(), (b.getPlanvorgabe() ? "1" : "0"), b.getBegruendung(), new Integer(b.getId()) };
+																b.getVerwendungszweck(), (b.getPlanvorgabe() ? "1" : "0"), b.getBegruendung(), null, new Integer(b.getId()) };
 				if(statements.get(271).executeUpdate(parameters) == 0)
 					throw new ApplicationServerException(78);
 
 			} catch (SQLException e){
 				throw new ApplicationServerException(79, e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * aktualisiert eine ASKBestellung angand der bestellId
+	 * @param b - ASKBestellung
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void updateASKBestellung(ASKBestellung b) throws ApplicationServerException{
+		if(b != null){
+			try{
+			
+				Object[] parameters = { new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
+																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
+																b.getBemerkung(), null, null, null, null, null, null, null, null, new Integer(b.getId()) };
+				if(statements.get(271).executeUpdate(parameters) == 0)
+					throw new ApplicationServerException(78);
+
+			} catch (SQLException e){
+				throw new ApplicationServerException(94, e.getMessage());
 			}
 		}
 	}
@@ -3583,6 +3641,38 @@ public class Database implements Serializable{
 		}
 	
 		return angebote;
+	}
+	
+	/**
+	 * löscht eine Bestellung aus der Tabelle Bestellungen. 
+	 * VORSICHT ! Vorher die Bestellungen ASK, Standard bzw. Klein löschen.
+	 * @param bestellId - Id der Bestellung
+	 * @throws ApplicationServerException
+	 */
+	public void deleteBestellung(int bestellId) throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			statements.get(300).executeUpdate(parameters);
+
+		} catch (SQLException e){
+			throw new ApplicationServerException(91, e.getMessage());
+		}
+	}
+	
+	/**
+	 * löscht eine ASK- bzw. StandardBestellung aus der Tabelle ASK_Standard_Bestellungen.
+	 * VORSICHT ! Vorher alle Angebote löschen.
+	 * @param bestellId - Id der Bestellung
+	 * @throws ApplicationServerException
+	 */
+	public void deleteASK_Standard_Bestellung(int bestellId) throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			statements.get(251).executeUpdate(parameters);
+
+		} catch (SQLException e){
+			throw new ApplicationServerException(92, e.getMessage());
+		}
 	}
 }
 

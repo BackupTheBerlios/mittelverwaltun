@@ -1796,8 +1796,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(c > 0)
 			throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
-		db.setAutoCommit(false);
-		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
 		
@@ -1820,8 +1818,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 		}
 		db.commit();
-		
-		db.setAutoCommit(true);
 	}
 
 
@@ -1830,8 +1826,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
 	
-		db.setAutoCommit(false);
-		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
 		
@@ -1852,7 +1846,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.insertPosition(position, newAngebotId);
 		}
 		db.commit();
-		db.setAutoCommit(true);
 	}
 
 
@@ -2020,8 +2013,37 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
-		//System.out.println("test");
+		// original ASKBestellung in der Datenbank
+		ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(original.getId());
+	
+		ArrayList angebote = db.selectForUpdateAngebote(original.getId());
+
+		Angebot angebot = (Angebot)angebote.get(0);
 		
+		angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		
+		dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+	
+		// die Bestellung hat sich zwischenzeitlich geändert
+		if(!original.equals(dbOriginal))
+			throw new ApplicationServerException( 76 );
+			
+		ArrayList originalOffer = new ArrayList();
+		originalOffer.add(original.getAngebot());
+		
+		ArrayList editedOffer = new ArrayList();
+		editedOffer.add(edited.getAngebot());		
+			
+		if(original.getPhase() == '0'){
+			
+			db.updateASKBestellung(edited);
+			actualizeAngebote(originalOffer, editedOffer, edited.getId());
+		}else if(original.getPhase() == '1'){
+			db.updateASKBestellung(edited);
+			actualizeAngebote(originalOffer, editedOffer, edited.getId());
+		}else if(original.getPhase() == '2'){
+		
+		}
 	}
 	
 	/*
@@ -2265,8 +2287,64 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)
 	 */
 	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException {
-		// TODO Automatisch erstellter Methoden-Stub
+		// original StandardBestellung in der Datenbank
+		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(delOrder.getId());
+
+		ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
+
+		for(int i = 0; i < angebote.size(); i++){
+			Angebot angebot = (Angebot)angebote.get(i);
+
+			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		}
+		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
+	
+		// die Bestellung hat sich zwischenzeitlich geändert
+		if(!delOrder.equals(dbOriginal))
+			throw new ApplicationServerException( 76 );
 		
+		// alle Position aller Angebote der Bestellung löschen
+		db.deletePositions(delOrder.getId());
+		// alle Angebote der Bestellung löschen
+		db.deleteAngebote(delOrder.getId());
+		// die StandardBestellung löschen
+		db.deleteASK_Standard_Bestellung(delOrder.getId());
+		// die Bestellung löschen
+		db.deleteBestellung(delOrder.getId());
+		
+		db.commit();
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.ASKBestellung)
+	 */
+	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException {
+		// original StandardBestellung in der Datenbank
+		ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(delOrder.getId());
+
+		ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
+
+		Angebot angebot = (Angebot)angebote.get(0);
+		
+		angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		
+		dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+	
+		// die Bestellung hat sich zwischenzeitlich geändert
+		if(!delOrder.equals(dbOriginal))
+			throw new ApplicationServerException( 76 );
+		
+		// alle Position aller Angebote der Bestellung löschen
+		db.deletePositions(delOrder.getId());
+		// alle Angebote der Bestellung löschen
+		db.deleteAngebote(delOrder.getId());
+		// die StandardBestellung löschen
+		db.deleteASK_Standard_Bestellung(delOrder.getId());
+		// die Bestellung löschen
+		db.deleteBestellung(delOrder.getId());
+		
+		db.commit();
 	}
 }
 

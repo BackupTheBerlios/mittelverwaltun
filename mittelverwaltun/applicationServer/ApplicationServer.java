@@ -184,15 +184,20 @@ public interface ApplicationServer extends Remote {
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
 
-	
 	/**
-	 * 
+	 * löscht eine StandardBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
 	 * @param delOrder - StandardBestellung die gelöscht werden soll
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
 	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException;
 
+	/**
+	 * löscht eine ASKBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
+	 * @param delOrder - ASKBestellung die gelöscht werden soll
+	 * @throws ApplicationServerException
+	 */
+	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException;
 	
 	/**
 	 * Eine Kleinbestellung in die Datenbank einfügen.

@@ -1743,8 +1743,10 @@ public class PreparedSqlStatements {
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//251 fügt eine ASKBestellung in die ASK_Standard_Bestellungen Tabelle ein
-			statements[i++] = null;
+		{//251 löscht eine ASK- bzw. StandardBestellung anhand der Id
+			ps = con.prepareStatement("DELETE FROM ASK_Standard_Bestellungen WHERE id = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//252
 			statements[i++] = null;
@@ -1858,17 +1860,17 @@ public class PreparedSqlStatements {
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//271 aktualisiert die StandardBestellung
+		{//271 aktualisiert die ASK- bzw. StandardBestellung
 			ps = con.prepareStatement("UPDATE Bestellungen a, ASK_Standard_Bestellungen b " +																"SET a.besteller = ?, a.auftraggeber = ?, a.empfaenger = ?, a.referenzNr = ?, a.huelNr = ?, a.phase = ?, " +
 																		"a.datum = ?, a.zvTitel = ?, a.fbKonto = ?, a.bestellwert = ?, a.verbindlichkeiten = ?, " +																		"b.bemerkungen = ?, b.kostenart = ?, b.ersatzbeschaffung = ?, b.ersatzbeschreibung = ?, b.ersatzInventarNr = ?, " +
-																		"b.verwendungszweck = ?, b.planvorgabe = ?, b.begruendung = ? " +
+																		"b.verwendungszweck = ?, b.planvorgabe = ?, b.begruendung = ?, b.swBeauftragter = ? " +
 																"WHERE a.id = ? " +
 																	"AND a.id = b.id " +
 																	"AND a.geloescht = '0' ");
 			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,  Types.VARCHAR,
 											Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT,
 											Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-											Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
+											Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//272
@@ -1903,20 +1905,20 @@ public class PreparedSqlStatements {
 										  "ORDER BY datum DESC");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//274 select for update für eine Bestellung
+		{//274 select for update für eine ASK- bzw. StandardBestellung
 			ps = con.prepareStatement("SELECT " +
 																		"k.id, k.beschreibung," +
 																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +
 																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
 																		"a.besteller, a.auftraggeber, a.empfaenger, " +
-																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert, a.verbindlichkeiten " +
+																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert, a.verbindlichkeiten, " +																		"b.swBeauftragter " +
 																"FROM Bestellungen a, ASK_Standard_Bestellungen b, Kostenarten k " +
 															  "WHERE a.id = ? " +
 																	"AND a.id = b.id " +
-																	"AND a.typ = '0' " +
+																	"AND a.typ = ? " +
 																	"AND a.geloescht = '0' " +
 																	"AND k.id = b.kostenart FOR UPDATE");
-			int[] param = {	Types.INTEGER };
+			int[] param = {	Types.INTEGER, Types.VARCHAR };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/**********************/
@@ -2005,7 +2007,7 @@ public class PreparedSqlStatements {
 		/* Tabelle: Angebote 2 	                  */
 		/* Indizes: 285-289                       */
 		/******************************************/
-		{//285 
+		{//285 löscht ein Angebot anhand der Id
 			ps = con.prepareStatement("DELETE FROM Angebote WHERE id = ? ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -2115,8 +2117,10 @@ public class PreparedSqlStatements {
 		/* Tabelle: Bestellungen 2            		*/
 		/* Indizes: 300-309                       */
 		/******************************************/
-		{//300 
-			statements[i++] = null;
+		{//300 löscht eine Bestellung aus der Tabelle Bestellungen anhand der Id
+			ps = con.prepareStatement("DELETE FROM Bestellungen WHERE id = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//301
 			statements[i++] = null;

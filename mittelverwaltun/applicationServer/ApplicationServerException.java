@@ -147,6 +147,10 @@ public class ApplicationServerException extends Exception {
 		messages[88] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deletePosition";
 		messages[89] = "Application Server Error: Position hat sich zwischenzeitlich geändert";
 		messages[90] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdatePosition";
+		messages[91] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteBestellung";
+		messages[92] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteASK_Standard_Bestellung";
+		messages[93] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateASKBestellung";
+		messages[94] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateASKBestellung";
 			
 //		Exception Ende ROBERT von 50-99
 
