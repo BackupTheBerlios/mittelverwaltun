@@ -281,7 +281,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 				id = frame.getApplicationServer().addBestellung(editedOrder);
 			else{
 				id = editedOrder.getId();
-				frame.getApplicationServer().setBestellung(bestellung, editedOrder);
+				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, editedOrder);
 			}
 
 			if(phase == 1)

@@ -1406,9 +1406,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(db.countAktiveBestellungen(dbUser) > 0)
 				throw new ApplicationServerException(50);
 
-			//Benutzer aus der MySQL-DB löschen
-			db.deleteUserMySQL(dbUser);
-
+			
 			// Benutzer hat Bestellungen gemacht
 			if(db.countBestellungen(dbUser) > 0)
 				db.deleteUser(dbUser);
@@ -1416,6 +1414,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.deleteUser(dbUser);
 			else
 				db.deleteUserFinal(dbUser);		// Kann definitiv gelöscht werden
+				
+			// Benutzer aus der MySQL-DB löschen
+				db.deleteUserMySQL(dbUser);
 				
 		  db.commit();
 		}
@@ -1437,8 +1438,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(64);
 		}
 		
-		db.insertUserMySQL(benutzer);
 		int newID = db.insertUser(benutzer);
+		db.insertUserMySQL(benutzer);
 		
 		db.commit();
 		return newID;

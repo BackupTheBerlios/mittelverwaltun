@@ -337,45 +337,33 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	  }
   }
 
-  protected String addUser(){
+  protected void addUser() throws ApplicationServerException{
 		if(listBenutzer.isSelectionEmpty())
-			return "Es ist kein Benutzer selektiert !";
+			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("") || (tfPasswort.getPassword().length == 0))
-			return "Benutzername, Passwort, Name und Vorname müssen ausgefüllt sein.";
+			throw new ApplicationServerException(0, "Benutzername, Passwort, Name und Vorname müssen ausgefüllt sein.");
 		else{
-			if((new String(tfPasswort.getPassword())).equals(new String(tfPasswortWdhl.getPassword())))
-				try{
-					PasswordEncrypt pe = new PasswordEncrypt();
-					String psw = pe.encrypt(new String(tfPasswort.getPassword()).toString());
+			if((new String(tfPasswort.getPassword())).equals(new String(tfPasswortWdhl.getPassword()))){
+				PasswordEncrypt pe = new PasswordEncrypt();
+				String psw = pe.encrypt(new String(tfPasswort.getPassword()).toString());
 
-				  Benutzer benutzer = new Benutzer(tfBenutzername.getText(), psw, (Rolle)cbRollen.getSelectedItem(),
-																					(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
-																					tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
-																					tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
-					int key = applicationServer.addUser(benutzer);
-					benutzer.setId(key);
-				  listModel.addElement(benutzer);
-				  listBenutzer.setSelectedIndex(listModel.getSize() - 1);
-				}catch (ApplicationServerException e) {
-					return e.getMessage();
-				}
-			else
-			   return "Passwort und Passwort-Wiederholung sind nicht gleich.";
+			  Benutzer benutzer = new Benutzer(tfBenutzername.getText(), psw, (Rolle)cbRollen.getSelectedItem(),
+																				(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
+																				tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
+																				tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
+				int key = applicationServer.addUser(benutzer);
+				benutzer.setId(key);
+			  listModel.addElement(benutzer);
+			  listBenutzer.setSelectedIndex(listModel.getSize() - 1);
+			}else
+				throw new ApplicationServerException(0, "Passwort und Passwort-Wiederholung sind nicht gleich.");
 		}
-
-
-	  return "";
   }
 
-	protected String delUser(){
+	protected void delUser() throws ApplicationServerException{
 		Benutzer currBenutzer = (Benutzer)listModel.getElementAt(listBenutzer.getSelectedIndex());
-		try{
-			applicationServer.delUser(currBenutzer);
-			listModel.remove(listBenutzer.getSelectedIndex());
-			return "";
-		}catch(ApplicationServerException e){
-			return e.getNestedMessage();
-		}
+		applicationServer.delUser(currBenutzer);
+		listModel.remove(listBenutzer.getSelectedIndex());
 	}
 
 
@@ -389,11 +377,11 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	}
 
 
-  protected String changeUser(){
+  protected void changeUser() throws ApplicationServerException{
 	  if(listBenutzer.isSelectionEmpty()){
-		  return "Es ist kein Benutzer selektiert !";
+			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		}else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("")){
-			return "Benutzername, Name und Vorname müssen ausgefüllt sein.";
+			throw new ApplicationServerException(0, "Benutzername, Name und Vorname müssen ausgefüllt sein.");
 	  }else{
 		  String passwort = "";
 		  if(!(tfPasswort.getPassword().length == 0)){
@@ -401,64 +389,56 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 					PasswordEncrypt pe = new PasswordEncrypt();
 					passwort = pe.encrypt(new String(tfPasswort.getPassword()).toString());
 				}else{
-			  	return "Passwort und Passwort-Wiederholung sind nicht gleich.";
+					throw new ApplicationServerException(0, "Passwort und Passwort-Wiederholung sind nicht gleich.");
 			  }
 		  }
-		  try {
-				Benutzer currBenutzer = (Benutzer)listModel.getElementAt(listBenutzer.getSelectedIndex());
-				if(passwort.equals(""))
-					passwort = currBenutzer.getPasswort();
+	  	Benutzer currBenutzer = (Benutzer)listModel.getElementAt(listBenutzer.getSelectedIndex());
+			if(passwort.equals(""))
+				passwort = currBenutzer.getPasswort();
 
-				Benutzer benutzer = new Benutzer(currBenutzer.getId(), tfBenutzername.getText(), passwort, (Rolle)cbRollen.getSelectedItem(),
-																				(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
-																				tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
-																				tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
-				applicationServer.setUser(benutzer, currBenutzer);
-				listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
-				if(frame != null)
-					frame.setBenutzer(benutzer);
-		  } catch (ApplicationServerException e) {
-				return e.getMessage();
-			}
-			return "";
+			Benutzer benutzer = new Benutzer(currBenutzer.getId(), tfBenutzername.getText(), passwort, (Rolle)cbRollen.getSelectedItem(),
+																			(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
+																			tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
+																			tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
+			applicationServer.setUser(benutzer, currBenutzer);
+			listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
+			if(frame != null)
+				frame.setBenutzer(benutzer);
 	  }
   }
 
   public void actionPerformed(ActionEvent e) {
-	  String error = "";
-	  if ( e.getSource() == buAnlegen ) {
-		  error = addUser();
-	  } else if ( e.getSource() == buAendern ) {
-		  error =changeUser();
-	  } else if ( e.getSource() == buLoeschen ) {
-			if(listBenutzer.isSelectionEmpty()){
-			  error = "Es ist kein Institut selektiert !";
-		  }else{
-			  if(JOptionPane.showConfirmDialog(this, "Wollen Sie wirklich löschen ?", "Löschen", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION)
-				  error = delUser();
-					loadUsers();
+	  try{
+		  if ( e.getSource() == buAnlegen ) {
+			  addUser();
+		  } else if ( e.getSource() == buAendern ) {
+			  changeUser();
+		  } else if ( e.getSource() == buLoeschen ) {
+				if(listBenutzer.isSelectionEmpty()){
+					throw new ApplicationServerException(0, "Es ist kein Institut selektiert !");
+			  }else{
+				  if(JOptionPane.showConfirmDialog(this, "Wollen Sie wirklich löschen ?", "Löschen", 
+				  																JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+					  delUser();
+						loadUsers();
+				  }
+			  }
+		  } else if ( e.getSource() == buRefresh ) {
+				loadInstituts();
+				loadRollen();
+				loadUsers();
+			} else if ( e.getSource() == buKontoAuswahl ) {
+				AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, applicationServer, false);
+				kontoAuswahl.show();
+			} else if ( e.getSource() == buKontoEntfernen ) {
+				privatKonto = 0;
+				tfKonto.setText("");
+			} else if ( e.getSource() == buBeenden ) {
+			  this.dispose();
 		  }
-	  } else if ( e.getSource() == buRefresh ) {
-			loadInstituts();
-			loadRollen();
-			loadUsers();
-		} else if ( e.getSource() == buKontoAuswahl ) {
-			AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, applicationServer, false);
-			kontoAuswahl.show();
-		}else if ( e.getSource() == buKontoEntfernen ) {
-			privatKonto = 0;
-			tfKonto.setText("");
-		}else if ( e.getSource() == buBeenden ) {
-		  this.dispose();
-	  }
-	  if(!error.equals("")){
-
-		JOptionPane.showMessageDialog(
-			  this,
-			  error,
-			  "Warnung",
-			  JOptionPane.ERROR_MESSAGE);
-	  }
+	  }catch(ApplicationServerException ex){
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", ex.getMessage(), ex.getNestedMessage(), MessageDialogs.ERROR_ICON);
+		}
   }
 
 	public void valueChanged(ListSelectionEvent e) {

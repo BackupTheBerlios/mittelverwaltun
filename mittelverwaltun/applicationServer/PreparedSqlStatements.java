@@ -150,7 +150,7 @@ public class PreparedSqlStatements {
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, 
-										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//25	
@@ -1498,10 +1498,10 @@ public class PreparedSqlStatements {
 		/* Indizes: 220-229                       */
 		/******************************************/
 		{//220 Anzahl der Buchunen zu einem Benutzer
-			ps = con.prepareStatement( "SELECT COUNT(b.betrag) " +
+			ps = con.prepareStatement( "SELECT COUNT(b.betragZvKonto) " +
 										 "FROM Benutzer a, Buchungen b " +
 										"WHERE a.id = ? " +
-										"AND a.id = b.benutzerid " );
+										"AND a.id = b.benutzer " );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

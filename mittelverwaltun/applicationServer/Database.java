@@ -206,7 +206,6 @@ public class Database implements Serializable{
 			
 			return existsFBKonto( konto );		// kontoId ermitteln
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -231,7 +230,6 @@ public class Database implements Serializable{
 			
 			return existsFBKonto( konto );		// kontoId ermitteln
 		 } catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		 }
 	 }
@@ -334,7 +332,6 @@ public class Database implements Serializable{
 			// SQL-Statement ausführen
 			return statements.get(54).executeUpdate(parameters);	// Zeilennummer des gelöschten Kontos
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -370,7 +367,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch ( SQLException e ) {
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
@@ -405,7 +401,6 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch ( SQLException e ){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
@@ -563,7 +558,6 @@ public class Database implements Serializable{
 			else						// Sonst bei nicht gelöschten nachsehen 
 				return existsFBKonto( konto );
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -592,7 +586,6 @@ public class Database implements Serializable{
 			else						// Sonst bei nicht gelöschten nachsehen 
 				return existsFBKonto( konto );
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -723,7 +716,6 @@ public class Database implements Serializable{
 			rs.close();
 
 		} catch (SQLException e){
-			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1,e.getMessage());
 		}
 
@@ -751,7 +743,6 @@ public class Database implements Serializable{
 			}
 			rs.close();
 		} catch (SQLException e){
-			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1,e.getMessage());
 		}
 
@@ -1030,15 +1021,12 @@ public class Database implements Serializable{
 
 	public void updateUserMySQL(Benutzer benutzer, String oldBenutzer) throws ApplicationServerException{
 		try{
-			//setAutoCommit();
 			Object[] param1 ={benutzer.getBenutzername(), oldBenutzer};
 			statements.get(94).executeUpdate(param1);
 			statements.get(95).executeUpdate(param1);
-			commit();
 
 		} catch (SQLException e){
-				rollback();
-				throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(1, e.getMessage());
 		}
 	}
 
@@ -1058,7 +1046,6 @@ public class Database implements Serializable{
 				statements.get(23).executeUpdate(param);
 			}
 		} catch (SQLException e){
-			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1, e.getMessage());
 		}
 	}
@@ -1067,16 +1054,12 @@ public class Database implements Serializable{
 		try{
 			Object[] param ={benutzer.getBenutzername()};
 
-			//setAutoCommit();
 			statements.get(90).executeUpdate(param);
 			statements.get(91).executeUpdate(param);
 			statements.get(92).executeUpdate(param);
-			//commit();
-
+			
 		} catch (SQLException e){
-			System.out.println(e.getMessage());
-			rollback();
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(100, e.getMessage());
 		}
 	}
 
@@ -1103,10 +1086,7 @@ public class Database implements Serializable{
 	    }else
 	        return 0;
 		} catch (SQLException e){
-			rollback();
-			setAutoCommit(true);
-			System.out.println(e.getMessage());
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(101, e.getMessage());
 		}
 	}
 
@@ -1114,10 +1094,8 @@ public class Database implements Serializable{
 		try{
 
 			Object[] param ={benutzer.getBenutzername()};
-			//setAutoCommit();
 			statements.get(96).executeUpdate(param);
 			statements.get(97).executeUpdate(param);
-			//commit();
 		} catch (SQLException e){
 			throw new ApplicationServerException(1, e.getMessage());
 		}
@@ -1347,7 +1325,6 @@ public class Database implements Serializable{
 			 }
 			 rs.close();
 		 } catch (SQLException e){
-			 System.out.println(e.getMessage());
 			 throw new ApplicationServerException(1,e.getMessage());
 		 }
 
@@ -1360,7 +1337,6 @@ public class Database implements Serializable{
 			 Object[] parameters = {new Integer(rolle), new Integer(aktivitaet)};
 			 statements.get(112).executeUpdate(parameters);
 		 } catch (SQLException e){
-			 System.out.println(e.getMessage());
 			 throw new ApplicationServerException(1,e.getMessage());
 		 }
 	 }
@@ -1370,7 +1346,6 @@ public class Database implements Serializable{
 			Object[] parameters = {new Integer(rolle), new Integer(aktivitaet)};
 			statements.get(113).executeUpdate(parameters);
 		 } catch (SQLException e){
-			 System.out.println(e.getMessage());
 			 throw new ApplicationServerException(1,e.getMessage());
 		 }
 	 }
@@ -1512,7 +1487,7 @@ public class Database implements Serializable{
 			
 			return existsZVKonto( konto );	// KontoId ermitteln und zurückgeben
 		} catch (SQLException e){
-			rollback();		// Um die Änderungen rückgängig zu machen
+			rollback();		
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}

@@ -27,11 +27,11 @@ public class ApplicationServerException extends Exception {
 	}
 
 	public String getMessage(){
-		return messages[errorCode] + " (" + errorCode + ")";
-//		if(errorCode == 0)
-//			return super.getMessage() + " (" + errorCode + ")";
-//		else
-//			return messages[errorCode] + " (" + errorCode + ")";
+//		return messages[errorCode] + " (" + errorCode + ")";
+		if(errorCode == 0)
+			return super.getMessage() + " (" + errorCode + ")";
+		else
+			return messages[errorCode] + " (" + errorCode + ")";
 	}
 
 	public String getNestedMessage(){
@@ -156,15 +156,10 @@ public class ApplicationServerException extends Exception {
 		messages[97] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectASKBestellung";
 		messages[98] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateVormerkungen";
 		messages[99] = "Application Server Error: FBKonto bzw. ZVTitel existiert nicht";
+		messages[100] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertUserMySQL";
+		messages[101] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertUser";
 			
-//		Exception Ende ROBERT von 50-99
 
-//		Exception Anfang WALDEMAR von 100-149
-
-//		Exception Ende WALDEMAR von 100-149
-
-
-//		Exception Anfang Mario 150
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";
 		messages[151] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selecTotalAccountBudget.";
 		messages[152] = "Application Server Error: Das Fachbereichskonto wurde in der Zwischenzeit gelöscht.";
