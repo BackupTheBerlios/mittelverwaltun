@@ -3055,7 +3055,42 @@ public class Database implements Serializable{
 			  throw new ApplicationServerException(77, e.getMessage());
 		 }
  	}
- 	
+ 
+	/**
+	 * gibt in der Datenbank vorhandene Bestelungen zurück
+	 * @param filter (=> Filterung anhand des Bestellungstyps
+	 * @return ArrayListe von Bestellungen
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */
+	public ArrayList selectBestellungen(int filter) throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();
+
+		try{
+			ResultSet rs;
+			if ((filter >= 0)&&(filter<=2)){
+				Object[] parameters = { new Integer(filter) };
+				rs = statements.get(272).executeQuery(parameters);
+			}else{
+				rs = statements.get(273).executeQuery();
+			}
+						
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					bestellungen.add( new Bestellung(rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), new Benutzer(rs.getString(5),rs.getString(6)), new Benutzer(rs.getString(7),rs.getString(8)), new Benutzer(rs.getString(9),rs.getString(10)), rs.getFloat(11)));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 73, e.getMessage() );
+		}
+	
+		return bestellungen;
+	}
+	
  	/**
  	 * aktualisiert eine StandardBestellung angand der bestellId
  	 * @param b - Standardbestellung
