@@ -28,9 +28,8 @@ import dbObjects.Position;
  */
 public class PositionenTable extends JTable {
 	ActionListener al;
-	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis",""};
-	private static String[] editTitle = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis","","","Id"};
-  private Object[][] data = {{new Integer(1),"",new Float(0),new Float(0.16), new Float(0), new Float(0), new String("Del")}};
+	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis","","Id"};
+	private Object[][] data = {{new Integer(1),"",new Float(0),new Float(0.16), new Float(0), new Float(0), new String("Del"), new Integer(0)}};
 	
 	public PositionenTable(){
 		setModel(new DefaultTableModel(title, 0){
@@ -82,12 +81,12 @@ public class PositionenTable extends JTable {
 									if(answer == 0){
 										((DefaultTableModel)getModel()).removeRow(getSelectedRow());
 										((DefaultTableModel)getModel()).fireTableStructureChanged();
-										updateTableStructur2();
+										updateTableStructur();
 									}
 								}
 							}        
 						};
-		updateTableStructur2();
+		updateTableStructur();
 	}
 		
 	public PositionenTable(ArrayList positions){
@@ -95,9 +94,9 @@ public class PositionenTable extends JTable {
 		
 		for(int i = 0; i < positions.size(); i++){
 			Position position = (Position)positions.get(i);
-			float gesamt = position.getMenge() * position.getEinzelPreis();
+			
 			data[i][0] = new Integer(position.getMenge());
-			data[i][1] = position.getArtikel();
+			data[i][1] = position;
 			data[i][2] = new Float(position.getEinzelPreis());
 			data[i][3] = new Float(position.getMwst());
 			data[i][4] = new Float(position.getRabatt());
@@ -128,7 +127,7 @@ public class PositionenTable extends JTable {
 					}        
 				}; 
 							
-		setModel(new DefaultTableModel(data, editTitle){
+		setModel(new DefaultTableModel(data, title){
 									public Class getColumnClass(int c) {
 										 return getValueAt(0, c).getClass();
 									}
@@ -165,20 +164,6 @@ public class PositionenTable extends JTable {
 	  	
 	}
 	
-	
-	
-	private void updateTableStructur2(){
-		setUpMwStColumn(this, getColumnModel().getColumn(3));
-		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Del", al));
-		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Del"));
-		getColumnModel().getColumn(6).setMaxWidth(70);
-		getColumnModel().getColumn(6).setMinWidth(70);
-		getColumnModel().getColumn(0).setMaxWidth(50);
-		getColumnModel().getColumn(4).setMaxWidth(80);
-		getColumnModel().getColumn(5).setMaxWidth(80);
-		
-	}
-	
 	private void updateTableStructur(){
 		setUpMwStColumn(this, getColumnModel().getColumn(3));
 		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Del", al));
@@ -189,11 +174,9 @@ public class PositionenTable extends JTable {
 		getColumnModel().getColumn(5).setMaxWidth(150);
 		getColumnModel().getColumn(6).setMaxWidth(70);
 		getColumnModel().getColumn(6).setMinWidth(70);
-		getColumnModel().getColumn(7).setMaxWidth(60);
-		getColumnModel().getColumn(7).setMinWidth(60);
-		getColumnModel().getColumn(8).setMinWidth(0);
-		getColumnModel().getColumn(8).setMaxWidth(0);
-		getColumnModel().getColumn(8).setWidth(0);
+		getColumnModel().getColumn(7).setMinWidth(0);
+		getColumnModel().getColumn(7).setMaxWidth(0);
+		getColumnModel().getColumn(7).setWidth(0);
 	}
 	
 	

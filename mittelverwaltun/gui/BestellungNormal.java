@@ -484,8 +484,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			// ein Angebot hat mindestens eine Position auch wenn er nur die Summe hat
 			if(angebot.getPositionen().size() == 0){
 				ArrayList positionen = new ArrayList();
-				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, bestellung.getFbkonto().getInstitut());
+				Position position = new Position("", angebot.getSumme(), 1, 0, 0, bestellung.getFbkonto().getInstitut());
 				positionen.add(position);
+				angebot.setPositionen(positionen);
 			}
 			angebot.setAngenommen(((Boolean)(dtm.getValueAt(i, 4))).booleanValue());
 			angebote.add(angebot);
@@ -499,7 +500,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
 																				(new String("0")).charAt(0), "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
-																				zvTitel, fbKonto, (angebotNr == 0) ? 0f : ((Angebot)(angebote.get(angebotNr))).getSumme());
+																				zvTitel, fbKonto, 0);
 		try {
 			if(bestellung != null){
 				newBestellung.setId(bestellung.getId());
@@ -668,12 +669,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		ArrayList angebote = bestellung.getAngebote();
 		for(int i = 0; i < angebote.size(); i++){
-			Angebot angebot = (Angebot)angebote.get(i);
+			Angebot angebot = (Angebot)((Angebot)angebote.get(i)).clone();
 
-			if(((Position)angebot.getPositionen().get(0)).getMwst() == 0.0){
-				angebot.setSumme(((Position)angebot.getPositionen().get(0)).getEinzelPreis());
-				angebot.getPositionen().remove(0);
-			}
 			if(angebot.getAngenommen()){
 				tfAngebotNr.setText("" + (i+1));
 				angebotNr = i+1;

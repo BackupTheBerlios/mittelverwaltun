@@ -52,6 +52,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
   JLabel jLabel11 = new JLabel();
   JComboBox cbFirmen = new JComboBox();
   JButton buAddFirm = new JButton();
+  Angebot angebot;
 
 
   public AngebotFrame(BestellungNormal frame) {
@@ -88,8 +89,13 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 	  public AngebotFrame(BestellungNormal frame, Angebot angebot, int angebotNr) {
 			super(JOptionPane.getFrameForComponent(null), "Angebot", false);
 			this.frame = frame;
+			this.angebot = angebot;
 			this.angebotNr = angebotNr;
-			tablePositionen = new PositionenTable(angebot.getPositionen());
+			if(((Position)angebot.getPositionen().get(0)).getMwst() != 0)
+				tablePositionen = new PositionenTable(angebot.getPositionen());
+			else
+				tablePositionen = new PositionenTable();
+				
 			tablePositionen.addPropertyChangeListener(this);
 			cbFirmen.addItemListener(this);
 
@@ -255,7 +261,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 			setAngebot();
 		}else if ( e.getSource() == buAddPosition ) {
 			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-			Object[] o = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0)};
+			Object[] o = {new Integer(1),new Position(),new Float(0), new Float(0.16), new Float(0), new Float(0)};
 
 			dtm.addRow(o);
 			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
@@ -270,7 +276,6 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 	void setAngebot() {
 		ArrayList positionen = new ArrayList();
 		DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-		float sum = 0;
 		String emptyFields = checkData();
 
 		if(!emptyFields.equals(""))
@@ -282,28 +287,43 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																		  null);
 		else{
 			for(int i = 0; i < tablePositionen.getRowCount(); i++){
-					Position position = new Position(		(String)(dtm.getValueAt(i, 1)),
-																							((Float)dtm.getValueAt(i, 2)).floatValue(),
-																							((Integer)dtm.getValueAt(i, 0)).intValue(),
-																							((Float)dtm.getValueAt(i, 3)).floatValue(),
-																							((Float)dtm.getValueAt(i, 4)).floatValue(),
-																							frame.frame.getBenutzer().getKostenstelle());
-					positionen.add(position);
-			 }
-			 	
-				Angebot angebot = null;
-				Object o = tfDate.getValue();
+				Position position = (Position)(dtm.getValueAt(i, 1));
 				
-				java.util.Date datum = (java.util.Date)tfDate.getValue();
-				Date sqlDate = new Date(datum.getTime());
+				position.setArtikel("" + (dtm.getValueAt(i, 1)));
+				position.setEinzelPreis(((Float)dtm.getValueAt(i, 2)).floatValue());
+				position.setMenge(((Integer)dtm.getValueAt(i, 0)).intValue());
+				position.setMwst(((Float)dtm.getValueAt(i, 3)).floatValue());
+				position.setRabatt(((Float)dtm.getValueAt(i, 4)).floatValue());
 				
-				if(positionen.size() == 0)
-					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false, ((Float)(tfBestellsumme.getValue())).floatValue());
-				else
-					angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false);
-					
-				frame.insertAngebot(angebot, angebotNr);
-				this.dispose();
+				positionen.add(position);
+			}
+			
+			if(positionen.size() == 0){
+				if(angebot != null){
+					// die Bestellsumme neu setzen
+					((Position)angebot.getPositionen().get(0)).setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
+					positionen.add((Position)(angebot.getPositionen().get(0)));
+				}else{
+					Position pos = new Position();
+					pos.setMenge(1);
+					pos.setEinzelPreis(((Float)(tfBestellsumme.getValue())).floatValue());
+					positionen.add(pos);
+				}
+			}
+			
+			java.util.Date datum = (java.util.Date)tfDate.getValue();
+			Date sqlDate = new Date(datum.getTime());
+			
+			if(angebot == null){
+				angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false);
+			}else{
+				angebot.setDatum(sqlDate);
+				angebot.setAnbieter((Firma)cbFirmen.getSelectedItem());
+				angebot.setPositionen(positionen);
+			}
+			
+			frame.insertAngebot(angebot, angebotNr);
+			this.dispose();
 		}
 	}
 
