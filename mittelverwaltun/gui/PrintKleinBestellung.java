@@ -17,7 +17,7 @@ import dbObjects.*;
  * @author w.flat
  * 04.03.2005
  */
-public class BestellungKleinPrint extends JFrame implements Printable {
+public class PrintKleinBestellung extends JFrame implements Printable {
 	
 	JPanel printPanel = new JPanel();
 	JLabel labFHMannheim = new JLabel();
@@ -64,7 +64,7 @@ public class BestellungKleinPrint extends JFrame implements Printable {
 	JLabel labVerwendung = new JLabel();
 	KleinBestellung bestellung;
 	
-	public BestellungKleinPrint(KleinBestellung bestellung) {
+	public PrintKleinBestellung(KleinBestellung bestellung) {
 		this.bestellung = bestellung;
 		try {
 			jbInit();

@@ -427,7 +427,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			paper.setImageableArea(35,90,560,712) ;
 			paper.setSize(595,842);
 			pf.setPaper(paper);
-			BestellungKleinPrint printFrame = new BestellungKleinPrint(getKleinBestellung());
+			PrintKleinBestellung printFrame = new PrintKleinBestellung(getKleinBestellung());
 			printFrame.show();
 			printFrame.setVisible(false);
 

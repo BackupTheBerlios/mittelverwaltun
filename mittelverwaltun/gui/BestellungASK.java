@@ -570,10 +570,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  paper.setImageableArea(35,90,560,712) ;
 	  paper.setSize(595,842);
 	  pf.setPaper(paper);
-	  BestellungVordruckPrint bestellung = new BestellungVordruckPrint();
+	  PrintSTDVordruck bestellung = new PrintSTDVordruck();
 	  bestellung.show();
 	  bestellung.setVisible(false);
-	  BestellungBeilageASKPrint beilage = new BestellungBeilageASKPrint();
+		PrintASKBestellung beilage = new PrintASKBestellung();
 	  beilage.show();
 	  beilage.setVisible(false);
 

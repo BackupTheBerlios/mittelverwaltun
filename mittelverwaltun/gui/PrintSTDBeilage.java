@@ -11,7 +11,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 
 
-public class BestellungBeilagePrint extends JFrame implements Printable {
+public class PrintSTDBeilage extends JFrame implements Printable {
   JLabel jLabel4 = new JLabel();
   JLabel jLabel8 = new JLabel();
   JLabel labKoSt = new JLabel();
@@ -65,7 +65,7 @@ public class BestellungBeilagePrint extends JFrame implements Printable {
   JTable tableBestellung = new JTable();
   JPanel printPanel = new JPanel();
 
-  public BestellungBeilagePrint() {
+  public PrintSTDBeilage() {
   	createBestellung();
     try {
       jbInit();
@@ -76,7 +76,7 @@ public class BestellungBeilagePrint extends JFrame implements Printable {
     createTable();
   }
   public static void main(String[] args) {
-    BestellungBeilagePrint bestellungBeilage2 = new BestellungBeilagePrint();
+		PrintSTDBeilage bestellungBeilage2 = new PrintSTDBeilage();
     bestellungBeilage2.show();
   }
   private void jbInit() throws Exception {

@@ -22,6 +22,7 @@ public class StartWindow extends JFrame implements ActionListener {
 	JButton butAnmelden = new JButton();
 	JPasswordField tfPasswort = new JPasswordField();
 	JTextField tfBenutzername = new JTextField();
+	
 	JButton butAbbrechen = new JButton();
 	JLabel labFHLogo;
 	

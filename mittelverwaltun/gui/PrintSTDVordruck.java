@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
 
-public class BestellungVordruckPrint extends JFrame implements Printable{
+public class PrintSTDVordruck extends JFrame implements Printable{
   JPanel printPanel = new JPanel();
   JTextPane tpTelefon1 = new JTextPane();
   JTextPane tpAdresse = new JTextPane();
@@ -44,7 +44,7 @@ public class BestellungVordruckPrint extends JFrame implements Printable{
   Image img;
 	ImageIcon logoIcon = null;
 
-  public BestellungVordruckPrint() {
+  public PrintSTDVordruck() {
   	try{
 				img = loadImageResource("image","fh-header2.gif");
 				if (img != null)
@@ -116,7 +116,7 @@ public class BestellungVordruckPrint extends JFrame implements Printable{
 
 
   public static void main(String[] args) {
-    BestellungVordruckPrint bestellungVordruck2 = new BestellungVordruckPrint();
+	PrintSTDVordruck bestellungVordruck2 = new PrintSTDVordruck();
     bestellungVordruck2.show();
   }
 

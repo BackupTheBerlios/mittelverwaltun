@@ -572,10 +572,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		paper.setImageableArea(35,90,560,712) ;
 		paper.setSize(595,842);
 		pf.setPaper(paper);
-		BestellungVordruckPrint bestellung = new BestellungVordruckPrint();
+		PrintSTDVordruck bestellung = new PrintSTDVordruck();
 		bestellung.show();
 		bestellung.setVisible(false);
-		BestellungBeilagePrint beilage = new BestellungBeilagePrint();
+		PrintSTDBeilage beilage = new PrintSTDBeilage();
 		beilage.show();
 		beilage.setVisible(false);
 
