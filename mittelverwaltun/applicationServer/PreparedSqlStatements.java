@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[325];
+		statements = new PreparedStatementWrapper[335];
 		int i = 0;
 
 		/**************************************/
@@ -1854,10 +1854,10 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		/**************************************************/
-		/* Join: Bestellungen, ASK_Standard_Bestellungen  */
-		/* Indizes: 270-274					              */
-		/**************************************************/
+		/***************************************************/
+		/* Join: Bestellungen, ASK_Standard_Bestellungen 1 */
+		/* Indizes: 270-274					              			   */
+		/***************************************************/
 		{//270 gibt die StandardBestellung mit der zugehörigen Id zurück. Es werden nur BenutzerId ermittelt
 			ps = con.prepareStatement("SELECT " +																		"k.id, k.beschreibung," +																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
 																		"a.besteller, a.auftraggeber, a.empfaenger, " +																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert, a.verbindlichkeiten , " +																		"b.swBeauftragter " +
@@ -2208,6 +2208,40 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//324
+			statements[i++] = null;
+		}
+		/***************************************************/
+		/* Join: Bestellungen, ASK_Standard_Bestellungen 2 */
+		/* Indizes: 325-334					                       */
+		/***************************************************/
+		{//325 
+			statements[i++] = null;
+		}
+		{//326
+			statements[i++] = null;
+		}
+		{//327
+			statements[i++] = null;
+		}
+		{//328
+			statements[i++] = null;
+		}
+		{//329
+			statements[i++] = null;
+		}
+		{//330 
+			statements[i++] = null;
+		}
+		{//331
+			statements[i++] = null;
+		}
+		{//332
+			statements[i++] = null;
+		}
+		{//333
+			statements[i++] = null;
+		}
+		{//334
 			statements[i++] = null;
 		}
 	}

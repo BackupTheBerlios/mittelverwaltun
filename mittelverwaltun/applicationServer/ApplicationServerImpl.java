@@ -1823,6 +1823,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			db.insertPosition(position, newAngebotId);
 		}
+		
+		if(bestellung.getPhase() == '1'){
+			// Vormerkungen bei FBKonto und ZVTitel setzen
+			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel());
+				// ? Vormerkungen Buchen ?
+		}
+		
 		db.commit();
 
 		return newBestellungId;
@@ -2016,14 +2023,20 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(!original.equals(dbOriginal))
 			throw new ApplicationServerException( 76 );
 			
-		if(original.getPhase() == '0'){
+		if(edited.getPhase() == '0'){
 			db.updateASKBestellung(edited);
 			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
-		}else if(original.getPhase() == '1'){
+		}else if(edited.getPhase() == '1'){
 			db.updateASKBestellung(edited);
 			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
 			
-		}else if(original.getPhase() == '2'){
+			// es wurde auf den Button Bestellen gedrückt
+			if(original.getPhase() == '0'){
+				// Vormerkungen bei FBKonto und ZVTitel setzen
+				db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+				// ? Vormerkungen Buchen ?
+			}
+		}else if(edited.getPhase() == '2'){
 		
 		}
 		
