@@ -2032,16 +2032,25 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 	
 	
-	/**
-	 * gibt eine ASKBestellung mit allen Objekten zurück
-	 * @param id - BestellungId
-	 * @return ASKBestellung mit der zugehörigen Id
-	 * @throws ApplicationServerException
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getASKBestellung(int)
 	 */
 	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException {
-	
-		return null;
+		ASKBestellung bestellung = db.selectASKBestellung(id);
+		
+		ArrayList angebote = db.selectAngebote(id);
+
+		Angebot angebot = (Angebot)angebote.get(0);
+		
+		angebot.setPositionen(db.selectPositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		
+		bestellung.setAngebot(angebot); // Angebote hinzufügen
+
+		return bestellung;
 	}
+	
+	
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
 		return db.selectBestellungen(filter);
 	}

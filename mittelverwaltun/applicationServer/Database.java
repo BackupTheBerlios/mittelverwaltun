@@ -2963,6 +2963,45 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * gibt eine ASKBestellung mit der bestellerId zurück. Angebote und Auswahl sind nicht gesetzt
+	 * @param bestellId der ASKBestellung
+	 * @return ASKbestellung
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public ASKBestellung selectASKBestellung(int bestellId) throws ApplicationServerException{
+		ASKBestellung bestellung = null;
+
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			ResultSet rs = statements.get(270).executeQuery(parameters);
+
+			if (rs.next()){
+				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
+				Benutzer besteller = selectUser(rs.getInt("besteller"));
+				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
+				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
+				Benutzer swBeauftragter = selectUser(rs.getInt("swBeauftragter"));
+				ZVTitel zvTitel = selectZVTitel(rs.getInt("zvTitel"));
+				FBUnterkonto fbkonto = selectFBKonto(rs.getInt("fbKonto"));
+			
+				bestellung = new ASKBestellung(	bestellId, rs.getString("referenzNr"), rs.getString("huelNr"), rs.getDate("datum"), besteller,
+																			 	auftraggeber, empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten"),
+																				rs.getString("phase").charAt(0), null, rs.getString("bemerkungen"), swBeauftragter);
+				
+			}else {
+				throw new ApplicationServerException(70);
+			}
+
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(97,e.getMessage());
+		}
+
+		return bestellung;
+	}
+	
+	/**
 	 * wählt eine StandardBestellung zum Aktualisieren
 	 * @param bestellId
 	 * @return
