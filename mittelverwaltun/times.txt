@@ -1,0 +1,2 @@
+Waiter.TimeDelta=1
+WindowWaiter.WaitWindowTimeout=180

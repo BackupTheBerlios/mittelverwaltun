@@ -64,307 +64,403 @@ public class Database implements Serializable{
 
 
 	/**
-	 * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören.
+	 * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören <br>
+	 * und nicht gelöscht sind.
+	 * @return Array mit den ermittelten Hauptkonten
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectFBHauptkonten( Institut institut ) throws ApplicationServerException {
-		ArrayList konten = new ArrayList();
+		ArrayList konten = new ArrayList();	// Liste mit den Hauptkonten
 
 		try{
-			Object[] parameters = { new Integer(institut.getId()) };
-			ResultSet rs = statements.get(50).executeQuery(parameters);
-			rs.last();
+			Object[] parameters = { new Integer(institut.getId()) };	// Parameter setzen
+			ResultSet rs = statements.get(50).executeQuery(parameters);	// SQL-Statement mit der Nummer 50 ausführen
+			rs.last();		// auf die letzte abgefragte Zeile springen
 
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
+			if ( rs.getRow() > 0 ) {	// Wenn die Zeilen anzahl größer als 0	
+				rs.beforeFirst();		// Vor die erste Zeile springen
 
-				int i = 0;
-				while( rs.next() ){
-					konten.add( new FBHauptkonto( rs.getInt(1), rs.getInt(2), institut, rs.getString(4), rs.getString(5),
-												rs.getString(6), rs.getFloat(7), rs.getFloat(8), rs.getString(9) ) );
+				while( rs.next() ){		// Wenn es noch Zeilen gibt
+					// Neues FBHauptkonto erzeugen und die Liste einfügen
+												// kontoId, hausHaltsJahreId, institut, bezeichnung, 
+					konten.add( new FBHauptkonto( rs.getInt(1), rs.getInt(2), institut, rs.getString(4),
+												// hauptkonto,  unterkonto, budget, dispolimit, vormerkungen
+												rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getFloat(8), rs.getFloat(9),
+												// prüfbedingung, kleinbestellungen, gelöscht
+												rs.getString(10), rs.getString(11).equalsIgnoreCase("1"), false ) );
 				}
 			}
 
-			rs.close();
-		} catch (SQLException e){
+			rs.close();					// Die Abfrage schließen
+		} catch(SQLException e) {
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
-		return konten;
+		
+		return konten;		// Ermittelten Hauptkonten
 	}
 
 	/**
-	 * Abfrage aller FBUnterkonten in der Datenbank, die zum angegebenem Institut und Hauptkonto gehören.
-	 * @param institut
-	 * @param hauptkonto
-	 * @return
+	 * Abfrage aller FBUnterkonten in der Datenbank, die zum angegebenem Institut und Hauptkonto gehören <br>
+	 * und nicht gelöscht sind.
+	 * @param Institut
+	 * @param FBHauptkonto
+	 * @return FBUnterkonten
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException {
-		ArrayList konten = new ArrayList();
+		ArrayList konten = new ArrayList();		// FBUnterkonten
 
 		try{
+			// Parameter an das SQL-Statement
 			Object[] parameters = { new Integer(institut.getId()), new Integer(hauptkonto.getId()) };
+			// SQL-Statement mit der Nummer 51 ausführen 
 			ResultSet rs = statements.get(51).executeQuery(parameters);
+			rs.last();		// An letzte Zeile springen
 
-			rs.last();
+			if(rs.getRow() > 0) {		// Wenn die Zeile größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
 
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-
-				int i = 0;
-				while( rs.next() ){
+				while( rs.next() ){		// Wenn es die nächste Zeile gibt
+					// Neues FBUnterkonto erzeugen und in die Liste einfügen
+												// kontoId, hausHaltsJahrId, institut, bezeichnung
 					konten.add( new FBUnterkonto( rs.getInt(1), rs.getInt(2), institut, rs.getString(4),
-												  rs.getString(5), rs.getString(6), rs.getFloat(7) ) );
+												// hauptkonto, unterkonto, budget, vormerkungen
+												rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getFloat(8),
+												// kleinbestellungen, gelöscht
+												rs.getString(9).equalsIgnoreCase("1"), false ) );
 				}
 			}
 
-			rs.close();
-
+			rs.close();					// Die Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
-		return konten;
+		
+		return konten;		// Ermittelten FBUnterkonten
 	}
 	
 
 	/**
 	 * Ein neues FBHauptkonto erstellen.
-	 * @param konto
-	 * @return
+	 * @param FBHauptkonto
+	 * @return kontoId, des eingefügten FBHauptkontos
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int insertFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
 		try{
-			Object[] parameters = {new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()), konto.getBezeichnung(),
-									konto.getHauptkonto(), konto.getUnterkonto(), new Float(konto.getBudget()), new Float(konto.getDispoLimit()),
-									konto.getPruefung(), (konto.getGeloescht() ? "1" : "0")};
+			// Parameter an das SQL-Statement
+			Object[] parameters = {new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()),
+									konto.getBezeichnung(), konto.getHauptkonto(), konto.getUnterkonto(),
+									new Float(konto.getBudget()), new Float(konto.getDispoLimit()),
+									new Float(konto.getVormerkungen()), konto.getPruefung(),
+									(konto.getKleinbestellungen() ? "1" : "0"), (konto.getGeloescht() ? "1" : "0")};
+			// SQL-Statement ausführen
 			statements.get(52).executeUpdate(parameters);
 			
-			return existsFBKonto( konto );
+			return existsFBKonto( konto );		// kontoId ermitteln
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 	
 	/**
-	 * Ein neues Unterkonto erstellen.
-	 * @param konto
-	 * @return
+	 * Ein neues FBUnterkonto erstellen.
+	 * @param FBUnterkonto, welches erstellt werden soll
+	 * @return KontoId, des erstellten FBUnterkontos
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	 public int insertFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		 try{
-		 	Object[] parameters = {new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()),
+		 	// Parameter, welche an das SQL-Statement übergeben werden 
+			Object[] parameters = {new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()),
 									konto.getBezeichnung(), konto.getHauptkonto(), konto.getUnterkonto(),
-									new Float(konto.getBudget()), (konto.getGeloescht() ? "1" : "0")};
-
-		 	statements.get(56).executeUpdate(parameters);
+									new Float(konto.getBudget()), new Float(0),
+									new Float(konto.getVormerkungen()), "",
+									(konto.getKleinbestellungen() ? "1" : "0"), (konto.getGeloescht() ? "1" : "0")};
+			// SQL-Statement ausführen
+		 	statements.get(52).executeUpdate(parameters);
 			
-			return existsFBKonto( konto );
+			return existsFBKonto( konto );		// kontoId ermitteln
 		 } catch (SQLException e){
-			 throw new ApplicationServerException( 0, e.getMessage() );
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
 		 }
 	 }
 	 
 	/**
-	 * Abfrage ob ein FBKonto schon existiert. Dabei ist die InstitutsId, das Hauptkonto und das Unterkonto entscheidend.
-	 * @param konto
-	 * @return id vom FBKonto
+	 * Abfrage ob ein FBKonto schon existiert. Dabei ist die InstitutsId, <br>
+	 * das Hauptkonto und das Unterkonto entscheidend.
+	 * @param FBkonto
+	 * @return kontoId des FBKontos
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
-	public int existsFBKonto( FBUnterkonto konto ) throws ApplicationServerException {
+	public int existsFBKonto(FBUnterkonto konto) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement festlegen
 			Object[] parameters = {new Integer(konto.getInstitut().getId()), konto.getHauptkonto(), konto.getUnterkonto()};
+			// SQL-Statement mit der Nummer 53 ausführen
 			ResultSet rs = statements.get(53).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert das Konto
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+				return rs.getInt(1);// Id des FBKontos
 			}
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst ist die Id 0 -> nicht gefunden
 	}
 	
 	/**
-	 * Abfrage ob ein gelöschtes FBKonto schon existiert.
+	 * Abfrage ob ein gelöschtes FBKonto schon existiert. <br>
 	 * Dabei ist die InstitutsId, das Hauptkonto und das Unterkonto entscheidend.
-	 * @param konto
-	 * @return id vom gelöschtem Konto
+	 * @param FBkonto
+	 * @return kontoId vom gelöschten FBKonto
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
-	public int existsDeleteFBKonto( FBUnterkonto konto ) throws ApplicationServerException {
+	public int existsDeleteFBKonto(FBUnterkonto konto) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement festlegen
 			Object[] parameters = {new Integer(konto.getInstitut().getId()), konto.getHauptkonto(), konto.getUnterkonto()};
+			// SQL-Statement mit der Nummer 59 ausführen
 			ResultSet rs = statements.get(59).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert das Konto
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+				return rs.getInt(1);// Id des FBKontos
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst ist die Id 0 -> nicht gefunden
 	}
 		
 
 	/**
 	 * Ein FBKonto in der Datenbank löschen. Es wird kein Unterschied zwischen Haupt- und Unterkonto gemacht.
-	 * @param konto
-	 * @return
+	 * @param FBKonto, das gelöscht werden soll
+	 * @return Zeilennummer, des gelöschten FBKontos
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int deleteFBKonto( FBUnterkonto konto ) throws ApplicationServerException {
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters ={ new Integer(konto.getId())};
-			
-			return statements.get(54).executeUpdate(parameters);
+			// SQL-Statement ausführen
+			return statements.get(54).executeUpdate(parameters);	// Zeilennummer des gelöschten Kontos
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 	
 	
 	/**
-	 * Ein FBHauptkonto zum aktualisieren auswählen
-	 * @param konto
-	 * @return
+	 * Ein FBHauptkonto zum Aktualisieren auswählen <br>
+	 * @param FBKonto
+	 * @return FBHauptkonto, welches aktualisiert werden soll
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public FBHauptkonto selectForUpdateFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
-		FBHauptkonto result = null;
+		FBHauptkonto result = null;		// FBHauptkonto, welches aktualisiert werden soll
 		
 		try{
+			// Parameter für das SQL-Statement festlegen
 			Object[] parameters = {new Integer(konto.getId())};
+			// SQL-Statement mit der Nummer 58 ausführen
 			ResultSet rs = statements.get(58).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				
-				result = new FBHauptkonto( konto.getId(), rs.getInt(1), konto.getInstitut(), rs.getString(3), rs.getString(4),
-											rs.getString(5), rs.getFloat(6), rs.getFloat(7), rs.getString(8),
-									 		!rs.getString(9).equalsIgnoreCase( "0" ) );
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert das Konto
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+										// kontoId, hausHaltsJahrId, instiut, bezeichnung, 
+				result = new FBHauptkonto( konto.getId(), rs.getInt(1), konto.getInstitut(), rs.getString(3), 
+											// hauptkonto, unterkonto, budget
+											rs.getString(4), rs.getString(5), rs.getFloat(6),
+											// dispolimit, vormerkungen, pruefbedingung
+											rs.getFloat(7), rs.getFloat(8), rs.getString(9),
+											// kleinbestellungen, gelöscht
+									 		rs.getString(10).equalsIgnoreCase( "1" ), rs.getString(11).equalsIgnoreCase( "1" ) );
 			}
-			rs.close();
-		} catch ( SQLException e ){
+			rs.close();		// Abfrage schließen
+		} catch ( SQLException e ) {
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// FBHauptkonto zurückgeben
 	}
 	
 	/**
 	 * Ein FBUnterkonto zum aktualisieren auswählen
-	 * @param konto
-	 * @return
+	 * @param FBUnterkonto
+	 * @return FBUnterkonto, welches ausgewählt wurde
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public FBUnterkonto selectForUpdateFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
-		FBUnterkonto result = null;
+		FBUnterkonto result = null;		// Das FBUnterkonto, welches aktualisiert werden soll
 		
 		try{
+			// Parameter für das SQL-Statement festlegen
 			Object[] parameters = {new Integer(konto.getId())};
+			// SQL-Statement mit der Nummer 58 ausführen
 			ResultSet rs = statements.get(58).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				
-				result = new FBUnterkonto( konto.getId(), rs.getInt(1), konto.getInstitut(), rs.getString(3), rs.getString(4),
-											rs.getString(5), rs.getFloat(6), !rs.getString(9).equalsIgnoreCase( "0" ) );
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert das Konto
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste Zeile
+										// kontoId, hausHaltsJahrId, instiut, bezeichnung, 
+				result = new FBUnterkonto( konto.getId(), rs.getInt(1), konto.getInstitut(), rs.getString(3), 
+										// hauptkonto, unterkonto, budget, vormerkungen
+										rs.getString(4), rs.getString(5), rs.getFloat(6), rs.getFloat(8), 
+										// kleinbestellungen, gelöscht
+										rs.getString(10).equalsIgnoreCase( "1" ), rs.getString(11).equalsIgnoreCase( "1" ) );
 			}
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch ( SQLException e ){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// FBUnterkonto zurückgeben
 	}
 	
 	/**
-	 * Anzahl der Bestellungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde
+	 * Anzahl der Bestellungen(aktiv und abgeschlossen) ermitteln, <br>
+	 * bei denen ein bestimmtes FBKonto angegeben wurde.
+	 * @param FBKonto, welches überprüft werden soll
+	 * @return Anzahl der Bestellungen bei denen, das FBKonto angegeben ist
+	 * @author w.flat
 	 */
 	public int countBestellungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(212).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Bestellungen zurückgeben
 			else
-				return 0;
-	  } catch (SQLException e){
-		  throw new ApplicationServerException(0, e.getMessage());
-	  }
+				return 0;				// Sonst ist die Anzahl = 0
+		} catch (SQLException e){
+			throw new ApplicationServerException(0, e.getMessage());
+		}
 	}
 	
 	/**
-	 * Anzahl der aktiven Bestellungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde
+	 * Anzahl der aktiven Bestellungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde.
+	 * @param FBKonto, welches überprüft werden soll
+	 * @return Anzahl der nicht abgeschlossenen Bestellungen
+	 * @author w.flat
 	 */
 	public int countActiveBestellungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter an das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(213).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Wenn es Result gibt
+				return rs.getInt(1);	// Rückgabe Anzahl der Bestellungen
 			else
-				return 0;
+				return 0;				// Sonst wird 0 zurückgegeben
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der aktiven Benutzer ermitteln, denen ein bestimmtes FBKonto zugeordnet ist
+	 * Anzahl der aktiven Benutzer ermitteln, denen ein bestimmtes FBKonto zugeordnet ist.
+	 * @param FBKonto, für das die Überprüfung durch genommen wird.
+	 * @return Anzahl der Benutzer, die dieses Konto besitzen
+	 * @author w.flat
 	 */
 	public int countActiveBenutzer( FBUnterkonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter an das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(31).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Dann die Anzahl zurückgeben
 			else
-				return 0;
+				return 0;				// Sonst ist die Anzahl = 0
+	  } catch (SQLException e){
+		  throw new ApplicationServerException(0, e.getMessage());
+	  }
+	}
+
+	/**
+	 * Anzahl der Benutzer(aktiv und gelöscht) ermitteln, denen ein bestimmtes FBKonto zugeordnet ist.
+	 * @param FBKonto, für das die Überprüfung durch genommen wird.
+	 * @return Anzahl der Benutzer, die dieses Konto besitzen
+	 * @author w.flat
+	 */
+	public int countBenutzer( FBUnterkonto konto )throws ApplicationServerException{
+		try{
+			// Parameter an das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
+			ResultSet rs = statements.get(32).executeQuery(parameters);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Dann die Anzahl zurückgeben
+			else
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der Buchungen ermitteln, bei denen ein bestimmtes FBKonto benutzt wurde
+	 * Anzahl der Buchungen ermitteln, bei denen ein bestimmtes FBKonto benutzt wurde.
+	 * @param FBKonto, welches überprüft werden soll
+	 * @return Anzahl der Buchingen, bei denen das FBKonto benutzt wurde
+	 * @author w.flat 
 	 */
 	public int countBuchungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(221).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
-			else
-				return 0;
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Buchungen zurückgeben
+			else	
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde
+	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes FBKonto angegeben wurde.
+	 * @param FBKonto welches überprüft werden soll.
+	 * @return Anzahl der Kontenzuordnungen, bei denen das FBKonto angegeben ist.
+	 * @author w.flat
 	 */
 	public int countKontenzuordnungen( FBUnterkonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter an das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(236).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())		// Wenn es ein Ergebnis gibt
+				return rs.getInt(1);	// Anzahl der Kontenzuordnungen zurückgeben
 			else
-				return 0;
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
@@ -372,48 +468,58 @@ public class Database implements Serializable{
 	
 	/**
 	 * Ein FBHauptkonto in der Datenbank aktualisieren.
-	 * @param konto
-	 * @return id vom Hauptkonto, das aktulisiert wurde
+	 * @param FBHauptkonto
+	 * @return kontoId vom Hauptkonto, das aktulisiert wurde
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = { new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()),
 									konto.getBezeichnung(), konto.getHauptkonto(), konto.getUnterkonto(),
-									new Float(konto.getBudget()), new Float(konto.getDispoLimit()), konto.getPruefung(),
+									new Float(konto.getBudget()), new Float(konto.getDispoLimit()),
+									new Float(konto.getVormerkungen()), konto.getPruefung(),
+									(konto.getKleinbestellungen() ? "1" : "0"), 
 									(konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId()) };
+			// Aktualisierung durchführen
 			statements.get(55).executeUpdate(parameters);
-			
-			if( konto.getGeloescht() )
+			// Ermittlung der kontoId
+			if( konto.getGeloescht() )	// Wenn das gelöscht wurde
 				return existsDeleteFBKonto( konto );
-			else
+			else						// Sonst bei nicht gelöschten nachsehen 
 				return existsFBKonto( konto );
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Ein FBUnterkonto in der Datenbank aktualisieren.
-	 * @param konto
-	 * @return id vom Unterkonto, das aktulisiert wurde
+	 * @param FBUnterkonto
+	 * @return kontoId vom Unterkonto, das aktulisiert wurde
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
-
 		try{
-
+			// Parameter für das SQL-Statement
 			Object[] parameters = { new Integer(konto.getHaushaltsJahrID()), new Integer(konto.getInstitut().getId()),
 									konto.getBezeichnung(), konto.getHauptkonto(), konto.getUnterkonto(),
-									new Float(konto.getBudget()), (konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId()) };
-			statements.get(57).executeUpdate(parameters);
-			
-			if( konto.getGeloescht() )
+									new Float(konto.getBudget()), new Float(0),
+									new Float(konto.getVormerkungen()), new String(""),
+									(konto.getKleinbestellungen() ? "1" : "0"), 
+									(konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId()) };
+			// Aktualisierung durchführen
+			statements.get(55).executeUpdate(parameters);
+			// Ermittlung der kontoId
+			if( konto.getGeloescht() )	// Wenn das gelöscht wurde
 				return existsDeleteFBKonto( konto );
-			else
+			else						// Sonst bei nicht gelöschten nachsehen 
 				return existsFBKonto( konto );
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
@@ -1143,223 +1249,224 @@ public class Database implements Serializable{
 	}
 
 	/**
-	 * Abfrage aller ZVKonten in der Datenbank
+	 * Abfrage aller ZVKonten in der Datenbank.
+	 * @return Liste mit ZVKonten
+	 * @author w.flat
 	 */
 	public ArrayList selectZVKonten() throws ApplicationServerException {
-		ArrayList konten = new ArrayList();
+		ArrayList konten = new ArrayList();	// Liste für die ZVKonten
 
 		try{
+			// Das SQL-Statement mit der Nummer 120 ausführen
 			ResultSet rs = statements.get(120).executeQuery();
-			rs.last();
-			
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-
-				int i = 0;
-				while( rs.next() ){
+			rs.last();	// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					konten.add( new ZVKonto( rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5),
-										rs.getFloat(6), rs.getFloat(7), !rs.getString(8).equalsIgnoreCase( "0" ),
+										rs.getFloat(6), rs.getFloat(7), rs.getString(8).equalsIgnoreCase( "1" ),
 										rs.getString(9).charAt(0), rs.getShort(10) ) );
 				}
 			}
-
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
-		return konten;
+		return konten;		// Liste mit den ZVKonten zurückgeben
 	}
 
 	/**
-	 * Abfrage aller ZVTitel in der Datenbank die zu einem ZVKonto gehören
-	 * @param zvKonto
-	 * @return
+	 * Abfrage aller ZVTitel in der Datenbank die zu einem ZVKonto gehören.
+	 * @param ZVKonto, zu dem die ZVTitel ermittelt werden sollen
+	 * @return Liste mit den ZVTiteln, die zu dem ZVKonto gehören
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectZVTitel( ZVKonto zvKonto ) throws ApplicationServerException {
-		ArrayList konten = new ArrayList();
+		ArrayList konten = new ArrayList();	// Liste mit den ZVTiteln des ZVKontos
 
 		try{
+			// Parameter für das SQL-Statement 
 			Object[] parameters = {new Integer(zvKonto.getId())};
+			// SQL-Statement ausführen
 			ResultSet rs = statements.get(140).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				int i = 0;
-
-				while( rs.next() ){
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der abgefragten Zeilen größer 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ) {	// Solange es Zeilen gibt	
 					konten.add( new ZVTitel( rs.getInt(1), zvKonto, rs.getString(3), rs.getString(4), rs.getString(5),
 										rs.getFloat(6), rs.getString(7), rs.getString(8) ) );
 				}
 			}
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 
-		return konten;
+		return konten;		// Ermittelten ZVTitel zurückgeben
 	}
 
 	/**
-	 * Abfrage aller ZVUntertitel in der Datenbank die zu einem ZVKonto gehören
-	 * @param zvTitel
-	 * @return
+	 * Abfrage aller ZVUntertitel in der Datenbank die zu einem ZVTitel gehören.
+	 * @param zvTitel, zu dem die ZVUntertitel ermittelt werden sollen
+	 * @return Liste mit den ZVUntertiteln, die zu dem ZVTitel gehören
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectZVUntertitel( ZVTitel zvTitel ) throws ApplicationServerException {
-		ArrayList konten = new ArrayList();
+		ArrayList konten = new ArrayList();		// Liste für die ermittelten ZVUntertitel
 
 		try{
-
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(zvTitel.getZVKonto().getId())};
+			// SQL-Statement mit der Nummer 141 ausführen
 			ResultSet rs = statements.get(141).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				int i = 0;
-
-				while( rs.next() ){
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Gibt es ien Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ) {	// Solange es Abfragezeilen gibt
+					// ZVUntertitel erstellen und in die Liste einfügen
 					konten.add( new ZVUntertitel( rs.getInt(1), zvTitel, rs.getString(3), rs.getString(4), rs.getString(5),
 										rs.getFloat(6), rs.getString(7), rs.getString(8) ) );
 				}
 			}
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 
-		return konten;
+		return konten;		// Die ermittelten ZVUntertitel zurückgeben
 	}
-	
-
 
 	/**
-	 * Ein neues ZVKonto erstellen
-	 * @param konto
-	 * @return
+	 * Ein neues ZVKonto erstellen.
+	 * @param ZVKonto, welches erstellt werden soll
+	 * @return kontoId vom erstellten ZVKonto
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int insertZVKonto( ZVKonto konto ) throws ApplicationServerException {
-
 		try{
+			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer(konto.getHaushaltsJahrId()), konto.getBezeichnung(), konto.getKapitel(),
-									konto.getTitelgruppe(), new Float(konto.getTgrBudget()), new Float(konto.getDispoLimit()),
-									(konto.getZweckgebunden() ? "1" : "0"), "" + konto.getFreigegeben(), "" + konto.getUebernahmeStatus()};
-			
+								konto.getTitelgruppe(), new Float(konto.getTgrBudget()), new Float(konto.getDispoLimit()),
+								(konto.getZweckgebunden() ? "1" : "0"), "" + konto.getFreigegeben(),
+								"" + konto.getUebernahmeStatus()};
+			// SQL-Statement ausführen
 			statements.get(121).executeUpdate(parameters);
 			
-			return existsZVKonto( konto );
+			return existsZVKonto( konto );	// KontoId ermitteln und zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Abfrage ob ein ZVKonto existiert. Dabei ist nur der Kapitel und die Titelgruppe entscheidend.
-	 * @param konto
-	 * @return id vom ZVKonto
+	 * @param ZVKonto, welches überprüft werden soll
+	 * @return kontoId vom übergebenen ZVKonto
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
-			ResultSet rs;
-//			if( konto.isTGRKonto() ){
-				Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
-				rs = statements.get(122).executeQuery(parameters);
-//			} else {
-//				Object[] parameters = {konto.getKapitel(), ((ZVTitel)konto.getSubTitel().get(0)).getTitel()};
-//				rs = statements.get(160).executeQuery(parameters);
-//			}
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				int res = rs.getInt(1);
-				return res;
+			// Parameter für das SQL-Statement
+			Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
+			// SQL-Statement mit der Nummer 122 ausführen
+			ResultSet rs = statements.get(122).executeQuery(parameters);
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){		// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Nächste Zeile
+				return rs.getInt(1);	// Rückgabe der kontoId
 			}
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst Rückgabe = 0 
 	}
 	
 	/**
 	 * Abfrage ob ein gelöschtes ZVKonto existiert. Dabei ist nur der Kapitel und die Titelgruppe entscheidend.
-	 * @param konto
-	 * @return id vom ZVKonto
+	 * @param ZVKonto, welches überprüft werden soll
+	 * @return kontoId vom ZVKonto
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsDeleteZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
-			ResultSet rs;
-//			if( konto.isTGRKonto() ){
-				Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
-				rs = statements.get(126).executeQuery(parameters);
-//			} else {
-//				Object[] parameters = {konto.getKapitel(), ((ZVTitel)konto.getSubTitel().get(0)).getTitel()};
-//				rs = statements.get(169).executeQuery(parameters);
-//			}
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			// Parameter für das SQL-Statement
+			Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
+			// SQL-Statement mit der Nummer 126 ausführen
+			ResultSet rs = statements.get(126).executeQuery(parameters);
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){		// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Nächste Zeile
+				return rs.getInt(1);	// Rückgabe der kontoId
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst Rückgabe = 0 
 	}
 
 	/**
 	 * Abfrage ob ein ZVTitel existiert. Dabei ist die zvKontoId, der Titel und der Untertitel entscheidend.
-	 * @param titel
-	 * @return id vom ZVTitel
+	 * @param ZVTitel, das abgefragt werden soll
+	 * @return titelId vom ZVTitel
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsZVTitel( ZVTitel titel ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(titel.getZVKonto().getId()), titel.getTitel(), titel.getUntertitel()};
+			// SQL-Statement mit der Numer 142 ausführen
 			ResultSet rs = statements.get(142).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){	// Gibt es abgefragte Zeilen
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste abgefragte Zeile
+				return rs.getInt(1);	// titelId zurückgeben
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst ist die Rückgabe = 0
 	}
 	
 	/**
 	 * Abfrage ob ein gelöschter ZVTitel existiert. Dabei ist die zvKontoId, der Titel und der Untertitel entscheidend.
-	 * @param titel
-	 * @return id vom ZVTitel
+	 * @param zvTitel, der abgefragt werden soll
+	 * @return titelId vom ermittelten ZVTitel
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsDeleteZVTitel( ZVTitel titel ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(titel.getZVKonto().getId()), titel.getTitel(), titel.getUntertitel()};
+			// SQL-Statement mit der Numer 147 ausführen
 			ResultSet rs = statements.get(147).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){	// Gibt es abgefragte Zeilen
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();			// Nächste abgefragte Zeile
 				return rs.getInt(1);
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
 		}
 		
-		return 0;
+		return 0;		// Sonst ist die Rückgabe = 0
 	}
 
 	/**
@@ -1409,80 +1516,112 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * Anzahl der Bestellungen ermitteln, bei denen ein bestimmter ZVTitel angegeben wurde
+	 * Anzahl der Bestellungen(aktive oder abgeschlossene) ermitteln, <br>
+	 * bei denen ein bestimmter ZVTitel angegeben wurde.
+	 * @param ZVTitel/ZVUntertitel, der überprüft werden sollte
+	 * @return Anzahl der ermittelten Bestellungen
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countBestellungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement mit der Nummer 214 ausführen
 			ResultSet rs = statements.get(214).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Bestellungen
 			else
-				return 0;
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der aktiven Bestellungen ermitteln, bei denen ein bestimmter ZVTitel angegeben wurde
+	 * Anzahl der aktiven Bestellungen ermitteln, bei denen ein bestimmter ZVTitel angegeben wurde.
+	 * @param ZVTitel/ZVUntertitel, für welches die Überprüfung durchgeführt werden soll.
+	 * @return Anzahl der nicht abgeschlossenen Bestellungen mit diesem ZVTitel/ZVUntertitel.
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countActiveBestellungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement mit der Nummer 215 ausführen
 			ResultSet rs = statements.get(215).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Bestellungen
 			else
-				return 0;
-	  } catch (SQLException e){
-		  throw new ApplicationServerException(0, e.getMessage());
-	  }
+				return 0;				// Sonst ist die Anzahl = 0
+		} catch (SQLException e){
+			throw new ApplicationServerException(0, e.getMessage());
+		}
 	}
 	
 	/**
-	 * Anzahl der Buchungen ermitteln, bei denen ein bestimmter ZVTitel angegeben wurde
+	 * Anzahl der Buchungen ermitteln, bei denen ein bestimmter ZVTitel angegeben wurde.
+	 * @param ZVTitel/ZVUntertitel, für welches die Überprüfung durchgeführt werden soll.
+	 * @return Anzahl der Buchungen mit diesem ZVTitel/ZVUntertitel.
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countBuchungen( ZVUntertitel konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement mit der Nummer 222 ausführen
 			ResultSet rs = statements.get(222).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Buchungen
 			else
-				return 0;
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes ZVKonto angegeben wurde
+	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes ZVKonto angegeben wurde.
+	 * @param ZVKonto, welches abgefragt werden soll
+	 * @return Anzahl der Kontenzuordnungen, bei denen das ZVKonto angegeben ist
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countKontenzuordnungen( ZVKonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement mit der Nummer 235 auführen
 			ResultSet rs = statements.get(235).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Anzahl der Kontenzuordnungen für dieses ZVKonto
 			else
-				return 0;
+				return 0;				// Sonst ist die Anzahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
 	}
 	
 	/**
-	 * Anzahl der Kontenzuordnungen ermitteln, bei denen ein bestimmtes ZVKonto angegeben wurde
+	 * Überprüfung ob ein ZVKonto zweckgebunden sein kann. <br>
+	 * Dabei wird ermittelt ob mehr als ein ZVKonto zu dem FBKonto einer Kontozuordnung existiert.
+	 * @param ZVKonto für welches die Überprüfung durchgeführt werden soll
+	 * @return Zahl > 0, wenn das ZVKonto nicht zweckgebunden sein kann. Sonst Zahl = 0.
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countZVKonten( ZVKonto konto )throws ApplicationServerException{
 		try{
-		  Object[] parameters = { new Integer(konto.getId()) };
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(konto.getId()) };
+			// SQL-Statement mit der Nummer 237 auführen
 			ResultSet rs = statements.get(237).executeQuery(parameters);
-			if(rs.next())
-				return rs.getInt(1);
+			if(rs.next())	// Gibt es ein Ergebnis
+				return rs.getInt(1);	// Ermittelte Zahl zurückgeben
 			else
-				return 0;
+				return 0;				// Sonst ist die Zahl = 0
 	  } catch (SQLException e){
 		  throw new ApplicationServerException(0, e.getMessage());
 	  }
@@ -1491,84 +1630,98 @@ public class Database implements Serializable{
 
 	/**
 	 * Ein neuen ZVTitel zu einem ZVKonto erstellen erstellen.
-	 * @param konto
-	 * @return
+	 * @param ZVTitel, welcher erstellt werden soll
+	 * @return ZVTitelId vom erstellten ZVTitel
 	 * @throws ApplicationServerException
 	 */
 	public int insertZVTitel( ZVTitel konto ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters ={new Integer(konto.getZVKonto().getId()), konto.getBezeichnung(), konto.getTitel(),
 								konto.getUntertitel(), new Float(konto.getBudget()), konto.getBemerkung(), konto.getBedingung()};
+			// SQL-Statement mit der Nummer 143 ausführen
 			statements.get(143).executeUpdate(parameters);
-
-			return existsZVTitel( konto );
+			return existsZVTitel( konto );		// ZVTitelId ermitteln und zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Ein neuen ZVUntertitel zu einem ZVTitel erstellen erstellen.
-	 * @param konto
-	 * @return
+	 * @param ZVUntertitel welcher erstellt werden soll
+	 * @return ZVUntertitelId vom erstellten ZVUntertitel
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int insertZVUntertitel( ZVUntertitel konto ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters ={new Integer(konto.getZVTitel().getZVKonto().getId()), konto.getBezeichnung(), konto.getTitel(),
 								konto.getUntertitel(), new Float(konto.getBudget()), konto.getBemerkung(), konto.getBedingung()};
+			// SQL-Statement mit der Nummer 143 ausführen
 			statements.get(143).executeUpdate(parameters);
-
-			return existsZVUntertitel( konto );
+			return existsZVUntertitel( konto );		// ZVUntertitelId ermitteln und zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Ein ZVKonto in der Datenbank löschen.
-	 * @param konto
-	 * @return
+	 * @param ZVKonto das gelöscht werden soll.
+	 * @return Die gelöschte Zeile in der ZVKonto-Tabelle
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int deleteZVKonto( ZVKonto konto ) throws ApplicationServerException {
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(konto.getId())};
-			return statements.get(123).executeUpdate(parameters);
+			// SQL-Statement mit der Nummer 123 ausführen
+			return statements.get(123).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Einen ZVTitel in der Datenbank löschen.
-	 * @param titel
-	 * @return
+	 * @param ZVTitel das gelöscht werden soll.
+	 * @return Die gelöschte Zeile in der ZVTitel-Tabelle
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int deleteZVTitel( ZVUntertitel titel ) throws ApplicationServerException {
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(titel.getId())};
-			return statements.get(144).executeUpdate(parameters);
+			// SQL-Statement mit der Nummer 144 ausführen
+			return statements.get(144).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Einen ZVUntertitel in der Datenbank löschen.
-	 * @param titel
-	 * @return
+	 * @param ZVUntertitel das gelöscht werden soll.
+	 * @return Die gelöschte Zeile in der ZVTitel-Tabelle
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int deleteZVUntertitel( ZVUntertitel titel ) throws ApplicationServerException {
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(titel.getId())};
-			return statements.get(144).executeUpdate(parameters);
+			// SQL-Statement mit der Nummer 144 ausführen
+			return statements.get(144).executeUpdate(parameters);	// gelöschte Zeile zurückgeben
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 
@@ -1576,154 +1729,175 @@ public class Database implements Serializable{
 
 	/**
 	 * Ein ZVKonto in der Datenbank aktualisieren.
-	 * @param konto
-	 * @return
+	 * @param ZVKonto, welches aktualisiert werden soll.
+	 * @return zvKontoId vom aktualisierten ZVKonto
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateZVKonto( ZVKonto konto ) throws ApplicationServerException {
-		// Verarbeitung des von sql-anweisungen und des ergebnisses
 		try{
+			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer(konto.getHaushaltsJahrId()),  konto.getBezeichnung(), konto.getKapitel(),
 							konto.getTitelgruppe(), new Float(konto.getTgrBudget()), new Float(konto.getDispoLimit()),
 							(konto.getZweckgebunden() ? "1" : "0"), ""+konto.getFreigegeben(), ""+konto.getUebernahmeStatus(),
 							(konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId())};
-
+			// SQL-Statement mit der Nummer ausführen 
 			statements.get(124).executeUpdate(parameters);
-			if( konto.getGeloescht() )
-				return existsDeleteZVKonto( konto );
+			if( konto.getGeloescht() )		// Wenn das gelöschtes Konto
+				return existsDeleteZVKonto( konto );	// Dann zvKontoId vom gelöschten ZVKonto
 			else
-				return existsZVKonto( konto );
+				return existsZVKonto( konto );			// Sonst von aktiven ZVKonto
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Einen ZVTitel in der Datenbank aktualisieren.
-	 * @param titel
-	 * @return
+	 * @param ZVTitel, welcher aktualisiert werden soll
+	 * @return zvTitelId des aktualisierten ZVTitels
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateZVTitel( ZVTitel titel ) throws ApplicationServerException {
-		// Verarbeitung des von sql-anweisungen und des ergebnisses
 		try{
+			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer(titel.getZVKonto().getId()), titel.getBezeichnung(), titel.getTitel(),
 							titel.getUntertitel(), new Float(titel.getBudget()), titel.getBemerkung(),
 							titel.getBedingung(), (titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
-
+			// SQL-Statement mit der Nummer 145 ausführen
 			statements.get(145).executeUpdate(parameters);
-			if( titel.getGeloescht() )
-				return existsDeleteZVTitel( titel );
+			if( titel.getGeloescht() )		// Wenn gelöschter ZVTitel
+				return existsDeleteZVTitel( titel );	// Dann ZVTitelId vom gelöschten ZVTitel
 			else
-				return existsZVTitel( titel );
+				return existsZVTitel( titel );			// Sonst vom aktiven ZVTitel
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
 	 * Einen ZVUntertitel in der Datenbank aktualisieren.
-	 * @param titel
-	 * @return
+	 * @param ZVUntertitel welcher aktualisiert werden soll
+	 * @return ZVUntertitelId vom aktualisierten ZVUntertitel
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateZVUntertitel( ZVUntertitel titel ) throws ApplicationServerException {
-		// Verarbeitung des von sql-anweisungen und des ergebnisses
 		try{
+			// Parameter an das SQL-Statement
 			Object[] parameters = {new Integer( titel.getZVTitel().getZVKonto().getId()), titel.getBezeichnung(), titel.getTitel(),
 							titel.getUntertitel(), new Float(titel.getBudget()), titel.getBemerkung(),
 							titel.getBedingung(), (titel.getGeloescht() ? "1" : "0"), new Integer(titel.getId())};
-
+			// SQL-Statement mit der Nummer 145 ausführen
 			statements.get(145).executeUpdate(parameters);
-			if( titel.getGeloescht() )
-				return existsDeleteZVUntertitel( titel );
+			if( titel.getGeloescht() )		// Wenn gelöschter ZVTitel
+				return existsDeleteZVUntertitel( titel );	// Dann ZVUntertitelId vom gelöschten ZVUntertitel
 			else
-				return existsZVUntertitel( titel );
+				return existsZVUntertitel( titel );			// Sonst vom aktiven ZVUntertitel
 		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 	
 	
 	/**
-	 * Ein ZVKonto zum Aktualisieren auswählen
+	 * Ein ZVKonto zum Aktualisieren auswählen.
+	 * @param ZVKonto, welches ausgewählt werden soll.
+	 * @return ZVKonto, das ausgewählt wurde
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ZVKonto selectForUpdateZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
-		ZVKonto result = null;
-		
+		ZVKonto result = null;		// Das ausgewählte ZVKonto
 		try {
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer( zvKonto.getId() )};
+			// SQL-Statement mit der Nummer 125 ausführen
 			ResultSet rs = statements.get(125).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Gibt es abgefragte Zeilen
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Nächste Abfrage-Zeile
+				// Neues ZVKonto erstellen
 				result = new ZVKonto( zvKonto.getId(), rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
 									rs.getFloat(5), rs.getFloat(6), !rs.getString(7).equalsIgnoreCase( "0" ),
 									rs.getString(8).charAt(0), rs.getShort(9), !rs.getString(10).equalsIgnoreCase( "0" ) );
 			}
-			rs.close();
-
+			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// ZVKonto zurückgeben
 	}
 	
 	/**
-	 * Einen ZVTitel zum Aktualisieren auswählen
+	 * Einen ZVTitel zum Aktualisieren auswählen.
+	 * @param ZVTitel, der aktualisiert werden soll
+	 * @return ZVTitel der aktualisiert werden soll
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ZVTitel selectForUpdateZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
-		ZVTitel result = null;
-		
+		ZVTitel result = null;		// Der ausgewählte ZVTitel
 		try {
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer( zvTitel.getId() )};
+			// SQL-Statement mit der Nummer 146 ausführen
 			ResultSet rs = statements.get(146).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-
+			rs.last();		// In die letzte Abfragezeile springen 
+			if ( rs.getRow() > 0 ) {	// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die Nächste Zeile
+				// Neuen ZVTitel erstellen
 				result = new ZVTitel( zvTitel.getId(), zvTitel.getZVKonto(), rs.getString(2), rs.getString(3),rs.getString(4),
 									rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
 			}
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// ZVtitel zurückgeben
 	}
 	
 	/**
 	 * Einen ZVUntertitel zum Aktualisieren auswählen
+	 * @param ZVUntertitel, der aktualisiert werden soll
+	 * @return ZVUntertitel der aktualisiert werden soll
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ZVUntertitel selectForUpdateZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
-		ZVUntertitel result = null;
-		
+		ZVUntertitel result = null;		// Der ausgewählte ZVUntertitel
 		try {
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer( zvUntertitel.getId() )};
+			// SQL-Statement mit der Nummer 146 ausführen
 			ResultSet rs = statements.get(146).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-
+			rs.last();		// In die letzte Abfragezeile springen 
+			if ( rs.getRow() > 0 ) {	// Gibt es ein Ergebnis
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die Nächste Zeile
+				// Neuen ZVUntertitel erstellen
 				result = new ZVUntertitel( zvUntertitel.getId(), zvUntertitel.getZVTitel(), rs.getString(2), rs.getString(3),
 					rs.getString(4), rs.getFloat(5), rs.getString(6), rs.getString(7), !rs.getString(8).equalsIgnoreCase( "0" ) );
 			}
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch(SQLException e) {
+			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// ZVtitel zurückgeben
 	}
+	
 
 	public ResultSet query(String query) throws ApplicationServerException{
 	 try{
@@ -2020,110 +2194,115 @@ public class Database implements Serializable{
 	
 	/**
 	 * Abfrage aller nicht gelöschter Firmen.
-	 * @return ArrayList mit nicht gelöschten Firmen.
+	 * @return ArrayListe mit nicht gelöschten Firmen.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectFirmen() throws ApplicationServerException {
-		ArrayList firmen = new ArrayList();
-
+		ArrayList firmen = new ArrayList();		// Liste mit den Firmen
 		try{
+			// SQL-Statement mit der Nummer 240 ausführen
 			ResultSet rs = statements.get(240).executeQuery();
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-
-				while( rs.next() ){
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ){		// Solange es noch Abfrage-Zeilen gibt
 					firmen.add( new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-											rs.getString(10), !rs.getString(11).equalsIgnoreCase( "0" ) ) );
+											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
+											rs.getString(12).equalsIgnoreCase( "1" ) ) );
 				}
 			}
-
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
-		return firmen;
+		return firmen;		// Die Firmen zurückgeben
 	}
 	
 	/**
 	 * Abfrage aller gelöschter Firmen.
 	 * @return ArrayList mit gelöschten Firmen.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public ArrayList selectDelFirmen() throws ApplicationServerException {
-		ArrayList firmen = new ArrayList();
-
-		try{
+		ArrayList firmen = new ArrayList();		// Liste für die gelöschten Firmen
+		try {
+			// SQL-Statement mit der Nummer 241 ausführen
 			ResultSet rs = statements.get(241).executeQuery();
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-
-				while( rs.next() ){
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ){		// Solange es noch Abfrage-Zeilen gibt
 					firmen.add( new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-											rs.getString(10), !rs.getString(11).equalsIgnoreCase( "0" ) ) );
+											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ),
+											rs.getString(12).equalsIgnoreCase( "1" ) ) );
 				}
 			}
 
-			rs.close();
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
-		return firmen;
+		return firmen;		// Die Firmen zurückgeben
 	}
 	
 	/**
 	 * Eine Firma zum aktualisieren auswählen.
+	 * @param Firma, die ausgewählt werden soll.
 	 * @return Firma, die ausgewählt wurde.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public Firma selectForUpdateFirma( Firma firma ) throws ApplicationServerException {
 		Firma result = null;
-
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(firma.getId())};
-			ResultSet rs = statements.get(242).executeQuery(parameters);
-			rs.last();
-
-			if ( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				
+			// SQL-Statement mit der Nummer 242 ausführen
+			ResultSet rs = statements.get(242).executeQuery();
+			rs.last();		// In die letzte Zeile springen
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die nächste Zeile
 				result = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 									rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
-									rs.getString(10), !rs.getString(11).equalsIgnoreCase( "0" ) );
+									rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ),
+									rs.getString(12).equalsIgnoreCase( "1" ) );
 			}
-			
-			rs.close();
+			rs.close();			// Abfrage schließen
 		} catch (SQLException e){
+			rollback();
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
-		return result;
+		return result;		// Die Firma zurückgeben
 	}
 	
 	/**
-	 * Abfrage ob eine nicht gelöschte Firma schon existiert.
-	 * Dabei ist der Namen, Strasse, PLZ, Ort entscheidend. 
-	 * @return id von der Firma
+	 * Abfrage ob eine nicht gelöschte Firma schon existiert. <br>
+	 * Dabei ist der Namen, Strasse, Strassen-Nr, PLZ, Ort entscheidend.
+	 * @param Firma, die überprüft werden soll.
+	 * @return id von der Firma.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsFirma( Firma firma ) throws ApplicationServerException {
-		try{
+		try { 
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new String(firma.getName()), new String(firma.getStrasseNr()),
 									new String(firma.getPlz()), new String(firma.getOrt())};
+			// SQL-Satement mit der Nummer 243 ausführen
 			ResultSet rs = statements.get(243).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){		// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die nächste Zeile
+				return rs.getInt(1);	// Id der Firma
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
@@ -2133,21 +2312,25 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * Abfrage ob eine gelöschte Firma schon existiert.
-	 * Dabei ist der Namen, Strasse, PLZ, Ort entscheidend. 
+	 * Abfrage ob eine gelöschte Firma schon existiert. <br>
+	 * Dabei ist der Namen, Strasse, Strassen-Nr, PLZ, Ort entscheidend.	 
+	 * @param Firma, die überprüft werden soll.
 	 * @return id von der Firma
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int existsDelFirma( Firma firma ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new String(firma.getName()), new String(firma.getStrasseNr()),
 									new String(firma.getPlz()), new String(firma.getOrt())};
+			// SQL-Satement mit der Nummer 244 ausführen
 			ResultSet rs = statements.get(244).executeQuery(parameters);
-			rs.last();
-			if( rs.getRow() > 0 ){
-				rs.beforeFirst();
-				rs.next();
-				return rs.getInt(1);
+			rs.last();		// In die letzte Zeile springen
+			if( rs.getRow() > 0 ){		// Ist die Anzahl der Zeile > 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				rs.next();				// Die nächste Zeile
+				return rs.getInt(1);	// Id der Firma
 			}
 		} catch (SQLException e){
 			throw new ApplicationServerException(0, e.getMessage());
@@ -2158,21 +2341,24 @@ public class Database implements Serializable{
 
 	/**
 	 * Eine Firma in der Datenbank aktualisieren.
-	 * @param Firma
-	 * @return id von der Firma, die aktulisiert wurde
+	 * @param Firma, die aktualisiert werden soll.
+	 * @return id von der Firma, die aktulisiert wurde.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int updateFirma( Firma firma ) throws ApplicationServerException {
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = { firma.getName(), firma.getStrasseNr(), firma.getPlz(), firma.getOrt(), firma.getKundenNr(),
 									firma.getTelNr(), firma.getFaxNr(), firma.getEMail(), firma.getWWW(), 
+									new String(firma.getASK() ? "1" : "0"),
 									new String(firma.getGeloescht() ? "1" : "0"), new Integer( firma.getId() ) };
+			// SQL-Satement mit der Nummer 245 ausführen
 			statements.get(245).executeUpdate(parameters);
-			
-			if( firma.getGeloescht() )
-				return existsDelFirma( firma );
+			if( firma.getGeloescht() )		// Wenn gelöschte Firma
+				return existsDelFirma( firma );	// Id von der gelöschten Firma
 			else
-				return existsFirma( firma );
+				return existsFirma( firma );	// Id von der nicht gelöschten Firma
 		} catch (SQLException e){
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
@@ -2180,36 +2366,43 @@ public class Database implements Serializable{
 	
 	/**
 	 * Ein neue Firma erstellen.
-	 * @param neue Firma.
+	 * @param Firma, die erstellt werden soll.
 	 * @return id der erstellten Firma.
 	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	 public int insertFirma( Firma firma ) throws ApplicationServerException {
 		 try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = { firma.getName(), firma.getStrasseNr(), firma.getPlz(), firma.getOrt(), firma.getKundenNr(),
 									firma.getTelNr(), firma.getFaxNr(), firma.getEMail(), firma.getWWW(), 
-									new String( firma.getGeloescht() ? "1" : "0" ) };
-
+									new String( firma.getASK() ? "1" : "0" ), new String( firma.getGeloescht() ? "1" : "0" ) };
+			// SQL-Satement mit der Nummer 246 ausführen
 			statements.get(246).executeUpdate(parameters);
-			
-			return existsFirma( firma );
+			return existsFirma( firma );	// Id von der Firma
 		} catch (SQLException e){
+			rollback();
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 	
 	/**
 	 * Eine Firma in der Datenbank löschen.
-	 * @param firma, die gelöscht werden soll.
+	 * @param Firma, die gelöscht werden soll.
 	 * @return Zeilenindex von der Firma, die gelöscht wurde.
 	 * @throws ApplicationServerException
+	 * 
 	 */
 	public int deleteFirma( Firma firma ) throws ApplicationServerException {
 
 		try{
+			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(firma.getId())};
-			return statements.get(247).executeUpdate(parameters);
+			// SQL-Satement mit der Nummer 247 ausführen
+			statements.get(247).executeUpdate(parameters);
+			return firma.getId();		// FirmenId zurückgeben
 		} catch (SQLException e){
+			rollback();
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 
@@ -2217,13 +2410,17 @@ public class Database implements Serializable{
 	
 	/**
 	 * Anzahl der aktiven Bestellungen, die bei einer bestimmten Firma bestellt werden.
-	 * @param die Firma.
-	 * @return anzahl der Bestellungen.
+	 * @param Firma, die überprüft werden soll.
+	 * @return Anzahl der Bestellungen.
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public int countActiveBestellungen( Firma firma )throws ApplicationServerException{
 		 try{
-		   Object[] parameters = { new Integer(firma.getId()) };
-			 ResultSet rs = statements.get(216).executeQuery(parameters);
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(firma.getId()) };
+			// SQL-Satement mit der Nummer 216 ausführen
+			ResultSet rs = statements.get(216).executeQuery(parameters);
 		   if(rs.next())
 			 return rs.getInt(1);
 		   else

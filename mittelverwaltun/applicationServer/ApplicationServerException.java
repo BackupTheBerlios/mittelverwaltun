@@ -60,34 +60,28 @@ public class ApplicationServerException extends Exception {
 		messages[4] = "Application Server Error: Institut bzw. Kostenstelle bereits vorhanden.";
 		messages[5] = "Application Server Error: Benutzername in der DB bereits vergeben.";
 		messages[6] = "Application Server Error: Es existiert kein aktives Haushaltsjahr.";
-
 		messages[7] = "Application Server Error: Rolle existiert nicht mehr.";
 		messages[8] = "Application Server Error: Rollenname bereits vergeben.";
 		messages[9] = "Application Server Error: Rolle wird noch von Benutzern verwendet.";
-
 		messages[10] = "Application Server Error: Das ZVKonto existiert nicht.";
 		messages[11] = "Application Server Error: Das ZVKonto existiert bereits.";
 		messages[12] = "Application Server Error: Der ZVTitel existiert nicht.";
 		messages[13] = "Application Server Error: Der ZVTitel existiert bereits.";
 		messages[14] = "Application Server Error: Der ZVUntertitel existiert nicht.";
 		messages[15] = "Application Server Error: Der ZVUntertitel existiert bereits.";
-
 		messages[16] = "Application Server Error: Das FBHauptkonto existiert nicht.";
 		messages[17] = "Application Server Error: Das FBHauptkonto existiert bereits.";
 		messages[18] = "Application Server Error: Das FBUnterkonto existiert nicht.";
 		messages[19] = "Application Server Error: Das FBUnterkonto existiert bereits.";
-		
 		messages[20] = "Application Server Error: Bestellungen noch nicht abgeschlossen.";
 		messages[21] = "Application Server Error: Kontenzuordnungen noch vorhanden.";
 		messages[22] = "Application Server Error: Konto ist einem Benutzer zugeordnet.";
 		messages[23] = "Application Server Error: Das FBHauptkonto ist gelöscht.";
 		messages[24] = "Application Server Error: Das FBUnterkonto ist gelöscht.";
-		
 		messages[25] = "Application Server Error: Die FBHauptkonten unterscheiden sich [DB - Application].";
 		messages[26] = "Application Server Error: Die FBHauptkonten-Budgets unterscheiden sich [DB - Application].";
 		messages[27] = "Application Server Error: Die FBUnterkonten unterscheiden sich [DB - Application].";
 		messages[28] = "Application Server Error: Die FBUnterkonten-Budgets unterscheiden sich [DB - Application].";
-		
 		messages[29] = "Application Server Error: Das ZVKonto ist gelöscht.";
 		messages[30] = "Application Server Error: Der ZVTitel ist gelöscht.";
 		messages[31] = "Application Server Error: Der ZVUntertitel ist gelöscht.";
@@ -97,9 +91,11 @@ public class ApplicationServerException extends Exception {
 		messages[35] = "Application Server Error: Die ZVKonten unterscheiden sich [DB - Application].";
 		messages[36] = "Application Server Error: Die ZVTitel unterscheiden sich [DB - Application].";
 		messages[37] = "Application Server Error: Die ZVUntertitel unterscheiden sich [DB - Application].";
-		
 		messages[38] = "Application Server Error: Die Firma existiert bereits.";
 		messages[39] = "Application Server Error: Die Firma ist bereits gelöscht.";
+		messages[40] = "Application Server Error: Das FBKonto kann nicht verändert werden." +						"Es gibt Buchungen, Bestellungen oder Benutzer, die dieses Konto verwenden.";
+		messages[41] = "Application Server Error: Der ZVTitel/ZVUntertitel kann nicht verändert werden." +
+						"Es gibt Buchungen oder Bestellungen, die diesen ZVTitel/ZVUntertitel verwenden.";
 
 //		Exception Ende WALDEMAR
 

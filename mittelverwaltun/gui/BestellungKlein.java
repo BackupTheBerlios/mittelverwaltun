@@ -30,138 +30,127 @@ import java.util.ArrayList;
 
 
 public class BestellungKlein extends JInternalFrame implements ActionListener, ItemListener, PropertyChangeListener, ZVKontoSelectable {
-  JLabel labUT = new JLabel();
-  JLabel labTitel = new JLabel();
-  JLabel jLabel11 = new JLabel();
-  JLabel labKapitel = new JLabel();
-  JLabel jLabel3 = new JLabel();
-  JLabel jLabel9 = new JLabel();
-  JLabel jLabel10 = new JLabel();
-  JPanel oben = new JPanel();
-  JButton buKontoAuswahl = new JButton();
-  JTextField tfProjektNr = new JTextField();
-  JLabel jLabel8 = new JLabel();
-  JPanel jPanel4 = new JPanel();
-  JLabel jLabel13 = new JLabel();
-  JTextPane tpVerwendung = new JTextPane();
-  JLabel jLabel14 = new JLabel();
-  JPanel jPanel2 = new JPanel();
-  JPanel unten = new JPanel();
-  JLabel jLabel7 = new JLabel();
-  JPanel jPanel1 = new JPanel();
-  JLabel jLabel6 = new JLabel();
-  JLabel jLabel5 = new JLabel();
-  BestellungKleinTable table = new BestellungKleinTable();
-  JScrollPane scrollTable = new JScrollPane();
-  JLabel jLabel1 = new JLabel();
-  JLabel labGesamt = new JLabel();
-  JButton buAbbrechen = new JButton();
-  JButton buBestellen = new JButton();
-  JButton buDrucken = new JButton();
-  JTextField tfTitlVerz = new JTextField();
-  JTextField tfKartei = new JTextField();
-  JTextField tfKarteiNr = new JTextField();
+	JLabel labFBKonto = new JLabel();
+	JComboBox comboFBKonto = new JComboBox();
+	JLabel labZVKonto = new JLabel();
+	JComboBox comboZVKonto = new JComboBox();
+	JButton buBestellen = new JButton();
+	JButton buDrucken = new JButton();
+	JButton buAbbrechen = new JButton();
+	JComboBox comboBenutzer = new JComboBox();
+	JLabel labAuszahlungAn = new JLabel();
+	JPanel panelVerwendung = new JPanel();
+	JLabel labBegruendung = new JLabel();
+	JTextPane tpVerwendung = new JTextPane();
+	JPanel panelKartei = new JPanel();
+	JLabel labMaterial = new JLabel();
+	JLabel labLaborNr = new JLabel();
+	JTextField tfKartei = new JTextField();
+	JLabel labEingetragen = new JLabel();
+	JTextField tfKarteiNr = new JTextField();
+	JPanel panelTitelVerzNr = new JPanel();
+	JTextField tfTitelVerzNr = new JTextField();
+	JLabel labTitelVerzNr = new JLabel();
+	JPanel panelTable = new JPanel();
+	JScrollPane scrollBelege = new JScrollPane();
+	JLabel labGesamt = new JLabel();
+	BestellungKleinTable tableBelege = new BestellungKleinTable();
+	JButton buAddRow = new JButton();
+	JLabel labGesamtText = new JLabel();
+	JPanel panelProjekt = new JPanel();
+	JTextField tfProjektNr = new JTextField();
+	JLabel labProjektNr = new JLabel();
+	JTextField tfDatum = new JTextField();
+	JLabel labDatum = new JLabel();
+	MainFrame frame;
 
-  MainFrame frame;
-  JButton buAddRow = new JButton();
-  JComboBox cbKostenstelle = new JComboBox();
-  JComboBox cbInstitut = new JComboBox();
-  JLabel jLabel24 = new JLabel();
-  JLabel labInstitut = new JLabel();
-  JLabel labUser = new JLabel();
-
-  public BestellungKlein(MainFrame frame) {
-		super( "Kleinbestellung erstellen" );
+	public BestellungKlein(MainFrame frame) {
+		super("Auszahlungsanordnung erstellen");
 		this.frame = frame;
 		this.setClosable(true);
 		this.setIconifiable(true);
-		this.getContentPane().setLayout( null );
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
+		this.setBounds(50,50,530,555);
 		setData();
+				
 		try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
+			jbInit();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 
-		labUser.setText(frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
+//		labUser.setText(frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
 
 		buAbbrechen.addActionListener(this);
+		buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
 		buBestellen.addActionListener(this);
+		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
 		buDrucken.addActionListener(this);
-		buKontoAuswahl.addActionListener(this);
+		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buAddRow.addActionListener(this);
-
-		if(!frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
-			cbInstitut.setVisible(false);
-			labInstitut.setVisible(false);
-		}
-		table.addPropertyChangeListener(this);
-		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		buAddRow.setIcon(Functions.getExpandIcon(getClass()));
+		tableBelege.addPropertyChangeListener(this);
   }
 
 
   private void loadInstituts(){
-	  try {
-//		TODO Admin durch die Aktivität austauschen
-			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
-				Institut[] instituts = frame.getApplicationServer().getInstitutes();
-			
-			  if(instituts != null){
-				  cbInstitut.removeAllItems();
-					 for(int i = 0; i < instituts.length; i++){
-						  cbInstitut.addItem(instituts[i]);
-					 }
-			  }
-			}else{
-				Institut institut = frame.getBenutzer().getKostenstelle();
-				
-				cbInstitut.removeAllItems();
-				cbInstitut.addItem(institut);
-			}
-	  } catch (ApplicationServerException e) {
-		  e.printStackTrace();
-	  }
+//	  try {
+////		TODO Admin durch die Aktivität austauschen
+//			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
+//				Institut[] instituts = frame.getApplicationServer().getInstitutes();
+//			
+//			  if(instituts != null){
+//				  cbInstitut.removeAllItems();
+//					 for(int i = 0; i < instituts.length; i++){
+//						  cbInstitut.addItem(instituts[i]);
+//					 }
+//			  }
+//			}else{
+//				Institut institut = frame.getBenutzer().getKostenstelle();
+//				
+//				cbInstitut.removeAllItems();
+//				cbInstitut.addItem(institut);
+//			}
+//	  } catch (ApplicationServerException e) {
+//		  e.printStackTrace();
+//	  }
   }
 
-  private void loadHauptkonten(){
-	  try {
-		  Institut institut = null;
-		  // TODO Admin durch die Aktivität austauschen
-		  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-			  institut = (Institut)cbInstitut.getSelectedItem();
-		  else
-			  institut = frame.getBenutzer().getKostenstelle();
+	private void loadHauptkonten() {
+//	  try {
+//		  Institut institut = null;
+//		  // TODO Admin durch die Aktivität austauschen
+//		  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
+//			  institut = (Institut)cbInstitut.getSelectedItem();
+//		  else
+//			  institut = frame.getBenutzer().getKostenstelle();
+//
+//
+//		  if(institut != null){
+//			  ArrayList hauptKonten = frame.getApplicationServer().getFBHauptkonten(institut);
+//
+//			  if(hauptKonten != null){
+//				  cbKostenstelle.removeAllItems();
+//					 for(int i = 0; i < hauptKonten.size(); i++){
+//
+//						  cbKostenstelle.addItem(hauptKonten.get(i));
+//					 }
+//			  }
+//		  }
+//	  } catch (ApplicationServerException e) {
+//		  e.printStackTrace();
+//	  }
+	}
 
+	private void setData(){
+		loadInstituts();
+		loadHauptkonten();
+	}
 
-		  if(institut != null){
-			  ArrayList hauptKonten = frame.getApplicationServer().getFBHauptkonten(institut);
+	void insertZVKonto() {
+	}
 
-			  if(hauptKonten != null){
-				  cbKostenstelle.removeAllItems();
-					 for(int i = 0; i < hauptKonten.size(); i++){
-
-						  cbKostenstelle.addItem(hauptKonten.get(i));
-					 }
-			  }
-		  }
-	  } catch (ApplicationServerException e) {
-		  e.printStackTrace();
-	  }
-  }
-
-  private void setData(){
-	  loadInstituts();
-	  loadHauptkonten();
-  }
-
-  void insertZVKonto(){
-
-  }
-
-  public static void main(String[] args) {
+	public static void main(String[] args) {
 		 MainFrame test = new MainFrame("FBMittelverwaltung");
 		 try{
 			 CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
@@ -181,154 +170,109 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		 }catch(Exception e){
 				 System.out.println(e);
 		 }
-  }
+	}
 
-  private void jbInit() throws Exception {
-    this.setBounds(50,50,550,550);
-    oben.setLayout(null);
-    oben.setBounds(new Rectangle(6, 49, 549, 223));
-    scrollTable.setBounds(new Rectangle(3, 61, 530, 128));
-    jLabel1.setFont(new java.awt.Font("Dialog", 1, 12));
-    jLabel1.setText("Gesamt");
-    jLabel1.setBounds(new Rectangle(343, 198, 51, 15));
-    labGesamt.setFont(new java.awt.Font("Dialog", 1, 12));
-    labGesamt.setText("");
-    labGesamt.setBounds(new Rectangle(406, 198, 79, 15));
-    buAbbrechen.setBounds(new Rectangle(378, 197, 117, 25));
-    buAbbrechen.setText("Abbrechen");
-    buBestellen.setBounds(new Rectangle(24, 197, 117, 25));
-    buBestellen.setText("Bestellen");
-    buDrucken.setBounds(new Rectangle(201, 197, 117, 25));
-    buDrucken.setText("Drucken");
-    tfTitlVerz.setText("");
-    tfTitlVerz.setBounds(new Rectangle(84, 157, 128, 21));
-    tfKartei.setText("");
-    tfKartei.setBounds(new Rectangle(148, 3, 94, 21));
-    tfKarteiNr.setText("");
-    tfKarteiNr.setBounds(new Rectangle(313, 3, 101, 21));
-    buAddRow.setBounds(new Rectangle(4, 192, 127, 21));
-    buAddRow.setText("Zeile hinzufügen");
-    labKapitel.setText("");
-    labTitel.setText("");
-    jLabel10.setBounds(new Rectangle(199, 9, 33, 15));
-    jLabel10.setText("UT");
-    jLabel10.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel9.setBounds(new Rectangle(7, 9, 53, 15));
-    jLabel9.setText("Kapitel");
-    jLabel9.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel3.setBounds(new Rectangle(5, 37, 67, 15));
-    jLabel3.setText("Projekt-Nr.");
-    jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
-    labKapitel.setBounds(new Rectangle(47, 9, 55, 15));
-    labKapitel.setHorizontalAlignment(SwingConstants.CENTER);
-    labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel11.setBounds(new Rectangle(109, 9, 40, 15));
-    jLabel11.setText("Titel");
-    jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
-    labTitel.setBounds(new Rectangle(137, 9, 52, 15));
-    labTitel.setHorizontalAlignment(SwingConstants.CENTER);
-    labTitel.setFont(new java.awt.Font("Dialog", 0, 12));
-    labUT.setBounds(new Rectangle(221, 9, 40, 15));
-    labUT.setHorizontalAlignment(SwingConstants.CENTER);
-    labUT.setFont(new java.awt.Font("Dialog", 0, 12));
-    this.setTitle("Kleinbestellung");
-    this.getContentPane().setLayout(null);
-		buKontoAuswahl.setBounds(new Rectangle(278, 5, 176, 25));
-		buKontoAuswahl.setText("ZVKonto auswählen");
-    tfProjektNr.setBounds(new Rectangle(75, 32, 57, 21));
-    tfProjektNr.setText("");
-    tfProjektNr.setBounds(new Rectangle(78, 31, 123, 21));
-    jLabel8.setFont(new java.awt.Font("Dialog", 1, 11));
-    jLabel8.setText("eingetragen.");
-    jLabel8.setBounds(new Rectangle(422, 9, 75, 15));
-    jPanel4.setLayout(null);
-    jPanel4.setBounds(new Rectangle(4, 117, 529, 32));
-    jPanel4.setBorder(BorderFactory.createLineBorder(Color.black));
-    jLabel13.setText("");
-    jLabel13.setFont(new java.awt.Font("Dialog", 1, 11));
-    jLabel13.setText("Auszahlung an:");
-    jLabel13.setBounds(new Rectangle(5, 9, 89, 15));
-    tpVerwendung.setFont(new java.awt.Font("Dialog", 1, 11));
-    tpVerwendung.setBorder(null);
-    tpVerwendung.setText("");
-    tpVerwendung.setBounds(new Rectangle(3, 21, 519, 51));
-    jLabel14.setFont(new java.awt.Font("Dialog", 0, 11));
-    jLabel14.setText("Titl. Verz. Nr.:");
-    jLabel14.setBounds(new Rectangle(5, 164, 89, 15));
-    jPanel2.setBorder(BorderFactory.createLineBorder(Color.black));
-    jPanel2.setBounds(new Rectangle(4, 8, 529, 79));
-    jPanel2.setLayout(null);
-    unten.setBounds(new Rectangle(4, 276, 547, 229));
-    unten.setLayout(null);
-    jLabel7.setFont(new java.awt.Font("Dialog", 1, 11));
-    jLabel7.setText("- Labor, Nr.");
-    jLabel7.setBounds(new Rectangle(244, 9, 68, 15));
-    jPanel1.setBorder(BorderFactory.createLineBorder(Color.black));
-    jPanel1.setBounds(new Rectangle(4, 86, 529, 32));
-    jPanel1.setLayout(null);
-    jLabel6.setFont(new java.awt.Font("Dialog", 1, 11));
-    jLabel6.setText("In Material/Geräte-Kartei");
-    jLabel6.setBounds(new Rectangle(4, 9, 140, 15));
-    jLabel5.setFont(new java.awt.Font("Dialog", 1, 11));
-    jLabel5.setText("Verwendung oder Begründung");
-    jLabel5.setBounds(new Rectangle(5, 3, 187, 15));
-    cbKostenstelle.setBounds(new Rectangle(88, 27, 345, 21));
-    cbInstitut.setBounds(new Rectangle(88, 3, 345, 21));
-    jLabel24.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel24.setText("Kostenstelle:");
-    jLabel24.setBounds(new Rectangle(13, 33, 82, 15));
-    labInstitut.setFont(new java.awt.Font("Dialog", 0, 12));
-    labInstitut.setText("Institut:");
-    labInstitut.setBounds(new Rectangle(13, 9, 50, 15));
-    labUser.setBounds(new Rectangle(99, 9, 296, 15));
-    labUser.setText("Auszahlung an:");
-    labUser.setFont(new java.awt.Font("Dialog", 1, 11));
-    jPanel2.add(jLabel5, null);
-    jPanel2.add(tpVerwendung, null);
-    this.getContentPane().add(oben, null);
-    jPanel1.add(jLabel8, null);
-    jPanel1.add(jLabel6, null);
-    jPanel1.add(jLabel7, null);
-    jPanel1.add(tfKartei, null);
-    jPanel1.add(tfKarteiNr, null);
-    unten.add(jPanel2, null);
-    jPanel4.add(jLabel13, null);
-    jPanel4.add(labUser, null);
-    this.getContentPane().add(cbInstitut, null);
-    this.getContentPane().add(cbKostenstelle, null);
-    this.getContentPane().add(jLabel24, null);
-    this.getContentPane().add(labInstitut, null);
-    unten.add(jLabel14, null);
-    unten.add(buBestellen, null);
-    unten.add(buDrucken, null);
-    unten.add(tfTitlVerz, null);
-    unten.add(buAbbrechen, null);
-    unten.add(jPanel1, null);
-    unten.add(jPanel4, null);
-    oben.add(tfProjektNr, null);
-    oben.add(jLabel9, null);
-    oben.add(labKapitel, null);
-    oben.add(jLabel11, null);
-    oben.add(labTitel, null);
-    oben.add(jLabel10, null);
-    oben.add(labUT, null);
-    oben.add(buKontoAuswahl, null);
-    oben.add(jLabel3, null);
-    oben.add(scrollTable, null);
-    oben.add(jLabel1, null);
-    oben.add(labGesamt, null);
-    oben.add(buAddRow, null);
-    scrollTable.getViewport().add(table, null);
-    oben.add(tfProjektNr, null);
-    this.getContentPane().add(unten, null);
-
-  }
+	private void jbInit() throws Exception {
+		labFBKonto.setText("FBKonto");
+		labFBKonto.setBounds(new Rectangle(10, 40, 120, 15));
+		this.getContentPane().setLayout(null);
+		labZVKonto.setText("ZVKonto");
+		labZVKonto.setBounds(new Rectangle(10, 70, 120, 15));
+		buBestellen.setBounds(new Rectangle(10, 490, 120, 25));
+		buBestellen.setText("Bestellen");
+		buDrucken.setBounds(new Rectangle(200, 490, 120, 25));
+		buDrucken.setText("Drucken");
+		buAbbrechen.setBounds(new Rectangle(390, 490, 120, 25));
+		buAbbrechen.setText("Abbrechen");
+		labAuszahlungAn.setText("Auszahlung an");
+		labAuszahlungAn.setBounds(new Rectangle(10, 10, 120, 15));
+		panelVerwendung.setBorder(BorderFactory.createLineBorder(Color.black));
+		panelVerwendung.setBounds(new Rectangle(10, 335, 500, 80));
+		panelVerwendung.setLayout(null);
+		labBegruendung.setText("Verwendung oder Begründung");
+		labBegruendung.setBounds(new Rectangle(6, 6, 200, 15));
+		panelKartei.setBorder(BorderFactory.createLineBorder(Color.black));
+		panelKartei.setBounds(new Rectangle(10, 414, 500, 30));
+		panelKartei.setLayout(null);
+		labMaterial.setText("In Material/Geräte-Kartei");
+		labMaterial.setBounds(new Rectangle(6, 6, 145, 15));
+		labLaborNr.setText("Labor, Nr.");
+		labLaborNr.setBounds(new Rectangle(241, 6, 70, 15));
+		tfKartei.setText("");
+		tfKartei.setBounds(new Rectangle(151, 5, 85, 21));
+		labEingetragen.setText("eingetragen.");
+		labEingetragen.setBounds(new Rectangle(401, 6, 90, 15));
+		tfKarteiNr.setText("");
+		tfKarteiNr.setBounds(new Rectangle(311, 5, 85, 21));
+		panelTitelVerzNr.setBorder(BorderFactory.createLineBorder(Color.black));
+		panelTitelVerzNr.setBounds(new Rectangle(10, 443, 500, 30));
+		panelTitelVerzNr.setLayout(null);
+		tfTitelVerzNr.setText("");
+		tfTitelVerzNr.setBounds(new Rectangle(116, 5, 150, 21));
+		labTitelVerzNr.setText("Titel. Verz. Nr.");
+		labTitelVerzNr.setBounds(new Rectangle(6, 7, 110, 15));
+		panelTable.setBorder(BorderFactory.createLineBorder(Color.black));
+		panelTable.setBounds(new Rectangle(10, 140, 500, 200));
+		panelTable.setLayout(null);
+		labGesamt.setText("");
+		labGesamt.setBounds(new Rectangle(351, 166, 140, 15));
+		buAddRow.setBounds(new Rectangle(6, 166, 180, 22));
+		buAddRow.setText("Zeile hinzufügen");
+		labGesamtText.setText("Gesamt");
+		labGesamtText.setBounds(new Rectangle(271, 166, 80, 15));
+		panelProjekt.setBorder(BorderFactory.createLineBorder(Color.black));
+		panelProjekt.setBounds(new Rectangle(10, 102, 500, 40));
+		panelProjekt.setLayout(null);
+		tfProjektNr.setText("");
+		tfProjektNr.setBounds(new Rectangle(86, 9, 150, 21));
+		labProjektNr.setText("Projekt-Nr.");
+		labProjektNr.setBounds(new Rectangle(6, 11, 80, 15));
+		tfDatum.setText("");
+		tfDatum.setBounds(new Rectangle(341, 9, 150, 21));
+		labDatum.setText("Datum");
+		labDatum.setBounds(new Rectangle(261, 11, 80, 15));
+		scrollBelege.setBounds(new Rectangle(5, 5, 490, 150));
+		tpVerwendung.setBounds(new Rectangle(6, 26, 490, 50));
+		comboZVKonto.setBounds(new Rectangle(130, 70, 380, 21));
+		comboFBKonto.setBounds(new Rectangle(130, 40, 380, 21));
+		comboBenutzer.setBounds(new Rectangle(130, 10, 380, 21));
+		this.getContentPane().add(labFBKonto, null);
+		this.getContentPane().add(comboFBKonto, null);
+		this.getContentPane().add(labZVKonto, null);
+		this.getContentPane().add(comboZVKonto, null);
+		this.getContentPane().add(buBestellen, null);
+		this.getContentPane().add(buDrucken, null);
+		this.getContentPane().add(buAbbrechen, null);
+		this.getContentPane().add(comboBenutzer, null);
+		this.getContentPane().add(labAuszahlungAn, null);
+		this.getContentPane().add(panelVerwendung, null);
+		panelVerwendung.add(labBegruendung, null);
+		panelVerwendung.add(tpVerwendung, null);
+		this.getContentPane().add(panelKartei, null);
+		panelKartei.add(labMaterial, null);
+		panelKartei.add(labLaborNr, null);
+		panelKartei.add(tfKartei, null);
+		panelKartei.add(labEingetragen, null);
+		panelKartei.add(tfKarteiNr, null);
+		this.getContentPane().add(panelTitelVerzNr, null);
+		panelTitelVerzNr.add(tfTitelVerzNr, null);
+		panelTitelVerzNr.add(labTitelVerzNr, null);
+		this.getContentPane().add(panelTable, null);
+		panelTable.add(scrollBelege, null);
+		panelTable.add(labGesamt, null);
+		panelTable.add(buAddRow, null);
+		panelTable.add(labGesamtText, null);
+		this.getContentPane().add(panelProjekt, null);
+		panelProjekt.add(tfProjektNr, null);
+		panelProjekt.add(labProjektNr, null);
+		panelProjekt.add(tfDatum, null);
+		panelProjekt.add(labDatum, null);
+		scrollBelege.add(tableBelege, null);
+	}
+	
 	public void actionPerformed(ActionEvent e) {
-		if ( e.getSource() == buKontoAuswahl ) {
-			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, (FBHauptkonto)cbKostenstelle.getSelectedItem(), false, frame);
-			kontoAuswahl.show();
-		}else if ( e.getSource() == buAddRow ) {
-			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
+		if ( e.getSource() == buAddRow ) {
+			DefaultTableModel dtm = (DefaultTableModel)tableBelege.getModel();
 			Object[] o = {new Integer(1),"","", new Float(0)};
 
 			dtm.addRow(o);
@@ -367,55 +311,45 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	}
 
 	public void setZVKonto(ZVUntertitel zvTitel) {
-		//zvKonto.getKapitel() + "/" + getTitel()
-		if(zvTitel.getZVTitel() != null){
-			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText(zvTitel.getUntertitel());
-		}else{
-			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText("");
-		}
 
 	}
 
 	public void propertyChange(PropertyChangeEvent e) {
-		if(e.getSource() == cbKostenstelle){
-			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-
-			if(kostenstelle != null){
-				labKapitel.setText("");
-				labTitel.setText("");
-				labUT.setText("");
-			}
-		}else if(e.getSource() == cbInstitut){
-			loadHauptkonten();
-		}else if(e.getSource() == table){
-			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
-		  float sum = 0;
-		  float price = 0;
-
-		  for(int i = 0; i < table.getRowCount(); i++){
-				price = ((Float)dtm.getValueAt(i, 3)).floatValue();
-				sum += price;
-		  }
-		  labGesamt.setText(NumberFormat.getCurrencyInstance().format(sum));
-		}
+//		if(e.getSource() == cbKostenstelle){
+//			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
+//
+//			if(kostenstelle != null){
+//				labKapitel.setText("");
+//				labTitel.setText("");
+//				labUT.setText("");
+//			}
+//		}else if(e.getSource() == cbInstitut){
+//			loadHauptkonten();
+//		}else if(e.getSource() == table){
+//			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
+//		  float sum = 0;
+//		  float price = 0;
+//
+//		  for(int i = 0; i < table.getRowCount(); i++){
+//				price = ((Float)dtm.getValueAt(i, 3)).floatValue();
+//				sum += price;
+//		  }
+//		  labGesamt.setText(NumberFormat.getCurrencyInstance().format(sum));
+//		}
 	}
 
 
 	public void itemStateChanged(ItemEvent e) {
-		if(e.getSource() == cbKostenstelle){
-			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-			labUser.setText("Hallo" + frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
-			if(kostenstelle != null){
-				labKapitel.setText("");
-				labTitel.setText("");
-				labUT.setText("");
-			}
-		}else if(e.getSource() == cbInstitut){
-			loadHauptkonten();
-		}
+//		if(e.getSource() == cbKostenstelle){
+//			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
+//			labUser.setText("Hallo" + frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
+//			if(kostenstelle != null){
+//				labKapitel.setText("");
+//				labTitel.setText("");
+//				labUT.setText("");
+//			}
+//		}else if(e.getSource() == cbInstitut){
+//			loadHauptkonten();
+//		}
 	}
 }

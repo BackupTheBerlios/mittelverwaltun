@@ -15,6 +15,33 @@ import javax.swing.ImageIcon;
  */
 public class Functions {
 	
+	static public ImageIcon getBestellIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","cart.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	static public ImageIcon getExpandIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","expand.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	static public ImageIcon getPrintIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","print.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
 	static public ImageIcon getServerIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","Server16.gif", clazz);

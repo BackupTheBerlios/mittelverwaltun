@@ -55,6 +55,10 @@ public class FBUnterkonto implements Serializable{
 	 */
 	private int haushaltsJahrID;
 	
+	/**
+	 * Flag zum Anzeogen, ob ein FBHauptkonto für Kleinbestellungen verwendet werden kann.
+	 */
+	private boolean kleinbestellungen;
 	
 	
 	public FBUnterkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter, float budget ){
@@ -78,7 +82,7 @@ public class FBUnterkonto implements Serializable{
 		this.haushaltsJahrID = haushaltsJahrID;
 		this.geloescht = geloescht;
 	}
-	
+
 	/**
 	 * Konstruktor, welcher alle Attribute enthält. <br>
 	 * @param id = FBUnterkontoId
@@ -89,10 +93,11 @@ public class FBUnterkonto implements Serializable{
 	 * @param unter = Nummer des Unterkontos
 	 * @param budget = Budget, welches dieses Konto enthält
 	 * @param vormerkungen = Vorgemerkte Mittel
+	 * @param kleinbestellungen = Ob dieses Konto für Kleinbestellungen verwendet werden kann.
 	 * @param geloescht = Flag, ob Konto gelöscht
 	 */
 	public FBUnterkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt,
-												String unter, float budget, float vormerkungen, boolean geloescht ){
+								String unter, float budget, float vormerkungen, boolean kleinbestellungen, boolean geloescht ){
 		this.id = id;
 		this.bezeichnung = bez;
 		this.institut = inst;
@@ -102,6 +107,7 @@ public class FBUnterkonto implements Serializable{
 		this.vormerkungen = vormerkungen;
 		this.haushaltsJahrID = haushaltsJahrID;
 		this.geloescht = geloescht;
+		this.kleinbestellungen = kleinbestellungen;
 	}
 
 	
@@ -146,7 +152,23 @@ public class FBUnterkonto implements Serializable{
 		setHauptkonto( konto.getHauptkonto() );
 		setUnterkonto( konto.getUnterkonto() );
 		setBudget( konto.getBudget() );
+		setVormerkungen(konto.getVormerkungen());
+		setKleinbestellungen(konto.getKleinbestellungen());
 		setGeloescht( konto.getGeloescht() );
+	}
+	
+	/**
+	 * 
+	 */
+	public boolean getKleinbestellungen() {
+		return kleinbestellungen;
+	}
+	
+	/**
+	 * 
+	 */
+	public void setKleinbestellungen(boolean kleinbestellungen) {
+		this.kleinbestellungen = kleinbestellungen;
 	}
 	
 	/**
@@ -289,8 +311,8 @@ public class FBUnterkonto implements Serializable{
 	 */
 	public Object cloneWhole() {
 		return new FBUnterkonto( this.getId(), this.getHaushaltsJahrID(), null,
-												this.getBezeichnung(), this.getHauptkonto(), this.getUnterkonto(),
-												this.getBudget(), this.getGeloescht() );
+									this.getBezeichnung(), this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
+									this.getVormerkungen(), this.getKleinbestellungen(), this.getGeloescht() );
 	}
 
 	/**
@@ -299,8 +321,8 @@ public class FBUnterkonto implements Serializable{
 	 */
 	public Object clone() {
 		return new FBUnterkonto( this.getId(), this.getHaushaltsJahrID(), (Institut)this.getInstitut().clone(),
-												this.getBezeichnung(), this.getHauptkonto(), this.getUnterkonto(),
-												this.getBudget(), this.getGeloescht() );
+								this.getBezeichnung(), this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
+								this.getVormerkungen(), this.getKleinbestellungen(), this.getGeloescht() );
 	}
 
 }

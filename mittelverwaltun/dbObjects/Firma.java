@@ -2,28 +2,76 @@ package dbObjects;
 
 
 /**
- * @author Admin
+ * @author w.flat
  * 17.10.2004
  */
 public class Firma {
 	
+	/**
+	 * Eindeutige Id zur Identifizierung der Firma.
+	 */
 	int id;
+	
+	/**
+	 * Der Firmen-Name.
+	 */
 	String name;
+	
+	/**
+	 * Der Strassen-Name und die Strassen-Nummer. 
+	 */
 	String strasseNr;
+	
+	/**
+	 * Die Postleitzahl.
+	 */
 	String plz;
+	
+	/**
+	 * Der Standort der Firma.
+	 */
 	String ort;
+	
+	/**
+	 * Die Kundennummer, die man bei der Firma hat.
+	 */
 	String kundenNr;
+	
+	/**
+	 * Die Telefonnummer der Firma.
+	 */
 	String telNr;
+	
+	/**
+	 * Die Fax-Nummer der Firma.
+	 */
 	String faxNr;
+	
+	/**
+	 * Die E-Mail-Adresse der Firma.
+	 */
 	String eMail;
+	
+	/**
+	 * Die Homepage der Firma.
+	 */
 	String www;
+	
+	/**
+	 * Flag ob es sich bei der Firma um die ASK.
+	 */
+	boolean ask;
+	
+	/**
+	 * Flag ob die Firma in der Datenbank gelöscht ist.
+	 */
 	boolean geloescht;
 	
 	/**
 	 * Konstruktor, der alle Attribute enthält.
 	 */
 	public Firma( int id, String name, String strasseNr, String plz, String ort, String kundenNr,  
-							String telNr, String faxNr, String eMail, String www, boolean geloescht  ) {
+						String telNr, String faxNr, String eMail, String www, boolean ask, boolean geloescht ) {
 		this.id = id;
 		this.name = name;
 		this.strasseNr = strasseNr;
@@ -34,6 +82,7 @@ public class Firma {
 		this.faxNr = faxNr;
 		this.eMail = eMail;
 		this.www = www;
+		this.ask = ask;
 		this.geloescht = geloescht;
 	}
 	
@@ -52,6 +101,7 @@ public class Firma {
 		this.faxNr = faxNr;
 		this.eMail = eMail;
 		this.www = www;
+		this.ask = false;
 		this.geloescht = false;
 	}
 	
@@ -60,7 +110,7 @@ public class Firma {
 	 */
 	public Object clone() {
 		return new Firma( this.id, this.name, this.strasseNr, this.plz, this.ort, this.kundenNr,  
-									this.telNr, this.faxNr, this.eMail, this.www, this. geloescht );
+							this.telNr, this.faxNr, this.eMail, this.www, this.ask, this. geloescht );
 	}
 	
 	/**
@@ -76,6 +126,7 @@ public class Firma {
 		this.faxNr = firma.faxNr;
 		this.eMail = firma.eMail;
 		this.www = firma.www;
+		this.ask = firma.ask;
 		this.geloescht = firma.geloescht;
 	}
 	
@@ -234,6 +285,20 @@ public class Firma {
 	 */
 	public void setWWW( String www ) {
 		this.www = www;
+	}
+	
+	/**
+	 * Ermittlung des ASK-Flags.
+	 */
+	public boolean getASK() {
+		return ask;
+	}
+	
+	/**
+	 * ASK-Flag der Firma aktualisieren.
+	 */
+	public void setASK(boolean ask) {
+		this.ask = ask;
 	}
 	
 	/**

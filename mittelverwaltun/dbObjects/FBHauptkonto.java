@@ -33,12 +33,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 	private Kontenzuordnung[] zuordnung;
 	
 	/**
-	 * Flag zum Anzeogen, ob ein FBHauptkonto für Kleinbestellungen verwendet werden kann.
-	 */
-	private boolean kleinbestellungen;
-
-	
-	/**
 	 * 
 	 */
 	public FBHauptkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter,
@@ -83,15 +77,14 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 	 * @param dispo = Dispositionskredit für ein FBHauptkonto
 	 * @param vormerkungen = Vorgemerkte Mittel
 	 * @param pruefung = Pruefbedingungs-String
-	 * @param geloescht = Flag, ob Konto gelöscht
 	 * @param kleinbestellungen = Ob dieses Konto für Kleinbestellungen verwendet werden kann.
+	 * @param geloescht = Flag, ob Konto gelöscht
 	 */
 	public FBHauptkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter,
 				float budget, float dispo, float vormerkungen, String pruefung, boolean kleinbestellungen, boolean geloescht ){
-		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, vormerkungen, geloescht );
+		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, vormerkungen, kleinbestellungen, geloescht );
 		this.dispoLimit = dispo;
 		this.pruefung = pruefung;
-		this.kleinbestellungen = kleinbestellungen;
 	}
 	
 	
@@ -120,7 +113,9 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 		setUnterkonto( konto.getUnterkonto() );
 		setBudget( konto.getBudget() );
 		setDispoLimit( konto.getDispoLimit() );
+		setVormerkungen(konto.getVormerkungen());
 		setPruefung( konto.getPruefung() );
+		setKleinbestellungen(konto.getKleinbestellungen());
 		setGeloescht( konto.getGeloescht() );
 	}
 	
@@ -133,20 +128,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 		}
 		
 		super.setHauptkonto( hauptkonto );
-	}
-	
-	/**
-	 * 
-	 */
-	public boolean getKleinbestellungen() {
-		return kleinbestellungen;
-	}
-	
-	/**
-	 * 
-	 */
-	public void setKleinbestellungen(boolean kleinbestellungen) {
-		this.kleinbestellungen = kleinbestellungen;
 	}
 
 	/**
@@ -293,15 +274,16 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 				&& ( this.getHauptkonto().equalsIgnoreCase(acc.getHauptkonto()) )
 				&& (this.getUnterkonto().equalsIgnoreCase(acc.getUnterkonto()));
 	}
-	
+
 	/**
 	 * Ein Kopie von einem FBHauptkonto erstellen. Es werden auch die FBUnterkonten kopiert.
 	 * @return ein kopiertes FBHauptkonto
 	 */
 	public Object cloneWhole() {
 		FBHauptkonto result = new FBHauptkonto( this.getId(), this.getHaushaltsJahrID(), null, this.getBezeichnung(),
-														this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
-														this.getDispoLimit(), this.getPruefung(), this.getGeloescht() );
+												this.getHauptkonto(), this.getUnterkonto(), this.getBudget(), 
+												this.getDispoLimit(), this.getVormerkungen(),
+												this.getPruefung(), this.getKleinbestellungen(), this.getGeloescht() );
 		result.setInstitut( (Institut)this.getInstitut().clone() );
 		ArrayList hauptkonten = new ArrayList();
 		hauptkonten.add( result );
@@ -324,8 +306,9 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 	 */
 	public Object clone() {
 		FBHauptkonto result = new FBHauptkonto( this.getId(), this.getHaushaltsJahrID(), null, this.getBezeichnung(),
-														this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
-														this.getDispoLimit(), this.getPruefung(), this.getGeloescht() );
+												this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
+												this.getDispoLimit(), this.getVormerkungen(), this.getPruefung(),
+												this.getKleinbestellungen(), this.getGeloescht() );
 		result.setInstitut( (Institut)this.getInstitut().clone() );
 		ArrayList hauptkonten = new ArrayList();
 		hauptkonten.add( result );

@@ -1,0 +1,5 @@
+
+	selectForUpdate setzt Autocommit = 0, und bei nächstem Update auf 1
+	Bei mehreren Aweisungen manuell AutoCommit = 0 setzen, und zum Schluss AutoCommit = 1
+	RollBack in der Methode, wo das SQL-Statement ausgeführt wird
+	

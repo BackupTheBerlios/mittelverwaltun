@@ -534,7 +534,6 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 		tfPruefbedingung.setValue( new Float( konto.getPruefsumme() ) );
 		tfVormerkungen.setValue( new Float( konto.getVormerkungen() ) );
 		checkKleinbestellungen.setSelected(konto.getKleinbestellungen());
-		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
 	
@@ -601,7 +600,7 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new FBUnterkonto( 0, konto.getHaushaltsJahrID(), konto.getInstitut(), tfBezeichnung.getText(),
-								konto.getHauptkonto(), tfUnterkonto.getText(), 0, 0, false );
+								konto.getHauptkonto(), tfUnterkonto.getText(), 0, 0, checkKleinbestellungen.isSelected(), false );
 	}
 
 	/**
@@ -644,6 +643,7 @@ class FBUnterkontoPanel extends JPanel {
 	CurrencyTextField tfBudget = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
+	JCheckBox checkKleinbestellungen = new JCheckBox();
 	
 	public FBUnterkontoPanel() {
 	  try {
@@ -684,6 +684,8 @@ class FBUnterkontoPanel extends JPanel {
 	  labVormerkungen.setBounds(new Rectangle(257, 82, 95, 15));
 	  tfVormerkungen.setText("");
 	  tfVormerkungen.setBounds(new Rectangle(352, 82, 145, 21));
+	  checkKleinbestellungen.setText("Kleinbestellungen");
+	  checkKleinbestellungen.setBounds(new Rectangle(12, 117, 140, 23));
 	  this.add(labBezeichnung, null);
 	  this.add(tfBezeichnung, null);
 	  this.add(labKostenstelle, null);
@@ -697,6 +699,7 @@ class FBUnterkontoPanel extends JPanel {
 	  this.add(labVormerkungen, null);
 	  this.add(tfVormerkungen, null);
 	  tfVormerkungen.setEnabled(false);
+	  this.add(checkKleinbestellungen, null);
 	  this.setBorder(BorderFactory.createEtchedBorder());
 	}
 	
@@ -713,6 +716,7 @@ class FBUnterkontoPanel extends JPanel {
 		tfUnterkonto.setValue( konto.getUnterkonto() );
 		tfBudget.setValue( new Float( konto.getBudget() ) );
 		tfVormerkungen.setValue( new Float( konto.getVormerkungen() ) );
+		checkKleinbestellungen.setSelected(konto.getKleinbestellungen());
 	}
 	
 	/**
@@ -736,7 +740,8 @@ class FBUnterkontoPanel extends JPanel {
 			return null;
 		
 		return new FBUnterkonto( konto.getId(), konto.getHaushaltsJahrID(), konto.getInstitut(), tfBezeichnung.getText(),
-				konto.getHauptkonto(), tfUnterkonto.getText(), konto.getBudget(), konto.getVormerkungen(), konto.getGeloescht() );
+									konto.getHauptkonto(), tfUnterkonto.getText(), konto.getBudget(), 
+									konto.getVormerkungen(), checkKleinbestellungen.isSelected(), konto.getGeloescht() );
 	}
 }
 
