@@ -1827,7 +1827,7 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//263
+		{//263 
 			statements[i++] = null;
 		}
 		{//264
@@ -1852,8 +1852,10 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//267
-			statements[i++] = null;
+		{//267 löscht alle Positionen und alle Angebote zu einer Bestellung
+			ps = con.prepareStatement("DELETE " +																"FROM Angebote a, Positionen p " +																"WHERE a.bestellung = ? " +																		"AND a.id = b.angebot ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//268
 			statements[i++] = null;

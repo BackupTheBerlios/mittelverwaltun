@@ -1738,7 +1738,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			Angebot angebot = (Angebot)bestellung.getAngebote().get(i);
 			ArrayList positionen = angebot.getPositionen();
 			
-			newAngebotId = db.insertAngebot(angebot, newBestellungId, (bestellung.getAuswahl() == (i + 1)) ? true : false);
+			newAngebotId = db.insertAngebot(angebot, newBestellungId);
 			
 			// fügt alle Positionen ein
 			for(int j = 0; j < positionen.size(); j++){
@@ -1777,7 +1777,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		Angebot angebot = (Angebot)bestellung.getAngebot();
 		ArrayList positionen = angebot.getPositionen();
 		
-		newAngebotId = db.insertAngebot(angebot, newBestellungId, true);
+		newAngebotId = db.insertAngebot(angebot, newBestellungId);
 		
 		// fügt alle Positionen ein
 		for(int j = 0; j < positionen.size(); j++){
@@ -1806,6 +1806,46 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
+		switch(edited.getPhase()){
+			case 0:{
+							db.updateStandardBestellung(edited, 0f);
+							if(!original.getAngebote().equals(edited.getAngebote())){ // die  haben sich geändert
+								db.deleteAngebote(edited.getId()); // löscht alle Angebote
+								
+								ArrayList angebote = edited.getAngebote();
+								int newAngebotId = 0;
+								for(int i = 0; i < angebote.size(); i++){
+									Angebot angebot = (Angebot)edited.getAngebote().get(i);
+									ArrayList positionen = angebot.getPositionen();
+
+									newAngebotId = db.insertAngebot(angebot, edited.getId());
+
+									// fügt alle Positionen ein
+									for(int j = 0; j < positionen.size(); j++){
+										Position position = (Position)positionen.get(j);
+	
+										db.insertPosition(position, newAngebotId);
+									}
+									// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
+									if(positionen.size() == 0){
+										Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, edited.getFbkonto().getInstitut());
+	
+										db.insertPosition(position, newAngebotId);
+									}
+								}
+							}
+							break;
+						 }
+			case 1:{
+//							float v = ((Angebot)edited.getAngebote().get(edited.getAuswahl())).getSumme();
+//							db.updateStandardBestellung(edited, 0f);
+							break;
+						 }
+			case 2:{
+							break;
+						 }
+		}
+		
 	}
 
 
@@ -1828,9 +1868,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		for(int i = 0; i < angebote.size(); i++){
 			Angebot angebot = (Angebot)angebote.get(i);
 			
-			if(angebot.getAngenommen())	// Auswahl bei der Bestellung setzen falls ein Angebot angenommen wurde
-				bestellung.setAuswahl(i+1);
-				
 			angebot.setPositionen(db.selectPositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
 		}
 		

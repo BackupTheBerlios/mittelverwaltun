@@ -2853,11 +2853,11 @@ public class Database implements Serializable{
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public int insertAngebot(Angebot angebot, int bestellungId, boolean angenommen) throws ApplicationServerException{
+	public int insertAngebot(Angebot angebot, int bestellungId) throws ApplicationServerException{
 		if(angebot != null){
 			try{
 				Object[] parameters = { new Integer(bestellungId), new Integer(angebot.getAnbieter().getId()),
-																angebot.getDatum(), (angenommen ? "1" : "0") };
+																angebot.getDatum(), (angebot.getAngenommen() ? "1" : "0") };
 				statements.get(260).executeUpdate(parameters);
 				ResultSet rs = statements.get(260).getGeneratedKeys();
 
@@ -2999,6 +2999,21 @@ public class Database implements Serializable{
 			} catch (SQLException e){
 				throw new ApplicationServerException(79, e.getMessage());
 			}
+		}
+	}
+	
+	/**
+	 * löscht alle Angebote mit Positionen zu einer Bestellung
+	 * @param bestellId
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void deleteAngebote( int bestellId ) throws ApplicationServerException {
+		try{
+			Object[] parameters = {new Integer(bestellId)};
+			statements.get(267).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException( 80, e.getMessage() );
 		}
 	}
 }
