@@ -45,6 +45,17 @@ public class Position implements Serializable {
 		this.institut = institut;
 	}
 	
+	public Position(int id, String artikel, float einzelPreis, int menge, float mwst, float rabatt, Institut institut, boolean beglichen){
+		this.menge = menge;
+		this.artikel = artikel;
+		this.einzelPreis = einzelPreis;
+		this.mwst = mwst;
+		this.rabatt = rabatt;
+		this.id = id;
+		this.institut = institut;
+		this.beglichen = beglichen;
+	}
+	
 	/**
 	 * Konstruktor für die Position ohne die institut
 	 * @param id
