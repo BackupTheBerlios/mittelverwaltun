@@ -1,190 +1,208 @@
 package gui;
 
-import java.awt.Component;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.AbstractCellEditor;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-import dbObjects.Position;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.*;
+import dbObjects.*;
 
 /**
  * @author robert
- *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class BestellungKleinTable extends JTable {
-	ActionListener al;
-	private static String[] title = {"Beleg-Nr","Firma","Artikel, Gegenstand","Preis",""};
-	private static String[] editTitle = {"Beleg-Nr","Firma","Artikel, Gegenstand","Preis","","","Id"};
-  private Object[][] data = {{new Integer(1),"","", new Float(0), new String("Löschen")}};
+
+	/**
+	 * Frame mit dem ActionListener.
+	 */
+	BestellungKlein frame;
 	
-	public BestellungKleinTable(){
-		setModel(new DefaultTableModel(data, title){
+	/**
+	 * Die Liste mit den Firmen für die ComboBox.
+	 */
+	ArrayList firmen;
+	
+	/**
+	 * Die Spalten-Namen
+	 */
+	private static String[] title = {"Beleg-Nr", "Firma", "Artikel, Gegenstand", "Preis", ""};
+	
+	/**
+	 * Erstellt eine Tabelle mit fünf Spalten für den BestellungKlein-Frame. <br>
+	 * Es können die Belege der Auszahlungsanordnung gespeichert werden.
+	 * @param frame = BestellungKlein-Frame als ActionListener
+	 * @param firmen = Liste mit Firmen für die ComboBox
+	 * @author w.flat
+	 */
+	public BestellungKleinTable(BestellungKlein frame, ArrayList firmen) {
+		this.frame = frame;		// ActionListener für die Löschen-Buttons
+		this.firmen = firmen;	// Firmen für die ComboBox
+		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);		// Keine automatische Größen-Anpassung
+		
+		// TableModel festlegen. Dabei wird bei DefaultTableModel nur die Methoden
+		// getColumnClass und isCellEditable überschrieben
+		setModel(new DefaultTableModel(title, 0) {
 										public Class getColumnClass(int c) {
-											 return getValueAt(0, c).getClass();
+											if(c == 0)
+												return Integer.class;
+											else if(c == 1)
+												return JComboBox.class;
+											else if(c == 3)
+												return Float.class;
+											else if(c == 4)
+												return JButton.class;
+											else
+												return JTextField.class;
 										}
-							
+										
 										public boolean isCellEditable(int rowIndex, int columnIndex){
-										  return columnIndex < 5;
+											return columnIndex < 5;
 										}
 								}
 						);
+		// CellEditor und CellRenderer für Float-Klasse festlegen
 		setDefaultEditor(Float.class, new JTableFloatEditor(0));
 		setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
+		// CellEditor und CellRenderer für Integer-Klasse festlegen
 		setDefaultEditor(Integer.class, new JTableIntegerEditor(1));
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 		dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 		setDefaultRenderer(Integer.class, dtcr);
-		al = new ActionListener() {            
-							public void actionPerformed(ActionEvent e) { 
-								if(e.getActionCommand() == "Löschen"){
-									((DefaultTableModel)getModel()).removeRow(getSelectedRow());
-									((DefaultTableModel)getModel()).fireTableStructureChanged();
-									updateTableStructur2();
-								}
-		           
-							}        
-						};
-		updateTableStructur2();
-	}
-		
-	public BestellungKleinTable(Position[] positions){
-		Object[][] data = new Object[positions.length][5];
-		
-//		for(int i = 0; i < positions.length; i++){
-//			data[i][0] = new Integer(positions[i].getMenge());
-//			data[i][1] = positions[i].getBeschreibung();
-//			data[i][2] = new Float(positions[i].getEinzelPreis());
-//			data[i][3] = new Float(positions[i].getMwst());
-//			data[i][4] = new Float((positions[i].getMenge() * positions[i].getEinzelPreis()));
-//			data[i][5] = new String("Speichern");
-//			data[i][6] = new String("Löschen");
-//			data[i][7] = new Integer(positions[i].getId());
-//		}
-
-		al = new ActionListener() {            
-					public void actionPerformed(ActionEvent e) { 
-						if(e.getActionCommand() == "Speichern"){
-							int row = getSelectedRow();
-							Position position = new Position(((Integer)getValueAt(row, 7)).intValue(), 
-															getValueAt(row, 1).toString(), 
-															((Float)getValueAt(row, 2)).floatValue(),
-															((Integer)getValueAt(row, 0)).intValue(), 
-															((Float)getValueAt(row, 3)).floatValue(),
-															((Float)getValueAt(row, 4)).floatValue()
-															);
-							//useCase.updatePosition(position);
-							System.out.println(position);
-						}else if(e.getActionCommand() == "Löschen"){
-							int answer = JOptionPane.showConfirmDialog(
-										getComponent(0),
-										"Soll die Position " + getSelectedRow() + " mit: \n"
-										+ getValueAt(getSelectedRow(), 1)
-										+ "\ngelöscht werden ? ",
-										"Warnung",
-										JOptionPane.YES_NO_OPTION,
-										JOptionPane.QUESTION_MESSAGE,
-										null);
-							if(answer == 0){
-								//useCase.deletePosition(position);
-								((DefaultTableModel)getModel()).removeRow(getSelectedRow());
-								((DefaultTableModel)getModel()).fireTableStructureChanged();
-								updateTableStructur();
-							}
-						}
-		           
-					}        
-				}; 
-							
-		setModel(new DefaultTableModel(data, title){
-										public Class getColumnClass(int c) {
-											 return getValueAt(0, c).getClass();
-										}
-							
-										public boolean isCellEditable(int rowIndex, int columnIndex){
-										  return columnIndex < 5;
-										}
-								}
-						);
-		setDefaultEditor(Float.class, new JTableFloatEditor(0));
-	  	setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
-	  	setDefaultEditor(Integer.class, new JTableIntegerEditor(1));
-	  	DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
-	  	dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-	  	setDefaultRenderer(Integer.class, dtcr);
-	  	updateTableStructur();
-	  	
+		// Festlegen der Tabellen-Eigenschaften
+		updateTableStructure();
 	}
 	
-	private void updateTableStructur2(){
-		getColumnModel().getColumn(4).setCellEditor(new TableButtonCellEditor("Löschen", al));
-		getColumnModel().getColumn(4).setCellRenderer(new TableButtonCellRenderer("Löschen"));
-		getColumnModel().getColumn(0).setMaxWidth(50);
+	/**
+	 * Neue Zeile in der Tabelle einfügen.
+	 * @author w.flat
+	 */
+	public void addRaw() {
+		Object[] o = {new Integer(this.getRowCount() + 1), (firmen.get(0)==null ? new Firma():firmen.get(0)), "", new Float(0)};
+		((DefaultTableModel)this.getModel()).addRow(o);
+		((DefaultTableModel)this.getModel()).fireTableRowsInserted(	((DefaultTableModel)this.getModel()).getRowCount(), 
+																	((DefaultTableModel)this.getModel()).getRowCount());
+	}
+	
+	/**
+	 * Die aktuelle Spalte löschen.
+	 * @author w.flat
+	 */
+	public void delPresRaw() {
+		((DefaultTableModel)getModel()).removeRow(getSelectedRow());
+		setBelegNr();
+		((DefaultTableModel)getModel()).fireTableStructureChanged();
+		updateTableStructure();
+	}
+	
+	/**
+	 * Neue Firmen speichern.
+	 * @param firmen = Neue Liste mit Firmen
+	 * @author w.flat
+	 */
+	public void setFirmen(ArrayList firmen) {
+		if(firmen == null || this.firmen == firmen)	// Wenn keine Firmen angegeben
+			return;									// Gleiche Firmen
+		
+		this.firmen = firmen;
+	}
+	
+	/**
+	 * Beleg-Nr. aktualisieren.
+	 * @author w.flat
+	 */
+	private void setBelegNr() {
+		for(int i = 0; i < this.getRowCount(); i++) {
+			((DefaultTableModel)this.getModel()).setValueAt(new Integer(i + 1), i, 0);
+		}
+	}
+	
+	/**
+	 * Die Struktur der Tabelle festlegen.
+	 * @author w.flat
+	 */
+	private void updateTableStructure(){
+		// Einstellungen der ersten Spalte = "Beleg-Nr"
+		getColumnModel().getColumn(0).setMinWidth(50);
+		getColumnModel().getColumn(0).setWidth(60);
+		getColumnModel().getColumn(0).setPreferredWidth(60);
+		getColumnModel().getColumn(0).setMaxWidth(70);
+		// Einstellen der zweiten Spalte = "Firma"
+		getColumnModel().getColumn(1).setMinWidth(150);		// Größe festlegen
+		getColumnModel().getColumn(1).setWidth(150);
+		getColumnModel().getColumn(1).setPreferredWidth(150);
+		getColumnModel().getColumn(1).setMaxWidth(200);
+		JComboBox cb = new JComboBox();		// ComboBox für die Firmen
+		for(int i = 0; i < firmen.size(); i++) {
+			cb.addItem(firmen.get(i));
+		}
+		getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(cb));		// CellEditor
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();			// CellRenderer
+		renderer.setToolTipText("Firmenauswahl");
+		getColumnModel().getColumn(1).setCellRenderer(renderer);
+		// Einstellen der dritten Spalte = "Artikel"
+		getColumnModel().getColumn(2).setMinWidth(190);
+		getColumnModel().getColumn(2).setWidth(190);
+		getColumnModel().getColumn(2).setPreferredWidth(190);
+		getColumnModel().getColumn(2).setMaxWidth(250);
 		getColumnModel().getColumn(2).setCellRenderer(new MultiLineRenderer());
-		getColumnModel().getColumn(3).setMaxWidth(50);
-		getColumnModel().getColumn(4).setMaxWidth(150);
-		getColumnModel().getColumn(4).setMaxWidth(70);
-		getColumnModel().getColumn(4).setMinWidth(70);
+		// Einstellen der vierten Spalte = "Preis"
+		getColumnModel().getColumn(3).setMinWidth(60);
+		getColumnModel().getColumn(3).setWidth(80);
+		getColumnModel().getColumn(3).setPreferredWidth(80);
+		getColumnModel().getColumn(3).setMaxWidth(100);
+		// Einstellen der fünnften Spalte = "JButton"
+		getColumnModel().getColumn(4).setMinWidth(100);
+		getColumnModel().getColumn(4).setWidth(100);
+		getColumnModel().getColumn(4).setPreferredWidth(100);
+		getColumnModel().getColumn(4).setMaxWidth(100);
+		getColumnModel().getColumn(4).setCellEditor(new TableButtonCellEditor(frame));
+		getColumnModel().getColumn(4).setCellRenderer(new TableButtonCellRenderer());
 	}
 	
-	private void updateTableStructur(){
-		getColumnModel().getColumn(5).setCellEditor(new TableButtonCellEditor("Speichern", al));
-		getColumnModel().getColumn(5).setCellRenderer(new TableButtonCellRenderer("Speichern"));
-		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Löschen", al));
-		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Löschen"));
-		getColumnModel().getColumn(0).setMaxWidth(50);
-		getColumnModel().getColumn(2).setMaxWidth(100);
-		getColumnModel().getColumn(3).setMaxWidth(50);
-		getColumnModel().getColumn(4).setMaxWidth(150);
-		getColumnModel().getColumn(5).setMaxWidth(70);
-		getColumnModel().getColumn(5).setMinWidth(70);
-		getColumnModel().getColumn(6).setMaxWidth(60);
-		getColumnModel().getColumn(6).setMinWidth(60);
-		getColumnModel().getColumn(7).setMinWidth(0);
-		getColumnModel().getColumn(7).setMaxWidth(0);
-		getColumnModel().getColumn(7).setWidth(0);
+	/**
+	 * JButton-Renderer für die letzte Spalte.
+	 * @author w.flat
+	 * 02.03.2005
+	 */
+	private static class TableButtonCellRenderer implements TableCellRenderer {
+		final JButton button;
+		
+		TableButtonCellRenderer() {
+			button = new JButton("Löschen");
+		}
+		
+		public Component getTableCellRendererComponent(	JTable table, Object value, boolean isSelected, 
+																boolean hasFocus, int row, int column) {
+			return button;
+		}
 	}
 	
-	
-	private static class TableButtonCellRenderer implements TableCellRenderer {        
-		final JButton button;        
-		TableButtonCellRenderer(String buttonLabel) {            
-			button = new JButton(buttonLabel);  
-			button.setMargin(new Insets(2,2,2,2));         
-		}        
-	
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {            
-			return button;        
-		}    
-	}    
-				
+	/**
+	 * JButton-CellEditor für die letzte Spalte.
+	 * @author w.flat
+	 * 02.03.2005
+	 */
 	private static class TableButtonCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {        
-		final JButton button;        
+		final JButton button;
 		final ActionListener callback;
-		        
-		TableButtonCellEditor(String buttonLabel, ActionListener callback) {            
-			button = new JButton(buttonLabel);            
+
+		TableButtonCellEditor(ActionListener callback) {            
+			button = new JButton("Löschen");
 			this.callback = callback;  
-			button.setMargin(new Insets(2,2,2,2));         
-			button.addActionListener(this);        
-		}        
+			button.addActionListener(this);
+		}
+		
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {            
 			return button;        
-		}        
+		}
+		
 		public Object getCellEditorValue() {            
 			return null;        
-		}        
+		}
+		
 		public void actionPerformed(ActionEvent e) {            
-			button.getParent().requestFocus();            
-			callback.actionPerformed(e);        
+			button.getParent().requestFocus();
+			callback.actionPerformed(e);
 		}    
 	}
 }

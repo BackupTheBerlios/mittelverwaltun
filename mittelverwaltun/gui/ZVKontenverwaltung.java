@@ -840,13 +840,13 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 		this.add(tfPruefbedingung, null);
 		this.add(tfDispolimit, null);
 		
-	  checkPruefbedingung.addActionListener( this );
-	  rbBis.addActionListener( this );
-	  rbAb.addActionListener( this );
-	  groupPruefbedingung.add( rbBis );
-	  groupPruefbedingung.add( rbAb );
-	  tfBudget.setEnabled( false );
-	  checkZweckgebunden.addActionListener( this );
+		checkPruefbedingung.addActionListener( this );
+		rbBis.addActionListener( this );
+		rbAb.addActionListener( this );
+		groupPruefbedingung.add( rbBis );
+		groupPruefbedingung.add( rbAb );
+		tfBudget.setEnabled( false );
+		checkZweckgebunden.addActionListener( this );		
 	}
 
 	/**
@@ -1107,6 +1107,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	JLabel labLimit = new JLabel();
 	JLabel labUntertitel = new JLabel();
 	IntTextField tfUntertitel = new IntTextField(2);
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
 	public TitelZVKontoTitelPanel() {
 	  try {
@@ -1117,70 +1119,77 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	  }
 	}
 	void jbInit() throws Exception {
-	  tfKapitel.setText("");
-	  tfKapitel.setBounds(new Rectangle(102, 47, 80, 21));
-	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(102, 12, 390, 21));
-	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
-	  labKapitel.setText("Kapitel");
-	  labKapitel.setBounds(new Rectangle(12, 47, 90, 15));
-	  this.setLayout(null);
-	  labTitel.setText("Titel");
-	  labTitel.setBounds(new Rectangle(322, 47, 90, 15));
-	  labBemerkung.setText("Bemerkung");
-	  labBemerkung.setBounds(new Rectangle(202, 82, 80, 15));
-	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
-	  tfBudget.setText("");
-	  tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
-	  tfBemerkung.setText("");
-	  tfBemerkung.setBounds(new Rectangle(282, 82, 210, 21));
-	  rbBis.setText("Bis");
-	  rbBis.setBounds(new Rectangle(202, 112, 60, 22));
-	  rbAb.setText("Ab");
-	  rbAb.setBounds(new Rectangle(262, 112, 60, 22));
-	  tfPruefbedingung.setText("");
-	  tfPruefbedingung.setBounds(new Rectangle(372, 112, 120, 21));
-	  checkPruefbedingung.setSelected(false);
-	  checkPruefbedingung.setText("Prüfbedingung");
-	  checkPruefbedingung.setBounds(new Rectangle(8, 112, 140, 22));
-	  labLimit.setFont(new java.awt.Font("MS Sans Serif", 0, 12));
-	  labLimit.setForeground(Color.blue);
-	  labLimit.setToolTipText("");
-	  labLimit.setText("Zusätzliche Angaben zum neuem Untertitel");
-	  labLimit.setBounds(new Rectangle(12, 152, 300, 16));
-	  labUntertitel.setText("Untertitel");
-	  labUntertitel.setBounds(new Rectangle(12, 182, 90, 15));
-	  tfUntertitel.setText("");
-	  tfUntertitel.setBounds(new Rectangle(102, 182, 80, 21));
-	  this.setBorder(BorderFactory.createEtchedBorder());
-	  tfTitel.setBounds(new Rectangle(412, 47, 80, 21));
-	  this.add(labBezeichnung, null);
-	  this.add(tfBezeichnung, null);
-	  this.add(labKapitel, null);
-	  this.add(tfKapitel, null);
-	  this.add(labTitel, null);
-	  this.add(tfTitel, null);
-	  this.add(labBudget, null);
-	  this.add(tfBudget, null);
-	  this.add(labBemerkung, null);
-	  this.add(tfBemerkung, null);
-	  this.add(checkPruefbedingung, null);
-	  this.add(rbBis, null);
-	  this.add(rbAb, null);
-	  this.add(tfPruefbedingung, null);
-	  this.add(labLimit, null);
-	  this.add(labUntertitel, null);
-	  this.add(tfUntertitel, null);
-	  
-	  tfKapitel.setEnabled( false );
-	  tfBudget.setEnabled( false );
-	  checkPruefbedingung.addActionListener( this );
-	  rbBis.addActionListener( this );
-	  rbAb.addActionListener( this );
-	  groupPruefbedingung.add( rbBis );
-	  groupPruefbedingung.add( rbAb );
+		tfKapitel.setText("");
+		tfKapitel.setBounds(new Rectangle(102, 47, 80, 21));
+		tfBezeichnung.setText("");
+		tfBezeichnung.setBounds(new Rectangle(102, 12, 390, 21));
+		labBezeichnung.setText("Bezeichnung");
+		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
+		labKapitel.setText("Kapitel");
+		labKapitel.setBounds(new Rectangle(12, 47, 90, 15));
+		this.setLayout(null);
+		labTitel.setText("Titel");
+		labTitel.setBounds(new Rectangle(322, 47, 90, 15));
+		labBemerkung.setText("Bemerkung");
+		labBemerkung.setBounds(new Rectangle(10, 112, 90, 15));
+		labBudget.setText("Budget");
+		labBudget.setBounds(new Rectangle(12, 82, 90, 15));
+		tfBudget.setText("");
+		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
+		tfBemerkung.setText("");
+		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
+		rbBis.setText("Bis");
+		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
+		rbAb.setText("Ab");
+		rbAb.setBounds(new Rectangle(262, 142, 60, 22));
+		tfPruefbedingung.setText("");
+		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
+		checkPruefbedingung.setSelected(false);
+		checkPruefbedingung.setText("Prüfbedingung");
+		checkPruefbedingung.setBounds(new Rectangle(8, 142, 140, 22));
+		labLimit.setFont(new java.awt.Font("MS Sans Serif", 0, 12));
+		labLimit.setForeground(Color.blue);
+		labLimit.setToolTipText("");
+		labLimit.setText("Zusätzliche Angaben zum neuem Untertitel");
+		labLimit.setBounds(new Rectangle(12, 182, 300, 16));
+		labUntertitel.setText("Untertitel");
+		labUntertitel.setBounds(new Rectangle(12, 212, 90, 15));
+		tfUntertitel.setText("");
+		tfUntertitel.setBounds(new Rectangle(102, 212, 80, 21));
+		this.setBorder(BorderFactory.createEtchedBorder());
+		labVormerkungen.setText("Vormerkungen");
+		labVormerkungen.setBounds(new Rectangle(302, 82, 90, 15));
+		tfVormerkungen.setText("");
+		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
+		tfTitel.setBounds(new Rectangle(412, 47, 80, 21));
+		this.add(labBezeichnung, null);
+		this.add(tfBezeichnung, null);
+		this.add(labKapitel, null);
+		this.add(tfKapitel, null);
+		this.add(labTitel, null);
+		this.add(tfTitel, null);
+		this.add(labBudget, null);
+		this.add(tfBudget, null);
+		this.add(checkPruefbedingung, null);
+		this.add(rbBis, null);
+		this.add(rbAb, null);
+		this.add(tfPruefbedingung, null);
+		this.add(labLimit, null);
+		this.add(labUntertitel, null);
+		this.add(tfUntertitel, null);
+		this.add(labBemerkung, null);
+		this.add(tfBemerkung, null);
+		this.add(labVormerkungen, null);
+		this.add(tfVormerkungen, null);
+		tfVormerkungen.setEnabled(false);
+		
+		tfKapitel.setEnabled( false );
+		tfBudget.setEnabled( false );
+		checkPruefbedingung.addActionListener( this );
+		rbBis.addActionListener( this );
+		rbAb.addActionListener( this );
+		groupPruefbedingung.add( rbBis );
+		groupPruefbedingung.add( rbAb );	  
 	}
 		
 	/**
@@ -1200,6 +1209,7 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		rbAb.setSelected( !zvTitel.isPruefungBis() );
 		tfPruefbedingung.setValue( new Float( zvTitel.getPruefsumme() ) );
 		tfUntertitel.setValue( "" );
+		tfVormerkungen.setValue( new Float( zvTitel.getVormerkungen() ) );
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -1244,8 +1254,9 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new ZVTitel( zvTitel.getId(), zvTitel.getZVKonto(), tfBezeichnung.getText(), tfTitel.getText(), "",
-						zvTitel.getBudget(), tfBemerkung.getText(),
-						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+						zvTitel.getBudget(), zvTitel.getVormerkungen(), tfBemerkung.getText(),
+						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ),
+						zvTitel.getGeloescht() );
 	}
 	
 	/**
@@ -1255,8 +1266,9 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		if( zvTitel == null )
 			return null;
 		return new ZVUntertitel( 0, zvTitel, tfBezeichnung.getText(), tfTitel.getText(), tfUntertitel.getText(),
-						0, tfBemerkung.getText(),
-						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+						0, 0, tfBemerkung.getText(),
+						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ),
+						false );
 	}
 
 	/**
@@ -1304,6 +1316,8 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	ButtonGroup groupPruefbedingung = new ButtonGroup();
 	JRadioButton rbBis = new JRadioButton( "Bis", true );
 	JRadioButton rbAb = new JRadioButton( "Ab", false );
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
 	public TitelZVKontoUntertitelPanel() {
 	  try {
@@ -1314,65 +1328,72 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	  }
 	}
 	void jbInit() throws Exception {
-	  tfBemerkung.setText("");
-	  tfBemerkung.setBounds(new Rectangle(282, 82, 210, 21));
-	  checkPruefbedingung.setText("Prüfbedingung");
-	  checkPruefbedingung.setBounds(new Rectangle(12, 112, 140, 22));
-	  checkPruefbedingung.setSelected(false);
-	  tfUntertitel.setText("");
-	  tfUntertitel.setBounds(new Rectangle(412, 47, 80, 21));
-	  tfPruefbedingung.setText("");
-	  tfPruefbedingung.setBounds(new Rectangle(372, 112, 120, 21));
-	  tfBudget.setText("");
-	  tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
-	  tfKapitel.setText("");
-	  tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
-	  rbAb.setText("Ab");
-	  rbAb.setBounds(new Rectangle(262, 112, 60, 22));
-	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
-	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
-	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
-	  labBemerkung.setText("Bemerkung");
-	  labBemerkung.setBounds(new Rectangle(202, 82, 80, 15));
-	  labKapitel.setText("Kapitel");
-	  labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
-	  labUntertitel.setText("Untertitel");
-	  labUntertitel.setBounds(new Rectangle(322, 47, 90, 15));
-	  labTitel.setText("Titel");
-	  labTitel.setBounds(new Rectangle(12, 47, 90, 15));
-	  rbBis.setText("Bis");
-	  rbBis.setBounds(new Rectangle(202, 112, 60, 22));
-	  this.setBorder(BorderFactory.createEtchedBorder());
-	  this.setLayout(null);
-	  tfTitel.setBounds(new Rectangle(102, 47, 80, 21));
-	  this.add(labBezeichnung, null);
-	  this.add(tfBezeichnung, null);
-	  this.add(tfKapitel, null);
-	  this.add(labKapitel, null);
-	  this.add(labTitel, null);
-	  this.add(tfTitel, null);
-	  this.add(labUntertitel, null);
-	  this.add(tfUntertitel, null);
-	  this.add(labBudget, null);
-	  this.add(tfBudget, null);
-	  this.add(labBemerkung, null);
-	  this.add(tfBemerkung, null);
-	  this.add(checkPruefbedingung, null);
-	  this.add(rbBis, null);
-	  this.add(rbAb, null);
-	  this.add(tfPruefbedingung, null);
-	  
-	  tfKapitel.setEnabled( false );
-	  tfTitel.setEnabled( false );
-	  tfBudget.setEnabled( false );
-	  checkPruefbedingung.addActionListener( this );
-	  rbBis.addActionListener( this );
-	  rbAb.addActionListener( this );
-	  groupPruefbedingung.add( rbBis );
-	  groupPruefbedingung.add( rbAb );
+		tfBemerkung.setText("");
+		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
+		checkPruefbedingung.setText("Prüfbedingung");
+		checkPruefbedingung.setBounds(new Rectangle(12, 142, 140, 22));
+		checkPruefbedingung.setSelected(false);
+		tfUntertitel.setText("");
+		tfUntertitel.setBounds(new Rectangle(412, 47, 80, 21));
+		tfPruefbedingung.setText("");
+		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
+		tfBudget.setText("");
+		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
+		tfKapitel.setText("");
+		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
+		rbAb.setText("Ab");
+		rbAb.setBounds(new Rectangle(282, 142, 60, 22));
+		labBudget.setText("Budget");
+		labBudget.setBounds(new Rectangle(12, 82, 90, 15));
+		tfBezeichnung.setText("");
+		tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
+		labBezeichnung.setText("Bezeichnung");
+		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
+		labBemerkung.setText("Bemerkung");
+		labBemerkung.setBounds(new Rectangle(12, 112, 80, 15));
+		labKapitel.setText("Kapitel");
+		labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
+		labUntertitel.setText("Untertitel");
+		labUntertitel.setBounds(new Rectangle(322, 47, 90, 15));
+		labTitel.setText("Titel");
+		labTitel.setBounds(new Rectangle(12, 47, 90, 15));
+		rbBis.setText("Bis");
+		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
+		this.setBorder(BorderFactory.createEtchedBorder());
+		this.setLayout(null);
+		labVormerkungen.setText("Vormerkungen");
+		labVormerkungen.setBounds(new Rectangle(292, 82, 90, 15));
+		tfVormerkungen.setText("");
+		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
+		tfTitel.setBounds(new Rectangle(102, 47, 80, 21));
+		this.add(labBezeichnung, null);
+		this.add(tfBezeichnung, null);
+		this.add(tfKapitel, null);
+		this.add(labKapitel, null);
+		this.add(labTitel, null);
+		this.add(tfTitel, null);
+		this.add(labUntertitel, null);
+		this.add(tfUntertitel, null);
+		this.add(labBudget, null);
+		this.add(tfBudget, null);
+		this.add(checkPruefbedingung, null);
+		this.add(rbBis, null);
+		this.add(rbAb, null);
+		this.add(tfPruefbedingung, null);
+		this.add(labBemerkung, null);
+		this.add(tfBemerkung, null);
+		this.add(labVormerkungen, null);
+		this.add(tfVormerkungen, null);
+		tfVormerkungen.setEnabled(false);
+		
+		tfKapitel.setEnabled( false );
+		tfTitel.setEnabled( false );
+		tfBudget.setEnabled( false );
+		checkPruefbedingung.addActionListener( this );
+		rbBis.addActionListener( this );
+		rbAb.addActionListener( this );
+		groupPruefbedingung.add( rbBis );
+		groupPruefbedingung.add( rbAb );
 	}
 	
 	/**
@@ -1392,6 +1413,7 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		rbBis.setSelected( zvUntertitel.isPruefungBis() );
 		rbAb.setSelected( !zvUntertitel.isPruefungBis() );
 		tfPruefbedingung.setValue( new Float( zvUntertitel.getPruefsumme() ) );
+		tfVormerkungen.setValue(new Float(zvUntertitel.getVormerkungen()));
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -1418,8 +1440,10 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new ZVUntertitel( zvUntertitel.getId(), zvUntertitel.getZVTitel(), tfBezeichnung.getText(),
-					zvUntertitel.getZVTitel().getTitel(), tfUntertitel.getText(), zvUntertitel.getBudget(), tfBemerkung.getText(),
-					ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+					zvUntertitel.getZVTitel().getTitel(), tfUntertitel.getText(), zvUntertitel.getBudget(),
+					zvUntertitel.getVormerkungen(), tfBemerkung.getText(),
+					ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ), 
+					zvUntertitel.getGeloescht() );
 
 	}
 
@@ -1471,6 +1495,8 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	JLabel labLimit = new JLabel();
 	JLabel labUntertitel = new JLabel();
 	IntTextField tfUntertitel = new IntTextField(2);
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
 	
 	public TGRZVKontoTitelPanel() {
@@ -1482,77 +1508,85 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	  }
 	}
 	void jbInit() throws Exception {
-	  tfKapitel.setText("");
-	  tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
-	  tfTitelgruppe.setText("");
-	  tfTitelgruppe.setBounds(new Rectangle(412, 47, 80, 21));
-	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
-	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
-	  labKapitel.setText("Kapitel");
-	  labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
-	  labTGR.setText("Titelgruppe");
-	  labTGR.setBounds(new Rectangle(322, 47, 90, 15));
-	  this.setLayout(null);
-	  tfKategorie.setText("");
-	  tfKategorie.setBounds(new Rectangle(102, 47, 80, 21));
-	  labKategorie.setText("Kategorie");
-	  labKategorie.setBounds(new Rectangle(12, 47, 90, 15));
-	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
-	  tfBudget.setText("");
-	  tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
-	  this.setBorder(BorderFactory.createEtchedBorder());
-	  labBemerkung.setText("Bemerkung");
-	  labBemerkung.setBounds(new Rectangle(202, 82, 80, 15));
-	  tfBemerkung.setText("");
-	  tfBemerkung.setBounds(new Rectangle(282, 82, 210, 21));
-	  rbBis.setText("Bis");
-	  rbBis.setBounds(new Rectangle(202, 112, 60, 22));
-	  rbAb.setText("Ab");
-	  rbAb.setBounds(new Rectangle(262, 112, 60, 22));
-	  tfPruefbedingung.setText("");
-	  tfPruefbedingung.setBounds(new Rectangle(372, 112, 120, 21));
-	  checkPruefbedingung.setSelected(false);
-	  checkPruefbedingung.setText("Prüfbedingung");
-	  checkPruefbedingung.setBounds(new Rectangle(12, 112, 140, 22));
-	  labLimit.setFont(new java.awt.Font("MS Sans Serif", 0, 12));
-	  labLimit.setForeground(Color.blue);
-	  labLimit.setText("Zusätzliche Angaben zum neuem Untertitel");
-	  labLimit.setBounds(new Rectangle(12, 147, 300, 16));
-	  labUntertitel.setText("Untertitel");
-	  labUntertitel.setBounds(new Rectangle(12, 182, 90, 15));
-	  tfUntertitel.setText("");
-	  tfUntertitel.setBounds(new Rectangle(102, 182, 80, 21));
-	  this.add(labTGR, null);
-	  this.add(labKapitel, null);
-	  this.add(labBezeichnung, null);
-	  this.add(tfBezeichnung, null);
-	  this.add(tfTitelgruppe, null);
-	  this.add(tfKapitel, null);
-	  this.add(tfKategorie, null);
-	  this.add(labKategorie, null);
-	  this.add(labBudget, null);
-	  this.add(tfBudget, null);
-	  this.add(labBemerkung, null);
-	  this.add(tfBemerkung, null);
-	  this.add(rbBis, null);
-	  this.add(rbAb, null);
-	  this.add(tfPruefbedingung, null);
-	  this.add(checkPruefbedingung, null);
-	  this.add(labLimit, null);
-	  this.add(labUntertitel, null);
-	  this.add(tfUntertitel, null);
-	  checkPruefbedingung.addActionListener( this );
-	  rbBis.addActionListener( this );
-	  rbAb.addActionListener( this );
-	  groupPruefbedingung.add( rbBis );
-	  groupPruefbedingung.add( rbAb );
-	  
-	  tfKapitel.setEnabled( false );
-	  tfTitelgruppe.setEnabled( false );
-	  tfBudget.setEnabled( false );
+		tfKapitel.setText("");
+		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
+		tfTitelgruppe.setText("");
+		tfTitelgruppe.setBounds(new Rectangle(412, 47, 80, 21));
+		tfBezeichnung.setText("");
+		tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
+		labBezeichnung.setText("Bezeichnung");
+		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
+		labKapitel.setText("Kapitel");
+		labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
+		labTGR.setText("Titelgruppe");
+		labTGR.setBounds(new Rectangle(322, 47, 90, 15));
+		this.setLayout(null);
+		tfKategorie.setText("");
+		tfKategorie.setBounds(new Rectangle(102, 47, 80, 21));
+		labKategorie.setText("Kategorie");
+		labKategorie.setBounds(new Rectangle(12, 47, 90, 15));
+		labBudget.setText("Budget");
+		labBudget.setBounds(new Rectangle(12, 82, 90, 15));
+		tfBudget.setText("");
+		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
+		this.setBorder(BorderFactory.createEtchedBorder());
+		this.setOpaque(true);
+		labBemerkung.setText("Bemerkung");
+		labBemerkung.setBounds(new Rectangle(12, 112, 80, 15));
+		tfBemerkung.setText("");
+		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
+		rbBis.setText("Bis");
+		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
+		rbAb.setText("Ab");
+		rbAb.setBounds(new Rectangle(262, 142, 60, 22));
+		tfPruefbedingung.setText("");
+		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
+		checkPruefbedingung.setSelected(false);
+		checkPruefbedingung.setText("Prüfbedingung");
+		checkPruefbedingung.setBounds(new Rectangle(12, 142, 140, 22));
+		labLimit.setFont(new java.awt.Font("MS Sans Serif", 0, 12));
+		labLimit.setForeground(Color.blue);
+		labLimit.setText("Zusätzliche Angaben zum neuem Untertitel");
+		labLimit.setBounds(new Rectangle(12, 182, 300, 16));
+		labUntertitel.setText("Untertitel");
+		labUntertitel.setBounds(new Rectangle(12, 212, 90, 15));
+		tfUntertitel.setText("");
+		tfUntertitel.setBounds(new Rectangle(102, 212, 80, 21));
+		labVormerkungen.setText("Vormerkungen");
+		labVormerkungen.setBounds(new Rectangle(292, 82, 90, 15));
+		tfVormerkungen.setText("");
+		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
+		this.add(labTGR, null);
+		this.add(labKapitel, null);
+		this.add(labBezeichnung, null);
+		this.add(tfBezeichnung, null);
+		this.add(tfTitelgruppe, null);
+		this.add(tfKapitel, null);
+		this.add(tfKategorie, null);
+		this.add(labKategorie, null);
+		this.add(labBudget, null);
+		this.add(tfBudget, null);
+		this.add(labBemerkung, null);
+		this.add(tfBemerkung, null);
+		this.add(rbBis, null);
+		this.add(rbAb, null);
+		this.add(tfPruefbedingung, null);
+		this.add(checkPruefbedingung, null);
+		this.add(labLimit, null);
+		this.add(labUntertitel, null);
+		this.add(tfUntertitel, null);
+		this.add(labVormerkungen, null);
+		this.add(tfVormerkungen, null);
+		tfVormerkungen.setEnabled(false);
+		
+		groupPruefbedingung.add( rbBis );
+		groupPruefbedingung.add( rbAb );
+		tfKapitel.setEnabled( false );
+		tfTitelgruppe.setEnabled( false );
+		tfBudget.setEnabled( false );
+		checkPruefbedingung.addActionListener( this );
+		rbBis.addActionListener( this );
+		rbAb.addActionListener( this );
 	}
 	
 	/**
@@ -1573,6 +1607,7 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 		rbAb.setSelected( !zvTitel.isPruefungBis() );
 		tfPruefbedingung.setValue( new Float( zvTitel.getPruefsumme() ) );
 		tfUntertitel.setValue( "" );
+		tfVormerkungen.setValue( new Float( zvTitel.getVormerkungen() ) );
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -1609,8 +1644,10 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new ZVTitel( zvTitel.getId(), zvTitel.getZVKonto(), tfBezeichnung.getText(),
-						tfKategorie.getText() + tfTitelgruppe.getText() , "", zvTitel.getBudget(), tfBemerkung.getText(),
-						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+						tfKategorie.getText() + tfTitelgruppe.getText() , "", zvTitel.getBudget(),
+						zvTitel.getVormerkungen(), tfBemerkung.getText(),
+						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ), 
+						zvTitel.getGeloescht() );
 	}
 	
 	/**
@@ -1621,8 +1658,9 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new ZVUntertitel( 0, zvTitel, tfBezeichnung.getText(), tfKategorie.getText() + tfTitelgruppe.getText(),
-						tfUntertitel.getText(),	0, tfBemerkung.getText(),
-						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+						tfUntertitel.getText(),	0, 0, tfBemerkung.getText(),
+						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ), 
+						false );
 	}
 
 	/**
@@ -1672,6 +1710,8 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	JTextField tfBemerkung = new JTextField();
 	JLabel labUntertitel = new JLabel();
 	IntTextField tfUntertitel = new IntTextField(2);
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
 	public TGRZVKontoUntertitelPanel() {
 	  try {
@@ -1682,73 +1722,80 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	  }
 	}
 	void jbInit() throws Exception {
-	  tfBemerkung.setText("");
-	  tfBemerkung.setBounds(new Rectangle(282, 82, 210, 21));
-	  checkPruefbedingung.setText("Prüfbedingung");
-	  checkPruefbedingung.setBounds(new Rectangle(12, 112, 140, 22));
-	  checkPruefbedingung.setSelected(false);
-	  tfPruefbedingung.setText("");
-	  tfPruefbedingung.setBounds(new Rectangle(372, 112, 120, 21));
-	  labKategorie.setText("Kategorie");
-	  labKategorie.setBounds(new Rectangle(12, 47, 80, 15));
-	  tfBudget.setText("");
-	  tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
-	  tfKapitel.setText("");
-	  tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
-	  rbAb.setText("Ab");
-	  rbAb.setBounds(new Rectangle(262, 112, 60, 22));
-	  tfTitelgruppe.setText("");
-	  tfTitelgruppe.setBounds(new Rectangle(257, 47, 70, 21));
-	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
-	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
-	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
-	  labBemerkung.setText("Bemerkung");
-	  labBemerkung.setBounds(new Rectangle(202, 82, 80, 15));
-	  labKapitel.setText("Kapitel");
-	  labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
-	  labTGR.setText("Titelgruppe");
-	  labTGR.setBounds(new Rectangle(177, 47, 80, 15));
-	  tfKategorie.setText("");
-	  tfKategorie.setBounds(new Rectangle(92, 47, 70, 21));
-	  rbBis.setText("Bis");
-	  rbBis.setBounds(new Rectangle(202, 112, 60, 22));
-	  this.setLayout(null);
-	  labUntertitel.setText("Untertitel");
-	  labUntertitel.setBounds(new Rectangle(342, 49, 80, 15));
-	  tfUntertitel.setText("");
-	  tfUntertitel.setBounds(new Rectangle(422, 47, 70, 21));
-	  this.setBorder(BorderFactory.createEtchedBorder());
-	  this.add(rbBis, null);
-	  this.add(tfKategorie, null);
-	  this.add(labTGR, null);
-	  this.add(labKapitel, null);
-	  this.add(labBemerkung, null);
-	  this.add(labBezeichnung, null);
-	  this.add(tfBezeichnung, null);
-	  this.add(labBudget, null);
-	  this.add(tfTitelgruppe, null);
-	  this.add(rbAb, null);
-	  this.add(tfKapitel, null);
-	  this.add(tfBudget, null);
-	  this.add(labKategorie, null);
-	  this.add(tfPruefbedingung, null);
-	  this.add(checkPruefbedingung, null);
-	  this.add(tfBemerkung, null);
-	  this.add(labUntertitel, null);
-	  this.add(tfUntertitel, null);
-	  
-	  tfKapitel.setEnabled( false );
-	  tfKategorie.setEnabled( false );
-	  tfTitelgruppe.setEnabled( false );
-	  tfBudget.setEnabled( false );
-	  checkPruefbedingung.addActionListener( this );
-	  rbBis.addActionListener( this );
-	  rbAb.addActionListener( this );
-	  groupPruefbedingung.add( rbBis );
-	  groupPruefbedingung.add( rbAb );
+		tfBemerkung.setText("");
+		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
+		checkPruefbedingung.setText("Prüfbedingung");
+		checkPruefbedingung.setBounds(new Rectangle(12, 142, 140, 22));
+		checkPruefbedingung.setSelected(false);
+		tfPruefbedingung.setText("");
+		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
+		labKategorie.setText("Kategorie");
+		labKategorie.setBounds(new Rectangle(12, 47, 80, 15));
+		tfBudget.setText("");
+		tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
+		tfKapitel.setText("");
+		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
+		rbAb.setText("Ab");
+		rbAb.setBounds(new Rectangle(262, 142, 60, 22));
+		tfTitelgruppe.setText("");
+		tfTitelgruppe.setBounds(new Rectangle(257, 47, 70, 21));
+		labBudget.setText("Budget");
+		labBudget.setBounds(new Rectangle(12, 82, 80, 15));
+		tfBezeichnung.setText("");
+		tfBezeichnung.setBounds(new Rectangle(102, 12, 210, 21));
+		labBezeichnung.setText("Bezeichnung");
+		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
+		labBemerkung.setText("Bemerkung");
+		labBemerkung.setBounds(new Rectangle(12, 112, 90, 15));
+		labKapitel.setText("Kapitel");
+		labKapitel.setBounds(new Rectangle(322, 12, 90, 15));
+		labTGR.setText("Titelgruppe");
+		labTGR.setBounds(new Rectangle(177, 47, 80, 15));
+		tfKategorie.setText("");
+		tfKategorie.setBounds(new Rectangle(92, 47, 70, 21));
+		rbBis.setText("Bis");
+		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
+		this.setLayout(null);
+		labUntertitel.setText("Untertitel");
+		labUntertitel.setBounds(new Rectangle(342, 49, 80, 15));
+		tfUntertitel.setText("");
+		tfUntertitel.setBounds(new Rectangle(422, 47, 70, 21));
+		this.setBorder(BorderFactory.createEtchedBorder());
+		labVormerkungen.setText("Vormerkungen");
+		labVormerkungen.setBounds(new Rectangle(302, 82, 90, 15));
+		tfVormerkungen.setText("");
+		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
+		this.add(rbBis, null);
+		this.add(tfKategorie, null);
+		this.add(labTGR, null);
+		this.add(labKapitel, null);
+		this.add(labBemerkung, null);
+		this.add(labBezeichnung, null);
+		this.add(tfBezeichnung, null);
+		this.add(labBudget, null);
+		this.add(tfTitelgruppe, null);
+		this.add(rbAb, null);
+		this.add(tfKapitel, null);
+		this.add(tfBudget, null);
+		this.add(labKategorie, null);
+		this.add(tfPruefbedingung, null);
+		this.add(checkPruefbedingung, null);
+		this.add(tfBemerkung, null);
+		this.add(labUntertitel, null);
+		this.add(tfUntertitel, null);
+		this.add(labVormerkungen, null);
+		this.add(tfVormerkungen, null);
+		tfVormerkungen.setEnabled(false);
+		
+		tfKapitel.setEnabled( false );
+		tfKategorie.setEnabled( false );
+		tfTitelgruppe.setEnabled( false );
+		tfBudget.setEnabled( false );
+		checkPruefbedingung.addActionListener( this );
+		rbBis.addActionListener( this );
+		rbAb.addActionListener( this );
+		groupPruefbedingung.add( rbBis );
+		groupPruefbedingung.add( rbAb );	  
 	}
 	
 	/**
@@ -1769,6 +1816,7 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		rbBis.setSelected( zvUntertitel.isPruefungBis() );
 		rbAb.setSelected( !zvUntertitel.isPruefungBis() ); 
 		tfPruefbedingung.setValue( new Float( zvUntertitel.getPruefsumme() ) );
+		tfVormerkungen.setValue( new Float( zvUntertitel.getVormerkungen() ) );
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -1795,8 +1843,10 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 			return null;
 			
 		return new ZVUntertitel( zvUntertitel.getId(), zvUntertitel.getZVTitel(), tfBezeichnung.getText(),
-					zvUntertitel.getZVTitel().getTitel(), tfUntertitel.getText(), zvUntertitel.getBudget(), tfBemerkung.getText(),
-					ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+					zvUntertitel.getZVTitel().getTitel(), tfUntertitel.getText(), zvUntertitel.getBudget(), 
+					zvUntertitel.getVormerkungen(), tfBemerkung.getText(),
+					ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ), 
+					zvUntertitel.getGeloescht() );
 	}
 
 	/**

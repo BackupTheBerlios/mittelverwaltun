@@ -1,39 +1,26 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import dbObjects.FBHauptkonto;
-import dbObjects.Institut;
-import dbObjects.ZVTitel;
-import dbObjects.ZVUntertitel;
-
-import applicationServer.ApplicationServer;
-import applicationServer.ApplicationServerException;
-import applicationServer.CentralServer;
+import dbObjects.*;
+import applicationServer.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.rmi.Naming;
+import java.awt.event.*;
+import java.awt.print.*;
+import java.beans.*;
+import java.rmi.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
 
-public class BestellungKlein extends JInternalFrame implements ActionListener, ItemListener, PropertyChangeListener, ZVKontoSelectable {
-	JLabel labFBKonto = new JLabel();
-	JComboBox comboFBKonto = new JComboBox();
-	JLabel labZVKonto = new JLabel();
-	JComboBox comboZVKonto = new JComboBox();
+public class BestellungKlein extends JInternalFrame implements ActionListener, ItemListener, 
+																ZVKontoSelectable, PropertyChangeListener {
+	JLabel labTextKostenstelle = new JLabel();
+	JLabel labTextKapitel = new JLabel();
 	JButton buBestellen = new JButton();
 	JButton buDrucken = new JButton();
 	JButton buAbbrechen = new JButton();
@@ -54,7 +41,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	JPanel panelTable = new JPanel();
 	JScrollPane scrollBelege = new JScrollPane();
 	JLabel labGesamt = new JLabel();
-	BestellungKleinTable tableBelege = new BestellungKleinTable();
+	BestellungKleinTable tableBelege;
 	JButton buAddRow = new JButton();
 	JLabel labGesamtText = new JLabel();
 	JPanel panelProjekt = new JPanel();
@@ -62,7 +49,23 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	JLabel labProjektNr = new JLabel();
 	JTextField tfDatum = new JTextField();
 	JLabel labDatum = new JLabel();
+	JLabel labKostenstelle = new JLabel();
+	JLabel labTextHauptkonto = new JLabel();
+	JLabel labHauptkonto = new JLabel();
+	JLabel labTextUnterkonto = new JLabel();
+	JLabel labUnterkonto = new JLabel();
+	JButton butFBKontoAuswahl = new JButton();
+	JLabel labKapitel = new JLabel();
+	JLabel labTextTitel = new JLabel();
+	JLabel labTitel = new JLabel();
+	JLabel labTextUntertitel = new JLabel();
+	JLabel labUntertitel = new JLabel();
+	JButton butZVTitelAuswahl = new JButton();
+	JButton butStornieren = new JButton();
 	MainFrame frame;
+	Firma presFirma = null;
+	FBUnterkonto fbKonto;
+	ZVUntertitel zvTitel;
 
 	public BestellungKlein(MainFrame frame) {
 		super("Auszahlungsanordnung erstellen");
@@ -70,16 +73,14 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setBounds(50,50,530,555);
-		setData();
-				
+		this.setBounds(50,50,630,555);
+		
 		try {
+			tableBelege = new BestellungKleinTable(this, frame.getApplicationServer().getFirmen());
 			jbInit();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-//		labUser.setText(frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
 
 		buAbbrechen.addActionListener(this);
 		buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
@@ -89,65 +90,68 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buAddRow.addActionListener(this);
 		buAddRow.setIcon(Functions.getExpandIcon(getClass()));
+		butFBKontoAuswahl.addActionListener(this);
+		butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
+		butZVTitelAuswahl.addActionListener(this);
+		butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
+
+		butStornieren.setVisible(false);
 		tableBelege.addPropertyChangeListener(this);
-  }
-
-
-  private void loadInstituts(){
-//	  try {
-////		TODO Admin durch die Aktivität austauschen
-//			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
-//				Institut[] instituts = frame.getApplicationServer().getInstitutes();
-//			
-//			  if(instituts != null){
-//				  cbInstitut.removeAllItems();
-//					 for(int i = 0; i < instituts.length; i++){
-//						  cbInstitut.addItem(instituts[i]);
-//					 }
-//			  }
-//			}else{
-//				Institut institut = frame.getBenutzer().getKostenstelle();
-//				
-//				cbInstitut.removeAllItems();
-//				cbInstitut.addItem(institut);
-//			}
-//	  } catch (ApplicationServerException e) {
-//		  e.printStackTrace();
-//	  }
-  }
-
-	private void loadHauptkonten() {
-//	  try {
-//		  Institut institut = null;
-//		  // TODO Admin durch die Aktivität austauschen
-//		  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-//			  institut = (Institut)cbInstitut.getSelectedItem();
-//		  else
-//			  institut = frame.getBenutzer().getKostenstelle();
-//
-//
-//		  if(institut != null){
-//			  ArrayList hauptKonten = frame.getApplicationServer().getFBHauptkonten(institut);
-//
-//			  if(hauptKonten != null){
-//				  cbKostenstelle.removeAllItems();
-//					 for(int i = 0; i < hauptKonten.size(); i++){
-//
-//						  cbKostenstelle.addItem(hauptKonten.get(i));
-//					 }
-//			  }
-//		  }
-//	  } catch (ApplicationServerException e) {
-//		  e.printStackTrace();
-//	  }
+		
+		loadUsers();
 	}
 
-	private void setData(){
-		loadInstituts();
-		loadHauptkonten();
+	/**
+	 * Methode zum Laden aller möglichen User, die zur Zeit die Kleinbestellung durchführen können.
+	 * @author w.flat
+	 */
+	private void loadUsers() {
+		comboBenutzer.removeAllItems();		// Alle Einträge in der ComboBox löschen
+		if(frame == null)	// Kein Frame vorhanden
+			return;
+		if(frame.getBenutzer() == null)		// Benutzer nicht vorhanden
+			return;
+		
+		try {
+			if(frame.getBenutzer().getRolle().getBezeichnung().equalsIgnoreCase("Admin")) {
+				// Benutzer für die man die Kleinbestellung durchführen kann
+				Benutzer[] users = frame.getApplicationServer().getUsers();
+				for(int i = 0; i < users.length; i++) {
+					if(users[i] == null)	// Kein Benutzer vorhanden
+						continue;
+					comboBenutzer.addItem(users[i]);				// Neuen Benutzer in die ComboBox einfügen
+					if(users[i].equals(frame.getBenutzer()))		// Den Benutzer selektieren
+						comboBenutzer.setSelectedItem(users[i]);
+				}
+			} else if(frame.getBenutzer().getRolle().getBezeichnung().equalsIgnoreCase("Institutsadmin")) {
+				// Benutzer für die man die Kleinbestellung durchführen kann
+				Benutzer[] users = frame.getApplicationServer().getUsers(frame.getBenutzer().getKostenstelle());
+				for(int i = 0; i < users.length; i++) {
+					if(users[i] == null)	// Kein Benutzer vorhanden
+						continue;
+					comboBenutzer.addItem(users[i]);				// Neuen Benutzer in die ComboBox einfügen
+					if(users[i].equals(frame.getBenutzer()))		// Den Benutzer selektieren
+						comboBenutzer.setSelectedItem(users[i]);
+				}
+			} else {
+				comboBenutzer.addItem(frame.getBenutzer());			// Neuen Benutzer in die ComboBox einfügen
+				comboBenutzer.setSelectedItem(frame.getBenutzer());	// Den Benutzer selektieren
+			}
+		} catch(ApplicationServerException e) {
+		}
 	}
-
-	void insertZVKonto() {
+	
+	/**
+	 * Methode zum Löschen der FBKonto-Labels und ZVTitel-Labels.
+	 * @author w.flat
+	 */
+	private void clearLabels() {
+		labKostenstelle.setText("");
+		labHauptkonto.setText("");
+		labUnterkonto.setText("");
+		labKapitel.setText("");
+		labTitel.setText("");
+		labUntertitel.setText("");
 	}
 
 	public static void main(String[] args) {
@@ -171,75 +175,105 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				 System.out.println(e);
 		 }
 	}
-
+	
+	/**
+	 * Initialisierung der Graphischen Oberfläche. 
+	 * @throws Exception
+	 * @author w.flat
+	 */
 	private void jbInit() throws Exception {
-		labFBKonto.setText("FBKonto");
-		labFBKonto.setBounds(new Rectangle(10, 40, 120, 15));
+		labTextKostenstelle.setText("Kostenstelle");
+		labTextKostenstelle.setBounds(new Rectangle(10, 40, 80, 15));
 		this.getContentPane().setLayout(null);
-		labZVKonto.setText("ZVKonto");
-		labZVKonto.setBounds(new Rectangle(10, 70, 120, 15));
-		buBestellen.setBounds(new Rectangle(10, 490, 120, 25));
+		this.setTitle("");
+		labTextKapitel.setText("Kapitel");
+		labTextKapitel.setBounds(new Rectangle(10, 70, 80, 15));
+		buBestellen.setBounds(new Rectangle(10, 490, 150, 25));
 		buBestellen.setText("Bestellen");
-		buDrucken.setBounds(new Rectangle(200, 490, 120, 25));
+		buDrucken.setBounds(new Rectangle(235, 490, 150, 25));
 		buDrucken.setText("Drucken");
-		buAbbrechen.setBounds(new Rectangle(390, 490, 120, 25));
+		buAbbrechen.setBounds(new Rectangle(460, 490, 150, 25));
 		buAbbrechen.setText("Abbrechen");
 		labAuszahlungAn.setText("Auszahlung an");
 		labAuszahlungAn.setBounds(new Rectangle(10, 10, 120, 15));
 		panelVerwendung.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelVerwendung.setBounds(new Rectangle(10, 335, 500, 80));
+		panelVerwendung.setBounds(new Rectangle(10, 335, 600, 80));
 		panelVerwendung.setLayout(null);
 		labBegruendung.setText("Verwendung oder Begründung");
 		labBegruendung.setBounds(new Rectangle(6, 6, 200, 15));
 		panelKartei.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelKartei.setBounds(new Rectangle(10, 414, 500, 30));
+		panelKartei.setBounds(new Rectangle(10, 414, 600, 30));
 		panelKartei.setLayout(null);
 		labMaterial.setText("In Material/Geräte-Kartei");
-		labMaterial.setBounds(new Rectangle(6, 6, 145, 15));
+		labMaterial.setBounds(new Rectangle(6, 6, 160, 15));
+		labLaborNr.setAlignmentX((float) 0.0);
 		labLaborNr.setText("Labor, Nr.");
-		labLaborNr.setBounds(new Rectangle(241, 6, 70, 15));
+		labLaborNr.setBounds(new Rectangle(281, 6, 80, 15));
 		tfKartei.setText("");
-		tfKartei.setBounds(new Rectangle(151, 5, 85, 21));
+		tfKartei.setBounds(new Rectangle(171, 5, 100, 21));
 		labEingetragen.setText("eingetragen.");
-		labEingetragen.setBounds(new Rectangle(401, 6, 90, 15));
+		labEingetragen.setBounds(new Rectangle(481, 6, 90, 15));
 		tfKarteiNr.setText("");
-		tfKarteiNr.setBounds(new Rectangle(311, 5, 85, 21));
+		tfKarteiNr.setBounds(new Rectangle(371, 5, 100, 21));
 		panelTitelVerzNr.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelTitelVerzNr.setBounds(new Rectangle(10, 443, 500, 30));
+		panelTitelVerzNr.setBounds(new Rectangle(10, 443, 600, 30));
 		panelTitelVerzNr.setLayout(null);
 		tfTitelVerzNr.setText("");
-		tfTitelVerzNr.setBounds(new Rectangle(116, 5, 150, 21));
+		tfTitelVerzNr.setBounds(new Rectangle(131, 5, 150, 21));
 		labTitelVerzNr.setText("Titel. Verz. Nr.");
-		labTitelVerzNr.setBounds(new Rectangle(6, 7, 110, 15));
+		labTitelVerzNr.setBounds(new Rectangle(6, 7, 120, 15));
 		panelTable.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelTable.setBounds(new Rectangle(10, 140, 500, 200));
+		panelTable.setBounds(new Rectangle(10, 140, 600, 200));
 		panelTable.setLayout(null);
 		labGesamt.setText("");
-		labGesamt.setBounds(new Rectangle(351, 166, 140, 15));
+		labGesamt.setBounds(new Rectangle(451, 166, 140, 15));
 		buAddRow.setBounds(new Rectangle(6, 166, 180, 22));
 		buAddRow.setText("Zeile hinzufügen");
 		labGesamtText.setText("Gesamt");
-		labGesamtText.setBounds(new Rectangle(271, 166, 80, 15));
+		labGesamtText.setBounds(new Rectangle(371, 166, 80, 15));
 		panelProjekt.setBorder(BorderFactory.createLineBorder(Color.black));
-		panelProjekt.setBounds(new Rectangle(10, 102, 500, 40));
+		panelProjekt.setBounds(new Rectangle(10, 102, 600, 40));
 		panelProjekt.setLayout(null);
 		tfProjektNr.setText("");
 		tfProjektNr.setBounds(new Rectangle(86, 9, 150, 21));
 		labProjektNr.setText("Projekt-Nr.");
 		labProjektNr.setBounds(new Rectangle(6, 11, 80, 15));
 		tfDatum.setText("");
-		tfDatum.setBounds(new Rectangle(341, 9, 150, 21));
+		tfDatum.setBounds(new Rectangle(441, 9, 150, 21));
 		labDatum.setText("Datum");
-		labDatum.setBounds(new Rectangle(261, 11, 80, 15));
-		scrollBelege.setBounds(new Rectangle(5, 5, 490, 150));
-		tpVerwendung.setBounds(new Rectangle(6, 26, 490, 50));
-		comboZVKonto.setBounds(new Rectangle(130, 70, 380, 21));
-		comboFBKonto.setBounds(new Rectangle(130, 40, 380, 21));
-		comboBenutzer.setBounds(new Rectangle(130, 10, 380, 21));
-		this.getContentPane().add(labFBKonto, null);
-		this.getContentPane().add(comboFBKonto, null);
-		this.getContentPane().add(labZVKonto, null);
-		this.getContentPane().add(comboZVKonto, null);
+		labDatum.setBounds(new Rectangle(361, 11, 80, 15));
+		labKostenstelle.setText("");
+		labKostenstelle.setBounds(new Rectangle(90, 40, 60, 15));
+		labTextHauptkonto.setText("Hauptkonto");
+		labTextHauptkonto.setBounds(new Rectangle(160, 40, 80, 15));
+		labHauptkonto.setText("");
+		labHauptkonto.setBounds(new Rectangle(240, 40, 40, 15));
+		labTextUnterkonto.setText("Unterkonto");
+		labTextUnterkonto.setBounds(new Rectangle(290, 40, 80, 15));
+		labUnterkonto.setText("");
+		labUnterkonto.setBounds(new Rectangle(370, 40, 60, 15));
+		butFBKontoAuswahl.setBounds(new Rectangle(440, 40, 170, 25));
+		butFBKontoAuswahl.setText("FBKonto-Auswahl");
+		labKapitel.setText("");
+		labKapitel.setBounds(new Rectangle(90, 70, 60, 15));
+		labTextTitel.setText("Titel");
+		labTextTitel.setBounds(new Rectangle(160, 70, 80, 15));
+		labTitel.setText("");
+		labTitel.setBounds(new Rectangle(240, 70, 60, 15));
+		labTextUntertitel.setText("Untertitel");
+		labTextUntertitel.setBounds(new Rectangle(310, 70, 80, 15));
+		labUntertitel.setText("");
+		labUntertitel.setBounds(new Rectangle(390, 70, 40, 15));
+		butZVTitelAuswahl.setBounds(new Rectangle(440, 70, 170, 25));
+		butZVTitelAuswahl.setText("ZVTitel-Auswahl");
+		butStornieren.setBounds(new Rectangle(10, 490, 150, 25));
+		butStornieren.setOpaque(true);
+		butStornieren.setText("Stornieren");
+		scrollBelege.setBounds(new Rectangle(5, 5, 590, 150));
+		tpVerwendung.setBounds(new Rectangle(6, 26, 590, 50));
+		comboBenutzer.setBounds(new Rectangle(130, 10, 310, 21));
+		this.getContentPane().add(labTextKostenstelle, null);
+		this.getContentPane().add(labTextKapitel, null);
 		this.getContentPane().add(buBestellen, null);
 		this.getContentPane().add(buDrucken, null);
 		this.getContentPane().add(buAbbrechen, null);
@@ -267,17 +301,58 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		panelProjekt.add(labProjektNr, null);
 		panelProjekt.add(tfDatum, null);
 		panelProjekt.add(labDatum, null);
-		scrollBelege.add(tableBelege, null);
+		this.getContentPane().add(labKostenstelle, null);
+		this.getContentPane().add(labTextHauptkonto, null);
+		this.getContentPane().add(labHauptkonto, null);
+		this.getContentPane().add(labTextUnterkonto, null);
+		this.getContentPane().add(labUnterkonto, null);
+		this.getContentPane().add(butFBKontoAuswahl, null);
+		this.getContentPane().add(labKapitel, null);
+		this.getContentPane().add(labTextTitel, null);
+		this.getContentPane().add(labTitel, null);
+		this.getContentPane().add(labTextUntertitel, null);
+		this.getContentPane().add(labUntertitel, null);
+		this.getContentPane().add(butZVTitelAuswahl, null);
+		this.getContentPane().add(butStornieren, null);
+
+		scrollBelege.getViewport().add(tableBelege, null);		
+		comboBenutzer.addItemListener(this);
+		comboBenutzer.addPropertyChangeListener(this);
 	}
 	
+	/**
+	 * Aktuell ausgewählten User ermitteln. 
+	 * @author w.flat
+	 */
+	private Benutzer getPresUser() {
+		return (Benutzer)comboBenutzer.getSelectedItem();
+	}
+	
+	/**
+	 * Reaktion auf die Button-Ereignise.
+	 * @author w.flat
+	 */
 	public void actionPerformed(ActionEvent e) {
-		if ( e.getSource() == buAddRow ) {
-			DefaultTableModel dtm = (DefaultTableModel)tableBelege.getModel();
-			Object[] o = {new Integer(1),"","", new Float(0)};
-
-			dtm.addRow(o);
-			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
-
+		if(e.getActionCommand().equalsIgnoreCase("Löschen")) {
+			int answer = JOptionPane.showConfirmDialog(
+						getComponent(0),
+						"Soll der Beleg mit der Beleg-Nr. = "
+						+ ((DefaultTableModel)tableBelege.getModel()).getValueAt(tableBelege.getSelectedRow(), 0)
+						+ "\ngelöscht werden ? ",
+						"Warnung",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null);
+			if(answer == 0){
+				tableBelege.delPresRaw();
+			}
+		} else if( e.getSource() == butZVTitelAuswahl ) {
+			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
+			kontoAuswahl.show();
+		} else if( e.getSource() == butFBKontoAuswahl ) {
+			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, getPresUser());
+		} else if( e.getSource() == buAddRow ) {
+			tableBelege.addRaw();
 		} else if ( e.getSource() == buDrucken ) {
 			PrinterJob pJob = PrinterJob.getPrinterJob();
 			pJob.setJobName("Kleinbestellung");
@@ -310,46 +385,175 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		}
 	}
 
-	public void setZVKonto(ZVUntertitel zvTitel) {
-
-	}
-
+	/**
+	 * Wenn in der Combo-Box-Benutzer anderer Eintrag ausgewählt wurde. 
+	 */
 	public void propertyChange(PropertyChangeEvent e) {
-//		if(e.getSource() == cbKostenstelle){
-//			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-//
-//			if(kostenstelle != null){
-//				labKapitel.setText("");
-//				labTitel.setText("");
-//				labUT.setText("");
-//			}
-//		}else if(e.getSource() == cbInstitut){
-//			loadHauptkonten();
-//		}else if(e.getSource() == table){
-//			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
-//		  float sum = 0;
-//		  float price = 0;
-//
-//		  for(int i = 0; i < table.getRowCount(); i++){
-//				price = ((Float)dtm.getValueAt(i, 3)).floatValue();
-//				sum += price;
-//		  }
-//		  labGesamt.setText(NumberFormat.getCurrencyInstance().format(sum));
+//		if(e.getSource() == comboBenutzer) {
+//			clearLabels();
 //		}
 	}
 
-
+	/**
+	 * Wenn in der Combo-Box-Benutzer anderer Eintrag ausgewählt wurde. 
+	 */
 	public void itemStateChanged(ItemEvent e) {
-//		if(e.getSource() == cbKostenstelle){
-//			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-//			labUser.setText("Hallo" + frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
-//			if(kostenstelle != null){
-//				labKapitel.setText("");
-//				labTitel.setText("");
-//				labUT.setText("");
-//			}
-//		}else if(e.getSource() == cbInstitut){
-//			loadHauptkonten();
-//		}
+		if(e.getSource() == comboBenutzer) {
+			clearLabels();
+		}	
+	}
+
+	/**
+	 * Das FBKonto für die Bestellung festlegen.  
+	 */
+	public void setFBKonto(FBUnterkonto fbKonto) {
+		clearLabels();
+		this.fbKonto = fbKonto;
+		labKostenstelle.setText(fbKonto.getInstitut().getKostenstelle());
+		labHauptkonto.setText(fbKonto.getHauptkonto());
+		labUnterkonto.setText(fbKonto.getUnterkonto());
+	}
+
+	/**
+	 * Den ZVTitel für die Bestellung festlegen. 
+	 */
+	public void setZVKonto(ZVUntertitel zvTitel) {
+		this.zvTitel = zvTitel;
+		if(zvTitel instanceof ZVTitel)
+			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
+		else
+			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
+		labTitel.setText(zvTitel.getTitel());
+		labUntertitel.setText(zvTitel.getUntertitel());
 	}
 }
+
+/**
+ * Dialog zur Auswahl, eines FBKontos für eine Kleinbestellung. 
+ * @author w.flat
+ * 03.03.2005
+ */
+class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelectionListener {
+	JPanel panel1 = new JPanel();
+	JScrollPane scrollFirmen = new JScrollPane();
+	FBKontenTree treeKonten;
+	JButton butSelect = new JButton();
+	JButton butAbbrechen = new JButton();
+	BestellungKlein intFrame;
+
+	/**
+	 * Dialog für die Auswahl eines FBKontos, für eine Kleinbestellung. 
+	 * @param frame = welches blockiert werden soll. 
+	 * @param intFrame = Frame, welches die Methode setFBKonto hat. 
+	 * @param modal = Flag ob der frame blockiert werden soll.
+	 * @param user = für den die FBKonten geladen werden sollen. 
+	 * @author w.flat
+	 */
+	public FBKontoAuswahlDialog(MainFrame frame, BestellungKlein intFrame, boolean modal, Benutzer user) {
+		super(frame, "FBKonto Auswahl", modal);
+		this.intFrame = intFrame;
+		
+		try {
+			treeKonten = new FBKontenTree(this, "FBKonten für Kleinbestellungen");
+			jbInit();
+		}
+		catch(Exception ex) {
+		  ex.printStackTrace();
+		}
+		
+		butAbbrechen.addActionListener(this);
+		butAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
+		butSelect.addActionListener(this);
+		butSelect.setIcon(Functions.getAddIcon(getClass()));
+		butSelect.setEnabled(false);
+		
+		try { 
+			treeKonten.loadInstituts(frame.getApplicationServer().getFBKontenForUser(user));
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		this.setBounds(50, 50, 332, 285);
+		this.show();
+	}
+	
+	/**
+	 * Anzeigen des Dialogs und laden der Konten in den Baum. 
+	 * @param inst = Institut mit den FBKonten, die ausgewählt werden können. 
+	 * @author w.flat
+	 */
+	private void showFBKontoAuswahl(Institut[] inst) {
+		this.show();
+		treeKonten.loadInstituts(inst);
+	}
+
+	/**
+	 * Initialisierung des Dialogs. 
+	 * @throws Exception
+	 * @author w.flat
+	 */ 
+	private void jbInit() throws Exception {
+		panel1.setLayout(null);
+		panel1.setBorder(BorderFactory.createEtchedBorder());
+		butSelect.setBounds(new Rectangle(12, 222, 140, 25));
+		butSelect.setText("Auswählen");
+		butAbbrechen.setBounds(new Rectangle(172, 222, 140, 25));
+		butAbbrechen.setToolTipText("");
+		butAbbrechen.setText("Abbrechen");
+		scrollFirmen.setBounds(new Rectangle(12, 12, 300, 200));
+		getContentPane().add(panel1, BorderLayout.CENTER);
+		panel1.add(scrollFirmen, null);
+		scrollFirmen.getViewport().add(treeKonten, null);
+		panel1.add(butSelect, null);
+		panel1.add(butAbbrechen, null);
+	}
+	
+	/**
+	 * Überprüfung, ob ein FBKonto ausgewählt wurde, bei dem das Flag-Kleinbestellungen gesetzt ist. 
+	 * @author w.flat
+	 */
+	private void checkKonto() {
+		if(treeKonten.fbHauptkontoIsSelected()) {
+			if(treeKonten.getFBHauptkonto().getKleinbestellungen()) {
+				butSelect.setEnabled(true);
+			} else {
+				butSelect.setEnabled(false);
+			}
+		} else if(treeKonten.fbUnterkontoIsSelected()) {
+			if(treeKonten.getFBUnterkonto().getKleinbestellungen()) {
+				butSelect.setEnabled(true);
+			} else {
+				butSelect.setEnabled(false);
+			}
+		} else {
+			butSelect.setEnabled(false);
+		}
+	}
+	
+	/**
+	 * Reaktion auf die Button-Ereignise.
+	 * @author w.flat
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == butSelect) {
+			if(treeKonten.fbHauptkontoIsSelected()) {
+				intFrame.setFBKonto(treeKonten.getFBHauptkonto());
+			} else if(treeKonten.fbUnterkontoIsSelected()) {
+				intFrame.setFBKonto(treeKonten.getFBUnterkonto());
+			}
+			this.dispose();
+		} else if(e.getSource() == butAbbrechen) {
+			this.dispose();
+		}
+	}
+	
+	/**
+	 * Reaktion auf die Baum-Ereignise.
+	 * @author w.flat
+	 */
+	public void valueChanged(TreeSelectionEvent e) {
+		treeKonten.checkSelection( e );
+		checkKonto();		
+	}
+}
+
