@@ -549,7 +549,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 				newBestellung.setBesteller(bestellung.getBesteller());
 				newBestellung.setHuel(bestellung.getHuel());
 				id = bestellung.getId();
-				frame.getApplicationServer().setBestellung(bestellung, newBestellung);
+				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, newBestellung);
 			}else{
 				id = frame.getApplicationServer().addBestellung(newBestellung);
 			}

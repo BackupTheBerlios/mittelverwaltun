@@ -178,6 +178,8 @@ public class ApplicationServerException extends Exception {
 		messages[160] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateAccountStates";
 		messages[161] = "Application Server Error: FB-Konto bzw. ZV-Titel existiert nicht";
 		messages[162] = "Application Server Error: Bestellungsänderung konnte nicht durchgeführt werden. Keine ausreichende Deckung vorhanden.";
+		messages[163] = "Application Server Error: Rollback fehlgeschlagen.";
+		messages[164] = "Application Server Error: Commit fehlgeschlagen.";
 //Exception Ende Mario 199
 	}
 

@@ -40,6 +40,8 @@ public class Database implements Serializable{
 			System.out.println("Done.");
 			System.out.println("Set transaction_isolation_level = repeatable_read...");
 			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+//			System.out.println("Set transaction_isolation_level = read_committed...");
+//			con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			System.out.println("Done.");
 			System.out.println("Prepare SQL-Statements...");
 			statements = new PreparedSqlStatements(con);	//
@@ -1148,20 +1150,35 @@ public class Database implements Serializable{
 	}
 
 	public void rollback() throws ApplicationServerException{
-		try{
-			statements.get(2).executeQuery();
-		} catch (SQLException e){
-			System.out.println(e.getMessage());
-			throw new ApplicationServerException(1, e.getMessage());
+//		try{
+//			statements.get(2).executeQuery();
+//		} catch (SQLException e){
+//			System.out.println(e.getMessage());
+//			throw new ApplicationServerException(1, e.getMessage());
+//		}
+		
+		try {
+			this.con.rollback();
+		} catch (SQLException e) {
+			throw new ApplicationServerException(163, e.getMessage());
+			
 		}
 	}
 
+
+	
 	public void commit() throws ApplicationServerException{
-		try{
-			statements.get(1).executeQuery();
-		} catch (SQLException e){
-			System.out.println(e.getMessage());
-			throw new ApplicationServerException(1, e.getMessage());
+//		try{
+//			statements.get(1).executeQuery();
+//		} catch (SQLException e){
+//			System.out.println(e.getMessage());
+//			throw new ApplicationServerException(1, e.getMessage());
+//		}
+		try {
+			this.con.commit();
+		} catch (SQLException e) {
+			throw new ApplicationServerException(164, e.getMessage());
+			
 		}
 	}
 
@@ -3771,12 +3788,13 @@ public class Database implements Serializable{
 	 */
 	public void insertBuchung(Buchung b) throws ApplicationServerException{
 		try{
-			Object[] parameters = { b.getDatum(), b.getBenutzer(), "" + b.getTyp(), b.getBeschreibung(), new Integer(b.getBestellung().getId()),
-															new Integer(b.getZvKonto().getId()), new Float(b.getBetragZvKonto()), 
-															new Integer(b.getZvTitel1().getId()), new Float(b.getBetragZvTitel1()), 
-															new Integer(b.getZvTitel2().getId()), new Float(b.getBetragZvTitel2()),
-															new Integer(b.getFbKonto1().getId()), new Float(b.getBetragFbKonto1()),
-															new Integer(b.getFbKonto2().getId()), new Float(b.getBetragFbKonto2()) };
+			Object[] parameters = { b.getTimestamp(), new Integer(b.getBenutzer().getId()), "" + b.getTyp(), b.getBeschreibung(),
+						(b.getBestellung()== null) ? null : new Integer(b.getBestellung().getId()),
+						(b.getZvKonto() == null) ? null : new Integer(b.getZvKonto().getId()), new Float(b.getBetragZvKonto()), 
+						(b.getZvTitel1() == null) ? null : new Integer(b.getZvTitel1().getId()), new Float(b.getBetragZvTitel1()), 
+						(b.getZvTitel2() == null) ? null : new Integer(b.getZvTitel2().getId()), new Float(b.getBetragZvTitel2()),
+						(b.getFbKonto1() == null) ? null : new Integer(b.getFbKonto1().getId()), new Float(b.getBetragFbKonto1()),
+						(b.getFbKonto2() == null) ? null : new Integer(b.getFbKonto2().getId()), new Float(b.getBetragFbKonto2()) };
 			statements.get(223).executeUpdate(parameters);
 			
 		} catch (SQLException e){

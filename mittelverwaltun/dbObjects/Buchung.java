@@ -1,8 +1,8 @@
 package dbObjects;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 /**
- * @author robert
+ * @author robert, mario
  *
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
@@ -11,9 +11,9 @@ public class Buchung {
 
 	private Benutzer benutzer;
 
-	private Date datum;
+	private Timestamp timestamp;
 
-	private char typ;
+	private String typ;
 
 	private String beschreibung;
 
@@ -39,6 +39,133 @@ public class Buchung {
 
 	private float betragFbKonto2;
 
+	public Buchung (Benutzer benutzer, String typ, ZVKonto k, float buchung){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto = k;
+		this.betragZvKonto = buchung;
+		this.zvTitel1 = null;
+		this.betragZvTitel1 = 0;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = null;
+		this.betragFbKonto1 = 0;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, ZVUntertitel t, float buchung){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto = null;
+		this.betragZvKonto = 0;
+		this.zvTitel1 = t;
+		this.betragZvTitel1 = buchung;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = null;
+		this.betragFbKonto1 = 0;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, FBUnterkonto k, float buchung){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto = null;
+		this.betragZvKonto = 0;
+		this.zvTitel1 = null;
+		this.betragZvTitel1 = 0;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = k;
+		this.betragFbKonto1 = buchung;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, ZVUntertitel t1, float buchung1, ZVUntertitel t2, float buchung2){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto = null;
+		this.betragZvKonto = 0;
+		this.zvTitel1 = t1;
+		this.betragZvTitel1 = buchung1;
+		this.zvTitel2 = t2;
+		this.betragZvTitel2 = buchung2;
+		this.fbKonto1 = null;
+		this.betragFbKonto1 = 0;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, FBUnterkonto k1, float buchung1, FBUnterkonto k2, float buchung2){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto = null;
+		this.betragZvKonto = 0;
+		this.zvTitel1 = null;
+		this.betragZvTitel1 = 0;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = k1;
+		this.betragFbKonto1 = buchung1;
+		this.fbKonto2 = k2;
+		this.betragFbKonto2 = buchung2;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = bestellung;
+		this.zvKonto = null;
+		this.betragZvKonto = 0;
+		this.zvTitel1 = t;
+		this.betragZvTitel1 = buchung;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = k;
+		this.betragFbKonto1 = buchung;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	public Buchung (Benutzer benutzer, String typ, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = bestellung;
+		this.zvKonto = zvk;
+		this.betragZvKonto = tgrBuchung;
+		this.zvTitel1 = t;
+		this.betragZvTitel1 = titelBuchung;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
+		this.fbKonto1 = fbk;
+		this.betragFbKonto1 = kontoBuchung;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+	
+	
 	public Benutzer getBenutzer() {
 		return benutzer;
 	}
@@ -47,19 +174,19 @@ public class Buchung {
 		this.benutzer = benutzer;
 	}
 
-	public Date getDatum() {
-		return datum;
+	public Timestamp getTimestamp() {
+		return timestamp;
 	}
 
-	public void setDatum(Date datum) {
-		this.datum = datum;
+	public void setTimestamp(Timestamp t) {
+		this.timestamp = t;
 	}
 
-	public char getTyp() {
+	public String getTyp() {
 		return typ;
 	}
 
-	public void setTyp(char typ) {
+	public void setTyp(String typ) {
 		this.typ = typ;
 	}
 

@@ -1839,7 +1839,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
 	 */
-	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
+	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
 		
 		try{
 		
@@ -1871,7 +1871,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if(edited.getPhase() == '1'){
 					//	Vormerkungen bei FBKonto und ZVTitel setzen
 					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
-					// ? Vormerkungen Buchen ?
+					bucheBestellungsaenderung(benutzer,edited,edited.getZvtitel(), edited.getFbkonto(), edited.getFbkonto().getVormerkungen());
 				}
 			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
 				db.updateStandardBestellung(edited);
@@ -1883,6 +1883,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if (edited.getPhase() == '3')
 					dBestellwert = -original.getBestellwert();
 				else dBestellwert = edited.getBestellwert() - original.getBestellwert();
+				
 				System.out.println("dBestellwert = "+dBestellwert);
 				// Bestimme Zahlungsdifferenz
 				float dZahlung = ( edited.getBestellwert() - edited.getVerbindlichkeiten()) - (original.getBestellwert() - original.getVerbindlichkeiten());
@@ -1910,9 +1911,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					else {
 						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
 						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
+						if (edited.getPhase() != '3')
+							bucheBestellungsaenderung(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+						else bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
 					}
 				}
-			
+				
 				if (dZahlung != 0){ // => Positionen wurden beglichen oder 'zurückgezahlt'
 					float tgrEntry, titelEntry;
 					if (dZahlung < 0){
@@ -1939,6 +1943,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					
 					db.updateAccountStates(original.getZvtitel(), tgrEntry, titelEntry, original.getFbkonto(), -dZahlung);
 					System.out.println("db.updateAccountStates(original.getZvtitel(), " + tgrEntry + ", " + titelEntry + ", original.getFbkonto(), "+ (-dZahlung) + ");");
+					ZVKonto zvk;
+					if(original.getZvtitel() instanceof ZVTitel)
+						zvk = ((ZVTitel)original.getZvtitel()).getZVKonto();
+					else
+						zvk = original.getZvtitel().getZVTitel().getZVKonto();
+					
+					if (edited.getPhase() != '3')
+						bucheBestellungsbegleichung(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
+					else
+						bucheStornoZahlungen(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
 				}
 			}
 
@@ -2073,7 +2087,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
-	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
+	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
 		try{	
 			// original ASKBestellung in der Datenbank
 			ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(original.getId());
@@ -2097,7 +2111,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if(edited.getPhase() == '1'){
 					// Vormerkungen bei FBKonto und ZVTitel setzen
 					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
-					// ? Vormerkungen Buchen ?
+					bucheBestellungsaenderung(benutzer,edited,edited.getZvtitel(), edited.getFbkonto(), edited.getFbkonto().getVormerkungen());
 				}
 			
 			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
@@ -2136,6 +2150,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					else {
 						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
 						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
+						if (edited.getPhase() != '3')
+							bucheBestellungsaenderung(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+						else bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
 					}
 				}
 			
@@ -2165,6 +2182,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					
 					db.updateAccountStates(original.getZvtitel(), tgrEntry, titelEntry, original.getFbkonto(), -dZahlung);
 					System.out.println("db.updateAccountStates(original.getZvtitel(), " + tgrEntry + ", " + titelEntry + ", original.getFbkonto(), "+ (-dZahlung) + ");");
+					
+					ZVKonto zvk;
+					if(original.getZvtitel() instanceof ZVTitel)
+						zvk = ((ZVTitel)original.getZvtitel()).getZVKonto();
+					else
+						zvk = original.getZvtitel().getZVTitel().getZVKonto();
+					
+					if (edited.getPhase() != '3')
+						bucheBestellungsbegleichung(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
+					else
+						bucheStornoZahlungen(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
 				}
 			}
 
@@ -2265,78 +2293,94 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 	
 	/**
-	 * Mittelzuweisung in der Buchungstabelle Typ 1
+	 * Mittelzuweisung an einen ZV-Kontentitel (Typ 1)
 	 * @throws ApplicationServerException
 	 */
-	private void bucheMittelzuweisung() throws ApplicationServerException {
-		
+	private void bucheMittelzuweisungZVTitel(Benutzer b, ZVUntertitel t, float buchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "1", t, buchung));
 	}
 	
 	/**
-	 * Mittelübernahme aus Geschäftsjahr für ZV Konten Typ 2
+	 * Mittelzuweisung an die Titelgruppe eines ZV-Kontos (Typ 2)
 	 * @throws ApplicationServerException
 	 */
-	private void bucheZVMitteluebernahme() throws ApplicationServerException {
-	
+	private void bucheMittelzuweisungZVTitelgruppe(Benutzer b, ZVKonto k, float buchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "2", k, buchung));
 	}
 	
 	/**
-	 * Mittelübernahme aus Geschäftsjahr für FB Konten Typ3
+	 * Mittelübernahme aus Geschäftsjahr für ZV-Kontentitel (Typ 3)
 	 * @throws ApplicationServerException
 	 */
-	private void bucheFBMitteluebernahme() throws ApplicationServerException {
+	private void bucheZVMitteluebernahme(Benutzer b, ZVUntertitel von, ZVUntertitel nach, float betrag) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "3", von, -betrag, nach, betrag));
+	}
+	
+	/**
+	 * Mittelübernahme aus Geschäftsjahr für FB-Konten (Typ 4)
+	 * @throws ApplicationServerException
+	 */
+	private void bucheFBMitteluebernahme(Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "4", von, -betrag, nach, betrag));
+	}
+	
+	/**
+	 * Mittelverteilung von ZV-Budget (zweckgebundenes / -ungebundenes) an FB-Konten (Typ 5)
+	 * @throws ApplicationServerException
+	 */
+	private void bucheMittelverteilung(Benutzer b, FBUnterkonto k, float buchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "5", k, buchung));
+	}
+	
+	/**
+	 * Mittelumverteilung zwischen FB-Konten (Typ 6)
+	 * @throws ApplicationServerException
+	 */
+	private void bucheUmverteilung (Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "6", von, -betrag, nach, betrag));
+	}
+	
+	/**
+	 * Vormerkung für Bestellung  (Typ 7)
+	 * ACHTUNG: evtl. überflüssig da durch Typ 8 abgedeckt
+	 * @throws ApplicationServerException
+	 */
+//	private void bucheVormerkungen(Bestellung b, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+//		
+//	}
+	
+	/**
+	 * Bestellungsänderung = Änderung der Vormerkung !!!(Typ 8)
+	 * @throws ApplicationServerException
+	 */
+	private void bucheBestellungsaenderung(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(benutzer, "8", bestellung, t, k, buchung));
+	}
+	
+	/**
+	 * Begleichung einer oder meherer Positionen einer Bestellung (Typ 9)
+	 * = Änderung der Budgets und Vormerkungen
+	 * @throws ApplicationServerException
+	 */
+	private void bucheBestellungsbegleichung(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(benutzer, "9", bestellung, zvk, tgrBuchung, t, titelBuchung, fbk, kontoBuchung));
+	}
+	
+	/**
+	 * Stornierung einer Bestellung Typ 10
+	 * @throws ApplicationServerException
+	 */
+	private void bucheStornoVormerkungen(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(benutzer, "10", bestellung, t, k, buchung));
+	}
 
-	}
-	
 	/**
-	 * Mittelübernahme aus Geschäftsjahr für FB Konten Typ 4
-	 * Es wird nur ein FBKonto benutzt. Es handelt sich um die Verteilung der Mittel auf die FBKonten
+	 * Stornierung einer Bestellung Typ 11
 	 * @throws ApplicationServerException
 	 */
-	private void bucheMittelverteilung() throws ApplicationServerException {
-
+	private void bucheStornoZahlungen(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(benutzer, "11", bestellung, zvk, tgrBuchung, t, titelBuchung, fbk, kontoBuchung));
 	}
-	
-	/**
-	 * Mittelverteilung institutsintern Typ 5
-	 * @throws ApplicationServerException
-	 */
-	private void bucheUmverteilung() throws ApplicationServerException {
-
-	}
-	
-	/**
-	 * Vormerkung für Bestellung institutsintern Typ 6
-	 * @throws ApplicationServerException
-	 */
-	private void bucheVormerkungen() throws ApplicationServerException {
-		
-	}
-	
-	/**
-	 * Bestellungsänderung Typ 7
-	 * @throws ApplicationServerException
-	 */
-	private void bucheBestellungsaenderung() throws ApplicationServerException {
-
-	}
-	
-	/**
-	 * Bestellungsänderung Typ 8
-	 * @throws ApplicationServerException
-	 */
-	private void bucheBestellungsBegleichung() throws ApplicationServerException {
-
-	}
-	
-	/**
-	 * Stornierung einer Bestellung Typ 9
-	 * @throws ApplicationServerException
-	 */
-	private void bucheStorno() throws ApplicationServerException {
-
-	}
-
 
 	/**
 	 * Eine Kleinbestellung in die Datenbank einfügen.

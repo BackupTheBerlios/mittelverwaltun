@@ -1536,7 +1536,7 @@ public class PreparedSqlStatements {
 																	 "(timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto, betragZvKonto, " +																	 "zvTitel1, betragZvTitel1, zvTitel2, betragZvTitel2, " +																	 "fbKonto1, betragFbKonto1, fbKonto2, betragFbKonto2 ) " +
 															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 															  Statement.RETURN_GENERATED_KEYS);
-			int[] param = {	Types.DATE, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.FLOAT,
+			int[] param = {	Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.FLOAT,
 										 	Types.INTEGER, Types.FLOAT, Types.INTEGER, Types.FLOAT, 
 											Types.INTEGER, Types.FLOAT, Types.INTEGER, Types.FLOAT	};
 			statements[i++] = new PreparedStatementWrapper(ps, param);

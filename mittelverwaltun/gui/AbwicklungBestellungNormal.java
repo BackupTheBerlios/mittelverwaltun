@@ -503,7 +503,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(tempOrigin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
@@ -527,7 +527,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
@@ -549,7 +549,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {

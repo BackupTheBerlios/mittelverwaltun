@@ -139,7 +139,7 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException;
+	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws ApplicationServerException;
 	
 	/**
 	 * speichert die ASKBestellung
@@ -148,7 +148,7 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
+	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws ApplicationServerException;
 	
 	/**
 	 * gibt eine StandardBestellung mit allen Objekten zurück
