@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 
 /**
+ * 
  * @author w.flat
  * 17.10.2004
  */
 public class Firma implements Serializable {
 	
 	/**
-	 * Eindeutige Id zur Identifizierung der Firma.
+	 * Eindeutige Id zur Identifizierung der Firma. Wird von der Datenbank vergeben. 
 	 */
 	int id;
 	
@@ -71,6 +72,18 @@ public class Firma implements Serializable {
 	
 	/**
 	 * Konstruktor, der alle Attribute enthält.
+	 * @param id = Id der Firma. 
+	 * @param name = Der Firmenname. 
+	 * @param strasseNr = Der Strassenname und die Strassennummer.
+	 * @param plz = Die PLZ des Standorts. 
+	 * @param ort = Der Standort der Firma. 
+	 * @param kundenNr = Die Kundenummer, bei der Firma. 
+	 * @param telNr = Die Telefonnummer der Firma. 
+	 * @param faxNr = Die Faxnummer der Firma.
+	 * @param eMail = Die E-Mail-Adresse der Firma. 
+	 * @param www = Die Homepage der Firma. 
+	 * @param ask = Flag ob die Firma für die ASK-Bestellung verwendet werden darf. 
+	 * @param geloescht = Flag ob die Firma gelöscht ist oder nicht. 
 	 */
 	public Firma( int id, String name, String strasseNr, String plz, String ort, String kundenNr,  
 						String telNr, String faxNr, String eMail, String www, boolean ask, boolean geloescht ) {
@@ -88,11 +101,23 @@ public class Firma implements Serializable {
 		this.geloescht = geloescht;
 	}
 	
+	/**
+	 * Default-Konstruktor.
+	 */
 	public Firma() {
 	}
 	
 	/**
-	 * Konstruktor, der alle Attribute enthält außer der Id und dem Flag gelöscht.
+	 * Konstruktor, zum Erzeugen einer neuen Firma.
+	 * @param name = Der Firmenname. 
+	 * @param strasseNr = Der Strassenname und die Strassennummer.
+	 * @param plz = Die PLZ des Standorts. 
+	 * @param ort = Der Standort der Firma. 
+	 * @param kundenNr = Die Kundenummer, bei der Firma. 
+	 * @param telNr = Die Telefonnummer der Firma. 
+	 * @param faxNr = Die Faxnummer der Firma.
+	 * @param eMail = Die E-Mail-Adresse der Firma. 
+	 * @param www = Die Homepage der Firma. 
 	 */
 	public Firma( String name, String strasseNr, String plz, String ort, String kundenNr,  
 							String telNr, String faxNr, String eMail, String www ) {
@@ -111,7 +136,8 @@ public class Firma implements Serializable {
 	}
 	
 	/**
-	 * Eine Kopie einer Firma erstellen.
+	 * Eine Kopie einer Firma erstellen. 
+	 * @return Die kopierte Firma. 
 	 */
 	public Object clone() {
 		return new Firma( this.id, this.name, this.strasseNr, this.plz, this.ort, this.kundenNr,  
@@ -120,6 +146,7 @@ public class Firma implements Serializable {
 	
 	/**
 	 * Die Firma aktualisieren, indem man die Angaben, außer der id aus der übergebenen Firma entnimmt. 
+	 * @param firma = Firma von der die Änderungen übernommen werden. 
 	 */
 	public void setFirma( Firma firma ) {
 		this.name = firma.name;
@@ -136,13 +163,15 @@ public class Firma implements Serializable {
 	
 	/**
 	 * Ausgabe der Firma als String. D.h. Ausgabe vom Firmennamen, Ort.
+	 * @return Firmenname, Standort. 
 	 */
 	public String toString() {
 		return name + ", " + ort;
 	}
 	
 	/**
-	 * Ermittlung ob zwei Firmen gleich sind. Dabei ist der Name, Straße, PLZ und Ort entscheidend.
+	 * Ermittlung ob zwei Firmen gleich sind. Dabei ist der Name, Straße, PLZ und Ort entscheidend. 
+	 * @param o = Die Zweite Firma. 
 	 */
 	public boolean equals( Object o ) {
 		if(o != null){
@@ -153,70 +182,78 @@ public class Firma implements Serializable {
 					((ort == null || firma.getOrt() == null) ? true : ort.equals(firma.getOrt()))
 				 )
 				return true;
-			else
-				return false;
-		}else
-			return false;
+		}
+		
+		return false;
 	}
 	
 	/**
 	 * Id der Firma zurückgeben.
+	 * @return Id der Firma. 
 	 */
 	public int getId() {
 		return id;
 	}
 	
 	/**
-	 * Id der Firma aktualisieren.
+	 * Id der Firma aktualisieren. 
+	 * @param id = Neue Id der Firma. 
 	 */
 	public void setId( int id ) {
 		this.id = id;
 	}
 	
 	/**
-	 * Namen der Firma zurückgeben.
+	 * Den Namen der Firma zurückgeben.
+	 * @return Der Firmenname. 
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * Name der Firma aktualisieren.
+	 * Name der Firma aktualisieren. 
+	 * @param name = Neuer Firmenname. 
 	 */
 	public void setName( String name ) {
 		this.name = name;
 	}
 	
 	/**
-	 * StrasseNr der Firma zurückgeben.
+	 * StrasseNr der Firma zurückgeben. 
+	 * @return Strasenname und die Starssennummer der Firma. 
 	 */
 	public String getStrasseNr() {
 		return strasseNr;
 	}
 	
 	/**
-	 * StrasseNr der Firma aktualisieren.
+	 * StrasseNr der Firma aktualisieren. 
+	 * @param strasseNr = Neuer Strassenname und die neue Strassennummer. 
 	 */
 	public void setStrasseNr( String strasseNr ) {
 		this.strasseNr = strasseNr;
 	}
 	
 	/**
-	 * Plz der Firma zurückgeben.
+	 * Plz der Firma zurückgeben. 
+	 * @return Die PLZ des Standorts. 
 	 */
 	public String getPlz() {
 		return plz;
 	}
 	
 	/**
-	 * Plz der Firma aktualisieren.
+	 * Plz der Firma aktualisieren. 
+	 * @param plz = Die Postleitzahl des Standorts. 
 	 */
 	public void setPlz( String plz ) {
 		this.plz = plz;
 	}
 	
 	/**
-	 * Ort der Firma zurückgeben.
+	 * Ort der Firma zurückgeben. 
+	 * @return Der Standort der Firma. 
 	 */
 	public String getOrt() {
 		return ort;
@@ -224,20 +261,23 @@ public class Firma implements Serializable {
 	
 	/**
 	 * Ort der Firma aktualisieren.
+	 * @param ort = Der Standort der Firma. 
 	 */
 	public void setOrt( String ort ) {
 		this.ort = ort;
 	}
 	
 	/**
-	 * KundenNr der Firma zurückgeben.
+	 * KundenNr bei der Firma zurückgeben.
+	 * @return Die Kundennummer, die man bei der Firma hat. 
 	 */
 	public String getKundenNr() {
 		return kundenNr;
 	}
 	
 	/**
-	 * KundenNr der Firma aktualisieren.
+	 * KundenNr der Firma aktualisieren. 
+	 * @param kundenNr = Neue Kundennummer bei der Firma.
 	 */
 	public void setKundenNr( String kundenNr ) {
 		this.kundenNr = kundenNr;
@@ -245,6 +285,7 @@ public class Firma implements Serializable {
 	
 	/**
 	 * TelNr der Firma zurückgeben.
+	 * @return Die Telefonnummer der Firma. 
 	 */
 	public String getTelNr() {
 		return telNr;
@@ -252,13 +293,15 @@ public class Firma implements Serializable {
 	
 	/**
 	 * TelNr der Firma aktualisieren.
+	 * @param telNr = Neue Telefonnummer der Firma. 
 	 */
 	public void setTelNr( String telNr ) {
 		this.telNr = telNr;
 	}
 	
 	/**
-	 * FaxNr der Firma zurückgeben.
+	 * FaxNr der Firma zurückgeben. 
+	 * @return Die Faxnummer der Firma. 
 	 */
 	public String getFaxNr() {
 		return faxNr;
@@ -266,13 +309,15 @@ public class Firma implements Serializable {
 	
 	/**
 	 * FaxNr der Firma aktualisieren.
+	 * @param faxNr = Neue Faxnummer der Firma. 
 	 */
 	public void setFaxNr( String faxNr ) {
 		this.faxNr = faxNr;
 	}
 	
 	/**
-	 * EMail der Firma zurückgeben.
+	 * EMail der Firma zurückgeben. 
+	 * @return Die E-Mail-Adresse der Firma. 
 	 */
 	public String getEMail() {
 		return eMail;
@@ -280,13 +325,15 @@ public class Firma implements Serializable {
 	
 	/**
 	 * EMail der Firma aktualisieren.
+	 * @param eMail = Neue E-Mail-Adresse der Firma. 
 	 */
 	public void setEMail( String eMail ) {
 		this.eMail = eMail;
 	}
 	
 	/**
-	 * Homepage der Firma zurückgeben.
+	 * Homepage der Firma zurückgeben. 
+	 * @return Die Homepage der Firma. 
 	 */
 	public String getWWW() {
 		return www;
@@ -294,13 +341,15 @@ public class Firma implements Serializable {
 	
 	/**
 	 * Homepage der Firma aktualisieren.
+	 * @param www = Die Neue Homepage der Firma. 
 	 */
 	public void setWWW( String www ) {
 		this.www = www;
 	}
 	
 	/**
-	 * Ermittlung des ASK-Flags.
+	 * Ermittlung des ASK-Flags. 
+	 * @return true = Wenn das Flag gesetzt ist, sonst = flase.
 	 */
 	public boolean getASK() {
 		return ask;
@@ -308,20 +357,23 @@ public class Firma implements Serializable {
 	
 	/**
 	 * ASK-Flag der Firma aktualisieren.
+	 * @param ask = Neuer Wert für das Flag ask. 
 	 */
 	public void setASK(boolean ask) {
 		this.ask = ask;
 	}
 	
 	/**
-	 * Ermittlung ob die Firma gelöscht ist.
+	 * Ermittlung ob die Firma gelöscht ist. 
+	 * @return true = Wenn die Firma gelöscht ist, sonst = false. 
 	 */
 	public boolean getGeloescht() {
 		return geloescht;
 	}
 	
 	/**
-	 * Die Firma als gelöscht markieren.
+	 * Den Neuen Wert dem Flag gelöscht zuweisen. 
+	 * @param geloescht = Neuer Wert des Flags gelöscht. 
 	 */
 	public void setGeloescht( boolean geloescht ) {
 		this.geloescht = geloescht;
