@@ -1861,7 +1861,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
 		// original StandardBestellung in der Datenbank
-//		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(id);
+//		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(original.getId());
 //	
 //		ArrayList angebote = db.selectForUpdateAngebote(id);
 //
@@ -1872,7 +1872,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 //		}
 //		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
 		
-		StandardBestellung dbOriginal = getStandardBestellung(id);
+		StandardBestellung dbOriginal = getStandardBestellung(original.getId());
 		
 		// die Bestellung hat sich zwischenzeitlich geändert
 		if(!original.equals(dbOriginal))
