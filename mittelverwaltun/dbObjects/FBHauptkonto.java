@@ -10,10 +10,32 @@ import java.util.ArrayList;
 
 public class FBHauptkonto extends FBUnterkonto implements Serializable{
 
+	/**
+	 * DispositionsKredit, den ein FBHauptkonto verwenden kann. 
+	 */
 	private float dispoLimit;
+	
+	/**
+	 * Eine Liste von allen FBUnterkonten, die ein FBHauptkonto hat.
+	 */
 	private ArrayList unterkonten = new ArrayList();
+	
+	/**
+	 * Prüfbedingung, ob ein Konto nur bis zu einem bestimmten Betrag verwendet werden darf <br>
+	 * oder ab einem bestimmten Betrag. Wenn der String leer ist, dann keine Pruefbedingung <br>
+	 * für dieses Konto. 
+	 */
 	private String pruefung;
+	
+	/**
+	 * Kontenzuordnungen. Welchen ZVKonten ist ein FBHauptkonto zugeordnet.
+	 */
 	private Kontenzuordnung[] zuordnung;
+	
+	/**
+	 * Flag zum Anzeogen, ob ein FBHauptkonto für Kleinbestellungen verwendet werden kann.
+	 */
+	private boolean kleinbestellungen;
 
 	
 	/**
@@ -40,13 +62,36 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 	
 	
 	/**
-	 * Dieser Konstruktor enthält alle Attribute
+	 * 
 	 */
 	public FBHauptkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter,
 							float budget, float dispo, String pruefung, boolean geloescht ){
 		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, geloescht );
 		this.dispoLimit = dispo;
 		this.pruefung = pruefung;
+	}
+	
+	/**
+	 * Konstruktor, welcher alle Attribute enthält. <br>
+	 * @param id = FBHauptkontoId
+	 * @param haushaltsJahrID = HaushaltsJahrID
+	 * @param inst = Institut, welchem das Konto zugeordnet ist.
+	 * @param bez = Bezeichnung des Kontos
+	 * @param haupt = Nummer des Hauptkontos
+	 * @param unter = Nummer des Unterkontos
+	 * @param budget = Budget, welches dieses Konto enthält
+	 * @param dispo = Dispositionskredit für ein FBHauptkonto
+	 * @param vormerkungen = Vorgemerkte Mittel
+	 * @param pruefung = Pruefbedingungs-String
+	 * @param geloescht = Flag, ob Konto gelöscht
+	 * @param kleinbestellungen = Ob dieses Konto für Kleinbestellungen verwendet werden kann.
+	 */
+	public FBHauptkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter,
+				float budget, float dispo, float vormerkungen, String pruefung, boolean kleinbestellungen, boolean geloescht ){
+		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, vormerkungen, geloescht );
+		this.dispoLimit = dispo;
+		this.pruefung = pruefung;
+		this.kleinbestellungen = kleinbestellungen;
 	}
 	
 	
@@ -89,12 +134,24 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 		
 		super.setHauptkonto( hauptkonto );
 	}
+	
+	/**
+	 * 
+	 */
+	public boolean getKleinbestellungen() {
+		return kleinbestellungen;
+	}
+	
+	/**
+	 * 
+	 */
+	public void setKleinbestellungen(boolean kleinbestellungen) {
+		this.kleinbestellungen = kleinbestellungen;
+	}
 
 	/**
 	 * Die Unterkonten von dem Hauptkonto ermittteln
 	 * @return
-	 * 
-	 * @uml.property name="unterkonten"
 	 */
 	public ArrayList getUnterkonten() {
 		return unterkonten;
@@ -103,8 +160,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable{
 	/**
 	 * Die Unterkonten zum Hauptkonto hinzufügen 
 	 * @param unterkonten
-	 * 
-	 * @uml.property name="unterkonten"
 	 */
 	public void setUnterkonten(ArrayList unterkonten) {
 		this.unterkonten = unterkonten;

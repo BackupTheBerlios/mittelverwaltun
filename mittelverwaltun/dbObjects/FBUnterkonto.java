@@ -3,50 +3,60 @@ package dbObjects;
 import java.io.Serializable;
 
 /**
- * @author robert *  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern: * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
- * 
+ * FBUnterkonto. <br> 
+ * Diese Klasse repräsentiert ein FB-Unterkonto, welches einem Professor <br> 
+ * oder einem Mitarbeiter eines Institus zugeordnet ist. <br>
+ * @author w.flat
  */
-
-
 public class FBUnterkonto implements Serializable{
 
 	/**
-	 * 
+	 * Eideutige Id zur Identifizierung des FB-Unterkontos.
 	 */
 	private int id;
 
 	/**
-	 * 
+	 * Institut, welchem das FBUnterkonto zugeordnet ist.
 	 */
 	private Institut institut;
 
-
-
+	/**
+	 * Nummer des Hauptkontos dargestellt als String.
+	 */
 	private String hauptkonto;
 
 	/**
-	 * 
+	 * Nummer des Unterkontos dargestellt als String.
 	 */
 	private String unterkonto;
 
 	/**
-	 * 
+	 * Die Bezeichnung des FBUnterkontos.
 	 */
 	private String bezeichnung;
 
 	/**
-	 * 
+	 * Budget, welches diesem FBUnterkonto zugeordnet ist.
 	 */
 	private float budget;
 
 	/**
-	 * 
+	 * Budget, welches schon z.B. für Bestellungen vorgemerkt ist.
+	 */
+	private float vormerkungen;
+
+	/**
+	 * Flag zum Markieren, dass das FBUNterkonto gelöscht ist.
 	 */
 	private boolean geloescht;
 
-	
+	/**
+	 * Id des Haushaltsjahres, welchem das FBUnterkonto zugeordnet ist.
+	 */
 	private int haushaltsJahrID;
-		
+	
+	
+	
 	public FBUnterkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter, float budget ){
 		this.id = id;
 		this.bezeichnung = bez;
@@ -69,6 +79,32 @@ public class FBUnterkonto implements Serializable{
 		this.geloescht = geloescht;
 	}
 	
+	/**
+	 * Konstruktor, welcher alle Attribute enthält. <br>
+	 * @param id = FBUnterkontoId
+	 * @param haushaltsJahrID = HaushaltsJahrID
+	 * @param inst = Institut, welchem das Konto zugeordnet ist.
+	 * @param bez = Bezeichnung des Kontos
+	 * @param haupt = Nummer des Hauptkontos
+	 * @param unter = Nummer des Unterkontos
+	 * @param budget = Budget, welches dieses Konto enthält
+	 * @param vormerkungen = Vorgemerkte Mittel
+	 * @param geloescht = Flag, ob Konto gelöscht
+	 */
+	public FBUnterkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt,
+												String unter, float budget, float vormerkungen, boolean geloescht ){
+		this.id = id;
+		this.bezeichnung = bez;
+		this.institut = inst;
+		this.hauptkonto = haupt;
+		this.unterkonto = unter;
+		this.budget = budget;
+		this.vormerkungen = vormerkungen;
+		this.haushaltsJahrID = haushaltsJahrID;
+		this.geloescht = geloescht;
+	}
+
+	
 	public FBUnterkonto( int id, String bez, Institut inst, String haupt, String unter, float budget ){
 		this.id = id;
 		this.bezeichnung = bez;
@@ -87,7 +123,8 @@ public class FBUnterkonto implements Serializable{
 	
 	
 	/**
-	 * Gleichheit von zwei FBUnterkonten
+	 * Gleichheit von zwei FBUnterkonten. <br>
+	 * Gleichheit ist gegeben, wenn Institut, Hauptkonto und Unterkonto gleich sind. <br>
 	 * @param unterkonto 
 	 * @return boolean
 	 */
@@ -111,6 +148,21 @@ public class FBUnterkonto implements Serializable{
 		setBudget( konto.getBudget() );
 		setGeloescht( konto.getGeloescht() );
 	}
+	
+	/**
+	 * 
+	 */
+	public float getVormerkungen() {
+		return vormerkungen;
+	}
+	
+	/**
+	 * 
+	 */
+	public void setVormerkungen(float vormerkungen) {
+		this.vormerkungen = vormerkungen;
+	}
+
 
 	/**
 	 * 
@@ -146,7 +198,7 @@ public class FBUnterkonto implements Serializable{
 	public Institut getInstitut() {
 		return institut;
 	}
-
+	
 	/**
 	 * 
 	 */

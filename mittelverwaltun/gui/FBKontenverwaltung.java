@@ -58,32 +58,32 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 		this.frame = frame;
 		
 		scrollKonten.getViewport().add( treeKonten = new FBKontenTree( this, "FBKonten" ), null );
-		scrollKonten.setBounds(new Rectangle(10, 10, 280, 200));
+		scrollKonten.setBounds(new Rectangle(10, 10, 280, 235));
 		this.getContentPane().add(scrollKonten);
-		fbHauptkontoPanel.setBounds(new Rectangle(300, 10, 500, 200));
+		fbHauptkontoPanel.setBounds(new Rectangle(300, 10, 500, 235));
 		this.getContentPane().add(fbHauptkontoPanel);
-		fbUnterkontoPanel.setBounds(new Rectangle(300, 10, 500, 200));
+		fbUnterkontoPanel.setBounds(new Rectangle(300, 10, 500, 235));
 		this.getContentPane().add(fbUnterkontoPanel);
 		labNoPanel.setBounds(new Rectangle(300, 10, 500, 16));
 		this.getContentPane().add(labNoPanel);
 
-		buAktualisieren.setBounds(new Rectangle(10, 220, 150, 25));
+		buAktualisieren.setBounds(new Rectangle(10, 255, 150, 25));
 		buAktualisieren.addActionListener( this );
 		this.getContentPane().add(buAktualisieren);
 		buAktualisieren.setIcon(Functions.getRefreshIcon(getClass()));
-		buAnlegen.setBounds(new Rectangle(170, 220, 150, 25));
+		buAnlegen.setBounds(new Rectangle(170, 255, 150, 25));
 		buAnlegen.addActionListener( this );
 		this.getContentPane().add(buAnlegen);
 		buAnlegen.setIcon(Functions.getAddIcon(getClass()));
-		buAendern.setBounds(new Rectangle(330, 220, 150, 25));
+		buAendern.setBounds(new Rectangle(330, 255, 150, 25));
 		buAendern.addActionListener( this );
 		this.getContentPane().add(buAendern);
 		buAendern.setIcon(Functions.getEditIcon(getClass()));
-		buLoeschen.setBounds(new Rectangle(490, 220, 150, 25));
+		buLoeschen.setBounds(new Rectangle(490, 255, 150, 25));
 		buLoeschen.addActionListener( this );
 		this.getContentPane().add(buLoeschen);
 		buLoeschen.setIcon(Functions.getDelIcon(getClass()));
-		buBeenden.setBounds(new Rectangle(650, 220, 150, 25));
+		buBeenden.setBounds(new Rectangle(650, 255, 150, 25));
 		buBeenden.addActionListener( this );
 		this.getContentPane().add(buBeenden);
 		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
@@ -91,7 +91,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 		loadKonten();
 		showPanel();
 			
-		this.setSize( 818, 288 );
+		this.setSize( 818, 318 );
 	}
 	
 	/**
@@ -407,6 +407,9 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	JRadioButton rbBis = new JRadioButton("Bis", true);
 	JRadioButton rbAb = new JRadioButton("Ab", false);
 	CurrencyTextField tfPruefbedingung = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
+	JCheckBox checkKleinbestellungen = new JCheckBox();
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
 	public FBHauptkontoPanel() {
 	  try {
@@ -419,39 +422,48 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	void jbInit() throws Exception {
 	  this.setLayout(null);
 	  tfBezeichnung.setToolTipText("");
+	  tfBezeichnung.setToolTipText("");
 	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(90, 10, 405, 21));
+	  tfBezeichnung.setBounds(new Rectangle(92, 12, 405, 21));
 	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(10, 10, 80, 15));
+	  labBezeichnung.setBounds(new Rectangle(12, 12, 80, 15));
 	  labKostenstelle.setText("Kostenstelle");
-	  labKostenstelle.setBounds(new Rectangle(10, 45, 80, 15));
+	  labKostenstelle.setBounds(new Rectangle(12, 47, 80, 15));
 	  labHauptkonto.setText("Hauptkonto");
-	  labHauptkonto.setBounds(new Rectangle(185, 45, 80, 15));
+	  labHauptkonto.setBounds(new Rectangle(187, 47, 80, 15));
 	  labUnterkonto.setText("Unterkonto");
-	  labUnterkonto.setBounds(new Rectangle(350, 45, 80, 15));
+	  labUnterkonto.setBounds(new Rectangle(357, 47, 80, 15));
 	  tfHauptkonto.setRequestFocusEnabled(true);
 	  tfHauptkonto.setText("");
-	  tfHauptkonto.setBounds(new Rectangle(265, 45, 65, 21));
+	  tfHauptkonto.setBounds(new Rectangle(267, 47, 65, 21));
 	  tfKostenstelle.setText("");
+	  tfKostenstelle.setBounds(new Rectangle(92, 47, 65, 21));
 	  tfKostenstelle.setEnabled( false );
-	  tfKostenstelle.setBounds(new Rectangle(90, 45, 65, 21));
 	  tfUnterkonto.setText("");
-	  tfUnterkonto.setBounds(new Rectangle(430, 45, 65, 21));
+	  tfUnterkonto.setBounds(new Rectangle(432, 47, 65, 21));
 	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(10, 80, 80, 15));
+	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
 	  labDispolimit.setText("Dispolimit");
-	  labDispolimit.setBounds(new Rectangle(275, 80, 80, 15));
+	  labDispolimit.setBounds(new Rectangle(257, 82, 95, 15));
 	  checkPruefbedingung.setText("Prüfbedingung");
-	  checkPruefbedingung.setBounds(new Rectangle(10, 120, 120, 23));
-	  rbBis.setBounds(new Rectangle(160, 120, 60, 23));
-	  rbAb.setBounds(new Rectangle(240, 120, 60, 23));
+	  checkPruefbedingung.setBounds(new Rectangle(12, 152, 120, 23));
 	  tfBudget.setText("");
+	  tfBudget.setBounds(new Rectangle(92, 82, 140, 21));
 	  tfBudget.setEnabled( false );
-	  tfBudget.setBounds(new Rectangle(90, 80, 140, 21));
 	  tfDispolimit.setText("");
-	  tfDispolimit.setBounds(new Rectangle(355, 80, 140, 21));
+	  tfDispolimit.setBounds(new Rectangle(357, 82, 140, 21));
 	  tfPruefbedingung.setText("");
-	  tfPruefbedingung.setBounds(new Rectangle(355, 120, 140, 21));
+	  tfPruefbedingung.setBounds(new Rectangle(357, 152, 140, 21));
+	  checkKleinbestellungen.setActionCommand("jCheckBox1");
+	  checkKleinbestellungen.setText("Kleinbestellungen");
+	  checkKleinbestellungen.setBounds(new Rectangle(12, 117, 140, 23));
+	  labVormerkungen.setText("Vormerkungen");
+	  labVormerkungen.setBounds(new Rectangle(257, 117, 95, 15));
+	  tfVormerkungen.setText("");
+	  tfVormerkungen.setBounds(new Rectangle(357, 117, 140, 21));
+	  rbAb.setBounds(new Rectangle(242, 152, 60, 23));
+	  rbBis.setBounds(new Rectangle(162, 152, 60, 23));
+	  
 	  this.add(labBezeichnung, null);
 	  this.add(tfBezeichnung, null);
 	  this.add(labKostenstelle, null);
@@ -468,6 +480,10 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	  this.add(rbBis, null);
 	  this.add(rbAb, null);
 	  this.add(tfPruefbedingung, null);
+	  this.add(checkKleinbestellungen, null);
+	  this.add(labVormerkungen, null);
+	  this.add(tfVormerkungen, null);
+	  tfVormerkungen.setEnabled(false);
 	  checkPruefbedingung.addActionListener( this );
 	  rbBis.addActionListener( this );
 	  rbAb.addActionListener( this );
@@ -493,6 +509,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 		rbBis.setSelected( true );
 		rbAb.setSelected( false );
 		tfPruefbedingung.setValue( new Float( 0 ) );
+		tfVormerkungen.setValue( new Float( 0 ) );
+		checkKleinbestellungen.setSelected( false );
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -514,6 +532,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 		rbBis.setSelected( konto.isPruefungBis() );
 		rbAb.setSelected( !konto.isPruefungBis() );
 		tfPruefbedingung.setValue( new Float( konto.getPruefsumme() ) );
+		tfVormerkungen.setValue( new Float( konto.getVormerkungen() ) );
+		checkKleinbestellungen.setSelected(konto.getKleinbestellungen());
 		
 		actionPerformed( new ActionEvent( checkPruefbedingung, 0, "" ) );
 	}
@@ -554,9 +574,10 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new FBHauptkonto( konto.getId(), konto.getHaushaltsJahrID(), konto.getInstitut(), tfBezeichnung.getText(),
-					tfHauptkonto.getText(), tfUnterkonto.getText(), konto.getBudget(),
-					Float.parseFloat( tfDispolimit.getValue().toString() ),
-					FBHauptkonto.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+					tfHauptkonto.getText(), tfUnterkonto.getText(), konto.getBudget(), 
+					Float.parseFloat( tfDispolimit.getValue().toString() ), konto.getVormerkungen(),
+					FBHauptkonto.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ),
+					checkKleinbestellungen.isSelected(), konto.getGeloescht() );
 	}
 	
 	/**
@@ -567,8 +588,9 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new FBHauptkonto( 0, 0, institut, tfBezeichnung.getText(), tfHauptkonto.getText(), tfUnterkonto.getText(),
-					0, Float.parseFloat( tfDispolimit.getValue().toString() ),
-					FBHauptkonto.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
+					0, Float.parseFloat( tfDispolimit.getValue().toString() ), 0, 
+					FBHauptkonto.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ),
+					checkKleinbestellungen.isSelected(), false );
 	}
 	
 	/**
@@ -579,7 +601,7 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new FBUnterkonto( 0, konto.getHaushaltsJahrID(), konto.getInstitut(), tfBezeichnung.getText(),
-								konto.getHauptkonto(), tfUnterkonto.getText(), 0 );
+								konto.getHauptkonto(), tfUnterkonto.getText(), 0, 0, false );
 	}
 
 	/**
@@ -620,7 +642,8 @@ class FBUnterkontoPanel extends JPanel {
 	IntTextField tfUnterkonto = new IntTextField(4);
 	JLabel labBudget = new JLabel();
 	CurrencyTextField tfBudget = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
-
+	JLabel labVormerkungen = new JLabel();
+	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 	
 	public FBUnterkontoPanel() {
 	  try {
@@ -634,29 +657,33 @@ class FBUnterkontoPanel extends JPanel {
 	  this.setLayout(null);
 	  tfBezeichnung.setToolTipText("");
 	  tfBezeichnung.setText("");
-	  tfBezeichnung.setBounds(new Rectangle(90, 10, 405, 21));
+	  tfBezeichnung.setBounds(new Rectangle(92, 12, 405, 21));
 	  labBezeichnung.setText("Bezeichnung");
-	  labBezeichnung.setBounds(new Rectangle(10, 10, 80, 15));
+	  labBezeichnung.setBounds(new Rectangle(12, 12, 80, 15));
 	  labKostenstelle.setText("Kostenstelle");
-	  labKostenstelle.setBounds(new Rectangle(10, 45, 80, 15));
+	  labKostenstelle.setBounds(new Rectangle(12, 47, 80, 15));
 	  labHauptkonto.setText("Hauptkonto");
-	  labHauptkonto.setBounds(new Rectangle(185, 45, 80, 15));
+	  labHauptkonto.setBounds(new Rectangle(187, 47, 80, 15));
 	  labUnterkonto.setText("Unterkonto");
-	  labUnterkonto.setBounds(new Rectangle(350, 45, 80, 15));
+	  labUnterkonto.setBounds(new Rectangle(352, 47, 80, 15));
 	  tfHauptkonto.setRequestFocusEnabled(true);
 	  tfHauptkonto.setText("");
+	  tfHauptkonto.setBounds(new Rectangle(267, 47, 65, 21));
 	  tfHauptkonto.setEnabled( false );
-	  tfHauptkonto.setBounds(new Rectangle(265, 45, 65, 21));
 	  tfKostenstelle.setText("");
+	  tfKostenstelle.setBounds(new Rectangle(92, 47, 65, 21));
 	  tfKostenstelle.setEnabled( false );
-	  tfKostenstelle.setBounds(new Rectangle(90, 45, 65, 21));
 	  tfUnterkonto.setText("");
-	  tfUnterkonto.setBounds(new Rectangle(430, 45, 65, 21));
+	  tfUnterkonto.setBounds(new Rectangle(432, 47, 65, 21));
 	  labBudget.setText("Budget");
-	  labBudget.setBounds(new Rectangle(10, 80, 80, 15));
+	  labBudget.setBounds(new Rectangle(12, 82, 80, 15));
 	  tfBudget.setText("");
+	  tfBudget.setBounds(new Rectangle(92, 82, 140, 21));
 	  tfBudget.setEnabled( false );
-	  tfBudget.setBounds(new Rectangle(90, 80, 140, 21));
+	  labVormerkungen.setText("Vormerkungen");
+	  labVormerkungen.setBounds(new Rectangle(257, 82, 95, 15));
+	  tfVormerkungen.setText("");
+	  tfVormerkungen.setBounds(new Rectangle(352, 82, 145, 21));
 	  this.add(labBezeichnung, null);
 	  this.add(tfBezeichnung, null);
 	  this.add(labKostenstelle, null);
@@ -667,6 +694,9 @@ class FBUnterkontoPanel extends JPanel {
 	  this.add(tfUnterkonto, null);
 	  this.add(labBudget, null);
 	  this.add(tfBudget, null);
+	  this.add(labVormerkungen, null);
+	  this.add(tfVormerkungen, null);
+	  tfVormerkungen.setEnabled(false);
 	  this.setBorder(BorderFactory.createEtchedBorder());
 	}
 	
@@ -682,6 +712,7 @@ class FBUnterkontoPanel extends JPanel {
 		tfHauptkonto.setValue( konto.getHauptkonto() );
 		tfUnterkonto.setValue( konto.getUnterkonto() );
 		tfBudget.setValue( new Float( konto.getBudget() ) );
+		tfVormerkungen.setValue( new Float( konto.getVormerkungen() ) );
 	}
 	
 	/**
@@ -705,7 +736,7 @@ class FBUnterkontoPanel extends JPanel {
 			return null;
 		
 		return new FBUnterkonto( konto.getId(), konto.getHaushaltsJahrID(), konto.getInstitut(), tfBezeichnung.getText(),
-								konto.getHauptkonto(), tfUnterkonto.getText(), konto.getBudget() );
+				konto.getHauptkonto(), tfUnterkonto.getText(), konto.getBudget(), konto.getVormerkungen(), konto.getGeloescht() );
 	}
 }
 

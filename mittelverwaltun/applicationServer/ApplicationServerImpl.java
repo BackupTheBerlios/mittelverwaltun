@@ -252,7 +252,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int addFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
 		if( konto == null )
 			return 0;
-		if( db.existsFBKonto( konto ) > 0 )
+		if( db.existsFBKonto( konto ) > 0 )		// Wenn ein FBUnterkonto bereits existiert
 			throw new ApplicationServerException( 19 );
 		
 		int id = 0;
@@ -275,9 +275,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 20 );
 		if( db.countKontenzuordnungen( konto ) > 0 )		// Wenn Kontenzuordnungen existieren
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 21 );
 		
 		ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
 		// Nachsehen ob sich bei den Unterkonten Fehler ergeben
@@ -286,9 +286,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if( temp.get(i) == null )	// Kein Unterkonto
 					continue;
 				if( db.countActiveBenutzer( (FBUnterkonto)temp.get(i) ) >  0 )		// Unterkonto ist einem Benutzer zugeordnet
-					throw new ApplicationServerException( 0 );
+					throw new ApplicationServerException( 22 );
 				if( db.countActiveBestellungen( (FBUnterkonto)temp.get(i) ) > 0 )	// Es gibt Bestellungen 
-					throw new ApplicationServerException( 0 );
+					throw new ApplicationServerException( 20 );
 			}
 		}
 
@@ -336,9 +336,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		if( db.countActiveBestellungen( konto ) > 0 )		// Wenn Bestellungen noch nicht abgeschlossen sind 
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 20 );
 		if( db.countActiveBenutzer( konto ) >  0 )			// Unterkonto ist einem Benutzer zugeordnet
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 22 );
 		
 		// Es gibt abgeschlossene Bestellungen noch oder Buchungen
 		if( (db.countBestellungen( konto ) > 0) || (db.countBuchungen( konto ) > 0) ) {
@@ -364,18 +364,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		FBHauptkonto old = db.selectForUpdateFBHauptkonto( konto );	// Zum aktualisieren auswählen
 		if( old == null )		// Kein FBHauptonto gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 16 );
 		if( old.getGeloescht() )	// Das FBHauptonto gelöscht
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 23 );
 		
 		if( old.equals( konto ) )
 			return db.updateFBHauptkonto( konto );
 			
 		if( db.existsFBKonto( konto ) > 0 )			// Das neue Konto existiert bereits
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 17 );
 			
 		if( db.countActiveBestellungen( konto ) > 0 )	// gibt es Bestellungen beim Hauptkonto
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 20 );
 		
 		ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
 		// Nachsehen ob sich bei den Unterkonten Fehler ergeben
@@ -384,7 +384,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if( temp.get(i) == null )	// Kein Unterkonto
 					continue;
 				if( db.countActiveBestellungen( (FBUnterkonto)temp.get(i) ) > 0 )	// gibt es Bestellungen 
-					throw new ApplicationServerException( 1 );
+					throw new ApplicationServerException( 20 );
 			}
 		}
 		
@@ -411,18 +411,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		FBUnterkonto old = db.selectForUpdateFBUnterkonto( konto );	// Zum aktualisieren auswählen
 		if( old == null )		// Kein FBUnterkonto gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 18 );
 		if( old.getGeloescht() )	// Das FBUnterkonto gelöscht
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 24 );
 		
 		if( old.equals( konto ) )		// Wenn die Konten gleich sind
 			return db.updateFBUnterkonto( konto );
 			
 		if( db.existsFBKonto( konto ) > 0 )			// Das neue Konto existiert bereits
-			throw new ApplicationServerException( 0, "Unterkonto exisitiert" );
+			throw new ApplicationServerException( 19 );
 			
 		if( db.countActiveBestellungen( konto ) > 0 )	// gibt es Bestellungen beim Unterkonto
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 20 );
 
 		return db.updateFBUnterkonto( konto );
 	}
@@ -438,29 +438,29 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return;
 		FBHauptkonto oldHaupt = db.selectForUpdateFBHauptkonto( haupt );	// Das FBHauptkonto auswählen
 		if( oldHaupt == null )				// Wenn kein FBHauptkonto in der Datenbank gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 16 );
 		if( oldHaupt.getGeloescht() )		// Wenn das FBHauptkonto gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 23 );
 		if( !oldHaupt.equals( haupt ) )		// Wenn die FBHauptkonten nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 25 );
 		// wenn die Budgets oder Dispolimits nicht übereinstimmen
 		if( haupt.getBudget() != oldHaupt.getBudget() || haupt.getDispoLimit() != oldHaupt.getDispoLimit() )
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 26 );
 		haupt.setBudget( haupt.getBudget() - betrag );
 		db.updateFBHauptkonto( haupt );
 		
 		FBUnterkonto oldUnter = db.selectForUpdateFBUnterkonto( unter );		// Das FBUnterkonto auswählen
 		if( oldUnter == null ) {			// Wenn kein FBUnterkonto in der Datenbank gefunden
 			db.updateFBHauptkonto( oldHaupt );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 18 );
 		}
 		if( oldUnter.getGeloescht() ) {		// Wenn das FBUnterkonto gelöscht ist
 			db.updateFBHauptkonto( oldHaupt );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 24 );
 		}
 		if( !oldUnter.equals( unter ) ) {		// Wenn die FBUnterkonten nicht gleich sind, dann wurde das Konto verändert
 			db.updateFBHauptkonto( oldHaupt );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 27 );
 		}
 		unter.setBudget( unter.getBudget() + betrag );
 		db.updateFBUnterkonto( unter );
@@ -477,29 +477,29 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return;
 		FBHauptkonto oldFrom = db.selectForUpdateFBHauptkonto( from );	// Das FBHauptkonto auswählen
 		if( oldFrom == null )				// Wenn kein FBHauptkonto in der Datenbank gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 16 );
 		if( oldFrom.getGeloescht() )		// Wenn das FBHauptkonto gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 23 );
 		if( !oldFrom.equals( from ) )		// Wenn die FBHauptkonten nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 25 );
 		// wenn die Budgets oder Dispolimits nicht übereinstimmen
 		if( oldFrom.getBudget() != from.getBudget() || oldFrom.getDispoLimit() != from.getDispoLimit() )
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 26 );
 		from.setBudget( from.getBudget() - betrag );
 		db.updateFBHauptkonto( from );
 		
 		FBHauptkonto oldTo = db.selectForUpdateFBHauptkonto( to );	// Das FBHauptkonto auswählen
 		if( oldTo == null )	{			// Wenn kein FBHauptkonto in der Datenbank gefunden
 			db.updateFBHauptkonto( oldFrom );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 16 );
 		}
 		if( oldTo.getGeloescht() ) {	// Wenn das FBHauptkonto gelöscht ist
 			db.updateFBHauptkonto( oldFrom );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 23 );
 		}
 		if( !oldTo.equals( to ) ) {		// Wenn die FBHauptkonten nicht gleich sind, dann wurde das Konto verändert
 			db.updateFBHauptkonto( oldFrom );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 25 );
 		}
 		to.setBudget( to.getBudget() + betrag );
 		db.updateFBHauptkonto( to );
@@ -516,29 +516,29 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return;
 		FBUnterkonto oldUnter = db.selectForUpdateFBUnterkonto( unter );	// Das FBUnterkonto auswählen
 		if( oldUnter == null )				// Wenn kein FBUnterkonto in der Datenbank gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 18 );
 		if( oldUnter.getGeloescht() )		// Wenn das FBUnterkonto gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 24 );
 		if( !oldUnter.equals( unter ) )		// Wenn die FBUnterkonten nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 27 );
 		// wenn die Budgets nicht übereinstimmen
 		if( oldUnter.getBudget() != unter.getBudget() )
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 28 );
 		unter.setBudget( unter.getBudget() - betrag );
 		db.updateFBUnterkonto( unter );
 		
 		FBHauptkonto oldHaupt = db.selectForUpdateFBHauptkonto( haupt );	// Das FBHauptkonto auswählen
 		if( oldHaupt == null ) {				// Wenn kein FBHauptkonto in der Datenbank gefunden
 			db.updateFBUnterkonto( oldUnter );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 16 );
 		}
 		if( oldHaupt.getGeloescht() ) {		// Wenn das FBHauptkonto gelöscht ist
 			db.updateFBUnterkonto( oldUnter );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 23 );
 		}
 		if( !oldHaupt.equals( haupt ) )	{	// Wenn die FBHauptkonten nicht gleich sind, dann wurde das Konto verändert
 			db.updateFBUnterkonto( oldUnter );
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 25 );
 		}
 		haupt.setBudget( haupt.getBudget() + betrag );
 		db.updateFBHauptkonto( haupt );
@@ -688,7 +688,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		if( db.countKontenzuordnungen( zvKonto ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(0);
+			throw new ApplicationServerException(21);
 		
 		ArrayList zvTitel = zvKonto.getSubTitel();
 		// Nachsehen ob es beim Löschen von ZVTiteln Fehler entstehen
@@ -697,7 +697,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if( zvTitel.get(i) == null )	// kein zvTitel
 					continue;
 				if( db.countActiveBestellungen( (ZVTitel)zvTitel.get(i) ) > 0 )		// Wenn es noch laufende Bestellungen gibt
-					throw new ApplicationServerException(0);
+					throw new ApplicationServerException(20);
 
 				ArrayList zvUntertitel = ((ZVTitel)zvTitel.get(i)).getSubUntertitel();
 				// Nachsehen ob es beim Löschen von ZVUntertiteln Fehler entstehen
@@ -707,7 +707,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 							continue;
 						// Wenn es noch laufende Bestellungen gibt
 						if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-							throw new ApplicationServerException(0);
+							throw new ApplicationServerException(20);
 					}	// Ende for zvUntertitel
 				}	// Ende if( zvUntertitel != null )
 			}	// Ende for zvTitel
@@ -788,7 +788,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		if( db.countActiveBestellungen( zvTitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(0);
+			throw new ApplicationServerException(21);
 
 
 		ArrayList zvUntertitel = zvTitel.getSubUntertitel();
@@ -799,7 +799,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					continue;
 				// Wenn es noch laufende Bestellungen gibt
 				if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-					throw new ApplicationServerException(0);
+					throw new ApplicationServerException(20);
 			}	// Ende for zvUntertitel
 		}	// Ende if( zvUntertitel != null )
 		
@@ -845,7 +845,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return 0;
 		
 		if( db.countActiveBestellungen( zvUntertitel ) > 0 )		// Wenn es Kontenzuordnungen gibt
-			throw new ApplicationServerException(0);
+			throw new ApplicationServerException(21);
 
 		// Wenn es abgeschlossene Bestellungen oder Buchungen gibt
 		if( (db.countBestellungen( zvUntertitel ) > 0) || (db.countBuchungen( zvUntertitel ) > 0) ) {
@@ -873,7 +873,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( old == null )		// Wenn kein ZVKonto in der Datenbank gefunden
 			throw new ApplicationServerException( 10 );
 		if( old.getGeloescht() )	// Wenn ein ZVKonto gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 29 );
 		
 		if( old.equals( zvKonto ) )	// Wenn die ZVKontos gleich sind, dann betrift die Änderung nur das ZVKonto
 			return db.updateZVKonto( zvKonto );
@@ -888,7 +888,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				if( zvTitel.get(i) == null )	// kein zvTitel
 					continue;
 				if( db.countActiveBestellungen( (ZVTitel)zvTitel.get(i) ) > 0 )		// Wenn es noch laufende Bestellungen gibt
-					throw new ApplicationServerException(0);
+					throw new ApplicationServerException(20);
 
 				ArrayList zvUntertitel = ((ZVTitel)zvTitel.get(i)).getSubUntertitel();
 				// Nachsehen ob es beim Ändern von ZVUntertiteln Fehler entstehen
@@ -898,7 +898,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 							continue;
 						// Wenn es noch laufende Bestellungen gibt
 						if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-							throw new ApplicationServerException(0);
+							throw new ApplicationServerException(20);
 					}	// Ende for zvUntertitel
 				}	// Ende if( zvUntertitel != null )
 			}	// Ende for zvTitel
@@ -939,7 +939,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( old == null )		// kein ZVTitel vorhanden
 			throw new ApplicationServerException( 12 );
 		if( old.getGeloescht() )	// Wenn der Titel schon gelöscht ist
-			throw new ApplicationServerException( 12 );
+			throw new ApplicationServerException( 30 );
 		
 		if( old.equals( zvTitel ) )	// Wenn die beiden Titeln gleich sind
 			return db.updateZVTitel( zvTitel );
@@ -947,7 +947,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( db.existsZVTitel( zvTitel ) > 0 )	// Wenn der ZVTitel bereits existiert
 			throw new ApplicationServerException( 13 );
 		if( db.countActiveBestellungen( zvTitel ) > 0 )	// Es gibt noch laufende Bestellungen
-			throw new ApplicationServerException( 13 );
+			throw new ApplicationServerException( 20 );
 			
 		ArrayList zvUntertitel = zvTitel.getSubUntertitel();
 		// Nachsehen ob es beim Ändern von ZVUntertiteln Fehler entstehen
@@ -957,7 +957,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					continue;
 				// Wenn es noch laufende Bestellungen gibt
 				if( db.countActiveBestellungen( (ZVUntertitel)zvUntertitel.get(j) ) > 0 )
-					throw new ApplicationServerException(0);
+					throw new ApplicationServerException(20);
 			}	// Ende for zvUntertitel
 		}	// Ende if( zvUntertitel != null )
 
@@ -986,7 +986,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( old == null )	// Kein ZVUntertitel gefunden
 			throw new ApplicationServerException( 14 );
 		if( old.getGeloescht() )	// Der ZVUntertitel ist bereits gelöscht
-			throw new ApplicationServerException( 14 );
+			throw new ApplicationServerException( 31 );
 		
 		if( old.equals( zvUntertitel ) )	// Sind die beiden ZVUntertitel gleich 
 			return db.updateZVUntertitel( zvUntertitel );
@@ -995,7 +995,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException( 15 );
 		
 		if( db.countActiveBestellungen( zvUntertitel ) > 0 )	// Wenn es noch laufende Bestellungen gibt
-			throw new ApplicationServerException( 15 );
+			throw new ApplicationServerException( 20 );
 		
 		return db.updateZVUntertitel( zvUntertitel );
 	}
@@ -1007,14 +1007,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public void buche( ZVKonto konto, float betrag ) throws ApplicationServerException {
 		if( konto == null )
 			return;
-		ZVKonto old = db.selectForUpdateZVKonto( konto );	// Das ZVKonto zu aktualisieren auswählen
+		ZVKonto old = db.selectForUpdateZVKonto( konto );	// Das ZVKonto zum Aktualisieren auswählen
 		if( old == null )		// Wenn kein ZVKonto in der Datenbank gefunden
 			throw new ApplicationServerException( 10 );
 		if( old.getGeloescht() )	// Wenn das ZVKonto gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 29 );
 		
 		if( !old.equals( konto ) )	// Wenn die ZVKontos nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 35 );
 		konto.setTgrBudget( konto.getTgrBudget() + betrag );
 		db.updateZVKonto( konto );
 	}
@@ -1028,12 +1028,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return;
 		ZVTitel old = db.selectForUpdateZVTitel( konto );	// Den ZVTitel zu aktualisieren auswählen
 		if( old == null )		// Wenn kein ZVTitel in der Datenbank gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 12 );
 		if( old.getGeloescht() )	// Wenn der ZVTitel gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 30 );
 		
 		if( !old.equals( konto ) )	// Wenn die ZVTitel nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 36 );
 		konto.setBudget( konto.getBudget() + betrag );
 		db.updateZVTitel( konto );
 	}
@@ -1047,12 +1047,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			return;
 		ZVUntertitel old = db.selectForUpdateZVUntertitel( konto );	// Den ZVUntertitel zu aktualisieren auswählen
 		if( old == null )		// Wenn kein ZVUntertitel in der Datenbank gefunden
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 14 );
 		if( old.getGeloescht() )	// Wenn der ZVUntertitel gelöscht ist
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 31 );
 		
 		if( !old.equals( konto ) )	// Wenn die ZVUntertitel nicht gleich sind, dann wurde das Konto verändert
-			throw new ApplicationServerException( 0 );
+			throw new ApplicationServerException( 37 );
 		konto.setBudget( konto.getBudget() + betrag );
 		db.updateZVUntertitel( konto );
 	}
@@ -1423,7 +1423,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
 		if( db.existsFirma( firma ) > 0 )				// Wenn diese Firma bereits existiert 
-			throw new ApplicationServerException( 0 );	// dann kann man es nicht mehr erstellen
+			throw new ApplicationServerException( 38 );	// dann kann man es nicht mehr erstellen
 		
 		int id = 0;		// id der Firma
 		if( (id = db.existsDelFirma( firma )) > 0 ) {	// Es gibt eine gelöschte Firma
@@ -1444,7 +1444,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
 		if( db.existsDelFirma( firma ) > 0 )			// Wenn diese Firma bereits gelöscht ist
-			throw new ApplicationServerException( 0 );	// dann kann man es nicht aktualisieren
+			throw new ApplicationServerException( 39 );	// dann kann man es nicht aktualisieren
 				
 		db.selectForUpdateFirma( firma );		// Firma zu aktualisieren auswählen
 		
@@ -1461,7 +1461,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if( firma == null )					// Wurde eine Firma angegeben
 			return 0;
 		if( db.countActiveBestellungen( firma ) > 0 )	// Gibt es aktive Bestellungen, die an die angegebene Firma gehen
-			throw new ApplicationServerException( 0 );	// dann kann man es nicht löschen
+			throw new ApplicationServerException( 20 );	// dann kann man es nicht löschen
 		
 		if( db.countInactiveBestellungen( firma ) > 0 ) {	// Wenn es inaktive Bestellungen gibt, dann braucht man die Firma
 			firma.setGeloescht( true );						// für Reports und es wird nur der Flag gesetzt
