@@ -34,16 +34,16 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"FB-Konto", "ZV-Konto", "Ausgaben"}; 
 			setColumnIdentifiers(colheads);
 		} else if  (type == Reports.REPORT_5){
-			String[] colheads = {"ZV-Konto", "Institut", "Ausgaben", "Kontostand"}; 
+			String[] colheads = {"ZVKonto", "Institut", "Institut-Ausgaben", "Institut-Kontostand"};
 			setColumnIdentifiers(colheads);
 		}	else if (type == Reports.REPORT_6){
-			String[] colheads = {"ZV-Konto", "Ausgaben"}; 
+			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_7){
-			String[] colheads = {"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
+			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_8){
-			String[] colheads = {"FB-Konto", "Einnahmen"}; 
+			String[] colheads = {"Instiut", "FB-Konto", "Einnahmen"}; 
 			setColumnIdentifiers(colheads);
 		}
 		
@@ -58,12 +58,12 @@ public class ReportsTableModel extends DefaultTableModel {
 			
 			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_3 || type == Reports.REPORT_5)
 				data = new Object[4];
-			else if(type == Reports.REPORT_4)
+			else if(type == Reports.REPORT_4 || type == Reports.REPORT_8)
 				data = new Object[3];
-			else if(type == Reports.REPORT_6 || type == Reports.REPORT_8)
-				data = new Object[2];
+			else if(type == Reports.REPORT_6 )
+				data = new Object[3];
 			else if(type == Reports.REPORT_7)
-				data = new Object[8];
+				data = new Object[9];
 			
 			// eine Zeile des Reports
 			ArrayList row = (ArrayList)content.get(i);
@@ -92,47 +92,50 @@ public class ReportsTableModel extends DefaultTableModel {
 				data[2] = (Float)row.get(2);							// Ausgaben
 				
 			} else if (type == Reports.REPORT_5){
-				data[0] = (String)row.get(0);							// ZV-Konto
+				data[0] = (String)row.get(0);							// Institut
 				data[1] = (String)row.get(1);							// Institut
 				data[2] = (Float)row.get(2);							// Ausgaben
 				data[3] = (Float)row.get(3);							// Kontostand
 					
 			} else if (type == Reports.REPORT_6){
-				data[0] = (String)row.get(0);							// ZV-Konto
-				data[1] = (Float)row.get(1);							// Ausgaben
+				data[0] = (String)row.get(0);							// Institut
+				data[1] = (String)row.get(1);							// ZV-Konto
+				data[2] = (Float)row.get(2);							// Ausgaben
 						
 			} else if (type == Reports.REPORT_7){
-				data[0] = (String)row.get(0);							// ZV-Konto
-				data[1] = (Float)row.get(1);							// Ausgaben
-				data[2] = (String)row.get(2);							// FBI-Schlüsselnummer
-				data[3] = (String)row.get(3);							// Hül-Nr
+				data[0] = (String)row.get(0);							// Institut
+				data[1] = (String)row.get(1);							// ZV-Konto
+				data[2] = (Float)row.get(2);							// Ausgaben
+				data[3] = (String)row.get(3);							// FBI-Schlüsselnummer
+				data[4] = (String)row.get(4);							// Hül-Nr
 				
-				if (row.get(4).equals("0"))										// Typ
-					data[4] = "Standardbestellung";
-				else if (row.get(4).equals("1"))
-					data[4] = "ASK-Bestellung";
-				else if (row.get(4).equals("2"))
-					data[4] = "Zahlungsanforderung";
-				else data[4] = "n.a.";
+				if (row.get(5).equals("0"))										// Typ
+					data[5] = "Standardbestellung";
+				else if (row.get(5).equals("1"))
+					data[5] = "ASK-Bestellung";
+				else if (row.get(5).equals("2"))
+					data[5] = "Zahlungsanforderung";
+				else data[5] = "n.a.";
 
-				data[5] = ((Date)row.get(5)).toString();								// Datum
+				data[6] = ((Date)row.get(6)).toString();								// Datum
 				
-				if (row.get(6).equals("0"))											// Phase
-					data[6] = (String)"Sondierung";
-				else if (row.get(6).equals("1"))
-					data[6] = (String)"Abwicklung";
-				else if (row.get(6).equals("2"))
-					data[6] = (String)"Abgeschlossen";
-				else if (row.get(6).equals("3"))
-					data[6] = (String)"Storniert";
-				else data[6] = (String)"unbekannt";
+				if (row.get(7).equals("0"))											// Phase
+					data[7] = (String)"Sondierung";
+				else if (row.get(7).equals("1"))
+					data[7] = (String)"Abwicklung";
+				else if (row.get(7).equals("2"))
+					data[7] = (String)"Abgeschlossen";
+				else if (row.get(7).equals("3"))
+					data[7] = (String)"Storniert";
+				else data[7] = (String)"unbekannt";
 				
-				data[7] = new String("X");								// Button anzeigen
-				identifiers.add((Integer)row.get(7));			// Id der Bestellung
+				data[8] = new String("X");								// Button anzeigen
+				identifiers.add((Integer)row.get(8));			// Id der Bestellung
 							
 			} else if (type == Reports.REPORT_8){
-				data[0] = (String)row.get(0);							// FB-Konto
-				data[1] = (Float)row.get(1);							// Einnahmen
+				data[0] = (String)row.get(0);							// Institut
+				data[1] = (String)row.get(1);							// FB-Konto
+				data[2] = (Float)row.get(2);							// Einnahmen
 							
 			}
 						
@@ -143,7 +146,7 @@ public class ReportsTableModel extends DefaultTableModel {
 	public int getType (int row){
 		if(type == Reports.REPORT_7){
 			if ((row < this.getRowCount())&& (row >= 0)){
-				String type = (String)getValueAt(row, 4);
+				String type = (String)getValueAt(row, 5);
 				if (type.equals("Standardbestellung"))
 					return OrderTableModel.STD_TYP;
 				else if (type.equals("ASK-Bestellung"))
@@ -160,7 +163,7 @@ public class ReportsTableModel extends DefaultTableModel {
 	public int getPhase (int row){
 		if(type == Reports.REPORT_7){
 			if ((row < this.getRowCount())&& (row >= 0)){
-				String type = (String)getValueAt(row, 6);
+				String type = (String)getValueAt(row, 7);
 				if (type.equals("Sondierung"))
 					return OrderTableModel.SONDIERUNG;
 				else if (type.equals("Abwicklung"))
@@ -184,7 +187,7 @@ public class ReportsTableModel extends DefaultTableModel {
 	}
 	
 	public boolean isCellEditable(int rowIndex, int colIndex) {
-		if(type == Reports.REPORT_7 && colIndex == 7)
+		if(type == Reports.REPORT_7 && colIndex == 8)
 			return true;
 		else
 			return false;

@@ -51,6 +51,7 @@ public class ReportsTable extends JTable{
   	DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
   	dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
   	setDefaultRenderer(Integer.class, dtcr);
+  	setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
 		
 		if(type == Reports.REPORT_1){
 			getColumnModel().getColumn(0).setPreferredWidth(45);
@@ -65,10 +66,10 @@ public class ReportsTable extends JTable{
 		}else if(type == Reports.REPORT_6){
 			
 		}else if(type == Reports.REPORT_7){
-			getColumnModel().getColumn(7).setPreferredWidth(20);
-			getColumnModel().getColumn(7).setMaxWidth(20);
-			getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor(actionListener));
-			getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer());
+			getColumnModel().getColumn(8).setPreferredWidth(20);
+			getColumnModel().getColumn(8).setMaxWidth(20);
+			getColumnModel().getColumn(8).setCellEditor(new TableButtonCellEditor(actionListener));
+			getColumnModel().getColumn(8).setCellRenderer(new TableButtonCellRenderer());
 			
 		}else if(type == Reports.REPORT_8){
 			

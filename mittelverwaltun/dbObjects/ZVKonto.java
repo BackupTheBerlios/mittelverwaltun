@@ -113,10 +113,15 @@ public class ZVKonto implements Serializable {
 	/**
 	 * Ermittlung ob zwei ZVKontos gleich sind
 	 */
-	public boolean equals( ZVKonto zvKonto ) {
-		if( this.kapitel.equalsIgnoreCase( zvKonto.getKapitel() ) && this.titelgruppe.equalsIgnoreCase( zvKonto.getTitelgruppe() ) )
-			return true;
-		else
+	public boolean equals( Object o ) {
+		if(o != null){
+			ZVKonto zvKonto = (ZVKonto)o;
+			
+			if( this.kapitel.equalsIgnoreCase( zvKonto.getKapitel() ) && this.titelgruppe.equalsIgnoreCase( zvKonto.getTitelgruppe() ) )
+				return true;
+			else
+				return false;
+		}else
 			return false;
 	}
 	
