@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[250];
+		statements = new PreparedStatementWrapper[260];
 		int i = 0;
 
 		/**************************************/
@@ -1342,14 +1342,8 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
-		{//218 fügt eine Bestellung in die ASK_Standard_Bestellungen Tabelle ein
-			ps = con.prepareStatement("INSERT " +
-																"INTO ASK_Standard_Bestellungen " +
-																	 "( id, angebot, bemerkungen, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +																	 "ersatzInventarNr, verwendungszweck, planvorgabe, begruendung) " +
-															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+		{//218 
+			statements[i++] = null;
 		}
 		{//219 fügt eine Bestellung in die Bestellungen Tabelle ein und liefert eine Id
 			ps = con.prepareStatement("INSERT " +
@@ -1549,6 +1543,47 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//249
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: ASK_Standard_Bestellungen 	  */
+		/* Indizes: 250-259                       */
+		/******************************************/
+		{//250 fügt eine StandardBestellung in die ASK_Standard_Bestellungen Tabelle ein
+			ps = con.prepareStatement("INSERT " +
+																"INTO ASK_Standard_Bestellungen " +
+																	 "( id, angebot, bemerkungen, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +
+																	 "ersatzInventarNr, verwendungszweck, planvorgabe, begruendung) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//251
+			statements[i++] = null;
+		}
+		{//252
+			statements[i++] = null;
+		}
+		{//253
+			statements[i++] = null;
+		}
+		{//254
+			statements[i++] = null;
+		}
+		{//255
+			statements[i++] = null;
+		}
+		{//256
+			statements[i++] = null;
+		}
+		{//257
+			statements[i++] = null;
+		}
+		{//258
+			statements[i++] = null;
+		}
+		{//259
 			statements[i++] = null;
 		}
 	}
