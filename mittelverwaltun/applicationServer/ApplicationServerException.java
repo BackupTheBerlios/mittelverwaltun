@@ -132,7 +132,9 @@ public class ApplicationServerException extends Exception {
 		messages[73] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectAngebote";
 		messages[74] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectPositionen";
 		messages[75] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFirma";
-
+		messages[76] = "Application Server Error: Die Bestellung hat sich zwischenzeitlich geändert";
+		messages[77] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkReferenzNr";
+				
 //		Exception Ende ROBERT von 50-99
 
 //		Exception Anfang WALDEMAR von 100-149

@@ -756,13 +756,10 @@ public class Database implements Serializable{
 		try{
 			Object[] parameters = { new Integer(id) };
 			ResultSet rs = statements.get(86).executeQuery(parameters);
-			rs.last();		
-			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
-				rs.beforeFirst();		// Vor die erste Zeile springen
+			if(rs.next())
 				institut = new Institut (rs.getInt(1), rs.getString(2), rs.getString(3),
 																	new Benutzer(rs.getInt(4),rs.getString(5),rs.getString(6),rs.getString(7)));
-					
-			}
+			
 			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 1, e.getMessage() );
@@ -2910,8 +2907,11 @@ public class Database implements Serializable{
 			
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					
-					Firma anbieter = selectFirma(rs.getInt("anbieter"));
-					angebote.add( new Angebot( rs.getInt(0), null, rs.getDate(2), anbieter, !rs.getString(3).equalsIgnoreCase("0")));
+					Firma anbieter = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+																			rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+																			rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
+																			rs.getString(12).equalsIgnoreCase( "1" ) );
+					angebote.add( new Angebot( rs.getInt(13), null, rs.getDate(14), anbieter, !rs.getString(15).equalsIgnoreCase("0")));
 				}
 			}
 			rs.close();		// Abfrage schließen
@@ -2937,11 +2937,10 @@ public class Database implements Serializable{
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
-		
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt 
-					Institut institut = selectInstitute(rs.getInt(1));
-				  positionen.add( new Position(rs.getInt(0), rs.getString(2), rs.getFloat(3), rs.getInt(4), rs.getFloat(5),
-				  														 rs.getFloat(6), institut, !rs.getString(7).equalsIgnoreCase("0")));
+					Institut institut = selectInstitute(rs.getInt("institut"));
+				  positionen.add( new Position(rs.getInt(1), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getFloat(6),
+				  														 rs.getFloat(7), institut, !rs.getString(8).equalsIgnoreCase("0")));
 				}
 			}
 			rs.close();		// Abfrage schließen
@@ -2951,4 +2950,22 @@ public class Database implements Serializable{
 
 		return positionen;
 	}
+	
+	/**
+	 * prüft ob die ReferenzNr der Bestellung schon vorhanden ist
+	 * @param referenzNr der Bestellung
+	 * @return Anzahl der Bestellungen mit dieser ReferenzNr
+	 * @throws ApplicationServerException
+	 */
+	public int checkReferenzNr(String referenzNr) throws ApplicationServerException{
+	  try{
+		  Object[] parameters = { referenzNr };
+			  ResultSet rs = statements.get(218).executeQuery(parameters);
+			  rs.last();
+	
+			 return rs.getRow();
+		 } catch (SQLException e){
+			  throw new ApplicationServerException(77, e.getMessage());
+		 }
+ 	}
 }

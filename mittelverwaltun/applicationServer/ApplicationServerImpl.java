@@ -1782,7 +1782,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
-		// TODO Automatisch erstellter Methoden-Stub
+		// original StandardBestellung in der Datenbank
+		StandardBestellung dbOriginal = getStandardBestellung(original.getId());
+		
+		// die Bestellung hat sich zwischenzeitlich geändert
+		if(!original.equals(dbOriginal))
+			throw new ApplicationServerException( 76 );
+			
+		// die Referenznummer der Bestellung hat sich geändert
+		if(!original.getReferenznr().equals(edited.getReferenznr()));
+		
 		
 	}
 
@@ -1791,7 +1800,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
-		// TODO Automatisch erstellter Methoden-Stub
+		
+		
 		
 	}
 	

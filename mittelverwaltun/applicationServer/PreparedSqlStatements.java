@@ -1484,9 +1484,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		
-		{//218 
-			statements[i++] = null;
+		{//218 gibt die Anzahl der Bestellungen mit der ReferenzNr
+			ps = con.prepareStatement( "SELECT COUNT(id) " +
+																	 "FROM Bestellungen " +
+																"WHERE referenzNr = ? " );
+			int[] param = {Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//219 fügt eine Bestellung in die Bestellungen Tabelle ein und liefert eine Id
 			ps = con.prepareStatement("INSERT " +
@@ -1805,10 +1808,11 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.DATE, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//261 gibt die Angebote zur eine Bestellung mit bestellId zurück
-			ps = con.prepareStatement("SELECT id, anbieter, datum, angenommen " +
-																"FROM Angebote " +
-															  "WHERE bestellung = ?");
+		{//261 gibt die Angebote zur einer Bestellung mit bestellId und vollständiger Firma zurück
+			ps = con.prepareStatement("SELECT f.id, f.name, f.strassenr, f.plz, f.ort, f.kundennr, " +
+																			 "f.telnr, f.faxnr, f.email, f.www, f.ask, f.geloescht, " +																			 "a.id AS angebotId, a.datum, a.angenommen " +
+																"FROM Angebote a, Firmen f " +
+															  "WHERE a.bestellung = ? " +															  		"AND a.anbieter = f.id " +															  		"AND f.geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1842,7 +1846,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//266 gibt alle Positionen zu einem Angebot anhand der angebotId zurück
-			ps = con.prepareStatement("SELECT id, institut, artikel, einzelPreis, menge, mwSt, rabatt, beglichen" +
+			ps = con.prepareStatement("SELECT id, institut, artikel, einzelPreis, menge, mwSt, rabatt, beglichen " +
 																"FROM Positionen " +
 															  "WHERE angebot = ?");
 			int[] param = {Types.INTEGER};
