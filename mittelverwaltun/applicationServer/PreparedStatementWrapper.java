@@ -97,7 +97,7 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.FLOAT:
 							{
 								Float v = (Float)parameters[i];
-								if(v == null)
+								if (v == null)
 									stmt.setNull(i+1, Types.NULL);
 								else
 									stmt.setFloat(i+1, v.floatValue());
@@ -106,7 +106,7 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.INTEGER:
 							{
 								Integer v = (Integer)parameters[i];
-								if(v == null)
+								if (v == null)
 									stmt.setNull(i+1, Types.NULL);
 								else
 									stmt.setInt(i+1, v.intValue());
@@ -146,10 +146,10 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.VARCHAR:
 						{
 							String v = parameters[i].toString();
-							if(v == null)
-									stmt.setNull(i+1, Types.NULL);
-								else
-									stmt.setString(i+1, v);
+							if (v == null)
+								stmt.setNull(i+1, Types.NULL);
+							else
+								stmt.setString(i+1, v);
 							break;
 						}					
 			}
@@ -204,7 +204,7 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.FLOAT:
 							{
 								Float v = (Float)parameters[i];
-								if(v == null)
+								if (v == null)
 									stmt.setNull(i+1, Types.NULL);
 								else
 									stmt.setFloat(i+1, v.floatValue());
@@ -213,7 +213,7 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.INTEGER:
 							{
 								Integer v = (Integer)parameters[i];
-								if(v == null)
+								if (v == null)
 									stmt.setNull(i+1, Types.NULL);
 								else
 									stmt.setInt(i+1, v.intValue());
@@ -231,7 +231,7 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 								break;
 							}
 				case Types.NUMERIC:
-							;
+						;
 				case Types.OTHER:
 						;
 				case Types.REAL:
@@ -253,10 +253,10 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.VARCHAR:
 						{
 							String v = parameters[i].toString();
-							if(v == null)
-									stmt.setNull(i+1, Types.NULL);
-								else
-									stmt.setString(i+1, v);	
+							if (v == null)
+								stmt.setNull(i+1, Types.NULL);
+							else
+								stmt.setString(i+1, v);
 							break;
 						}					
 			}
