@@ -103,7 +103,7 @@ public class ApplicationServerException extends Exception {
 
 //		Exception Ende WALDEMAR
 
-//		Exception Anfang WALDEMAR von 50-99
+//		Exception Anfang ROBERT von 50-99
 
 		messages[50] = "Application Server Error: Institut wurde in der Zwischenzeit verändert.";
 		messages[51] = "Application Server Error: Institut ist ein Fachbereich.";
@@ -123,8 +123,12 @@ public class ApplicationServerException extends Exception {
 
 		messages[63] = "Application Server Error: ZVKonto existiert nicht mehr.";
 		messages[64] = "Application Server Error: Das Fachbereichskonto existiert nicht mehr.";
+		
+		messages[65] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertBestellung.";
+		messages[66] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertStandardBestellung.";
+		messages[67] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAngebot.";
 
-//		Exception Ende WALDEMAR von 50-99
+//		Exception Ende ROBERT von 50-99
 
 //		Exception Anfang WALDEMAR von 100-149
 

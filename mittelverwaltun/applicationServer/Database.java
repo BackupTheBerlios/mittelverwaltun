@@ -2419,7 +2419,7 @@ public class Database implements Serializable{
 	 * @return Id der Bestellung in der Tabelle Bestellungen
 	 * @throws ApplicationServerException
 	 */ 
-	public int insertBestellung(Bestellung bestellung, char typ) throws ApplicationServerException{
+	public int insertBestellung(Bestellung bestellung, int typ) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
 				float vb = 0f; // Verbindlichkeiten
@@ -2437,12 +2437,58 @@ public class Database implements Serializable{
 					return rs.getInt(1);
 				}
 			} catch (SQLException e){
-				throw new ApplicationServerException(1, e.getMessage());
+				throw new ApplicationServerException(65, e.getMessage());
 			}
 		}else{
-			throw new ApplicationServerException(4);
+			throw new ApplicationServerException(65);
 		}
 		return 0;
+	}
+	
+	/**
+	 * fügt eine StandardBestellung in die Tabelle ASK_Standard_Bestellungen ein
+	 * @param bestellung - Standardbestellung
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public void insertStandardBestellung(StandardBestellung bestellung) throws ApplicationServerException{
+		if(bestellung != null){
+			try{
+				Object[] parameters = { new Integer(bestellung.getId()), new Integer(bestellung.getAuswahl()), bestellung.getBemerkung(),
+																new Integer(bestellung.getKostenart().getId()), (bestellung.getErsatzbeschaffung() ? "1" : "0"),
+																bestellung.getErsatzbeschreibung(), bestellung.getInventarNr(), bestellung.getVerwendungszweck(),
+																(bestellung.getPlanvorgabe() ? "1" : "0"), bestellung.getBegruendung()};
+				statements.get(250).executeUpdate(parameters);
+				
+			} catch (SQLException e){
+				throw new ApplicationServerException(66, e.getMessage());
+			}
+		}else{
+			throw new ApplicationServerException(66);
+		}
 	}	
+	
+	/**
+	 * fügt ein Angebot in die Tabelle Angebote ein und liefert eine Id zurück
+	 * @param angebot
+	 * @return Id des Angebots
+	 * @throws ApplicationServerException
+	 */
+	public int insertAngebot(Angebot angebot) throws ApplicationServerException{
+		if(angebot != null){
+			try{
+				Object[] parameters = { };
+				statements.get(218).executeUpdate(parameters);
+				ResultSet rs = statements.get(218).getGeneratedKeys();
+
+				
+			} catch (SQLException e){
+				throw new ApplicationServerException(67, e.getMessage());
+			}
+		}else{
+			throw new ApplicationServerException(67);
+		}
+		return 0;
+	}
 
 }

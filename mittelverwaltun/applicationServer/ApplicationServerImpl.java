@@ -1509,6 +1509,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
 		
+		int newId = db.insertBestellung(bestellung, 0);
+		
 		
 	}
 
