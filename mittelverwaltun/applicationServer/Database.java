@@ -479,8 +479,8 @@ public class Database implements Serializable{
 																			new Rolle(rs.getInt(13), rs.getString(14)),
 																			new Institut(rs.getInt(10), rs.getString(11), rs.getString(12)),
 																			rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
-																			rs.getInt(9),rs.getString(14), rs.getString(15), rs.getString(16), 
-																			rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
+																			rs.getInt(9),rs.getString(15), rs.getString(16), rs.getString(17), 
+																			rs.getString(18),!rs.getString(19).equalsIgnoreCase( "0" ));
 					i++;
 				}
 			}
@@ -772,14 +772,17 @@ public class Database implements Serializable{
 		try{
 				if(benutzer.getPrivatKonto() == 0){
 					Object[] param2 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
-																					benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
-																					new Integer(benutzer.getId())};
+														benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
+														benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
+														(benutzer.getSoftBeauftragter() ? "1" : "0"), new Integer(benutzer.getId())};
 					if(statements.get(22).executeUpdate(param2) == 0)
 						throw new ApplicationServerException(2);
 				}else{
 					Object[] param3 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
 															benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
-															new Integer(benutzer.getPrivatKonto()), new Integer(benutzer.getId())};
+															new Integer(benutzer.getPrivatKonto()), benutzer.getTelefon(), benutzer.getFax(), 
+															benutzer.getBau(), benutzer.getRaum(), (benutzer.getSoftBeauftragter() ? "1" : "0"),
+															new Integer(benutzer.getId())};
 					if(statements.get(21).executeUpdate(param3) == 0)
 						throw new ApplicationServerException(2);
 				}
@@ -818,14 +821,17 @@ public class Database implements Serializable{
 			PreparedStatementWrapper stmt;
 	    if(benutzer.getPrivatKonto() == 0){
 	        Object[] param2 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
-	                                            new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
-	                                            benutzer.getVorname(), benutzer.getEmail()};
+	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
+	                          benutzer.getVorname(), benutzer.getEmail(), benutzer.getTelefon(), benutzer.getFax(),
+	                          benutzer.getBau(), benutzer.getRaum(), (benutzer.getSoftBeauftragter() ? "1" : "0")};
 	        stmt = statements.get(25);
 	        stmt.executeUpdate(param2);
 	    }else{
 	        Object[] param3 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
-	                                            new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
-	                                            benutzer.getVorname(), benutzer.getEmail(), new Integer(benutzer.getPrivatKonto())};
+	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
+	                          benutzer.getVorname(), benutzer.getEmail(), new Integer(benutzer.getPrivatKonto()), 
+	                          benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
+	                          (benutzer.getSoftBeauftragter() ? "1" : "0")};
 	    		stmt = statements.get(24);
 	        stmt.executeUpdate(param3);
 	    }
