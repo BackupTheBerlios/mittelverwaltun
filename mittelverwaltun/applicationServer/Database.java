@@ -38,10 +38,10 @@ public class Database implements Serializable{
 			System.out.println("Set autocommit = false...");
 			con.setAutoCommit(false);
 			System.out.println("Done.");
-			System.out.println("Set transaction_isolation_level = repeatable_read...");
-			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-//			System.out.println("Set transaction_isolation_level = read_committed...");
-//			con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+//			System.out.println("Set transaction_isolation_level = repeatable_read...");
+//			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+			System.out.println("Set transaction_isolation_level = read_committed...");
+			con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			System.out.println("Done.");
 			System.out.println("Prepare SQL-Statements...");
 			statements = new PreparedSqlStatements(con);	//
@@ -3608,7 +3608,7 @@ public class Database implements Serializable{
 			Object[] parameters = { new Integer(bestellung.getBesteller().getId()), 
 									new Integer(bestellung.getAuftraggeber().getId()), 
 									new Integer(bestellung.getEmpfaenger().getId()), 
-									new String(""), bestellung.getHuel(), new String(bestellung.getProjektNr()), 
+									bestellung.getReferenznr(), bestellung.getHuel(), new String("" + bestellung.getPhase()), 
 									bestellung.getDatum(), new Integer(bestellung.getZvtitel().getId()), 
 									new Integer(bestellung.getFbkonto().getId()),
 									new Float(bestellung.getBestellwert()), new Float(0), 
@@ -3656,6 +3656,40 @@ public class Database implements Serializable{
 			Object[] parameters = {new Integer(bestellung.getId())};
 			// SQL-Statement ausführen
 			statements.get(294).executeQuery(parameters);
+		} catch (SQLException e){
+			rollback();		// Um die Änderungen rückgängig zu machen
+			throw new ApplicationServerException( 0, e.getMessage() );
+		}
+	}
+	
+	/**
+	 * Eine Kleinbestellung mit einer bestimmter Id abfragen. 
+	 * @param Id des Kontos. 
+	 * @return Kleinbestellung die abgefragt wurde. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public KleinBestellung selectKleinbestellung( int id ) throws ApplicationServerException {
+		KleinBestellung bestellung = null;
+		try{
+			// Parameter an das SQL-Statement
+			Object[] parameters = {new Integer(id)};
+			// SQL-Statement mit der Nummer 295 ausführen
+			ResultSet rs = statements.get(295).executeQuery(parameters);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0, dann existiert der Beleg
+				rs.beforeFirst();	// Vor die erste Zeile springen
+				rs.next();
+				// Neuen Beleg erzeugen und die Liste einfügen
+				bestellung = new KleinBestellung( rs.getInt(1), rs.getDate(4), selectUser(rs.getInt(2)), 
+											selectUser(rs.getInt(3)), selectZVTitel(rs.getInt(5)), 
+											selectFBKonto(rs.getInt(6)), rs.getFloat(7), rs.getString(9),
+											rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13), 
+											selectBelege(rs.getInt(1)) );
+				bestellung.setPhase(rs.getString(8).charAt(0));
+			}
+			rs.close();					// Die Abfrage schließen
+			return bestellung;
 		} catch (SQLException e){
 			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
@@ -3889,6 +3923,25 @@ public class Database implements Serializable{
 		}
 
 		return report;
+	}
+
+	/**
+	 * Aktualisieren der Beträge auf dem ZVTitel und FBKonto bei der Stornierung einer Kleinbestellung. 
+	 * @param titel = Der Titel der bei der Bestellung angegeben wurde. 
+	 * @param konto = FBkonto, das bei der Bestellung angegeben wurde. 
+	 * @param betrag = Der Betrag, den der ZVTitel und das FBKonto bekommt. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public void updateAccountStates(ZVUntertitel titel, FBUnterkonto konto, float betrag) throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Float(betrag), new Float(betrag), new Integer(konto.getId()), new Integer(titel.getId()) };
+			if(statements.get(312).executeUpdate(parameters) == 0)
+				throw new ApplicationServerException(99);
+
+		} catch (SQLException e){
+			throw new ApplicationServerException(98, e.getMessage());
+		}
 	}
 
 

@@ -2340,11 +2340,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		db.insertBuchung(new Buchung(b, "6", von, -betrag, nach, betrag));
 	}
 	
-	/**
-	 * Vormerkung für Bestellung  (Typ 7)
-	 * ACHTUNG: evtl. überflüssig da durch Typ 8 abgedeckt
-	 * @throws ApplicationServerException
-	 */
+//	/**
+//	 * Vormerkung für Bestellung  (Typ 7)
+//	 * ACHTUNG: evtl. überflüssig da durch Typ 8 abgedeckt
+//	 * @throws ApplicationServerException
+//	 */
 //	private void bucheVormerkungen(Bestellung b, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
 //		
 //	}
@@ -2401,8 +2401,52 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			for(int i = 0; i < bestellung.getBelege().size(); i++) {
 				db.insertBeleg(bestellung.getId(), (Beleg)bestellung.getBelege().get(i));
 			}
-			// TODO Buchung durchführen
+			//	Bestimme verfügbares ZV-Budget
+			float availableZvBudget = 0.00f;
+			if(bestellung.getZvtitel() instanceof ZVTitel)
+				availableZvBudget = db.getAvailableTgrBudget(((ZVTitel)bestellung.getZvtitel()).getZVKonto().getId());
+			else
+				availableZvBudget = db.getAvailableTgrBudget(bestellung.getZvtitel().getZVTitel().getZVKonto().getId());
+			if (bestellung.getZvtitel().getBudget() > bestellung.getZvtitel().getVormerkungen())
+				availableZvBudget += (bestellung.getZvtitel().getBudget() - bestellung.getZvtitel().getVormerkungen());
+			
+			// Bestimme verfügbares FB-Budget
+			float availableFbBudget = bestellung.getFbkonto().getBudget() - bestellung.getFbkonto().getVormerkungen();
+				
+			if ((bestellung.getBestellwert() > availableZvBudget)||(bestellung.getBestellwert() > availableFbBudget)){
+				throw new ApplicationServerException( 162 );
+			} else {
+				db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getBestellwert());
+				bucheBestellungsaenderung(bestellung.getBesteller(), bestellung, bestellung.getZvtitel(), 
+										bestellung.getFbkonto(), bestellung.getBestellwert());
+			}
+			
+			float tgrEntry, titelEntry;
+			float availableRessources = bestellung.getZvtitel().getBudget() - bestellung.getZvtitel().getVormerkungen();
+			if (availableRessources > 0){
+				titelEntry = availableRessources < bestellung.getBestellwert() ? 	-availableRessources : 
+																					-bestellung.getBestellwert();
+				tgrEntry = availableRessources < bestellung.getBestellwert() ? availableRessources-bestellung.getBestellwert() : 0;
+			}else{
+				tgrEntry = -bestellung.getBestellwert();
+				titelEntry = 0;
+			}
+				
+			db.updateAccountStates(bestellung.getZvtitel(), tgrEntry, titelEntry, bestellung.getFbkonto(), 
+																					-bestellung.getBestellwert());
+			ZVKonto zvk;
+			if(bestellung.getZvtitel() instanceof ZVTitel)
+				zvk = ((ZVTitel)bestellung.getZvtitel()).getZVKonto();
+			else
+				zvk = bestellung.getZvtitel().getZVTitel().getZVKonto();
+				
+			bucheBestellungsbegleichung(bestellung.getBesteller(), bestellung, zvk, tgrEntry, bestellung.getZvtitel(), 
+										titelEntry, bestellung.getFbkonto(), -bestellung.getBestellwert());
+
 			return bestellung.getId();
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		} finally {
 			db.commit();
 		}		
@@ -2451,11 +2495,37 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(bestellung == null)		// keine Bestellung angegeben
 			return 0;
 		try {
-			bestellung.setGeloescht(true);				// Flag gelöscht setzen
+			bestellung.setPhase('3');
 			db.selectForUpdateKleinbestellung(bestellung);	// Zum Aktualisieren auswählen
 			db.updateKleinbestellung(bestellung);		// Bestellung aktualisieren(löschen)
 			// TODO Buchung durchführen
+			db.updateAccountStates(bestellung.getZvtitel(), bestellung.getFbkonto(), bestellung.getBestellwert());
+			ZVKonto zvk;
+			if(bestellung.getZvtitel() instanceof ZVTitel)
+				zvk = ((ZVTitel)bestellung.getZvtitel()).getZVKonto();
+			else
+				zvk = bestellung.getZvtitel().getZVTitel().getZVKonto();
+			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, 0f, bestellung.getZvtitel(), 
+											bestellung.getBestellwert(), bestellung.getFbkonto(), bestellung.getBestellwert());
 			return bestellung.getId();
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}		
+	}
+	
+	/**
+	 * Eine Kleinbestellung mit einer bestimmter Id abfragen. 
+	 * @param Id des Kontos. 
+	 * @return Kleinbestellung die abgefragt wurde. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public KleinBestellung getKleinbestellung(int id) throws ApplicationServerException {
+		try {
+			return db.selectKleinbestellung(id);
 		} finally {
 			db.commit();
 		}		

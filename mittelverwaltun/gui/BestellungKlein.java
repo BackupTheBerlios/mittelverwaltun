@@ -129,10 +129,15 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			// Einrichtung der Buttons
 			buAbbrechen.addActionListener(this);
 			buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
-			butStornieren.addActionListener(this);
-			butStornieren.setIcon(Functions.getDelIcon(getClass()));
-			buDrucken.addActionListener(this);
-			buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+			if(bestellung.getPhase() == '3') {
+				butStornieren.setEnabled(false);
+				buDrucken.setEnabled(false);
+			} else {
+				butStornieren.addActionListener(this);
+				butStornieren.setIcon(Functions.getDelIcon(getClass()));
+				buDrucken.addActionListener(this);
+				buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+			}			
 			buAddRow.addActionListener(this);
 			buAddRow.setIcon(Functions.getExpandIcon(getClass()));
 			buAddRow.setEnabled(false);
@@ -163,6 +168,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			// Beschriften der Labels
 			setFBKonto(this.bestellung.getFbkonto());
 			setZVKonto(this.bestellung.getZvtitel());
+			labGesamt.setText(NumberFormat.getCurrencyInstance().format(tableBelege.getSum()));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -304,7 +310,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		tfProjektNr.setBounds(new Rectangle(86, 9, 150, 21));
 		labProjektNr.setText("Projekt-Nr.");
 		labProjektNr.setBounds(new Rectangle(6, 11, 80, 15));
-		tfDatum.setText("");
 		tfDatum.setBounds(new Rectangle(441, 9, 150, 21));
 		labDatum.setText("Datum");
 		labDatum.setBounds(new Rectangle(361, 11, 80, 15));
@@ -404,8 +409,10 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				tableBelege.delPresRaw();
 			}
 		} else if( e.getSource() == butZVTitelAuswahl ) {
-			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
-			kontoAuswahl.show();
+			if(fbKonto != null) {
+				AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
+				kontoAuswahl.show();
+			}
 		} else if( e.getSource() == butFBKontoAuswahl ) {
 			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, (Benutzer)comboBenutzer.getSelectedItem());
 		} else if( e.getSource() == buAddRow ) {
@@ -465,7 +472,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		} else if( e.getSource() == butStornieren ) {
 			int answer = JOptionPane.showConfirmDialog(
 						getComponent(0),
-						"Soll die Bestellung wirklich gelöscht werden ? ",
+						"Soll die Bestellung wirklich storniert werden ? ",
 						"Warnung",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE,

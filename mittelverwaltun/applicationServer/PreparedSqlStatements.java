@@ -2127,7 +2127,17 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//295 
-			statements[i++] = null;
+			/**
+			 * Eine Kleinbestellung mit bestimmter Id selektieren. 
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT a.id, a.besteller, a.empfaenger, a.datum, a.zvTitel, a.fbKonto, " +
+											"a.bestellwert, a.phase, " +
+											"b.projektNr, b.verwendungszweck, b.labor, b.kartei, b.verzeichnis " +
+										"FROM Bestellungen a, Kleinbestellungen b " + 
+										"WHERE a.id = b.id AND a.id = ? ");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//296
 			statements[i++] = null;
@@ -2208,7 +2218,21 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//312
-			statements[i++] = null;
+			/**
+			 * Aktualisieren der Beträge auf dem ZVTitel und auf dem FBKonto, bei der Stornierung einer
+			 * Kleinbestellung.
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKontentitel zvt " +	
+										   "SET " +
+											   "fbk.budget = (fbk.budget + ?), " +
+											   "zvt.budget = (zvt.budget + ?) " +
+										 "WHERE fbk.id = ? " +
+										   "AND zvt.id = ? " +
+										   "AND fbk.geloescht = '0' " +
+										   "AND zvt.geloescht = '0'" );
+			int[] param = {	Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//313
 			statements[i++] = null;

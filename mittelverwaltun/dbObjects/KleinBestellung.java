@@ -37,6 +37,7 @@ public class KleinBestellung extends Bestellung implements Serializable {
 		this.labor = labor;
 		this.kartei = kartei;
 		this.verzeichnis = verzeichnis;
+		this.setTyp('2');
 	}
 
 	public ArrayList getBelege() {

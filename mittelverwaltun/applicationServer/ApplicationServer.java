@@ -257,7 +257,16 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 */
 	public Firma getASKFirma() throws ApplicationServerException;
-	
+
+	/**
+	 * Eine Kleinbestellung mit einer bestimmter Id abfragen. 
+	 * @param Id des Kontos. 
+	 * @return Kleinbestellung die abgefragt wurde. 
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */	
+	public KleinBestellung getKleinbestellung(int id) throws ApplicationServerException;
+
 	/**
 	 * Gibt eine ArrayList mit Inhalten für den entsprechenden Report zurück, siehe Reports Klasse für
 	 * den Aufbau der ArrayListe
@@ -268,4 +277,5 @@ public interface ApplicationServer extends Remote {
 	 * @author robert
 	 */
 	public ArrayList getReport(int typ, Institut institut) throws ApplicationServerException;
+
 }

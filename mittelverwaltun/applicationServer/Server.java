@@ -1,22 +1,20 @@
 package applicationServer;
 
-import gui.Functions;
+import gui.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.rmi.Naming;
+import java.io.*;
+import java.rmi.*;
+import com.gc.systray.*;
 
-public class Server extends JFrame implements ActionListener {
+public class Server extends JFrame implements ActionListener, SystemTrayIconListener {
 	
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
 
-	String rmiregistry = "C:\\Programme\\Java\\j2re1.4.2_05\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\Programme\\Java\\j2re1.4.2_05\\lib";
-
-//	String rmiregistry = "C:\\j2sdk1.4.0\\bin\\rmiregistry.exe ";
-//	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.0\\lib";
+	String rmiregistry = "C:\\j2sdk1.4.2\\bin\\rmiregistry.exe ";
+	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2\\lib";
 
 	final int delay = 3000;
 	JScrollPane scrollList = new JScrollPane();
@@ -27,18 +25,114 @@ public class Server extends JFrame implements ActionListener {
 	JButton buDelUser = new JButton();
 	StatusBar statusBar = new StatusBar();
 	JButton buClose = new JButton();
-
-	
 	int userCount = 1;
+	
+	// SystemTray Komponenten
+	JPopupMenu sysTrayMenu = new JPopupMenu();
+	JMenuItem miRegistry = new JMenuItem();
+	JMenuItem miServer = new JMenuItem();
+	JMenuItem miClose = new JMenuItem();
+	SystemTrayIconManager sysTrayMgr;
+	int icons[] = new int[3];
+	int presIcon;
+	String toolTips[] = {"Registry gestopt.\nServer gestopt.", 
+							"Registry gestartet.\nServer gestopt.", 
+							"Registry gestartet.\nServer gestartet."};
+	String presToolTip = toolTips[0];
+	
 	
 	public Server() {
 		super("Central Server");
 		try {
 			jbInit();
-		}
-		catch(Exception e) {
+			initSysTray();
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String args[]){
+		Server server = new Server();
+		server.synchronize();
+	}
+
+	/**
+	 * SystemTrayIconListener implementation
+	 */
+	public void mouseClickedLeftButton(Point pos, SystemTrayIconManager source) {
+	}
+	public void mouseClickedRightButton(Point pos, SystemTrayIconManager ssource) {
+	}
+	public void mouseLeftDoubleClicked(Point pos, SystemTrayIconManager source) {
+		sysTrayMgr.setVisible(false);
+		this.setVisible(true);
+		this.setExtendedState(Frame.NORMAL);
+		this.toFront();
+	}
+	public void mouseRightDoubleClicked(Point pos, SystemTrayIconManager source) {
+	}
+	
+	private void initSysTray() throws Exception {
+		// MenuItem Registry
+		sysTrayMenu.add(miRegistry);
+		miRegistry.setText(buRegistry.getText());
+		miRegistry.addActionListener( this );
+		miRegistry.setIcon(Functions.getWebIcon(getClass()));
+		// MenuItem Server
+		sysTrayMenu.add(miServer);
+		miServer.setText(buServer.getText());
+		miServer.addActionListener( this );
+		miServer.setEnabled( false );
+		miServer.setIcon(Functions.getServerIcon(getClass()));
+		// MenuItem Close
+		sysTrayMenu.add(miClose);
+		miClose.setText(buClose.getText());
+		miClose.addActionListener( this );
+		miClose.setIcon(Functions.getCloseIcon(getClass()));
+
+		if (!SystemTrayIconManager.initializeSystemDependent()) {
+			throw new Exception("No DesktopIndicator.dll - File.");
+		}
+		presIcon = icons[0] = SystemTrayIconManager.loadImage("./image/traf_red.ico");
+		icons[1] = SystemTrayIconManager.loadImage("./image/traf_yellow.ico");
+		icons[2] = SystemTrayIconManager.loadImage("./image/traf_green.ico");
+		for(int i = 0; i < icons.length; i++) {
+			if(icons[i] == -1) {
+				throw new Exception("No Icon.");
+			}
+		}
+		sysTrayMgr = new SystemTrayIconManager(presIcon, presToolTip);
+		sysTrayMgr.addSystemTrayIconListener(this);
+		sysTrayMgr.setRightClickView(sysTrayMenu);
+		sysTrayMgr.setVisible(true);
+		sysTrayMgr.setVisible(false);
+	}
+	
+	public void synchronize() {
+		try {
+			while (true) {
+				synchronized( this ) {
+					this.wait(1);
+				}
+			}
+		} catch( InterruptedException x ) {
+		}
+		sysTrayMgr.setVisible(false);
+		sysTrayMgr.removeSystemTrayIconListener(this);
+		this.setVisible(true);
+		for( int i = 0; i < listModel.size(); i++ )
+			((User)listModel.getElementAt( i )).logout();
+		if( rmiProcess != null ) {
+			rmiProcess.destroy();
+		}
+		centralServer = null;
+		this.dispose();
+		System.exit( 0 );
+	}
+	
+	public void iconify() {
+		this.setVisible(false);
+		sysTrayMgr.update(presIcon, presToolTip);
 	}
 	
 	private void jbInit() throws Exception {
@@ -85,6 +179,10 @@ public class Server extends JFrame implements ActionListener {
 			public void windowClosing(WindowEvent e) {
 				Server server = (Server)e.getSource();
 				server.actionPerformed( new ActionEvent( server.getCloseButton(), 0, "" ) );
+			}
+			public void windowIconified(WindowEvent e) {
+				Server server = (Server)e.getSource();
+				server.iconify();
 			}
 		} );
 	}
@@ -137,23 +235,23 @@ public class Server extends JFrame implements ActionListener {
 			}
 		}
 	}
-	
-	public static void main(String args[]){
-		new Server();
-	}
-	
+		
 	public JButton getCloseButton() {
 		return buClose; 
 	}
 	
 		
 	public void actionPerformed(ActionEvent e) {
-		if( e.getSource() == buRegistry ) {
+		if( e.getSource() == buRegistry || e.getSource() == miRegistry ) {
 			if( rmiProcess == null && centralServer == null  ){
 				try {
 					rmiProcess = Runtime.getRuntime().exec(rmiregistry + " " + classpath);
 					buRegistry.setText( "Stop Registry" );
 					buServer.setEnabled( true );
+					miRegistry.setText( "Stop Registry" );
+					miServer.setEnabled( true );
+					presIcon = icons[1];
+					presToolTip = toolTips[1];
 					statusBar.showTextForMilliseconds( "RMI-Registry wurde gestartet.", delay );
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -165,11 +263,18 @@ public class Server extends JFrame implements ActionListener {
 				statusBar.showTextForMilliseconds( "RMI-Registry wurde gestopt.", delay );
 				buRegistry.setText( "Start Registry" );
 				buServer.setEnabled( false );
+				miRegistry.setText( "Start Registry" );
+				miServer.setEnabled( false );
+				presIcon = icons[0];
+				presToolTip = toolTips[0];
 			} else if( rmiProcess != null && centralServer != null ) {
 				JOptionPane.showMessageDialog( this, "Sie müssen zuerst den Server aus der Registry entfernen !",
 														"Fehler !", JOptionPane.ERROR_MESSAGE );
 			}
-		} else if( e.getSource() == buServer ) {
+			if(this.getExtendedState() == Frame.ICONIFIED) {
+				sysTrayMgr.update(presIcon, presToolTip);
+			}
+		} else if( e.getSource() == buServer || e.getSource() == miServer ) {
 			if( rmiProcess == null && centralServer == null  ){
 				JOptionPane.showMessageDialog( this, "Sie müssen zuerst Registry starten !",
 														"Fehler !", JOptionPane.ERROR_MESSAGE );
@@ -178,6 +283,10 @@ public class Server extends JFrame implements ActionListener {
 					Naming.rebind("mittelverwaltung", centralServer = new CentralServerImpl( this ));
 					buRegistry.setEnabled( false );
 					buServer.setText( "Server entfernen" );
+					miRegistry.setEnabled( false );
+					miServer.setText( "Server entfernen" );
+					presIcon = icons[2];
+					presToolTip = toolTips[2];
 					statusBar.showTextForMilliseconds( "Server wurde registriert.", delay );
 				} catch(Exception ex) {
 					ex.printStackTrace();
@@ -189,10 +298,17 @@ public class Server extends JFrame implements ActionListener {
 					centralServer = null;
 					buRegistry.setEnabled( true );
 					buServer.setText( "Server registrieren" );
+					miRegistry.setEnabled( true );
+					miServer.setText( "Server registrieren" );
+					presIcon = icons[1];
+					presToolTip = toolTips[1];
 					statusBar.showTextForMilliseconds( "Server wurde entfernt.", delay );
 				} catch(Exception ex) {
 					ex.printStackTrace();
 				}
+			}
+			if(this.getExtendedState() == Frame.ICONIFIED) {
+				sysTrayMgr.update(presIcon, presToolTip);
 			}
 		} else if( e.getSource() == buDelUser ) {
 			if( listUser.getSelectedIndex() >= 0 ) {
@@ -205,7 +321,7 @@ public class Server extends JFrame implements ActionListener {
 					statusBar.showTextForMilliseconds( "Der User '" + temp.getBenutzer() + "' wurde entfernt.", delay );
 				}
 			}
-		} else if( e.getSource() == buClose ) {
+		} else if( e.getSource() == buClose || e.getSource() == miClose ) {
 			int result = JOptionPane.YES_OPTION;
 			if( listModel.size() > 0 ) {
 				 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
@@ -220,6 +336,8 @@ public class Server extends JFrame implements ActionListener {
 			if( rmiProcess != null ) {
 				rmiProcess.destroy();
 			}
+			sysTrayMgr.setVisible(false);
+			sysTrayMgr.removeSystemTrayIconListener(this);
 			centralServer = null;
 			this.dispose();
 			System.exit( 0 );

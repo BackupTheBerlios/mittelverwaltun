@@ -104,6 +104,13 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					}
+			}else if (tabBestellungen.getSelectedOrderType()==OrderTable.ZA_TYP){
+				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.ABGESCHLOSSEN)
+					try {
+						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabBestellungen.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
 			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();
