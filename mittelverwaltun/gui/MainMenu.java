@@ -57,17 +57,17 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Reporting"
 	JMenu menuReporting = new JMenu("Reporting");
 
-		JMenuItem miLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Logliste anzeigen");
-		JMenu menuZVReport = new JMenu("Zentralverwaltung");
-			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
-			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
-			JMenuItem miZVVerteilung = new JActivityRelatedMenuItem(1, "Verteilung");
-		JMenu menuFBReport = new JMenu("Fachbereichsintern");
-			JMenuItem miFBAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
-			JMenuItem miFBAusgabeNachKundV = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten und Verwaltungskonten");
-		JMenu menuInstitutReport = new JMenu("Institutsintern");
-			JMenuItem miIAusgabeNachVK = new JActivityRelatedMenuItem(1, "Ausgabe nach Verwaltungskonten");
-			JMenuItem miBestellungen = new JActivityRelatedMenuItem(1, "Bestellungen");
+		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Reports/Logliste anzeigen");
+//		JMenu menuZVReport = new JMenu("Zentralverwaltung");
+//			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
+//			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
+//			JMenuItem miZVVerteilung = new JActivityRelatedMenuItem(1, "Verteilung");
+//		JMenu menuFBReport = new JMenu("Fachbereichsintern");
+//			JMenuItem miFBAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
+//			JMenuItem miFBAusgabeNachKundV = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten und Verwaltungskonten");
+//		JMenu menuInstitutReport = new JMenu("Institutsintern");
+//			JMenuItem miIAusgabeNachVK = new JActivityRelatedMenuItem(1, "Ausgabe nach Verwaltungskonten");
+//			JMenuItem miBestellungen = new JActivityRelatedMenuItem(1, "Bestellungen");
 			
 	// Das Hauptfenster
 	MainFrame frame;
@@ -183,33 +183,33 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			
 		// Das Menü "Reporting"
 		add( menuReporting );
-			menuReporting.add( miLoglisteAnzeigen );
-			activityRelItems.add( miLoglisteAnzeigen );
-			miLoglisteAnzeigen.addActionListener( this );
-			menuReporting.add( menuZVReport );
-				menuZVReport.add( miZVAusgabeNachK );
-				activityRelItems.add( miZVAusgabeNachK );
-				miZVAusgabeNachK.addActionListener( this );
-				menuZVReport.add( miZVAusgabeNachKundI );
-				activityRelItems.add( miZVAusgabeNachKundI );
-				miZVAusgabeNachKundI.addActionListener( this );
-				menuZVReport.add( miZVVerteilung );
-				activityRelItems.add( miZVVerteilung );
-				miZVVerteilung.addActionListener( this );
-			menuReporting.add( menuFBReport );
-				menuFBReport.add( miFBAusgabeNachK );
-				activityRelItems.add( miFBAusgabeNachK );
-				miFBAusgabeNachK.addActionListener( this );
-				menuFBReport.add( miFBAusgabeNachKundV );
-				activityRelItems.add( miFBAusgabeNachKundV );
-				miFBAusgabeNachKundV.addActionListener( this );
-			menuReporting.add( menuInstitutReport );
-				menuInstitutReport.add( miIAusgabeNachVK );
-				activityRelItems.add( miIAusgabeNachVK );
-				miIAusgabeNachVK.addActionListener( this );
-				menuInstitutReport.add( miBestellungen );
-				activityRelItems.add( miBestellungen );
-				miBestellungen.addActionListener( this );
+			menuReporting.add( miReportsLoglisteAnzeigen );
+			activityRelItems.add( miReportsLoglisteAnzeigen );
+			miReportsLoglisteAnzeigen.addActionListener( this );
+//			menuReporting.add( menuZVReport );
+//				menuZVReport.add( miZVAusgabeNachK );
+//				activityRelItems.add( miZVAusgabeNachK );
+//				miZVAusgabeNachK.addActionListener( this );
+//				menuZVReport.add( miZVAusgabeNachKundI );
+//				activityRelItems.add( miZVAusgabeNachKundI );
+//				miZVAusgabeNachKundI.addActionListener( this );
+//				menuZVReport.add( miZVVerteilung );
+//				activityRelItems.add( miZVVerteilung );
+//				miZVVerteilung.addActionListener( this );
+//			menuReporting.add( menuFBReport );
+//				menuFBReport.add( miFBAusgabeNachK );
+//				activityRelItems.add( miFBAusgabeNachK );
+//				miFBAusgabeNachK.addActionListener( this );
+//				menuFBReport.add( miFBAusgabeNachKundV );
+//				activityRelItems.add( miFBAusgabeNachKundV );
+//				miFBAusgabeNachKundV.addActionListener( this );
+//			menuReporting.add( menuInstitutReport );
+//				menuInstitutReport.add( miIAusgabeNachVK );
+//				activityRelItems.add( miIAusgabeNachVK );
+//				miIAusgabeNachVK.addActionListener( this );
+//				menuInstitutReport.add( miBestellungen );
+//				activityRelItems.add( miBestellungen );
+//				miBestellungen.addActionListener( this );
 		
 		// Aktivieren der Menüeinträge
 		if( frame.getBenutzer() != null )		
@@ -260,14 +260,15 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miAendern ) {
 			frame.addChild( new HaushaltsjahrAendern(frame.getApplicationServer()) );
 		} else if ( e.getSource() == miMitteluebertrag ) {
-		} else if ( e.getSource() == miLoglisteAnzeigen ) {
-		} else if ( e.getSource() == miZVAusgabeNachK ) {
-		} else if ( e.getSource() == miZVAusgabeNachKundI ) {
-		} else if ( e.getSource() == miZVVerteilung ) {
-		} else if ( e.getSource() == miFBAusgabeNachK ) {
-		} else if ( e.getSource() == miFBAusgabeNachKundV ) {
-		} else if ( e.getSource() == miIAusgabeNachVK ) {
-		} else if ( e.getSource() == miBestellungen ){
+		} else if ( e.getSource() == miReportsLoglisteAnzeigen ) {
+			frame.addChild( new Reports(frame) );
+//		} else if ( e.getSource() == miZVAusgabeNachK ) {
+//		} else if ( e.getSource() == miZVAusgabeNachKundI ) {
+//		} else if ( e.getSource() == miZVVerteilung ) {
+//		} else if ( e.getSource() == miFBAusgabeNachK ) {
+//		} else if ( e.getSource() == miFBAusgabeNachKundV ) {
+//		} else if ( e.getSource() == miIAusgabeNachVK ) {
+//		} else if ( e.getSource() == miBestellungen ){
 		} else {																			//Mario: Änderung 01.09.2004
 			int i = 0;																		//
 			while ( i < miTmpRollen.length ) {												//

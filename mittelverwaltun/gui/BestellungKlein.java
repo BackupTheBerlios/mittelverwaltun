@@ -9,7 +9,6 @@ import applicationServer.*;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.print.*;
 import java.beans.*;
 import java.rmi.*;
 import java.sql.Date;
@@ -263,7 +262,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		buBestellen.setBounds(new Rectangle(10, 490, 150, 25));
 		buBestellen.setText("Bestellen");
 		buDrucken.setBounds(new Rectangle(235, 490, 150, 25));
-		buDrucken.setText("Drucken");
+		buDrucken.setText("Vorschau");
 		buAbbrechen.setBounds(new Rectangle(460, 490, 150, 25));
 		buAbbrechen.setText("Abbrechen");
 		labAuszahlungAn.setText("Auszahlung an");
@@ -426,32 +425,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				return;		// Srung aus der Methode
 			}
 			// Wenn keine Fehler beim Formular, dann Drucken
-			PrinterJob pJob = PrinterJob.getPrinterJob();
-			pJob.setJobName("Kleinbestellung");
-
-			PageFormat pf = new PageFormat();
-			Paper paper = pf.getPaper() ;
-			paper.setImageableArea(35,90,560,712) ;
-			paper.setSize(595,842);
-			pf.setPaper(paper);
-			PrintKleinBestellung printFrame = new PrintKleinBestellung(getKleinBestellung());
-			printFrame.show();
-			printFrame.setVisible(false);
-
-			Book book = new Book();
-			book.append(printFrame, pf);
-
-			if(pJob.printDialog()){
-				try{
-					pJob.setPrintable(printFrame, pf);
-					pJob.print();
-				}catch(PrinterException pexc){
-					System.out.println("Fehler beim Drucken");
-				}
-			}
-			pJob.cancel();
-			if(pJob.isCancelled())
-				printFrame.dispose();
+				PrintKleinBestellung printFrame = new PrintKleinBestellung(getKleinBestellung(), frame);
 		} else if ( e.getSource() == buAbbrechen ) {
 			this.dispose();
 		} else if( e.getSource() == buBestellen ) {

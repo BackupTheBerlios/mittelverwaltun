@@ -21,6 +21,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.net.URL;
 import java.rmi.Naming;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 
@@ -80,17 +82,23 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	 * FB-Konto, Einnahmen
 	 */
 	public static final int REPORT_8 = 8;
+	
+	/**
+	 * Typ für die Anzeige der Änderungen durch Benutzer in der Datenbank
+	 */
+	public static final int LOGS = 9;
 
 	MainFrame frame;
-
 	JButton btBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
 	JScrollPane spReport = new JScrollPane();
 	JComboBox cbReportFilter;
+	String[] types = {"alle", "Add", "Set", "Del", "Buchung"};
+	JComboBox cbLogsType = new JComboBox(types);
 	JButton btAktualisieren = new JButton(Functions.getFindIcon(this.getClass()));
 	ReportsTable tabReport;
   JLabel labInstitut = new JLabel();
   JComboBox cbZVKonten = new JComboBox();
-  String[] items = {"Report_1", "Report_2", "Report_3", "Report_4", "Report_5", "Report_6", "Report_7", "Report_8"};
+  String[] items = {"Report_1", "Report_2", "Report_3", "Report_4", "Report_5", "Report_6", "Report_7", "Report_8", "Logs"};
 	String[] 	tooltips = {"<html><p>Ein Report, der die Konten der Zentralverwaltung <br>" +
 														"und die zugewiesenen Mittel, die Summe der <br>" +
 														"Ausgaben und aktuellen Kontostände enthält</p></html>",
@@ -105,11 +113,16 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 												"<html><p>Für jedes Instiut ein detaillierter Report über die Ausgaben mit FBI-Schlüsselnummer, <br>" +
 														"Hüll-Nr, Datum, welches Konto der Zentralverwaltung belastet wurde, Firma, Beschreibung des bestellten Artikels, <br>" +
 														"Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung</p></html>",
-												"Für jedes Instiut ein Report über die Einnahmen"};
+												"Für jedes Instiut ein Report über die Einnahmen",
+												"Anzeige aller Änderungen der Benutzer in der Datenbank"};
   JButton btDrucken = new JButton(Functions.getPrintIcon(this.getClass()));
   JComboBox cbInstitut = new JComboBox();
   String filter = "";
   String xmlFile = "";
+  JLabel jLabel1 = new JLabel();
+  JFormattedTextField tfDatumVon = new JFormattedTextField(DateFormat.getDateInstance());
+  JLabel jLabel2 = new JLabel();
+  JFormattedTextField tfDatumBis = new JFormattedTextField(DateFormat.getDateInstance());
 
 	public Reports(MainFrame frame) {
 		this.frame = frame;
@@ -124,7 +137,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	private void jbInit() throws Exception {
 
-		this.setSize(new Dimension(800, 414));
+		this.setSize(new Dimension(800, 458));
 		this.setFrameIcon(null);
     this.setTitle("Reports");
     this.getContentPane().setLayout(null);
@@ -145,23 +158,22 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     tabReport = new ReportsTable(this);
     tabReport.setFont(new java.awt.Font("Dialog", 0, 11));
 
-    spReport.setBounds(new Rectangle(14, 52, 760, 288));
+    spReport.setBounds(new Rectangle(13, 98, 760, 288));
     labInstitut.setFont(new java.awt.Font("Dialog", 1, 11));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(211, 12, 61, 27));
     labInstitut.setVisible(false);
 		cbZVKonten.setBounds(new Rectangle(278, 12, 363, 27));
 		cbZVKonten.setVisible(false);
-		cbZVKonten.setActionCommand("selectZVKonto");
 		cbZVKonten.addItemListener(this);
 		btDrucken.setText("Drucken");
     btDrucken.addActionListener(this);
     btDrucken.setActionCommand("printReport");
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
-    btDrucken.setBounds(new Rectangle(514, 349, 120, 27));
+    btDrucken.setBounds(new Rectangle(513, 395, 120, 27));
 
 
-    btBeenden.setBounds(new Rectangle(654, 349, 120, 27));
+    btBeenden.setBounds(new Rectangle(653, 395, 120, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
     btBeenden.setActionCommand("dispose");
     btBeenden.addActionListener(this);
@@ -169,18 +181,38 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
     cbInstitut.setBounds(new Rectangle(278, 12, 363, 27));
     cbInstitut.setVisible(false);
-	 	cbInstitut.setActionCommand("selectInstitut");
 	 	cbInstitut.addItemListener(this);
 
-	 	this.getContentPane().add(cbZVKonten, null);
+		cbLogsType.setBounds(new Rectangle(278, 12, 100, 27));
+		cbLogsType.setVisible(false);
+		cbLogsType.addItemListener(this);
+
+    jLabel1.setFont(new java.awt.Font("Dialog", 1, 11));
+    jLabel1.setToolTipText("");
+    jLabel1.setText("Zeitraum von:");
+    jLabel1.setBounds(new Rectangle(14, 56, 87, 29));
+    tfDatumVon.setValue(new Date(System.currentTimeMillis()));
+    tfDatumVon.setBounds(new Rectangle(100, 60, 106, 20));
+    jLabel2.setBounds(new Rectangle(219, 56, 30, 29));
+    jLabel2.setText("bis:");
+    jLabel2.setToolTipText("");
+    jLabel2.setFont(new java.awt.Font("Dialog", 1, 11));
+    tfDatumBis.setBounds(new Rectangle(255, 60, 106, 20));
+    tfDatumBis.setValue(new Date(System.currentTimeMillis()));
+    this.getContentPane().add(cbZVKonten, null);
     this.getContentPane().add(labInstitut, null);
     this.getContentPane().add(btAktualisieren, null);
     this.getContentPane().add(cbInstitut, null);
+	 this.getContentPane().add(cbLogsType, null);
     this.getContentPane().add(cbReportFilter, null);
     this.getContentPane().add(btBeenden, null);
-    this.getContentPane().add(btDrucken, null);
     this.getContentPane().add(spReport, null);
+    this.getContentPane().add(btDrucken, null);
     spReport.getViewport().add(tabReport, null);
+    this.getContentPane().add(tfDatumBis, null);
+    this.getContentPane().add(jLabel1, null);
+    this.getContentPane().add(tfDatumVon, null);
+    this.getContentPane().add(jLabel2, null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -194,7 +226,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			this.dispose();
 		}
 	}
-	
+
 	/**
 	* Reads the report from the specified template file.
 	*
@@ -342,6 +374,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			cbReportFilter.setToolTipText(tooltips[7]);
 			report = REPORT_8;
 			xmlFile = "/xml/report8.xml";
+		}else if(r == "Logs"){
+			cbReportFilter.setToolTipText(tooltips[8]);
+			report = LOGS;
+			xmlFile = "/xml/logs.xml";
 		}
 
 		if(e.getSource() == cbReportFilter){
@@ -352,14 +388,23 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 				labInstitut.setVisible(true);
 				cbInstitut.setVisible(true);
 				cbZVKonten.setVisible(false);
+				cbLogsType.setVisible(false);
 			}else if(r == "Report_5"){
 				labInstitut.setText("ZVKonto");
 				labInstitut.setVisible(true);
 				cbZVKonten.setVisible(true);
 				cbInstitut.setVisible(false);
+				cbLogsType.setVisible(false);
+			}else if(r == "Logs"){
+				labInstitut.setText("Log-Typ");
+				labInstitut.setVisible(true);
+				cbZVKonten.setVisible(false);
+				cbInstitut.setVisible(false);
+				cbLogsType.setVisible(true);
 			}else{
 				labInstitut.setVisible(false);
 				cbInstitut.setVisible(false);
+				cbLogsType.setVisible(false);
 			}
 		}else if(e.getSource() == cbInstitut){
 			Institut i = (Institut)cbInstitut.getSelectedItem();
@@ -382,6 +427,16 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 			if(report == tabReport.getReportType())
 				tabReport.filterView(this.filter);
+		}else if(e.getSource() == cbLogsType){
+			String type = (String)cbLogsType.getSelectedItem();
+	
+			if(type.equals("alle"))
+				this.filter = "";
+			else
+				this.filter = type;
+	
+			if(report == tabReport.getReportType())
+				tabReport.filterView(this.filter);
 		}
 	}
 
@@ -393,47 +448,59 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		 ToolTipManager.sharedInstance().unregisterComponent(component);
 		 component.setToolTipText(oldToolTipText);
 	}
-	
+
 	private void showReport(){
 		try {
+			java.util.Date vonUtil = (java.util.Date)tfDatumVon.getValue();
+			Date von = new Date(vonUtil.getTime());
+
+			java.util.Date bisUtil = (java.util.Date)tfDatumBis.getValue();
+			Date bis = new Date(bisUtil.getTime());
+
+			
 			if(cbReportFilter.getSelectedItem() == "Report_1"){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_1);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_1, von, bis);
 						tabReport.fillReport(REPORT_1, "", content);
 			} else if(cbReportFilter.getSelectedItem() == "Report_2"){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_2);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_2, von, bis);
 						tabReport.fillReport(REPORT_2, filter, content);
 			} else if(cbReportFilter.getSelectedItem() == "Report_3"){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_3);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_3, von, bis);
 						tabReport.fillReport(REPORT_3, filter, content);
 			} else if(cbReportFilter.getSelectedItem() == "Report_4"){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_4);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_4, von, bis);
 						tabReport.fillReport(REPORT_4, "", content);
 			} else if(cbReportFilter.getSelectedItem() == "Report_5"){
 				if(cbZVKonten.getSelectedItem() != null){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_5);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_5, von, bis);
 						tabReport.fillReport(REPORT_5, filter, content);
 				}
 			} else if(cbReportFilter.getSelectedItem() == "Report_6"){
 				if(cbInstitut.getSelectedItem() != null){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_6);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_6, von, bis);
 						tabReport.fillReport(REPORT_6, filter, content);
 				}
 			} else if(cbReportFilter.getSelectedItem() == "Report_7"){
 				if(cbInstitut.getSelectedItem() != null){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_7);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_7, von, bis);
 						tabReport.fillReport(REPORT_7, filter, content);
 				}
 			} else if(cbReportFilter.getSelectedItem() == "Report_8"){
 				if(cbInstitut.getSelectedItem() != null){
-						ArrayList content = frame.getApplicationServer().getReport(REPORT_8);
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_8, von, bis);
 						tabReport.fillReport(REPORT_8, filter, content);
+				}
+			}else if(cbReportFilter.getSelectedItem() == "Logs"){
+				if(cbInstitut.getSelectedItem() != null){
+						ArrayList content = frame.getApplicationServer().getLogList(von, bis);
+						tabReport.fillReport(LOGS, filter, content);
 				}
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 		}
 	}
-	
+
 	private void showOrder(){
 		try {
 			if (tabReport.getSelectedOrderType()==OrderTable.STD_TYP){
@@ -450,10 +517,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 		}
 	}
-	
+
 	private void printReport(){
 		final URL in = getClass().getResource(xmlFile);
-		
+
 		if (in == null){
 			System.out.println("xml not found");
 			return;
@@ -461,22 +528,30 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		JCheckBox test = new JCheckBox();
 		test.setSelected(true);
 		test.setBackground(Color.WHITE);
-	
+
 		JFreeReport report = new JFreeReport();
-		
+
 		report = parseReport(in);
 		report.setData(tabReport.getModel());
-	
+
 		final URL imageURL = getClass().getResource("../image/fhlogo.jpg");
 		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
 		final WaitingImageObserver obs = new WaitingImageObserver(image);
 		obs.waitImageLoaded();
 		report.setProperty("logo", image);
 		report.setPropertyMarked("logo", true);
-		
-		report.setProperty("description", "adresse\ntest\nbla\n");
-		report.setPropertyMarked("description", true);
-	
+
+		java.util.Date vonUtil = (java.util.Date)tfDatumVon.getValue();
+		Date von = new Date(vonUtil.getTime());
+
+		java.util.Date bisUtil = (java.util.Date)tfDatumBis.getValue();
+		Date bis = new Date(bisUtil.getTime());
+
+		report.setProperty("datumVon", DateFormat.getDateInstance().format(von));
+		report.setPropertyMarked("datumVon", true);
+		report.setProperty("datumBis", DateFormat.getDateInstance().format(bis));
+		report.setPropertyMarked("datumBis", true);
+
 		try {
 			final PreviewInternalFrame preview = new PreviewInternalFrame(report);
 			preview.getBase().setToolbarFloatable(true);
@@ -486,7 +561,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			preview.pack();
 			frame.addChild(preview);
 			preview.setVisible(true);
-	
+
 		} catch (ReportProcessingException e1) {
 			e1.printStackTrace();
 		}

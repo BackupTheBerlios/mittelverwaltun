@@ -26,6 +26,12 @@ public class Database implements Serializable{
 		this.statements = null;
 	}
 
+	/**
+	 * stellt eine Verbindung zur Datenbank her mit dem benutzernamen
+	 * @param user - benutzername
+	 * @throws ConnectionException
+	 * @author Mario
+	 */
 	public void connect (String user) throws ConnectionException{
 		try{
 			System.out.println("Load database driver...");
@@ -53,6 +59,11 @@ public class Database implements Serializable{
 		} 
 	}
 
+	/**
+	 * unterbricht die Verbindung mit der Datenbank
+	 * @throws ConnectionException
+	 * @author Mario
+	 */
 	public void disconnect() throws ConnectionException{
 		try {
 			System.out.println("Release SQL-Statements...");
@@ -67,7 +78,6 @@ public class Database implements Serializable{
 
 		}
 	}
-
 
 	/**
 	 * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören <br>
@@ -590,8 +600,14 @@ public class Database implements Serializable{
 		}
 	}
 	
-	
-
+	/**
+	 * gibt einen Benutzer mit dem übergebenen Benutzernamen und Passwort zurück
+	 * @param user - Benutzername in der Datenbank
+	 * @param password
+	 * @return Benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Benutzer selectUser(String user, String password) throws ApplicationServerException{
 		Benutzer benutzer = null;
 
@@ -610,13 +626,19 @@ public class Database implements Serializable{
 
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1,e.getMessage());
+			throw new ApplicationServerException(113,e.getMessage());
 		}
 
 		return benutzer;
 	}
 
-	// Liefert einen Benutzer und sperrt diesen Datensatz für ein Update
+	/**
+	 * Liefert einen Benutzer und sperrt diesen Datensatz für ein Update
+	 * @param benutzer
+	 * @return Benutzer aus der Datenbank für den Vergleich ob sich zwischenzeitlich was geändert hat
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Benutzer selectForUpdateUser(Benutzer benutzer) throws ApplicationServerException{
 		Benutzer b = null;
 		try{
@@ -630,11 +652,17 @@ public class Database implements Serializable{
 							rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(114, e.getMessage());
 		}
 		return b;
 	}
 
+	/**
+	 * gibt alle Benutzer im System zurück
+	 * @return Benutzer-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Benutzer[] selectUsers() throws ApplicationServerException{
 		Benutzer[] benutzer = null;
 
@@ -658,7 +686,7 @@ public class Database implements Serializable{
 			}
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(115, e.getMessage());
 		}
 
 		return benutzer;
@@ -668,6 +696,7 @@ public class Database implements Serializable{
 	 * gibt alle SwBeauftragte des Fachbereichs zurück
 	 * @return Benutzer-Array mit allen SwBeauftragten
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Benutzer[] selectSwBeauftragte() throws ApplicationServerException{
 		Benutzer[] benutzer = null;
@@ -693,6 +722,13 @@ public class Database implements Serializable{
 		return benutzer;
 	}
 
+	/**
+	 * gibt alle temporären Rollen des Empfängers zurück
+	 * @param empfaenger
+	 * @return TmpRolle-Array
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */
 	public TmpRolle[] selectTempRollen (int empfaenger) throws ApplicationServerException{
 
 		TmpRolle[] tmpRollen = new TmpRolle[0];
@@ -722,6 +758,13 @@ public class Database implements Serializable{
 		return tmpRollen;
 	}
 
+	/**
+	 * gibt alle ID der Aktivitäten einer Rolle zurück
+	 * @param rollenId - Id der Rolle
+	 * @return int-Array mit allen Id´s der Aktivitäten
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */
 	public int[] selectAktivitaeten(int rollenId) throws ApplicationServerException{
 
 		int[] aktivitaeten = null;
@@ -749,6 +792,12 @@ public class Database implements Serializable{
 		return aktivitaeten;
 	}
 
+	/**
+	 * gibt alle Fachbereiche zurück. Im Moment nur den Fachbereich Informatik
+	 * @return Fachberich-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Fachbereich[] selectFachbereiche() throws ApplicationServerException{
 		Fachbereich[] fachbereiche = null;
 		try{
@@ -795,6 +844,12 @@ public class Database implements Serializable{
 		return f;
 	}
 
+	/**
+	 * aktualisiert den übergebenen Fachberiech in der Datenbank
+	 * @param fachbereich
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateFachbereich(Fachbereich fachbereich) throws ApplicationServerException{
 		if(fachbereich != null){
 			try{
@@ -806,11 +861,17 @@ public class Database implements Serializable{
 					throw new ApplicationServerException(3);
 
 			} catch (SQLException e){
-				throw new ApplicationServerException(1, e.getMessage());
+				throw new ApplicationServerException(116, e.getMessage());
 			}
 		}
 	}
 
+	/**
+	 * gibt alle Institute des Fachbereichs zurück
+	 * @return Institut-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Institut[] selectInstitutes() throws ApplicationServerException{
 
 		Institut[] institutes = null;
@@ -830,7 +891,7 @@ public class Database implements Serializable{
 			}
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(117, e.getMessage());
 		}
 
 		return institutes;
@@ -841,6 +902,7 @@ public class Database implements Serializable{
 	 * @param id des Instituts
 	 * @return Institut
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Institut selectInstitute(int id) throws ApplicationServerException{
 		Institut institut = null;
@@ -854,12 +916,18 @@ public class Database implements Serializable{
 			
 			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 1, e.getMessage() );
+			throw new ApplicationServerException( 118, e.getMessage() );
 		}
 
 		return institut;		
 	}
 
+	/**
+	 * löscht das übergebene Institut
+	 * @param institut
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteInstitute(Institut institut) throws ApplicationServerException{
 		try{
 
@@ -868,11 +936,17 @@ public class Database implements Serializable{
 
 
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(119, e.getMessage());
 		}
 	}
 
-
+	/**
+	 * fügt ein neues Institut in die Datenbank hinzu
+	 * @param institut
+	 * @return Id - neue Id des Instituts
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public int insertInstitute(Institut institut) throws ApplicationServerException{
 		if(checkInstitute(institut) == 0){
 			try{
@@ -885,7 +959,7 @@ public class Database implements Serializable{
 					return rs.getInt(1);
 				}
 			} catch (SQLException e){
-				throw new ApplicationServerException(1, e.getMessage());
+				throw new ApplicationServerException(120, e.getMessage());
 			}
 		}else{
 			throw new ApplicationServerException(4);
@@ -893,7 +967,13 @@ public class Database implements Serializable{
 		return 0;
 	}
 
-	// Gibt die Benutzer eines Instituts zurück
+	/**
+	 * Gibt die Benutzer eines Instituts zurück
+	 * @param institut
+	 * @return Benutzer-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Benutzer[] selectUsers(Institut institut) throws ApplicationServerException{
 		Benutzer[] benutzer = null;
 		try{
@@ -919,7 +999,7 @@ public class Database implements Serializable{
 			rs.close();
 			return benutzer;
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(121, e.getMessage());
 		}
 	}
 	
@@ -928,6 +1008,7 @@ public class Database implements Serializable{
 	 * @param userId
 	 * @return Benutzer
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Benutzer selectUser(int userId) throws ApplicationServerException{
 		Benutzer benutzer = null;
@@ -953,6 +1034,13 @@ public class Database implements Serializable{
 		return benutzer;
 	}
 
+	/**
+	 * gibt ein Institut aus der Datenbank und sperrt diesen Datensatz für eine Aktualisierung
+	 * @param institut
+	 * @return Institut aus der Datenbank für den Abgleich
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Institut selectForUpdateInstitute(Institut institut) throws ApplicationServerException{
 		Institut inst = null;
 		try{
@@ -963,12 +1051,19 @@ public class Database implements Serializable{
 				inst = new Institut (rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4));
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(122, e.getMessage());
 		}
 		return inst;
 	}
 
-	// Prüft ob die Änderung des Instituts oder das Einfügen gemacht werden kann
+	/**
+	 * Prüft ob die Änderung des Instituts oder das Einfügen gemacht werden kann.
+	 * Es wird die Anzahl der Institute zurückgegen, mit der gleichen Bezeichnung und Kostenstelle.
+	 * @param institut
+	 * @return Anzahl der gefundenen Institute ausser das übergebene Institut - bei 0 ist das Einfügen kein Problem
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public int checkInstitute(Institut institut) throws ApplicationServerException{
 		try{
 			Object[] parameters = { new Integer(institut.getId()), institut.getBezeichnung(), new Integer(institut.getKostenstelle()) };
@@ -976,10 +1071,16 @@ public class Database implements Serializable{
 			rs.last();
 			return rs.getRow();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(123, e.getMessage());
 		}
 	}
 
+	/**
+	 * aktualisiert ein Institut
+	 * @param institut
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateInstitute(Institut institut) throws ApplicationServerException{
 		try{
 			Object[] parameters = {institut.getBezeichnung() ,new Integer(institut.getKostenstelle()), 
@@ -987,11 +1088,17 @@ public class Database implements Serializable{
 				if(statements.get(81).executeUpdate(parameters) == 0)
 					throw new ApplicationServerException(3);
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(124, e.getMessage());
 		}
 	}
 
-	//	Prüft ob es schon einen Benutzer mit dem Benutzernamen gibt
+	/**
+	 * Prüft ob es schon einen Benutzer mit dem Benutzernamen in der MySQL-Datenbank gibt
+	 * @param benutzer
+	 * @return Anzahl der Benutzer mit dem Benutzernamen
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	 public int checkUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		 try{
 			 Object[] parameters = {benutzer.getBenutzername() };
@@ -1001,12 +1108,17 @@ public class Database implements Serializable{
 
 		 	 return rs.getRow();
 		 } catch (SQLException e){
-			 throw new ApplicationServerException(1, e.getMessage());
+			 throw new ApplicationServerException(125, e.getMessage());
 		 }
 	 }
 
-
-	//	Prüft ob es schon einen Benutzer mit dem Benutzernamen gibt
+	/**
+	 * Prüft ob es schon einen Benutzer mit dem Benutzernamen in der Tabelle User gibt
+	 * @param benutzer
+	 * @return Anzahl der Benutzer mit dem gleichen Benutzernamen ausser der übergebene Benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	 public int checkUser(Benutzer benutzer) throws ApplicationServerException{
 		 try{
 			 Object[] parameters = { new Integer(benutzer.getId()), benutzer.getBenutzername() };
@@ -1015,10 +1127,17 @@ public class Database implements Serializable{
 			 rs.last();
 		 return rs.getRow();
 		 } catch (SQLException e){
-			 throw new ApplicationServerException(1, e.getMessage());
+			 throw new ApplicationServerException(126, e.getMessage());
 		 }
 	 }
 
+	/**
+	 * aktualisiert den Benutzernamen in der MySQL-Datenbank
+	 * @param benutzer - aktualisierte Benutzer
+	 * @param oldBenutzer - alte Benutzername
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateUserMySQL(Benutzer benutzer, String oldBenutzer) throws ApplicationServerException{
 		try{
 			Object[] param1 ={benutzer.getBenutzername(), oldBenutzer};
@@ -1026,10 +1145,16 @@ public class Database implements Serializable{
 			statements.get(95).executeUpdate(param1);
 
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(127, e.getMessage());
 		}
 	}
 
+	/**
+	 * aktualisiert den übergebenen Benutzer in der Tabelle User
+	 * @param benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
 			Object[] param2 = {	benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
@@ -1046,10 +1171,16 @@ public class Database implements Serializable{
 				statements.get(23).executeUpdate(param);
 			}
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(128, e.getMessage());
 		}
 	}
 
+	/**
+	 * fügt einen neuen Benutzer in die MySQL-Datenbank hinzu
+	 * @param benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void insertUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		try{
 			Object[] param ={benutzer.getBenutzername()};
@@ -1068,6 +1199,7 @@ public class Database implements Serializable{
 	 * @param benutzer
 	 * @return Id in der Tabelle Benutzer des eingefügten Users 
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public int insertUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1090,6 +1222,12 @@ public class Database implements Serializable{
 		}
 	}
 
+	/**
+	 * löscht den übergebenen Benuter aus der MySQL-Datenbank
+	 * @param benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteUserMySQL(Benutzer benutzer) throws ApplicationServerException{
 		try{
 
@@ -1097,12 +1235,15 @@ public class Database implements Serializable{
 			statements.get(96).executeUpdate(param);
 			statements.get(97).executeUpdate(param);
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(129, e.getMessage());
 		}
 	}
 
 	/**
 	 * Löscht den Benutzer endgültig aus der Tabelle Benutzer
+	 * @param benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void deleteUserFinal(Benutzer benutzer) throws ApplicationServerException{
 		try{
@@ -1111,11 +1252,16 @@ public class Database implements Serializable{
 			statements.get(26).executeUpdate(parameters);
 
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(130, e.getMessage());
 		}
 	}
 
-	// setzt das Flag geloescht auf 1
+	/**
+	 * Löscht den Benutzer nicht aus der Tabelle sondern setzt das Flag geloescht auf 1
+	 * @param benutzer
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
 
@@ -1123,18 +1269,15 @@ public class Database implements Serializable{
 			statements.get(29).executeUpdate(parameters);
 
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(131, e.getMessage());
 		}
 	}
 
+	/**
+	 * stellt alle Änderungen der aktuellen Session zurück
+	 * @throws ApplicationServerException
+	 */
 	public void rollback() throws ApplicationServerException{
-//		try{
-//			statements.get(2).executeQuery();
-//		} catch (SQLException e){
-//			System.out.println(e.getMessage());
-//			throw new ApplicationServerException(1, e.getMessage());
-//		}
-		
 		try {
 			this.con.rollback();
 		} catch (SQLException e) {
@@ -1142,16 +1285,12 @@ public class Database implements Serializable{
 			
 		}
 	}
-
-
 	
+	/**
+	 * commitet alle Änderungen die in der Session ablaufen
+	 * @throws ApplicationServerException
+	 */
 	public void commit() throws ApplicationServerException{
-//		try{
-//			statements.get(1).executeQuery();
-//		} catch (SQLException e){
-//			System.out.println(e.getMessage());
-//			throw new ApplicationServerException(1, e.getMessage());
-//		}
 		try {
 			this.con.commit();
 		} catch (SQLException e) {
@@ -1160,18 +1299,22 @@ public class Database implements Serializable{
 		}
 	}
 
-	public void setAutoCommit(boolean commit) throws ApplicationServerException{
-		try{
-			if(commit)
-				statements.get(5).executeQuery();
-			else
-				statements.get(3).executeQuery();
-		} catch (SQLException e){
-			System.out.println(e.getMessage());
-			throw new ApplicationServerException(1, e.getMessage());
-		}
-	}
+//	public void setAutoCommit(boolean commit) throws ApplicationServerException{
+//		try{
+//			if(commit)
+//				statements.get(5).executeQuery();
+//			else
+//				statements.get(3).executeQuery();
+//		} catch (SQLException e){
+//			System.out.println(e.getMessage());
+//			throw new ApplicationServerException(1, e.getMessage());
+//		}
+//	}
 
+	/**
+	 * gibt das aktuelle Haushaltsjahr zurück
+	 * @throws ApplicationServerException
+	 */
 	public Haushaltsjahr selectHaushaltsjahr() throws ApplicationServerException{
 		Haushaltsjahr hhj;
 		try{
@@ -1186,7 +1329,7 @@ public class Database implements Serializable{
 				throw new ApplicationServerException(6);
 			}
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(132, e.getMessage());
 		}
 	}
 
@@ -1205,11 +1348,16 @@ public class Database implements Serializable{
 			if(rs.next())
 				hhj = new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(133, e.getMessage());
 		}
 		return hhj;
 	}
 
+	/**
+	 * aktualisiert das Haushaltsjahr
+	 * @param hhj
+	 * @throws ApplicationServerException
+	 */
 	public void updateHaushaltsjahr(Haushaltsjahr hhj) throws ApplicationServerException{
 		if(hhj != null){
 			try{
@@ -1219,12 +1367,12 @@ public class Database implements Serializable{
 					throw new ApplicationServerException(6);
 
 			} catch (SQLException e){
-				throw new ApplicationServerException(1, e.getMessage());
+				throw new ApplicationServerException(134, e.getMessage());
 			}
 		}
 	}
 	
-		/**
+	/**
 	 * Abfrage der HaushaltsjahrId vom aktuellem Jahr
 	 */
 	public int selectHaushaltsjahrId() throws ApplicationServerException{
@@ -1241,10 +1389,15 @@ public class Database implements Serializable{
 				throw new ApplicationServerException(6);
 			}
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(135, e.getMessage());
 		}
 	}
 
+	/**
+	 * gibt alle Rollen zurück
+	 * @return Rolle-Array
+	 * @throws ApplicationServerException
+	 */
 	public Rolle[] selectRollen() throws ApplicationServerException{
 		Rolle[] rollen = null;
 		try{
@@ -1262,12 +1415,18 @@ public class Database implements Serializable{
 			}
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(136, e.getMessage());
 		}
 
 		return rollen;
 	}
 
+	/**
+	 * gibt eine Rolle für den Abgleich zurück und sperrt diesen Datensatz
+	 * @param rolle
+	 * @return Rolle
+	 * @throws ApplicationServerException
+	 */
 	public Rolle selectForUpdateRolle(Rolle rolle) throws ApplicationServerException{
 		Rolle r = null;
 		try{
@@ -1278,78 +1437,110 @@ public class Database implements Serializable{
 				r = new Rolle(rs.getInt(1), rs.getString(2));
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(137, e.getMessage());
 		}
 		return r;
 	}
 
-	 public Aktivitaet[] selectAktivitaetenFull(int rollenId) throws ApplicationServerException{
-		 Aktivitaet[] aktivitaeten = null;
-		 try{
-			 Object[] parameters ={new Integer(rollenId)};
-			 ResultSet rs = statements.get(200).executeQuery(parameters);
-			 rs.last();
-			 int count = rs.getRow();
-			 rs.beforeFirst();
-			 if (count > 0){
-				 aktivitaeten = new Aktivitaet[count];
-				 int i = 0;
-				 while (rs.next()){
-					 aktivitaeten[i] = new Aktivitaet(rs.getInt(1), rs.getString(2),  rs.getString(3));
-					 i++;
-				 }
-			 }
-			 rs.close();
-		 } catch (SQLException e){
-			 System.out.println(e.getMessage());
-			 throw new ApplicationServerException(1,e.getMessage());
-		 }
+	/**
+	 * gibt alle Aktivitäten zu einer Rolle zurück
+	 * @param rollenId - Id der Rolle
+	 * @return Aktivitaet-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public Aktivitaet[] selectAktivitaetenFull(int rollenId) throws ApplicationServerException{
+ 		Aktivitaet[] aktivitaeten = null;
+	 	try{
+		 	Object[] parameters ={new Integer(rollenId)};
+		 	ResultSet rs = statements.get(200).executeQuery(parameters);
+		 	rs.last();
+		 	int count = rs.getRow();
+		 	rs.beforeFirst();
+		 	if (count > 0){
+			 	aktivitaeten = new Aktivitaet[count];
+			 	int i = 0;
+			 	while (rs.next()){
+				 	aktivitaeten[i] = new Aktivitaet(rs.getInt(1), rs.getString(2),  rs.getString(3));
+				 	i++;
+			 	}
+		 	}
+		 	rs.close();
+	 	} catch (SQLException e){
+		 	System.out.println(e.getMessage());
+		 	throw new ApplicationServerException(138,e.getMessage());
+	 	}
 
-		 return aktivitaeten;
-	 }
+ 		return aktivitaeten;
+	}
 
-	 public Aktivitaet[] selectAktivitaeten() throws ApplicationServerException{
-		 Aktivitaet[] aktivitaeten = null;
-		 try{
-			 ResultSet rs = statements.get(10).executeQuery();
-			 rs.last();
-			 int count = rs.getRow();
-			 rs.beforeFirst();
-			 if (count > 0){
-				 aktivitaeten = new Aktivitaet[count];
-				 int i = 0;
-				 while (rs.next()){
-					 aktivitaeten[i] = new Aktivitaet(rs.getInt(1), rs.getString(2),  rs.getString(3));
-					 i++;
-				 }
-			 }
-			 rs.close();
-		 } catch (SQLException e){
-			 throw new ApplicationServerException(1,e.getMessage());
-		 }
+	/**
+	 * gibt alle Aktivitäten zurück
+	 * @return Aktiviaet-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public Aktivitaet[] selectAktivitaeten() throws ApplicationServerException{
+		Aktivitaet[] aktivitaeten = null;
+		try{
+			ResultSet rs = statements.get(10).executeQuery();
+			rs.last();
+			int count = rs.getRow();
+			rs.beforeFirst();
+			if (count > 0){
+				aktivitaeten = new Aktivitaet[count];
+				int i = 0;
+				while (rs.next()){
+					aktivitaeten[i] = new Aktivitaet(rs.getInt(1), rs.getString(2),  rs.getString(3));
+					i++;
+				}
+			}
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(139,e.getMessage());
+		}
 
-		 return aktivitaeten;
-	 }
+		return aktivitaeten;
+	}
 
-
+	/**
+	 * fügt eine neue Zurordnung einer Aktivität zu einer Rolle
+	 * @param rolle - Id der Rolle
+	 * @param aktivitaet - Id der Aktivität
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	 public void insertRollenAktivitaet(int rolle, int aktivitaet)  throws ApplicationServerException{
 		 try{
 			 Object[] parameters = {new Integer(rolle), new Integer(aktivitaet)};
 			 statements.get(112).executeUpdate(parameters);
 		 } catch (SQLException e){
-			 throw new ApplicationServerException(1,e.getMessage());
+			 throw new ApplicationServerException(140,e.getMessage());
 		 }
 	 }
 
+	/**
+	 * löscht eine Zuordnung einer Aktivität zu einer Rolle
+	 * @param rolle - Id der Rolle
+	 * @param aktivitaet - Id der Aktivität
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	 public void deleteRollenAktivitaet(int rolle, int aktivitaet)  throws ApplicationServerException{
 		 try{
 			Object[] parameters = {new Integer(rolle), new Integer(aktivitaet)};
 			statements.get(113).executeUpdate(parameters);
 		 } catch (SQLException e){
-			 throw new ApplicationServerException(1,e.getMessage());
+			 throw new ApplicationServerException(141,e.getMessage());
 		 }
 	 }
 
+	/**
+	 * gibt alle Rollen mit allen Aktivitäten zurück
+	 * @return Rolle-Array
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public Rolle[] selectRollenFull() throws ApplicationServerException{
 		Rolle[] rollen = null;
 		try{
@@ -1368,7 +1559,7 @@ public class Database implements Serializable{
 			}
 			rs.close();
 		} catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(142, e.getMessage());
 		}
 
 		return rollen;
@@ -2049,27 +2240,14 @@ public class Database implements Serializable{
 		
 		return result;		// ZVtitel zurückgeben
 	}
-	
 
-	public ResultSet query(String query) throws ApplicationServerException{
-	 try{
-		 PreparedStatement stmt = con.prepareStatement(query);
-	 		return stmt.executeQuery();
-	 } catch (SQLException e){
-		 throw new ApplicationServerException(1, e.getMessage());
-	 }
-  }
-
-  public void update(String query) throws ApplicationServerException{
-	   try{
-		   PreparedStatement stmt = con.prepareStatement(query);
-			 stmt.executeUpdate();
-	   } catch (SQLException e){
-		   throw new ApplicationServerException(1, e.getMessage());
-	   }
-   }
-
-   // prüft ob die Bezeichnung der Rolle schon mal in der Daten vorhanden ist
+  /**
+   * prüft ob die Bezeichnung der Rolle schon mal in der Daten vorhanden ist
+   * @param rolle
+   * @return Anzahl der gleichen Bezeichnungen einer Rollen ausser der übergebenen Rolle
+   * @throws ApplicationServerException
+   * @author robert
+   */
   public int checkRolle(Rolle rolle) throws ApplicationServerException{
   	try{
 	  	Object[] parameters = { new Integer(rolle.getId()), rolle.getBezeichnung()};
@@ -2078,10 +2256,17 @@ public class Database implements Serializable{
 
 		  return rs.getRow();
 	  } catch (SQLException e){
-			throw new ApplicationServerException(1, e.getMessage());
+			throw new ApplicationServerException(143, e.getMessage());
 	  }
   }
 
+	/**
+	 * fügt eine neue Rolle hinzu
+	 * @param rolle
+	 * @return Id - neue Id der Rolle
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
   public int insertRolle(Rolle rolle) throws ApplicationServerException{
 		try{
 		   Object[] parameters = { new Integer(rolle.getId()), rolle.getBezeichnung()};
@@ -2091,7 +2276,7 @@ public class Database implements Serializable{
 			   return rs.getInt(1);
 		   }
    } catch (SQLException e){
-	   throw new ApplicationServerException(1, e.getMessage());
+	   throw new ApplicationServerException(144, e.getMessage());
    }
    return 0;
 	}
@@ -2221,7 +2406,7 @@ public class Database implements Serializable{
 	 * gibt die Kontenzuordnugn mit der fbKontoId und zvKontoId
 	 * @param fbKontoId
 	 * @param zvKontoId
-	 * @return
+	 * @return Kontenzuordnung
 	 * @throws ApplicationServerException
 	 */
 	public Kontenzuordnung selectKontenzuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
@@ -3785,7 +3970,7 @@ public class Database implements Serializable{
 			statements.get(223).executeUpdate(parameters);
 			
 		} catch (SQLException e){
-			throw new ApplicationServerException(65, e.getMessage());
+			throw new ApplicationServerException(110, e.getMessage());
 		}
 	}
 
@@ -3866,11 +4051,12 @@ public class Database implements Serializable{
 	 * @return Report 7 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport7() throws ApplicationServerException {
+	public ArrayList selectReport7(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(335).executeQuery(); 
+			Object[] parameters = {von, bis};
+			ResultSet rs = statements.get(335).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -3903,11 +4089,12 @@ public class Database implements Serializable{
 	 * @return Report 8 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport8() throws ApplicationServerException {
+	public ArrayList selectReport8(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(336).executeQuery(); 
+			Object[] parameters = {new Timestamp(von.getTime()), new Timestamp(bis.getTime())};
+			ResultSet rs = statements.get(336).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -3934,11 +4121,12 @@ public class Database implements Serializable{
 	 * @return Report 6 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport6() throws ApplicationServerException {
+	public ArrayList selectReport6(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(337).executeQuery(); 
+			Object[] parameters = {von, bis};
+			ResultSet rs = statements.get(337).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -3965,11 +4153,12 @@ public class Database implements Serializable{
 	 * @return Report 5 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport5() throws ApplicationServerException {
+	public ArrayList selectReport5(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(338).executeQuery(); 
+			Object[] parameters = {new Timestamp(von.getTime()), new Timestamp(bis.getTime())};
+			ResultSet rs = statements.get(338).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -3997,11 +4186,12 @@ public class Database implements Serializable{
 	 * @return Report 4 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport4() throws ApplicationServerException {
+	public ArrayList selectReport4(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(339).executeQuery(); 
+			Object[] parameters = {new Timestamp(von.getTime()), new Timestamp(bis.getTime())};
+			ResultSet rs = statements.get(339).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -4028,11 +4218,12 @@ public class Database implements Serializable{
 	 * @return Report 3 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport3() throws ApplicationServerException {
+	public ArrayList selectReport3(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(340).executeQuery(); 
+			Object[] parameters = {new Timestamp(von.getTime()), new Timestamp(bis.getTime()), new Timestamp(von.getTime()), new Timestamp(bis.getTime())};
+			ResultSet rs = statements.get(340).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -4061,7 +4252,7 @@ public class Database implements Serializable{
 	 * @return Report 2 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport2() throws ApplicationServerException {
+	public ArrayList selectReport2(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 //		try{
@@ -4094,11 +4285,12 @@ public class Database implements Serializable{
 	 * @return Report 1 als ArrayListe
 	 * @throws ApplicationServerException
 	 */
-	public ArrayList selectReport1() throws ApplicationServerException {
+	public ArrayList selectReport1(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
 		try{
-			ResultSet rs = statements.get(342).executeQuery(); 
+			Object[] parameters = {new Timestamp(von.getTime()), new Timestamp(bis.getTime()), new Timestamp(von.getTime()), new Timestamp(bis.getTime())};
+			ResultSet rs = statements.get(342).executeQuery(parameters); 
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -4165,6 +4357,57 @@ public class Database implements Serializable{
 			return buchung;
 		} catch (SQLException e){
 			throw new ApplicationServerException(98, e.getMessage());
+		}
+	}
+	
+	/**
+	 * gibt eine alle Logs aus der Tabelle Logs in einem bestimmten Zeitraum
+	 * @param von - Datum für den Startpunkt
+	 * @param bis - Datum für den Endpunkt
+	 * @return Arraylist mit allen Logs-Einträgen
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectLogList(Date von, Date bis) throws ApplicationServerException{
+		ArrayList list = new ArrayList();
+		try{
+			Object[] parameters = { new Timestamp(von.getTime()), new Timestamp(bis.getTime()) };
+			ResultSet rs = statements.get(343).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+	
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					Benutzer b = selectUser(rs.getInt(2));
+					
+					row.add(rs.getDate(1)); 		// Datum
+					row.add(b.getName() + ", " + b.getVorname()); 								// Benutzer
+					row.add(rs.getString(3));		// Typ
+					row.add(rs.getString(4));		// Beschreibung
+					
+					list.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException(111, e.getMessage());
+		}
+		return list;
+	}
+	
+	/**
+	 * fügt eine neue Log in die Tabelle Logs ein
+	 * @param type - 0 = Add, 1 = Set, 2 = Del, 3 = buche
+	 * @param beschreibung - (Text der Änderung)
+	 * @throws ApplicationServerException
+	 */
+	public void insertLog(int type, String beschreibung) throws ApplicationServerException{
+		try{
+			Object[] parameters = {"" + type, beschreibung };
+			statements.get(344).executeUpdate(parameters);
+		
+		} catch (SQLException e){
+			throw new ApplicationServerException(112, e.getMessage());
 		}
 	}
 }

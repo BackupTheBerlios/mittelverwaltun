@@ -7,11 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.rmi.Naming;
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
@@ -459,7 +454,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
-    btDrucken.setText("Drucken");
+    btDrucken.setText("Vorschau");
 		btDrucken.setActionCommand("print");
     btDrucken.setToolTipText("Bestellung drucken");
 		btDrucken.addActionListener(this);
@@ -521,38 +516,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	}
 	
 	private void printOrder(){
-		PrinterJob pJob = PrinterJob.getPrinterJob();
-
-		PageFormat pf = new PageFormat();
-		Paper paper = pf.getPaper() ;
-		paper.setImageableArea(25,30,560,800) ;
-		paper.setSize(595,842);
-		pf.setPaper(paper);
-		PrintSTDVordruck bestellung = new PrintSTDVordruck(origin, frame.getApplicationServer());
-		bestellung.show();
-		bestellung.setVisible(false);
-		PrintSTDBeilage beilage = new PrintSTDBeilage(origin);
-		beilage.show();
-		beilage.setVisible(false);
-
-		pJob.setJobName("Standard Bestellung");
-		Book book = new Book();
-		book.append(bestellung, pf, bestellung.getNumPages());
-		book.append(beilage, pf);
-
-		if(pJob.printDialog()){
-			try{
-				pJob.setPageable(book);
-				pJob.print();
-			}catch(PrinterException pexc){
-				System.out.println("Fehler beim Drucken");
-			}
-		}
-		pJob.cancel();
-		if(pJob.isCancelled()){
-			bestellung.dispose();
-			beilage.dispose();
-		}
+		PrintSTDBestellung bestellung = new PrintSTDBestellung(origin, frame);
 	}
 
 	public void actionPerformed(ActionEvent e) {

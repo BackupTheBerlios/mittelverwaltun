@@ -167,7 +167,42 @@ public class ApplicationServerException extends Exception {
 		messages[107] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport3";
 		messages[108] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport2";
 		messages[109] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport1";
-			
+		messages[110] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertBuchung.";
+		messages[111] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectLogList.";
+		messages[112] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertLog.";
+		messages[113] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectUser(String user, String password).";
+		messages[114] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateUser.";
+		messages[115] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectUsers.";
+		messages[116] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateFachbereich.";
+		messages[117] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectInstitutes.";
+		messages[118] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectInstitute.";
+		messages[119] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteInstitute.";
+		messages[120] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertInstitute.";
+		messages[121] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectUsers(Institut institut).";
+		messages[122] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateInstitute.";
+		messages[123] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkInstitute.";
+		messages[124] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateInstitute.";
+		messages[125] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkUserMySQL.";
+		messages[126] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkUser.";
+		messages[127] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateUserMySQL.";
+		messages[128] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateUser.";
+		messages[129] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteUserMySQL.";
+		messages[130] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteUserFinal.";
+		messages[131] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteUser.";
+		messages[132] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectHaushaltsjahr.";
+		messages[133] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateHaushaltsjahr.";
+		messages[134] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateHaushaltsjahr.";
+		messages[135] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectHaushaltsjahrID.";
+		messages[136] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectRollen.";
+		messages[137] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateRolle.";
+		messages[138] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectAktivitaetenFull.";
+		messages[139] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectAktivitaeten.";
+		messages[140] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertRollenAktivitaet.";
+		messages[141] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteRollenAktivitaet.";
+		messages[142] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectRollenFull.";
+		messages[143] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkRolle.";
+		messages[144] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertRolle.";
+		
 
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";
 		messages[151] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selecTotalAccountBudget.";

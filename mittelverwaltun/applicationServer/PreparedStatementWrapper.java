@@ -141,7 +141,16 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.TIME:
 						;
 				case Types.TIMESTAMP:
-						;
+						{
+							if (parameters[i] == null)
+								stmt.setNull(i+1, Types.NULL);
+							else{
+										
+								Timestamp v = (Timestamp)parameters[i];
+								stmt.setTimestamp(i+1, v);
+							}
+							break;
+						}			
 				case Types.TINYINT:
 						;
 				case Types.VARBINARY:

@@ -50,8 +50,9 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SET AUTOCOMMIT = 1");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//6
-			statements[i++] = null;
+		{//6 gibt den Session user zurück
+			ps = con.prepareStatement( "SELECT SESSION_USER()");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//7
 			statements[i++] = null;
@@ -575,7 +576,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//86 gibt ein Institut mit Institutsleiter anhand der id zurück
-			ps = con.prepareStatement("SELECT a.id, a.bezeichnung, a.kostenstelle, a.institutsleiter, " +
+			ps = con.prepareStatement("SELECT a.id, a.bezeichnung, a.kostenstelle, " +
 																			 "b.id, b.benutzername, b.name, b.vorname " +
 																"FROM institute a, Benutzer b " + 
 																"WHERE b.id = a.institutsleiter " +																		"AND a.id = ?");
@@ -2335,7 +2336,7 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/**************************/
-		/* Reports 								*/
+		/* Reports, Logs					*/
 		/* Indizes: 335-349				*/
 		/**************************/
 		{//335 Report 7 für alle Institute siehe gui.Reports.java
@@ -2344,7 +2345,8 @@ public class PreparedSqlStatements {
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
 																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
 															  "WHERE i.id = fbk.institutsId  " +
-																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND fbk.geloescht = '0' " +
+																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND (be.datum BETWEEN ? AND ?) " +
+																	"AND zvt.zvKontoId = zvk.id " +																	"AND fbk.geloescht = '0' " +
 																	"AND zvk.geloescht = '0' " +
 																	"AND zvt.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
@@ -2352,7 +2354,8 @@ public class PreparedSqlStatements {
 																	"AND h.status = 0 " +
 																	"AND be.phase != 0 " +
 																	"AND be.geloescht = '0'" +																"ORDER BY i.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.DATE, Types.DATE };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//336 Report 8 für alle Institute: FB-Konto, ZV-Konto, Einnahmen siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
@@ -2361,11 +2364,13 @@ public class PreparedSqlStatements {
 																	"Institute i, FBKonten fbk, Buchungen b, Haushaltsjahre h " +
 															  "WHERE i.id = fbk.institutsId  " +
 																	"AND b.fbKonto1 = fbk.id " +
+																	"AND (b.timestamp BETWEEN ? AND ?) " +
 																	"AND fbk.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																	"AND b.typ = '5' " +																"GROUP BY i.bezeichnung, fbk.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//337 Report 6 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
@@ -2373,6 +2378,7 @@ public class PreparedSqlStatements {
 																"FROM " +
 																	"ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Bestellungen be " +																	"ON be.phase != 0 " +
+																	"AND (be.datum BETWEEN ? AND ?) " +
 																	"AND be.geloescht = '0' " +
 																	"AND be.fbKonto = fbk.id " +
 																	"AND be.zvTitel = zvt.id " +
@@ -2385,7 +2391,8 @@ public class PreparedSqlStatements {
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																"GROUP BY i.bezeichnung, zvk.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.DATE, Types.DATE };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//338 Report 5 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
@@ -2396,6 +2403,7 @@ public class PreparedSqlStatements {
 																"FROM " +
 																	"ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
+																	"AND (bu.timestamp BETWEEN ? AND ?) " +
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
 															  "WHERE i.id = fbk.institutsId  " +
@@ -2407,7 +2415,8 @@ public class PreparedSqlStatements {
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																"GROUP BY zvk.bezeichnung, i.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//339 Report 4 siehe gui.Reports.java
 			/**
@@ -2421,6 +2430,7 @@ public class PreparedSqlStatements {
 																	"Buchungen bu, ZVKontentitel zvt, ZVKonten zvk, " +
 																	"FBKonten fbk, Haushaltsjahre h " +
 															  "WHERE zvt.zvKontoId = zvk.id " +															  	"AND bu.typ > 8 " +
+																	"AND (bu.timestamp BETWEEN ? AND ?) " +
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
 																	"AND fbk.geloescht = '0' " +
@@ -2430,7 +2440,8 @@ public class PreparedSqlStatements {
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																"GROUP BY fbk.bezeichnung, zvk.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//340 Report 3 siehe gui.Reports.java
 			/**
@@ -2438,13 +2449,14 @@ public class PreparedSqlStatements {
 			 * der Ausgaben und den aktuellen Kontostand enthält
 			 */
 			ps = con.prepareStatement("SELECT " +																		"i.bezeichnung AS institut, " +
-																		"fbk.bezeichnung AS fbKonto, " +																		"(SELECT SUM(betragFbKonto1) FROM Buchungen WHERE fbKonto1 = fbk.id AND typ = '5') AS einnahmen, " +
+																		"fbk.bezeichnung AS fbKonto, " +																		"(SELECT SUM(betragFbKonto1) FROM Buchungen WHERE fbKonto1 = fbk.id AND typ = '5' AND (timestamp BETWEEN ? AND ?)) AS einnahmen, " +
 																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +																		"fbk.budget AS kontostand " +
 																"FROM " +
 																	"Institute i, ZVKontentitel zvt, ZVKonten zvk, " +
 																	"FBKonten fbk, Haushaltsjahre h " +
 															  "LEFT JOIN Buchungen bu " +
 																	"ON bu.typ > 8 " +
+																	"AND (bu.timestamp BETWEEN ? AND ?) " +
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
 															  "WHERE i.id = fbk.institutsId " +															  	"AND zvt.zvKontoId = zvk.id " +
@@ -2455,7 +2467,8 @@ public class PreparedSqlStatements {
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																"GROUP BY i.bezeichnung, fbk.bezeichnung");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps,param);
 		}
 		{//341 Report 2 siehe gui.Reports.java
 			/**
@@ -2474,6 +2487,7 @@ public class PreparedSqlStatements {
 																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +
 																			"FROM Buchungen " +
 																			"WHERE typ IN (1, 2) " +
+																				"AND (timestamp BETWEEN ? AND ?) " +
 																				"AND ( zvKonto = zvk.id " +
 																							"OR zvTitel1 IN " +
 																											"( SELECT id " +
@@ -2482,19 +2496,31 @@ public class PreparedSqlStatements {
 																											")" +
 																						")" +
 																		") AS mittel, " +
-																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
+																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND (timestamp BETWEEN ? AND ?) " +
+																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
 																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel " +																											"WHERE zvKontoId  = zvk.id " +																												"AND geloescht = '0')" +																		") AS kontostand " +
 																"FROM " +
 																	"ZVKonten zvk, Haushaltsjahre h " +
 															  "WHERE h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +																	"AND zvk.geloescht = '0'");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps,param);
 		}
-		{//343
-			statements[i++] = null;
+		{//343 gibt alle Logs in einem Zeitabschnitt zurück
+			ps = con.prepareStatement("SELECT " +
+																		"timestamp, benutzerId, typ, beschreibung " +
+																"FROM " +
+																	"Logs " +
+															  "WHERE timestamp BETWEEN ? AND ? ");
+			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//344
-			statements[i++] = null;
+		{//344 fügt eine neue Log ein
+			ps = con.prepareStatement(	"INSERT INTO logs " +
+																		"(timestamp, benutzerId, typ, beschreibung) " +
+																	"VALUES ( NOW(), " +																						"(SELECT id FROM Benutzer WHERE CONVERT(benutzername USING latin1) = CONVERT(substring_index(SESSION_USER(),'@',1) USING latin1)), " +																						"?, ?)" );
+			int[] param = {Types.VARCHAR, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//345 
 			statements[i++] = null;

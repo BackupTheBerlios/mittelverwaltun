@@ -1,7 +1,7 @@
 package applicationServer;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import dbObjects.*;
@@ -38,6 +38,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return id;
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#login(java.lang.String, java.lang.String)
+	 */
 	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException{
 
 		db.connect(user);
@@ -57,18 +61,34 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return b;
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#logout()
+	 */
 	public void logout()throws ConnectionException{
 		db.disconnect();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getUsers()
+	 */
 	public Benutzer[] getUsers () throws ApplicationServerException{
 		return db.selectUsers();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getInstitutes()
+	 */
 	public Institut[] getInstitutes () throws ApplicationServerException{
 		return db.selectInstitutes();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getRollen()
+	 */
 	public Rolle[] getRollen () throws ApplicationServerException{
 		return db.selectRollen();
 	}
@@ -145,6 +165,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		 return getInstitutesWithAccounts(false);
 	 }
 	 
+	 /*
+	  *  (Kein Javadoc)
+	  * @see applicationServer.ApplicationServer#getNoPurposeFBHauptkonten(dbObjects.Institut)
+	  */
 	 public ArrayList getNoPurposeFBHauptkonten( Institut institut ) throws ApplicationServerException {
 		 //return db.selectFBHauptkonten( institut );
 		 return db.selectNoPurposeFBHauptkonten( institut );
@@ -180,7 +204,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				 throw new ApplicationServerException(154);
 				 // Konten stimmen nicht überein
 			 }
-			 
+			
+				db.insertLog(1, "Budget eines FBHauptkontos aktualisiert \n" +
+												"Benutzer: " + b + "\n" +
+												"FBHauptkonto: " + acc + "\n" +
+												"Betrag: " +  remmitance);
+			
 			 db.commit();
 		}catch(ApplicationServerException e){
 			db.rollback();
@@ -188,6 +217,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	 }
 	 
+	 /*
+	  *  (Kein Javadoc)
+	  * @see applicationServer.ApplicationServer#getUsersByRole(dbObjects.Institut, int)
+	  */
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
 		 return db.selectUsersByRole(i, rollenId);
 	 }
@@ -342,6 +375,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.selectForUpdateFBHauptkonto( konto );	// Zum Aktualisieren auswählen
 				return db.updateFBHauptkonto( konto );
 			}
+			db.insertLog(0, "FBHauptKonto (Id: " + konto.getId() + " hinzugefügt: \n" +
+											"FBHauptKonto: " + konto );
 			
 			return db.insertFBHauptkonto( konto );			// Sonst ein neues FBHauptkonto erstellen
 		} catch(ApplicationServerException e) {
@@ -372,6 +407,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.selectForUpdateFBUnterkonto( konto );	// Das Konto zum Aktualiseren auswählen
 				return db.updateFBUnterkonto( konto );	// Das Konto aktualisieren
 			}
+			db.insertLog(0, "FBUnterKonto (Id: " + konto.getId() + " hinzugefügt: \n" +
+											"FBUnterKonto: " + konto );
 			
 			return db.insertFBUnterkonto( konto );			// Sonst ein neues FBUnterkonto erstellen
 		} catch(ApplicationServerException e) {
@@ -399,6 +436,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if( db.countKontenzuordnungen( konto ) > 0 )		// Wenn Kontenzuordnungen existieren
 				throw new ApplicationServerException( 21 );
 		
+			String logText = "";
 			ArrayList temp = ((FBHauptkonto)konto).getUnterkonten();
 			// Nachsehen ob sich bei den Unterkonten Fehler(Exception) ergeben
 			if( temp != null ) {		// Gibt es Unterkonten
@@ -441,11 +479,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				konto.setGeloescht( true );					// Flag gelöscht setzen
 				return db.updateFBHauptkonto( konto );		// Das FBHauptkonto aktualsieren
 			}
+			
+			db.insertLog(2, "FBHauptKonto (Id: " + konto.getId() + " gelöscht: \n" +
+											"FBHauptKonto: " + konto );
+			
 			// Sonst wird das Hauptkonto ganz gelöscht
 			if( db.deleteFBKonto( konto ) > 0)
 				return konto.getId();
 			else
 				return 0;
+				
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -477,6 +521,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				konto.setGeloescht( true );					// Flag gellöscht setzen
 				return db.updateFBUnterkonto( konto );		// Das FBUnterkonto in der Datenbank aktualisieren
 			}
+			db.insertLog(2, "FBUnterkonto (Id: " + konto.getId() + " gelöscht: \n" +
+											"FBUnterkonto: " + konto );
+			
 			// Sonst wird das FBUnterkonto ganz gelöscht
 			if( db.deleteFBKonto( konto ) > 0)
 				return konto.getId();
@@ -544,6 +591,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				}
 			}
 			
+			db.insertLog(1, "FBHauptKonto (Id: " + konto.getId() + " aktualisiert: \n" +
+											"FBHauptKonto: " + konto );
+			
 			return db.updateFBHauptkonto( konto );	// Sonst kann das FBHauptkonto aktualisiert werden
 		} catch(ApplicationServerException e) {
 			db.rollback();
@@ -581,6 +631,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 40 );		// Das Konto kann nicht verändert werden, da es 
 																// zu Inkonsistenzen kommen kann
 			}
+			db.insertLog(1, "FBUnterkonto (Id: " + konto.getId() + " aktualisiert: \n" +
+											"FBUnterkonto: " + konto );
 			
 			return db.updateFBUnterkonto( konto );		// Sonst kann das FBUnterkonto aktualisiert werden
 		} catch(ApplicationServerException e) {
@@ -634,6 +686,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget von einem FBHauptkonto auf ein FBUnterkonto gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"Von FBHauptkonto: " +  haupt + "\n" +
+											"Nach FBUnterkonto: " + unter + "\n" +
+											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
@@ -681,6 +738,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget von einem FBHauptkonto auf ein anderes FBHauptkonto gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"Von FBHauptkonto: " +  from + "\n" +											"Nach FBHauptkonto: " + to + "\n" +											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
@@ -728,6 +788,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget von einem FBUnterkonto auf ein FBHauptkonto gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"Von FBUnterkonto: " +  unter + "\n" +
+											"Nach FBHauptkonto: " + haupt + "\n" +
+											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
@@ -820,6 +885,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(0, "ZVKonto hinzugefügt: \n" +
+											"ZVKonto: " +  zvKonto );
 			db.commit();
 		}
 	}
@@ -861,6 +928,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(0, "ZVTitel hinzugefügt: \n" +
+											"ZVTitel: " +  zvTitel );
 			db.commit();
 		}
 	}
@@ -892,6 +961,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(0, "ZVUntertitel hinzugefügt: \n" +
+											"ZVUntertitel: " +  zvUntertitel );
 			db.commit();
 		}
 	}
@@ -994,6 +1065,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(2, "ZVKonto (Id: " + zvKonto.getId() + ") gelöscht: \n" +
+											"ZVKonto: " +  zvKonto );
 			db.commit();
 		}
 	}
@@ -1074,6 +1147,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(2, "ZVTitel (Id: " + zvTitel.getId() + ") gelöscht: \n" +
+											"ZVTitel: " +  zvTitel );
 			db.commit();
 		}
 	}
@@ -1109,6 +1184,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(2, "ZVUntertitel (Id: " + zvUntertitel.getId() + ") gelöscht: \n" +
+											"ZVUntertitel: " +  zvUntertitel );
 			db.commit();
 		}
 	}
@@ -1184,6 +1261,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(1, "ZVKonto (Id: " + zvKonto.getId() + ") aktualisiert: \n" +
+											"ZVKonto: " +  zvKonto );
 			db.commit();
 		}
 	}
@@ -1240,6 +1319,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(1, "ZVTitel (Id: " + zvTitel.getId() + ") aktualisiert: \n" +
+											"ZVTitel: " +  zvTitel );
 			db.commit();
 		}
 	}
@@ -1275,6 +1356,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(1, "ZVUntertitel (Id: " + zvUntertitel.getId() + ") aktualisiert: \n" +
+											"ZVUntertitel: " +  zvUntertitel );
 			db.commit();
 		}
 	}
@@ -1306,6 +1389,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget auf ein ZVKonto gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"ZVKonto: " +  konto + "\n" +
+											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
@@ -1336,6 +1423,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget auf einen ZVTitel gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"ZVTitel: " +  konto + "\n" +
+											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
@@ -1367,13 +1458,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.rollback();
 			throw e;
 		} finally {
+			db.insertLog(3, "Budget auf einen ZVUntertitel gebucht \n" +
+											"Benutzer: " + benutzer + "\n" +
+											"ZVUntertitel: " +  konto + "\n" +
+											"Betrag: " +  betrag);
 			db.commit();
 		}
 	}
 
-	
-
-  // Ein Institut in der Datenbank aktualisieren
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setInstitute(dbObjects.Institut, dbObjects.Institut)
+	 */
 	public void setInstitute(Institut editedInst, Institut clientInst) throws ApplicationServerException {
 		if(editedInst != null && clientInst != null){
 			try{	
@@ -1392,6 +1488,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					throw new ApplicationServerException(4);
 	
 				db.updateInstitute(editedInst);
+				db.insertLog(1, "Institut (Id: " + editedInst.getId() + " aktualisiert: \n" +
+												"Institut: " + editedInst );
 			
 			} catch(ApplicationServerException e) {
 				db.rollback();
@@ -1402,6 +1500,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delInstitute(dbObjects.Institut)
+	 */
 	public void delInstitute(Institut clientInst) throws ApplicationServerException {
 		if(clientInst != null){
 			try{	
@@ -1424,10 +1526,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 				// Institut hat Benutzer
 				Benutzer[] benutzer = db.selectUsers(dbInst);
-				if(benutzer.length > 0)
+				if(benutzer != null && benutzer.length > 0)
 					throw new ApplicationServerException(53);
 	
 				db.deleteInstitute(clientInst);
+				db.insertLog(2, "Institut (Id: " + clientInst.getId() + " gelöscht: \n" +
+												"Institut: " + clientInst );
 			
 			} catch(ApplicationServerException e) {
 				db.rollback();
@@ -1438,9 +1542,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-	// fügt ein neues Institut hinzu
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addInstitute(dbObjects.Institut)
+	 */
 	public int addInstitute(Institut institut) throws ApplicationServerException {
 		try{
+			db.insertLog(0, "Institut (Id: " + institut.getId() + " hinzugefügt: \n" +
+											"Institut: " + institut );
+			
 			if(db.checkInstitute(institut) == 0){
 				return db.insertInstitute(institut);
 			}else
@@ -1453,8 +1563,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setUser(dbObjects.Benutzer, dbObjects.Benutzer)
+	 */
 	public void setUser(Benutzer editedUser, Benutzer clientUser) throws ApplicationServerException {
 		if(editedUser != null && clientUser != null){
 			try{
@@ -1487,6 +1599,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 						throw new ApplicationServerException(64);
 				}
 				db.updateUser(editedUser);
+				db.insertLog(1, "Benutzer (Id: " + editedUser.getId() +") aktualisiert: \n" +
+												"Benutzer: " +  editedUser );
+			
 			} catch(ApplicationServerException e) {
 				db.rollback();
 				throw e;
@@ -1496,7 +1611,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delUser(dbObjects.Benutzer)
+	 */
 	public void delUser(Benutzer clientUser) throws ApplicationServerException {
 		if(clientUser != null){
 			try{	
@@ -1521,8 +1639,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					db.deleteUserFinal(dbUser);		// Kann definitiv gelöscht werden
 					
 				// Benutzer aus der MySQL-DB löschen
-					db.deleteUserMySQL(dbUser);
+				db.deleteUserMySQL(dbUser);
 				
+				db.insertLog(2, "Benutzer (Id: " + clientUser.getId() +") gelöscht: \n" +
+												"Benutzer: " +  clientUser );
+			
 			} catch(ApplicationServerException e) {
 				 db.rollback();
 				 throw e;
@@ -1532,7 +1653,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-	//Fügt den Benutzer in die MySQL- und FBMittelvewaltungsdatenbank hinzu
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addUser(dbObjects.Benutzer)
+	 */
 	public int addUser(Benutzer benutzer) throws ApplicationServerException {
 		try{	
 			if(db.checkUserMySQL(benutzer) > 0)		// benutzer bereits in der MySQL-DB vorhanden
@@ -1551,6 +1675,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			
 			int newID = db.insertUser(benutzer);
 			db.insertUserMySQL(benutzer);
+			db.insertLog(0, "Benutzer (Id: " + newID +") hinzugefügt: \n" +
+											"Benutzer: " +  benutzer );
 			
 			return newID;
 		} catch(ApplicationServerException e) {
@@ -1561,11 +1687,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getFachbereiche()
+	 */
 	public Fachbereich[] getFachbereiche() throws ApplicationServerException {
 		return db.selectFachbereiche();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setFachbereich(dbObjects.Fachbereich, dbObjects.Fachbereich)
+	 */
 	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws ApplicationServerException {
 		try{	
 			Fachbereich dbFB = db.selectForUpdateFachbereich();
@@ -1587,10 +1720,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getHaushaltsjahr()
+	 */
 	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
 		return db.selectHaushaltsjahr();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setHaushaltsjahr(dbObjects.Haushaltsjahr, dbObjects.Haushaltsjahr)
+	 */
 	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException {
 		if(editedHhj != null && clientHhj != null){
 			try{	
@@ -1607,35 +1748,30 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.rollback();
 				throw e;
 			} finally {
+				db.insertLog(1, "Haushaltsjahr aktualisiert" );
 				db.commit();
 			}
 		}
 	}
-
-	public ResultSet query(String query) {
-		try {
-			return db.query(query);
-		} catch (ApplicationServerException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public void update(String query) {
-		try {
-			db.update(query);
-		} catch (ApplicationServerException e) {
-			e.printStackTrace();
-		}
-	}
-
+	
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getRollenFull()
+	 */
 	public Rolle[] getRollenFull() throws ApplicationServerException {
 		return db.selectRollenFull();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addRollenAktivitaet(int, int)
+	 */
 	public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		try{	
 			db.insertRollenAktivitaet(rolle, aktivitaet);
+			db.insertLog(0, "RollenAktivitaet hinzugefügt: \n" +
+											"Rolle (Id: " + rolle + ") \n" +											"Aktivität (Id: " + aktivitaet + ")" );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -1644,9 +1780,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delRollenAktivitaet(int, int)
+	 */
 	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		try{	
 			db.deleteRollenAktivitaet(rolle, aktivitaet);
+			db.insertLog(2, "RollenAktivitaet gelöscht: \n" +
+											"Rolle (Id: " + rolle + ") \n" +
+											"Aktivität (Id: " + aktivitaet + ")" );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -1655,13 +1799,24 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getAktivitaeten()
+	 */
 	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException {
 		return db.selectAktivitaeten();
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addRolle(dbObjects.Rolle)
+	 */
 	public int addRolle(Rolle rolle) throws ApplicationServerException {
 		if(db.checkRolle(rolle) == 0){
 			try{
+				db.insertLog(0, "Rolle (Id:" + rolle.getId() + ") hinzugefügt: \n" +
+												"Rolle: " + rolle.getBezeichnung() );
+			
 				return db.insertRolle(rolle);
 			} catch(ApplicationServerException e) {
 				db.rollback();
@@ -1673,6 +1828,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw new ApplicationServerException(8);
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setRolle(dbObjects.Rolle, dbObjects.Rolle)
+	 */
 	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws ApplicationServerException {
 		if(editedRolle != null && clientRolle != null){
 			try{	
@@ -1688,6 +1847,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					throw new ApplicationServerException(8);
 	
 				db.updateRolle(editedRolle);
+				db.insertLog(1, "Rolle (Id:" + clientRolle.getId() + ") aktualisiert: \n" +
+												"Rolle: " + editedRolle.getBezeichnung() );
+			
 			} catch(ApplicationServerException e) {
 				db.rollback();
 				throw e;
@@ -1697,6 +1859,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delRolle(dbObjects.Rolle)
+	 */
 	public void delRolle(Rolle rolle) throws ApplicationServerException {
 		if(rolle != null){
 			try{	
@@ -1713,6 +1879,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 				db.deleteRollenAktivitaeten(rolle.getId());
 				db.deleteRolle(rolle);
+				db.insertLog(2, "Rolle (Id:" + rolle.getId() + ") gelöscht: \n" +
+												"Rolle: " + rolle.getBezeichnung() );
+			
 			} catch(ApplicationServerException e) {
 				db.rollback();
 				throw e;
@@ -1722,10 +1891,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getUser(java.lang.String, java.lang.String)
+	 */
 	public Benutzer getUser(String user, String password) throws ApplicationServerException {
 		return db.selectUser(user, password);
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getZVKontenOnly()
+	 */
 	public ArrayList getZVKontenOnly() throws ApplicationServerException {
 		return db.selectZVKonten();
 	}
@@ -1762,7 +1939,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return instituts;
 	}
 
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#setKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.Kontenzuordnung)
+	 */
 	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws ApplicationServerException {
 		try{	
 			// Kontenzuordnung existiert ?
@@ -1778,9 +1958,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			FBHauptkonto dbFBKonto = db.selectFBHauptkonto(fbKonto.getId());
 			if(dbFBKonto == null)	// FBKonto existiert nicht mehr
 				throw new ApplicationServerException(64);
-	
-	
+				
 			db.updateKontenZuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId(), clientZuordnung.getStatus());
+			db.insertLog(1, "KontenZuordnung aktualisiert: \n" +
+											"FBHauptkonto: " + fbKonto );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -1789,7 +1971,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
+	 */
 	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
 		try{	
 			Kontenzuordnung zuordnung = db.selectKontenzuordnung(fbKonto.getId(), zvKonto.getId());
@@ -1814,7 +1999,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					throw new ApplicationServerException(61);
 			}
 			db.insertKontenZuordnung(fbKonto.getId(), zvKonto.getId());
-		
+			db.insertLog(0, "KontenZuordnung hinzugefügt: \n" +
+											"FBHauptkonto: " + fbKonto + "\n" +											"ZVKonto: " + zvKonto );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -1823,10 +2010,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}	
 	}
 
-
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
+	 */
 	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
 		try{	
 			db.deleteKontenZuordnung(fbKonto.getId(), zvKonto.getId());
+			db.insertLog(2, "KontenZuordnung gelöscht: \n" +
+											"FBHauptkonto: " + fbKonto + "\n" +
+											"ZVKonto: " + zvKonto );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -1835,6 +2029,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getFBKonto(int)
+	 */
 	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException {
 		return db.selectFBKonto(fbKontoId);
 	}
@@ -1868,6 +2066,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.selectForUpdateFirma( firma );	// Zum Aktualisieren auswählen
 				return db.updateFirma( firma );		// Aktualisieren
 			}
+			db.insertLog(0, "Firma (Id: " + firma.getId() + " hinzugefügt: \n" +
+											"Firma: " + firma );
 			
 			return db.insertFirma( firma );			// Sonst neu erstellen
 		} catch(ApplicationServerException e) {
@@ -1893,6 +2093,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 39 );	// dann kann man es nicht aktualisieren
 		
 			db.selectForUpdateFirma( firma );		// Firma zu aktualisieren auswählen
+			
+			db.insertLog(1, "Firma (Id: " + firma.getId() + " aktualisiert: \n" +
+											"Firma: " + firma );
+			
 			return db.updateFirma( firma );			// Firma aktualisieren und Id zurückgeben
 		} catch(ApplicationServerException e) {
 			db.rollback();
@@ -1918,6 +2122,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if( db.countBelege( firma ) > 0 || db.countAngebote( firma ) > 0 )
 				throw new ApplicationServerException( 42 );		// dann kann man es nicht löschen
 		
+			db.insertLog(2, "Firma (Id: " + firma.getId() + " gelöscht: \n" +
+											"Firma: " + firma );
+			
 			return db.deleteFirma( firma );			// Sonst wird die Firma aus der Datenbank gelöscht
 		} catch(ApplicationServerException e) {
 			db.rollback();
@@ -1982,6 +2189,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
 					// ? Vormerkungen Buchen ?
 			}
+			db.insertLog(0, "Standard-Bestellung (Id: " + bestellung.getId() + " hinzugefügt: \n" +
+											"Besteller: " + bestellung.getBesteller().getName() + ", " + bestellung.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + bestellung.getDatum().toString() );
 			
 			db.commit();
 			return newBestellungId;
@@ -1990,7 +2200,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw e;
 		}
 	}
-
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
@@ -2022,7 +2231,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
 					// ? Vormerkungen Buchen ?
 			}
-			
+			db.insertLog(0, "ASK-Bestellung (Id: " + bestellung.getId() + " hinzugefügt: \n" +											"Besteller: " + bestellung.getBesteller().getName() + ", " + bestellung.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + bestellung.getDatum().toString() );
 			db.commit();
 	
 			return newBestellungId;
@@ -2031,7 +2241,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			throw e;
 		}
 	}
-
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
@@ -2052,6 +2261,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			}
 			dbOriginal.setAngebote(angebote); // Angebote hinzufügen
 			
+			String logText = "";
+		
 			// die Bestellung hat sich zwischenzeitlich geändert
 			if(!original.equals(dbOriginal))
 				throw new ApplicationServerException( 76 );
@@ -2065,10 +2276,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(original.getPhase() == '0'){
 				db.updateStandardBestellung(edited);
 				actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
+				logText += ", Angebot aktualisiert";
+				
 				if(edited.getPhase() == '1'){
 					//	Vormerkungen bei FBKonto und ZVTitel setzen
 					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
 					bucheBestellungsaenderung(benutzer,edited,edited.getZvtitel(), edited.getFbkonto(), edited.getFbkonto().getVormerkungen());
+					logText += ", Vormerkungen aktualisert und Bestellung geändert beim Konto:\n" +
+										 "FB-Konto: " + edited.getFbkonto() + "\n" +
+										 "ZV-Titel: " + edited.getZvtitel();
+					
 				}
 			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
 				db.updateStandardBestellung(edited);
@@ -2104,9 +2321,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					}
 					else {
 						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
-						if (edited.getPhase() != '3')
+						logText += ", Vormerkungen aktualisert und Bestellung ";
+						if (edited.getPhase() != '3'){
 							bucheBestellungsaenderung(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
-						else bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+							logText += "geändert beim Konto:\n" +
+												 "FB-Konto: " + edited.getFbkonto() + "\n" +
+												 "ZV-Titel: " + edited.getZvtitel();
+						}else {
+							bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+							logText += "storniert ";
+						} 
 					}
 				}
 				
@@ -2140,20 +2364,26 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					else
 						zvk = original.getZvtitel().getZVTitel().getZVKonto();
 					
-					if (edited.getPhase() != '3')
-						bucheBestellungsbegleichung(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
-					else
+					if (edited.getPhase() != '3'){
+						bucheBestellungsbegleichung(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung); 
+						logText += "\nBestellung beglichen ";
+					}else {
 						bucheStornoZahlungen(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
+						logText += "\nBestellungszahlungen storniert ";
+					} 
 				}
 			}
-
+			db.insertLog(1, "Standard-Bestellung (Id:" + original.getId() + " geändert: \n" +
+											"Besteller: " + original.getBesteller().getName() + ", " + original.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + original.getDatum().toString() + "n" +
+											 logText);
+			
 			db.commit();
 		}catch (ApplicationServerException e){
 			db.rollback();
 			throw e;
 		}
 	}
-	
 	
 	/**
 	 * aktualisiert die Angebote einer Bestellung. Dazu gehört auch löschen, hinzufügen und ändern
@@ -2290,6 +2520,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
 			
 			dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+			
+			String logText = "";
 		
 			// die Bestellung hat sich zwischenzeitlich geändert
 			if(!original.equals(dbOriginal))
@@ -2298,10 +2530,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(original.getPhase() == '0'){
 				db.updateASKBestellung(edited);
 				actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
+				logText += ", Angebot aktualisiert";
+				
 				// es wurde auf den Button Bestellen gedrückt
 				if(edited.getPhase() == '1'){
 					// Vormerkungen bei FBKonto und ZVTitel setzen
 					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel(), edited.getFbkonto().getVormerkungen());
+					logText += ", Vormerkungen aktualisert und Bestellung geändert beim Konto:\n" +										 "FB-Konto: " + edited.getFbkonto() + "\n" +										 "ZV-Titel: " + edited.getZvtitel();
 					bucheBestellungsaenderung(benutzer,edited,edited.getZvtitel(), edited.getFbkonto(), edited.getFbkonto().getVormerkungen());
 				}
 			
@@ -2341,9 +2576,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					else {
 						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
 						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
-						if (edited.getPhase() != '3')
+						logText += ", Vormerkungen aktualisert und Bestellung ";
+						if (edited.getPhase() != '3'){
 							bucheBestellungsaenderung(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
-						else bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+							logText += "geändert beim Konto:\n" +
+												 "FB-Konto: " + edited.getFbkonto() + "\n" +
+												 "ZV-Titel: " + edited.getZvtitel();
+						}else {
+							bucheStornoVormerkungen(benutzer, original, original.getZvtitel(), original.getFbkonto(), dBestellwert);
+							logText += "storniert ";
+						} 
 					}
 				}
 			
@@ -2380,13 +2622,21 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					else
 						zvk = original.getZvtitel().getZVTitel().getZVKonto();
 					
-					if (edited.getPhase() != '3')
+					if (edited.getPhase() != '3'){
 						bucheBestellungsbegleichung(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
-					else
+						logText += "\nBestellung beglichen ";
+					}else{
 						bucheStornoZahlungen(benutzer, original, zvk, tgrEntry, original.getZvtitel(), titelEntry, original.getFbkonto(), -dZahlung);
+						logText += "\nBestellungszahlungen storniert ";
+					}
 				}
 			}
-
+			
+			db.insertLog(1, "ASK-Bestellung (Id:" + original.getId() + " geändert: \n" +
+											"Besteller: " + original.getBesteller().getName() + ", " + original.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + original.getDatum().toString() + "n" +
+											 logText);
+			
 			db.commit();
 		}catch (ApplicationServerException e){
 			db.rollback();
@@ -2415,7 +2665,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return bestellung;
 	}
 	
-	
 	/*
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getASKBestellung(int)
@@ -2434,11 +2683,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return bestellung;
 	}
 	
-	
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getBestellungen(int)
+	 */
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
 		return db.selectBestellungen(filter);
 	}
 
+	/*
+	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getBestellungen()
+	 */
 	public ArrayList getBestellungen() throws ApplicationServerException{
 		return db.selectBestellungen(-1);
 	}
@@ -2634,6 +2890,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			bucheBestellungsbegleichung(bestellung.getBesteller(), bestellung, zvk, tgrEntry, bestellung.getZvtitel(), 
 										titelEntry, bestellung.getFbkonto(), -bestellung.getBestellwert());
 
+			db.insertLog(0, "Klein-Bestellung (Id: " + bestellung.getId() + " hinzugefügt: \n" +
+											"Besteller: " + bestellung.getBesteller().getName() + ", " + bestellung.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + bestellung.getDatum().toString()+ "\n" +
+											"FB-Konto: " +  bestellung.getFbkonto() + "\n" +
+											"ZV-Titel: " + bestellung.getZvtitel() );
+			
 			return bestellung.getId();
 		} catch(ApplicationServerException e) {
 			db.rollback();
@@ -2702,6 +2964,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				zvk = bestellung.getZvtitel().getZVTitel().getZVKonto();
 			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, -old.getBetragZvKonto(), bestellung.getZvtitel(), 
 									-old.getBetragZvTitel1(), bestellung.getFbkonto(), -old.getBetragFbKonto1());
+			
+			db.insertLog(2, "Klein-Bestellung (Id: " + bestellung.getId() + " gelöscht: \n" +
+											"Besteller: " + bestellung.getBesteller().getName() + ", " + bestellung.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + bestellung.getDatum().toString() + "\n" +											"Stornozahlungen an:\n" +											"FB-Konto: " +  bestellung.getFbkonto() + "\n" +											"ZV-Titel: " + bestellung.getZvtitel());
+			
 			return bestellung.getId();
 		} catch(ApplicationServerException e) {
 			db.rollback();
@@ -2763,6 +3030,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				delOrder.setGeloescht(true);
 				db.updateStandardBestellung(delOrder); // Flag gelöscht setzen
 			}
+			db.insertLog(2, "Standard-Bestellung gelöscht: \n" +
+											"Besteller: " + delOrder.getBesteller().getName() + ", " + delOrder.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + delOrder.getDatum().toString() );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -2805,6 +3076,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				delOrder.setGeloescht(true);
 				db.updateASKBestellung(delOrder); // Flag gelöscht setzen
 			}
+			
+			db.insertLog(2, "ASK-Bestellung gelöscht: \n" +
+											"Besteller: " + delOrder.getBesteller().getName() + ", " + delOrder.getBesteller().getVorname() + "\n" +
+											"Bestelldatum: " + delOrder.getDatum().toString() );
+			
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -2813,14 +3089,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		}
 	}
 
-
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getSwBeauftragte()
 	 */
 	public Benutzer[] getSwBeauftragte() throws ApplicationServerException {
 		return db.selectSwBeauftragte();
 	}
-
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getASKFirma()
@@ -2829,35 +3103,38 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return db.selectASKFirma();
 	}
 
-
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getReport(int, dbObjects.Institut)
 	 */
-	public ArrayList getReport(int typ) throws ApplicationServerException {
+	public ArrayList getReport(int typ, Date von, Date bis) throws ApplicationServerException {
 		
 		if(typ == 1){
-			return db.selectReport1();
+			return db.selectReport1(von, bis);
 		}if(typ == 2){
-			return db.selectReport2();
+			return db.selectReport2(von, bis);
 		}if(typ == 3){
-			return db.selectReport3();
+			return db.selectReport3(von, bis);
 		}else if(typ == 4){
-			return db.selectReport4();
+			return db.selectReport4(von, bis);
 		}else if(typ == 5){
-			return db.selectReport5();
+			return db.selectReport5(von, bis);
 		}else if(typ == 6){
-			return db.selectReport6();
+			return db.selectReport6(von, bis);
 		}else if(typ == 7){
-			return db.selectReport7();
+			return db.selectReport7(von, bis);
 		}else if(typ == 8){
-			return db.selectReport8();
+			return db.selectReport8(von, bis);
 		}
 		
 		return null;
 	}
-	
-	
-	
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getLogList(java.sql.Date, java.sql.Date)
+	 */
+	public ArrayList getLogList(Date von, Date bis) throws ApplicationServerException {
+		return db.selectLogList(von, bis);
+	}
 }
 
 

@@ -19,6 +19,7 @@ import dbObjects.ZVTitel;
 
 import java.awt.*;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 
@@ -50,8 +51,8 @@ public class PrintASKBestellung extends JFrame {
 
 			data[i][0] = new Integer(p.getMenge());
 			data[i][1] = p.getArtikel();
-			data[i][2] = new Float(p.getEinzelPreis() + (p.getEinzelPreis() * p.getMwst()));
-			data[i][3] = new Float(p.getGesamtpreis());
+			data[i][2] = NumberFormat.getCurrencyInstance().format(p.getEinzelPreis() + (p.getEinzelPreis() * p.getMwst()));
+			data[i][3] = NumberFormat.getCurrencyInstance().format(p.getGesamtpreis());
 			data[i][4] = p.getInstitut().getBezeichnung();
 		}
 	  dtm = new DefaultTableModel(data, cols){
@@ -91,7 +92,7 @@ public class PrintASKBestellung extends JFrame {
 	
 	private void printReport(){
 		final URL in = getClass().getResource("/xml/askBestellung.xml");
-		System.setProperty("org.jfree.report.targets.G2OutputTarget.isBuggyFRC","true");
+//		System.setProperty("org.jfree.report.targets.G2OutputTarget.isBuggyFRC","true");
 		
 		if (in == null){
 			System.out.println("xml not found");

@@ -177,7 +177,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			applicationServer.delInstitute(currInstitut);
 			listModel.remove(listInstitute.getSelectedIndex());
 			return "";
-		}catch(Exception e){
+		}catch(ApplicationServerException e){
 			return e.getMessage();
 		}
 	}	

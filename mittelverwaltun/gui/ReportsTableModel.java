@@ -1,6 +1,7 @@
 package gui;
 
 import java.sql.Date;
+import java.text.DateFormat;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
@@ -49,6 +50,9 @@ public class ReportsTableModel extends DefaultTableModel {
 		} else if (type == Reports.REPORT_8){
 			String[] colheads = {"Institut", "FB-Konto", "Einnahmen (Institut)"}; 
 			setColumnIdentifiers(colheads);
+		}	else if (type == Reports.LOGS){
+			String[] colheads = {"Datum", "Benutzer", "Typ", "Beschreibung"}; 
+			setColumnIdentifiers(colheads);
 		}
 		
 		fillReport (content);
@@ -60,7 +64,7 @@ public class ReportsTableModel extends DefaultTableModel {
 		for(int i = 0; i < content.size(); i++){
 			Object[] data = null;
 			
-			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_5)
+			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_5 || type == Reports.LOGS)
 				data = new Object[4];
 			else if(type == Reports.REPORT_4 || type == Reports.REPORT_8)
 				data = new Object[3];
@@ -128,7 +132,7 @@ public class ReportsTableModel extends DefaultTableModel {
 						data[5] = "Zahlungsanforderung";
 					else data[5] = "n.a.";
 	
-					data[6] = ((Date)row.get(6)).toString();								// Datum
+					data[6] = DateFormat.getDateInstance().format((Date)row.get(6));								// Datum
 					
 					if (row.get(7).equals("0"))											// Phase
 						data[7] = (String)"Sondierung";
@@ -148,6 +152,24 @@ public class ReportsTableModel extends DefaultTableModel {
 					data[0] = (String)row.get(0);							// Institut
 					data[1] = (String)row.get(1);							// FB-Konto
 					data[2] = (Float)row.get(2);							// Einnahmen
+				}		
+			} else if (type == Reports.LOGS){
+				String type = "";
+				if (row.get(2).equals("0"))											// Typ
+					type = "Add";
+				else if (row.get(2).equals("1"))
+					type = "Set";
+				else if (row.get(2).equals("2"))
+					type = "Del";
+				else if (row.get(2).equals("3"))
+					type = "Buchung";
+				else type = (String)"unbekannt";
+					
+				if(filter.equals("") || filter.equals(type)){
+					data[0] = DateFormat.getDateInstance().format((Date)row.get(0));							// Datum 
+					data[1] = (String)row.get(1);							// Benutzer
+					data[2] = type;														// Typ
+					data[3] = (String)row.get(3);							// Beschreibung
 				}		
 			}
 						
