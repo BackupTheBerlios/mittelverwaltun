@@ -1819,7 +1819,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param bestellId
 	 * @throws ApplicationServerException
 	 */
-	public void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
+	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
 		int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
 		
 		for(int i = 0; i < listIndex; i++){
@@ -1871,7 +1871,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws ApplicationServerException {
+	private void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws ApplicationServerException {
 		if(!(oldOffer.equals(newOffer))){ // Angebot hat sich geändert
 			
 			db.updateAngebot(newOffer); // aktualisiert nur die Tabelle Angebote
@@ -1995,6 +1995,79 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		 }
 
 		 return instituts;
+	}
+	
+	/**
+	 * Mittelzuweisung in der Buchungstabelle Typ 1
+	 * @throws ApplicationServerException
+	 */
+	private void bucheMittelzuweisung() throws ApplicationServerException {
+		
+	}
+	
+	/**
+	 * Mittelübernahme aus Geschäftsjahr für ZV Konten Typ 2
+	 * @throws ApplicationServerException
+	 */
+	private void bucheZVMitteluebernahme() throws ApplicationServerException {
+	
+	}
+	
+	/**
+	 * Mittelübernahme aus Geschäftsjahr für FB Konten Typ3
+	 * @throws ApplicationServerException
+	 */
+	private void bucheFBMitteluebernahme() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Mittelübernahme aus Geschäftsjahr für FB Konten Typ 4
+	 * Es wird nur ein FBKonto benutzt. Es handelt sich um die Verteilung der Mittel auf die FBKonten
+	 * @throws ApplicationServerException
+	 */
+	private void bucheMittelverteilung() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Mittelverteilung institutsintern Typ 5
+	 * @throws ApplicationServerException
+	 */
+	private void bucheUmverteilung() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Vormerkung für Bestellung institutsintern Typ 6
+	 * @throws ApplicationServerException
+	 */
+	private void bucheVormerkungen() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Bestellungsänderung Typ 7
+	 * @throws ApplicationServerException
+	 */
+	private void bucheBestellungsaenderung() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Bestellungsänderung Typ 8
+	 * @throws ApplicationServerException
+	 */
+	private void bucheBestellungsBegleichung() throws ApplicationServerException {
+
+	}
+	
+	/**
+	 * Stornierung einer Bestellung Typ 9
+	 * @throws ApplicationServerException
+	 */
+	private void bucheStorno() throws ApplicationServerException {
+
 	}
 
 }

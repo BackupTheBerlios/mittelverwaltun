@@ -25,14 +25,14 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Bestellung"
 	JMenu menuBestellung = new JMenu("Bestellung");
 		JMenu menuAuszahlungsanordnung = new JMenu("Auszahlungsanordnung");
-			JMenuItem miAADurchführen = new JActivityRelatedMenuItem(0, "Durchführen");
-			JMenuItem miAAAnzeigen = new JActivityRelatedMenuItem(0, "Anzeigen/Stornieren");
+			JMenuItem miAADurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
+			JMenuItem miAAAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen/Stornieren");
 		JMenu menuStandardbestellung = new JMenu("Standardbestellung");
-			JMenuItem miSBDurchführen = new JActivityRelatedMenuItem(1, "Durchführen");
-			JMenuItem miSBAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
+			JMenuItem miSBDurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
+			JMenuItem miSBAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
 		JMenu menuASKBestellung = new JMenu("ASK Bestellung");
-			JMenuItem miASKDurchführen = new JActivityRelatedMenuItem(1, "Durchführen");
-			JMenuItem miASKAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
+			JMenuItem miASKDurchführen = new JActivityRelatedMenuItem(17, "Durchführen");
+			JMenuItem miASKAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
 		
 	// Das Menü "Mittelverwaltung"
 	JMenu menuMittelverwaltung = new JMenu("Mittelverwaltung");
