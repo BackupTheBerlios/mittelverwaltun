@@ -33,6 +33,7 @@ public class Database implements Serializable{
 			System.out.println("Done.");
 			System.out.println("Connect to database...");
 			con = DriverManager.getConnection("jdbc:mysql://" + url + "/" + database, user, defaultPwd);
+
 			System.out.println("Connection established.");
 			System.out.println("Set autocommit = false...");
 			con.setAutoCommit(false);
@@ -1012,27 +1013,19 @@ public class Database implements Serializable{
 
 	public void updateUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
-				if(benutzer.getPrivatKonto() == 0){
-					Object[] param2 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
-														benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
-														benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
-														(benutzer.getSwBeauftragter() ? "1" : "0"), new Integer(benutzer.getId())};
-					if(statements.get(22).executeUpdate(param2) == 0)
-						throw new ApplicationServerException(2);
-				}else{
-					Object[] param3 = {benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
-															benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
-															new Integer(benutzer.getPrivatKonto()), benutzer.getTelefon(), benutzer.getFax(), 
-															benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0"),
-															new Integer(benutzer.getId())};
-					if(statements.get(21).executeUpdate(param3) == 0)
-						throw new ApplicationServerException(2);
-				}
+			Object[] param2 = {	benutzer.getBenutzername(), new Integer(benutzer.getRolle().getId()), new Integer(benutzer.getKostenstelle().getId()),
+													benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
+													((benutzer.getPrivatKonto() == 0) ? null : new Integer(benutzer.getPrivatKonto())), benutzer.getTelefon(), benutzer.getFax(), 
+													benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0"),
+													new Integer(benutzer.getId())};
+			if(statements.get(21).executeUpdate(param2) == 0)
+				throw new ApplicationServerException(2);
+			
 
-				if(!benutzer.getPasswort().equals("")){
-					Object[] param = {benutzer.getPasswort(), new Integer(benutzer.getId()) };
-					statements.get(23).executeUpdate(param);
-				}
+			if(!benutzer.getPasswort().equals("")){
+				Object[] param = {benutzer.getPasswort(), new Integer(benutzer.getId()) };
+				statements.get(23).executeUpdate(param);
+			}
 		} catch (SQLException e){
 			System.out.println(e.getMessage());
 			throw new ApplicationServerException(1, e.getMessage());
@@ -1064,27 +1057,15 @@ public class Database implements Serializable{
 	 */
 	public int insertUser(Benutzer benutzer) throws ApplicationServerException{
 		try{
-			Object[] param ={benutzer.getBenutzername()};
+	    
+		  Object[] param3 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
+												new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
+												benutzer.getVorname(), benutzer.getEmail(), ((benutzer.getPrivatKonto() == 0) ? null : new Integer(benutzer.getPrivatKonto())), 
+												benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
+												(benutzer.getSwBeauftragter() ? "1" : "0")};
+			statements.get(24).executeUpdate(param3);
 
-			PreparedStatementWrapper stmt;
-	    if(benutzer.getPrivatKonto() == 0){
-	        Object[] param2 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
-	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
-	                          benutzer.getVorname(), benutzer.getEmail(), benutzer.getTelefon(), benutzer.getFax(),
-	                          benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0")};
-	        stmt = statements.get(25);
-	        stmt.executeUpdate(param2);
-	    }else{
-	        Object[] param3 ={benutzer.getBenutzername(), benutzer.getPasswort(), new Integer(benutzer.getRolle().getId()),
-	                          new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
-	                          benutzer.getVorname(), benutzer.getEmail(), new Integer(benutzer.getPrivatKonto()), 
-	                          benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
-	                          (benutzer.getSwBeauftragter() ? "1" : "0")};
-	    		stmt = statements.get(24);
-	        stmt.executeUpdate(param3);
-	    }
-
-			ResultSet rs = stmt.getGeneratedKeys();
+			ResultSet rs = statements.get(24).getGeneratedKeys();
 			
 	    if (rs.next()) {
 	        return rs.getInt(1);
@@ -2934,6 +2915,44 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * wählt eine Bestellung zum Aktualisieren
+	 * @param bestellId
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public StandardBestellung selectForUpdateStandardBestellung(int bestellId) throws ApplicationServerException{
+		StandardBestellung bestellung = null;
+
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			ResultSet rs = statements.get(274).executeQuery(parameters);
+
+			if (rs.next()){
+				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
+				Benutzer besteller = selectUser(rs.getInt("besteller"));
+				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
+				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
+				ZVTitel zvTitel = selectZVTitel(rs.getInt("zvTitel"));
+				FBUnterkonto fbkonto = selectFBKonto(rs.getInt("fbKonto"));
+			
+				bestellung = new StandardBestellung(kostenart, !rs.getString("ersatzbeschaffung").equalsIgnoreCase("0"), rs.getString("ersatzbeschreibung"),
+																						rs.getString("ersatzInventarNr"), rs.getString("verwendungszweck"), !rs.getString("planvorgabe").equalsIgnoreCase("0"), 
+																						rs.getString("begruendung"), rs.getString("bemerkungen"), bestellId, 
+																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), rs.getString("huelNr"), auftraggeber,
+																						empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten") );
+			}else {
+				throw new ApplicationServerException(70);
+			}
+
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(71,e.getMessage());
+		}
+
+		return bestellung;
+	}
+	
+	/**
 	 * fügt eine ASKBestellung in die Tabelle ASK_Standard_Bestellungen ein
 	 * @param bestellung - ASKbestellung
 	 * @param angebotId - Id des dazugehörigen Angebots
@@ -3502,6 +3521,68 @@ public class Database implements Serializable{
 			rollback();		// Um die Änderungen rückgängig zu machen
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
+	}
+	
+	/**
+	 * Positionen zum Aktualisieren auswählen
+	 * @param angebotId - Id des Angebots
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectForUpdatePositionen(int angebotId) throws ApplicationServerException {
+		ArrayList positionen = new ArrayList();	// Liste für die ZVKonten
+		
+		try{
+			Object[] parameters = { new Integer(angebotId) };
+			ResultSet rs = statements.get(281).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt 
+					Institut institut = selectInstitute(rs.getInt("institut"));
+				  positionen.add( new Position(rs.getInt(1), rs.getString(3), rs.getFloat(4), rs.getInt(5), rs.getFloat(6),
+																		 rs.getFloat(7), institut, !rs.getString(8).equalsIgnoreCase("0")));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 74, e.getMessage() );
+		}
+
+		return positionen;
+	}
+	
+	/**
+	 * Angebote zum Aktualisieren auswählen
+	 * @param bestellId
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectForUpdateAngebote(int bestellId) throws ApplicationServerException {
+		ArrayList angebote = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			Object[] parameters = { new Integer(bestellId) };
+			ResultSet rs = statements.get(286).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					
+					Firma anbieter = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+																			rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+																			rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
+																			rs.getString(12).equalsIgnoreCase( "1" ) );
+					angebote.add( new Angebot( rs.getInt(13), null, rs.getDate(14), anbieter, !rs.getString(15).equalsIgnoreCase("0")));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 73, e.getMessage() );
+		}
+	
+		return angebote;
 	}
 }
 

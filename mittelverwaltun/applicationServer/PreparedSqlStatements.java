@@ -106,12 +106,12 @@ public class PreparedSqlStatements {
 		/* Tabelle: Benutzer                  */
 		/* Indizes: 20-39                     */
 		/**************************************/
-		{//20			(0)
+		{//20			
 			ps = con.prepareStatement("SELECT * FROM Benutzer WHERE id = ? AND geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//21			(1)
+		{//21	aktualisiert einen Benutzer anhand der Id, keine Aktualisierung des Passworts
 			ps = con.prepareStatement("UPDATE Benutzer " +
 										 "SET " +
 												"benutzername = ?, " +
@@ -128,31 +128,17 @@ public class PreparedSqlStatements {
 										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//22			(2)
-			ps = con.prepareStatement("UPDATE Benutzer " +
-										 "SET " +
-												"benutzername = ?, " +
-												"rollenId = ?, " +
-												"institutsId = ?, " +
-												"titel = ?, " +
-												"name = ?, " +
-												"vorname = ?, " +
-												"email = ?, " +
-												"privatKontoId = NULL, telefon = ?, fax = ?, bau = ?, raum = ?, swBeauftragter = ?" +
-									   "WHERE id = ?");
-			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER };
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+		{//22	
+			statements[i++] = null;
 		}
-		{//23			(3)
+		{//23	
 			ps = con.prepareStatement("UPDATE Benutzer " +
 										 "SET passwort = ? " +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//24			(4)
+		{//24	
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
@@ -164,17 +150,8 @@ public class PreparedSqlStatements {
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//25			(5)
-			ps = con.prepareStatement(	"INSERT " +
-										  "INTO Benutzer " +
-												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email, telefon, fax, bau, raum, swBeauftragter) " +
-										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-										Statement.RETURN_GENERATED_KEYS);
-			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR};
-			statements[i++] = new PreparedStatementWrapper(ps, param);
+		{//25	
+			statements[i++] = null;
 		}
 
 		{//26			(6)
@@ -1927,8 +1904,21 @@ public class PreparedSqlStatements {
 										  "ORDER BY datum DESC");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//274
-			statements[i++] = null;
+		{//274 select for update für eine Bestellung
+			ps = con.prepareStatement("SELECT " +
+																		"k.id, k.beschreibung," +
+																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +
+																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +
+																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, a.fbKonto, a.bestellwert, a.verbindlichkeiten " +
+																"FROM Bestellungen a, ASK_Standard_Bestellungen b, Kostenarten k " +
+															  "WHERE a.id = ? " +
+																	"AND a.id = b.id " +
+																	"AND a.typ = '0' " +
+																	"AND a.geloescht = '0' " +
+																	"AND k.id = b.kostenart FOR UPDATE");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/**********************/
 		/* Tabelle: Belege    */
@@ -1996,8 +1986,12 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//281 
-			statements[i++] = null;
+		{//281 Select for update für eine Position
+			ps = con.prepareStatement("SELECT id, institut, artikel, einzelPreis, menge, mwSt, rabatt, beglichen " +
+																"FROM Positionen " +
+															  "WHERE angebot = ? FOR UPDATE");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//282
 			statements[i++] = null;
@@ -2017,8 +2011,16 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//286
-			statements[i++] = null;
+		{//286 select for update der Angebote einer Bestellung
+			ps = con.prepareStatement("SELECT f.id, f.name, f.strassenr, f.plz, f.ort, f.kundennr, " +
+																			 "f.telnr, f.faxnr, f.email, f.www, f.ask, f.geloescht, " +
+																			 "a.id AS angebotId, a.datum, a.angenommen " +
+																"FROM Angebote a, Firmen f " +
+															  "WHERE a.bestellung = ? " +
+																	"AND a.anbieter = f.id " +
+																	"AND f.geloescht = '0' FOR UPDATE");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//287
 			statements[i++] = null;

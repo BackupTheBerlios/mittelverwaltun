@@ -183,6 +183,16 @@ public interface ApplicationServer extends Remote {
 	 * @author robert
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException;
+
+	
+	/**
+	 * 
+	 * @param delOrder - StandardBestellung die gelöscht werden soll
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException;
+
 	
 	/**
 	 * Eine Kleinbestellung in die Datenbank einfügen.
@@ -217,4 +227,5 @@ public interface ApplicationServer extends Remote {
 	 * @author w.flat
 	 */	
 	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
+
 }

@@ -1861,7 +1861,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
 		// original StandardBestellung in der Datenbank
-		StandardBestellung dbOriginal = getStandardBestellung(original.getId());
+		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(id);
+	
+		ArrayList angebote = db.selectForUpdateAngebote(id);
+
+		for(int i = 0; i < angebote.size(); i++){
+			Angebot angebot = (Angebot)angebote.get(i);
+
+			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+		}
+		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
+		
 		
 		// die Bestellung hat sich zwischenzeitlich geändert
 		if(!original.equals(dbOriginal))
@@ -1873,6 +1883,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 		if(original.getPhase() == '0'){
+			
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 		}else if(original.getPhase() == '1'){
@@ -1963,8 +1974,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			ArrayList oldPs = oldOffer.getPositionen(); // alte Positionen
 			ArrayList newPs = newOffer.getPositionen(); // neue Positionen
 			
-			//int posIndex = (oldPs.size() > newPs.size()) ? oldPs.size() : newPs.size(); // der grössere Anzahl der Positionen
-			
 			while((oldPs.size() > 0) || (newPs.size() > 0)){
 				Position oldP = null;
 				Position newP = null;
@@ -1993,52 +2002,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 								db.deletePosition(oldP.getId());
 								oldPs.remove(oldP);
 							}else{
-								if(!oldP.equals(newP)) // Position geändert
-									db.updatePosition(newP);
-								oldPs.remove(oldP);
-								newPs.remove(newP);
+								if(!oldP.equals(newP)){ // Position geändert
+									db.updatePosition(newP); // aktualisieren
+									
+									oldPs.remove(oldP);
+									newPs.remove(newP);
+								}
 							}
 						}
 					}
 				}
 			}
-			
-//			for(int i = 0; i < posIndex; i++){
-//				Position oldP = null;
-//				
-//				if(i < oldPs.size())
-//					oldP = (Position)oldPs.get(i); 
-//				
-//				// nur neue Positionen hinzugefügt(mindestens 1)
-//				if(((Position)newPs.get(0)).getId() == 0){
-//					db.deleteOfferPositions(oldOffer.getId()); // alte Positionen löschen
-//					
-//					for(int j = 0; j < newPs.size(); j++) // neue Positionen
-//							db.insertPosition((Position)newPs.get(j), newOffer.getId());
-//					break;
-//				}
-//				
-//				if(i >= newPs.size()){ // restliche Position im alten Angebot löschen
-//					db.deletePosition(oldP.getId());
-//				}else{
-//					Position newP = (Position)newPs.get(i);
-//				
-//					if(newP.getId() == 0){ // neue Positionen
-//						if(oldP != null)
-//							db.deletePosition(oldP.getId());
-//						db.insertPosition(newP, newOffer.getId());
-//					}else{
-//						if(oldP != null){
-//							if(oldP.getId() != newP.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
-//								db.deletePosition(oldP.getId());
-//							}else{	// gleiche Position
-//								if(!oldP.equals(newP)) // Position geändert
-//									db.updatePosition(newP);
-//							}
-//						}
-//					}
-//				}
-//			}
 		}
 	}
 
@@ -2070,6 +2044,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		return bestellung;
 	}
+	
 	
 	/**
 	 * gibt eine ASKBestellung mit allen Objekten zurück
@@ -2202,6 +2177,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	}
 
+
 	/**
 	 * Eine Kleinbestellung in die Datenbank einfügen.
 	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
@@ -2284,5 +2260,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.commit();
 		}		
 	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)
+	 */
+	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException {
+		// TODO Automatisch erstellter Methoden-Stub
+		
+	}
 }
+
 
