@@ -2471,17 +2471,22 @@ public class Database implements Serializable{
 	/**
 	 * fügt ein Angebot in die Tabelle Angebote ein und liefert eine Id zurück
 	 * @param angebot
+	 * @param bestellungId - Id der eingefügten Bestellung
+	 * @param angenommen - sagt aus ob das Angebot ausgewählt wurde
 	 * @return Id des Angebots
 	 * @throws ApplicationServerException
 	 */
-	public int insertAngebot(Angebot angebot) throws ApplicationServerException{
+	public int insertAngebot(Angebot angebot, int bestellungId, boolean angenommen) throws ApplicationServerException{
 		if(angebot != null){
 			try{
-				Object[] parameters = { };
-				statements.get(218).executeUpdate(parameters);
-				ResultSet rs = statements.get(218).getGeneratedKeys();
+				Object[] parameters = { new Integer(bestellungId), new Integer(angebot.getAnbieter().getId()),
+																angebot.getDatum(), (angenommen ? "1" : "0") };
+				statements.get(260).executeUpdate(parameters);
+				ResultSet rs = statements.get(260).getGeneratedKeys();
 
-				
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
 			} catch (SQLException e){
 				throw new ApplicationServerException(67, e.getMessage());
 			}
@@ -2491,4 +2496,17 @@ public class Database implements Serializable{
 		return 0;
 	}
 
+	public void insertPosition(Position position) throws ApplicationServerException{
+		if(position != null){
+			try{
+				Object[] parameters = { };
+				statements.get(250).executeUpdate(parameters);
+		
+			} catch (SQLException e){
+				throw new ApplicationServerException(68, e.getMessage());
+			}
+		}else{
+			throw new ApplicationServerException(68);
+		}
+	}
 }
