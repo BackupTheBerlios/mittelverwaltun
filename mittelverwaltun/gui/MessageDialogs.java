@@ -68,6 +68,7 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		labMsg.setEditable(false);
 		labMsg.setBackground(this.getBackground());
 		labMsg.setBounds(35,6,300,50);
+		labMsg.setLineWrap(true);
 		cp.add(labMsg);
 			
 		JButton butOk = new JButton("OK");
