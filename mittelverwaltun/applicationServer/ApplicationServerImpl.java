@@ -1508,7 +1508,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
-		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
 		
@@ -1539,8 +1538,25 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
 	 */
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
-		// TODO Automatisch erstellter Methoden-Stub
+		int newBestellungId = db.insertBestellung(bestellung, 0);
+		int newAngebotId = 0;
 		
+		// Fügt das Angebot ein
+		Angebot angebot = (Angebot)bestellung.getAngebot();
+		ArrayList positionen = angebot.getPositionen();
+		
+		newAngebotId = db.insertAngebot(angebot, newBestellungId, true);
+		
+		// fügt alle Positionen ein
+		for(int j = 0; j < positionen.size(); j++){
+			Position position = (Position)positionen.get(j);
+			
+			db.insertPosition(position, newAngebotId);
+		}
+		
+		// fügt die ASKbestellung ein
+		bestellung.setId(newBestellungId);
+		db.insertASKBestellung(bestellung, newAngebotId);
 	}
 
 }

@@ -2469,6 +2469,28 @@ public class Database implements Serializable{
 	}	
 	
 	/**
+	 * fügt eine ASKBestellung in die Tabelle ASK_Standard_Bestellungen ein
+	 * @param bestellung - ASKbestellung
+	 * @param angebotId - Id des dazugehörigen Angebots
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public void insertASKBestellung(ASKBestellung bestellung, int angebotId) throws ApplicationServerException{
+		if(bestellung != null){
+			try{
+				Object[] parameters = {new Integer(bestellung.getId()), new Integer(angebotId), 
+																bestellung.getBemerkung(), new Integer(bestellung.getSwbeauftragter().getId())};
+				statements.get(251).executeUpdate(parameters);
+			
+			} catch (SQLException e){
+				throw new ApplicationServerException(69, e.getMessage());
+			}
+		}else{
+			throw new ApplicationServerException(69);
+		}
+	}
+	
+	/**
 	 * fügt ein Angebot in die Tabelle Angebote ein und liefert eine Id zurück
 	 * @param angebot
 	 * @param bestellungId - Id der eingefügten Bestellung

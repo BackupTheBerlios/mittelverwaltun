@@ -1559,8 +1559,13 @@ public class PreparedSqlStatements {
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//251
-			statements[i++] = null;
+		{//251 fügt eine ASKBestellung in die ASK_Standard_Bestellungen Tabelle ein
+			ps = con.prepareStatement("INSERT " +
+																"INTO ASK_Standard_Bestellungen " +
+																	 "( id, angebot, bemerkungen, swBeauftragter) " +
+															  "VALUES (?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//252
 			statements[i++] = null;
