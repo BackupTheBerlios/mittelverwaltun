@@ -22,10 +22,6 @@ public class Aktivitaet implements Serializable {
 		this.bemerkung = bemerkung;
 	}
 
-/**
- * 
- * @return
- */
 	public int getId() {
 		return id;
 	}
