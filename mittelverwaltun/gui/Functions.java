@@ -105,15 +105,6 @@ public class Functions {
 	  return null;
 	}
 	
-	static public ImageIcon getSaveIcon(Class clazz){
-		try{
-		  Image img = Functions.loadImageResource("image","Save.gif", clazz);
-		  if (img != null)
-			  return  new ImageIcon(img);
-	  }catch (IOException e){};
-	  return null;
-	}
-	
 	static public ImageIcon getRefreshIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","refresh.gif", clazz);
@@ -298,6 +289,15 @@ public class Functions {
 	static public ImageIcon getDownIcon(Class clazz){
 		try{
 		  Image img = Functions.loadImageResource("image","down.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+	
+	static public ImageIcon getSaveIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Save16.gif", clazz);
 		  if (img != null)
 			  return  new ImageIcon(img);
 	  }catch (IOException e){};
