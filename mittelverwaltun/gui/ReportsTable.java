@@ -23,61 +23,12 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 /**
+ * <p>Table für die Klasse Reports zum Anzeigen der Auswertungen<p>
  * 
  * @author robert
- *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class ReportsTable extends JTable{
-	
-	/**
-	 * Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel, die Summe
-	 * der Ausgaben und aktuellen Kontostände enthält
-	 */
-	public static final int REPORT_1 = 1;
-	
-	/**
-	 * Ein Report, nder die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe 
-	 * der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen
-	 */
-	public static final int REPORT_2 = 2;
-	
-	/**
-	 * Ein Report, der die institutsinternen Konten, die verteilten Mittel, die Summe 
-	 * der Ausgaben und den aktuellen Kontostand enthält
-	 */
-	public static final int REPORT_3 = 3;
-	
-	/**
-	 * Ein Report, der die Ausgaben bei den institutsinternen Konten nach Verwaltungskonten sortiert
-	 */
-	public static final int REPORT_4 = 4;
-	
-	/**
-	 * Ein Report von jedem Konto aus der Zentralverwaltung mit Ausgaben jedes Instituts
-	 * und aktueller Kontostände
-	 */
-	public static final int REPORT_5 = 5;
-	
-	/**
-	 * Für jedes Institut ein Report mit Ausgaben sortiert nach Verwaltungskonen
-	 */
-	public static final int REPORT_6 = 6;
-	
-	/**
-	 * Für jedes Instiut ein detaillierter Report über die Einnahmen und Ausgaben mit FBI-Schlüsselnummer,
-	 * Hüll-Nr, Datum, welches Konto der Zentralverwaltung belastet wurde, Firma, Beschreibung des bestellten Artikels, 
-	 * Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung
-	 */
-	public static final int REPORT_7 = 7;
-	
-	/**
-	 * Für jedes Instiut ein Report über die Einnahmen
-	 */
-	public static final int REPORT_8 = 8;
-	
-	
+		
 	private int type = 0;
 	private ActionListener actionListener;
 	
@@ -106,19 +57,21 @@ public class ReportsTable extends JTable{
   	dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
   	setDefaultRenderer(Integer.class, dtcr);
 		
-		if(type == REPORT_1){
+		if(type == Reports.REPORT_1){
 			getColumnModel().getColumn(0).setPreferredWidth(45);
-		}else if(type == REPORT_2){
+		}else if(type == Reports.REPORT_2){
 			
-		}else if(type == REPORT_3){
+		}else if(type == Reports.REPORT_3){
 			
-		}else if(type == REPORT_4){
+		}else if(type == Reports.REPORT_4){
 			
-		}else if(type == REPORT_5){
+		}else if(type == Reports.REPORT_5){
 			
-		}else if(type == REPORT_6){
+		}else if(type == Reports.REPORT_6){
 			
-		}else if(type == REPORT_7){
+		}else if(type == Reports.REPORT_7){
+			
+		}else if(type == Reports.REPORT_8){
 			
 		}
 	}

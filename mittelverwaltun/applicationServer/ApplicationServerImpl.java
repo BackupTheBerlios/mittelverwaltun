@@ -2551,6 +2551,19 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public Firma getASKFirma() throws ApplicationServerException {
 		return db.selectASKFirma();
 	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getReport(int, dbObjects.Institut)
+	 */
+	public ArrayList getReport(int typ, Institut institut) throws ApplicationServerException {
+		
+		if(typ == 7){
+			
+		}
+		
+		return null;
+	}
 	
 	
 	
