@@ -2410,6 +2410,39 @@ public class Database implements Serializable{
 				throw new ApplicationServerException(1, e.getMessage());
 			}
 		 	return kostenarten;
-	 }	
+	 }
+	
+	/**
+	 * fügt eine Bestellung in die Tabelle Bestellungen ein und liefert die erzeugte Id für die Bestellung zurück
+	 * @param bestellung - Standard-,ASK- und KleinBestellung
+	 * @param typ - gibt den Typ der Bestellung an 0 = Standard, 1 = ASK, 2 = Klein
+	 * @return Id der Bestellung in der Tabelle Bestellungen
+	 * @throws ApplicationServerException
+	 */ 
+	public int insertBestellung(Bestellung bestellung, char typ) throws ApplicationServerException{
+		if(bestellung != null){
+			try{
+				float vb = 0f; // Verbindlichkeiten
+				if(typ != 2 && bestellung.getPhase() != 0)
+					vb = bestellung.getBestellwert();
+				
+				Object[] parameters = { new Integer(bestellung.getBesteller().getId()), new Integer(bestellung.getAuftraggeber().getId()),
+																new Integer(bestellung.getEmpfaenger().getId()), bestellung.getReferenznr(), "" + typ,
+																"" + bestellung.getPhase(), bestellung.getDatum(), new Integer(bestellung.getZvtitel().getId()), 
+																new Integer(bestellung.getFbkonto().getId()), new Float(bestellung.getBestellwert()), new Float(vb)};
+				statements.get(219).executeUpdate(parameters);
+				ResultSet rs = statements.get(219).getGeneratedKeys();
+
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+			} catch (SQLException e){
+				throw new ApplicationServerException(1, e.getMessage());
+			}
+		}else{
+			throw new ApplicationServerException(4);
+		}
+		return 0;
+	}	
 
 }
