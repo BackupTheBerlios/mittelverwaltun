@@ -1348,10 +1348,10 @@ public class PreparedSqlStatements {
 		{//219 fügt eine Bestellung in die Bestellungen Tabelle ein und liefert eine Id
 			ps = con.prepareStatement("INSERT " +
 																"INTO Bestellungen " +
-																	 "(besteller, auftraggeber, empfaenger, referenzNr, typ, phase, " +																	 "datum, zvTitel, fbKont, bestellwert, verbindlichkeiten) " +
-															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+																	 "(besteller, auftraggeber, empfaenger, referenzNr, typ, phase, " +																	 "datum, zvTitel, fbKonto, bestellwert, verbindlichkeiten) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 															  Statement.RETURN_GENERATED_KEYS);
-			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,  Types.VARCHAR,  Types.VARCHAR,
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR,  Types.VARCHAR,  Types.VARCHAR,
 										 Types.DATE, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.FLOAT};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1552,19 +1552,19 @@ public class PreparedSqlStatements {
 		{//250 fügt eine StandardBestellung in die ASK_Standard_Bestellungen Tabelle ein
 			ps = con.prepareStatement("INSERT " +
 																"INTO ASK_Standard_Bestellungen " +
-																	 "( id, angebot, bemerkungen, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +
+																	 "( id, bemerkungen, kostenart, ersatzbeschaffung, ersatzbeschreibung, " +
 																	 "ersatzInventarNr, verwendungszweck, planvorgabe, begruendung) " +
-															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER,  Types.VARCHAR,  Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//251 fügt eine ASKBestellung in die ASK_Standard_Bestellungen Tabelle ein
 			ps = con.prepareStatement("INSERT " +
 																"INTO ASK_Standard_Bestellungen " +
-																	 "( id, angebot, bemerkungen, swBeauftragter) " +
-															  "VALUES (?, ?, ?, ?)");
-			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.INTEGER};
+																	 "( id, bemerkungen, swBeauftragter) " +
+															  "VALUES (?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//252
@@ -1622,7 +1622,7 @@ public class PreparedSqlStatements {
 		/******************************************/
 		{//265 fügt eine Positon in die Tabelle Positionen ein
 			ps = con.prepareStatement("INSERT " +
-																"INTO Angebote " +
+																"INTO Positionen " +
 																	 "( angebot, institut, menge, artikel, einzelPreis, mwSt, rabatt) " +
 															  "VALUES (?, ?, ?, ?, ?, ?, ?)");
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT};

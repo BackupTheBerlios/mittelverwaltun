@@ -1508,9 +1508,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
 	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
+		db.setAutoCommit(false);
+		
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
 		
+		// fügt die Standardbestellung ein
+		bestellung.setId(newBestellungId);
+		db.insertStandardBestellung(bestellung);
 		
 		// Fügt alle Angebote ein
 		for(int i = 0; i < bestellung.getAngebote().size(); i++){
@@ -1526,11 +1531,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.insertPosition(position, newAngebotId);
 			}
 		}
+		db.commit();
 		
-		// fügt die Standardbestellung ein
-		bestellung.setId(newBestellungId);
-		bestellung.setAuswahl(newAngebotId);	// setzt die Id auf ein Angebot
-		db.insertStandardBestellung(bestellung);
+		db.setAutoCommit(true);
 	}
 
 
@@ -1540,6 +1543,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public void addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
 		int newBestellungId = db.insertBestellung(bestellung, 0);
 		int newAngebotId = 0;
+		
+		// fügt die ASKbestellung ein
+		bestellung.setId(newBestellungId);
+		db.insertASKBestellung(bestellung);
 		
 		// Fügt das Angebot ein
 		Angebot angebot = (Angebot)bestellung.getAngebot();
@@ -1554,9 +1561,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.insertPosition(position, newAngebotId);
 		}
 		
-		// fügt die ASKbestellung ein
-		bestellung.setId(newBestellungId);
-		db.insertASKBestellung(bestellung, newAngebotId);
+		
 	}
 
 }

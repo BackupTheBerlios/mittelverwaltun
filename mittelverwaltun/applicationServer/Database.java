@@ -2454,16 +2454,19 @@ public class Database implements Serializable{
 	public void insertStandardBestellung(StandardBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
-				Object[] parameters = { new Integer(bestellung.getId()), new Integer(bestellung.getAuswahl()), bestellung.getBemerkung(),
+				Object[] parameters = { new Integer(bestellung.getId()), bestellung.getBemerkung(),
 																new Integer(bestellung.getKostenart().getId()), (bestellung.getErsatzbeschaffung() ? "1" : "0"),
 																bestellung.getErsatzbeschreibung(), bestellung.getInventarNr(), bestellung.getVerwendungszweck(),
 																(bestellung.getPlanvorgabe() ? "1" : "0"), bestellung.getBegruendung()};
 				statements.get(250).executeUpdate(parameters);
 				
 			} catch (SQLException e){
+				//rollback();
+				setAutoCommit(true);
 				throw new ApplicationServerException(66, e.getMessage());
 			}
 		}else{
+			setAutoCommit(true);
 			throw new ApplicationServerException(66);
 		}
 	}	
@@ -2475,10 +2478,10 @@ public class Database implements Serializable{
 	 * @return
 	 * @throws ApplicationServerException
 	 */
-	public void insertASKBestellung(ASKBestellung bestellung, int angebotId) throws ApplicationServerException{
+	public void insertASKBestellung(ASKBestellung bestellung) throws ApplicationServerException{
 		if(bestellung != null){
 			try{
-				Object[] parameters = {new Integer(bestellung.getId()), new Integer(angebotId), 
+				Object[] parameters = {new Integer(bestellung.getId()), 
 																bestellung.getBemerkung(), new Integer(bestellung.getSwbeauftragter().getId())};
 				statements.get(251).executeUpdate(parameters);
 			
