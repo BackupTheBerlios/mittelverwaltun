@@ -50,9 +50,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(1,"Fachbereiche");
 		JMenuItem miInstitute = new JActivityRelatedMenuItem(1, "Institute");
 		JMenu menuHaushaltsjahr = new JMenu( "Haushaltsjahr" );
-			JMenuItem miAbschliessenAnlegen = new JActivityRelatedMenuItem(	1,	"Abschließen/Anlegen");
-			JMenuItem miAendern = new JActivityRelatedMenuItem(1, "Ändern");
-			JMenuItem miMitteluebertrag = new JActivityRelatedMenuItem(	1,	"Mittelübertrag aus vergangenem Jahr");
+			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	1,	"Aktuelles Haushaltsjahr abschließen");
+			JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Haushaltsjahre anzeigen");
+			//JMenuItem miMitteluebertrag = new JActivityRelatedMenuItem(	1,	"Mittelübertrag aus vergangenem Jahr");
 			
 	// Das Menü "Reporting"
 	JMenu menuReporting = new JMenu("Reporting");
@@ -170,15 +170,15 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			activityRelItems.add( miInstitute );
 			miInstitute.addActionListener( this );
 			menuVerwaltung.add( menuHaushaltsjahr );
-				menuHaushaltsjahr.add( miAbschliessenAnlegen );
-				activityRelItems.add( miAbschliessenAnlegen );
-				miAbschliessenAnlegen.addActionListener( this );
-				menuHaushaltsjahr.add( miAendern );
-				activityRelItems.add( miAendern );
-				miAendern.addActionListener( this );
-				menuHaushaltsjahr.add( miMitteluebertrag );
-				activityRelItems.add( miMitteluebertrag );
-				miMitteluebertrag.addActionListener( this );
+				menuHaushaltsjahr.add( miAbschliessen );
+				activityRelItems.add( miAbschliessen );
+				miAbschliessen.addActionListener( this );
+				menuHaushaltsjahr.add( miAnzeigen );
+				activityRelItems.add( miAnzeigen );
+				miAnzeigen.addActionListener( this );
+	//			menuHaushaltsjahr.add( miMitteluebertrag );
+	//			activityRelItems.add( miMitteluebertrag );
+	//			miMitteluebertrag.addActionListener( this );
 			
 			
 		// Das Menü "Reporting"
@@ -255,11 +255,11 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			frame.addChild( new Fachbereichverwaltung(frame.getApplicationServer()) );
 		} else if ( e.getSource() == miInstitute ) {
 			frame.addChild( new Institutverwaltung( frame.getApplicationServer() ) );
-		} else if ( e.getSource() == miAbschliessenAnlegen ) {
-			frame.addChild( new HaushaltsjahrAnlegen( frame ) );
-		} else if ( e.getSource() == miAendern ) {
-			frame.addChild( new HaushaltsjahrAendern(frame.getApplicationServer()) );
-		} else if ( e.getSource() == miMitteluebertrag ) {
+		} else if ( e.getSource() == miAbschliessen ) {
+			frame.addChild( new AbschlussHaushaltsjahr( frame ) );
+		} else if ( e.getSource() == miAnzeigen ) {
+			//frame.addChild( new HaushaltsjahrAendern(frame.getApplicationServer()) );
+		} else if ( e.getSource() == null/*miMitteluebertrag*/ ) {
 		} else if ( e.getSource() == miReportsLoglisteAnzeigen ) {
 			frame.addChild( new Reports(frame) );
 //		} else if ( e.getSource() == miZVAusgabeNachK ) {
