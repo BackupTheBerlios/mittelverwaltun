@@ -75,7 +75,7 @@ public class PositionsTableModel extends DefaultTableModel {
 			data[0] = new Integer(position.getMenge());
 			data[1] = position.getArtikel();
 			
-			if (type == ASK_ABWICKLUNG){
+			if (type == ASK_ABWICKLUNG || type == ASK_STANDARD){
 				data[2] = position.getInstitut();
 				data[3] = new Float(position.getEinzelPreis());
 				data[4] = new Float(position.getMwst());

@@ -486,7 +486,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}else if ( e.getSource() == buBestellen ) {
 			error = checkData();
 			if(error.equals("")){
-				bestellen();
+				saveOrder(1);;
 			}else{
 				JOptionPane.showMessageDialog(
 						  this,
@@ -497,7 +497,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   	}else if ( e.getSource() == buSpeichern ) {
 			error = checkData();
 			if(error.equals("")){
-				saveBestellung();
+				saveOrder(0);
 			}else{
 				JOptionPane.showMessageDialog(
 						  this,
@@ -528,7 +528,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 	}
 
-	private void saveBestellung(){
+	/**
+	 * speichert bzw. bestellt eine Bestellung
+	 * @param phase - 0 nur speichern, 1 bestellen
+	 */
+	private void saveOrder(int phase){
 		DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 		ArrayList angebote = new ArrayList();
 
@@ -555,6 +559,15 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
 																				'0', "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																				zvTitel, fbKonto, 0, 0);
+		if(phase == 1){
+			float betrag = ((Angebot)newBestellung.getAngebote().get(newBestellung.getAngenommenesAngebot())).getSumme();
+			newBestellung.setVerbindlichkeiten(betrag);
+			newBestellung.setBestellwert(betrag);
+			newBestellung.getZvtitel().setVormerkungen(betrag);
+			newBestellung.getFbkonto().setVormerkungen(betrag);
+			newBestellung.setPhase('1');
+		}																		
+																				
 		int id = 0;																		
 		try {
 			if(bestellung != null){
@@ -567,61 +580,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 				id = frame.getApplicationServer().addBestellung(newBestellung);
 			}
 				
-			bestellung = frame.applicationServer.getStandardBestellung(id);
-		} catch (ApplicationServerException e) {
-				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
-				e.printStackTrace();
-		}
-	}
-
-	private void bestellen(){
-		
-		DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
-		ArrayList angebote = new ArrayList();
-
-		for(int i = 0; i < dtm.getRowCount(); i++){
-			Angebot angebot = (Angebot)dtm.getValueAt(i, 1);
-
-			// ein Angebot hat mindestens eine Position auch wenn er nur die Summe hat
-			if(angebot.getPositionen().size() == 0){
-				ArrayList positionen = new ArrayList();
-				Position position = new Position("", angebot.getSumme(), 1, 0, 0, bestellung.getFbkonto().getInstitut());
-				positionen.add(position);
-				angebot.setPositionen(positionen);
-			}
-			angebot.setAngenommen(((Boolean)(dtm.getValueAt(i, 4))).booleanValue());
-			angebote.add(angebot);
-		}
-
-		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
-		Date sqlDate = new Date(datum.getTime());
-		
-		
-
-		StandardBestellung newBestellung = new StandardBestellung(angebote, (Kostenart)cbKostenart.getSelectedItem(),
-																				rbErsatz.isSelected(), tfErsatzText.getText(), tfInventarNr.getText(), tpVerwendungszweck.getText(),
-																				cbDrittelMittel.isSelected(), tpAuftragGrund.getText(), tpBemerkungen.getText(),
-																				tfReferenzNr.getText(), sqlDate, frame.getBenutzer(),
-																				'1', "", (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
-																				zvTitel, fbKonto, 0, 0);
-																				
-		float betrag = ((Angebot)newBestellung.getAngebote().get(newBestellung.getAngenommenesAngebot())).getSumme();
-		newBestellung.setVerbindlichkeiten(betrag);
-		newBestellung.setBestellwert(betrag);
-		newBestellung.getZvtitel().setVormerkungen(betrag);
-		newBestellung.getFbkonto().setVormerkungen(betrag);
-				
-		try {
-			if(bestellung != null){
-				newBestellung.setId(bestellung.getId());
-				newBestellung.setBesteller(bestellung.getBesteller());
-				newBestellung.setHuel(bestellung.getHuel());
-				frame.getApplicationServer().setBestellung(bestellung, newBestellung);
-			}else{
-				frame.getApplicationServer().addBestellung(newBestellung);
-			}
-				
-			dispose();
+			if(phase == 1)
+				dispose();
+			else
+				bestellung = frame.applicationServer.getStandardBestellung(id);
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();

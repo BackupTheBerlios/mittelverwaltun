@@ -170,6 +170,21 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		setFBKonto(bestellung.getFbkonto());
 		setZVKonto(bestellung.getZvtitel());
 		tpBemerkungen.setText(bestellung.getBemerkung());
+		
+		PositionsTableModel ptm = (PositionsTableModel)tableBestellung.getModel();
+
+		tfNetto.setValue(new Float(ptm.getOrderSum() - ptm.get7PercentSum() - ptm.get16PercentSum()));
+		tf7MwSt.setValue(new Float(ptm.get7PercentSum()));
+		tf16MwSt.setValue(new Float(ptm.get16PercentSum()));
+		tfBestellsumme.setValue(new Float(ptm.getOrderSum()));
+
+		if(ptm.getOrderSum() == 0){
+		  buBestellen.setEnabled(false);
+			buSpeichern.setEnabled(false);
+		}else{
+			buBestellen.setEnabled(true);
+			buSpeichern.setEnabled(true);
+		}
   }
 
   private void loadInstituts(){
@@ -226,13 +241,16 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	 loadInstituts();
  }
 
-  private void saveOrder(){
+  private void saveOrder( int phase){
 		ASKBestellung editedOrder = null;
+		
+		java.util.Date datum = (java.util.Date)tfBestellDatum.getValue();
+		Date sqlDate = new Date(datum.getTime());
 
   	if(bestellung == null){
 			Angebot a = new Angebot(tableBestellung.getOrderPositions(), (Date)tfBestellDatum.getValue(), firma, true);
 			
-			editedOrder = new ASKBestellung(null, null, (Date)tfBestellDatum.getValue(), (Benutzer)frame.getBenutzer(),
+			editedOrder = new ASKBestellung(null, null, sqlDate, (Benutzer)frame.getBenutzer(),
 																		  (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
 																		  zvTitel, fbKonto, ((Float)tfBestellsumme.getValue()).floatValue(), 0, '0', a, tpBemerkungen.getText(), 
 																			(Benutzer)cbSwBeauftragter.getSelectedItem());
@@ -241,20 +259,37 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		  editedOrder.getAngebot().setPositionen(tableBestellung.getOrderPositions());
 		  editedOrder.setBestellwert(tableBestellung.getOrderSum());
 		  editedOrder.setAuftraggeber((Benutzer)cbAuftraggeber.getSelectedItem());
+		  editedOrder.setSwbeauftragter((Benutzer)cbSwBeauftragter.getSelectedItem());
 		  editedOrder.setBemerkung(tpBemerkungen.getText());
-		  editedOrder.setDatum((Date)tfBestellDatum.getValue());
+		  editedOrder.setDatum(sqlDate);
 		  editedOrder.setEmpfaenger((Benutzer)cbEmpfaenger.getSelectedItem());
 		  editedOrder.setFbkonto(fbKonto);
 		  editedOrder.setZvtitel(zvTitel);
   	}
+  	
+  	if(phase == 1){
+			float betrag = tableBestellung.getOrderSum();
+			editedOrder.setPhase('1');
+			editedOrder.setVerbindlichkeiten(betrag);
+			editedOrder.setBestellwert(betrag);
+			editedOrder.getZvtitel().setVormerkungen(betrag);
+			editedOrder.getFbkonto().setVormerkungen(betrag);
+  	}
 
+		int id = 0;
+		
 		try {
 			if(bestellung == null)
-				frame.getApplicationServer().addBestellung(editedOrder);
-			else
+				id = frame.getApplicationServer().addBestellung(editedOrder);
+			else{
+				id = editedOrder.getId();
 				frame.getApplicationServer().setBestellung(bestellung, editedOrder);
+			}
 
-			bestellung = editedOrder;
+			if(phase == 1)
+				dispose();
+			else
+				bestellung = frame.getApplicationServer().getASKBestellung(id);
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
@@ -337,7 +372,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 			test.setJMenuBar( new MainMenu( test ) );
 			
-			ASKBestellung best = applicationServer.getASKBestellung(22);
+			ASKBestellung best = applicationServer.getASKBestellung(16);
 			bestellung = new BestellungASK(test, best);
 			test.addChild(bestellung);
 
@@ -529,11 +564,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
     jPanel1.add(jLabel6, null);
   }
 
-
-  private void bestellen(){
-
-  }
-
   private void printBestellung(){
 	  PrinterJob pJob = PrinterJob.getPrinterJob();
 
@@ -597,7 +627,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  }else if ( e.getSource() == buBestellen ) {
 		  error = checkData();
 		  if(error.equals("")){
-			  bestellen();
+				saveOrder(1);
 		  }else{
 			  JOptionPane.showMessageDialog(
 						 this,
@@ -608,7 +638,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   	}else if ( e.getSource() == buSpeichern ) {
 		  error = checkData();
 		  if(error.equals("")){
-			  saveOrder();
+			  saveOrder(0);
 		  }else{
 			  JOptionPane.showMessageDialog(
 						 this,
@@ -632,6 +662,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  try {
 		  if(bestellung != null)
 			  frame.getApplicationServer().delBestellung(bestellung);
+			  clearInputFields();
 	  } catch (ApplicationServerException e) {
 		  MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 		  e.printStackTrace();
