@@ -117,7 +117,8 @@ public class BestellungASKTable extends JTable {
 															getValueAt(row, 1).toString(), 
 															((Float)getValueAt(row, 2)).floatValue(),
 															((Integer)getValueAt(row, 0)).intValue(), 
-															((Float)getValueAt(row, 3)).floatValue()
+															((Float)getValueAt(row, 3)).floatValue(),
+															((Float)getValueAt(row, 4)).floatValue()
 															);
 							//useCase.updatePosition(position);
 						}else if(e.getActionCommand() == "Del"){
