@@ -19,11 +19,6 @@ public class Angebot implements Serializable {
 
 	private int id;
 
-	/**
-	 * Falls keine Positionen Angegeben wurden kann trotzdem eine Summe für das Angebot abgegeben werden
-	 */
-	private float summe;
-
 	private Date datum;
 
 	private boolean angenommen;
@@ -36,15 +31,6 @@ public class Angebot implements Serializable {
 		this.angenommen = angenommen;
 	}
 	
-	public Angebot(int id, ArrayList positionen, Date datum, Firma anbieter, boolean angenommen, float summe){
-		this.id = id;
-		this.positionen = positionen;
-		this.datum = datum;
-		this.anbieter = anbieter;
-		this.angenommen = angenommen;
-		this.summe = summe;
-	}
-	
 	public Angebot(ArrayList positionen, Date datum, Firma anbieter, boolean angenommen){
 		this.positionen = positionen;
 		this.datum = datum;
@@ -52,14 +38,6 @@ public class Angebot implements Serializable {
 		this.angenommen = angenommen;
 	}
 	
-	public Angebot(ArrayList positionen, Date datum, Firma anbieter, boolean angenommen, float summe){
-		this.positionen = positionen;
-		this.datum = datum;
-		this.anbieter = anbieter;
-		this.angenommen = angenommen;
-		this.summe = summe;
-	}
-
 	public java.sql.Date getDatum() {
 		return datum;
 	}
@@ -103,26 +81,25 @@ public class Angebot implements Serializable {
 				Position position = (Position)positionen.get(i);
 				gesamtSumme += position.getGesamtpreis();
 			}
-		else
-			gesamtSumme = summe;
+		
 		return gesamtSumme;
 	}
 
-	public void setSumme(float summe) {
-		this.summe = summe;
-	}
-	
 	public boolean equals(Object o){
 		if(o != null){
 			Angebot angebot = (Angebot)o;
-			if( ((positionen == null || angebot.getPositionen() == null) ? true : positionen.equals(angebot.getPositionen())) &&
-					id == angebot.getId() &&
+			
+			if( (getSumme() == angebot.getSumme()) &&
+					((positionen == null || angebot.getPositionen() == null) ? true : positionen.equals(angebot.getPositionen())) &&
+					(id == angebot.getId()) &&
 					((anbieter == null || angebot.getAnbieter() == null) ? true : (anbieter.getId() == angebot.getAnbieter().getId())) &&
 					datum.equals(angebot.getDatum()) &&
-					summe == angebot.getSumme() )
+					(angenommen == angebot.getAngenommen())
+				){
 				return true;
-			else
+			}else{
 				return false;
+			}
 		}else
 			return false;
 	}
@@ -133,6 +110,17 @@ public class Angebot implements Serializable {
 
 	public void setAngenommen(boolean angenommen) {
 		this.angenommen = angenommen;
+	}
+	
+	/**
+	 * erstellt eine Kopie von einem Angebot
+	 */
+	public Object clone(){
+		ArrayList pos = new ArrayList();
+		for(int i = 0; i < positionen.size(); i++){
+			pos.add(((Position)positionen.get(i)).clone());
+		}
+		return new Angebot( this.id, pos, (Date)this.datum.clone(), (Firma)this.anbieter.clone(), this.angenommen);
 	}
 
 }

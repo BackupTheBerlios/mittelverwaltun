@@ -108,6 +108,8 @@ public class Position implements Serializable {
 		this.rabatt = rabatt;
 	}
 	
+	public Position(){}
+	
 	
 	public String toString(){
 		return artikel;
@@ -154,7 +156,7 @@ public class Position implements Serializable {
 	}
 	
 	public float getGesamtpreis(){
-		return this.menge * this.einzelPreis + (this.menge * this.einzelPreis * this.mwst) - this.rabatt;
+		return  this.einzelPreis * this.menge + (this.einzelPreis * this.menge * this.mwst) - this.rabatt;
 	}
 
 	public boolean getBeglichen() {
@@ -200,4 +202,11 @@ public class Position implements Serializable {
 			return false;
 	}
 
+	/**
+	 * erstellt eine Kopie von einer Position
+	 */
+	public Object clone(){
+		return new Position(	this.id, this.artikel, this.einzelPreis, this.menge, this.mwst, this.rabatt, 
+																			(Institut)this.institut.clone(), this.beglichen );
+	}
 }
