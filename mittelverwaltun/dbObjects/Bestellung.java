@@ -136,6 +136,14 @@ public class Bestellung implements Serializable {
 	public void setPhase(char phase) {
 		this.phase = phase;
 	}
+	
+	public char getTyp() {
+		return typ;
+	}
+
+	public void setTyp(char typ) {
+		this.typ = typ;
+	}
 
 	public Benutzer getAuftraggeber() {
 		return auftraggeber;

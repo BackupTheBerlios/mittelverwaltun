@@ -296,7 +296,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     panelAngebot.setBounds(new Rectangle(15,292, 640, 309));
     panelAngebot.setLayout(null);
     
-    Angebot angebot = (Angebot)origin.getAngebote().get(origin.getAuswahl()-1);
+    Angebot angebot = (Angebot)origin.getAngebote().get(origin.getAngenommenesAngebot());
     
 	    lbFirma.setBounds(new Rectangle(9, 25, 54, 21));
 	    lbFirma.setText("Anbieter");
@@ -447,7 +447,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "details"){
-			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, ((Angebot)origin.getAngebote().get(origin.getAuswahl()-1)).getAnbieter());
+			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, ((Angebot)origin.getAngebote().get(origin.getAngenommenesAngebot())).getAnbieter());
 			dialog.show();
 		}else if (e.getActionCommand() == "dispose"){
 			this.dispose();

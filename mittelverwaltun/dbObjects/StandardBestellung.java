@@ -214,6 +214,24 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		this.bemerkung = bemerkung;
 	}
 	
+	public int getAngenommenesAngebot(){
+		int result = -1;
+		
+		if (getPhase() != '0'){
+			if (angebote != null){
+				for (int i=0; i<angebote.size();i++){
+					Angebot a = (Angebot)angebote.get(i);
+						if (a.getAngenommen()){
+							result = i;
+							break;
+						}
+				}
+			}
+		}
+		return result;
+	}
+	
+	
 	public boolean equals(Object o){
 		if(o != null){
 			StandardBestellung b = (StandardBestellung)o;
