@@ -3944,8 +3944,7 @@ public class Database implements Serializable{
 				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
 					ArrayList row = new ArrayList();
 					row.add(rs.getString(1)); 						// FB-Konto
-					row.add(rs.getString(2)); 						// ZV-Konto
-					row.add(new Float(rs.getFloat(3)));		// Einnahmen
+					row.add(new Float(rs.getFloat(2)));		// Einnahmen
 					
 					report.add( row );
 				}

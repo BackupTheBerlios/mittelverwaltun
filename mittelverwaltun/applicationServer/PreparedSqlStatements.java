@@ -2343,16 +2343,13 @@ public class PreparedSqlStatements {
 		}
 		{//336 Report 8 für ein Institut: FB-Konto, ZV-Konto, Einnahmen
 			ps = con.prepareStatement("SELECT " +
-																		"fbk.bezeichnung AS fbKonto, zvk.bezeichnung AS zvKonto, bu.betragFbKonto1 " +
+																		"fbk.bezeichnung AS fbKonto, b.betragFbKonto1 " +
 																"FROM " +
-																	"ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Buchungen b " +
 															  "WHERE i.id = ? " +
 																	"AND i.id = fbk.institutsId  " +
-																	"AND bu.fbKonto = fbk.id " +
-																	"AND bu.typ = '5' " +
-																	"AND bu.zvTitel = zvt.id " +
-																	"AND zvt.zvKontoId = zvk.id ");
+																	"AND b.fbKonto1 = fbk.id " +
+																	"AND b.typ = '5' ");
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

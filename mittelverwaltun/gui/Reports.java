@@ -191,16 +191,23 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		} else if(e.getActionCommand() == "showReport"){
 			if(cbReportFilter.getSelectedItem() == "Report_7"){
 				if(cbInstitut.getSelectedItem() != null){
-//					tabReport.removeAll();
 					try {
 						ArrayList content = frame.getApplicationServer().getReport(REPORT_7, (Institut)cbInstitut.getSelectedItem());
-//						tabReport = new ReportsTable(REPORT_7, content, this);
-						
 						tabReport.fillReport(REPORT_7, content);
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					}
 					
+				}
+			} else if(cbReportFilter.getSelectedItem() == "Report_8"){
+				if(cbInstitut.getSelectedItem() != null){
+					try {
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_8, (Institut)cbInstitut.getSelectedItem());
+						tabReport.fillReport(REPORT_8, content);
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
+						
 				}
 			}
 		} else if(e.getActionCommand() == "refresh"){

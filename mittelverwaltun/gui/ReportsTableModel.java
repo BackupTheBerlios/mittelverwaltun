@@ -43,7 +43,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_8){
-			String[] colheads = {"ZV-Konto", "Einnahmen"}; 
+			String[] colheads = {"FB-Konto", "Einnahmen"}; 
 			setColumnIdentifiers(colheads);
 		}
 		
@@ -61,7 +61,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			else if(type == Reports.REPORT_4)
 				data = new Object[3];
 			else if(type == Reports.REPORT_6 || type == Reports.REPORT_8)
-				data = new Object[3];
+				data = new Object[2];
 			else if(type == Reports.REPORT_7)
 				data = new Object[8];
 			
@@ -131,7 +131,7 @@ public class ReportsTableModel extends DefaultTableModel {
 				identifiers.add((Integer)row.get(7));			// Id der Bestellung
 							
 			} else if (type == Reports.REPORT_8){
-				data[0] = (String)row.get(0);							// ZV-Konto
+				data[0] = (String)row.get(0);							// FB-Konto
 				data[1] = (Float)row.get(1);							// Einnahmen
 							
 			}
