@@ -7,13 +7,17 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+
 import dbObjects.Position;
 
 /**
@@ -24,9 +28,9 @@ import dbObjects.Position;
  */
 public class PositionenTable extends JTable {
 	ActionListener al;
-	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","Rabatt","Gesamtpreis",""};
-	private static String[] editTitle = {"Menge","Artikel/Bestellnummer","Einzelpreis","Rabatt","Gesamtpreis","","","Id"};
-  private Object[][] data = {{new Integer(1),"",new Float(0), new Float(0), new Float(0), new String("Del")}};
+	private static String[] title = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis",""};
+	private static String[] editTitle = {"Menge","Artikel/Bestellnummer","Einzelpreis","MwSt","Rabatt","Gesamtpreis","","","Id"};
+  private Object[][] data = {{new Integer(1),"",new Float(0),new Float(0.16), new Float(0), new Float(0), new String("Del")}};
 	
 	public PositionenTable(){
 		setModel(new DefaultTableModel(title, 0){
@@ -35,7 +39,8 @@ public class PositionenTable extends JTable {
 										}
 							
 										public boolean isCellEditable(int rowIndex, int columnIndex){
-										  return true;
+											return columnIndex != 5;
+										  //return true;
 										}
 										
 										public void setValueAt(Object aValue, int rowIndex, int columnIndex)
@@ -45,10 +50,11 @@ public class PositionenTable extends JTable {
 												 try{
 													int menge = ((Integer)getValueAt(rowIndex,0)).intValue();
 													float price = ((Float)getValueAt(rowIndex, 2)).floatValue();
-													float rabat = ((Float)getValueAt(rowIndex, 3)).floatValue();
-												 super.setValueAt(new Float(menge * price - rabat), rowIndex, 4);
+													float mwst = ((Float)getValueAt(rowIndex, 3)).floatValue();
+													float rabat = ((Float)getValueAt(rowIndex, 4)).floatValue();
+												 super.setValueAt(new Float(menge * price + (menge * price * mwst) - rabat), rowIndex, 5); //Gesamtpreis einer Position
 												 }catch(Exception e){
-												 super.setValueAt(new Integer(0), rowIndex, 4);
+												 super.setValueAt(new Integer(0), rowIndex, 5);
 												 }
 											  }
 											  fireTableRowsUpdated(rowIndex,rowIndex);
@@ -85,18 +91,20 @@ public class PositionenTable extends JTable {
 	}
 		
 	public PositionenTable(ArrayList positions){
-		Object[][] data = new Object[positions.size()][8];
+		Object[][] data = new Object[positions.size()][9];
 		
 		for(int i = 0; i < positions.size(); i++){
 			Position position = (Position)positions.get(i);
+			float gesamt = position.getMenge() * position.getEinzelPreis();
 			data[i][0] = new Integer(position.getMenge());
 			data[i][1] = position.getBeschreibung();
 			data[i][2] = new Float(position.getEinzelPreis());
-			data[i][3] = new Float(position.getRabatt());
-			data[i][4] = new Float((position.getMenge() * position.getEinzelPreis() - position.getRabatt()));
-			data[i][5] = new String("Save");
-			data[i][6] = new String("Del");
-			data[i][7] = new Integer(position.getId());
+			data[i][3] = new Float(position.getMwst());
+			data[i][4] = new Float(position.getRabatt());
+			data[i][5] = new Float(position.getGesamtpreis());
+			data[i][6] = new String("Save");
+			data[i][7] = new String("Del");
+			data[i][8] = new Integer(position.getId());
 		}
 
 		al = new ActionListener() {            
@@ -107,7 +115,8 @@ public class PositionenTable extends JTable {
 															getValueAt(row, 1).toString(), 
 															((Float)getValueAt(row, 2)).floatValue(),
 															((Integer)getValueAt(row, 0)).intValue(), 
-															((Float)getValueAt(row, 3)).floatValue()
+															((Float)getValueAt(row, 3)).floatValue(),
+															((Float)getValueAt(row, 4)).floatValue()
 															);
 							//useCase.updatePosition(position);
 						}else if(e.getActionCommand() == "Del"){
@@ -147,10 +156,11 @@ public class PositionenTable extends JTable {
 											 try{
 												int menge = ((Integer)getValueAt(rowIndex,0)).intValue();
 												float price = ((Float)getValueAt(rowIndex, 2)).floatValue();
-												float rabat = ((Float)getValueAt(rowIndex, 3)).floatValue();
-											 super.setValueAt(new Float(menge * price - rabat), rowIndex, 4);
+												float mwst = ((Float)getValueAt(rowIndex, 3)).floatValue();
+												float rabat = ((Float)getValueAt(rowIndex, 4)).floatValue();
+											 super.setValueAt(new Float(menge * price + (menge * price * mwst) - rabat), rowIndex, 5);
 											 }catch(Exception e){
-											 super.setValueAt(new Integer(0), rowIndex, 4);
+											 super.setValueAt(new Integer(0), rowIndex, 5);
 											 }
 										  }
 										  fireTableRowsUpdated(rowIndex,rowIndex);
@@ -170,33 +180,34 @@ public class PositionenTable extends JTable {
 	
 	
 	private void updateTableStructur2(){
-		getColumnModel().getColumn(5).setCellEditor(new TableButtonCellEditor("Del", al));
-		getColumnModel().getColumn(5).setCellRenderer(new TableButtonCellRenderer("Del"));
-		getColumnModel().getColumn(5).setMaxWidth(70);
-		getColumnModel().getColumn(5).setMinWidth(70);
-		
+		setUpMwStColumn(this, getColumnModel().getColumn(3));
+		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Del", al));
+		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Del"));
+		getColumnModel().getColumn(6).setMaxWidth(70);
+		getColumnModel().getColumn(6).setMinWidth(70);
 		getColumnModel().getColumn(0).setMaxWidth(50);
-		getColumnModel().getColumn(3).setMaxWidth(80);
 		getColumnModel().getColumn(4).setMaxWidth(80);
+		getColumnModel().getColumn(5).setMaxWidth(80);
 		
 	}
 	
 	private void updateTableStructur(){
-		getColumnModel().getColumn(5).setCellEditor(new TableButtonCellEditor("Save", al));
-		getColumnModel().getColumn(5).setCellRenderer(new TableButtonCellRenderer("Save"));
-		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Del", al));
-		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Del"));
+		setUpMwStColumn(this, getColumnModel().getColumn(3));
+		getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor("Save", al));
+		getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer("Save"));
+		getColumnModel().getColumn(7).setCellEditor(new TableButtonCellEditor("Del", al));
+		getColumnModel().getColumn(7).setCellRenderer(new TableButtonCellRenderer("Del"));
 		getColumnModel().getColumn(0).setMaxWidth(50);
 		getColumnModel().getColumn(2).setMaxWidth(100);
-		getColumnModel().getColumn(3).setMaxWidth(50);
-		getColumnModel().getColumn(4).setMaxWidth(150);
-		getColumnModel().getColumn(5).setMaxWidth(70);
-		getColumnModel().getColumn(5).setMinWidth(70);
-		getColumnModel().getColumn(6).setMaxWidth(60);
-		getColumnModel().getColumn(6).setMinWidth(60);
-		getColumnModel().getColumn(7).setMinWidth(0);
-		getColumnModel().getColumn(7).setMaxWidth(0);
-		getColumnModel().getColumn(7).setWidth(0);
+		getColumnModel().getColumn(4).setMaxWidth(50);
+		getColumnModel().getColumn(5).setMaxWidth(150);
+		getColumnModel().getColumn(6).setMaxWidth(70);
+		getColumnModel().getColumn(6).setMinWidth(70);
+		getColumnModel().getColumn(7).setMaxWidth(60);
+		getColumnModel().getColumn(7).setMinWidth(60);
+		getColumnModel().getColumn(8).setMinWidth(0);
+		getColumnModel().getColumn(8).setMaxWidth(0);
+		getColumnModel().getColumn(8).setWidth(0);
 	}
 	
 	
@@ -232,5 +243,16 @@ public class PositionenTable extends JTable {
 			button.getParent().requestFocus();            
 			callback.actionPerformed(e);        
 		}    
+	}
+	
+	private void setUpMwStColumn(JTable table, TableColumn mwStColumn){
+		JComboBox cb = new JComboBox();
+		cb.addItem(new Float(0.07));
+		cb.addItem(new Float(0.16));
+		mwStColumn.setCellEditor(new DefaultCellEditor(cb));
+
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setToolTipText("Mehrwertsteuerauswahl");
+		mwStColumn.setCellRenderer(new JTablePercentRenderer());
 	}
 }

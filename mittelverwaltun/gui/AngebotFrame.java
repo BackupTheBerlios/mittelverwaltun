@@ -38,11 +38,13 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
   JLabel jLabel7 = new JLabel();
   JLabel jLabel8 = new JLabel();
   JLabel labNetto = new JLabel();
-  JLabel labMwSt = new JLabel();
+  JLabel labMwSt16 = new JLabel();
+  JLabel labMwSt7 = new JLabel();
   JLabel jLabel9 = new JLabel();
   JTextField tfDate = new JTextField();
   BestellungNormal frame = null;
   int angebotNr = -1;
+  JLabel jLabel10 = new JLabel();
 
 
   public AngebotFrame(BestellungNormal frame) {
@@ -68,7 +70,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 		this.setSize(540, 480);
 		Point p = frame.getLocation();
 	  Point p2 = frame.frame.getLocation();
-	  
+
 		setLocation((int)p.getX() + (int)p2.getX() + 50 , (int)p.getY() + (int)p2.getY() + 100 );
   }
 
@@ -157,25 +159,31 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
     buAddPosition.setText("Position hinzufügen");
     jLabel6.setFont(new java.awt.Font("Dialog", 1, 12));
     jLabel6.setText("Bestellsumme:");
-    jLabel6.setBounds(new Rectangle(212, 369, 96, 15));
+    jLabel6.setBounds(new Rectangle(212, 384, 96, 15));
 //    tfBestellsumme.setText("");
-    tfBestellsumme.setBounds(new Rectangle(330, 363, 117, 21));
+    tfBestellsumme.setBounds(new Rectangle(330, 378, 117, 21));
     jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel7.setText("Gesamtnettopreis:");
     jLabel7.setBounds(new Rectangle(212, 317, 115, 15));
     jLabel8.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel8.setText("16 % MwSt.");
-    jLabel8.setBounds(new Rectangle(212, 340, 79, 15));
+    jLabel8.setText("7 % MwSt.");
+    jLabel8.setBounds(new Rectangle(213, 338, 79, 15));
     labNetto.setFont(new java.awt.Font("Dialog", 0, 12));
     labNetto.setText("");
     labNetto.setBounds(new Rectangle(330, 317, 117, 15));
-    labMwSt.setFont(new java.awt.Font("Dialog", 0, 12));
-    labMwSt.setText("");
-    labMwSt.setBounds(new Rectangle(330, 340, 117, 15));
+		labMwSt7.setFont(new java.awt.Font("Dialog", 0, 12));
+		labMwSt7.setText("");
+		labMwSt7.setBounds(new Rectangle(330, 338, 117, 15));
+    labMwSt16.setFont(new java.awt.Font("Dialog", 0, 12));
+    labMwSt16.setText("");
+    labMwSt16.setBounds(new Rectangle(330, 358, 117, 15));
     jLabel9.setText("Angebot vom:(Datum)");
     jLabel9.setBounds(new Rectangle(401, 23, 127, 15));
     tfDate.setText("");
     tfDate.setBounds(new Rectangle(399, 43, 105, 21));
+    jLabel10.setBounds(new Rectangle(212, 358, 79, 15));
+    jLabel10.setText("16 % MwSt.");
+    jLabel10.setFont(new java.awt.Font("Dialog", 0, 12));
     scrollPositionen.getViewport().add(tablePositionen, null);
     this.getContentPane().add(buAddPosition, null);
     this.getContentPane().add(jLabel1, null);
@@ -188,16 +196,18 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
     this.getContentPane().add(tfOrt, null);
     this.getContentPane().add(jLabel5, null);
     this.getContentPane().add(scrollPositionen, null);
-    this.getContentPane().add(tfBestellsumme, null);
     this.getContentPane().add(labNetto, null);
     this.getContentPane().add(jLabel7, null);
-    this.getContentPane().add(jLabel8, null);
-    this.getContentPane().add(labMwSt, null);
-    this.getContentPane().add(jLabel6, null);
     this.getContentPane().add(buBeenden, null);
     this.getContentPane().add(buSpeichern, null);
     this.getContentPane().add(jLabel9, null);
     this.getContentPane().add(tfDate, null);
+    this.getContentPane().add(tfBestellsumme, null);
+    this.getContentPane().add(jLabel6, null);
+    this.getContentPane().add(jLabel8, null);
+    this.getContentPane().add(labMwSt7, null);
+    this.getContentPane().add(jLabel10, null);
+    this.getContentPane().add(labMwSt16, null);
   }
 
 	public void actionPerformed(ActionEvent e) {
@@ -205,7 +215,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 			setAngebot();
 		}else if ( e.getSource() == buAddPosition ) {
 			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-			Object[] o = {new Integer(1),"", new Float(0), new Float(0), new Float(0)};
+			Object[] o = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0)};
 
 			dtm.addRow(o);
 			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
@@ -233,7 +243,8 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 							Position position = new Position(		(String)(dtm.getValueAt(i, 1)),
 																									((Float)dtm.getValueAt(i, 2)).floatValue(),
 																									((Integer)dtm.getValueAt(i, 0)).intValue(),
-																									((Float)dtm.getValueAt(i, 3)).floatValue());
+																									((Float)dtm.getValueAt(i, 3)).floatValue(),
+																									((Float)dtm.getValueAt(i, 4)).floatValue());
 							positionen.add(position);
 					 }
 					Angebot angebot = null;
@@ -258,16 +269,26 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 	public void propertyChange(PropertyChangeEvent evt) {
 		DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
 	  float sum = 0;
+	  float gesamt = 0;
 	  float netto = 0;
 	  float mwst = 0;
+	  float mwst7 = 0;
+	  float mwst16 = 0;
 
 	  for(int i = 0; i < tablePositionen.getRowCount(); i++){
-			netto += ((Float)dtm.getValueAt(i, 4)).floatValue();
+	  	gesamt = ((Float)dtm.getValueAt(i, 5)).floatValue();
+			mwst = ((Float)dtm.getValueAt(i, 3)).floatValue();
+			sum += gesamt;
+			if(mwst == 0.16f)
+				mwst16 += (gesamt / 116) * 16;
+			else
+				mwst7 += (gesamt / 107) * 7;
 	  }
-	  mwst = (netto * 0.16f);
-	  sum = netto + mwst;
+	  
+	  netto = sum - mwst16 - mwst7;
 	  labNetto.setText(NumberFormat.getCurrencyInstance().format(netto));
-	  labMwSt.setText(NumberFormat.getCurrencyInstance().format(mwst));
+	  labMwSt7.setText(NumberFormat.getCurrencyInstance().format(mwst7));
+	  labMwSt16.setText(NumberFormat.getCurrencyInstance().format(mwst16));
 	  tfBestellsumme.setText(NumberFormat.getCurrencyInstance().format(sum));
 	  if(tablePositionen.getRowCount() == 0)
 	  	tfBestellsumme.setEditable(true);
