@@ -28,11 +28,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 	private String pruefung;
 	
 	/**
-	 * Kontenzuordnungen. Welchen ZVKonten ist ein FBHauptkonto zugeordnet.
-	 */
-	private Kontenzuordnung[] zuordnung;
-	
-	/**
 	 * 
 	 */
 	public FBHauptkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter,
@@ -246,22 +241,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 	public void setPruefung(String pruefung) {
 		this.pruefung = pruefung;
 	}
-
-	/**
-	 * 
-	 */
-	public Kontenzuordnung[] getZuordnung() {
-		return zuordnung;
-	}
-
-	/**
-	 * 
-	 */
-	public void setZuordnung(Kontenzuordnung[] zuordnung) {
-		this.zuordnung = zuordnung;
-	}
-
-	
 
 	public String toString(){
 		return getBezeichnung() + ", " + getInstitut().getKostenstelle()  + "-" + getHauptkonto() +  "-" + getUnterkonto();

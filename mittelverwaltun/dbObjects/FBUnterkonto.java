@@ -61,6 +61,8 @@ public class FBUnterkonto implements Serializable {
 	private boolean kleinbestellungen;
 	
 	
+	private Kontenzuordnung[] zuordnung;
+
 	public FBUnterkonto( int id, int haushaltsJahrID, Institut inst, String bez, String haupt, String unter, float budget ){
 		this.id = id;
 		this.bezeichnung = bez;
@@ -323,6 +325,14 @@ public class FBUnterkonto implements Serializable {
 		return new FBUnterkonto( this.getId(), this.getHaushaltsJahrID(), (Institut)this.getInstitut().clone(),
 								this.getBezeichnung(), this.getHauptkonto(), this.getUnterkonto(), this.getBudget(),
 								this.getVormerkungen(), this.getKleinbestellungen(), this.getGeloescht() );
+	}
+
+	public Kontenzuordnung[] getZuordnung() {
+		return zuordnung;
+	}
+
+	public void setZuordnung(Kontenzuordnung[] zuordnung) {
+		this.zuordnung = zuordnung;
 	}
 
 }

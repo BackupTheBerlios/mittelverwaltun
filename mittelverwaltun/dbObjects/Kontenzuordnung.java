@@ -40,7 +40,4 @@ public class Kontenzuordnung implements Serializable {
 	public String toString(){
 		return zvKonto.toString();
 	}
-
-	
-
 }
