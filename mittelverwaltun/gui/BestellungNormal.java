@@ -142,11 +142,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
 		setData();
 
-//		TODO Admin durch die Aktivität austauschen
-		if(!frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
-			cbInstitut.setVisible(false);
-			labInstitut.setVisible(false);
-		}
 		panelErsatz.setVisible(false);
 		tpAuftragGrund.setVisible(false);
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
@@ -176,7 +171,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		 	test.setJMenuBar( new MainMenu( test ) );
-		 	StandardBestellung best = applicationServer.getStandardBestellung(18);
+		 	StandardBestellung best = applicationServer.getStandardBestellung(9);
 
 			bestellung = new BestellungNormal(test, best);
 		 	test.addChild(bestellung);
@@ -565,34 +560,34 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		PageFormat pf = new PageFormat();
 		Paper paper = pf.getPaper() ;
-		paper.setImageableArea(35,90,560,712) ;
+		paper.setImageableArea(25,30,560,800) ;
 		paper.setSize(595,842);
 		pf.setPaper(paper);
-		PrintSTDVordruck bestellung = new PrintSTDVordruck();
+		PrintSTDVordruck bestellung = new PrintSTDVordruck(this.bestellung);
 		bestellung.show();
 		bestellung.setVisible(false);
-		PrintSTDBeilage beilage = new PrintSTDBeilage();
+		PrintSTDBeilage beilage = new PrintSTDBeilage(this.bestellung);
 		beilage.show();
 		beilage.setVisible(false);
 
-		pJob.setJobName("Bestellung");
-		Book book = new Book();
-		book.append(bestellung, pf);
-		if(pJob.printDialog()){
-			try{
-				pJob.setPageable(book);
-				pJob.print();
-			}catch(PrinterException pexc){
-				System.out.println("Fehler beim Drucken");
-			}
-		}
-		pJob.cancel();
-		if(pJob.isCancelled()){
-			bestellung.dispose();
-		}
+//		pJob.setJobName("Bestellung");
+//		Book book = new Book();
+//		book.append(bestellung, pf);
+//		if(pJob.printDialog()){
+//			try{
+//				pJob.setPageable(book);
+//				pJob.print();
+//			}catch(PrinterException pexc){
+//				System.out.println("Fehler beim Drucken");
+//			}
+//		}
+//		pJob.cancel();
+//		if(pJob.isCancelled()){
+//			bestellung.dispose();
+//		}
 
 		pJob.setJobName("Beilage zur Bestellung");
-		book = new Book();
+		Book book = new Book();
 		book.append(beilage, pf);
 		if(pJob.printDialog()){
 			try{

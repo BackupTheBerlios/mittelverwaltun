@@ -22,11 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.print.Book;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.rmi.Naming;
 import java.sql.Date;
 import java.text.DateFormat;
@@ -570,33 +565,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   }
 
   private void printBestellung(){
-	  PrinterJob pJob = PrinterJob.getPrinterJob();
-
-	  PageFormat pf = new PageFormat();
-	  Paper paper = pf.getPaper() ;
-	  paper.setImageableArea(25,30,560,712) ;
-	  paper.setSize(595,842);
-	  pf.setPaper(paper);
-	  PrintASKBestellung print = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
-		print.show();
-		print.setVisible(false);
-	  
-
-	  pJob.setJobName("ASK Bestellung");
-	  Book book = new Book();
-	  book.append(print, pf);
-	  if(pJob.printDialog()){
-		  try{
-			  pJob.setPageable(book);
-			  pJob.print();
-		  }catch(PrinterException pexc){
-			  System.out.println("Fehler beim Drucken");
-		  }
-	  }
-	  pJob.cancel();
-	  if(pJob.isCancelled()){
-			print.dispose();
-	  }
+	  PrintASKBestellung printOrder = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
   }
 
   public void actionPerformed(ActionEvent e) {

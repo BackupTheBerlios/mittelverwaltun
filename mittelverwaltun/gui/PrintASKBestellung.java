@@ -13,8 +13,10 @@ import dbObjects.ZVTitel;
 
 import java.awt.*;
 import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 
 
@@ -73,6 +75,30 @@ public class PrintASKBestellung extends JFrame implements Printable {
       e.printStackTrace();
     }
 		createTable(order.getAngebot().getPositionen());
+		show();
+		setVisible(false);
+		
+		PrinterJob pJob = PrinterJob.getPrinterJob();
+
+	  PageFormat pf = new PageFormat();
+	  Paper paper = pf.getPaper() ;
+	  paper.setImageableArea(25,30,560,800) ;
+	  paper.setSize(595,842);
+	  pf.setPaper(paper);
+
+	  pJob.setJobName("ASK Bestellung");
+	  if(pJob.printDialog()){
+		  try{
+			  pJob.setPrintable(this, pf);
+			  pJob.print();
+		  }catch(PrinterException pexc){
+			  System.out.println("Fehler beim Drucken");
+		  }
+	  }
+	  pJob.cancel();
+	  if(pJob.isCancelled()){
+			this.dispose();
+	  }
   }
 
   private void jbInit() throws Exception {
@@ -82,7 +108,6 @@ public class PrintASKBestellung extends JFrame implements Printable {
 			  g.drawLine(95, 203, 193, 203);
 				g.drawLine(311, 203, 541, 203);
 				g.drawLine(146, 229, 307, 229);
-				g.drawLine(416, 229, 541, 229);
 				g.drawLine(224, 255, 273, 255);
 				g.drawLine(323, 255, 380, 255);
 				g.drawLine(404, 255, 444, 255);
@@ -107,12 +132,12 @@ public class PrintASKBestellung extends JFrame implements Printable {
     oben.setBackground(Color.white);
     jLabel7.setBounds(new Rectangle(313, 214, 168, 15));
     jLabel7.setText("des Fachbereichs Informatik");
-    jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel7.setFont(new java.awt.Font("Dialog", 0, 11));
     labKapitel.setBounds(new Rectangle(224, 240, 49, 15));
     labKapitel.setText(order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
-    labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
+    labKapitel.setFont(new java.awt.Font("Dialog", 0, 11));
 		tpAnschrift.setBounds(new Rectangle(14, 35, 304, 66));
-		tpAnschrift.setFont(new java.awt.Font("Dialog", 1, 12));
+		tpAnschrift.setFont(new java.awt.Font("Dialog", 1, 11));
 		Fachbereich[] fbs = as.getFachbereiche();
 		if ((fbs != null) && (fbs.length > 0))
 			tpAnschrift.setText(fbs[0].getFbBezeichnung() + "\n" +
@@ -122,57 +147,57 @@ public class PrintASKBestellung extends JFrame implements Printable {
 		 	tpAnschrift.setText("");
     jLabel1.setBounds(new Rectangle(14, 7, 280, 25));
     jLabel1.setText("Fachhochschule Mannheim");
-    jLabel1.setFont(new java.awt.Font("Dialog", 1, 18));
+    jLabel1.setFont(new java.awt.Font("Dialog", 1, 16));
 		tpFirmaAnschrift.setBounds(new Rectangle(14, 133, 344, 50));
-		tpFirmaAnschrift.setFont(new java.awt.Font("Dialog", 0, 12));
+		tpFirmaAnschrift.setFont(new java.awt.Font("Dialog", 0, 11));
 		tpFirmaAnschrift.setText(	order.getAngebot().getAnbieter().getStrasseNr() + "\n" +
 															order.getAngebot().getAnbieter().getPlz() + " " + order.getAngebot().getAnbieter().getOrt() + "\n" +
 															"Fax: " + order.getAngebot().getAnbieter().getFaxNr());
     labTitel.setBounds(new Rectangle(323, 240, 57, 15));
     labTitel.setText(order.getZvtitel().getTitel());
-    labTitel.setFont(new java.awt.Font("Dialog", 0, 12));
+    labTitel.setFont(new java.awt.Font("Dialog", 0, 11));
     labUT.setBounds(new Rectangle(404, 240, 40, 15));
     labUT.setText(order.getZvtitel().getUntertitel());
-    labUT.setFont(new java.awt.Font("Dialog", 0, 12));
+    labUT.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel8.setBounds(new Rectangle(14, 240, 212, 15));
     jLabel8.setText("zu belastender Haushaltstitel: Kapitel:");
-    jLabel8.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel8.setFont(new java.awt.Font("Dialog", 0, 11));
     labKoSt.setBounds(new Rectangle(311, 188, 230, 15));
     labKoSt.setText(order.getFbkonto().getInstitut().getKostenstelle());
-    labKoSt.setFont(new java.awt.Font("Dialog", 0, 12));
+    labKoSt.setFont(new java.awt.Font("Dialog", 0, 11));
     labKostenstelle.setBounds(new Rectangle(95, 188, 98, 15));
     labKostenstelle.setText(order.getFbkonto().getInstitut().getBezeichnung());
-    labKostenstelle.setFont(new java.awt.Font("Dialog", 0, 12));
+    labKostenstelle.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel4.setBounds(new Rectangle(14, 188, 78, 15));
     jLabel4.setText("Kostenstelle:");
-    jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel4.setFont(new java.awt.Font("Dialog", 0, 11));
     this.setTitle("Drucktest");
     this.getContentPane().setLayout(null);
-    jLabel2.setFont(new java.awt.Font("Dialog", 3, 16));
+    jLabel2.setFont(new java.awt.Font("Dialog", 3, 14));
     jLabel2.setText("Beilage zur Bestellung bei");
     jLabel2.setBounds(new Rectangle(15, 111, 202, 23));
-    jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel6.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel6.setText("Software-beauftragte/r:");
     jLabel6.setBounds(new Rectangle(14, 214, 135, 15));
-    labSoftwarebeauftragter.setFont(new java.awt.Font("Dialog", 0, 12));
+    labSoftwarebeauftragter.setFont(new java.awt.Font("Dialog", 0, 11));
     labSoftwarebeauftragter.setText(order.getSwbeauftragter().getName() + ", " + order.getSwbeauftragter().getVorname());
     labSoftwarebeauftragter.setBounds(new Rectangle(146, 214, 161, 15));
-    jLabel9.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel9.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel9.setText("Titel:");
     jLabel9.setBounds(new Rectangle(286, 240, 33, 15));
-    jLabel10.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel10.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel10.setText("UT:");
-    jLabel10.setBounds(new Rectangle(375, 240, 28, 15));
-    jLabel5.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel10.setBounds(new Rectangle(384, 240, 21, 15));
+    jLabel5.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel5.setText("KostenstelleNr.:");
     jLabel5.setBounds(new Rectangle(217, 188, 97, 15));
     jLabel111.setBounds(new Rectangle(9, 155, 40, 15));
     jLabel111.setText("Datum:");
-    jLabel111.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel19.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel111.setFont(new java.awt.Font("Dialog", 0, 11));
+    jLabel19.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel19.setText("Bestellung durchgeführt und obige Leistungen erhalten");
     jLabel19.setBounds(new Rectangle(8, 120, 315, 15));
-    jLabel12.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel12.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel12.setText("Unterschrift:");
     jLabel12.setBounds(new Rectangle(209, 12, 77, 15));
     unten.setBackground(Color.white);
@@ -180,14 +205,14 @@ public class PrintASKBestellung extends JFrame implements Printable {
     unten.setLayout(null);
     labUnterschrift1.setBounds(new Rectangle(287, 155, 177, 15));
     labUnterschrift1.setText("");
-    labUnterschrift1.setFont(new java.awt.Font("Dialog", 0, 12));
+    labUnterschrift1.setFont(new java.awt.Font("Dialog", 0, 11));
     labDatum1.setBounds(new Rectangle(56, 155, 131, 15));
-    labDatum1.setFont(new java.awt.Font("Dialog", 0, 12));
+    labDatum1.setFont(new java.awt.Font("Dialog", 0, 11));
     labDatum1.setText("");
     jLabel16.setBorder(BorderFactory.createLineBorder(Color.black));
     jLabel16.setText("");
     jLabel16.setBounds(new Rectangle(355, 18, 182, 41));
-    jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel11.setFont(new java.awt.Font("Dialog", 0, 11));
     jLabel11.setText("Datum:");
     jLabel11.setBounds(new Rectangle(12, 12, 40, 15));
     jLabel13.setFont(new java.awt.Font("Dialog", 0, 11));
@@ -199,14 +224,14 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel17.setFont(new java.awt.Font("Dialog", 0, 10));
     jLabel17.setText("Datum");
     jLabel17.setBounds(new Rectangle(189, 40, 40, 15));
-    labDatum.setFont(new java.awt.Font("Dialog", 0, 12));
+    labDatum.setFont(new java.awt.Font("Dialog", 0, 11));
     labDatum.setBounds(new Rectangle(59, 12, 131, 15));
     jLabel14.setBorder(BorderFactory.createLineBorder(Color.black));
     jLabel14.setText("");
     jLabel14.setBounds(new Rectangle(3, 18, 177, 41));
     jLabel110.setBounds(new Rectangle(206, 155, 77, 15));
     jLabel110.setText("Unterschrift:");
-    jLabel110.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel110.setFont(new java.awt.Font("Dialog", 0, 11));
     jTextPane3.setBackground(new Color(225, 225, 225));
     jTextPane3.setFont(new java.awt.Font("Dialog", 0, 10));
     jTextPane3.setText("Auftrags- nummer");
@@ -217,14 +242,14 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jLabel15.setBorder(BorderFactory.createLineBorder(Color.black));
     jLabel15.setText("");
     jLabel15.setBounds(new Rectangle(179, 18, 177, 41));
-    labUnterschrift.setFont(new java.awt.Font("Dialog", 0, 12));
+    labUnterschrift.setFont(new java.awt.Font("Dialog", 0, 11));
     labUnterschrift.setText("");
     labUnterschrift.setBounds(new Rectangle(290, 12, 177, 15));
 		printPanel.setBackground(Color.white);
 		labFirma.setBounds(new Rectangle(222, 111, 321, 23));
 		labFirma.setFont(new java.awt.Font("Dialog", 3, 16));
 		labFirma.setText(order.getAngebot().getAnbieter().getName());
-		labAuftragsNr.setFont(new java.awt.Font("Dialog", 0, 12));
+		labAuftragsNr.setFont(new java.awt.Font("Dialog", 0, 11));
     labAuftragsNr.setText(order.getReferenznr());
 		labAuftragsNr.setBounds(new Rectangle(60, 26, 112, 27));
     jScrollPane1.getViewport().add(tableBestellung);
@@ -233,7 +258,7 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jScrollPane1.getViewport().setBackground(Color.white);
     jScrollPane1.setBorder(BorderFactory.createEmptyBorder());
     jScrollPane1.setBounds(new Rectangle(0, 270, 547, 266));
-    tableBestellung.setFont(new java.awt.Font("Dialog", 0, 10));
+    tableBestellung.setFont(new java.awt.Font("Dialog", 0, 11));
     printPanel.setBounds(new Rectangle(4, 5, 547, 714));
 		printPanel.setLayout(null);
     jPanel2.add(jLabel13, null);
@@ -267,7 +292,6 @@ public class PrintASKBestellung extends JFrame implements Printable {
     oben.add(labKapitel, null);
     oben.add(jLabel9, null);
     oben.add(labTitel, null);
-    oben.add(jLabel10, null);
     oben.add(labUT, null);
     oben.add(jLabel2, null);
     printPanel.add(jScrollPane1, null);
@@ -276,6 +300,7 @@ public class PrintASKBestellung extends JFrame implements Printable {
     this.getContentPane().add(printPanel, null);
     oben.add(tpFirmaAnschrift, null);
     oben.add(labFirma, null);
+    oben.add(jLabel10, null);
 
   }
 
@@ -304,9 +329,9 @@ public class PrintASKBestellung extends JFrame implements Printable {
 
 		tableBestellung = new JTable(tableModel);
 		tableBestellung.getTableHeader().setFont(new Font("Arial", Font.BOLD, 11));
-		tableBestellung.getTableHeader().setBorder(BorderFactory.createLineBorder(new Color(0,0,0)));
+		tableBestellung.getTableHeader().setBorder(BorderFactory.createEtchedBorder(new Color(0,0,0),new Color(225,225,225) ));
 		tableBestellung.getTableHeader().setBackground(new Color(225,225,225));
-		tableBestellung.getTableHeader().setPreferredSize(new Dimension(640, 30));
+		tableBestellung.getTableHeader().setPreferredSize(new Dimension(545, 30));
 
 		tableBestellung.setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
 		tableBestellung.setDefaultRenderer(String.class, new MultiLineRenderer());
@@ -316,20 +341,30 @@ public class PrintASKBestellung extends JFrame implements Printable {
 		tableBestellung.setDefaultRenderer(Integer.class, dtcr);
 
 		tableBestellung.getColumnModel().getColumn(0).setMaxWidth(50);
-		tableBestellung.getColumnModel().getColumn(1).setMaxWidth(300);
+		tableBestellung.getColumnModel().getColumn(1).setMaxWidth(250);
 		tableBestellung.getColumnModel().getColumn(2).setMaxWidth(80);
+		tableBestellung.setFont(new Font("Arial", Font.PLAIN, 11));
 		tableBestellung.getColumnModel().getColumn(3).setMaxWidth(100);
-		tableBestellung.getColumnModel().getColumn(4).setMaxWidth(120);
+		tableBestellung.getColumnModel().getColumn(4).setMaxWidth(100);
 
 		tableBestellung.setGridColor(Color.white);
 		tableBestellung.setRowHeight(30);
 		tableBestellung.setEnabled(false);
 
 		jScrollPane1.getViewport().add(tableBestellung);
-		jScrollPane1.setBounds(new Rectangle(0, 268, 547, (tableBestellung.getModel().getRowCount() * 30)+20));
-		unten.setBounds(new Rectangle(0, 274 + (tableBestellung.getModel().getRowCount() *30)+20, 547, 200));
-		printPanel.setBounds(4,5,547, oben.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 + unten.getHeight() + 50);
+		jScrollPane1.setBounds(new Rectangle(0, 268, 547, (tableBestellung.getModel().getRowCount() * 30)+35));
 
+		int heightAll = oben.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 + unten.getHeight() + 50;
+
+
+		if(heightAll > 800){
+			unten.setBounds(new Rectangle(0, (heightAll / 800) * 800 + 600, 547, 200));
+			int t = (heightAll / 800) * 800 + 800;
+			printPanel.setBounds(4,5,547, t);
+		}else{
+			unten.setBounds(new Rectangle(0, 600, 547, 200));
+			printPanel.setBounds(4,5,547, 800);
+		}
 	}
 
 
@@ -340,20 +375,22 @@ public class PrintASKBestellung extends JFrame implements Printable {
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
-		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight();
+//		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight();
+		int heightAll = printPanel.getHeight();
 
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
 		if(pageIndex  >= totalNumPages) {
 			return NO_SUCH_PAGE;
 		}else{
+			
 			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 740);
-			if(totalNumPages > 1)
-				g2d.drawString("Seite: "+(pageIndex+1)+" von "+totalNumPages,(int)pageWidth/2-35, 725);//bottom center
+//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
+//			if(totalNumPages > 1)
+//				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
 
-			g2d.translate(0f,-pageIndex * pageFormat.getImageableHeight());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight()-5, 560, 712);
+			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
+			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
 
 			printPanel.printAll(g2d);
 

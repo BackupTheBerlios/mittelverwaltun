@@ -13,19 +13,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
+import dbObjects.Angebot;
+import dbObjects.StandardBestellung;
+
 
 public class PrintSTDVordruck extends JFrame implements Printable{
   JPanel printPanel = new JPanel();
-  JTextPane tpTelefon1 = new JTextPane();
   JTextPane tpAdresse = new JTextPane();
   JLabel tfFachhochschule = new JLabel();
   JPanel adresse = new JPanel();
-  JTextPane tpTelefon2 = new JTextPane();
   JTextPane tpBesteller = new JTextPane();
   JPanel logo = new JPanel();
   JLabel tfBestellNr = new JLabel();
   JLabel jLabel4 = new JLabel();
-  JLabel labMwSt = new JLabel();
+  JLabel labMwSt16 = new JLabel();
   JLabel jLabel2 = new JLabel();
   JPanel lieferAnschrift = new JPanel();
   JTextPane tpLieferadresse = new JTextPane();
@@ -43,8 +44,10 @@ public class PrintSTDVordruck extends JFrame implements Printable{
   Border border1;
   Image img;
 	ImageIcon logoIcon = null;
+	StandardBestellung order;
 
-  public PrintSTDVordruck() {
+  public PrintSTDVordruck(StandardBestellung order) {
+  	this.order = order;
   	try{
 				img = loadImageResource("image","fh-header2.gif");
 				if (img != null)
@@ -73,7 +76,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     catch(Exception e) {
       e.printStackTrace();
     }
-		createBestellung();
+		createBestellung(order);
 		createTable();
   }
 
@@ -114,11 +117,6 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 		 return ret;
 	  }
 
-
-  public static void main(String[] args) {
-	PrintSTDVordruck bestellungVordruck2 = new PrintSTDVordruck();
-    bestellungVordruck2.show();
-  }
 
   private void createTable(){
 		  String[] cols = {"Menge", "Artikel/Bestellnummer", "Einzelpreis(€)", "Rabatt", "Gesamtpreis(€)"};
@@ -167,23 +165,20 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 
 	  }
 
-	  private void createBestellung(){
-		  Font font10 = new Font("Helvetica", Font.PLAIN, 10);
-		  Font font12 = new Font("Helvetica", Font.PLAIN, 12);
-		  Font font12Bold = new Font("Helvetica", Font.BOLD, 12);
+	  private void createBestellung(StandardBestellung order){
 
-		  tfFachhochschule.setFont(font10);
+		  Angebot a = (Angebot)order.getAngebote().get(order.getAngenommenesAngebot());
+
 
 		  // Adresse
-		  insertText(tpAdresse.getDocument(), "dsv \nSpeyerstr. 20 \n\n68183 Mannheim");tpAdresse.setFont(font12);
+		  tpAdresse.setText(a.getAnbieter().getName() + "\n" +
+		  									a.getAnbieter().getStrasseNr() + "\n\n" +
+		  									a.getAnbieter().getPlz() + " " + a.getAnbieter().getOrt());
 
 		  // Besteller
-		  tpBesteller.setText("Fachbereich Informatik \nInstitut für Betriebssysteme \nProf. G. Bengel"); tpBesteller.setFont(font12);
+		  tpBesteller.setText("Fachbereich Informatik \nInstitut für Betriebssysteme \nProf. G. Bengel");
 
-		  // Telefon
-		  tpTelefon1.setText("Tel.: \nFax: \n\nDatum: \n\nUstIdNr.:"); tpTelefon1.setFont(font12);
-		  tpTelefon2.setText("(0621) 292 - 6223/6238 \n(0621) 292 - 6237 \n\n28. Januar 2004 \n\nDE811630448 "); tpTelefon2.setFont(font12);
-
+		  
 		  // BestellNr.
 		  tfBestellNr.setText("Bestellung    Nr.:");
 
@@ -191,7 +186,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 
 		  // Gesamtsummen
 		  netto.setText("363,50");
-		  labMwSt.setText("58,16");
+		  labMwSt16.setText("58,16");
 		  labGesammt.setText("421,66");
 
 
@@ -221,11 +216,8 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     printPanel.setBackground(Color.white);
     printPanel.setBounds(new Rectangle(4, 6, 587, 784));
     printPanel.setLayout(null);
-    tpTelefon1.setEditable(false);
-    tpTelefon1.setToolTipText("");
-    tpTelefon1.setText("Tel:");
-    tpTelefon1.setBounds(new Rectangle(361, 150, 59, 109));
     tpAdresse.setBackground(Color.white);
+    tpAdresse.setFont(new java.awt.Font("Dialog", 0, 11));
     tpAdresse.setEditable(false);
     tpAdresse.setText("tpAdresse");
     tpAdresse.setBounds(new Rectangle(3, 120, 287, 87));
@@ -237,12 +229,9 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     adresse.setForeground(Color.black);
     adresse.setLayout(null);
     adresse.setBounds(new Rectangle(3, 3, 580, 285));
-    tpTelefon2.setEditable(false);
-    tpTelefon2.setText("tpTelefon2");
-    tpTelefon2.setBounds(new Rectangle(427, 150, 144, 109));
     tpBesteller.setEditable(false);
     tpBesteller.setText("tpBesteller");
-    tpBesteller.setBounds(new Rectangle(361, 86, 183, 53));
+    tpBesteller.setBounds(new Rectangle(361, 86, 183, 164));
     logo.setBackground(Color.white);
     logo.setBounds(new Rectangle(0, 0, 572, 81));
     logo.setLayout(null);
@@ -256,9 +245,9 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     jLabel4.setFont(new java.awt.Font("Dialog", 1, 12));
     jLabel4.setText("Bemerkungen");
     jLabel4.setBounds(new Rectangle(2, 82, 159, 15));
-    labMwSt.setFont(new java.awt.Font("Dialog", 0, 12));
-    labMwSt.setHorizontalAlignment(SwingConstants.RIGHT);
-    labMwSt.setBounds(new Rectangle(443, 28, 79, 15));
+    labMwSt16.setFont(new java.awt.Font("Dialog", 0, 12));
+    labMwSt16.setHorizontalAlignment(SwingConstants.RIGHT);
+    labMwSt16.setBounds(new Rectangle(443, 28, 94, 15));
     jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
     jLabel2.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -320,8 +309,6 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     adresse.add(tfFachhochschule, null);
     adresse.add(tpAdresse, null);
     adresse.add(tpBesteller, null);
-    adresse.add(tpTelefon1, null);
-    adresse.add(tpTelefon2, null);
     printPanel.add(lieferAnschrift, null);
     lieferAnschrift.add(jLabel4, null);
     lieferAnschrift.add(jLabel5, null);
@@ -330,7 +317,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     lieferAnschrift.add(jLabel3, null);
     lieferAnschrift.add(jLabel1, null);
     lieferAnschrift.add(labGesammt, null);
-    lieferAnschrift.add(labMwSt, null);
+    lieferAnschrift.add(labMwSt16, null);
     lieferAnschrift.add(tpLieferadresse, null);
     lieferAnschrift.add(tpBemerkungen, null);
     printPanel.add(kostenstelle, null);
@@ -353,13 +340,13 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 		Graphics2D g2d = (Graphics2D) graphics;
-		
+
 		double pageHeight = pageFormat.getImageableHeight();
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
 		int heightAll = adresse.getHeight() +  jScrollPane1.getHeight() + lieferAnschrift.getHeight() + kostenstelle.getHeight();
-		
+
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
 	 	if(pageIndex  >= totalNumPages) {

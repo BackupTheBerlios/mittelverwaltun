@@ -5,10 +5,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
+import dbObjects.Angebot;
+import dbObjects.StandardBestellung;
+import dbObjects.ZVTitel;
+
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.util.ArrayList;
 
 
 public class PrintSTDBeilage extends JFrame implements Printable {
@@ -64,21 +69,20 @@ public class PrintSTDBeilage extends JFrame implements Printable {
   JScrollPane jScrollPane1 = new JScrollPane();
   JTable tableBestellung = new JTable();
   JPanel printPanel = new JPanel();
+  StandardBestellung order;
 
-  public PrintSTDBeilage() {
-  	createBestellung();
-    try {
+  public PrintSTDBeilage(StandardBestellung order) {
+  	this.order = order;
+  	try {
       jbInit();
     }
     catch(Exception e) {
       e.printStackTrace();
     }
-    createTable();
+		createBestellung(order);
+    createTable(order.getAngebote());
   }
-  public static void main(String[] args) {
-		PrintSTDBeilage bestellungBeilage2 = new PrintSTDBeilage();
-    bestellungBeilage2.show();
-  }
+
   private void jbInit() throws Exception {
 		this.setSize(new Dimension(564, 727));
     oben = new JPanel(){
@@ -155,30 +159,30 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     labKostenstelle.setFont(new java.awt.Font("Dialog", 0, 12));
     labKostenstelle.setHorizontalAlignment(SwingConstants.CENTER);
     labKostenstelle.setHorizontalTextPosition(SwingConstants.CENTER);
-    labKostenstelle.setText("FBI");
+    labKostenstelle.setText("");
     labKostenstelle.setBounds(new Rectangle(346, 75, 144, 15));
     labInventarNr.setFont(new java.awt.Font("Dialog", 0, 12));
     labInventarNr.setBorder(null);
-    labInventarNr.setText("bla");
+    labInventarNr.setText("");
     labInventarNr.setBounds(new Rectangle(473, 205, 81, 15));
     labTitel.setFont(new java.awt.Font("Dialog", 0, 12));
     labTitel.setHorizontalAlignment(SwingConstants.CENTER);
-    labTitel.setText("64875");
+    labTitel.setText("");
     labTitel.setBounds(new Rectangle(368, 151, 52, 15));
     labUT.setFont(new java.awt.Font("Dialog", 0, 12));
     labUT.setHorizontalAlignment(SwingConstants.CENTER);
-    labUT.setText("56");
+    labUT.setText("");
     labUT.setBounds(new Rectangle(470, 151, 40, 15));
     labErsatzText.setFont(new java.awt.Font("Dialog", 0, 12));
     labErsatzText.setBorder(null);
-    labErsatzText.setText("bla bla");
+    labErsatzText.setText("");
     labErsatzText.setBounds(new Rectangle(87, 205, 302, 15));
     jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel11.setText("Titel");
     jLabel11.setBounds(new Rectangle(339, 151, 40, 15));
     labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
     labKapitel.setHorizontalAlignment(SwingConstants.CENTER);
-    labKapitel.setText("02436");
+    labKapitel.setText("");
     labKapitel.setBounds(new Rectangle(249, 151, 55, 15));
     cbReparatur.setBackground(Color.white);
     cbReparatur.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -205,7 +209,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     jLabel6.setText("Kostenart:");
     jLabel6.setBounds(new Rectangle(9, 118, 124, 15));
     tpBegruendung.setFont(new java.awt.Font("Dialog", 0, 12));
-    tpBegruendung.setText("Begründung");
+    tpBegruendung.setText("");
     tpBegruendung.setBounds(new Rectangle(12, 46, 527, 90));
     cbErstbeschaffung.setBackground(Color.white);
     cbErstbeschaffung.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -255,7 +259,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     labAngebotNr.setFont(new java.awt.Font("Dialog", 0, 12));
     labAngebotNr.setBorder(null);
     labAngebotNr.setHorizontalAlignment(SwingConstants.CENTER);
-    labAngebotNr.setText("1");
+    labAngebotNr.setText("");
     labAngebotNr.setBounds(new Rectangle(188, 8, 41, 15));
     jLabel15.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel15.setText("genannten Firma erteilt, da diese Firma");
@@ -268,7 +272,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     jLabel20.setText("Beschaffungsbeauftragter:");
     jLabel20.setBounds(new Rectangle(5, 47, 154, 15));
     labName.setFont(new java.awt.Font("Dialog", 0, 12));
-    labName.setText("Schramm");
+    labName.setText("");
     labName.setBounds(new Rectangle(191, 7, 98, 15));
     unterschrift.setBackground(Color.white);
     unterschrift.setBounds(new Rectangle(2, 633, 550, 78));
@@ -291,7 +295,6 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     labUnterschrift2.setBounds(new Rectangle(159, 47, 173, 15));
     labUnterschrift2.setText("");
     labDatum.setFont(new java.awt.Font("Dialog", 0, 12));
-    labDatum.setText("06.04.2004");
     labDatum.setBounds(new Rectangle(55, 7, 73, 15));
     jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -359,36 +362,43 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     this.getContentPane().add(printPanel, null);
   }
 
-  private void createTable(){
+  private void createTable(ArrayList angebote){
 		 String[] cols = {"Nr.", "Firma, Ort", "Angebot vom", "Auftr.-Summe inkl. MwSt."};
-		 String[][] data = new String[4][cols.length];
+		 Object[][] data = new Object[4][cols.length];
 
-		 for(int i = 0; i < 4; i++){
-			 data[i][0] = "" + i;
-			 data[i][1] = "Bechtle ÖA direkt, Neckersulm";
-			 data[i][2] = "05.04.2004";
-			 data[i][3] = "91,87";
+		 for(int i = 0; i < angebote.size(); i++){
+		 	 Angebot a = (Angebot)angebote.get(i);
+			 data[i][0] = new Integer(i);
+			 data[i][1] = a.getAnbieter().toString();
+			 data[i][2] = a.getDatum();
+			 data[i][3] = new Float(a.getSumme());
 		 }
+
 	  DefaultTableModel tableModel = new DefaultTableModel(data, cols){
 			 public boolean isCellEditable(int rowIndex, int columnIndex){
 					return false;
 			 }
 
 			 public Class getColumnClass(int col)  {
-				 return String.class;
+					return getValueAt(0, col).getClass();
 			 }
 		 };
 
-		 tableBestellung = new JTable(tableModel);
-		 tableBestellung.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		 tableBestellung.getTableHeader().setBackground(new Color(255,255,255));
-		 tableBestellung.getTableHeader().setBorder(BorderFactory.createEmptyBorder());
-		 DefaultTableCellRenderer render = new DefaultTableCellRenderer();
-		 render.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-		 tableBestellung.getColumnModel().getColumn(0).setCellRenderer(render); tableBestellung.getColumnModel().getColumn(0).setMaxWidth(20);
-		 tableBestellung.getColumnModel().getColumn(1).setMaxWidth(300);
-		 tableBestellung.getColumnModel().getColumn(2).setCellRenderer(render); tableBestellung.getColumnModel().getColumn(2).setMaxWidth(100);
-		 tableBestellung.getColumnModel().getColumn(3).setCellRenderer(render); tableBestellung.getColumnModel().getColumn(3).setMaxWidth(170);
+		tableBestellung = new JTable(tableModel);
+		tableBestellung.getTableHeader().setFont(new Font("Arial", Font.BOLD, 11));
+	  tableBestellung.getTableHeader().setBorder(BorderFactory.createEtchedBorder(new Color(0,0,0),new Color(225,225,225) ));
+	  tableBestellung.getTableHeader().setBackground(new Color(225,225,225));
+	  tableBestellung.getTableHeader().setPreferredSize(new Dimension(545, 30));
+
+		tableBestellung.setDefaultRenderer(Float.class, new JTableCurrencyRenderer());
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		tableBestellung.setDefaultRenderer(Integer.class, dtcr);
+
+		tableBestellung.getColumnModel().getColumn(0).setMaxWidth(20);
+ 		tableBestellung.getColumnModel().getColumn(1).setMaxWidth(300);
+ 		tableBestellung.getColumnModel().getColumn(2).setMaxWidth(100);
+ 		tableBestellung.getColumnModel().getColumn(3).setMaxWidth(170);
 		 //tableBestellung.setGridColor(new Color(255,255,255));
 
 		 //tableBestellung.setRowHeight(40);
@@ -410,86 +420,82 @@ public class PrintSTDBeilage extends JFrame implements Printable {
 		}
   }
 
-  private void createBestellung(){
-	  labBestellNr.setText(" Best. 140000");
-	  labKoSt.setText(" Kost 56789");
-	  labKostenstelle.setText("FBI");
+  private void createBestellung(StandardBestellung order){
+	  labBestellNr.setText("Best. " + order.getReferenznr());
+	  labKoSt.setText(" Kost: " + order.getFbkonto().getInstitut().getKostenstelle());
+	  labKostenstelle.setText(order.getFbkonto().getInstitut().getBezeichnung());
 
 	  // Kostenart
-	  int kostenart = 0;
-//		  switch(kostenart){
-//			  case 0: {
-//								  cbInvestitionen.setSelected(true);
-//								  break;
-//							  }
-//			  case 1: {
-//								  cbReparatur.setSelected(true);
-//								  break;
-//							  }
-//			  case 2: {
-//								  cbVerbrauchsmaterial.setSelected(true);
-//								  break;
-//							  }
-//		  }
+	  switch(order.getKostenart().getId()){
+		  case 1: {
+							  cbInvestitionen.setSelected(true);
+							  break;
+						  }
+		  case 2: {
+							  cbReparatur.setSelected(true);
+							  break;
+						  }
+		  case 3: {
+							  cbVerbrauchsmaterial.setSelected(true);
+							  break;
+						  }
+	  }
 
 	  // Haushaltstitel
-	  labKapitel.setText("02436");
-	  labTitel.setText("64875");
-	  labUT.setText("");
+	  labKapitel.setText(order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
+	  labTitel.setText(order.getZvtitel().getTitel());
+	  labUT.setText(order.getZvtitel().getUntertitel());
 
 	  // Erstbeschaffung
-	  int erstbeschaffung = 0;
-
-	  if(erstbeschaffung == 0){
+	  if(!order.getErsatzbeschaffung()){
 		  cbErstbeschaffung.setSelected(true);
 	  }else{
 		  cbErsatz.setSelected(true);
-		  labErsatzText.setText("");
-		  labInventarNr.setText("");
+		  labErsatzText.setText(order.getErsatzbeschreibung());
+		  labInventarNr.setText(order.getInventarNr());
 	  }
 
 	  // Begründung
-	  tpBegruendung.setText("");
-	  cbDrittelMittel.setSelected(true);
+	  tpBegruendung.setText(order.getVerwendungszweck());
+	  cbDrittelMittel.setSelected(order.getPlanvorgabe());
 
 	  // Auftrag
-	  labAngebotNr.setText("1");
+	  labAngebotNr.setText("" + order.getAngenommenesAngebot());
 
 	  // Entscheidung für
-	  int entscheidung = 0;
-	  if(entscheidung == 0)
+	 if(order.getBegruendung().equals(""))
 		  cbAngebotGuenstig.setSelected(true);
 	  else{
 		  cbAuftragGrund.setSelected(true);
-		  tpAuftragGrund.setText("aus folgenden Grund bevorzugt wurden:");
+		  tpAuftragGrund.setText("aus folgenden Grund bevorzugt wurden:     " + order.getBegruendung());
 	  }
 
 	  //Rest
-	  labDatum.setText("06.04.2004");
-	  labName.setText("Schramm");
+	  labDatum.setText("" + order.getDatum());
+	  labName.setText(order.getAuftraggeber().getName());
   }
 
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 		Graphics2D g2d = (Graphics2D) graphics;
-		
+
 		double pageHeight = pageFormat.getImageableHeight();
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
 		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight() + unterschrift.getHeight();
-		
+
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
 		if(pageIndex  >= totalNumPages) {
 			return NO_SUCH_PAGE;
 		}else{
 			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 740);
-			if(totalNumPages > 1)
-				g2d.drawString("Seite: "+(pageIndex+1)+" von "+totalNumPages,(int)pageWidth/2-35, 725);//bottom center
+//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
+//			if(totalNumPages > 1)
+//				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
 
-			g2d.translate(0f,-pageIndex * pageFormat.getImageableHeight());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight()-5, 560, 712);
+			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
+			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
 
 			printPanel.printAll(g2d);
 
