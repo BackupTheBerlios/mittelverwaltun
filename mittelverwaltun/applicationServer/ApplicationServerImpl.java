@@ -1503,4 +1503,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return db.selectUsers(institut);
 	}
 
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
+	 */
+	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
+		
+		
+	}
+
 }

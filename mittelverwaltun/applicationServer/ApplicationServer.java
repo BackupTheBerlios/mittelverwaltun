@@ -114,4 +114,11 @@ public interface ApplicationServer extends Remote {
 	 * @throws ApplicationServerException
 	 */
 	public Kostenart[] getKostenarten() throws ApplicationServerException;
+	
+	/**
+	 * speichert eine StandardBestellung
+	 * @param bestellung - Standardbestellung
+	 * @throws ApplicationServerException
+	 */
+	public void addBestellung(StandardBestellung bestellung) throws ApplicationServerException;
 }
