@@ -15,6 +15,24 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 	private ArrayList untertitel = new ArrayList();
 	private ZVKonto zvKonto = null;
 
+	/**
+	 * Konstruktor, der alle Attribute vom ZVUntertitel enthält.
+	 * @param id = Eindeutige Id vom ZVTitel
+	 * @param zvKonto = ZVKonto, dem sieser ZVTitel angehört
+	 * @param bezeichnung = Bezeichnung des ZVUntertitels
+	 * @param titel = Titel vom ZVUntertitel
+	 * @param untertitel = Untertitel vom ZVUntertitel
+	 * @param budget = Betrag, den dieser ZVUntertitel besitzt
+	 * @param vormerkungen = Betrag, der für die Bestellungen vorgemerkt ist, aber noch nicht bezahlt.
+	 * @param bemerkung = Bemerkungen für das Konto
+	 * @param bedingung = Pruebedingung, ab welcher oder bis welche Summe der ZVUntertitel freigegeben ist
+	 * @param geloescht = ob der ZVUntertitel gelöscht ist oder nicht.
+	 */
+	public ZVTitel( int id, ZVKonto zvKonto, String bezeichnung, String titel, String untertitel,
+							float budget, float vormerkungen, String bemerkung, String bedingung, boolean geloescht ){
+		super( id, null, bezeichnung, titel, untertitel, budget, vormerkungen, bemerkung, bedingung, geloescht );
+		this.zvKonto = zvKonto;
+	}
 	
 	public ZVTitel( int id, ZVKonto zvKonto, String bezeichnung, String titel, String untertitel, float budget, 
 																					String bemerkung, String bedingung ){
@@ -44,7 +62,8 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 	 */
 	public Object clone() {
 		ZVTitel result = new ZVTitel( this.getId(), null, this.getBezeichnung(), this.getTitel(), this.getUntertitel(),
-									this.getBudget(), this.getBemerkung(), this.getBedingung(), this.getGeloescht() );
+									this.getBudget(), this.getVormerkungen(), this.getBemerkung(), 
+									this.getBedingung(), this.getGeloescht() );
 		
 		result.setZVKonto( (ZVKonto)(this.zvKonto.clone()) );
 		result.setSubUntertitel( new ArrayList() );
@@ -58,7 +77,8 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 	 */
 	public Object cloneWhole() {
 		ZVTitel result = new ZVTitel( this.getId(), null, this.getBezeichnung(), this.getTitel(), this.getUntertitel(),
-									this.getBudget(), this.getBemerkung(), this.getBedingung(), this.getGeloescht() );
+									this.getBudget(), this.getVormerkungen(), this.getBemerkung(), 
+									this.getBedingung(), this.getGeloescht() );
 		ArrayList unter = new ArrayList();
 		ZVUntertitel temp = null;
 		for( int i = 0; i < this.getSubUntertitel().size(); i++ ) {
@@ -104,6 +124,7 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 		setTitel( zvTitel.getTitel() );
 		setUntertitel( zvTitel.getUntertitel() );
 		setBudget( zvTitel.getBudget() );
+		setVormerkungen( zvTitel.getVormerkungen() );
 		setBemerkung( zvTitel.getBemerkung() );
 		setBedingung( zvTitel.getBedingung() );
 		setGeloescht( zvTitel.getGeloescht() );

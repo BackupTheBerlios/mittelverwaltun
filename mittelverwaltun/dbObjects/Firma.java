@@ -88,6 +88,9 @@ public class Firma implements Serializable {
 		this.geloescht = geloescht;
 	}
 	
+	public Firma() {
+	}
+	
 	/**
 	 * Konstruktor, der alle Attribute enthält außer der Id und dem Flag gelöscht.
 	 */
