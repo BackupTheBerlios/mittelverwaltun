@@ -3,9 +3,10 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.*;
 import java.rmi.*;
+
 import applicationServer.*;
 import dbObjects.Benutzer;
 
@@ -17,17 +18,17 @@ public class MainFrame extends JFrame implements ActionListener {
 	Benutzer benutzer;
 	Image bg;
 	ImageIcon bgIcon;
-
 	
 	final String host = "localhost";				// Adresse und
 	final String serverName = "mittelverwaltung";	// ServerName
 	
-	public MainFrame(CentralServer centralServer, ApplicationServer applicationServer, Benutzer benutzer){
+	public MainFrame(CentralServer centralServer, ApplicationServer applicationServer, Benutzer benutzer) {
 		super( "Mittelverwaltungsprogramm" );
 		try{
 			this.centralServer = centralServer;
 			this.applicationServer = applicationServer;
 			this.benutzer = benutzer;
+			InetAddress addr = InetAddress.getLocalHost();
 			bg = loadImageResource("image","bg.jpg");
 			if (bg != null)
 				bgIcon =  new ImageIcon(bg);
@@ -48,8 +49,8 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 			} );
 			this.setExtendedState(Frame.MAXIMIZED_BOTH);
-			this.show();
 			this.doLayout();
+			this.show();
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(
 				this,
@@ -85,8 +86,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 		} );
 	}
-		
-		
+	
+	
 	public void setBenutzer(Benutzer benutzer) {
 		this.benutzer = benutzer;
 	}
@@ -124,7 +125,21 @@ public class MainFrame extends JFrame implements ActionListener {
 	   this.dispose();
 	   System.exit(0);
 	}
-	
+
+	/**
+	 * Logout durchführen und Fenster schließen.
+	 */
+	public void windowClosing() {
+		if( centralServer != null && applicationServer != null ) {
+			try {
+				applicationServer.logout();
+			} catch(Exception e1) {
+			}
+		}
+	   this.dispose();
+	   System.exit(0);
+	}
+		
 	public void actionPerformed( ActionEvent e ) {
 		
 	}

@@ -3,8 +3,6 @@ package applicationServer;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-
-
 public interface CentralServer extends Remote {
 
 	public ApplicationServer getMyApplicationServer() throws RemoteException;

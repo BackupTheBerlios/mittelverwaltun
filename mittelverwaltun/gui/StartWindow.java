@@ -55,7 +55,7 @@ public class StartWindow extends JFrame implements ActionListener {
 			tfBenutzername.requestFocus();
 			centralServer = (CentralServer)Naming.lookup("//" + host + "/" + serverName);
 			InetAddress addr = InetAddress.getLocalHost();
-			applicationServer = centralServer.getMyApplicationServer( addr.getHostName(), addr.getHostAddress() );
+			applicationServer = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
 		}
 		catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);

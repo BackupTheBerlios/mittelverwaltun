@@ -13,8 +13,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
 
-	String rmiregistry = "C:\\j2sdk1.4.0\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.0\\lib";
+	String rmiregistry = "C:\\j2sdk1.4.2\\bin\\rmiregistry.exe ";
+	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2\\lib";
 
 	final int delay = 3000;
 	JScrollPane scrollList = new JScrollPane();
@@ -25,7 +25,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	JButton buDelUser = new JButton();
 	StatusBar statusBar = new StatusBar();
 	JButton buClose = new JButton();
-	int userCount = 1;
 	
 	// SystemTray Komponenten
 	JPopupMenu sysTrayMenu = new JPopupMenu();
@@ -40,12 +39,16 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	
 	public Server() {
 		super("Central Server");
+		this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
+		this.setResizable( false );
+		this.setBounds( 100, 100, 538, 213 );
 		try {
 			jbInit();
 			initSysTray();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		this.setVisible( true );
 	}
 	
 	public static void main(String args[]){
@@ -141,8 +144,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		sysTrayMgr.setVisible(false);
 		sysTrayMgr.removeSystemTrayIconListener(this);
 		this.setVisible(true);
-		for( int i = 0; i < listModel.size(); i++ )
-			((User)listModel.getElementAt( i )).logout();
 		if( rmiProcess != null ) {
 			rmiProcess.destroy();
 		}
@@ -166,8 +167,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		buDelUser.setText("Benutzer entfernen");
 		buClose.setBounds(new Rectangle(320, 135, 200, 25));
 		buClose.setText("Server beenden");
-		statusBar.setBounds(new Rectangle(5, 170, 520, 26));
-		this.setLocale(java.util.Locale.getDefault());
+		statusBar.setBounds(new Rectangle(0, 169, 532, 20));
 		scrollList.setBounds(new Rectangle(10, 10, 300, 150));
 		this.getContentPane().add(scrollList, null);
 		scrollList.getViewport().add(listUser, null);
@@ -191,11 +191,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		buClose.setIcon(Functions.getCloseIcon(getClass()));
 		this.getContentPane().add(statusBar, null);
 		
-		this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
-		this.setResizable( false );
-		this.setBounds( 100, 100, 538, 228 );
-		this.setVisible( true );
-		
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				Server server = (Server)e.getSource();
@@ -215,7 +210,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * @return ApplicationServerImpl
 	 */
 	public ApplicationServerImpl getNewApplicationServer(  String hostName, String hostAdress  ) {
-		User user = new User( ++userCount, hostName, hostAdress );
+		User user = new User( hostName, hostAdress );
 		listModel.addElement( user );
 		statusBar.showTextForMilliseconds( "Neuer User @" + hostAdress + " hat sich angemeldet.", delay );
 		
@@ -231,7 +226,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.getId() == id ) {
+			if( temp.getApplicationServer().getId() == id ) {
 				temp.setBenutzer( benutzerName );
 				listModel.setElementAt( temp, i );
 				statusBar.showTextForMilliseconds( "Der User @" + temp.getHostAdress() + " hat seinen Namen übermittelt.", delay );
@@ -239,7 +234,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			}
 		}
 	}
-	
+
 	/**
 	 * Einen User aus der ListBox entfernen
 	 * @param id des Users
@@ -248,15 +243,14 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.getId() == id ) {
-				temp.logout();
+			if( temp.getApplicationServer().getId() == id ) {
 				listModel.removeElementAt( i );
 				statusBar.showTextForMilliseconds( "Der User '" + temp.getBenutzer() + "' hat sich abgemeldet.", delay );
 				break;
 			}
 		}
 	}
-		
+	
 	public JButton getCloseButton() {
 		return buClose; 
 	}
@@ -333,7 +327,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.getBenutzer() + 
 														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
 														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
-					temp.logout();
 					listModel.removeElementAt( listUser.getSelectedIndex() );
 					statusBar.showTextForMilliseconds( "Der User '" + temp.getBenutzer() + "' wurde entfernt.", delay );
 				}
@@ -348,8 +341,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			}
 			if( result == JOptionPane.NO_OPTION )
 				return;
-			for( int i = 0; i < listModel.size(); i++ )
-				((User)listModel.getElementAt( i )).logout();
 			if( rmiProcess != null ) {
 				rmiProcess.destroy();
 			}
@@ -370,28 +361,21 @@ class User{
 	String hostName = null;
 	String hostAdress = null;
 	String benutzer = null;
-	int id;
 
 	/**
 	 * 
-	 * @uml.property name="applicationServer"
-	 * @uml.associationEnd 
-	 * @uml.property name="applicationServer"
 	 */
 	ApplicationServerImpl applicationServer = null;
 
 	
-	public User( int id, String hostName, String hostAdress ) {
-		this.id = id;
+	public User( String hostName, String hostAdress ) {
 		this.hostName = hostName;
 		this.hostAdress = hostAdress;
 		applicationServer = new ApplicationServerImpl();
-		applicationServer.setId( id );
 	}
 
 	/**
 	 * 
-	 * @uml.property name="applicationServer"
 	 */
 	public ApplicationServerImpl getApplicationServer() {
 		return applicationServer;
@@ -399,23 +383,13 @@ class User{
 
 	/**
 	 * 
-	 * @uml.property name="benutzer"
 	 */
 	public void setBenutzer(String benutzer) {
 		this.benutzer = benutzer;
 	}
 
-	
-	public void logout() {
-//		try {
-//			applicationServer.logout();
-//		} catch (ConnectionException e) {
-//		}
-	}
-
 	/**
 	 * 
-	 * @uml.property name="hostAdress"
 	 */
 	public String getHostAdress() {
 		return hostAdress;
@@ -423,7 +397,6 @@ class User{
 
 	/**
 	 * 
-	 * @uml.property name="benutzer"
 	 */
 	public String getBenutzer() {
 		if (benutzer != null)
@@ -432,15 +405,6 @@ class User{
 			return hostName;
 	}
 
-	/**
-	 * 
-	 * @uml.property name="id"
-	 */
-	public int getId() {
-		return id;
-	}
-
-	
 	public String toString() {
 		if( benutzer == null ) {
 			return "user @ " + hostAdress + " (" + hostName + ")";
@@ -454,50 +418,21 @@ class User{
 /**
  * Anzeigen eines am unterem Rand eines Fensters, die Größe wird im Fenster geregelt.
  * Man kann den Text einfach anzeigen oder für eine bestimmte Zeit(Millisekunden) anzeigen lassen.
+ * @author w.flat
  */
-class StatusBar extends JPanel implements ActionListener {
+class StatusBar extends JLabel implements ActionListener {
 
 	/**
-	 * 
-	 * @uml.property name="labText"
-	 * @uml.associationEnd 
-	 * @uml.property name="labText"
-	 */
-	JLabel labText = new JLabel("");
-
-	/**
-	 * 
-	 * @uml.property name="timer"
-	 * @uml.associationEnd 
-	 * @uml.property name="timer"
+	 * Timer zum Löschen des Textes.
 	 */
 	Timer timer = new Timer(1000, this);
-
 	
 	public StatusBar() {
 		super();
 		this.setBorder( BorderFactory.createLoweredBevelBorder() );
-		this.setLayout( new FlowLayout( FlowLayout.LEFT ) );
-		this.setColor( Color.blue );
-		this.add( labText );
+		this.setForeground( Color.blue );
 	}
-	
-	/**
-	 * Einen Text anzeigen. Bleibt bestehen bis man ihn überschreibt.
-	 * @param text
-	 */
-	public void setText( String text ) {
-		labText.setText( text );
-	}
-	
-	/**
-	 * Die Farbe des Textes Bestimmen. Es werden die Farben der Klasse Color verwendet. 
-	 * @param color
-	 */
-	public void setColor( Color color ) {
-		labText.setForeground( color );
-	}
-	
+
 	/**
 	 * Einen für eine bestimmte Zeit anzeigen
 	 * @param text
@@ -508,8 +443,16 @@ class StatusBar extends JPanel implements ActionListener {
 			timer.stop();
 		}
 		timer.setInitialDelay( milliseconds );
-		labText.setText( text );
+		this.setText( text );
 		timer.start();
+	}
+	
+	/**
+	 * Überlagern der setText-Methode, um einen Abstand links zu schaffen.
+	 */
+	public void setText(String text) {
+		String str = "  " + text;
+		super.setText(str);
 	}
 	
 	/**
@@ -517,7 +460,7 @@ class StatusBar extends JPanel implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		timer.stop();
-		labText.setText( "" );
+		this.setText( "" );
 	}
 }
 

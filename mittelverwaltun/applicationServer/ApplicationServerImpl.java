@@ -10,15 +10,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	private Database db;
 
-	int id;
+	private static int id = 0;
+	private int serverId;
 
 	public ApplicationServerImpl(){
 
 		// ToDo lesen aus .ini Datei
 		//db = new Database("com.mysql.jdbc.Driver", "192.168.1.2", "fbmittelverwaltung", "mittelverwaltung");
 		db = new Database("com.mysql.jdbc.Driver", "localhost", "fbmittelverwaltung", "mittelverwaltung");
+		this.serverId = ++id;
 	}
-
 
 	/**
 	 * Die id des Servers setzen.
@@ -26,7 +27,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * author w.flat
 	 */
 	public void setId(int id) {
-		this.id = id;
+		this.serverId = id;
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * author w.flat
 	 */
 	public int getId() {
-		return id;
+		return serverId;
 	}
 
 	/*

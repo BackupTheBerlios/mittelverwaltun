@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import dbObjects.*;
 
 
-public class Database implements Serializable{
+public class Database implements Serializable {
 
 	private String driver = null;
 	private String url = null;

@@ -4,11 +4,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 
-
 public class CentralServerImpl extends UnicastRemoteObject implements CentralServer {
 
 	Server server;
-
 	
 	protected CentralServerImpl() throws RemoteException {
 		super();
@@ -31,13 +29,13 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 		return null;
 	}
 	
-	public void addBenutzerNameToUser( int id, String name ) {
+	public void addBenutzerNameToUser( int id, String name ) throws RemoteException {
 		if( server != null ) {
 			server.addBenutzerNameToUser( id, name );
 		}
 	}
 	
-	public void delUser( int id ) {
+	public void delUser( int id ) throws RemoteException {
 		if( server != null ) {
 			server.delUser( id );
 		}
