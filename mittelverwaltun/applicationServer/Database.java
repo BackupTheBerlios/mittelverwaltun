@@ -3919,7 +3919,40 @@ public class Database implements Serializable{
 			}
 			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 73, e.getMessage() );
+			throw new ApplicationServerException( 102, e.getMessage() );
+		}
+
+		return report;
+	}
+	
+	/**
+	 * gibt eine ArrayList von ArrayList für den Report7 zurück. Nähere Infos in gui.Reports Klasse
+	 * @param i - Institut für diesen Report
+	 * @return
+	 * @throws ApplicationServerException
+	 */
+	public ArrayList selectReport8(Institut i) throws ApplicationServerException {
+		ArrayList report = new ArrayList();	// Liste für die ZVKonten
+
+		try{
+			Object[] parameters = { new Integer(i.getId()) };
+			ResultSet rs = statements.get(336).executeQuery(parameters); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+	
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					row.add(rs.getString(1)); 						// FB-Konto
+					row.add(rs.getString(2)); 						// ZV-Konto
+					row.add(new Float(rs.getFloat(3)));		// Einnahmen
+					
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 103, e.getMessage() );
 		}
 
 		return report;

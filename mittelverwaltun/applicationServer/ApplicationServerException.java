@@ -158,6 +158,8 @@ public class ApplicationServerException extends Exception {
 		messages[99] = "Application Server Error: FBKonto bzw. ZVTitel existiert nicht";
 		messages[100] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertUserMySQL";
 		messages[101] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertUser";
+		messages[102] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport7";
+		messages[103] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport8";
 			
 
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";

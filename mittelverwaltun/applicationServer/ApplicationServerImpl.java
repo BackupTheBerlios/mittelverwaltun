@@ -2630,6 +2630,8 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		if(typ == 7){
 			return db.selectReport7(institut);
+		}else if(typ == 8){
+			return db.selectReport8(institut);
 		}
 		
 		return null;

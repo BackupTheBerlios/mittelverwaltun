@@ -2329,8 +2329,7 @@ public class PreparedSqlStatements {
 		/* Reports 								*/
 		/* Indizes: 335-349				*/
 		/**************************/
-		{//335 
-//			"ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", "Id"
+		{//335 Report 7 für ein Institut: "ZV-Konto", "Ausgaben", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", "Id"
 			ps = con.prepareStatement("SELECT " +
 																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
@@ -2342,8 +2341,20 @@ public class PreparedSqlStatements {
 			int[] param = {	Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//336
-			statements[i++] = null;
+		{//336 Report 8 für ein Institut: FB-Konto, ZV-Konto, Einnahmen
+			ps = con.prepareStatement("SELECT " +
+																		"fbk.bezeichnung AS fbKonto, zvk.bezeichnung AS zvKonto, bu.betragFbKonto1 " +
+																"FROM " +
+																	"ZVKontentitel zvt, ZVKonten zvk, " +
+																	"Institute i, FBKonten fbk, Buchungen b " +
+															  "WHERE i.id = ? " +
+																	"AND i.id = fbk.institutsId  " +
+																	"AND bu.fbKonto = fbk.id " +
+																	"AND bu.typ = '5' " +
+																	"AND bu.zvTitel = zvt.id " +
+																	"AND zvt.zvKontoId = zvk.id ");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//337
 			statements[i++] = null;
