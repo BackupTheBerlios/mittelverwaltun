@@ -119,8 +119,15 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 					 if( hauptkonten.get(j)== null )	// kein FBHauptkonto
 						 continue;
 					 // Ermittlung der Unterkonten vom Hauptkonto
-					 ((FBHauptkonto)hauptkonten.get(j)).setUnterkonten( db.selectFBUnterkonten( instituts[i],
-																		 (FBHauptkonto)hauptkonten.get(j) ) );
+					 	Kontenzuordnung[] zuordnung = db.selectKontenzuordnungen( ((FBHauptkonto)hauptkonten.get(j)));
+						((FBHauptkonto)hauptkonten.get(j)).setZuordnung( zuordnung );
+						
+						ArrayList unterkonten = db.selectFBUnterkonten( instituts[i], (FBHauptkonto)hauptkonten.get(j));
+						// die Kontenzuordnungen der FBHauptkonten werden übernommen
+						for(int k = 0; k < unterkonten.size(); k++)
+							((FBUnterkonto)(unterkonten.get(k))).setZuordnung(zuordnung);
+							
+					 ((FBHauptkonto)hauptkonten.get(j)).setUnterkonten(unterkonten);
 				 }
 			 }
 		 }
@@ -1868,9 +1875,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				 for( int j = 0; j < hauptkonten.size(); j++ ) {
 					 if( hauptkonten.get(j)== null )	// kein FBHauptkonto
 						 continue;
-					 // Ermittlung der Unterkonten vom Hauptkonto
-					 ((FBHauptkonto)hauptkonten.get(j)).setUnterkonten( db.selectFBUnterkonten( instituts[i],
-																		 (FBHauptkonto)hauptkonten.get(j) ) );
+						// Ermittlung der Unterkonten vom Hauptkonto
+					  Kontenzuordnung[] zuordnung = db.selectKontenzuordnungen( ((FBHauptkonto)hauptkonten.get(j)));
+					  ((FBHauptkonto)hauptkonten.get(j)).setZuordnung( zuordnung );
+						
+					  ArrayList unterkonten = db.selectFBUnterkonten( instituts[i], (FBHauptkonto)hauptkonten.get(j));
+					  // die Kontenzuordnungen der FBHauptkonten werden übernommen
+					  for(int k = 0; k < unterkonten.size(); k++)
+						  ((FBUnterkonto)(unterkonten.get(k))).setZuordnung(zuordnung);
+							
+						((FBHauptkonto)hauptkonten.get(j)).setUnterkonten(unterkonten);
 				 }
 			 }
 		 }
