@@ -497,11 +497,10 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
 		
 		try {
-			StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			
-			as.setBestellung(origin, copy);
-			
-			origin = editedOrder;
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, editedOrder);
+			origin = as.getStandardBestellung(origin.getId());
+			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
@@ -522,9 +521,9 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
 		
 		try {
-			StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(origin, copy);
-			origin = editedOrder;
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, editedOrder);
+			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);

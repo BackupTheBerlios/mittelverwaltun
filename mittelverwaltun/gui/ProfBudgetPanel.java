@@ -27,7 +27,7 @@ public class ProfBudgetPanel extends JPanel implements TableModelListener {
   private JTable tabProfBudget = null;
   private JScrollPane spProfBudget = new JScrollPane();
   private JLabel labSumme = new JLabel();
-  private CurTextField tfSumme = new CurTextField();
+  private CurrencyTextField tfSumme = new CurrencyTextField();
   private ActionListener actionListener = null;	
 
 
@@ -80,7 +80,7 @@ public class ProfBudgetPanel extends JPanel implements TableModelListener {
 		tfSumme.setDisabledTextColor(Color.BLACK);
 		tfSumme.setBounds(new Rectangle(187, 232, 155, 20));
 		tfSumme.setHorizontalAlignment(SwingConstants.RIGHT);
-		tfSumme.setAmount(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget());
+		tfSumme.setValue(new Float(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget()));
 		
 		this.add(labHauptkto, null);
 		this.add(comboHptkto, null);
@@ -92,7 +92,7 @@ public class ProfBudgetPanel extends JPanel implements TableModelListener {
    }
 
    	public void tableChanged(TableModelEvent arg0) {
-		tfSumme.setAmount(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget());
+		tfSumme.setValue(new Float(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget()));
 		if (actionListener != null){
 			actionListener.actionPerformed(new ActionEvent(this,0,"overall budget changed"));
 		}
@@ -100,7 +100,7 @@ public class ProfBudgetPanel extends JPanel implements TableModelListener {
 
 	public void setStandardBudget (float budget){
 		((ProfBudgetTableModel)(tabProfBudget.getModel())).setStandardBudget(budget);		
-		tfSumme.setAmount(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget());
+		tfSumme.setValue(new Float(((ProfBudgetTableModel)(tabProfBudget.getModel())).calculateOverallBudget()));
 		if (actionListener != null){
 			actionListener.actionPerformed(new ActionEvent(this,0,"overall budget changed"));
 		}
@@ -113,7 +113,7 @@ public class ProfBudgetPanel extends JPanel implements TableModelListener {
 	}
 
 	public float getOverallBudget(){
-		return tfSumme.getAmount();
+		return ((Float)tfSumme.getValue()).floatValue();
 	}
 
 	public void addActionListener (ActionListener al){

@@ -210,6 +210,17 @@ public class Position implements Serializable {
 	public boolean equals(Object o){
 		if(o != null){
 			Position position = (Position)o;
+			 
+//			System.out.println(id == position.getId());
+//			System.out.println(einzelPreis == position.getEinzelPreis());
+//			System.out.println(menge == position.getMenge());
+//			System.out.println(rabatt == position.getRabatt() );
+//			System.out.println(mwst == position.getMwst() );
+//			System.out.println(beglichen == position.getBeglichen());
+//			System.out.println(((institut == null || position.getInstitut() == null) ? true : institut.equals(position.getInstitut())));
+//			System.out.println(((artikel == null || position.getArtikel() == null) ? true : artikel.equals(position.getArtikel())));
+			
+			
 			if( id == position.getId() &&
 					einzelPreis == position.getEinzelPreis() &&
 					menge == position.getMenge() &&

@@ -89,7 +89,15 @@ public class Angebot implements Serializable {
 		if(o != null){
 			Angebot angebot = (Angebot)o;
 			
+//			System.out.println(getSumme() == angebot.getSumme());
+//			System.out.println((positionen == null || angebot.getPositionen() == null) ? true : positionen.equals(angebot.getPositionen()));
+//			System.out.println(id == angebot.getId());
+//			System.out.println((anbieter == null || angebot.getAnbieter() == null) ? true : (anbieter.getId() == angebot.getAnbieter().getId()));
+//			System.out.println(datum.equals(angebot.getDatum()));
+//			System.out.println(angenommen == angebot.getAngenommen());
+			
 			if( (getSumme() == angebot.getSumme()) &&
+					
 					((positionen == null || angebot.getPositionen() == null) ? true : positionen.equals(angebot.getPositionen())) &&
 					(id == angebot.getId()) &&
 					((anbieter == null || angebot.getAnbieter() == null) ? true : (anbieter.getId() == angebot.getAnbieter().getId())) &&

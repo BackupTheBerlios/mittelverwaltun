@@ -33,11 +33,13 @@ public class Database implements Serializable{
 			System.out.println("Done.");
 			System.out.println("Connect to database...");
 			con = DriverManager.getConnection("jdbc:mysql://" + url + "/" + database, user, defaultPwd);
-
-			//con.setAutoCommit(false);
-			//con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-
 			System.out.println("Connection established.");
+			System.out.println("Set autocommit = false...");
+			con.setAutoCommit(false);
+			System.out.println("Done.");
+			System.out.println("Set transaction_isolation_level = repeatable_read...");
+			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+			System.out.println("Done.");
 			System.out.println("Prepare SQL-Statements...");
 			statements = new PreparedSqlStatements(con);	//
 			System.out.println("Done.");
@@ -45,7 +47,7 @@ public class Database implements Serializable{
 			throw new ConnectionException("Connection Exception: Invalid database driver.");
 		}catch (SQLException e){
 			throw new ConnectionException("Connection Exception: Connection refused.");
-		}
+		} 
 	}
 
 	public void disconnect() throws ConnectionException{
