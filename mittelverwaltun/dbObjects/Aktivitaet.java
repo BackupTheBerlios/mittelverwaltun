@@ -3,7 +3,7 @@ package dbObjects;
 import java.io.Serializable;
 
 /**
- * @author robert
+
  *
  * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
@@ -22,6 +22,10 @@ public class Aktivitaet implements Serializable {
 		this.bemerkung = bemerkung;
 	}
 
+/**
+ * 
+ * @return
+ */
 	public int getId() {
 		return id;
 	}
