@@ -69,6 +69,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	
 	/**
 	 * Für jedes Instiut ein Report über die Einnahmen
+	 * FB-Konto, ZV-Konto, Einnahmen
 	 */
 	public static final int REPORT_8 = 8;
 
@@ -180,8 +181,12 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					}
 			}else if (tabReport.getSelectedOrderType()==OrderTable.ZA_TYP){
-				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
-					;
+				if(tabReport.getSelectedOrderPhase()==OrderTable.ABGESCHLOSSEN)
+					try {
+						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabReport.getSelectedOrderID())));
+					} catch (ApplicationServerException exception) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					}
 			}
 		} else if(e.getActionCommand() == "showReport"){
 			if(cbReportFilter.getSelectedItem() == "Report_7"){
