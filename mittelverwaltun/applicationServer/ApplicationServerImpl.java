@@ -1376,53 +1376,65 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
   // Ein Institut in der Datenbank aktualisieren
 	public void setInstitute(Institut editedInst, Institut clientInst) throws ApplicationServerException {
 		if(editedInst != null && clientInst != null){
-			Institut dbInst = db.selectForUpdateInstitute(clientInst);
-
-			// Institut existiert nicht mehr
-			if(dbInst == null || dbInst.getGeloescht())
-				throw new ApplicationServerException(3);
-
-			//Institut hat sich zwischenzeitlich geändert
-			if(!dbInst.equals(clientInst))
-				throw new ApplicationServerException(50);
-
-			// Institut oder Kostenstelle schon vorhanden
-			if(db.checkInstitute(editedInst) != 0)
-				throw new ApplicationServerException(4);
-
-			db.updateInstitute(editedInst);
+			try{	
+				Institut dbInst = db.selectForUpdateInstitute(clientInst);
+	
+				// Institut existiert nicht mehr
+				if(dbInst == null || dbInst.getGeloescht())
+					throw new ApplicationServerException(3);
+	
+				//Institut hat sich zwischenzeitlich geändert
+				if(!dbInst.equals(clientInst))
+					throw new ApplicationServerException(50);
+	
+				// Institut oder Kostenstelle schon vorhanden
+				if(db.checkInstitute(editedInst) != 0)
+					throw new ApplicationServerException(4);
+	
+				db.updateInstitute(editedInst);
 			
-			db.setAutoCommit(false);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}
 	}
 
 	public void delInstitute(Institut clientInst) throws ApplicationServerException {
 		if(clientInst != null){
-			Institut dbInst = db.selectForUpdateInstitute(clientInst);
-
-			if(dbInst == null || dbInst.getGeloescht())	// Institut wurde schon gelöscht
-				throw new ApplicationServerException(3);
-			if(!dbInst.equals(clientInst))			// Gleichheit der Institute
-				throw new ApplicationServerException(50);
-
-			// Institut ist ein Fachbereich
-			Fachbereich[] inst = db.selectFachbereiche();
-			if(inst[0].getId() == dbInst.getId())
-				throw new ApplicationServerException(51);
-
-			// Institut hat FBHauptkonten
-			ArrayList konten = db.selectFBHauptkonten(dbInst);
-			if(konten.size() > 0)
-				throw new ApplicationServerException(52);
-
-			// Institut hat Benutzer
-			Benutzer[] benutzer = db.selectUsers(dbInst);
-			if(benutzer.length > 0)
-				throw new ApplicationServerException(53);
-
-			db.deleteInstitute(clientInst);
+			try{	
+				Institut dbInst = db.selectForUpdateInstitute(clientInst);
+	
+				if(dbInst == null || dbInst.getGeloescht())	// Institut wurde schon gelöscht
+					throw new ApplicationServerException(3);
+				if(!dbInst.equals(clientInst))			// Gleichheit der Institute
+					throw new ApplicationServerException(50);
+	
+				// Institut ist ein Fachbereich
+				Fachbereich[] inst = db.selectFachbereiche();
+				if(inst[0].getId() == dbInst.getId())
+					throw new ApplicationServerException(51);
+	
+				// Institut hat FBHauptkonten
+				ArrayList konten = db.selectFBHauptkonten(dbInst);
+				if(konten.size() > 0)
+					throw new ApplicationServerException(52);
+	
+				// Institut hat Benutzer
+				Benutzer[] benutzer = db.selectUsers(dbInst);
+				if(benutzer.length > 0)
+					throw new ApplicationServerException(53);
+	
+				db.deleteInstitute(clientInst);
 			
-			db.setAutoCommit(false);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}
 	}
 
@@ -1487,54 +1499,66 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public void delUser(Benutzer clientUser) throws ApplicationServerException {
 		if(clientUser != null){
-			Benutzer dbUser = db.selectForUpdateUser(clientUser);
-
-			if(dbUser == null || dbUser.getGeloescht())	// Benutzer wurde schon gelöscht
-				throw new ApplicationServerException(2);
-			if(!dbUser.equals(clientUser))			// Gleichheit der Benutzer
-				throw new ApplicationServerException(55);
-
-			// Benutzer hat aktive Bestellungen
-			if(db.countAktiveBestellungen(dbUser) > 0)
-				throw new ApplicationServerException(50);
-
-			
-			// Benutzer hat Bestellungen gemacht
-			if(db.countBestellungen(dbUser) > 0)
-				db.deleteUser(dbUser);
-			else if(db.countBuchungen(dbUser) > 0) // Benutzer hat schon Buchungen getätigt
-				db.deleteUser(dbUser);
-			else
-				db.deleteUserFinal(dbUser);		// Kann definitiv gelöscht werden
+			try{	
+				Benutzer dbUser = db.selectForUpdateUser(clientUser);
+	
+				if(dbUser == null || dbUser.getGeloescht())	// Benutzer wurde schon gelöscht
+					throw new ApplicationServerException(2);
+				if(!dbUser.equals(clientUser))			// Gleichheit der Benutzer
+					throw new ApplicationServerException(55);
+	
+				// Benutzer hat aktive Bestellungen
+				if(db.countAktiveBestellungen(dbUser) > 0)
+					throw new ApplicationServerException(50);
+	
 				
-			// Benutzer aus der MySQL-DB löschen
-				db.deleteUserMySQL(dbUser);
+				// Benutzer hat Bestellungen gemacht
+				if(db.countBestellungen(dbUser) > 0)
+					db.deleteUser(dbUser);
+				else if(db.countBuchungen(dbUser) > 0) // Benutzer hat schon Buchungen getätigt
+					db.deleteUser(dbUser);
+				else
+					db.deleteUserFinal(dbUser);		// Kann definitiv gelöscht werden
+					
+				// Benutzer aus der MySQL-DB löschen
+					db.deleteUserMySQL(dbUser);
 				
-		  db.commit();
+			} catch(ApplicationServerException e) {
+				 db.rollback();
+				 throw e;
+			 } finally {
+				 db.commit();
+			 }
 		}
 	}
 
 	//Fügt den Benutzer in die MySQL- und FBMittelvewaltungsdatenbank hinzu
 	public int addUser(Benutzer benutzer) throws ApplicationServerException {
-		if(db.checkUserMySQL(benutzer) > 0)		// benutzer bereits in der MySQL-DB vorhanden
-			throw new ApplicationServerException(54);
-		
-		//	benutzer bereits in der FBMittelvewaltung-DB vorhanden
-		if(db.checkUser(benutzer) > 0)
-			throw new ApplicationServerException(5);
-
-		//		FBKonto existiert nicht mehr
-		if(benutzer.getPrivatKonto() != 0){
-			FBUnterkonto privatKonto = db.selectFBKonto(benutzer.getPrivatKonto());
-			if(privatKonto == null)
-				throw new ApplicationServerException(64);
+		try{	
+			if(db.checkUserMySQL(benutzer) > 0)		// benutzer bereits in der MySQL-DB vorhanden
+				throw new ApplicationServerException(54);
+			
+			//	benutzer bereits in der FBMittelvewaltung-DB vorhanden
+			if(db.checkUser(benutzer) > 0)
+				throw new ApplicationServerException(5);
+	
+			//		FBKonto existiert nicht mehr
+			if(benutzer.getPrivatKonto() != 0){
+				FBUnterkonto privatKonto = db.selectFBKonto(benutzer.getPrivatKonto());
+				if(privatKonto == null)
+					throw new ApplicationServerException(64);
+			}
+			
+			int newID = db.insertUser(benutzer);
+			db.insertUserMySQL(benutzer);
+			
+			return newID;
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
 		}
-		
-		int newID = db.insertUser(benutzer);
-		db.insertUserMySQL(benutzer);
-		
-		db.commit();
-		return newID;
 	}
 
 
@@ -1543,17 +1567,24 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 
 	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws ApplicationServerException {
-		Fachbereich dbFB = db.selectForUpdateFachbereich();
-
-		if(dbFB == null)
-			throw new ApplicationServerException(67);
-
-		if(!fb.equals(dbFB))
-			throw new ApplicationServerException(58);
-
-		db.updateFachbereich(editedFB);
-		
-		return getFachbereiche()[0];
+		try{	
+			Fachbereich dbFB = db.selectForUpdateFachbereich();
+	
+			if(dbFB == null)
+				throw new ApplicationServerException(67);
+	
+			if(!fb.equals(dbFB))
+				throw new ApplicationServerException(58);
+	
+			db.updateFachbereich(editedFB);
+			
+			return getFachbereiche()[0];
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
@@ -1562,15 +1593,22 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException {
 		if(editedHhj != null && clientHhj != null){
-			Haushaltsjahr dbHhj = db.selectForUpdateHaushaltsjahr();
-
-			if(dbHhj == null)			// Fachberich existiert nicht mehr
-				throw new ApplicationServerException(57);
-
-			if(!dbHhj.equals(clientHhj))		//Fachbereich hat sich zwischenzeitlich geändert
-				throw new ApplicationServerException(58);
-
-			db.updateHaushaltsjahr(editedHhj);
+			try{	
+				Haushaltsjahr dbHhj = db.selectForUpdateHaushaltsjahr();
+	
+				if(dbHhj == null)			// Fachberich existiert nicht mehr
+					throw new ApplicationServerException(57);
+	
+				if(!dbHhj.equals(clientHhj))		//Fachbereich hat sich zwischenzeitlich geändert
+					throw new ApplicationServerException(58);
+	
+				db.updateHaushaltsjahr(editedHhj);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}
 	}
 
@@ -1607,8 +1645,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 
 	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
-		db.deleteRollenAktivitaet(rolle, aktivitaet);
-		db.commit();
+		try{	
+			db.deleteRollenAktivitaet(rolle, aktivitaet);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException {
@@ -1631,38 +1675,50 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws ApplicationServerException {
 		if(editedRolle != null && clientRolle != null){
-			Rolle dbRolle = db.selectForUpdateRolle(editedRolle);
-
-			if(dbRolle == null)			// Rolle existiert nicht mehr
-				throw new ApplicationServerException(7);
-
-			if(!dbRolle.equals(clientRolle))		//Rolle hat sich zwischenzeitlich geändert
-				throw new ApplicationServerException(59);
-
-			if(db.checkRolle(editedRolle) > 0)	//Rolle existiert schon
-				throw new ApplicationServerException(8);
-
-			db.updateRolle(editedRolle);
-			db.commit();
+			try{	
+				Rolle dbRolle = db.selectForUpdateRolle(editedRolle);
+	
+				if(dbRolle == null)			// Rolle existiert nicht mehr
+					throw new ApplicationServerException(7);
+	
+				if(!dbRolle.equals(clientRolle))		//Rolle hat sich zwischenzeitlich geändert
+					throw new ApplicationServerException(59);
+	
+				if(db.checkRolle(editedRolle) > 0)	//Rolle existiert schon
+					throw new ApplicationServerException(8);
+	
+				db.updateRolle(editedRolle);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}
 	}
 
 	public void delRolle(Rolle rolle) throws ApplicationServerException {
 		if(rolle != null){
-			Rolle dbRolle = db.selectForUpdateRolle(rolle);
-
-			if(dbRolle == null)			// Rolle existiert nicht mehr
-				throw new ApplicationServerException(7);
-
-			if(!dbRolle.equals(rolle))		//Rolle hat sich zwischenzeitlich geändert
-				throw new ApplicationServerException(59);
-
-			if(db.selectBenutzerRolle(rolle) > 0)
-				throw new ApplicationServerException(9);
-
-			db.deleteRollenAktivitaeten(rolle.getId());
-			db.deleteRolle(rolle);
-			db.commit();
+			try{	
+				Rolle dbRolle = db.selectForUpdateRolle(rolle);
+	
+				if(dbRolle == null)			// Rolle existiert nicht mehr
+					throw new ApplicationServerException(7);
+	
+				if(!dbRolle.equals(rolle))		//Rolle hat sich zwischenzeitlich geändert
+					throw new ApplicationServerException(59);
+	
+				if(db.selectBenutzerRolle(rolle) > 0)
+					throw new ApplicationServerException(9);
+	
+				db.deleteRollenAktivitaeten(rolle.getId());
+				db.deleteRolle(rolle);
+			} catch(ApplicationServerException e) {
+				db.rollback();
+				throw e;
+			} finally {
+				db.commit();
+			}
 		}
 	}
 
@@ -1708,23 +1764,29 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 
 	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws ApplicationServerException {
-		// Kontenzuordnung existiert ?
-		Kontenzuordnung dbZuordnung = db.selectKontenzuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId());
-
-		if(dbZuordnung == null)	// Zuordnung existiert nicht mehr
-			throw new ApplicationServerException(60);
-
-		ZVKonto dbZVKonto = db.selectZVKonto(clientZuordnung.getZvKonto().getId());
-		if(dbZVKonto == null)		// ZVKonto existiert nicht mehr
-			throw new ApplicationServerException(63);
-
-		FBHauptkonto dbFBKonto = db.selectFBHauptkonto(fbKonto.getId());
-		if(dbFBKonto == null)	// FBKonto existiert nicht mehr
-			throw new ApplicationServerException(64);
-
-
-		db.updateKontenZuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId(), clientZuordnung.getStatus());
-		db.commit();
+		try{	
+			// Kontenzuordnung existiert ?
+			Kontenzuordnung dbZuordnung = db.selectKontenzuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId());
+	
+			if(dbZuordnung == null)	// Zuordnung existiert nicht mehr
+				throw new ApplicationServerException(60);
+	
+			ZVKonto dbZVKonto = db.selectZVKonto(clientZuordnung.getZvKonto().getId());
+			if(dbZVKonto == null)		// ZVKonto existiert nicht mehr
+				throw new ApplicationServerException(63);
+	
+			FBHauptkonto dbFBKonto = db.selectFBHauptkonto(fbKonto.getId());
+			if(dbFBKonto == null)	// FBKonto existiert nicht mehr
+				throw new ApplicationServerException(64);
+	
+	
+			db.updateKontenZuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId(), clientZuordnung.getStatus());
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 
@@ -1763,8 +1825,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 
 	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
-		db.deleteKontenZuordnung(fbKonto.getId(), zvKonto.getId());
-		db.commit();
+		try{	
+			db.deleteKontenZuordnung(fbKonto.getId(), zvKonto.getId());
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException {
@@ -2665,37 +2733,42 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)
 	 */
 	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException {
-		// original StandardBestellung in der Datenbank
-		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(delOrder.getId());
-
-		ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
-
-		for(int i = 0; i < angebote.size(); i++){
-			Angebot angebot = (Angebot)angebote.get(i);
-
-			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
-		}
-		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
+		try{	
+			// original StandardBestellung in der Datenbank
+			StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(delOrder.getId());
 	
-		// die Bestellung hat sich zwischenzeitlich geändert
-		if(!delOrder.equals(dbOriginal))
-			throw new ApplicationServerException( 76 );
+			ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
+	
+			for(int i = 0; i < angebote.size(); i++){
+				Angebot angebot = (Angebot)angebote.get(i);
+	
+				angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+			}
+			dbOriginal.setAngebote(angebote); // Angebote hinzufügen
 		
-		if(delOrder.getPhase() == '0'){
-			// alle Position aller Angebote der Bestellung löschen
-			db.deletePositions(delOrder.getId());
-			// alle Angebote der Bestellung löschen
-			db.deleteAngebote(delOrder.getId());
-			// die StandardBestellung löschen
-			db.deleteASK_Standard_Bestellung(delOrder.getId());
-			// die Bestellung löschen
-			db.deleteBestellung(delOrder.getId());
-		}else{
-			delOrder.setGeloescht(true);
-			db.updateStandardBestellung(delOrder); // Flag gelöscht setzen
+			// die Bestellung hat sich zwischenzeitlich geändert
+			if(!delOrder.equals(dbOriginal))
+				throw new ApplicationServerException( 76 );
+			
+			if(delOrder.getPhase() == '0'){
+				// alle Position aller Angebote der Bestellung löschen
+				db.deletePositions(delOrder.getId());
+				// alle Angebote der Bestellung löschen
+				db.deleteAngebote(delOrder.getId());
+				// die StandardBestellung löschen
+				db.deleteASK_Standard_Bestellung(delOrder.getId());
+				// die Bestellung löschen
+				db.deleteBestellung(delOrder.getId());
+			}else{
+				delOrder.setGeloescht(true);
+				db.updateStandardBestellung(delOrder); // Flag gelöscht setzen
+			}
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
 		}
-		
-		db.commit();
 	}
 
 
@@ -2703,36 +2776,41 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.ASKBestellung)
 	 */
 	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException {
-		// original StandardBestellung in der Datenbank
-		ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(delOrder.getId());
-
-		ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
-
-		Angebot angebot = (Angebot)angebote.get(0);
-		
-		angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
-		
-		dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+		try{	
+			// original StandardBestellung in der Datenbank
+			ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(delOrder.getId());
 	
-		// die Bestellung hat sich zwischenzeitlich geändert
-		if(!delOrder.equals(dbOriginal))
-			throw new ApplicationServerException( 76 );
+			ArrayList angebote = db.selectForUpdateAngebote(delOrder.getId());
+	
+			Angebot angebot = (Angebot)angebote.get(0);
+			
+			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
+			
+			dbOriginal.setAngebot(angebot); // Angebote hinzufügen
 		
-		if(delOrder.getPhase() == '0'){
-			// alle Position des Angebots der Bestellung löschen
-			db.deletePositions(delOrder.getId());
-			// das Angebot löschen
-			db.deleteAngebote(delOrder.getId());
-			// die StandardBestellung löschen
-			db.deleteASK_Standard_Bestellung(delOrder.getId());
-			// die Bestellung löschen
-			db.deleteBestellung(delOrder.getId());
-		}else{
-			delOrder.setGeloescht(true);
-			db.updateASKBestellung(delOrder); // Flag gelöscht setzen
+			// die Bestellung hat sich zwischenzeitlich geändert
+			if(!delOrder.equals(dbOriginal))
+				throw new ApplicationServerException( 76 );
+			
+			if(delOrder.getPhase() == '0'){
+				// alle Position des Angebots der Bestellung löschen
+				db.deletePositions(delOrder.getId());
+				// das Angebot löschen
+				db.deleteAngebote(delOrder.getId());
+				// die StandardBestellung löschen
+				db.deleteASK_Standard_Bestellung(delOrder.getId());
+				// die Bestellung löschen
+				db.deleteBestellung(delOrder.getId());
+			}else{
+				delOrder.setGeloescht(true);
+				db.updateASKBestellung(delOrder); // Flag gelöscht setzen
+			}
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
 		}
-		
-		db.commit();
 	}
 
 
