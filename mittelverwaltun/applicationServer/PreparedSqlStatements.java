@@ -1550,7 +1550,17 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//225
-			statements[i++] = null;
+			/**
+			 * Buchung von einer bestimmter Bestellung mit einem bestimmten Typ.
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto, betragZvKonto, " +
+											"zvTitel1, betragZvTitel1, zvTitel2, betragZvTitel2, " +
+											"fbKonto1, betragFbKonto1, fbKonto2, betragFbKonto2 " +
+					  					"FROM buchungen " +
+				  						"WHERE bestellung = ? AND typ = ? " ); 
+			int[] param = {Types.INTEGER, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//226
 			statements[i++] = null;
@@ -2223,15 +2233,14 @@ public class PreparedSqlStatements {
 			 * Kleinbestellung.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKontentitel zvt " +	
+			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKontentitel zvt, ZVKonten zvk " +	
 										   "SET " +
-											   "fbk.budget = (fbk.budget + ?), " +
-											   "zvt.budget = (zvt.budget + ?) " +
-										 "WHERE fbk.id = ? " +
-										   "AND zvt.id = ? " +
-										   "AND fbk.geloescht = '0' " +
-										   "AND zvt.geloescht = '0'" );
-			int[] param = {	Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER };
+												"zvk.tgrBudget = (zvk.tgrBudget + ?), " +
+												"zvt.budget = (zvt.budget + ?), " +
+											   "fbk.budget = (fbk.budget + ?) " +
+										 "WHERE zvk.id = ? AND zvt.id = ? AND fbk.id = ? " +
+										   "AND fbk.geloescht = '0' AND zvk.geloescht = '0' AND zvt.geloescht = '0'" );
+			int[] param = {	Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//313

@@ -164,7 +164,7 @@ public class Buchung {
 		this.fbKonto2 = null;
 		this.betragFbKonto2 = 0;
 	}
-	
+
 	
 	public Benutzer getBenutzer() {
 		return benutzer;

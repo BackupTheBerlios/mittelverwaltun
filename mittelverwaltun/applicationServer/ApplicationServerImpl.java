@@ -2587,19 +2587,26 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			bestellung.setPhase('3');
 			db.selectForUpdateKleinbestellung(bestellung);	// Zum Aktualisieren auswählen
 			db.updateKleinbestellung(bestellung);		// Bestellung aktualisieren(löschen)
-			// TODO Buchung durchführen
-			db.updateAccountStates(bestellung.getZvtitel(), bestellung.getFbkonto(), bestellung.getBestellwert());
+			// Abfrage der Buchung zur Ermittlung der Beträge, die abgebucht wurden 
+			Buchung old = db.selectBuchung(bestellung.getId(), "9");
+			if(old == null)		// Keine Buchung gefunden
+				throw new ApplicationServerException(43);
+			db.updateAccountStates(old.getZvKonto(), old.getZvTitel1(), old.getFbKonto1(), 
+									-old.getBetragZvKonto(), -old.getBetragZvTitel1(), -old.getBetragFbKonto1());
 			ZVKonto zvk;
 			if(bestellung.getZvtitel() instanceof ZVTitel)
 				zvk = ((ZVTitel)bestellung.getZvtitel()).getZVKonto();
 			else
 				zvk = bestellung.getZvtitel().getZVTitel().getZVKonto();
-			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, 0f, bestellung.getZvtitel(), 
-											bestellung.getBestellwert(), bestellung.getFbkonto(), bestellung.getBestellwert());
+			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, -old.getBetragZvKonto(), bestellung.getZvtitel(), 
+									-old.getBetragZvTitel1(), bestellung.getFbkonto(), -old.getBetragFbKonto1());
 			return bestellung.getId();
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
+		} catch(Exception ex) {
+			db.rollback();
+			throw new ApplicationServerException(0);
 		} finally {
 			db.commit();
 		}		
@@ -2619,7 +2626,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			db.commit();
 		}		
 	}
-
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)

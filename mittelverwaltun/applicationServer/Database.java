@@ -4155,9 +4155,11 @@ public class Database implements Serializable{
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public void updateAccountStates(ZVUntertitel titel, FBUnterkonto konto, float betrag) throws ApplicationServerException{
+	public void updateAccountStates(ZVKonto zvKonto, ZVUntertitel zvTitel, FBUnterkonto fbKonto, 
+							float betragZvKonto, float betragZvTitel, float betragFbKonto) throws ApplicationServerException{
 		try{
-			Object[] parameters = { new Float(betrag), new Float(betrag), new Integer(konto.getId()), new Integer(titel.getId()) };
+			Object[] parameters = { new Float(betragZvKonto), new Float(betragZvTitel), new Float(betragFbKonto), 
+									new Integer(zvKonto.getId()), new Integer(zvTitel.getId()), new Integer(fbKonto.getId()) };
 			if(statements.get(312).executeUpdate(parameters) == 0)
 				throw new ApplicationServerException(99);
 
@@ -4166,7 +4168,31 @@ public class Database implements Serializable{
 		}
 	}
 
-
+	/**
+	 * Abfrage einer Buchung von einer bestimmten Bestellung mit einem bestimmten Typ. 
+	 * @param bestellungsId = Id von der Bestellung, zu der die Buchung gehört. 
+	 * @param typ = Der Typ der Buchung. 
+	 * @return Buchung, die ermittelt wurde
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
+	public Buchung selectBuchung(int bestellungsId, String typ) throws ApplicationServerException{
+		Buchung buchung = null;
+		try{
+			Object[] parameters = { new Integer(bestellungsId), new String(typ) };
+			ResultSet res = statements.get(225).executeQuery(parameters);
+			res.last();
+			if(res.getRow() > 0) {
+				buchung = new Buchung(selectUser(res.getInt(2)), res.getString(3), selectKleinbestellung(res.getInt(5)),
+										selectZVKonto(res.getInt(6)), res.getFloat(7), 
+										selectZVTitel(res.getInt(8)), res.getFloat(9), 
+										selectFBKonto(res.getInt(12)), res.getFloat(13) );
+			}
+			return buchung;
+		} catch (SQLException e){
+			throw new ApplicationServerException(98, e.getMessage());
+		}
+	}
 }
 
 

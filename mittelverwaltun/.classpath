@@ -2,10 +2,10 @@
 <classpath>
     <classpathentry kind="src" path=""/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="D:/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
-    <classpathentry kind="lib" path="D:/eclipse/plugins/itext-1.02b.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jemmy.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jfreereport-0.8.4_10-all.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jcommon-0.9.3a.jar"/>
+    <classpathentry kind="lib" path="C:/Programme/Eclipse/plugins/itext-1.02b.jar"/>
+    <classpathentry kind="lib" path="C:/Programme/Eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+    <classpathentry kind="lib" path="C:/Daten/Java/OO2/Projekt/Mittel/jcommon-0.9.3a.jar"/>
+    <classpathentry kind="lib" path="C:/Daten/Java/OO2/Projekt/Mittel/jemmy.jar"/>
+    <classpathentry kind="lib" path="C:/Daten/Java/OO2/Projekt/Mittel/jfreereport-0.8.4_10-all.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
