@@ -38,9 +38,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException{
 
 		db.connect(user);
-
+		
 		Benutzer b = db.selectUser(user, password);
-
+		
 		b.getRolle().setAktivitaeten( db.selectAktivitaeten( b.getRolle().getId() ) );
 
 		TmpRolle[] tmpRollen = db.selectTempRollen(b.getId());
@@ -2035,6 +2035,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException {
 		StandardBestellung bestellung = db.selectStandardBestellung(id);
+		
 		ArrayList angebote = db.selectAngebote(id);
 		
 		for(int i = 0; i < angebote.size(); i++){
@@ -2058,8 +2059,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 		return null;
 	}
+	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
+		return db.selectBestellungen(filter);
+	}
 
-
+	public ArrayList getBestellungen() throws ApplicationServerException{
+		return db.selectBestellungen(-1);
+	}
+	
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getInstituteWithAccounts(dbObjects.Institut, boolean)
 	 */

@@ -72,6 +72,7 @@ public class Position implements Serializable {
 		this.mwst = mwst;
 		this.rabatt = rabatt;
 		this.id = id;
+		this.beglichen = true;
 	}
 	
 	/**

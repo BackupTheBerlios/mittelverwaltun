@@ -101,6 +101,11 @@ public class Benutzer implements Serializable {
 		this.name = name;
 	}
 	
+	public Benutzer(String name, String vorname){
+		this.vorname = vorname;
+		this.name = name;
+	}
+	
 	public String toString(){
 		return vorname + " " + name + ", " + benutzername; 
 	}

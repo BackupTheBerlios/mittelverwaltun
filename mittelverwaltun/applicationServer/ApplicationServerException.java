@@ -163,6 +163,7 @@ public class ApplicationServerException extends Exception {
 		messages[155] = "Application Server Error: Die Budgetänderung konnte nicht durchgeführt werden.";
 		messages[156] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeFBBudgetSum.";
 		messages[157] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectDistributedAccountBudget";
+		messages[158] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectBestellungen";
 //Exception Ende Mario 199
 	}
 

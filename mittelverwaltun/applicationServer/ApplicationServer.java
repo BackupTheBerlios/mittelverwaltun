@@ -158,6 +158,24 @@ public interface ApplicationServer extends Remote {
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException;
 	
 	/**
+	 * gibt Bestellungen ggf. eines bestimmten Typs zurück
+	 * @param filter
+	 * @return
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	
+	public ArrayList getBestellungen(int filter) throws ApplicationServerException;
+	
+	/**
+	 * gibt alle Bestellungen zurück
+	 * @param filter
+	 * @return
+	 * @throws ApplicationServerException
+	 * @author Mario
+	 */	
+	public ArrayList getBestellungen() throws ApplicationServerException;
+	
+	/**
 	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts
 	 * @param subAccountsIncluded
 	 * @return
