@@ -35,9 +35,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		JMenu menuZenralverwaltung = new JMenu("Zenralverwaltung");
 			JMenuItem miKontenbudgetsFestlegen = new JActivityRelatedMenuItem(	1,"Kontenbudgets festlegen");
 		JMenu menuFachbereichsintern = new JMenu("Fachbereich");
-			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 1, "FBKonten umbuchen" );
-			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 1, "Budget zuweisen" );
-			JMenuItem miFBKontenZuweisenProf = new JActivityRelatedMenuItem( 1, "Budget zuweisen (Prof.)" );
+			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 1, "Umbuchungen zw. Fachbereichskonten" );
+			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 1, "Mittelverteilung" );
+			JMenuItem miFBKontenZuweisenProf = new JActivityRelatedMenuItem( 1, "Institutsweise Mittelverteilung nach Professoren" );
 
 	// Das Menü "Verwaltung"
 		JMenu menuVerwaltung = new JMenu("Verwaltung");
@@ -134,15 +134,16 @@ public class MainMenu extends JMenuBar implements ActionListener {
 				activityRelItems.add( miKontenbudgetsFestlegen );
 				miKontenbudgetsFestlegen.addActionListener( this );
 			menuMittelverwaltung.add( menuFachbereichsintern );
-				menuFachbereichsintern.add( miFBKontenUmbuchen );
-				activityRelItems.add( miFBKontenUmbuchen );
-				miFBKontenUmbuchen.addActionListener( this );	
 				menuFachbereichsintern.add( miFBKontenZuweisen );
 				activityRelItems.add( miFBKontenZuweisen );
 				miFBKontenZuweisen.addActionListener( this );	
 				menuFachbereichsintern.add( miFBKontenZuweisenProf );
 				activityRelItems.add( miFBKontenZuweisenProf );
-				miFBKontenZuweisenProf.addActionListener( this );			
+				miFBKontenZuweisenProf.addActionListener( this );	
+				menuFachbereichsintern.add( miFBKontenUmbuchen );
+				activityRelItems.add( miFBKontenUmbuchen );
+				miFBKontenUmbuchen.addActionListener( this );	
+						
 			
 		// Das Menü "Verwaltung"
 		add( menuVerwaltung );
@@ -238,7 +239,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		}else if ( e.getSource() == miFBKontenZuweisen ) {
 				frame.addChild( new RemmitanceToFBHauptkontoFrame( frame ) );
 		}else if ( e.getSource() == miFBKontenZuweisenProf ) {
-			frame.addChild( new ProfBudgetFrame( frame.getApplicationServer() ) );
+			frame.addChild( new ProfBudgetFrame( frame ) );
 		} else if ( e.getSource() == miBenutzer ) {
 			frame.addChild( new Benutzerverwaltung(frame.getApplicationServer()) );
 		} else if ( e.getSource() == miFirmen ) {

@@ -104,7 +104,7 @@ public interface ApplicationServer extends Remote {
 	 public float getAvailableNoPurposeBudget() throws ApplicationServerException;
 	 public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException;
 	 public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException;
-	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float budget ) throws ApplicationServerException;
+	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException;
 
 	/**
 	 * gibt ein Kostenarten-Array für die Standardbestellung 
