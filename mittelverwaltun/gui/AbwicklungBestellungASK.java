@@ -5,25 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
-import applicationServer.CentralServer;
 import dbObjects.ASKBestellung;
 import dbObjects.Angebot;
-import dbObjects.Benutzer;
-import dbObjects.FBUnterkonto;
 import dbObjects.Fachbereich;
-import dbObjects.Firma;
-import dbObjects.Institut;
-import dbObjects.Position;
-import dbObjects.ZVKonto;
 import dbObjects.ZVTitel;
 
 /**
@@ -395,6 +384,8 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
     btStorno.setText("Storno");
+    btStorno.setActionCommand("revokeOrder");
+    btStorno.addActionListener(this);
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -439,11 +430,14 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 			saveOrder();
 		}else if (e.getActionCommand() == "completeOrder"){
 			completeOrder();
+		}else if (e.getActionCommand() == "revokeOrder"){
+			revokeOrder();
 		}
 	}
 
 	private void saveOrder(){
 		
+		ASKBestellung tempOrigin = (ASKBestellung)origin.clone();
 		ASKBestellung editedOrder = (ASKBestellung)origin.clone();
 		editedOrder.getAngebot().setPositionen(tabPositionen.getOrderPositions());
 		editedOrder.setHuel(this.tfHuelNr.getText());
@@ -451,14 +445,13 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
 		
 		try {
-			ASKBestellung copy = (ASKBestellung)editedOrder.clone();
-			
-			as.setBestellung(origin, copy);
-		
-			origin = editedOrder;
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(tempOrigin, editedOrder);
+			origin = as.getASKBestellung(origin.getId());
+			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
-				e.printStackTrace();
+				//e.printStackTrace();
 		}
 	}
 	
@@ -476,15 +469,37 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
 		
 		try {
-			ASKBestellung copy = (ASKBestellung)editedOrder.clone();
-			as.setBestellung(origin, copy);
-			origin = editedOrder;
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, editedOrder);
+			origin = as.getASKBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
-				e.printStackTrace();
+				//e.printStackTrace();
 		}
-	}	
+	}
+	
+	private void revokeOrder(){
+		
+		tabPositionen.oweAllPositions();
+		
+		ASKBestellung editedOrder = (ASKBestellung)origin.clone();
+		editedOrder.getAngebot().setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setPhase('3');
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		try {
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, editedOrder);
+			origin = as.getASKBestellung(origin.getId());
+			updateComponentEnabling();
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				//e.printStackTrace();
+		}
+	}
 	
 	private void updateComponentEnabling(){
 		
@@ -503,5 +518,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		btAbschlieﬂen.setEnabled(enable);
 		
 		btSpeichern.setEnabled(enable);
+		
+		btStorno.setEnabled(origin.getPhase() != '3');
 	}
 }

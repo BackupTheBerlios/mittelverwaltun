@@ -2074,39 +2074,107 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
-		// original ASKBestellung in der Datenbank
-		ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(original.getId());
-	
-		ArrayList angebote = db.selectForUpdateAngebote(original.getId());
-
-		Angebot angebot = (Angebot)angebote.get(0);
+		try{	
+			// original ASKBestellung in der Datenbank
+			ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(original.getId());
 		
-		angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
-		
-		dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+			ArrayList angebote = db.selectForUpdateAngebote(original.getId());
 	
-		// die Bestellung hat sich zwischenzeitlich geändert
-		if(!original.equals(dbOriginal))
-			throw new ApplicationServerException( 76 );
+			Angebot angebot = (Angebot)angebote.get(0);
 			
-		if(edited.getPhase() == '0'){
-			db.updateASKBestellung(edited);
-			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
-		}else if(edited.getPhase() == '1'){
-			db.updateASKBestellung(edited);
-			actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
+			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
 			
-			// es wurde auf den Button Bestellen gedrückt
+			dbOriginal.setAngebot(angebot); // Angebote hinzufügen
+		
+			// die Bestellung hat sich zwischenzeitlich geändert
+			if(!original.equals(dbOriginal))
+				throw new ApplicationServerException( 76 );
+				
 			if(original.getPhase() == '0'){
-				// Vormerkungen bei FBKonto und ZVTitel setzen
-				db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
-				// ? Vormerkungen Buchen ?
+				db.updateASKBestellung(edited);
+				actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
+				// es wurde auf den Button Bestellen gedrückt
+				if(edited.getPhase() == '1'){
+					// Vormerkungen bei FBKonto und ZVTitel setzen
+					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+					// ? Vormerkungen Buchen ?
+				}
+			
+			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
+				db.updateASKBestellung(edited);
+				// TODO nur ein Angebot aktualisieren
+				actualizeAngebot(original.getAngebot(), edited.getAngebot(), edited.getId());
+	
+				// Bestimme Bestellwertdifferenz
+				float dBestellwert;
+				if (edited.getPhase() == '3')
+					dBestellwert = -original.getBestellwert();
+				else dBestellwert = edited.getBestellwert() - original.getBestellwert();
+				System.out.println("dBestellwert = "+dBestellwert);
+				// Bestimme Zahlungsdifferenz
+				float dZahlung = ( edited.getBestellwert() - edited.getVerbindlichkeiten()) - (original.getBestellwert() - original.getVerbindlichkeiten());
+				System.out.println("dZahlung = " + dZahlung);
+				// Aktualisiere Kontenstände
+				if (dBestellwert != 0){ // => Bestellungsänderung
+					
+					//	Bestimme verfügbares ZV-Budget
+					float availableZvBudget = 0.00f;
+					if(original.getZvtitel() instanceof ZVTitel)
+						availableZvBudget = db.getAvailableTgrBudget(((ZVTitel)original.getZvtitel()).getZVKonto().getId());
+					else
+						availableZvBudget = db.getAvailableTgrBudget(original.getZvtitel().getZVTitel().getZVKonto().getId());
+					
+					if (original.getZvtitel().getBudget() > original.getZvtitel().getVormerkungen())
+						availableZvBudget += (original.getZvtitel().getBudget() - original.getZvtitel().getVormerkungen());
+					System.out.println("availableZvBudget = " + availableZvBudget);
+					// Bestimme verfügbares FB-Budget
+					float availableFbBudget = original.getFbkonto().getBudget() - original.getFbkonto().getVormerkungen();
+					
+					if ((dBestellwert > availableZvBudget)||(dBestellwert > availableFbBudget)){
+						System.out.println("keine Deckung");//Error keine Deckung => rollback
+						throw new ApplicationServerException( 162 );
+					}
+					else {
+						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
+						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
+					}
+				}
+			
+				if (dZahlung != 0){ // => Positionen wurden beglichen oder 'zurückgezahlt'
+					float tgrEntry, titelEntry;
+					if (dZahlung < 0){
+						float tgrExpenses = db.getTgrExpensesForOrder(original.getId());
+						System.out.println("tgrExpenses: " + tgrExpenses);
+						if (tgrExpenses > 0){
+							tgrEntry = (tgrExpenses + dZahlung) > 0 ? -dZahlung : tgrExpenses;
+							titelEntry = -(tgrEntry + dZahlung);
+							
+						}else{
+							tgrEntry = 0;
+							titelEntry = -dZahlung;
+						}
+					}else{
+						float availableRessources = original.getZvtitel().getBudget() - original.getZvtitel().getVormerkungen();
+						if (availableRessources > 0){
+							titelEntry = availableRessources < dZahlung ? -availableRessources : -dZahlung;
+							tgrEntry = availableRessources < dZahlung ? availableRessources-dZahlung : 0;
+						}else{
+							tgrEntry = -dZahlung;
+							titelEntry = 0;
+						}
+					}
+					
+					db.updateAccountStates(original.getZvtitel(), tgrEntry, titelEntry, original.getFbkonto(), -dZahlung);
+					System.out.println("db.updateAccountStates(original.getZvtitel(), " + tgrEntry + ", " + titelEntry + ", original.getFbkonto(), "+ (-dZahlung) + ");");
+				}
 			}
-		}else if(edited.getPhase() == '2'){
-		
+
+			db.commit();
+		}catch (ApplicationServerException e){
+			db.rollback();
+			throw e;
 		}
-		
-		db.commit();
+	
 	}
 	
 	/*
