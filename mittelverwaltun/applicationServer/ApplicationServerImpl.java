@@ -1801,7 +1801,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
 		if(edited.getPhase() == '0'){
-			
 			db.updateStandardBestellung(edited, 0f);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
 		}else if(edited.getPhase() == '1'){
@@ -1820,39 +1819,41 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @throws ApplicationServerException
 	 */
 	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
-		int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
+		if(!(oldOffers.equals(newOffers))){
+			int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
 		
-		for(int i = 0; i < listIndex; i++){
-			Angebot oldOffer = (Angebot)oldOffers.get(i); 
-			
-			if(newOffers.size() == 0){ // alle Angebote gelöscht
-				db.deletePositions(bestellId);
-				db.deleteAngebote(bestellId);
-			}else{
-				
-				if(oldOffers.size() == 0){ // nur neue Angebote
-					db.insertAngebot((Angebot)newOffers.get(i), bestellId);
+			for(int i = 0; i < listIndex; i++){
+				Angebot oldOffer = (Angebot)oldOffers.get(i); 
+	
+				if(newOffers.size() == 0){ // alle Angebote gelöscht
+					db.deletePositions(bestellId);
+					db.deleteAngebote(bestellId);
 				}else{
-				
-					if(i >= newOffers.size()){ // restliche alte Angebote löschen
-						db.deleteOfferPositions(oldOffer.getId());
-						db.deleteAngebot(oldOffer.getId());
+		
+					if(oldOffers.size() == 0){ // nur neue Angebote
+						db.insertAngebot((Angebot)newOffers.get(i), bestellId);
 					}else{
-						Angebot newOffer = (Angebot)newOffers.get(i);
-//				
-						if(newOffer.getId() == 0){ // neues Angebot
-							if(oldOffer != null){
-								db.deleteOfferPositions(oldOffer.getId());
-								db.deleteAngebot(oldOffer.getId());
-							}
-							db.insertAngebot(newOffer, bestellId);
+		
+						if(i >= newOffers.size()){ // restliche alte Angebote löschen
+							db.deleteOfferPositions(oldOffer.getId());
+							db.deleteAngebot(oldOffer.getId());
 						}else{
-							if(oldOffer != null){
-								if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Angebote -> altes Angebot löschen
+							Angebot newOffer = (Angebot)newOffers.get(i);
+			
+							if(newOffer.getId() == 0){ // neues Angebot
+								if(oldOffer != null){
 									db.deleteOfferPositions(oldOffer.getId());
 									db.deleteAngebot(oldOffer.getId());
-								}else{
-									actualizeAngebot(oldOffer, newOffer, bestellId); // gleiche Angebote
+								}
+								db.insertAngebot(newOffer, bestellId);
+							}else{
+								if(oldOffer != null){
+									if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Angebote -> altes Angebot löschen
+										db.deleteOfferPositions(oldOffer.getId());
+										db.deleteAngebot(oldOffer.getId());
+									}else{
+										actualizeAngebot(oldOffer, newOffer, bestellId); // gleiche Angebote
+									}
 								}
 							}
 						}
