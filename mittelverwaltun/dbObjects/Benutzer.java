@@ -93,8 +93,8 @@ public class Benutzer implements Serializable{
 		this.vorname = vorname;
 		this.name = name;
 	}
-		
-	public Benutzer(String benutzername, String passwort, String vorname, String name){
+	
+	public Benutzer(String benutzername, String passwort, String vorname,String name){
 		this.benutzername = benutzername;
 		this.passwort = passwort;
 		this.vorname = vorname;
