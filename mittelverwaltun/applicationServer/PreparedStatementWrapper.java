@@ -82,7 +82,10 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.DATE:
 							{
 								Date v = (Date)parameters[i];
-								stmt.setDate(i+1, v);
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setDate(i+1, v);
 								break;
 							}
 				case Types.DECIMAL:
@@ -94,13 +97,19 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.FLOAT:
 							{
 								Float v = (Float)parameters[i];
-								stmt.setFloat(i+1, v.floatValue());
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setFloat(i+1, v.floatValue());
 								break;
 							}
 				case Types.INTEGER:
 							{
 								Integer v = (Integer)parameters[i];
-								stmt.setInt(i+1, v.intValue());
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setInt(i+1, v.intValue());
 								break;
 							}
 				case Types.JAVA_OBJECT:
@@ -137,7 +146,10 @@ public ResultSet executeQuery (Object[] parameters) throws SQLException{
 				case Types.VARCHAR:
 						{
 							String v = parameters[i].toString();
-							stmt.setString(i+1, v);
+							if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setString(i+1, v);
 							break;
 						}					
 			}
@@ -177,7 +189,10 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.DATE:
 							{
 								Date v = (Date)parameters[i];
-								stmt.setDate(i+1, v);
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setDate(i+1, v);
 								break;
 							}
 				case Types.DECIMAL:
@@ -189,13 +204,19 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.FLOAT:
 							{
 								Float v = (Float)parameters[i];
-								stmt.setFloat(i+1, v.floatValue());
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setFloat(i+1, v.floatValue());
 								break;
 							}
 				case Types.INTEGER:
 							{
 								Integer v = (Integer)parameters[i];
-								stmt.setInt(i+1, v.intValue());
+								if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setInt(i+1, v.intValue());
 								break;
 							}
 				case Types.JAVA_OBJECT:
@@ -205,12 +226,12 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.LONGVARCHAR:
 							;
 				case Types.NULL:
-							;
-				case Types.NUMERIC:
 							{
-								stmt.setNull(i+1, Types.NULL);	
+								stmt.setNull(i+1, Types.NULL);
 								break;
 							}
+				case Types.NUMERIC:
+							;
 				case Types.OTHER:
 						;
 				case Types.REAL:
@@ -232,7 +253,10 @@ public int executeUpdate (Object[] parameters) throws SQLException{
 				case Types.VARCHAR:
 						{
 							String v = parameters[i].toString();
-							stmt.setString(i+1, v);	
+							if(v == null)
+									stmt.setNull(i+1, Types.NULL);
+								else
+									stmt.setString(i+1, v);	
 							break;
 						}					
 			}
