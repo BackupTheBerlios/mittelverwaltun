@@ -19,17 +19,21 @@ public class Position implements Serializable{
 	private int menge;
 	private float rabatt;
 
-	public Position(int id, String beschreibung, float einzelPreis, int menge, float rabatt){
+	private float mwst;
+
+	public Position(int id, String beschreibung, float einzelPreis, int menge, float mwst, float rabatt){
 		this.id = id;
 		this.beschreibung = beschreibung;
 		this.einzelPreis = einzelPreis;
 		this.menge = menge;
+		this.mwst = mwst;
 		this.rabatt = rabatt;
 	}
-	public Position(String beschreibung, float einzelPreis, int menge, float rabatt){
+	public Position(String beschreibung, float einzelPreis, int menge, float mwst, float rabatt){
 		this.beschreibung = beschreibung;
 		this.einzelPreis = einzelPreis;
 		this.menge = menge;
+		this.mwst = mwst;
 		this.rabatt = rabatt;
 	}
 	
@@ -79,6 +83,18 @@ public class Position implements Serializable{
 
 	public void setRabatt(float rabatt) {
 		this.rabatt = rabatt;
+	}
+
+	public float getMwst() {
+		return mwst;
+	}
+
+	public void setMwst(float mwst) {
+		this.mwst = mwst;
+	}
+	
+	public float getGesamtpreis(){
+		return this.menge * this.einzelPreis + (this.menge * this.einzelPreis * this.mwst) - this.rabatt;
 	}
 
 }
