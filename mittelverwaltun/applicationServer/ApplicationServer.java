@@ -21,7 +21,7 @@ public interface ApplicationServer extends Remote {
 	public int addUser(Benutzer benutzer) throws ApplicationServerException;
 	public Rolle[] getRollen () throws ApplicationServerException;
 	public Fachbereich[] getFachbereiche() throws ApplicationServerException;
-	public void setFachbereich(Fachbereich fachbereich, int institutsid) throws ApplicationServerException;
+	public Fachbereich setFachbereich(Fachbereich fachbereich, Fachbereich fb) throws ApplicationServerException;
 	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException;
 
 	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException;

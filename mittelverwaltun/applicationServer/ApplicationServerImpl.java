@@ -1073,7 +1073,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				throw new ApplicationServerException(50);
 
 			// Institut oder Kostenstelle schon vorhanden
-			if(db.checkInstitute(editedInst) == 0)
+			if(db.checkInstitute(editedInst) != 0)
 				throw new ApplicationServerException(4);
 
 			db.updateInstitute(editedInst);
@@ -1206,16 +1206,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return db.selectFachbereiche();
 	}
 
-	public void setFachbereich(Fachbereich editedFB, int institutsid) throws ApplicationServerException {
-		Fachbereich dbFB = db.selectForUpdateFachbereich(editedFB, institutsid);
+	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws ApplicationServerException {
+		Fachbereich dbFB = db.selectForUpdateFachbereich();
 
 		if(dbFB == null)
 			throw new ApplicationServerException(67);
 
-		if(!editedFB.equals(dbFB))
+		if(!fb.equals(dbFB))
 			throw new ApplicationServerException(58);
 
-		db.updateFachbereich(editedFB, institutsid);
+		db.updateFachbereich(editedFB);
+		
+		return getFachbereiche()[0];
 	}
 
 	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
