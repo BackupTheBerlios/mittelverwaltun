@@ -35,6 +35,7 @@ public class OrderTable extends JTable{
 	static final int SONDIERUNG = 0;
 	static final int ABWICKLUNG = 1;
 	static final int ABGESCHLOSSEN = 2;
+	static final int STORNIERT = 2;
 	
 	private ActionListener actionListener;
 

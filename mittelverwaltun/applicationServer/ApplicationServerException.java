@@ -174,6 +174,10 @@ public class ApplicationServerException extends Exception {
 		messages[156] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeFBBudgetSum.";
 		messages[157] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectDistributedAccountBudget";
 		messages[158] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectBestellungen";
+		messages[159] = "Application Server Error: Fehler bei Datenbankzugriff - Database.getAvailableTgrBudget";
+		messages[160] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateAccountStates";
+		messages[161] = "Application Server Error: FB-Konto bzw. ZV-Titel existiert nicht";
+		messages[162] = "Application Server Error: Bestellungsänderung konnte nicht durchgeführt werden. Keine ausreichende Deckung vorhanden.";
 //Exception Ende Mario 199
 	}
 

@@ -87,9 +87,9 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
   JLabel lbVerbindlichkeiten = new JLabel();
   CurrencyTextField tfVerbindlichkeiten = new CurrencyTextField();
 
-  public AbwicklungBestellungASK(/*MainFrame frame*/ ApplicationServer as, ASKBestellung b) {
-  	//  this.frame = frame;
-    this.as = as;
+  public AbwicklungBestellungASK(MainFrame frame, ASKBestellung b) {
+  	this.frame = frame;
+    this.as = frame.getApplicationServer();
     this.origin = b;
   	
     try {
@@ -503,43 +503,5 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		btAbschließen.setEnabled(enable);
 		
 		btSpeichern.setEnabled(enable);
-	}
-	
-	public static void main(String[] args) {
-		JFrame test = new JFrame("Abwicklung Standardbestellung");
-		JDesktopPane desk = new JDesktopPane();
-		desk.setDesktopManager(new DefaultDesktopManager());
-		test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		test.setContentPane(desk);
-		test.setBounds(100,100,800,800);
-		try{
-			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("m.schmitt").toString());
-			applicationServer.login("m.schmitt", psw);
-			
-			Institut i = new Institut("Institut für Entwicklung", "160000");
-			Firma f = new Firma( 1, "askNet AG", "Am Weidstöckl 13", "76821", "Landau", "1000-00", "+49-(0)6341-9832429", "n.a.", "info@asknet.com", "www.asknet.com", true, false );
-			Date d = new Date(new GregorianCalendar(2005,2,15).getTimeInMillis());
-			
-			ArrayList positionen = new ArrayList();
-			positionen.add(new Position(1, "Artikel 1", 100, 10, 0.16f, 0, i, false));
-			positionen.add(new Position(2, "Artikel 2", 100, 10, 0.07f, 0, i, true));
-			Angebot a = new Angebot(1, positionen, d, f, true);
-			
-			Benutzer b = new Benutzer("Schmitt", "Mario");
-			ZVTitel t = new ZVTitel( 1, new ZVKonto ("","02436","",0), "", "24875", "00", 10000, "", "" );
-			FBUnterkonto k = new FBUnterkonto( "Institut für Entwicklung", i, "00", "0000" );
-			
-			ASKBestellung bestellung = new ASKBestellung(1, "100000", "", d, b, b, b, t, k, 500, 0,'1', a, "keine Bemerkung", b);
-			
-			AbwicklungBestellungASK iFrame= new AbwicklungBestellungASK(applicationServer, bestellung);
-			desk.add(iFrame);
-			test.show();
-			iFrame.show();
-		}catch(Exception e){
-				System.out.println(e);
-		}
 	}
 }

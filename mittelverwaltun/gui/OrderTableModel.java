@@ -26,6 +26,7 @@ public class OrderTableModel extends DefaultTableModel {
 	static final int SONDIERUNG = 0;
 	static final int ABWICKLUNG = 1;
 	static final int ABGESCHLOSSEN = 2;
+	static final int STORNIERT = 2;
 	
 	ArrayList identifiers;
 		
@@ -55,7 +56,11 @@ public class OrderTableModel extends DefaultTableModel {
 					data[2] = "Sondierung";
 				else if (order.getPhase()== '1')
 					data[2] = "Abwicklung";
-				else data[2] = "Abgeschlossen";
+				else if (order.getPhase()== '2')
+					data[2] = "Abgeschlossen";
+				else if (order.getPhase()== '3')
+					data[2] = "Storniert";
+				else data[2] = "unbekannt";
 							
 				data[3] = order.getBesteller().getName() + ", " + order.getBesteller().getVorname();
 				data[4] = order.getAuftraggeber().getName() + ", " + order.getAuftraggeber().getVorname();
@@ -104,6 +109,8 @@ public class OrderTableModel extends DefaultTableModel {
 				return ABWICKLUNG;
 			else if (type.equals("Abgeschlossen"))
 				return ABGESCHLOSSEN;
+			else if (type.equals("Storniert"))
+				return STORNIERT;
 			else return -1;
 		} else return -1;
 			

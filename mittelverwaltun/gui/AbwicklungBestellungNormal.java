@@ -412,6 +412,8 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
     btStorno.setText("Storno");
+    btStorno.setActionCommand("revokeOrder");
+    btStorno.addActionListener(this);
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -485,11 +487,14 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			saveOrder();
 		}else if (e.getActionCommand() == "completeOrder"){
 			completeOrder();
+		}else if (e.getActionCommand() == "revokeOrder"){
+			revokeOrder();
 		}
 	}
 
 	private void saveOrder(){
 		
+		StandardBestellung tempOrigin = (StandardBestellung)origin.clone();
 		StandardBestellung editedOrder = (StandardBestellung)origin.clone();
 		((Angebot)editedOrder.getAngebote().get(editedOrder.getAngenommenesAngebot())).setPositionen(tabPositionen.getOrderPositions());
 		editedOrder.setHuel(this.tfHuelNr.getText());
@@ -498,12 +503,12 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(origin, editedOrder);
+			as.setBestellung(tempOrigin, editedOrder);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
-				e.printStackTrace();
+				//e.printStackTrace();
 		}
 	}
 	
@@ -527,7 +532,29 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			updateComponentEnabling();
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
-				e.printStackTrace();
+				//e.printStackTrace();
+		}
+	}
+	
+	private void revokeOrder(){
+		
+		tabPositionen.oweAllPositions();
+		
+		StandardBestellung editedOrder = (StandardBestellung)origin.clone();
+		((Angebot)editedOrder.getAngebote().get(editedOrder.getAngenommenesAngebot())).setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setPhase('3');
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		try {
+			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, editedOrder);
+			origin = as.getStandardBestellung(origin.getId());
+			updateComponentEnabling();
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				//e.printStackTrace();
 		}
 	}
 	
@@ -548,5 +575,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		btAbschlieﬂen.setEnabled(enable);
 		
 		btSpeichern.setEnabled(enable);
+		
+		btStorno.setEnabled(origin.getPhase() != '3');
 	}
 }
