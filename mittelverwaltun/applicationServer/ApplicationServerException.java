@@ -96,6 +96,7 @@ public class ApplicationServerException extends Exception {
 		messages[40] = "Application Server Error: Das FBKonto kann nicht verändert werden." +						"Es gibt Buchungen, Bestellungen oder Benutzer, die dieses Konto verwenden.";
 		messages[41] = "Application Server Error: Der ZVTitel/ZVUntertitel kann nicht verändert werden." +
 						"Es gibt Buchungen oder Bestellungen, die diesen ZVTitel/ZVUntertitel verwenden.";
+		messages[42] = "Application Server Error: Die Firma kann nicht gelöscht werden, " +							"da sie in Belegen oder Angeboten verwendet wird.";
 
 //		Exception Ende WALDEMAR
 

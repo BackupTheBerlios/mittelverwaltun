@@ -2378,7 +2378,7 @@ public class Database implements Serializable{
 			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(firma.getId())};
 			// SQL-Statement mit der Nummer 242 ausführen
-			ResultSet rs = statements.get(242).executeQuery();
+			ResultSet rs = statements.get(242).executeQuery(parameters);
 			rs.last();		// In die letzte Zeile springen
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
 				rs.beforeFirst();		// Vor die erste Zeile springen
@@ -2508,7 +2508,6 @@ public class Database implements Serializable{
 	 * 
 	 */
 	public int deleteFirma( Firma firma ) throws ApplicationServerException {
-
 		try{
 			// Parameter für das SQL-Statement
 			Object[] parameters = {new Integer(firma.getId())};
@@ -2519,46 +2518,47 @@ public class Database implements Serializable{
 			rollback();
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
-
 	}
 	
 	/**
-	 * Anzahl der aktiven Bestellungen, die bei einer bestimmten Firma bestellt werden.
+	 * Anzahl der Belege, bei denen eine bestimmte Firma angegeben wurde.
 	 * @param Firma, die überprüft werden soll.
-	 * @return Anzahl der Bestellungen.
+	 * @return Anzahl der Belege.
 	 * @throws ApplicationServerException
 	 * @author w.flat
 	 */
-	public int countActiveBestellungen( Firma firma )throws ApplicationServerException{
+	public int countBelege( Firma firma )throws ApplicationServerException{
 		 try{
 			// Parameter für das SQL-Statement
 			Object[] parameters = { new Integer(firma.getId()) };
-			// SQL-Satement mit der Nummer 216 ausführen
-			ResultSet rs = statements.get(216).executeQuery(parameters);
-		   if(rs.next())
-			 return rs.getInt(1);
+			// SQL-Satement mit der Nummer 275 ausführen
+			ResultSet rs = statements.get(275).executeQuery(parameters);
+		   if(rs.next())		// Gibt es ein Ergebnis
+			 return rs.getInt(1);	// Anzahl zurückgeben
 		   else
-				return 0;
-
+				return 0;			// Sonst ist die Anzahl = 0
 		 } catch (SQLException e){
 		   throw new ApplicationServerException(1, e.getMessage());
 	   }
 	}
 	
 	/**
-	 * Anzahl der inaktiven Bestellungen, die bei einer bestimmten Firma bestellt werden.
-	 * @param die Firma.
-	 * @return anzahl der Bestellungen.
+	 * Anzahl der Angebote, bei denen eine bestimmte Firma angegeben wurde.
+	 * @param Firma, die überprüft werden soll.
+	 * @return Anzahl der Angebote.
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
-	public int countInactiveBestellungen( Firma firma )throws ApplicationServerException{
+	public int countAngebote( Firma firma )throws ApplicationServerException{
 		 try{
-		   Object[] parameters = { new Integer(firma.getId()) };
-			 ResultSet rs = statements.get(216).executeQuery(parameters);
-		   if(rs.next())
-			 return rs.getInt(1);
+			// Parameter für das SQL-Statement
+			Object[] parameters = { new Integer(firma.getId()) };
+			// SQL-Satement mit der Nummer 262 ausführen
+			ResultSet rs = statements.get(262).executeQuery(parameters);
+		   if(rs.next())		// Gibt es ein Ergebnis
+			 return rs.getInt(1);	// Anzahl zurückgeben
 		   else
-				return 0;
-
+				return 0;			// Sonst ist die Anzahl = 0
 		 } catch (SQLException e){
 		   throw new ApplicationServerException(1, e.getMessage());
 	   }

@@ -1680,23 +1680,18 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public int delFirma( Firma firma ) throws ApplicationServerException {
 		if( firma == null )					// Wurde eine Firma angegeben
 			return 0;
-		if( db.countActiveBestellungen( firma ) > 0 )	// Gibt es aktive Bestellungen, die an die angegebene Firma gehen
-			throw new ApplicationServerException( 20 );	// dann kann man es nicht löschen
+		// Gibt es Belege oder Angebote, die an die angegebene Firma gehen
+		if( db.countBelege( firma ) > 0 || db.countAngebote( firma ) > 0 )
+			throw new ApplicationServerException( 42 );		// dann kann man es nicht löschen
 		
 		try {
 			db.setAutoCommit(false);
-			if( db.countInactiveBestellungen( firma ) > 0 ) {	// Wenn es inaktive Bestellungen gibt, dann braucht man die Firma
-				firma.setGeloescht( true );						// für Reports und es wird nur der Flag gesetzt
-				db.selectForUpdateFirma( firma );				// Firma zum aktualisieren auswählen
-				return db.updateFirma( firma );					// Firma aktualisieren
-			}
 			return db.deleteFirma( firma );			// Sonst wird die Firma aus der Datenbank gelöscht
 		} finally {
 			db.setAutoCommit(true);
 			db.commit();
 		}
 	}
-
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getKostenarten()

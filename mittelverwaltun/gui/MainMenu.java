@@ -21,19 +21,18 @@ public class MainMenu extends JMenuBar implements ActionListener {
 				JMenu menuTmpRolle = new JMenu("Temporäre Rollen"); 
 					JActivityRelatedMenuItem[] miTmpRollen = null; 
 			JMenuItem miLogoutBeenden = new JActivityRelatedMenuItem(	0,	"Logout/Beenden");
-			
-			
+		
 	// Das Menü "Bestellung"
 	JMenu menuBestellung = new JMenu("Bestellung");
-		JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
-		JMenu menuErstellen = new JMenu("Erstellen");
-			JMenuItem miAuszahlungsanforderung = new JActivityRelatedMenuItem(18,	"Auszahlungsanforderung");
-			JMenuItem miStandardbestellung = new JActivityRelatedMenuItem(	17,"Standardbestellung");
-			JMenuItem miASKBestellung = new JActivityRelatedMenuItem(	1,	"ASK Bestellung");
-		JMenuItem miAendernStornieren = new JActivityRelatedMenuItem(	1,"Ändern/Stornieren");
-		JMenuItem miHUELNummer = new JActivityRelatedMenuItem(1,"HÜL-Nummer eintragen");
-		JMenuItem miBegleichen = new JActivityRelatedMenuItem(1, "Begleichen");
-		JMenuItem miDrucken = new JActivityRelatedMenuItem(1, "Drucken");
+		JMenu menuAuszahlungsanordnung = new JMenu("Auszahlungsanordnung");
+			JMenuItem miAADurchführen = new JActivityRelatedMenuItem(0, "Durchführen");
+			JMenuItem miAAAnzeigen = new JActivityRelatedMenuItem(0, "Anzeigen/Stornieren");
+		JMenu menuStandardbestellung = new JMenu("Standardbestellung");
+			JMenuItem miSBDurchführen = new JActivityRelatedMenuItem(1, "Durchführen");
+			JMenuItem miSBAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
+		JMenu menuASKBestellung = new JMenu("ASK Bestellung");
+			JMenuItem miASKDurchführen = new JActivityRelatedMenuItem(1, "Durchführen");
+			JMenuItem miASKAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
 		
 	// Das Menü "Mittelverwaltung"
 	JMenu menuMittelverwaltung = new JMenu("Mittelverwaltung");
@@ -43,9 +42,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 1, "FBKonten umbuchen" );
 			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 1, "Budget zuweisen" );
 			JMenuItem miFBKontenZuweisenProf = new JActivityRelatedMenuItem( 1, "Budget zuweisen (Prof.)" );
-		
-		
-		
+
 	// Das Menü "Verwaltung"
 		JMenu menuVerwaltung = new JMenu("Verwaltung");
 		JMenuItem miBenutzer = new JActivityRelatedMenuItem(1, "Benutzer");
@@ -64,33 +61,17 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Reporting"
 	JMenu menuReporting = new JMenu("Reporting");
 
-		JMenuItem miLoglisteAnzeigen = new JActivityRelatedMenuItem(
-			1,
-			"Logliste anzeigen");
+		JMenuItem miLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Logliste anzeigen");
 		JMenu menuZVReport = new JMenu("Zentralverwaltung");
-			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(
-				1,
-				"Ausgabe nach Konten");
-			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(
-				1,
-				"Ausgbe nach Konten und Instituten");
-			JMenuItem miZVVerteilung = new JActivityRelatedMenuItem(
-				1,
-				"Verteilung");
+			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
+			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
+			JMenuItem miZVVerteilung = new JActivityRelatedMenuItem(1, "Verteilung");
 		JMenu menuFBReport = new JMenu("Fachbereichsintern");
-			JMenuItem miFBAusgabeNachK = new JActivityRelatedMenuItem(
-				1,
-				"Ausgabe nach Konten");
-			JMenuItem miFBAusgabeNachKundV = new JActivityRelatedMenuItem(
-				1,
-				"Ausgabe nach Konten und Verwaltungskonten");
+			JMenuItem miFBAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
+			JMenuItem miFBAusgabeNachKundV = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten und Verwaltungskonten");
 		JMenu menuInstitutReport = new JMenu("Institutsintern");
-			JMenuItem miIAusgabeNachVK = new JActivityRelatedMenuItem(
-				1,
-				"Ausgabe nach Verwaltungskonten");
-			JMenuItem miBestellungen = new JActivityRelatedMenuItem(
-				1,
-				"Bestellungen");
+			JMenuItem miIAusgabeNachVK = new JActivityRelatedMenuItem(1, "Ausgabe nach Verwaltungskonten");
+			JMenuItem miBestellungen = new JActivityRelatedMenuItem(1, "Bestellungen");
 			
 	// Das Hauptfenster
 	MainFrame frame;
@@ -134,31 +115,27 @@ public class MainMenu extends JMenuBar implements ActionListener {
 					
 		// Das Menü "Bestellung"
 		add( menuBestellung );
-			menuBestellung.add( miAnzeigen );
-			activityRelItems.add( miAnzeigen );
-			miAnzeigen.addActionListener( this );
-			menuBestellung.add( menuErstellen );
-				menuErstellen.add( miAuszahlungsanforderung );
-				activityRelItems.add( miAuszahlungsanforderung );
-				miAuszahlungsanforderung.addActionListener( this );
-				menuErstellen.add( miStandardbestellung );
-				activityRelItems.add( miStandardbestellung );
-				miStandardbestellung.addActionListener( this );
-				menuErstellen.add( miASKBestellung );
-				activityRelItems.add( miASKBestellung );
-				miASKBestellung.addActionListener( this );
-			menuBestellung.add( miAendernStornieren );
-			activityRelItems.add( miAendernStornieren );
-			miAendernStornieren.addActionListener( this );
-			menuBestellung.add( miHUELNummer );
-			activityRelItems.add( miHUELNummer );
-			miHUELNummer.addActionListener( this );
-			menuBestellung.add( miBegleichen );
-			activityRelItems.add( miBegleichen );
-			miBegleichen.addActionListener( this );
-			menuBestellung.add( miDrucken );
-			activityRelItems.add( miDrucken );
-			miDrucken.addActionListener( this );
+			menuBestellung.add( menuAuszahlungsanordnung );
+				menuAuszahlungsanordnung.add(miAADurchführen);
+				activityRelItems.add( miAADurchführen );
+				miAADurchführen.addActionListener(this);
+				menuAuszahlungsanordnung.add(miAAAnzeigen);
+				miAAAnzeigen.addActionListener(this);
+				activityRelItems.add( miAAAnzeigen );
+			menuBestellung.add( menuStandardbestellung );
+				menuStandardbestellung.add(miSBDurchführen);
+				miSBDurchführen.addActionListener(this);
+				activityRelItems.add( miSBDurchführen );
+				menuStandardbestellung.add(miSBAnzeigen);
+				miSBAnzeigen.addActionListener(this);
+				activityRelItems.add( miSBAnzeigen );
+			menuBestellung.add( menuASKBestellung );
+				menuASKBestellung.add(miASKDurchführen);
+				miASKDurchführen.addActionListener(this);
+				activityRelItems.add( miASKDurchführen );
+				menuASKBestellung.add(miASKAnzeigen);
+				miASKAnzeigen.addActionListener(this);
+				activityRelItems.add( miASKAnzeigen );
 		
 		// Das Menü "Mittelverwaltung"
 		add( menuMittelverwaltung );
@@ -249,27 +226,23 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-				
+
 		if ( e.getSource() == miAccountAendern ) {
 			frame.addChild( new Benutzerverwaltung(frame) );
 		} else if ( e.getSource() == miDefaultRolle ) {						
 			enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());	//
 		} else if ( e.getSource() ==  miLogoutBeenden ) {					//
 			frame.onWindowClosing();
-		} else if ( e.getSource() == miAnzeigen ) {
-		} else if ( e.getSource() == miAuszahlungsanforderung ) {
+		} else if ( e.getSource() == miAADurchführen ) {
 			frame.addChild( new BestellungKlein( frame ) );
-		} else if ( e.getSource() == miStandardbestellung ) {
+		} else if ( e.getSource() == miAAAnzeigen ) {
+		} else if ( e.getSource() == miSBDurchführen ) {
 			frame.addChild( new BestellungNormal( frame ) );
-		} else if ( e.getSource() == miASKBestellung ) {
-			frame.addChild( new BestellungASK( frame ) );
-		} else if ( e.getSource() == miAendernStornieren ) {
+		} else if ( e.getSource() == miSBAnzeigen ) {
 			frame.addChild( new BestellungStorno( frame ) );
-		} else if ( e.getSource() == miHUELNummer ) {
-			frame.addChild( new HUELNummer( frame ) );
-		} else if ( e.getSource() == miBegleichen ) {
-			frame.addChild( new BestellungBegleichen( frame ) );
-		} else if ( e.getSource() == miDrucken ) {
+		} else if ( e.getSource() == miASKDurchführen ) {
+			frame.addChild( new BestellungASK( frame ) );
+		} else if ( e.getSource() == miASKAnzeigen ) {
 		} else if ( e.getSource() == miKontenbudgetsFestlegen ) {
 			frame.addChild( new ZVMittelFestlegen( frame ) );
 		} else if ( e.getSource() == miFBKontenUmbuchen ) {

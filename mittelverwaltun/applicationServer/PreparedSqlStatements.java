@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[275];
+		statements = new PreparedStatementWrapper[280];
 		int i = 0;
 
 		/**************************************/
@@ -1703,7 +1703,7 @@ public class PreparedSqlStatements {
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//245 Eine Firma in der Datenbank aktualisieren
+		{//245
 			/**
 			 * Eine Firma in der Datenbank aktualisieren.
 			 * @author w.flat
@@ -1713,7 +1713,7 @@ public class PreparedSqlStatements {
 											"telnr = ?, faxnr = ?, email = ?, www = ?, ask = ?, geloescht = ? " +
 										"WHERE id = ?" );
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+					Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//246 
@@ -1724,7 +1724,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( 	"INSERT INTO firmen " +
 										"(name, strassenr, plz, ort, kundennr, telnr, faxnr, email, www, ask, geloescht) " +										"VALUES (?,?,?,?,?,?,?,?,?,?,?)" );
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//247
@@ -1793,7 +1793,7 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/******************************************/
-		/* Tabelle: Angebote 	                    */
+		/* Tabelle: Angebote 	                  */
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//260 fügt ein Angebot in die Tabelle Angebot ein
@@ -1813,7 +1813,15 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//262
-			statements[i++] = null;
+			/**
+			 * Anzahl der Angebote bei denen eine bestimmte Firma verwendet wurde.
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT COUNT(a.id)" +
+										"FROM Angebote a, Firmen b " +
+										"WHERE b.id = ? AND a.anbieter = b.id" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//263
 			statements[i++] = null;
@@ -1851,7 +1859,7 @@ public class PreparedSqlStatements {
 		}
 		/**************************************************/
 		/* Join: Bestellungen, ASK_Standard_Bestellungen  */
-		/* Indizes: 270-274					                      */
+		/* Indizes: 270-274					              */
 		/**************************************************/
 		{//270 gibt die StandardBestellung mit der zugehörigen Id zurück. Es werden nur BenutzerId ermittelt
 			ps = con.prepareStatement("SELECT " +																		"k.id, k.beschreibung," +																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +																		"b.verwendungszweck, b.planvorgabe, b.begruendung, b.bemerkungen, " +
@@ -1873,6 +1881,33 @@ public class PreparedSqlStatements {
 		{//274
 			statements[i++] = null;
 		}
+		/**********************/
+		/* Tabelle: Belege    */
+		/* Indizes: 275-279	  */
+		/**********************/
+		{//275
+			/**
+			 * Anzahl der Belege bei denen eine bestimmte Firma verwendet wurde.
+			 * @author w.flat
+			 */
+			ps = con.prepareStatement(	"SELECT COUNT(a.id)" +
+										"FROM Belege a, Firmen b " +
+										"WHERE b.id = ? AND a.firma = b.id" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//276
+			statements[i++] = null;
+		}
+		{//277
+			statements[i++] = null;
+		}
+		{//278
+			statements[i++] = null;
+		}
+		{//279
+			statements[i++] = null;
+		}
 	}
 
 	public void release() throws SQLException{
@@ -1882,7 +1917,6 @@ public class PreparedSqlStatements {
 			}
 		}
 	}
-
 
 	public PreparedStatementWrapper get (int stmt){
 		return statements[stmt];
