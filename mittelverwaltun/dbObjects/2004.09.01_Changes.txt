@@ -1,7 +1,0 @@
-
-Neue Klasse Aktivitaet eingefügt
-
-
-Klasse Rolle um ein Attribut erweitert: aktivitaetenFull
-und um die get, set Methoden, ein neuer Konstruktor
-
