@@ -107,7 +107,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		loadInstituts();
 		loadRollen();
 
-		this.setBounds(0,0,799, 310);
+		this.setBounds(0,0,799, 400);
   }
 
   public Benutzerverwaltung(ApplicationServer applicationServer){
@@ -148,7 +148,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		loadUsers();
 		loadInstituts();
 		loadRollen();
-    this.setBounds(0,0,799, 310);
+    this.setBounds(0,0,799, 400);
   }
 
   private void jbInit() throws Exception {
