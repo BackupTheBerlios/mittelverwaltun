@@ -234,7 +234,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	public Object clone(){
 		ArrayList angeboteClone = null;
 		
-		if ( angebote!= null ){
+		if ( angebote != null ){
 			angeboteClone = new ArrayList();
 			for (int i=0; i<angebote.size(); i++)
 				angeboteClone.add(((Angebot)angebote.get(i)).clone());
@@ -268,6 +268,29 @@ public class StandardBestellung extends Bestellung implements Serializable {
 	public boolean equals(Object o){
 		if(o != null){
 			StandardBestellung b = (StandardBestellung)o;
+			
+//			System.out.println((kostenart == null || b.getKostenart() == null) ? true : kostenart.equals(b.getKostenart()));
+//			System.out.println(ersatzbeschaffung == b.getErsatzbeschaffung());
+//			System.out.println((ersatzbeschreibung == null || b.getErsatzbeschreibung() == null) ? true : ersatzbeschreibung.equals(b.getErsatzbeschreibung()));
+//			System.out.println((inventarNr == null || b.getInventarNr() == null) ? true : inventarNr.equals(b.getInventarNr()));
+//			System.out.println((verwendungszweck == null || b.getVerwendungszweck() == null) ? true : verwendungszweck.equals(b.getVerwendungszweck()));
+//			System.out.println(	planvorgabe == b.getPlanvorgabe());
+//			System.out.println((begruendung == null || b.getBegruendung() == null) ? true : begruendung.equals(b.getBegruendung()));
+//			System.out.println((bemerkung == null || b.getBegruendung() == null) ? true : bemerkung.equals(b.getBemerkung())); 
+//			System.out.println((angebote == null || b.getAngebote() == null) ? true : angebote.equals(b.getAngebote()));
+//			System.out.println(getId() == b.getId());
+//			System.out.println((getReferenznr() == null || b.getReferenznr() == null) ? true : getReferenznr().equals(b.getReferenznr())) ;
+//			System.out.println((getHuel() == null || b.getHuel() == null) ? true : getHuel().equals(b.getHuel()));
+//			System.out.println((getDatum() == null || b.getDatum() == null) ? true : getDatum().equals(b.getDatum()));
+//			System.out.println((getBesteller() == null || b.getBesteller() == null) ? true : getBesteller().equals(b.getBesteller())) ;
+//			System.out.println(getPhase() == b.getPhase() );
+//			System.out.println((getAuftraggeber() == null || b.getAuftraggeber() == null) ? true : getAuftraggeber().equals(b.getAuftraggeber())) ;
+//			System.out.println((getEmpfaenger() == null || b.getEmpfaenger() == null) ? true : getEmpfaenger().equals(b.getEmpfaenger())) ;
+//			System.out.println((getZvtitel() == null || b.getZvtitel() == null) ? true : getZvtitel().equals(b.getZvtitel())) ;
+//			System.out.println((getFbkonto() == null || b.getFbkonto() == null) ? true : getFbkonto().equals(b.getFbkonto())) ;
+//			System.out.println(getBestellwert() == b.getBestellwert() );
+//			System.out.println(getVerbindlichkeiten()==b.getVerbindlichkeiten());
+			
 			if( ((kostenart == null || b.getKostenart() == null) ? true : kostenart.equals(b.getKostenart())) &&
 					ersatzbeschaffung == b.getErsatzbeschaffung() &&
 					((ersatzbeschreibung == null || b.getErsatzbeschreibung() == null) ? true : ersatzbeschreibung.equals(b.getErsatzbeschreibung())) &&
@@ -275,7 +298,7 @@ public class StandardBestellung extends Bestellung implements Serializable {
 					((verwendungszweck == null || b.getVerwendungszweck() == null) ? true : verwendungszweck.equals(b.getVerwendungszweck())) &&
 					planvorgabe == b.getPlanvorgabe() &&
 					((begruendung == null || b.getBegruendung() == null) ? true : begruendung.equals(b.getBegruendung())) &&
-					((bemerkung == null || b.getBegruendung() == null) ? true : bemerkung.equals(b.getBemerkung())) && 
+					((bemerkung == null || b.getBemerkung() == null) ? true : bemerkung.equals(b.getBemerkung())) && 
 					((angebote == null || b.getAngebote() == null) ? true : angebote.equals(b.getAngebote())) &&
 					// Bestellung
 					getId() == b.getId() &&

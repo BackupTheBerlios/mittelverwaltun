@@ -1853,13 +1853,13 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
 				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 		
-		if(edited.getPhase() == '0'){
+		if(original.getPhase() == '0'){
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
-		}else if(edited.getPhase() == '1'){
+		}else if(original.getPhase() == '1'){
 			db.updateStandardBestellung(edited);
 			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
-		}else if(edited.getPhase() == '2'){
+		}else if(original.getPhase() == '2'){
 		
 		}
 	}
@@ -2028,7 +2028,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
 	public void setBestellung(ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
-		
+		//System.out.println("test");
 		
 	}
 	

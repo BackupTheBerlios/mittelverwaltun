@@ -2887,7 +2887,7 @@ public class Database implements Serializable{
 																						rs.getString("ersatzInventarNr"), rs.getString("verwendungszweck"), !rs.getString("planvorgabe").equalsIgnoreCase("0"), 
 																						rs.getString("begruendung"), rs.getString("bemerkungen"), bestellId, 
 																						rs.getString("referenzNr"), rs.getDate("datum"), besteller, rs.getString("phase").charAt(0), rs.getString("huelNr"), auftraggeber,
-																						empfaenger, zvTitel, fbkonto, rs.getInt("bestellwert"), rs.getInt("verbindlichkeiten") );
+																						empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten") );
 			}else {
 				throw new ApplicationServerException(70);
 			}
@@ -3103,6 +3103,7 @@ public class Database implements Serializable{
 	public void updateStandardBestellung(StandardBestellung b/*, float verbindlichkeiten*/) throws ApplicationServerException{
 		if(b != null){
 			try{
+				
 				Object[] parameters = { new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
 																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
 																b.getBemerkung(), new Integer(b.getKostenart().getId()), (b.getErsatzbeschaffung() ? "1" : "0"), b.getErsatzbeschreibung(), b.getInventarNr(),

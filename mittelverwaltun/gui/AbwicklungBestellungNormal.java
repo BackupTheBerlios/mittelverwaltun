@@ -344,7 +344,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    btAngebote.setActionCommand("showOffers");
 	    btAngebote.addActionListener(this);
 	
-	    tabPositionen = new PositionsTable(PositionsTable.STD_ABWICKLUNG, this, angebot.getPositionen());
+	    tabPositionen = new PositionsTable(PositionsTable.STD_ABWICKLUNG, false, this, angebot.getPositionen());
 	       
 	    spPositionen.getViewport().add(tabPositionen, null);
 		spPositionen.setBounds(new Rectangle(10, 58, 620, 180));
@@ -354,7 +354,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    btNeuePosition.setBounds(new Rectangle(9, 242, 165, 27));
 	    btNeuePosition.setActionCommand("addPosition");
 	    btNeuePosition.addActionListener(tabPositionen);
-	    
+	   	    
 	    lbSumme.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbSumme.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbSumme.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -378,7 +378,6 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tfVerbindlichkeiten.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfVerbindlichkeiten.setBackground(UIManager.getColor("Viewport.background"));
 	    tfVerbindlichkeiten.setEnabled(false);
-	    //tfVerbindlichkeiten.setDisabledTextColor(Color.black);
 	    tfVerbindlichkeiten.setValue(new Float(tabPositionen.getOrderDebit()));
 	    if (((Float)tfVerbindlichkeiten.getValue()).floatValue() > 0)
 	    	tfVerbindlichkeiten.setDisabledTextColor(Color.RED);
@@ -400,29 +399,26 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 
     btAbschlieﬂen.setBounds(new Rectangle(525, 25, 125, 27));
     btAbschlieﬂen.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btAbschlieﬂen.setHorizontalAlignment(SwingConstants.LEFT);
     btAbschlieﬂen.setText("Abschlieﬂen");
-
+    btAbschlieﬂen.setActionCommand("completeOrder");
+    btAbschlieﬂen.addActionListener(this);
+    
     btSpeichern.setBounds(new Rectangle(525, 60, 125, 27));
     btSpeichern.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btSpeichern.setHorizontalAlignment(SwingConstants.LEFT);
     btSpeichern.setText("Speichern");
     btSpeichern.setActionCommand("saveOrder");
     btSpeichern.addActionListener(this);
 
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btStorno.setHorizontalAlignment(SwingConstants.LEFT);
     btStorno.setText("Storno");
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btDrucken.setHorizontalAlignment(SwingConstants.LEFT);
     btDrucken.setText("Drucken");
 
     btBeenden.setBounds(new Rectangle(525, 165, 125, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btBeenden.setHorizontalAlignment(SwingConstants.LEFT);
     btBeenden.setText("Beenden");
     btBeenden.setActionCommand("dispose");
     btBeenden.addActionListener(this);
@@ -437,7 +433,8 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     this.getContentPane().add(btSpeichern, null);
     this.getContentPane().add(btStorno, null);
     
-   
+    updateComponentEnabling();
+    
   }
   
   
@@ -475,9 +472,6 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    	tfVerbindlichkeiten.setDisabledTextColor(Color.BLACK);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "details"){
 			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, ((Angebot)origin.getAngebote().get(origin.getAngenommenesAngebot())).getAnbieter());
@@ -489,9 +483,9 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 			dialog.show();
 		}else if (e.getActionCommand() == "saveOrder"){
 			saveOrder();
+		}else if (e.getActionCommand() == "completeOrder"){
+			completeOrder();
 		}
-			
-		
 	}
 
 	private void saveOrder(){
@@ -502,16 +496,58 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		editedOrder.setBestellwert(tabPositionen.getOrderSum());
 		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
 		
-		
-		
-		
 		try {
+			StandardBestellung copy = (StandardBestellung)editedOrder.clone();
 			
-			frame.getApplicationServer().setBestellung(origin, editedOrder);
+			as.setBestellung(origin, copy);
 			
+			origin = editedOrder;
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
 		}
+	}
+	
+	private void completeOrder(){
+		
+//		TODO: Test => mehr als eine Position in Angebot, Bestellsumme > 0
+		
+		tabPositionen.payAllPositions();
+		
+		StandardBestellung editedOrder = (StandardBestellung)origin.clone();
+		((Angebot)editedOrder.getAngebote().get(editedOrder.getAngenommenesAngebot())).setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setPhase('2');
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		try {
+			StandardBestellung copy = (StandardBestellung)editedOrder.clone();
+			as.setBestellung(origin, copy);
+			origin = editedOrder;
+			updateComponentEnabling();
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				e.printStackTrace();
+		}
+	}
+	
+	private void updateComponentEnabling(){
+		
+		boolean enable = origin.getPhase()=='1';
+		
+		tfHuelNr.setEnabled(enable);
+		if (tfHuelNr.isEnabled())
+			tfHuelNr.setBackground(Color.WHITE);
+		else
+			tfHuelNr.setBackground(UIManager.getColor("Viewport.background"));
+		
+		tabPositionen.setEditable(enable);
+		
+		btNeuePosition.setEnabled(enable);
+		
+		btAbschlieﬂen.setEnabled(enable);
+		
+		btSpeichern.setEnabled(enable);
 	}
 }

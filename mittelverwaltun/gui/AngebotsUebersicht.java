@@ -91,7 +91,7 @@ public class AngebotsUebersicht extends JDialog implements ActionListener{
         tfDatum.setValue(datum);
         tfDatum.setBounds(new Rectangle(475, 15, 65, 25));
                 
-        posTable = new PositionsTable(PositionsTable.ANZEIGE,positionen);
+        posTable = new PositionsTable(PositionsTable.ANZEIGE, false, positionen);
                 
         spPositionen.setBorder(null);
         spPositionen.setBounds(new Rectangle(15, 50, 525, 120));

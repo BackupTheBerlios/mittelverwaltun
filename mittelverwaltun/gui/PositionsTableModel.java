@@ -9,6 +9,8 @@ package gui;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
+
+import dbObjects.Institut;
 import dbObjects.Position;
 
 /**
@@ -23,14 +25,15 @@ public class PositionsTableModel extends DefaultTableModel {
 	public static final int ANZEIGE = 0;
 	public static final int STD_ABWICKLUNG = 1;
 	public static final int ASK_ABWICKLUNG = 2;
-	 	
-	int type;
-	ArrayList identifiers;
+	
+	private boolean editable = true;
+	private int type;
+	private ArrayList identifiers;
 		
-	public PositionsTableModel (int type, ArrayList positions){
-		
+	public PositionsTableModel (int type, boolean editable, ArrayList positions){
 		super();
 		this.type = type;
+		this.editable = editable;
 		
 		if (type == STD_ABWICKLUNG){
 			String[] colheads = {"Menge", "Artikel", "Einzelpreis", "Mwst", "Rabatt", "Gesamt", "Beglichen", "" }; 
@@ -111,7 +114,7 @@ public class PositionsTableModel extends DefaultTableModel {
 	}
 	
 	public boolean isCellEditable(int rowIndex, int colIndex) {
-		if ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))
+		if (editable && ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG)))
 			return colIndex != 5;
 		else
 			return false;
@@ -163,6 +166,8 @@ public class PositionsTableModel extends DefaultTableModel {
 			sum += ((Float)getValueAt(i,5)).floatValue();
 		}
 		
+		sum = ((float)Math.round(sum * 100f))/100f;
+		
 		return sum;
 	}
 	
@@ -176,11 +181,14 @@ public class PositionsTableModel extends DefaultTableModel {
 					debit += ((Float)getValueAt(i,5)).floatValue();
 			}
 		}
+		
+		debit = ((float)Math.round(debit * 100f))/100f;
+		
 		return debit;
 	}
 
 	public ArrayList getOrderPositions(){
-		if ((type==ANZEIGE)||(type==STD_ABWICKLUNG)){
+		if (type==ANZEIGE){
 			ArrayList positions = new ArrayList();
 				for (int i=0; i < getRowCount(); i++){
 					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
@@ -189,10 +197,48 @@ public class PositionsTableModel extends DefaultTableModel {
 								);
 				}
 			return positions;
+
+		}else if (type==STD_ABWICKLUNG){
+			ArrayList positions = new ArrayList();
+				for (int i=0; i < getRowCount(); i++){
+					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
+												((Float)getValueAt(i,2)).floatValue(), ((Integer)getValueAt(i,0)).intValue(),
+												((Float)getValueAt(i,3)).floatValue(), ((Float)getValueAt(i,4)).floatValue(),
+												((Boolean)getValueAt(i,6)).booleanValue())
+								);
+				}
+			return positions;
 		}
-		else if (type==ASK_ABWICKLUNG)
-			return null;
-		else return null;
+
+		else if (type==ASK_ABWICKLUNG){
+			ArrayList positions = new ArrayList();
+				for (int i=0; i < getRowCount(); i++){
+					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
+												((Float)getValueAt(i,3)).floatValue(), ((Integer)getValueAt(i,0)).intValue(),
+												((Float)getValueAt(i,4)).floatValue(), (Institut)getValueAt(i,2),
+												((Boolean)getValueAt(i,6)).booleanValue())
+								);
+				}
+			return positions;
+
+		}else return null;
+	
+	}
+	
+	public void setEditable (boolean editable){
+		this.editable = editable;
+	}
+	
+	public boolean isEditable(){
+		return editable;
+	}
+	
+	public void payAllPositions(){
+		if (editable && ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))){
+			for (int i=0; i<getRowCount();i++){
+				setValueAt(new Boolean(true), i, 6);
+			}	
+		}
 	}
 	
 }

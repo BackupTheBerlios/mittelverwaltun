@@ -116,10 +116,13 @@ public class Angebot implements Serializable {
 	 * erstellt eine Kopie von einem Angebot
 	 */
 	public Object clone(){
+		
 		ArrayList pos = new ArrayList();
+		
 		for(int i = 0; i < positionen.size(); i++){
 			pos.add(((Position)positionen.get(i)).clone());
 		}
+		
 		return new Angebot( this.id, pos, (Date)this.datum.clone(), (Firma)this.anbieter.clone(), this.angenommen);
 	}
 

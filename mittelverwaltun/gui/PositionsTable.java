@@ -41,16 +41,17 @@ public class PositionsTable extends JTable implements ActionListener {
 	public static final int STD_ABWICKLUNG = 1;
 	public static final int ASK_ABWICKLUNG = 2;
 	
-	int type = 0;
-	TableModelListener tml = null;
-	Institut[] institutes = null;
+	private boolean editable = true;
+	private int type = 0;
+	private TableModelListener tml = null;
+	private Institut[] institutes = null;
 	
-	public PositionsTable(int type, TableModelListener tml, ArrayList positions){
-		
+	public PositionsTable(int type, boolean editable, TableModelListener tml, ArrayList positions){
+		this.editable = editable;
 		this.type = type;
 		this.tml = tml;
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		PositionsTableModel model = new PositionsTableModel(type, positions);
+		PositionsTableModel model = new PositionsTableModel(type, editable, positions);
 		model.addTableModelListener(tml);
 		setModel(model);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -58,12 +59,13 @@ public class PositionsTable extends JTable implements ActionListener {
 		applyTableRendering();
 	}
 
-	public PositionsTable(int type, TableModelListener tml, ArrayList positions, Institut[] institutes){
+	public PositionsTable(int type, boolean editable, TableModelListener tml, ArrayList positions, Institut[] institutes){
+		this.editable = editable;
 		this.type = type;
 		this.tml = tml;
 		this.institutes = institutes;
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		PositionsTableModel model = new PositionsTableModel(type, positions);
+		PositionsTableModel model = new PositionsTableModel(type, editable, positions);
 		model.addTableModelListener(tml);
 		setModel(model);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -71,9 +73,10 @@ public class PositionsTable extends JTable implements ActionListener {
 		applyTableRendering();
 	}
 	
-	public PositionsTable(int type, ArrayList positions){
-		
-		PositionsTableModel model = new PositionsTableModel(type, positions);
+	public PositionsTable(int type, boolean editable, ArrayList positions){
+		this.editable = editable;
+		this.type = type;
+		PositionsTableModel model = new PositionsTableModel(type, editable, positions);
 		setModel(model);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -141,7 +144,7 @@ public class PositionsTable extends JTable implements ActionListener {
 	  		JComboBox cbInstitutes = new JComboBox();
 	  		if (institutes != null){
 	  			for(int i=0; i<institutes.length;i++){
-	  				System.out.println(institutes[i]);
+	  				//System.out.println(institutes[i]);
 	  				cbInstitutes.addItem(institutes[i]);
 	  			}
 	  				
@@ -207,12 +210,8 @@ public class PositionsTable extends JTable implements ActionListener {
 		}
 	}
 	
-	public ArrayList getPositions(){
-		return null;
-	}
-	
 	public void setPositions(ArrayList positions){
-		PositionsTableModel model = new PositionsTableModel(type, positions);
+		PositionsTableModel model = new PositionsTableModel(type, editable, positions);
 		if (this.tml != null) model.addTableModelListener(tml);
 		setModel(model);
 		applyTableRendering();
@@ -235,5 +234,17 @@ public class PositionsTable extends JTable implements ActionListener {
 	public ArrayList getOrderPositions(){
 		PositionsTableModel model = (PositionsTableModel)getModel();
 		return model.getOrderPositions();
+	}
+	
+	public void setEditable(boolean editable){
+		((PositionsTableModel)getModel()).setEditable(editable);
+	}
+	
+	public void payAllPositions(){
+		((PositionsTableModel)getModel()).payAllPositions();
+	}
+	
+	public boolean isEditable(){
+		return ((PositionsTableModel)getModel()).isEditable();
 	}
 }

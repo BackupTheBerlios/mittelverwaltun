@@ -13,6 +13,7 @@ import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import applicationServer.ApplicationServer;
+import applicationServer.ApplicationServerException;
 import applicationServer.CentralServer;
 import dbObjects.ASKBestellung;
 import dbObjects.Angebot;
@@ -326,7 +327,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	    btFirma.setActionCommand("details");
 	    btFirma.addActionListener(this);
 	    
-	    tabPositionen = new PositionsTable(PositionsTable.ASK_ABWICKLUNG, this, angebot.getPositionen(), as.getInstitutes());
+	    tabPositionen = new PositionsTable(PositionsTable.ASK_ABWICKLUNG, false, this, angebot.getPositionen(), as.getInstitutes());
 	       
 	    spPositionen.getViewport().add(tabPositionen, null);
 		spPositionen.setBounds(new Rectangle(10, 58, 620, 180));
@@ -336,7 +337,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	    btNeuePosition.setBounds(new Rectangle(9, 242, 165, 27));
 	    btNeuePosition.setActionCommand("addPosition");
 	    btNeuePosition.addActionListener(tabPositionen);
-	    
+	    	    
 	    lbSumme.setFont(new java.awt.Font("Dialog", 1, 11));
 	    lbSumme.setHorizontalAlignment(SwingConstants.RIGHT);
 	    lbSumme.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -360,7 +361,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	    tfVerbindlichkeiten.setFont(new java.awt.Font("Dialog", 1, 12));
 	    tfVerbindlichkeiten.setBackground(UIManager.getColor("Viewport.background"));
 	    tfVerbindlichkeiten.setEnabled(false);
-	    //tfVerbindlichkeiten.setDisabledTextColor(Color.black);
+	   
 	    tfVerbindlichkeiten.setValue(new Float(tabPositionen.getOrderDebit()));
 	    if (((Float)tfVerbindlichkeiten.getValue()).floatValue() > 0)
 	    	tfVerbindlichkeiten.setDisabledTextColor(Color.RED);
@@ -381,27 +382,26 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 
     btAbschließen.setBounds(new Rectangle(525, 25, 125, 27));
     btAbschließen.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btAbschließen.setHorizontalAlignment(SwingConstants.LEFT);
     btAbschließen.setText("Abschließen");
+    btAbschließen.setActionCommand("completeOrder");
+    btAbschließen.addActionListener(this);
 
     btSpeichern.setBounds(new Rectangle(525, 60, 125, 27));
     btSpeichern.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btSpeichern.setHorizontalAlignment(SwingConstants.LEFT);
     btSpeichern.setText("Speichern");
+    btSpeichern.setActionCommand("saveOrder");
+    btSpeichern.addActionListener(this);
 
     btStorno.setBounds(new Rectangle(525, 95, 125, 27));
     btStorno.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btStorno.setHorizontalAlignment(SwingConstants.LEFT);
     btStorno.setText("Storno");
     
     btDrucken.setBounds(new Rectangle(525, 130, 125, 27));
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btDrucken.setHorizontalAlignment(SwingConstants.LEFT);
     btDrucken.setText("Drucken");
 
     btBeenden.setBounds(new Rectangle(525, 165, 125, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
-    //btBeenden.setHorizontalAlignment(SwingConstants.LEFT);
     btBeenden.setText("Beenden");
     btBeenden.setActionCommand("dispose");
     btBeenden.addActionListener(this);
@@ -415,6 +415,8 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
     this.getContentPane().add(btBeenden, null);
     this.getContentPane().add(btSpeichern, null);
     this.getContentPane().add(btStorno, null);
+    
+    updateComponentEnabling();
     
   }
     
@@ -433,9 +435,76 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 			dialog.show();
 		}else if (e.getActionCommand() == "dispose"){
 			this.dispose();
+		}else if (e.getActionCommand() == "saveOrder"){
+			saveOrder();
+		}else if (e.getActionCommand() == "completeOrder"){
+			completeOrder();
 		}
 	}
 
+	private void saveOrder(){
+		
+		ASKBestellung editedOrder = (ASKBestellung)origin.clone();
+		editedOrder.getAngebot().setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		try {
+			ASKBestellung copy = (ASKBestellung)editedOrder.clone();
+			
+			as.setBestellung(origin, copy);
+		
+			origin = editedOrder;
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				e.printStackTrace();
+		}
+	}
+	
+	private void completeOrder(){
+		
+//		TODO: Test => mehr als eine Position in Angebot, Bestellsumme > 0
+		
+		tabPositionen.payAllPositions();
+		
+		ASKBestellung editedOrder = (ASKBestellung)origin.clone();
+		editedOrder.getAngebot().setPositionen(tabPositionen.getOrderPositions());
+		editedOrder.setPhase('2');
+		editedOrder.setHuel(this.tfHuelNr.getText());
+		editedOrder.setBestellwert(tabPositionen.getOrderSum());
+		editedOrder.setVerbindlichkeiten(tabPositionen.getOrderDebit());
+		
+		try {
+			ASKBestellung copy = (ASKBestellung)editedOrder.clone();
+			as.setBestellung(origin, copy);
+			origin = editedOrder;
+			updateComponentEnabling();
+		} catch (ApplicationServerException e) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
+				e.printStackTrace();
+		}
+	}	
+	
+	private void updateComponentEnabling(){
+		
+		boolean enable = origin.getPhase()=='1';
+		
+		tfHuelNr.setEnabled(enable);
+		if (tfHuelNr.isEnabled())
+			tfHuelNr.setBackground(Color.WHITE);
+		else
+			tfHuelNr.setBackground(UIManager.getColor("Viewport.background"));
+		
+		tabPositionen.setEditable(enable);
+		
+		btNeuePosition.setEnabled(enable);
+		
+		btAbschließen.setEnabled(enable);
+		
+		btSpeichern.setEnabled(enable);
+	}
+	
 	public static void main(String[] args) {
 		JFrame test = new JFrame("Abwicklung Standardbestellung");
 		JDesktopPane desk = new JDesktopPane();
@@ -463,7 +532,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 			ZVTitel t = new ZVTitel( 1, new ZVKonto ("","02436","",0), "", "24875", "00", 10000, "", "" );
 			FBUnterkonto k = new FBUnterkonto( "Institut für Entwicklung", i, "00", "0000" );
 			
-			ASKBestellung bestellung = new ASKBestellung(1, "100000", "", d, b, b, b, t, k, 500, '1', '1', a, "keine Bemerkung", b);
+			ASKBestellung bestellung = new ASKBestellung(1, "100000", "", d, b, b, b, t, k, 500, 0,'1', '1', a, "keine Bemerkung", b);
 			
 			AbwicklungBestellungASK iFrame= new AbwicklungBestellungASK(applicationServer, bestellung);
 			desk.add(iFrame);
