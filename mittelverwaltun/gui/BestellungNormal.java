@@ -546,8 +546,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 			if(phase == 1){
 				buDrucken.setEnabled(true);
-				buDelete.setEnabled(true);
+				buDelete.setEnabled(false);
 				buBestellen.setEnabled(false);
+				buSpeichern.setEnabled(false);
 			}
 			bestellung = frame.applicationServer.getStandardBestellung(id);
 		} catch (ApplicationServerException e) {
@@ -557,7 +558,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	private void printBestellung(){
-		
 		
 		PrinterJob pJob = PrinterJob.getPrinterJob();
 
@@ -573,9 +573,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		beilage.show();
 		beilage.setVisible(false);
 
-		pJob.setJobName("Bestellung");
+		pJob.setJobName("Standard Bestellung");
 		Book book = new Book();
-		book.append(bestellung, pf);
+		book.append(bestellung, pf, bestellung.getNumPages());
+		book.append(beilage, pf);
+		
 		if(pJob.printDialog()){
 			try{
 				pJob.setPageable(book);
@@ -587,23 +589,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		pJob.cancel();
 		if(pJob.isCancelled()){
 			bestellung.dispose();
+			beilage.dispose();
 		}
-
-//		pJob.setJobName("Beilage zur Bestellung");
-//		book = new Book();
-//		book.append(beilage, pf);
-//		if(pJob.printDialog()){
-//			try{
-//				pJob.setPageable(book);
-//				pJob.print();
-//			}catch(PrinterException pexc){
-//				System.out.println("Fehler beim Drucken");
-//			}
-//		}
-//		pJob.cancel();
-//		if(pJob.isCancelled()){
-//			beilage.dispose();
-//		}
 	}
 
 	public void setZVKonto(ZVUntertitel zvTitel) {

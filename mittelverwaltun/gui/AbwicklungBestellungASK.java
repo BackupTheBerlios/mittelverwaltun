@@ -414,6 +414,9 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
     btDrucken.setText("Drucken");
     btDrucken.setToolTipText("Bestellung drucken");
+		btDrucken.setActionCommand("print");
+		btDrucken.addActionListener(this);
+
 
     btBeenden.setBounds(new Rectangle(525, 165, 125, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -449,6 +452,8 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		if (e.getActionCommand() == "details"){
 			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, origin.getAngebot().getAnbieter());
 			dialog.show();
+		}else if (e.getActionCommand() == "print"){
+			PrintASKBestellung printOrder = new PrintASKBestellung(origin, frame.getApplicationServer());
 		}else if (e.getActionCommand() == "dispose"){
 			this.dispose();
 		}else if (e.getActionCommand() == "saveOrder"){

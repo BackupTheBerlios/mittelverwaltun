@@ -7,6 +7,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.border.*;
@@ -57,6 +58,8 @@ public class PrintSTDVordruck extends JFrame implements Printable{
   JLabel labMwSt7 = new JLabel();
   JLabel jLabel7 = new JLabel();
   JPanel panelSumme = new JPanel();
+  JTextPane tpKostenstelle1 = new JTextPane();
+  int numPages = 0;
 
   public PrintSTDVordruck(StandardBestellung order, ApplicationServer as) {
   	this.order = order;
@@ -185,29 +188,25 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 
 			jScrollPane1.getViewport().add(tableBestellung);
 			jScrollPane1.setBounds(new Rectangle(3, 240, 547, (tableBestellung.getModel().getRowCount() * 30)+35));
-//			jScrollPane1.setSize(547, (tableBestellung.getModel().getRowCount() * 30)+35);
 
 			int heightAll = adresse.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 +
 											panelSumme.getHeight() + lieferAnschrift.getHeight() + kostenstelle.getHeight() + 50;
+			numPages = (heightAll / 800) + 1;
 
-			if(heightAll > 8000){
-				lieferAnschrift.setBounds(new Rectangle(0, (heightAll / 800) * 800 + 600, 547, 127));
-				kostenstelle.setBounds(new Rectangle(0, (heightAll / 800) * 800 + 600, 547, 248));
+			if(heightAll > 800){
+				panelSumme.setBounds(new Rectangle(179, 275 + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30, 351, 99));
+				lieferAnschrift.setBounds(new Rectangle(2, (heightAll / 800) * 800 + 472, 526, 185));
+				kostenstelle.setBounds(new Rectangle(0, (heightAll / 800) * 800 + 670, 524, 127));
 				int t = (heightAll / 800) * 800 + 800;
 				printPanel.setBounds(4,5,547, t);
 			}else{
-				panelSumme.setBounds(new Rectangle(179, 240 + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30, 351, 99));
-//
-//				lieferAnschrift.setBounds(new Rectangle(6, 522, 526, 185));
-//				kostenstelle.setBounds(new Rectangle(1, 2, 248, 120));
-//				printPanel.setBounds(4,5,547, 800);
+				panelSumme.setBounds(new Rectangle(179, 240 + 35 + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30, 351, 99));
+				printPanel.setBounds(4,5,547, 850);
 			}
+	  }
 
-//			lieferAnschrift.setBounds(new Rectangle(0, 285 + (tableBestellung.getModel().getRowCount() *30)+35, 547, 248));
-//			kostenstelle.setBounds(new Rectangle(0, 274 + (tableBestellung.getModel().getRowCount() *30)+280, 547, 127));
-//			printPanel.setBounds(4,5,547, adresse.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 +
-//													lieferAnschrift.getHeight() + kostenstelle.getHeight() + 50);
-
+	  public int getNumPages(){
+	  	return numPages;
 	  }
 
 	  private void createBestellung(StandardBestellung order){
@@ -228,7 +227,11 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 				Benutzer il = order.getFbkonto().getInstitut().getInstitutsleiter(); // Institutsleiter
 			  tpBesteller.setText(	fbs[0].getFbBezeichnung() + "\n" +
 															order.getFbkonto().getInstitut().getBezeichnung() + "\n" +
-															il.getTitel() + " " + il.getVorname() + " " + il.getName() + "\n\n" +															"Tel.:    (0621) " + il.getTelefon() + "\n" +															"Fax:            " + il.getFax() + "\n" +															"Datum:    " + order.getDatum() + "\n" +															"UstldNr.: DE811630438");
+															il.getTitel() + " " + il.getVorname() + " " + il.getName() + "\n\n" +
+															"Tel.:    (0621) " + il.getTelefon() + "\n" +
+															"Fax:            " + il.getFax() + "\n" +
+															"Datum:    " + order.getDatum() + "\n" +
+															"UstldNr.: DE811630438");
 
 			} catch (ApplicationServerException e) {
 				e.printStackTrace();
@@ -240,10 +243,11 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 		  // Bestelldaten
 
 		  // Gesamtsummen
-		  netto.setText((order.getBestellwert() - order.get7PercentSum() - order.get16PercentSum()) + " €");
-			labMwSt7.setText(order.get7PercentSum() + " €");
-		  labMwSt16.setText(order.get16PercentSum() + " €");
-		  labGesammt.setText(order.getBestellwert() + " €");
+		  netto.setText(NumberFormat.getCurrencyInstance().format((order.getBestellwert() - order.get7PercentSum() - order.get16PercentSum())));
+			labMwSt7.setText(NumberFormat.getCurrencyInstance().format(order.get7PercentSum()));
+		  labMwSt16.setText(NumberFormat.getCurrencyInstance().format(order.get16PercentSum()));
+		  labGesammt.setText(NumberFormat.getCurrencyInstance().format(order.getBestellwert()));
+
 
 
 		  // Bemerkungen
@@ -261,17 +265,24 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 
 
 		  // Kostenstelle
-		  tpKostenstelle.setText(	"KostSt.:      " + order.getFbkonto().getInstitut().getBezeichnung() + "\n" +
-															"KostSt-Nr.:   " + order.getFbkonto().getInstitut().getKostenstelle() + "\n" +
-															"Kap/Tit/Ut:   " + (order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel()) + "/" +
+			tpKostenstelle1.setText("KostSt.:" + "\n" +
+															"KostSt-Nr.:" + "\n" +
+															"Kap/Tit/Ut:" + "\n" +
+															"InstitKo.:" + "\n" +
+															"InstitKo-Nr.:" + "\n" +
+															"FBI-Nr.:" + "\n" +
+															"Hül-Nr.:");
+		  tpKostenstelle.setText(	order.getFbkonto().getInstitut().getBezeichnung() + "\n" +
+															order.getFbkonto().getInstitut().getKostenstelle() + "\n" +
+															(order.getZvtitel().getZVTitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel()) + "/" +
 																								 order.getZvtitel().getTitel() + "/" +
 																								 order.getZvtitel().getUntertitel() + "\n" +
-															"InstitKo.:    " + order.getFbkonto().getBezeichnung() + "\n" +
-															"InstitKo-Nr.: " + order.getFbkonto().getInstitut().getKostenstelle() + " " +
+															order.getFbkonto().getBezeichnung() + "\n" +
+															order.getFbkonto().getInstitut().getKostenstelle() + " " +
 																								 order.getFbkonto().getHauptkonto() + " " +
 																								 order.getFbkonto().getUnterkonto() + "\n" +
-															"FBI-Nr.:      " + order.getReferenznr() + "\n" +
-															"Hül-Nr.:      " + order.getHuel());
+															order.getReferenznr() + "\n" +
+															order.getHuel());
 	  }
 
   private void jbInit() throws Exception {
@@ -363,15 +374,14 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     jLabel6.setBounds(new Rectangle(304, 10, 205, 15));
     tpKostenstelle.setFont(new java.awt.Font("Dialog", 0, 12));
     tpKostenstelle.setEditable(false);
-    tpKostenstelle.setText("Kostenstelle");
-    tpKostenstelle.setBounds(new Rectangle(1, 2, 248, 120));
+    tpKostenstelle.setBounds(new Rectangle(117, 2, 132, 120));
     kostenstelle.setBackground(Color.white);
     kostenstelle.setBounds(new Rectangle(0, 670, 524, 127));
     kostenstelle.setLayout(null);
     jScrollPane1.getViewport().setBackground(Color.white);
     jScrollPane1.setBorder(border1);
     jScrollPane1.setBounds(new Rectangle(-2, 235, 580, 137));
-    labMwSt7.setBounds(new Rectangle(259, 35, 79, 15));
+    labMwSt7.setBounds(new Rectangle(259, 32, 79, 15));
     labMwSt7.setHorizontalAlignment(SwingConstants.RIGHT);
     labMwSt7.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel7.setBounds(new Rectangle(4, 32, 233, 15));
@@ -384,6 +394,10 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     panelSumme.setBackground(Color.white);
 		panelSumme.setBounds(new Rectangle(175, 367, 351, 99));
 		panelSumme.setLayout(null);
+    tpKostenstelle1.setBounds(new Rectangle(10, 2, 104, 120));
+    tpKostenstelle1.setText("Kostenstelle");
+    tpKostenstelle1.setEditable(false);
+    tpKostenstelle1.setFont(new java.awt.Font("Dialog", 0, 12));
     this.getContentPane().add(printPanel, null);
     adresse.add(tfFachhochschule, null);
     adresse.add(logo, null);
@@ -407,6 +421,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
     printPanel.add(panelSumme, null);
     kostenstelle.add(tpKostenstelle, null);
     kostenstelle.add(jLabel6, null);
+    kostenstelle.add(tpKostenstelle1, null);
     printPanel.add(jScrollPane1, null);
     printPanel.add(lieferAnschrift, null);
     jScrollPane1.getViewport().add(tableBestellung, null);
@@ -430,7 +445,7 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
-		int heightAll = adresse.getHeight() +  jScrollPane1.getHeight() + lieferAnschrift.getHeight() + kostenstelle.getHeight();
+		int heightAll = printPanel.getHeight();
 
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
@@ -438,12 +453,12 @@ public class PrintSTDVordruck extends JFrame implements Printable{
 		 	return NO_SUCH_PAGE;
 	 	}else{
 			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 740);
-			if(totalNumPages > 1)
-				g2d.drawString("Seite: "+(pageIndex+1)+" von "+totalNumPages,(int)pageWidth/2-35, 725);//bottom center
+//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
+//			if(totalNumPages > 1)
+//				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
 
-			g2d.translate(0f,-pageIndex * pageFormat.getImageableHeight());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight()-5, 560, 712);
+			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
+			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
 
 			printPanel.printAll(g2d);
 

@@ -84,7 +84,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
   }
 
   private void jbInit() throws Exception {
-		this.setSize(new Dimension(564, 727));
+		this.setSize(new Dimension(564, 785));
     oben = new JPanel(){
 			public void paintComponent(Graphics g) {
 			  super.paintComponent(g);
@@ -275,7 +275,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     labName.setText("");
     labName.setBounds(new Rectangle(191, 7, 98, 15));
     unterschrift.setBackground(Color.white);
-    unterschrift.setBounds(new Rectangle(2, 633, 550, 78));
+    unterschrift.setBounds(new Rectangle(-2, 689, 550, 78));
     unterschrift.setLayout(null);
     labUnterschrift.setBorder(null);
     labUnterschrift.setText("");
@@ -306,7 +306,7 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     this.setTitle("Beilage zur Bestellung");
     printPanel.setBackground(Color.white);
-		printPanel.setBounds(new Rectangle(3, 4, 562, 728));
+		printPanel.setBounds(new Rectangle(3, 4, 562, 772));
 		printPanel.setLayout(null);
     oben.add(jLabel1, null);
     oben.add(labKoSt, null);
@@ -338,13 +338,13 @@ public class PrintSTDBeilage extends JFrame implements Printable {
     oben.add(cbVerbrauchsmaterial, null);
     oben.add(jLabel13, null);
     oben.add(jLabel12, null);
+    printPanel.add(unterschrift, null);
     unten.add(cbAngebotGuenstig, null);
     unten.add(cbAuftragGrund, null);
     unten.add(jLabel14, null);
     unten.add(labAngebotNr, null);
     unten.add(jLabel15, null);
     unten.add(tpAuftragGrund, null);
-    printPanel.add(unterschrift, null);
     unterschrift.add(jLabel16, null);
     unterschrift.add(labDatum, null);
     unterschrift.add(jLabel17, null);
@@ -407,8 +407,9 @@ public class PrintSTDBeilage extends JFrame implements Printable {
 			jScrollPane1.getViewport().add(tableBestellung);
 			jScrollPane1.setBounds(new Rectangle(0, 440, 548, (tableBestellung.getModel().getRowCount() * 15)+20));
 			unten.setBounds(new Rectangle(0, 380 + (tableBestellung.getModel().getRowCount() *30)+20, 547, 107));
-			unterschrift.setBounds(new Rectangle(0, 405 + (tableBestellung.getModel().getRowCount() *30) + 107, 537, 78));
-			printPanel.setBounds(4,5,547, oben.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 + unten.getHeight() + 60);
+//			unterschrift.setBounds(new Rectangle(0, 405 + (tableBestellung.getModel().getRowCount() *30) + 107, 537, 78));
+//			printPanel.setBounds(4,5,547, oben.getHeight() + tableBestellung.getTableHeader().getHeight() + tableBestellung.getModel().getRowCount() * 30 + unten.getHeight() + 60);
+			printPanel.setBounds(4,5,547, 800);
 
 	 }
 
@@ -482,24 +483,26 @@ public class PrintSTDBeilage extends JFrame implements Printable {
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
-		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight() + unterschrift.getHeight();
+		int heightAll =  printPanel.getHeight();
 
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
-		if(pageIndex  >= totalNumPages) {
-			return NO_SUCH_PAGE;
-		}else{
+//		if(pageIndex  >= totalNumPages) {
+//			return NO_SUCH_PAGE;
+//		}else{
 			g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 //			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight(), 560, 900);
 //			if(totalNumPages > 1)
 //				g2d.drawString("Seite: " + (pageIndex+1) + " von " + totalNumPages,( int)pageWidth/2 - 35, 790);//bottom center
 
-			g2d.translate(0f, -pageIndex * pageFormat.getImageableHeight());
-			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
+			g2d.translate(0f, 0);
+			//g2d.translate(0f, pageIndex * pageFormat.getImageableHeight());
+//			g2d.setClip(0, pageIndex * (int)pageFormat.getImageableHeight() - 5, 560, 780);
+			g2d.setClip(0, 0, 560, 780);
 
 			printPanel.printAll(g2d);
 
 			return Printable.PAGE_EXISTS;
-		}
+//		}
 	}
 }
