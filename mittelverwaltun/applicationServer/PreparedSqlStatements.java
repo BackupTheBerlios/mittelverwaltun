@@ -2335,7 +2335,10 @@ public class PreparedSqlStatements {
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
 																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
 															  "WHERE i.id = fbk.institutsId  " +
-																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND zvt.zvKontoId = zvk.id " +																	"AND fbk.geloescht = '0' " +
+																	"AND zvk.geloescht = '0' " +
+																	"AND zvt.geloescht = '0' " +
+																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																	"AND be.phase != 0 " +
@@ -2349,6 +2352,7 @@ public class PreparedSqlStatements {
 																	"Institute i, FBKonten fbk, Buchungen b, Haushaltsjahre h " +
 															  "WHERE i.id = fbk.institutsId  " +
 																	"AND b.fbKonto1 = fbk.id " +
+																	"AND fbk.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																	"AND b.typ = '5' " +																"GROUP BY i.bezeichnung, fbk.bezeichnung");
@@ -2365,6 +2369,9 @@ public class PreparedSqlStatements {
 																	"AND be.zvTitel = zvt.id " +
 															  "WHERE i.id = fbk.institutsId  " +
 																	"AND zvt.zvKontoId = zvk.id " +
+																	"AND fbk.geloescht = '0' " +
+																	"AND zvk.geloescht = '0' " +
+																	"AND zvt.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
@@ -2376,7 +2383,7 @@ public class PreparedSqlStatements {
 																		"zvk.bezeichnung AS zvKonto, " +
 																		"i.bezeichnung AS institut, " +
 																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +
-																		"(SELECT SUM(budget) FROM FBKonten WHERE institutsId = i.id) AS kontostand " +
+																		"( SELECT SUM(budget) " +																			"FROM FBKonten " +																			"WHERE institutsId = i.id " +																			"AND geloescht = '0') AS kontostand " +
 																"FROM " +
 																	"ZVKontentitel zvt, ZVKonten zvk, " +
 																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
@@ -2384,6 +2391,9 @@ public class PreparedSqlStatements {
 																	"AND bu.zvTitel1 = zvt.id " +
 															  "WHERE i.id = fbk.institutsId  " +
 																	"AND zvt.zvKontoId = zvk.id " +
+																	"AND fbk.geloescht = '0' " +
+																	"AND zvk.geloescht = '0' " +
+																	"AND zvt.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
@@ -2404,6 +2414,9 @@ public class PreparedSqlStatements {
 															  "WHERE zvt.zvKontoId = zvk.id " +															  	"AND bu.typ > 8 " +
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
+																	"AND fbk.geloescht = '0' " +
+																	"AND zvk.geloescht = '0' " +
+																	"AND zvt.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
@@ -2426,6 +2439,9 @@ public class PreparedSqlStatements {
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
 															  "WHERE i.id = fbk.institutsId " +															  	"AND zvt.zvKontoId = zvk.id " +
+																	"AND fbk.geloescht = '0' " +
+																	"AND zvk.geloescht = '0' " +
+																	"AND zvt.geloescht = '0' " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
@@ -2453,16 +2469,16 @@ public class PreparedSqlStatements {
 																							"OR zvTitel1 IN " +
 																											"( SELECT id " +
 																												"FROM ZVKontentitel " +
-																												"WHERE zvKontoId = zvk.id " +
+																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +
 																											")" +
 																						")" +
 																		") AS mittel, " +
-																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																											")" +																						")" +																		") AS ausgaben, " +
-																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel zvt1 " +																											"WHERE zvt1.zvKontoId  = zvk.id)" +																		") AS kontostand " +
+																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
+																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel " +																											"WHERE zvKontoId  = zvk.id " +																												"AND geloescht = '0')" +																		") AS kontostand " +
 																"FROM " +
 																	"ZVKonten zvk, Haushaltsjahre h " +
 															  "WHERE h.id = zvk.haushaltsjahrId " +
-																	"AND h.status = 0 ");
+																	"AND h.status = 0 " +																	"AND zvk.geloescht = '0'");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//343
