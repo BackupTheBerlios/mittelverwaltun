@@ -42,6 +42,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Verwaltung"
 		JMenu menuVerwaltung = new JMenu("Verwaltung");
 		JMenuItem miBenutzer = new JActivityRelatedMenuItem(1, "Benutzer");
+		JMenuItem miRollen = new JActivityRelatedMenuItem(1, "Rollen");
 		JMenuItem miFirmen = new JActivityRelatedMenuItem(1, "Firmen");
 		JMenu menuKonten = new JMenu("Konten");
 			JMenuItem miZVKonten = new JActivityRelatedMenuItem(1, "ZV-Konten");
@@ -53,7 +54,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	1,	"Aktuelles Haushaltsjahr abschließen");
 			JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Haushaltsjahre anzeigen");
 			//JMenuItem miMitteluebertrag = new JActivityRelatedMenuItem(	1,	"Mittelübertrag aus vergangenem Jahr");
-			
+		
 	// Das Menü "Reporting"
 	JMenu menuReporting = new JMenu("Reporting");
 
@@ -150,6 +151,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuVerwaltung.add( miBenutzer );
 			activityRelItems.add( miBenutzer );
 			miBenutzer.addActionListener( this );
+			menuVerwaltung.add( miRollen );
+			activityRelItems.add( miRollen );
+			miRollen.addActionListener( this );
 			menuVerwaltung.add( miFirmen );
 			activityRelItems.add( miFirmen );
 			miFirmen.addActionListener( this );
@@ -242,6 +246,8 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			frame.addChild( new ProfBudgetFrame( frame ) );
 		} else if ( e.getSource() == miBenutzer ) {
 			frame.addChild( new Benutzerverwaltung(frame.getApplicationServer()) );
+		} else if ( e.getSource() == miRollen ) {
+			frame.addChild( new RollenAktivitaetenverwaltung(frame) );
 		} else if ( e.getSource() == miFirmen ) {
 			frame.addChild( new Firmenverwaltung(frame) );
 		} else if ( e.getSource() == menuKonten ) {
@@ -252,9 +258,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miZuordnung ) {
 			frame.addChild( new KontenZuordnungverwaltung( frame.getApplicationServer() ,frame) );
 		} else if ( e.getSource() == miFachbereiche ) {
-			frame.addChild( new Fachbereichverwaltung(frame.getApplicationServer()) );
+			frame.addChild( new Fachbereichverwaltung(frame) );
 		} else if ( e.getSource() == miInstitute ) {
-			frame.addChild( new Institutverwaltung( frame.getApplicationServer() ) );
+			frame.addChild( new Institutverwaltung( frame ) );
 		} else if ( e.getSource() == miAbschliessen ) {
 			frame.addChild( new AbschlussHaushaltsjahr( frame ) );
 		} else if ( e.getSource() == miAnzeigen ) {
