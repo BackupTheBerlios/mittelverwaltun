@@ -1911,7 +1911,7 @@ public class PreparedSqlStatements {
 										  "ORDER BY datum DESC");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//274 select for update für eine ASK- bzw. StandardBestellung
+		{//274 select for update für eine StandardBestellung
 			ps = con.prepareStatement("SELECT " +
 																		"k.id, k.beschreibung," +
 																		"b.ersatzbeschaffung, b.ersatzbeschreibung, b.ersatzInventarNr, " +
@@ -2214,11 +2214,32 @@ public class PreparedSqlStatements {
 		/* Join: Bestellungen, ASK_Standard_Bestellungen 2 */
 		/* Indizes: 325-334					                       */
 		/***************************************************/
-		{//325 
-			statements[i++] = null;
+		{//325 gibt die ASKBestellung anhand der Id zurück, es werden nur die ID zurückgegeben
+			ps = con.prepareStatement("SELECT " +
+																		"b.bemerkungen, b.swBeauftragter, " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +
+																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, " +																		"a.fbKonto, a.bestellwert, a.verbindlichkeiten " +
+																"FROM Bestellungen a, ASK_Standard_Bestellungen b " +
+															  "WHERE a.id = ? " +
+																	"AND a.id = b.id " +
+																	"AND a.typ = '1' " +
+																	"AND a.geloescht = '0' ");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//326
-			statements[i++] = null;
+		{//326 select for update für eine ASKBestellung
+			ps = con.prepareStatement("SELECT " +
+																		"b.bemerkungen, b.swBeauftragter, " +
+																		"a.besteller, a.auftraggeber, a.empfaenger, " +
+																		"a.referenzNr, a.huelNr, a.phase, a.huelNr, a.datum, a.zvTitel, " +
+																		"a.fbKonto, a.bestellwert, a.verbindlichkeiten " +
+																"FROM Bestellungen a, ASK_Standard_Bestellungen b " +
+															  "WHERE a.id = ? " +
+																	"AND a.id = b.id " +
+																	"AND a.typ = '1' " +
+																	"AND a.geloescht = '0' FOR UPDATE");
+			int[] param = {	Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//327
 			statements[i++] = null;

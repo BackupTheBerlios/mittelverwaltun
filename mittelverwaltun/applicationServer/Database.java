@@ -2974,10 +2974,9 @@ public class Database implements Serializable{
 
 		try{
 			Object[] parameters = { new Integer(bestellId) };
-			ResultSet rs = statements.get(270).executeQuery(parameters);
+			ResultSet rs = statements.get(325).executeQuery(parameters);
 
 			if (rs.next()){
-				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
 				Benutzer besteller = selectUser(rs.getInt("besteller"));
 				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
 				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
@@ -3049,21 +3048,20 @@ public class Database implements Serializable{
 		ASKBestellung bestellung = null;
 
 		try{
-			Object[] parameters = { new Integer(bestellId), "1" };
-			ResultSet rs = statements.get(274).executeQuery(parameters);
+			Object[] parameters = { new Integer(bestellId) };
+			ResultSet rs = statements.get(326).executeQuery(parameters);
 
 			if (rs.next()){
-				Kostenart kostenart = new Kostenart(rs.getInt(1), rs.getString(2));
 				Benutzer besteller = selectUser(rs.getInt("besteller"));
 				Benutzer auftraggeber = selectUser(rs.getInt("auftraggeber"));
 				Benutzer empfaenger = selectUser(rs.getInt("empfaenger"));
 				Benutzer swBeauftragter = selectUser(rs.getInt("swBeauftragter"));
 				ZVTitel zvTitel = selectZVTitel(rs.getInt("zvTitel"));
 				FBUnterkonto fbkonto = selectFBKonto(rs.getInt("fbKonto"));
-		
-				bestellung = new ASKBestellung(bestellId, rs.getString("referenzNr"), rs.getString("huelNr"), rs.getDate("datum"), besteller, auftraggeber,
-																			 empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten"), rs.getString("phase").charAt(0),
-																			 null, rs.getString("bemerkungen"), swBeauftragter);
+			
+				bestellung = new ASKBestellung(	bestellId, rs.getString("referenzNr"), rs.getString("huelNr"), rs.getDate("datum"), besteller,
+																				auftraggeber, empfaenger, zvTitel, fbkonto, rs.getFloat("bestellwert"), rs.getFloat("verbindlichkeiten"),
+																				rs.getString("phase").charAt(0), null, rs.getString("bemerkungen"), swBeauftragter);
 			}else {
 				throw new ApplicationServerException(70);
 			}
@@ -3304,7 +3302,7 @@ public class Database implements Serializable{
 			
 				Object[] parameters = { (b.getGeloescht() ? "1" : "0"), new Integer(b.getBesteller().getId()), new Integer(b.getAuftraggeber().getId()), new Integer(b.getEmpfaenger().getId()), b.getReferenznr(), b.getHuel(), "" + b.getPhase(),
 																b.getDatum(), new Integer(b.getZvtitel().getId()), new Integer(b.getFbkonto().getId()), new Float(b.getBestellwert()), new Float(b.getVerbindlichkeiten()),
-																b.getBemerkung(), null, null, null, null, null, null, null, null, new Integer(b.getId()) };
+																b.getBemerkung(), null, null, null, null, null, null, null, new Integer(b.getSwbeauftragter().getId()), new Integer(b.getId()) };
 				if(statements.get(271).executeUpdate(parameters) == 0)
 					throw new ApplicationServerException(78);
 
