@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[270];
+		statements = new PreparedStatementWrapper[275];
 		int i = 0;
 
 		/**************************************/
@@ -1617,7 +1617,7 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/******************************************/
-		/* Tabelle: Positonen                 	  */
+		/* Tabelle: Positionen                 	  */
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//265 fügt eine Positon in die Tabelle Positionen ein
@@ -1638,6 +1638,25 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//269
+			statements[i++] = null;
+		}
+		/**************************************************/
+		/* Join: Bestellungen, ASK_Standard_Bestellungen  */
+		/* Indizes: 270-274					                      */
+		/**************************************************/
+		{//270 
+			statements[i++] = null;
+		}
+		{//271
+			statements[i++] = null;
+		}
+		{//272
+			statements[i++] = null;
+		}
+		{//273
+			statements[i++] = null;
+		}
+		{//274
 			statements[i++] = null;
 		}
 	}
