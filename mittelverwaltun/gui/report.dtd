@@ -1,0 +1,694 @@
+<!--
+  Report DTD for JFreeReport version 0.8.4-8.
+
+	ChangeLog:
+
+	2002-05-01: Taq: Added multiline-field and multiline-function element
+  2002-05-23: Changed the font style for extended attributes. The old attribute is also valid
+              and gets silently mapped to the new style by the parser.
+  2002-06-09: Added the rectangle shape element
+  2002-06-30: ImageField, ImageFunction
+  2002-07-10: ImageURLField, ImageURLFunction
+  2002-07-17: Updated missing attributes in Image* tags
+  2002-09-16: Removed BASELINE attribute from font definition, fixed Orientation-attribute declaration,
+              Bands can have a default font declaration
+  2002-10-16: All textelements have now a "dynamic" attribute which defaults to false
+  2002-12-01: Removed deprecated General and multiline-field and *-function tags
+              GroupHeader has "repeat" attribute
+  2002-12-02: Band-heights are no longer required. If they are set, they act as minimum-height.
+  2002-12-08: Added support for ReportConfiguration over XML
+  2003-01-25: ResourceLabel and ResourceField added
+              additional font style attributes added
+              all elements except the shape elements now able to be dynamic
+  2003-05-20: Added support for generic shape-field and drawable-field (since version 0.8.2)
+  ..
+  2004-04-04: Added support for fixed position of bands ..
+ -->
+
+<!ENTITY % boolean
+   "true | false"
+>
+
+<!ENTITY % fontstyle
+   "plain | bold | italic | bold-italic"
+>
+
+<!ENTITY % alignmentEnum
+   "left | center | right"
+>
+
+<!ENTITY % valignmentEnum
+   "top | middle | bottom"
+>
+
+<!ENTITY % orientations
+  "portrait | landscape | reverse_landscape"
+>
+
+<!--
+
+ The position of an element is declared either relative to the last
+ defined element in the band (or (0,0) if the element is the first element),
+ or it is positioned absolute to the top left corner of the current band.
+
+ When positioning an element be aware to take care of the elements width.
+ The next element should be placed at the absolute position x+width,
+ or the elements will overwrite each other.
+
+ All Fontstyles default to plain and all boolean styles to false. If no font is
+ set either in Band nor in element, a compiled in default font is used.
+
+-->
+<!ENTITY % position
+ "x           CDATA          #REQUIRED
+  y           CDATA          #REQUIRED
+  width       CDATA          #REQUIRED"
+>
+
+<!--
+
+  Colors are specified in HTML Syntax, so use #FFFFFF for white and #000000
+  for black when using RGB numeric values. You may also use defined named
+  constants for the color, as "black", "white" and so on.
+
+  The constants understood by the parser are:
+  "black", "blue", "cyan", darkGray", "gray", "green", "lightGray", "magenta",
+  "orange", "pink", "red", "white", "yellow"
+
+  -->
+<!ENTITY % basicform
+" color          CDATA          #IMPLIED
+  name           CDATA          #IMPLIED"
+ >
+
+<!ENTITY % fontdef
+" fontname       CDATA              #IMPLIED
+  fontstyle      (%fontstyle;)      #IMPLIED
+  fontsize       CDATA              #IMPLIED
+  fsbold         (%boolean;)        #IMPLIED
+  fsitalic       (%boolean;)        #IMPLIED
+  fsunderline    (%boolean;)        #IMPLIED
+  fsstrikethr    (%boolean;)        #IMPLIED
+  font-embedded  (%boolean;)        #IMPLIED
+  font-encoding  CDATA              #IMPLIED
+  line-height    CDATA              #IMPLIED
+
+  alignment      (%alignmentEnum;)  #IMPLIED
+  vertical-alignment     (%valignmentEnum;) #IMPLIED"
+ >
+
+<!--
+  Removed multiline function: This element was never implemented and now all text elements
+  support linebreaks.
+  -->
+<!ENTITY % itemelements
+  "(label | string-field | number-field | date-field |
+	imageref | image-field | imageurl-field | rectangle |
+  resource-label | resource-field | line |
+  drawable-field | shape-field | band)*">
+
+
+<!--
+
+     Colordefinitions are given either as predefined names as defined
+     in HTML or as HTML-RGB-Color-Reference ("#rrggbb");
+
+ -->
+
+
+<!--
+
+   A report constists of several elements, which are all optional:
+
+   * reportheader
+     printed at the first page
+
+   * reportfooter
+     printed on the last page
+
+   * a page header
+     Printed before any content is printed to the page.
+
+   * a page footer
+     printed, after the last content for the page is printed
+     The pagefooter is always positionated at the bottom of a page,
+     regardless how much space of the page is filled.
+
+   * one or more group definitions in the "groups" element
+     If no groups are defined, a default group is created to contain
+     all data elements of the current report.
+
+   * the (optional) item band. This is where the data rows are printed.
+     If no item band is defined, only printing is disabled. All
+     calculations are performed regardless of the appearance of the
+     items.
+
+   Attributes:
+    Width  = the width of the report in Java-Printing-Units
+    Height = the height of the report
+
+    All printing units are defined in 1/72 inches, the default printing
+    resolution on java.awt.graphics.
+
+    minPageFormat = a predefined page format, for instance "A4" or "US-LETTER"
+
+
+  -->
+
+<!ENTITY % pageFormats
+  "(  PAPER10X11 | PAPER10X13 | PAPER10X14 | PAPER12X11 | PAPER15X11 | PAPER7X9 | PAPER8X10 |
+      PAPER9X11 | PAPER9X12 | A0 | A1 | A2 | A3 | A3_TRANSVERSE | A3_EXTRA | A3_EXTRATRANSVERSE |
+      A3_ROTATED | A4 | A4_TRANSVERSE | A4_EXTRA | A4_PLUS | A4_ROTATED | A4_SMALL | A5 |
+      A5_TRANSVERSE | A5_EXTRA | A5_ROTATED | A6 | A6_ROTATED | A7 | A8 | A9 | A10 |
+      ANSIC | ANSID | ANSIE | ARCHA | ARCHB | ARCHC | ARCHD | ARCHE | B0 | B1 | B2 | B3 | B4 |
+      B4_ROTATED | B5 | B5_TRANSVERSE | B5_ROTATED | B6 | B6_ROTATED | B7 | B8 | B9 | B10 |
+      C4 | C5 | C6 | COMM10 | DL | DOUBLEPOSTCARD | DOUBLEPOSTCARD_ROTATED | ENV9 | ENV10 |
+      ENV11 | ENV12 | ENV14 | ENVC0 | ENVC1 | ENVC2 | ENVC3 | ENVC4 | ENVC5 | ENVC6 | ENVC65 | ENVC7 |
+      ENVCHOU3 | ENVCHOU3_ROTATED | ENVCHOU4 | ENVCHOU4_ROTATED | ENVDL | ENVINVITE | ENVISOB4 | ENVISOB5 |
+      ENVISOB6 | ENVITALIAN | ENVKAKU2 | ENVKAKU2_ROTATED | ENVKAKU3 | ENVKAKU3_ROTATED | ENVMONARCH |
+      ENVPERSONAL | ENVPRC1 | ENVPRC1_ROTATED | ENVPRC2 | ENVPRC2_ROTATED | ENVPRC3 | ENVPRC3_ROTATED |
+      ENVPRC4 | ENVPRC4_ROTATED | ENVPRC5 | ENVPRC5_ROTATED | ENVPRC6 | ENVPRC6_ROTATED | ENVPRC7 |
+      ENVPRC7_ROTATED | ENVPRC8 | ENVPRC8_ROTATED | ENVPRC9 | ENVPRC9_ROTATED | ENVPRC10 | ENVPRC10_ROTATED |
+      ENVYOU4 | ENVYOU4_ROTATED | EXECUTIVE | FANFOLDUS | FANFOLDGERMAN | FANFOLDGERMANLEGAL |
+      FOLIO | ISOB0 | ISOB1 | ISOB2 | ISOB3 | ISOB4 | ISOB5 | ISOB5_EXTRA | ISOB6 | ISOB7 | ISOB8 | ISOB9 |
+      ISOB10 | LEDGER | LEGAL | LEGAL_EXTRA | LETTER | LETTER_TRANSVERSE | LETTER_EXTRA | LETTER_EXTRATRANSVERSE |
+      LETTER_PLUS | LETTER_ROTATED | LETTER_SMALL | MONARCH | NOTE | POSTCARD | POSTCARD_ROTATED | PRC16K |
+      PRC16K_ROTATED | PRC32K | PRC32K_ROTATED | PRC32K_BIG | PRC32K_BIGROTATED | QUARTO | STATEMENT | SUPERA |
+      SUPERB | TABLOID | TABLOIDEXTRA )"
+>
+
+<!ELEMENT report   (configuration?, reportheader?, reportfooter?, pageheader?, pagefooter?, watermark?, groups?, items?, functions?)>
+
+<!ATTLIST report
+  width          CDATA           #IMPLIED
+  height         CDATA           #IMPLIED
+  name           CDATA           #IMPLIED
+  pageformat     %pageFormats;   #IMPLIED
+  orientation    (%orientations;) "portrait"
+  leftmargin     CDATA           #IMPLIED
+  rightmargin    CDATA           #IMPLIED
+  topmargin      CDATA           #IMPLIED
+  bottommargin   CDATA           #IMPLIED
+>
+
+<!--
+
+  Configure this instance of the report. You may use all defined ReportConfigurationKeys
+  as PropertyNames. See jfreereport.properties for more details.
+
+  This can be used to define the PDF-FontEncoding for an Report.
+
+  -->
+<!ELEMENT configuration (property*)>
+
+<!--
+
+  The reportheader can contain any band-element.
+  The height of the report header is ignored, if the header and footer is
+  printed on an own page.
+
+  As with every element container you may define default font settings
+  for sub elements without an own font definition.
+
+  In an header the ownpage is translated as pagebreak_after_print,
+  on an footer that attribute is translated to pagebreak_before_print.
+
+  -->
+<!ELEMENT reportheader ( %itemelements; )>
+<!ATTLIST reportheader
+  ownpage         (%boolean;)    #IMPLIED
+  height         CDATA           #IMPLIED
+   %basicform;
+  %fontdef;
+  fixed-position CDATA          #IMPLIED
+>
+
+<!ELEMENT reportfooter ( %itemelements; )>
+<!ATTLIST reportfooter
+  ownpage        (%boolean;)    #IMPLIED
+  height         CDATA          #IMPLIED
+  %basicform;
+  %fontdef;
+  fixed-position CDATA          #IMPLIED
+>
+
+
+
+<!--
+
+  The pageheader can contain any band-element.
+
+  As with every element container you may define default font settings
+  for sub elements without an own font definition.
+
+  -->
+<!ELEMENT pageheader ( %itemelements; )>
+<!ATTLIST pageheader
+  onfirstpage    (%boolean;)   #IMPLIED
+  onlastpage     (%boolean;)   #IMPLIED
+  height         CDATA         #IMPLIED
+  %basicform;
+  %fontdef;
+>
+
+<!ELEMENT pagefooter ( %itemelements; )>
+<!ATTLIST pagefooter
+  onfirstpage    (%boolean;)   #IMPLIED
+  onlastpage     (%boolean;)   #IMPLIED
+  height         CDATA         #IMPLIED
+  %basicform;
+  %fontdef;
+>
+
+<!--
+
+  The tag encapsulates all groups. This tag helps to keep parsing
+  simple. If no groups are defined, a default group is created and
+  contains all elements of the report datarow
+
+  -->
+<!ELEMENT groups (group*)>
+
+<!--
+  The fields are required
+  -->
+<!ELEMENT group  (groupheader?, groupfooter?, fields)>
+<!ATTLIST group
+  name           CDATA         #IMPLIED
+>
+
+<!--
+
+  A group header is printed before a group starts. A group start
+  is invoked when one element in groupelements changes and on the
+  start of the report generation.
+
+  If pagebreak is set to true, a page break will be forced before
+  the group header is printed.
+
+  If repeat is set to true, this header is repeated after an pagebreak
+  if this group is still active and no other groupheader in an subgroup
+  has the repeat flag set.
+
+  The pagebreak attribute is now deprecated and is replaced by
+  pagebreak-before-print.
+  -->
+<!ELEMENT groupheader ( %itemelements; )>
+<!ATTLIST groupheader
+  pagebreak                 (%boolean;)   #IMPLIED
+  pagebreak-after-print     (%boolean;)   #IMPLIED
+  pagebreak-before-print    (%boolean;)   #IMPLIED
+  repeat                    (%boolean;)   #IMPLIED
+  height                    CDATA         #IMPLIED
+  %basicform;
+  %fontdef;
+  fixed-position CDATA          #IMPLIED
+>
+
+<!--
+  This pagebreak is a pagebreak before print ...
+  -->
+<!ELEMENT groupfooter ( %itemelements; )>
+<!ATTLIST groupfooter
+  pagebreak                 (%boolean;)   #IMPLIED
+  pagebreak-after-print     (%boolean;)   #IMPLIED
+  pagebreak-before-print    (%boolean;)   #IMPLIED
+  height                    CDATA         #IMPLIED
+  %basicform;
+  %fontdef;
+  fixed-position CDATA          #IMPLIED
+>
+
+<!--
+
+  the name of the elements that have to change for
+  a group break.
+
+  A report group may have more than one group element.
+  A group element may only contain Strings defining the
+  names of the items which form a group. This is not
+  limited to items from the data model, you may also
+  enter functions here.
+
+  If you define a subgroup, then you'll have to include all
+  fields of the parent group and at least one new field.
+
+ -->
+<!ELEMENT fields  (field*)>
+<!ELEMENT field  (#PCDATA)>
+
+<!ELEMENT watermark   ( %itemelements; )>
+<!ATTLIST watermark
+  height         CDATA          #IMPLIED
+  %basicform;
+  %fontdef;
+>
+
+
+<!ELEMENT items   ( %itemelements; )>
+<!ATTLIST items
+  height         CDATA          #IMPLIED
+  %basicform;
+  %fontdef;
+  fixed-position CDATA          #IMPLIED
+>
+
+<!--
+
+  Defines a sub band.
+
+  -->
+<!ELEMENT band ( %itemelements; )>
+<!ATTLIST band
+  x              CDATA          #REQUIRED
+  y              CDATA          #REQUIRED
+  width          CDATA          #IMPLIED
+  height         CDATA          #IMPLIED
+  %basicform;
+  %fontdef;
+>
+
+
+<!--
+
+  A simple label, static text that does not change, the text
+  contains a ResourceBundle key, which is looked up during the
+  report processing.
+
+  -->
+<!ELEMENT resource-label   (#PCDATA)>
+<!ATTLIST resource-label
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  nullstring     CDATA          #IMPLIED
+  dynamic        (%boolean;)    #IMPLIED
+  resource-base  CDATA          #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+<!--
+
+  A text field. The field data contains a ResourceBundle key,
+  which is looked up during the report processing.
+
+  -->
+<!ELEMENT resource-field   EMPTY>
+<!ATTLIST resource-field
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  fieldname   CDATA    #REQUIRED
+  nullstring  CDATA    #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  resource-base  CDATA          #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+<!--
+  A simple label, static text that does not change
+  -->
+<!ELEMENT label   (#PCDATA)>
+<!ATTLIST label
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  nullstring     CDATA          #IMPLIED
+  dynamic        (%boolean;)    #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+<!--
+  A simple text field
+  -->
+<!ELEMENT string-field   EMPTY>
+<!ATTLIST string-field
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  fieldname   CDATA    #REQUIRED
+  nullstring  CDATA    #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+
+<!ELEMENT number-field   EMPTY>
+<!ATTLIST number-field
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  format		CDATA      #IMPLIED
+  fieldname   CDATA    #REQUIRED
+  nullstring  CDATA    #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+<!ELEMENT date-field   EMPTY>
+<!ATTLIST date-field
+  %basicform;
+  %position;
+  height         CDATA          #REQUIRED
+  %fontdef;
+  format		           CDATA         #IMPLIED
+  fieldname            CDATA         #REQUIRED
+  dynamic              (%boolean;)   #IMPLIED
+  nullstring           CDATA         #IMPLIED
+  trim-text-content    (%boolean;)   #IMPLIED
+  reserved-literal     CDATA         #IMPLIED
+>
+
+
+<!--
+
+   The image reference links an external image into the report.
+
+  -->
+<!ELEMENT imageref   EMPTY>
+<!ATTLIST imageref
+  %position;
+  height      CDATA #REQUIRED
+  src         CDATA #REQUIRED
+  name        CDATA #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  scale       (%boolean;)   #IMPLIED
+  keepAspectRatio     (%boolean;)   #IMPLIED
+>
+<!--
+
+   The image reference links an external image into the report. This element expects an
+   Graphics2D-Object in the datasource.
+
+  -->
+<!ELEMENT image-field   EMPTY>
+<!ATTLIST image-field
+  %position;
+  height      CDATA #REQUIRED
+  fieldname   CDATA #REQUIRED
+  name        CDATA #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  scale       (%boolean;)   #IMPLIED
+  keepAspectRatio     (%boolean;)   #IMPLIED
+>
+
+<!--
+  Not yet complete, may change ...
+
+  Field may not be dynamic, as drawables have no content size
+-->
+<!ELEMENT drawable-field   EMPTY>
+<!ATTLIST drawable-field
+  %position;
+  height      CDATA #REQUIRED
+  fieldname   CDATA #REQUIRED
+  name        CDATA #IMPLIED
+>
+
+<!--
+
+   The image reference links an external image into the report. This element expects an
+   URL or URL-String in the datasource.
+
+  -->
+<!ELEMENT imageurl-field   EMPTY>
+<!ATTLIST imageurl-field
+  %position;
+  height      CDATA #REQUIRED
+  fieldname   CDATA #REQUIRED
+  name        CDATA #IMPLIED
+  dynamic     (%boolean;)   #IMPLIED
+  scale       (%boolean;)   #IMPLIED
+  keepAspectRatio     (%boolean;)   #IMPLIED
+  dynamic        (%boolean;)    #IMPLIED
+>
+
+
+<!--
+
+  Shapes
+
+  -->
+<!ELEMENT line      EMPTY>
+<!ATTLIST line
+  x1        CDATA       #REQUIRED
+  y1        CDATA       #REQUIRED
+  x2        CDATA       #REQUIRED
+  y2        CDATA       #REQUIRED
+	color     CDATA       #IMPLIED
+	name      CDATA       #IMPLIED
+	weight    CDATA       #IMPLIED
+>
+
+<!--
+
+  The rectangle is a filled rectangular area. No outline is drawn.
+
+  -->
+<!ELEMENT rectangle EMPTY>
+<!ATTLIST rectangle
+  %position;
+  height         CDATA   #REQUIRED
+  %basicform;
+  draw     (%boolean;)   #IMPLIED
+  fill     (%boolean;)   #IMPLIED
+  weight    CDATA        #IMPLIED
+  scale       (%boolean;)   #IMPLIED
+  keepAspectRatio     (%boolean;)   #IMPLIED
+>
+
+<!--
+
+  A generic shape field. The shape is defined in the DataRow.
+
+  -->
+<!ELEMENT shape-field EMPTY>
+<!ATTLIST shape-field
+  %position;
+  height         CDATA   #REQUIRED
+  %basicform;
+  fieldname      CDATA   #REQUIRED
+  dynamic  (%boolean;)   #IMPLIED
+  draw     (%boolean;)   #IMPLIED
+  fill     (%boolean;)   #IMPLIED
+  weight    CDATA        #IMPLIED
+>
+
+<!--
+
+  Functions are defined in a function library.
+  Every referenced function has to be defined in the
+  library in order to be loaded and executed correctly.
+
+  -->
+<!ELEMENT functions  (function | expression | data-ref | property-ref)*>
+
+<!--
+
+  A data reference is used to validate the table model against
+  the declared format of the datasource. It simply checks that
+  all fields declared are present and are assignable from the
+  given type.
+
+  The attribute class is used to validate the data models objects.
+  This function uses TableModel.getColumnClass() to query the
+  table models data types. If the tablemodel returns java.lang.Object
+  no check is done, java.lang.Object is considered as an indicator
+  that the table model does not know about it's internal data
+  structure.
+
+  The data-reference was never implemented and will not be implemented
+  in future releases.
+
+-->
+<!ELEMENT data-ref  EMPTY>
+<!ATTLIST data-ref
+  name    CDATA   #REQUIRED
+	class   CDATA   #IMPLIED
+>
+
+<!--
+
+  A reference to a report property. This property is predefined here and can be accessed
+  as any datasource. The value defaults to null if no more data is given. The encoding parameter
+  defaults to "text", "serialized-base64" is implemented later to allow serialized objects
+  as value for the property.
+
+-->
+<!ELEMENT property-ref  (#PCDATA)>
+<!ATTLIST property-ref
+  name       CDATA   #REQUIRED
+	encoding   CDATA   #IMPLIED
+>
+
+<!--
+
+  A defined function has a valid implementing class that implement
+  the org.jfree.report.function.Function interface. Functions have access to the datarow and
+  can access other functions or expressions or the datasource. Functions are statefull and maintain
+  their state during the report generation. For stateless userdefined computations consider using
+  an expression instead of functions, as expression are cheaper to compute and maintain when using
+  huge reports.
+
+  Function parameters are given by propery elements. For visual
+  editing, function must obey to the java-beans rules (use get*/set*
+  methods, perhaps provide beaninfo and so on)
+
+  The deplevel attribute can be used to priorize the functions. Functions with an higher depencylevel
+  are executed before any function with lower depency levels. Depencylevels lower than 0 are not allowed.
+  -->
+<!ELEMENT function   (properties?)>
+<!ATTLIST function
+ class      CDATA    #REQUIRED
+	name       CDATA    #REQUIRED
+ deplevel   CDATA    #IMPLIED
+>
+
+
+<!--
+
+  An expression is a stateless userdefined function. It can access the datarow and the reportproperties
+  to perform its task. Using the datarow an expression has access to the datasource and other functions
+  and expressions.
+
+  Expression parameters are given by propery elements. For visual
+  editing, Expressions must obey to the java-beans rules (use get*/set*
+  methods, perhaps provide beaninfo and so on)
+
+  The deplevel attribute can be used to priorize the functions. Functions with an higher depencylevel
+  are executed before any function with lower depency levels. Depencylevels lower than 0 are not allowed.
+  -->
+<!ELEMENT expression   (properties?)>
+<!ATTLIST expression
+  class      CDATA    #REQUIRED
+	name       CDATA    #REQUIRED
+ deplevel   CDATA    #IMPLIED
+>
+
+<!--
+
+  Defines a set of properties for a function.
+
+  -->
+<!ELEMENT properties  (property*)>
+
+<!--
+
+  A single property, a name - value pair.
+
+  -->
+<!ELEMENT property    (#PCDATA)>
+<!ATTLIST property
+  name       CDATA    #REQUIRED
+  encoding   CDATA    #IMPLIED
+>

@@ -32,7 +32,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "Ausgaben", "Verteilungen"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_3){
-			String[] colheads = {"Instiut", "FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
+			String[] colheads = {"Institut", "FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_4){
 			String[] colheads = {"FB-Konto", "ZV-Konto", "Ausgaben (FB-Konto)"}; 
@@ -41,13 +41,13 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZVKonto", "Institut", "Ausgaben (Institut)", "Kontostand (Institut)"};
 			setColumnIdentifiers(colheads);
 		}	else if (type == Reports.REPORT_6){
-			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben (Institut)"}; 
+			String[] colheads = {"Institut", "ZV-Konto", "Ausgaben (Institut)"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_7){
-			String[] colheads = {"Instiut", "ZV-Konto", "Ausgaben (Bestellung)", "FBI-Schlüsselnummer", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
+			String[] colheads = {"Institut", "ZV-Konto", "Ausgaben (Bestellung)", "Referenznr.", "Hül-Nr", "Typ", "Datum", "Status", ""}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_8){
-			String[] colheads = {"Instiut", "FB-Konto", "Einnahmen (Institut)"}; 
+			String[] colheads = {"Institut", "FB-Konto", "Einnahmen (Institut)"}; 
 			setColumnIdentifiers(colheads);
 		}
 		
@@ -206,7 +206,6 @@ public class ReportsTableModel extends DefaultTableModel {
 	}
 
 	public Class getColumnClass(int colIndex) {
-		System.out.println("" + colIndex);
 		return getValueAt(0, colIndex).getClass();
 	}
 	

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE report PUBLIC "-//JFreeReport//DTD report definition//EN//simple"
+                        "./report.dtd">
+
+<report name="FB-Mittelverwaltung Report" pageformat="A4" leftmargin="72" topmargin="72" >
+  
+  <!-- REPORT HEADER -->
+  <!-- This band appears once at the beginning of the report.  In this example, -->
+  <!-- the header contains four labels. -->
+  <reportheader height="70" fontname="SansSerif" fontstyle="plain" fontsize="10">
+
+    <rectangle x="0" y="0" width="100%" height="30"
+      color="#6699CC" weight="0" draw="true" fill="true"/>
+		<rectangle x="0" y="0" width="100%" height="30"
+      color="#000000" weight="0" draw="true" fill="false"/>
+		
+		<label fontname="Tahoma" fontstyle="bold" fontsize="18"
+      x="0" y="8" width="100%" height="18" alignment="center"
+      >FB-Mittelverwaltung Reports</label>
+		
+    <string-field fieldname="reportName" fontname="Tahoma" fontstyle="bold" 
+    	fontsize="12" x="3" y="40" width="100%" height="0"
+      alignment="left" dynamic="true"/>
+		<line x1="0" y1="60" x2="0" y2="60" color="#CCCCCC" weight="0.5"/>
+
+  </reportheader>
+  
+	<!-- PAGE FOOTER -->
+  <!-- Displays the page number, centered at the bottom of the page. -->
+  <pagefooter height="14"
+    onfirstpage="true" onlastpage="true"
+    fontname="Tahoma" fontstyle="plain" fontsize="9">
+
+    <number-field fieldname="PageNumber"
+      format="Page 0"
+      x="0" y="3" width="100%" height="9"
+      alignment="center" nullstring="hull"/>
+
+  </pagefooter>
+	
+	<groups>
+    <group name="Institut Group">
+      <groupheader height="40" fontname="SansSerif" fontstyle="bold" fontsize="12" pagebreak="false">
+        <string-field x="0" y="11" width="250" height="12" alignment="left" fieldname="Institut"/>
+        <line x1="0" y1="23" x2="0" y2="23" weight="0.5"/>
+        <rectangle x="0" y="30" width="100%" height="15" color="#CCCCCC" weight="0"/>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="3" y="33" width="100%" height="10" alignment="left">ZV-Konto</label>
+        <label fontname="Tahoma" fontstyle="bold" fontsize="10" x="0" y="33" width="100%" height="10" alignment="right">Ausgaben (Institut) </label>
+      </groupheader>
+      <fields>
+        <field>Institut</field>
+      </fields>
+    </group>
+  </groups>
+
+  <!-- THE ITEM BAND -->
+  <!-- This band is printed once for each row of data in the TableModel. -->
+  <items height="0"
+    fontname="Tahoma" fontstyle="plain" fontsize="9">
+
+    <string-field x="0" y="7" width="100%" height="9" alignment="left"
+      fontname="Tahoma" fontstyle="plain" fontsize="8"
+      fieldname="ZV-Konto"/>
+
+    <string-field x="0" y="9" width="95%" height="9" alignment="right"
+      fontname="Tahoma"
+      fieldname="Ausgaben (Institut)"/>
+    <label fontname="Tahoma" x="0" y="9" width="100%" height="9" alignment="right">Euro</label>
+
+  </items>
+
+  <!-- FUNCTIONS -->
+  <!-- Declares the functions used in this report. -->
+  <functions>
+    <property-ref name="report.date"/>
+
+    <function name="PageNumber" class="org.jfree.report.function.PageFunction"/>
+
+    <function name="OverallCount"
+      class="org.jfree.report.function.ItemCountFunction">
+      <properties>
+        <property name="field">Name</property>
+      </properties>
+    </function>
+
+  </functions>
+
+</report>

@@ -3,6 +3,12 @@ package gui;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import org.jfree.report.JFreeReport;
+import org.jfree.report.ReportProcessingException;
+import org.jfree.report.modules.gui.base.PreviewInternalFrame;
+import org.jfree.report.modules.parser.base.ReportGenerator;
+import org.jfree.report.util.Log;
+
 import dbObjects.Institut;
 import dbObjects.ZVKonto;
 
@@ -13,6 +19,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.rmi.Naming;
 import java.util.ArrayList;
 
@@ -102,7 +111,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   JButton btDrucken = new JButton(Functions.getPrintIcon(this.getClass()));
   JComboBox cbInstitut = new JComboBox();
   String filter = "";
-  JButton buReportInfo = new JButton(Functions.getInformation24Icon(this.getClass()));
+  String xmlFile = "";
 
 	public Reports(MainFrame frame) {
 		this.frame = frame;
@@ -117,7 +126,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	private void jbInit() throws Exception {
 
-		this.setSize(800, 290);
+		this.setSize(new Dimension(800, 414));
 		this.setFrameIcon(null);
     this.setTitle("Reports");
     this.getContentPane().setLayout(null);
@@ -127,10 +136,9 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     cbReportFilter.setFont(new java.awt.Font("Dialog", 1, 11));
 	  cbReportFilter.setRenderer(new MyComboBoxRenderer());
 	  cbReportFilter.setToolTipText(tooltips[0]);
-	  cbReportFilter.setActionCommand("selectReport");
 	  cbReportFilter.addItemListener(this);
 
-    btAktualisieren.setBounds(new Rectangle(658, 12, 113, 27));
+    btAktualisieren.setBounds(new Rectangle(661, 12, 113, 27));
     btAktualisieren.setFont(new java.awt.Font("Dialog", 1, 11));
     btAktualisieren.setText("Anzeigen");
     btAktualisieren.setActionCommand("showReport");
@@ -139,7 +147,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     tabReport = new ReportsTable(this);
     tabReport.setFont(new java.awt.Font("Dialog", 0, 11));
 
-    spReport.setBounds(new Rectangle(15, 49,760, 150));
+    spReport.setBounds(new Rectangle(14, 52, 760, 288));
     labInstitut.setFont(new java.awt.Font("Dialog", 1, 11));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(211, 12, 61, 27));
@@ -150,12 +158,12 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		cbZVKonten.addItemListener(this);
 		btDrucken.setText("Drucken");
     btDrucken.addActionListener(this);
-    btDrucken.setActionCommand("dispose");
+    btDrucken.setActionCommand("printReport");
     btDrucken.setFont(new java.awt.Font("Dialog", 1, 11));
-    btDrucken.setBounds(new Rectangle(512, 209, 120, 27));
+    btDrucken.setBounds(new Rectangle(514, 349, 120, 27));
 
 
-    btBeenden.setBounds(new Rectangle(655, 209, 120, 27));
+    btBeenden.setBounds(new Rectangle(654, 349, 120, 27));
     btBeenden.setFont(new java.awt.Font("Dialog", 1, 11));
     btBeenden.setActionCommand("dispose");
     btBeenden.addActionListener(this);
@@ -165,91 +173,53 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     cbInstitut.setVisible(false);
 	 	cbInstitut.setActionCommand("selectInstitut");
 	 	cbInstitut.addItemListener(this);
-    buReportInfo.setBounds(new Rectangle(110, 12, 28, 27));
-    buReportInfo.setText("");
-	 	buReportInfo.setActionCommand("showReportInfo");
-		buReportInfo.addActionListener(this);
 
-    this.getContentPane().add(spReport, null);
-    spReport.getViewport().add(tabReport, null);
-    this.getContentPane().add(btBeenden, null);
 	 	this.getContentPane().add(cbZVKonten, null);
     this.getContentPane().add(labInstitut, null);
-    this.getContentPane().add(btDrucken, null);
     this.getContentPane().add(btAktualisieren, null);
     this.getContentPane().add(cbInstitut, null);
     this.getContentPane().add(cbReportFilter, null);
-    this.getContentPane().add(buReportInfo, null);
+    this.getContentPane().add(btBeenden, null);
+    this.getContentPane().add(btDrucken, null);
+    this.getContentPane().add(spReport, null);
+    spReport.getViewport().add(tabReport, null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand() == "showOrder"){
-			if (tabReport.getSelectedOrderType()==OrderTable.STD_TYP){
-				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
-					try {
-						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabReport.getSelectedOrderID())));
-					} catch (ApplicationServerException exception) {
-						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
-			}else if (tabReport.getSelectedOrderType()==OrderTable.ASK_TYP){
-				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
-					try {
-						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabReport.getSelectedOrderID())));
-					} catch (ApplicationServerException exception) {
-						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
-			}else if (tabReport.getSelectedOrderType()==OrderTable.ZA_TYP){
-				if(tabReport.getSelectedOrderPhase()==OrderTable.ABGESCHLOSSEN)
-					try {
-						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabReport.getSelectedOrderID())));
-					} catch (ApplicationServerException exception) {
-						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
-			}
+			showOrder();
 		} else if(e.getActionCommand() == "showReport"){
-			try {
-				if(cbReportFilter.getSelectedItem() == "Report_1"){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_1);
-							tabReport.fillReport(REPORT_1, "", content);
-				} else if(cbReportFilter.getSelectedItem() == "Report_2"){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_2);
-							tabReport.fillReport(REPORT_2, filter, content);
-				} else if(cbReportFilter.getSelectedItem() == "Report_3"){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_3);
-							tabReport.fillReport(REPORT_3, filter, content);
-				} else if(cbReportFilter.getSelectedItem() == "Report_4"){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_4);
-							tabReport.fillReport(REPORT_4, "", content);
-				} else if(cbReportFilter.getSelectedItem() == "Report_5"){
-					if(cbZVKonten.getSelectedItem() != null){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_5);
-							tabReport.fillReport(REPORT_5, filter, content);
-					}
-				} else if(cbReportFilter.getSelectedItem() == "Report_6"){
-					if(cbInstitut.getSelectedItem() != null){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_6);
-							tabReport.fillReport(REPORT_6, filter, content);
-					}
-				} else if(cbReportFilter.getSelectedItem() == "Report_7"){
-					if(cbInstitut.getSelectedItem() != null){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_7);
-							tabReport.fillReport(REPORT_7, filter, content);
-					}
-				} else if(cbReportFilter.getSelectedItem() == "Report_8"){
-					if(cbInstitut.getSelectedItem() != null){
-							ArrayList content = frame.getApplicationServer().getReport(REPORT_8);
-							tabReport.fillReport(REPORT_8, filter, content);
-					}
-				}
-			} catch (ApplicationServerException exception) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-			}
-		} else if(e.getActionCommand() == "showReportInfo"){
-			;
-		} else if(e.getActionCommand() == "dispose"){
+			showReport();
+		} else if(e.getActionCommand() == "printReport"){
+			printReport();
+		}	else if(e.getActionCommand() == "dispose"){
 			this.dispose();
 		}
 	}
+	
+	/**
+	* Reads the report from the specified template file.
+	*
+	* @param templateURL  the template location.
+	*
+	* @return a report.
+	*/
+  private JFreeReport parseReport(final URL templateURL)
+  {
+
+	 JFreeReport result = null;
+	 final ReportGenerator generator = ReportGenerator.getInstance();
+	 try
+	 {
+		result = generator.parseReport(templateURL);
+	 }
+	 catch (Exception e)
+	 {
+		Log.error("Failed to parse the report definition", e);
+	 }
+	 return result;
+
+  }
 
 	private void loadInstituts(){
 	  try {
@@ -319,7 +289,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   }
 
   class MyComboBoxRenderer extends BasicComboBoxRenderer {
-  	
+
   	public Component getListCellRendererComponent( JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		  if (isSelected) {
 			  setBackground(list.getSelectionBackground());
@@ -345,29 +315,37 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		if(r == "Report_1"){
 			cbReportFilter.setToolTipText(tooltips[0]);
 			report = REPORT_1;
+			xmlFile = "report1.xml";
 		}else if(r == "Report_2"){
 			cbReportFilter.setToolTipText(tooltips[1]);
 			report = REPORT_2;
+			xmlFile = "report2.xml";
 		}else if(r == "Report_3"){
 			cbReportFilter.setToolTipText(tooltips[2]);
 			report = REPORT_3;
+			xmlFile = "report3.xml";
 		}else if(r == "Report_4"){
 			cbReportFilter.setToolTipText(tooltips[3]);
 			report = REPORT_4;
-		}else if(r == "Report_5"){	
+			xmlFile = "report4.xml";
+		}else if(r == "Report_5"){
 			cbReportFilter.setToolTipText(tooltips[4]);
 			report = REPORT_5;
+			xmlFile = "report5.xml";
 		}else if(r == "Report_6"){
 			cbReportFilter.setToolTipText(tooltips[5]);
 			report = REPORT_6;
+			xmlFile = "report6.xml";
 		}else if(r == "Report_7"){
 			cbReportFilter.setToolTipText(tooltips[6]);
 			report = REPORT_7;
+			xmlFile = "report7.xml";
 		}else if(r == "Report_8"){
 			cbReportFilter.setToolTipText(tooltips[7]);
 			report = REPORT_8;
+			xmlFile = "report8.xml";
 		}
-		
+
 		if(e.getSource() == cbReportFilter){
 			tabReport.fillReport(0,"", new ArrayList());
 			filter = "";
@@ -408,4 +386,153 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 				tabReport.filterView(this.filter);
 		}
 	}
+
+	public void showToolTipText(JComponent component, String toolTipText) {
+		 String oldToolTipText = component.getToolTipText();
+		 ToolTipManager.sharedInstance().registerComponent(component);
+		 component.setToolTipText(oldToolTipText);
+		 component.getActionMap().get("postTip").actionPerformed(new ActionEvent(component, ActionEvent.ACTION_PERFORMED, "postTip"));
+		 ToolTipManager.sharedInstance().unregisterComponent(component);
+		 component.setToolTipText(oldToolTipText);
+	}
+	
+	private InputStream getResourceStream (String pkgname, String fname){
+		 String resname = "/" + pkgname.replace('.','/')+ "/" + fname;
+		 Class clazz = getClass();
+		 InputStream is = clazz.getResourceAsStream(resname);
+		 return is;
+	}
+
+	private Image loadImageResource (String pkgname, String fname) throws IOException{
+		 Image ret = null;
+
+		 InputStream is = getResourceStream(pkgname, fname);
+
+		 if (is != null){
+
+			byte[] buffer = new byte[0];
+			byte[] tmpbuf = new byte[1024];
+
+			while (true){
+					  int len = is.read(tmpbuf);
+					  if (len<=0){
+								 break;
+					  }
+					  byte[] newbuf = new byte[buffer.length + len];
+					  System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
+					  System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
+					  buffer = newbuf;
+			}
+
+			// create image
+			ret = Toolkit.getDefaultToolkit().createImage(buffer);
+			is.close();
+		}
+
+		return ret;
+	}
+	
+	private void showReport(){
+		try {
+			if(cbReportFilter.getSelectedItem() == "Report_1"){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_1);
+						tabReport.fillReport(REPORT_1, "", content);
+			} else if(cbReportFilter.getSelectedItem() == "Report_2"){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_2);
+						tabReport.fillReport(REPORT_2, filter, content);
+			} else if(cbReportFilter.getSelectedItem() == "Report_3"){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_3);
+						tabReport.fillReport(REPORT_3, filter, content);
+			} else if(cbReportFilter.getSelectedItem() == "Report_4"){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_4);
+						tabReport.fillReport(REPORT_4, "", content);
+			} else if(cbReportFilter.getSelectedItem() == "Report_5"){
+				if(cbZVKonten.getSelectedItem() != null){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_5);
+						tabReport.fillReport(REPORT_5, filter, content);
+				}
+			} else if(cbReportFilter.getSelectedItem() == "Report_6"){
+				if(cbInstitut.getSelectedItem() != null){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_6);
+						tabReport.fillReport(REPORT_6, filter, content);
+				}
+			} else if(cbReportFilter.getSelectedItem() == "Report_7"){
+				if(cbInstitut.getSelectedItem() != null){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_7);
+						tabReport.fillReport(REPORT_7, filter, content);
+				}
+			} else if(cbReportFilter.getSelectedItem() == "Report_8"){
+				if(cbInstitut.getSelectedItem() != null){
+						ArrayList content = frame.getApplicationServer().getReport(REPORT_8);
+						tabReport.fillReport(REPORT_8, filter, content);
+				}
+			}
+		} catch (ApplicationServerException exception) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+		}
+	}
+	
+	private void showOrder(){
+		try {
+			if (tabReport.getSelectedOrderType()==OrderTable.STD_TYP){
+				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
+						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabReport.getSelectedOrderID())));
+			}else if (tabReport.getSelectedOrderType()==OrderTable.ASK_TYP){
+				if(tabReport.getSelectedOrderPhase()!=OrderTable.SONDIERUNG)
+						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabReport.getSelectedOrderID())));
+			}else if (tabReport.getSelectedOrderType()==OrderTable.ZA_TYP){
+				if(tabReport.getSelectedOrderPhase()==OrderTable.ABGESCHLOSSEN)
+						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabReport.getSelectedOrderID())));
+			}
+		} catch (ApplicationServerException exception) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+		}
+	}
+	
+	private void printReport(){
+		final URL in = getClass().getResource(xmlFile);
+		
+		if (in == null){
+			System.out.println("xml not found");
+			return;
+		}
+	
+		JFreeReport report = new JFreeReport();
+	
+		report = parseReport(in);
+		report.setName("Report");
+		report.setData(tabReport.getModel());
+	
+	//					Image image = null;
+	//					try{
+	//						image = loadImageResource("image","fhlogo.gif");
+	//					}catch (IOException ex){
+	//						System.out.println("Grafik nicht geladen");
+	//					};
+//		final URL imageURL = getClass().getResource("../image/fhlogo.jpg");
+//		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
+//		final WaitingImageObserver obs = new WaitingImageObserver(image);
+//		obs.waitImageLoaded();
+//		report.setProperty("logo", image);
+//		report.setPropertyMarked("logo", true);
+		report.setProperty("reportName", (String)cbReportFilter.getSelectedItem());
+		report.setPropertyMarked("reportName", true);
+	
+		try {
+			final PreviewInternalFrame preview = new PreviewInternalFrame(report);
+			preview.getBase().setToolbarFloatable(true);
+			preview.setPreferredSize(new Dimension(700,600));
+			preview.setClosable(true);
+			preview.setResizable(true);
+			preview.setVisible(true);
+			//preview(DO_NOTHING_ON_CLOSE);
+			preview.pack();
+			frame.addChild(preview);
+//			preview.requestFocus();
+	
+		} catch (ReportProcessingException e1) {
+			e1.printStackTrace();
+		}
+	}
+
 }
