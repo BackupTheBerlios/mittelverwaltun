@@ -14,7 +14,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	DefaultListModel listModel = new DefaultListModel();
 	JPanel panelWindow = new JPanel();
 	JScrollPane scrollInstitute = new JScrollPane();
-	JList listInstitute = new JList();
+	JList listInstitute = new JList(listModel);
 	JLabel labInstitute = new JLabel();
 	JLabel labBezeichnung = new JLabel();
 	JTextField tfBezeichnung = new JTextField();
@@ -30,7 +30,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	
 	
 	public Institutverwaltung(ApplicationServer applicationServer) {
-		super( "Haushaltsjahr abschlieﬂen/anlegen" );
+		super( "Institutsverwaltung" );
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.applicationServer = applicationServer;
