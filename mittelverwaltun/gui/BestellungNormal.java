@@ -56,13 +56,11 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   JLabel jLabel24 = new JLabel();
   JTextField tfErsatzText = new JTextField();
   JTextField tfInventarNr = new JTextField();
-  JButton buDrucken = new JButton();
-
+  
   MainFrame frame;
   JButton buTitel = new JButton();
   JLabel labInstitut = new JLabel();
   JComboBox cbInstitut = new JComboBox();
-  JButton buAddAngebot = new JButton();
   ButtonGroup buttonGroup1 = new ButtonGroup();
   JRadioButton rbErstbeschaffung = new JRadioButton();
   JRadioButton rbErsatz = new JRadioButton();
@@ -72,10 +70,13 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   ButtonGroup buttonGroup3 = new ButtonGroup();
   JPanel panelErsatz = new JPanel();
   JPanel panelBeilage = new JPanel();
-  JButton buBeenden = new JButton();
-  JButton buSpeichern = new JButton();
-  JButton buBestellen = new JButton();
-  JTextField tfReferenzNr = new JTextField();
+  JButton buAddAngebot = new JButton(Functions.getAddIcon(getClass()));
+  JButton buBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
+  JButton buSpeichern = new JButton(Functions.getSaveIcon(this.getClass()));
+  JButton buBestellen = new JButton(Functions.getBestellIcon(getClass()));
+  JButton buDelete = new JButton(Functions.getDelIcon(getClass()));
+  JButton buDrucken = new JButton(Functions.getPrintIcon(getClass()));
+	JTextField tfReferenzNr = new JTextField();
   JComboBox cbKostenart = new JComboBox();
   JLabel labInstitut1 = new JLabel();
   JComboBox cbAuftraggeber = new JComboBox();
@@ -90,7 +91,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   StandardBestellung bestellung;
   JTextField tfFBKonto = new JTextField();
   JButton buFBKonto = new JButton();
-  JButton buDelete = new JButton();
   JTabbedPane jTabbedPane1 = new JTabbedPane();
   JPanel panelZweck = new JPanel();
   JPanel panelAuswahlgrund = new JPanel();
@@ -112,7 +112,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	  this.setClosable(true);
 	  this.setIconifiable(true);
 	  this.bestellung = bestellung;
-	  
+
 		init();
 		setOrderData();
   }
@@ -126,20 +126,14 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	 	}
 		cbInstitut.addItemListener(this);
 		buDrucken.addActionListener(this);
-		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
 		buTitel.addActionListener(this);
 		buAddAngebot.addActionListener(this);
-		buAddAngebot.setIcon(Functions.getAddIcon(getClass()));
 		buBeenden.addActionListener(this);
-		buBeenden.setIcon(Functions.getCloseIcon(this.getClass()));
 		buSpeichern.addActionListener(this);
-		buSpeichern.setIcon(Functions.getSaveIcon(this.getClass()));
 		buBestellen.addActionListener(this);
-		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
 		buFBKonto.addActionListener(this);
 		buDelete.addActionListener(this);
-		buDelete.setIcon(Functions.getDelIcon(getClass()));
-
+		buDelete.setEnabled(false);
 		rbErsatz.addActionListener(this);
 		rbErstbeschaffung.addActionListener(this);
 		rbAngebotGuenstig.addActionListener(this);
@@ -554,10 +548,12 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 				id = frame.getApplicationServer().addBestellung(newBestellung);
 			}
 
-			if(phase == 1)
-				dispose();
-			else
-				bestellung = frame.applicationServer.getStandardBestellung(id);
+			if(phase == 1){
+				buDrucken.setEnabled(true);
+				buDelete.setEnabled(true);
+				buBestellen.setEnabled(false);
+			}
+			bestellung = frame.applicationServer.getStandardBestellung(id);
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
@@ -622,7 +618,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
 			labTitel.setText(zvTitel.getTitel());
 			labUT.setText("");
-			this.zvTitel = (ZVTitel)zvTitel;
+			this.zvTitel = zvTitel;
 		}
 	}
 
@@ -700,6 +696,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	private void setOrderData(){
+		buDelete.setEnabled(true);
+		buBestellen.setEnabled(true);
 		tfReferenzNr.setText(bestellung.getReferenznr());
 		tfBestellDatum.setValue(bestellung.getDatum());
 		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
@@ -747,6 +745,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == cbInstitut){
 			fbKonto = null;
+			buBestellen.setSelected(false);
 			zvTitel = null;
 			tfFBKonto.setText("");
 			labKoSt.setText("KoSt: " + ((Institut)cbInstitut.getSelectedItem()).getKostenstelle());
@@ -784,6 +783,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	public void setFBKonto(FBUnterkonto fbKonto) {
 		this.fbKonto = fbKonto;
 		tfFBKonto.setText(fbKonto.toString());
+		buBestellen.setSelected(true);
 	}
 
 }

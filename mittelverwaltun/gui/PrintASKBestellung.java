@@ -5,25 +5,31 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 
+import applicationServer.ApplicationServer;
+
+import dbObjects.ASKBestellung;
+import dbObjects.Fachbereich;
+import dbObjects.Position;
+import dbObjects.ZVTitel;
+
 import java.awt.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
+import java.util.ArrayList;
 
 
 public class PrintASKBestellung extends JFrame implements Printable {
   JLabel jLabel4 = new JLabel();
   JLabel labKostenstelle = new JLabel();
   JLabel labKoSt = new JLabel();
-  JLabel labFachbereich = new JLabel();
   JLabel jLabel8 = new JLabel();
   JLabel labUT = new JLabel();
   JLabel labTitel = new JLabel();
-  JTextPane jTextPane2 = new JTextPane();
+  JTextPane tpFirmaAnschrift = new JTextPane();
   JLabel jLabel1 = new JLabel();
-  JTextPane jTextPane1 = new JTextPane();
+  JTextPane tpAnschrift = new JTextPane();
   JLabel labKapitel = new JLabel();
-  JLabel jLabel3 = new JLabel();
   JLabel jLabel7 = new JLabel();
   JPanel oben = new JPanel();
   JLabel jLabel2 = new JLabel();
@@ -53,22 +59,21 @@ public class PrintASKBestellung extends JFrame implements Printable {
   JTable tableBestellung = new JTable();
 	JScrollPane jScrollPane1 = new JScrollPane(tableBestellung);
   JPanel printPanel = new JPanel();
+  ASKBestellung order;
+  ApplicationServer as;
+  JLabel labFirma = new JLabel();
+  JLabel labAuftragsNr = new JLabel();
 
-  public PrintASKBestellung() {
-		createBestellung();
+  public PrintASKBestellung(ASKBestellung order, ApplicationServer as) {
+  	this.order = order;
+  	this.as = as;
     try {
       jbInit();
     }
     catch(Exception e) {
       e.printStackTrace();
     }
-		createTable();
-
-  }
-
-  public static void main(String[] args) {
-		PrintASKBestellung printTest = new PrintASKBestellung();
-    printTest.show();
+		createTable(order.getAngebot().getPositionen());
   }
 
   private void jbInit() throws Exception {
@@ -101,39 +106,44 @@ public class PrintASKBestellung extends JFrame implements Printable {
     oben.setLayout(null);
     oben.setBounds(new Rectangle(1, 1, 547, 265));
     oben.setBackground(Color.white);
-    jLabel7.setBounds(new Rectangle(313, 214, 106, 15));
-    jLabel7.setText("des Fachbereichs");
+    jLabel7.setBounds(new Rectangle(313, 214, 168, 15));
+    jLabel7.setText("des Fachbereichs Informatik");
     jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel3.setBounds(new Rectangle(332, 160, 136, 15));
-    jLabel3.setText("Fax: 0721 / 96458-99");
-    jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
     labKapitel.setBounds(new Rectangle(224, 240, 49, 15));
-    labKapitel.setText("33333");
+    labKapitel.setText(order.getZvtitel() != null ? order.getZvtitel().getZVTitel().getZVKonto().getKapitel() : ((ZVTitel)order.getZvtitel()).getZVKonto().getKapitel());
     labKapitel.setFont(new java.awt.Font("Dialog", 0, 12));
-    jTextPane1.setBounds(new Rectangle(14, 35, 231, 66));
-    jTextPane1.setFont(new java.awt.Font("Dialog", 1, 12));
+		tpAnschrift.setBounds(new Rectangle(14, 35, 304, 66));
+		tpAnschrift.setFont(new java.awt.Font("Dialog", 1, 12));
+		Fachbereich[] fbs = as.getFachbereiche();
+		if ((fbs != null) && (fbs.length > 0))
+			tpAnschrift.setText(fbs[0].getFhBezeichnung() + "\n" +
+													fbs[0].getFbBezeichnung() + "\n" +
+													fbs[0].getStrasseHausNr() + "\n" +
+													fbs[0].getPlzOrt());
+		else
+		 	tpAnschrift.setText("");
     jLabel1.setBounds(new Rectangle(14, 7, 280, 25));
     jLabel1.setText("Fachhochschule Mannheim");
     jLabel1.setFont(new java.awt.Font("Dialog", 1, 18));
-    jTextPane2.setBounds(new Rectangle(14, 140, 147, 50));
-    jTextPane2.setFont(new java.awt.Font("Dialog", 0, 12));
+		tpFirmaAnschrift.setBounds(new Rectangle(14, 133, 344, 50));
+		tpFirmaAnschrift.setFont(new java.awt.Font("Dialog", 0, 12));
+		tpFirmaAnschrift.setText(	order.getAngebot().getAnbieter().getStrasseNr() + "\n" +
+															order.getAngebot().getAnbieter().getPlz() + " " + order.getAngebot().getAnbieter().getOrt() + "\n" +
+															"Fax: " + order.getAngebot().getAnbieter().getFaxNr());
     labTitel.setBounds(new Rectangle(323, 240, 57, 15));
-    labTitel.setText("88888");
+    labTitel.setText(order.getZvtitel().getTitel());
     labTitel.setFont(new java.awt.Font("Dialog", 0, 12));
     labUT.setBounds(new Rectangle(404, 240, 40, 15));
-    labUT.setText("34");
+    labUT.setText(order.getZvtitel().getUntertitel());
     labUT.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel8.setBounds(new Rectangle(14, 240, 212, 15));
     jLabel8.setText("zu belastender Haushaltstitel: Kapitel:");
     jLabel8.setFont(new java.awt.Font("Dialog", 0, 12));
-    labFachbereich.setBounds(new Rectangle(416, 214, 125, 15));
-    labFachbereich.setText("");
-    labFachbereich.setFont(new java.awt.Font("Dialog", 0, 12));
     labKoSt.setBounds(new Rectangle(311, 188, 230, 15));
-    labKoSt.setText("");
+    labKoSt.setText(order.getFbkonto().getInstitut().getKostenstelle());
     labKoSt.setFont(new java.awt.Font("Dialog", 0, 12));
     labKostenstelle.setBounds(new Rectangle(95, 188, 98, 15));
-    labKostenstelle.setText("");
+    labKostenstelle.setText(order.getFbkonto().getInstitut().getBezeichnung());
     labKostenstelle.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel4.setBounds(new Rectangle(14, 188, 78, 15));
     jLabel4.setText("Kostenstelle:");
@@ -141,8 +151,8 @@ public class PrintASKBestellung extends JFrame implements Printable {
     this.setTitle("Drucktest");
     this.getContentPane().setLayout(null);
     jLabel2.setFont(new java.awt.Font("Dialog", 3, 16));
-    jLabel2.setText("Beilage zur Bestellung bei ASKnet AG");
-    jLabel2.setBounds(new Rectangle(15, 111, 301, 23));
+    jLabel2.setText("Beilage zur Bestellung bei");
+    jLabel2.setBounds(new Rectangle(15, 111, 202, 23));
     jLabel6.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel6.setText("Software-beauftragte/r:");
     jLabel6.setBounds(new Rectangle(14, 214, 135, 15));
@@ -213,6 +223,12 @@ public class PrintASKBestellung extends JFrame implements Printable {
     labUnterschrift.setText("");
     labUnterschrift.setBounds(new Rectangle(290, 12, 177, 15));
 		printPanel.setBackground(Color.white);
+		labFirma.setBounds(new Rectangle(214, 111, 329, 23));
+		labFirma.setFont(new java.awt.Font("Dialog", 3, 16));
+		labFirma.setText(order.getAngebot().getAnbieter().getName());
+		labAuftragsNr.setFont(new java.awt.Font("Dialog", 0, 12));
+    labAuftragsNr.setText(order.getReferenznr());
+		labAuftragsNr.setBounds(new Rectangle(57, 26, 115, 27));
     jScrollPane1.getViewport().add(tableBestellung);
     jScrollPane1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -226,9 +242,10 @@ public class PrintASKBestellung extends JFrame implements Printable {
     jPanel2.add(jLabel18, null);
     jPanel2.add(jLabel17, null);
     jPanel2.add(jTextPane3, null);
-    jPanel2.add(jLabel14, null);
     jPanel2.add(jLabel15, null);
     jPanel2.add(jLabel16, null);
+    jPanel2.add(jLabel14, null);
+    jPanel2.add(labAuftragsNr, null);
     unten.add(jLabel19, null);
     unten.add(jLabel110, null);
     unten.add(jLabel111, null);
@@ -240,16 +257,13 @@ public class PrintASKBestellung extends JFrame implements Printable {
     unten.add(labUnterschrift, null);
     unten.add(jPanel2, null);
     oben.add(jLabel1, null);
-    oben.add(jTextPane1, null);
-    oben.add(jTextPane2, null);
-    oben.add(jLabel3, null);
+    oben.add(tpAnschrift, null);
     oben.add(jLabel4, null);
     oben.add(labKostenstelle, null);
     oben.add(jLabel5, null);
     oben.add(labKoSt, null);
     oben.add(jLabel6, null);
     oben.add(labSoftwarebeauftragter, null);
-    oben.add(labFachbereich, null);
     oben.add(jLabel7, null);
     oben.add(jLabel8, null);
     oben.add(labKapitel, null);
@@ -262,39 +276,23 @@ public class PrintASKBestellung extends JFrame implements Printable {
     printPanel.add(unten, null);
     printPanel.add(oben, null);
     this.getContentPane().add(printPanel, null);
+    oben.add(tpFirmaAnschrift, null);
+    oben.add(labFirma, null);
 
   }
-
-  private void createBestellung(){
-  	insertText(jTextPane1.getDocument(), "Hochschule für Technik und Gestaltung \nWindeckstraße 110 \n68163 Mannheim");
-		insertText(jTextPane2.getDocument(), "Vincenz-Prießnutz-Str. 3 \n76131 Karlsruhe");
-
-	  labKostenstelle.setText("");
-	  labKoSt.setText("");
-
-	  labSoftwarebeauftragter.setText("");
-	  labFachbereich.setText("");
-
-	  labKapitel.setText("");
-	  labTitel.setText("");
-	  labUT.setText("");
-
-	  labDatum.setText("");
-	  labUnterschrift.setText("");
-		  labDatum1.setText("");
-		  labUnterschrift1.setText("");
-	}
-
-  private void createTable(){
+  
+  private void createTable(ArrayList positions){
 		String[] cols = {"Menge", "Produkt", "Einzelpreis", "Gesamtpreis", "für Institut"};
-		String[][] data = new String[8][cols.length];
+		String[][] data = new String[positions.size()][cols.length];
 
-		for(int i = 0; i < 8; i++){
-			data[i][0] = "" + i;
-			data[i][1] = "Bechtle ÖA direkt, Neckersulm";
-			data[i][2] = "91,87";
-			data[i][3] = "91,87";
-			data[i][4] = "FBI";
+		for(int i = 0; i < positions.size(); i++){
+			Position p = (Position)positions.get(i);
+			
+			data[i][0] = "" + p.getMenge();
+			data[i][1] = p.getArtikel();
+			data[i][2] = "" + p.getEinzelPreis() + (p.getEinzelPreis() * p.getMwst());
+			data[i][3] = "" + p.getGesamtpreis();
+			data[i][4] = p.getInstitut().getBezeichnung();
 		}
 	  DefaultTableModel tableModel = new DefaultTableModel(data, cols){
 				public boolean isCellEditable(int rowIndex, int columnIndex){
@@ -333,13 +331,13 @@ public class PrintASKBestellung extends JFrame implements Printable {
 
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
 		Graphics2D g2d = (Graphics2D) graphics;
-		
+
 		double pageHeight = pageFormat.getImageableHeight();
 		double pageWidth = pageFormat.getImageableWidth();
 
 		// Height of all components
 		int heightAll = oben.getHeight() +  jScrollPane1.getHeight() + unten.getHeight();
-		
+
 		int totalNumPages= (int)Math.ceil(heightAll / pageHeight);
 
 		if(pageIndex  >= totalNumPages) {

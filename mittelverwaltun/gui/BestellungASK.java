@@ -42,14 +42,14 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   PositionsTable tableBestellung;
   MainFrame frame;
   JComboBox cbSwBeauftragter = new JComboBox();
-  JButton buBeenden = new JButton();
-  JButton buDelete = new JButton();
-  JButton buDrucken = new JButton();
-  JButton buBestellen = new JButton();
-  JButton buSpeichern = new JButton();
+  JButton buBeenden = new JButton(Functions.getCloseIcon(this.getClass()));
+  JButton buDelete = new JButton(Functions.getDelIcon(getClass()));
+  JButton buDrucken = new JButton(Functions.getPrintIcon(getClass()));
+  JButton buBestellen = new JButton(Functions.getBestellIcon(getClass()));
+  JButton buSpeichern = new JButton(Functions.getSaveIcon(this.getClass()));
   CurrencyTextField tfBestellsumme = new CurrencyTextField();
   JLabel jLabel8 = new JLabel();
-  JButton buAddPosition = new JButton();
+  JButton buAddPosition = new JButton(Functions.getAddIcon(getClass()));
   JLabel jLabel9 = new JLabel();
   JLabel jLabel7 = new JLabel();
   JLabel jLabel10 = new JLabel();
@@ -130,37 +130,31 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	 catch(Exception e) {
 		e.printStackTrace();
 	 }
-
+		
 		cbInstitut.addItemListener(this);
 		buDrucken.addActionListener(this);
-		buDrucken.setIcon(Functions.getPrintIcon(getClass()));
+		buDrucken.setEnabled(false);
 		buTitel.addActionListener(this);
 		buAddPosition.addActionListener(tableBestellung);
 		buAddPosition.setActionCommand("addPosition");
-		buAddPosition.setIcon(Functions.getAddIcon(getClass()));
 		buBeenden.addActionListener(this);
-		buBeenden.setIcon(Functions.getCloseIcon(this.getClass()));
 		buSpeichern.addActionListener(this);
-		buSpeichern.setIcon(Functions.getSaveIcon(this.getClass()));
 		buBestellen.addActionListener(this);
-		buBestellen.setIcon(Functions.getBestellIcon(getClass()));
+		buBestellen.setEnabled(false);
 		buFBKonto.addActionListener(this);
 		buDelete.addActionListener(this);
-		buDelete.setIcon(Functions.getDelIcon(getClass()));
+		buDelete.setEnabled(false);
 		buBestellen.setEnabled(false);
 		buSpeichern.setEnabled(false);
 		setData();
 
-//	TODO Admin durch die Aktivität austauschen
-		if(!frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
-			cbInstitut.setVisible(false);
-			labInstitut.setVisible(false);
-		}
 
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
   }
 
   private void setOrderData(){
+		buDelete.setEnabled(true);
+		buBestellen.setEnabled(true);
 		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
 		cbEmpfaenger.setSelectedItem(bestellung.getEmpfaenger());
 		cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
@@ -249,7 +243,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		Date sqlDate = new Date(datum.getTime());
 
   	if(bestellung == null){
-			Angebot a = new Angebot(tableBestellung.getOrderPositions(), (Date)tfBestellDatum.getValue(), firma, true);
+			Angebot a = new Angebot(tableBestellung.getOrderPositions(), sqlDate, firma, true);
 
 			editedOrder = new ASKBestellung(tfAuftragsnummer.getText(), null, sqlDate, (Benutzer)frame.getBenutzer(),
 																		  (Benutzer)cbAuftraggeber.getSelectedItem(), (Benutzer)cbEmpfaenger.getSelectedItem(),
@@ -287,11 +281,14 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 				id = editedOrder.getId();
 				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, editedOrder);
 			}
-
-			if(phase == 1)
-				dispose();
-			else
-				bestellung = frame.getApplicationServer().getASKBestellung(id);
+			
+			buDelete.setEnabled(true);
+			if(phase == 1){
+				buDrucken.setEnabled(true);
+				buBestellen.setEnabled(false);
+			}
+				
+			bestellung = frame.getApplicationServer().getASKBestellung(id);
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
@@ -368,8 +365,8 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			ApplicationServer applicationServer = server.getMyApplicationServer();
 			test.setApplicationServer(applicationServer);
 			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			test.setBenutzer(applicationServer.login("r.driesner", psw));
+			String psw = pe.encrypt(new String("a").toString());
+			test.setBenutzer(applicationServer.login("test", psw));
 			test.setBounds(100,100,800,900);
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 			test.setJMenuBar( new MainMenu( test ) );
@@ -584,7 +581,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  PrintSTDVordruck bestellung = new PrintSTDVordruck();
 	  bestellung.show();
 	  bestellung.setVisible(false);
-		PrintASKBestellung beilage = new PrintASKBestellung();
+		PrintASKBestellung beilage = new PrintASKBestellung(this.bestellung, frame.getApplicationServer());
 	  beilage.show();
 	  beilage.setVisible(false);
 
