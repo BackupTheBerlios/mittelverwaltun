@@ -5,26 +5,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.Date;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 import dbObjects.Angebot;
 import dbObjects.FBHauptkonto;
 import dbObjects.Firma;
 import dbObjects.Position;
+import javax.swing.border.*;
 
 
-public class AngebotFrame extends JDialog implements ActionListener, PropertyChangeListener, ItemListener{
+public class AngebotFrame extends JDialog implements TableModelListener, ActionListener, ItemListener{
   JScrollPane scrollPositionen = new JScrollPane();
-  JButton buSpeichern = new JButton();
-  JButton buBeenden = new JButton();
+  JButton buSpeichern = new JButton(Functions.getSaveIcon(getClass()));
+  JButton buBeenden = new JButton(Functions.getCloseIcon(getClass()));
   FBHauptkonto hauptkonto;
   JLabel jLabel1 = new JLabel();
   JLabel jLabel2 = new JLabel();
@@ -34,96 +33,93 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
   JTextField tfStrasse = new JTextField();
   JTextField tfPLZ = new JTextField();
   JTextField tfOrt = new JTextField();
-  JLabel jLabel5 = new JLabel();
-  JButton buAddPosition = new JButton();
-  PositionenTable tablePositionen;
-  JLabel jLabel6 = new JLabel();
-  CurrencyTextField tfBestellsumme = new CurrencyTextField();
-  JLabel jLabel7 = new JLabel();
-  JLabel jLabel8 = new JLabel();
-  JLabel labNetto = new JLabel();
-  JLabel labMwSt16 = new JLabel();
-  JLabel labMwSt7 = new JLabel();
+  JButton buAddPosition = new JButton(Functions.getAddIcon(getClass()));
+  PositionsTable tablePositionen;
   JLabel jLabel9 = new JLabel();
   JFormattedTextField tfDate = new JFormattedTextField(DateFormat.getDateInstance());
   BestellungNormal frame = null;
   int angebotNr = -1;
-  JLabel jLabel10 = new JLabel();
   JLabel jLabel11 = new JLabel();
   JComboBox cbFirmen = new JComboBox();
   JButton buAddFirm = new JButton();
   Angebot angebot;
+  CurrencyTextField tfBestellsumme = new CurrencyTextField();
+  JLabel jLabel12 = new JLabel();
+  CurrencyTextField tf16MwSt = new CurrencyTextField();
+  CurrencyTextField tf7MwSt = new CurrencyTextField();
+  JLabel jLabel13 = new JLabel();
+  JLabel jLabel14 = new JLabel();
+  JLabel jLabel15 = new JLabel();
+  CurrencyTextField tfNetto = new CurrencyTextField();
+  JPanel jPanel1 = new JPanel();
+  TitledBorder titledBorder1;
+  JPanel jPanel2 = new JPanel();
+  TitledBorder titledBorder2;
 
 
   public AngebotFrame(BestellungNormal frame) {
     super(JOptionPane.getFrameForComponent(frame), "Angebot", false);
     this.frame = frame;
 
-		tablePositionen = new PositionenTable();
-		cbFirmen.addItemListener(this);
-		
-    try {
-      jbInit();
-      pack();
-    }
-    catch(Exception ex) {
-      ex.printStackTrace();
-    }
+		tablePositionen = new PositionsTable(PositionsTable.STD_DURCHFUEHRUNG, true, this, new ArrayList());
     tfDate.setValue(new Date(System.currentTimeMillis()));
-	
-		tablePositionen.addPropertyChangeListener(this);
-		buSpeichern.addActionListener( this );
-		buAddPosition.addActionListener(this);
-		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-		buBeenden.addActionListener( this );
-		buAddFirm.addActionListener(this);
 
-		this.setSize(540, 480);
-		Point p = frame.getLocation();
-	  Point p2 = frame.frame.getLocation();
-		loadFirmen();
-
-		setLocation((int)p.getX() + (int)p2.getX() + 50 , (int)p.getY() + (int)p2.getY() + 100 );
+    init();
   }
 
-	  public AngebotFrame(BestellungNormal frame, Angebot angebot, int angebotNr) {
-			super(JOptionPane.getFrameForComponent(null), "Angebot", false);
-			this.frame = frame;
-			this.angebot = angebot;
-			this.angebotNr = angebotNr;
-			if(((Position)angebot.getPositionen().get(0)).getMwst() != 0)
-				tablePositionen = new PositionenTable(angebot.getPositionen());
-			else
-				tablePositionen = new PositionenTable();
-				
-			tablePositionen.addPropertyChangeListener(this);
-			cbFirmen.addItemListener(this);
+  public AngebotFrame(BestellungNormal frame, Angebot angebot, int angebotNr) {
+		super(JOptionPane.getFrameForComponent(null), "Angebot", false);
+		this.frame = frame;
+		this.angebot = angebot;
+		this.angebotNr = angebotNr;
+		if(((Position)angebot.getPositionen().get(0)).getMwst() != 0)
+			tablePositionen = new PositionsTable(PositionsTable.STD_DURCHFUEHRUNG, true, this, angebot.getPositionen());
+		else{
+			tablePositionen = new PositionsTable(PositionsTable.STD_DURCHFUEHRUNG, true, this, new ArrayList());
+		}
 
-			try {
-			  jbInit();
-			  pack();
-			}
-			catch(Exception ex) {
-			  ex.printStackTrace();
-			}
-			
-		  buSpeichern.addActionListener( this );
-		  buAddPosition.addActionListener(this);
-		  buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-		  buBeenden.addActionListener( this );
-			buAddFirm.addActionListener(this);
-			loadFirmen();
-			setData(angebot);
-		  this.setBounds(100,100,540, 480);
-			setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-			
-	 }
+		init();
+	  setData(angebot);
+	  
+		if(((Position)angebot.getPositionen().get(0)).getMwst() != 0)
+			tfBestellsumme.setEditable(false);
+ }
 
-	 private void setData(Angebot angebot){
-	 	  cbFirmen.setSelectedItem(angebot.getAnbieter());
-	 		tfDate.setValue(angebot.getDatum());
-			tfBestellsumme.setValue(new Float(angebot.getSumme()));
-	 }
+	private void init(){
+		try {
+			jbInit();
+			pack();
+		 }
+		 catch(Exception ex) {
+			ex.printStackTrace();
+		 }
+
+		cbFirmen.addItemListener(this);
+		buSpeichern.addActionListener( this );
+	  buAddPosition.addActionListener(tablePositionen);
+	  buAddPosition.setActionCommand("addPosition");
+	  buBeenden.addActionListener( this );
+		buAddFirm.addActionListener(this);
+		loadFirmen();
+
+		this.setSize(570, 540);
+		Point p = frame.getLocation();
+	  Point p2 = frame.frame.getLocation();
+	  setLocation((int)p.getX() + (int)p2.getX() + 50 , (int)p.getY() + (int)p2.getY() + 100 );
+
+	}
+
+	private void setData(Angebot angebot){
+ 	  cbFirmen.setSelectedItem(angebot.getAnbieter());
+ 		tfDate.setValue(angebot.getDatum());
+		
+		PositionsTableModel ptm = (PositionsTableModel)tablePositionen.getModel();
+
+		tfNetto.setValue(new Float(ptm.getOrderSum() - ptm.get7PercentSum() - ptm.get16PercentSum()));
+		tf7MwSt.setValue(new Float(ptm.get7PercentSum()));
+		tf16MwSt.setValue(new Float(ptm.get16PercentSum()));
+		tfBestellsumme.setValue(new Float(angebot.getSumme()));
+	}
 
 	private String checkData(){
 		String error = "";
@@ -154,117 +150,125 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
   }
 
   private void jbInit() throws Exception {
+    titledBorder1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151)),"Positionen");
+    titledBorder2 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151)),"Anbieter");
     this.getContentPane().setLayout(null);
-    scrollPositionen.setBounds(new Rectangle(9, 130, 525, 178));
-    buSpeichern.setBounds(new Rectangle(112, 410, 103, 25));
+    scrollPositionen.setBounds(new Rectangle(11, 22, 537, 178));
+    buSpeichern.setBounds(new Rectangle(142, 481, 120, 25));
     buSpeichern.setText("Speichern");
-    buBeenden.setBounds(new Rectangle(280, 409, 120, 25));
+    buBeenden.setBounds(new Rectangle(283, 481, 120, 25));
     buBeenden.setText("Beenden");
     jLabel1.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel1.setVerifyInputWhenFocusTarget(true);
     jLabel1.setText("Firma:");
-    jLabel1.setBounds(new Rectangle(12, 42, 54, 15));
+    jLabel1.setBounds(new Rectangle(11, 52, 54, 15));
     jLabel2.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel2.setText("Straße und Nr.:");
-    jLabel2.setBounds(new Rectangle(12, 68, 90, 15));
+    jLabel2.setBounds(new Rectangle(11, 80, 90, 15));
     jLabel3.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel3.setText("PLZ:");
-    jLabel3.setBounds(new Rectangle(12, 93, 34, 15));
+    jLabel3.setBounds(new Rectangle(11, 107, 34, 15));
     jLabel4.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel4.setText("Ort:");
-    jLabel4.setBounds(new Rectangle(104, 93, 34, 15));
+    jLabel4.setBounds(new Rectangle(92, 107, 34, 15));
     tfFirma.setFont(new java.awt.Font("Dialog", 0, 12));
     tfFirma.setEditable(false);
     tfFirma.setText("");
-    tfFirma.setBounds(new Rectangle(104, 36, 232, 21));
+    tfFirma.setBounds(new Rectangle(114, 49, 427, 21));
     tfStrasse.setFont(new java.awt.Font("Dialog", 0, 12));
     tfStrasse.setEditable(false);
     tfStrasse.setText("");
-    tfStrasse.setBounds(new Rectangle(104, 62, 232, 21));
+    tfStrasse.setBounds(new Rectangle(114, 77, 427, 21));
     tfPLZ.setFont(new java.awt.Font("Dialog", 0, 12));
     tfPLZ.setToolTipText("");
     tfPLZ.setEditable(false);
     tfPLZ.setText("");
-    tfPLZ.setBounds(new Rectangle(43, 87, 49, 21));
+    tfPLZ.setBounds(new Rectangle(40, 104, 49, 21));
     tfOrt.setFont(new java.awt.Font("Dialog", 0, 12));
     tfOrt.setEditable(false);
     tfOrt.setText("");
-    tfOrt.setBounds(new Rectangle(135, 87, 203, 21));
-    jLabel5.setText("Positionen");
-    jLabel5.setBounds(new Rectangle(11, 111, 85, 15));
-    buAddPosition.setBounds(new Rectangle(9, 313, 164, 25));
+    tfOrt.setBounds(new Rectangle(114, 104, 427, 21));
+    buAddPosition.setBounds(new Rectangle(11, 201, 164, 25));
     buAddPosition.setText("Position hinzufügen");
-    jLabel6.setFont(new java.awt.Font("Dialog", 1, 12));
-    jLabel6.setText("Bestellsumme:");
-    jLabel6.setBounds(new Rectangle(212, 384, 96, 15));
-//    tfBestellsumme.setText("");
-    tfBestellsumme.setBounds(new Rectangle(330, 378, 117, 21));
-    jLabel7.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel7.setText("Gesamtnettopreis:");
-    jLabel7.setBounds(new Rectangle(212, 317, 115, 15));
-    jLabel8.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel8.setText("7 % MwSt.");
-    jLabel8.setBounds(new Rectangle(213, 338, 79, 15));
-    labNetto.setFont(new java.awt.Font("Dialog", 0, 12));
-    labNetto.setText("");
-    labNetto.setBounds(new Rectangle(330, 317, 117, 15));
-		labMwSt7.setFont(new java.awt.Font("Dialog", 0, 12));
-		labMwSt7.setText("");
-		labMwSt7.setBounds(new Rectangle(330, 338, 117, 15));
-    labMwSt16.setFont(new java.awt.Font("Dialog", 0, 12));
-    labMwSt16.setText("");
-    labMwSt16.setBounds(new Rectangle(330, 358, 117, 15));
+    jLabel9.setFont(new java.awt.Font("Dialog", 1, 11));
     jLabel9.setText("Angebot vom:(Datum)");
-    jLabel9.setBounds(new Rectangle(402, 75, 127, 15));
-    tfDate.setBounds(new Rectangle(400, 95, 105, 21));
-    jLabel10.setBounds(new Rectangle(212, 358, 79, 15));
-    jLabel10.setText("16 % MwSt.");
-    jLabel10.setFont(new java.awt.Font("Dialog", 0, 12));
-    jLabel11.setBounds(new Rectangle(12, 12, 107, 15));
+    jLabel9.setBounds(new Rectangle(10, 151, 127, 15));
+    tfDate.setBounds(new Rectangle(140, 148, 105, 21));
+    jLabel11.setBounds(new Rectangle(11, 25, 107, 15));
     jLabel11.setText("Firmenauswahl:");
     jLabel11.setVerifyInputWhenFocusTarget(true);
     jLabel11.setFont(new java.awt.Font("Dialog", 0, 12));
-    cbFirmen.setBounds(new Rectangle(114, 9, 251, 21));
-    buAddFirm.setBounds(new Rectangle(412, 5, 99, 25));
+    cbFirmen.setBounds(new Rectangle(114, 22, 322, 21));
+    buAddFirm.setBounds(new Rectangle(443, 22, 99, 21));
     buAddFirm.setText("add Firm");
-    scrollPositionen.getViewport().add(tablePositionen, null);
-    this.getContentPane().add(buAddPosition, null);
-    this.getContentPane().add(jLabel5, null);
-    this.getContentPane().add(scrollPositionen, null);
-    this.getContentPane().add(labNetto, null);
-    this.getContentPane().add(jLabel7, null);
+		tfBestellsumme.setBounds(new Rectangle(405, 277, 117, 21));
+		tfBestellsumme.setFont(new java.awt.Font("SansSerif", 1, 12));
+    jLabel12.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel12.setText("7 % MwSt.");
+    jLabel12.setBounds(new Rectangle(289, 230, 79, 15));
+    tf16MwSt.setBounds(new Rectangle(405, 251, 117, 21));
+    tf16MwSt.setEnabled(false);
+    tf16MwSt.setEditable(false);
+    tf7MwSt.setBounds(new Rectangle(405, 227, 117, 21));
+    tf7MwSt.setEnabled(false);
+    tf7MwSt.setEditable(false);
+    jLabel13.setFont(new java.awt.Font("Dialog", 0, 12));
+    jLabel13.setText("Gesamtnettopreis:");
+    jLabel13.setBounds(new Rectangle(289, 206, 115, 15));
+    jLabel14.setFont(new java.awt.Font("Dialog", 1, 12));
+    jLabel14.setText("Bestellsumme:");
+    jLabel14.setBounds(new Rectangle(289, 280, 96, 15));
+    jLabel15.setBounds(new Rectangle(289, 254, 79, 15));
+    jLabel15.setText("16 % MwSt.");
+    jLabel15.setFont(new java.awt.Font("Dialog", 0, 12));
+    tfNetto.setBounds(new Rectangle(405, 203, 117, 21));
+    tfNetto.setEnabled(false);
+    tfNetto.setEditable(false);
+    jPanel1.setBorder(titledBorder1);
+    jPanel1.setBounds(new Rectangle(7, 171, 556, 306));
+    jPanel1.setLayout(null);
+    jPanel2.setBorder(titledBorder2);
+    jPanel2.setBounds(new Rectangle(8, 8, 556, 134));
+    jPanel2.setLayout(null);
+    jPanel1.add(scrollPositionen, null);
+    jPanel1.add(tfBestellsumme, null);
+    jPanel1.add(jLabel13, null);
+    jPanel1.add(tfNetto, null);
+    jPanel1.add(jLabel12, null);
+    jPanel1.add(tf7MwSt, null);
+    jPanel1.add(jLabel15, null);
+    jPanel1.add(tf16MwSt, null);
+    jPanel1.add(jLabel14, null);
+    jPanel1.add(buAddPosition, null);
+    this.getContentPane().add(jLabel9, null);
     this.getContentPane().add(buBeenden, null);
     this.getContentPane().add(buSpeichern, null);
-    this.getContentPane().add(tfBestellsumme, null);
-    this.getContentPane().add(jLabel6, null);
-    this.getContentPane().add(jLabel8, null);
-    this.getContentPane().add(labMwSt7, null);
-    this.getContentPane().add(jLabel10, null);
-    this.getContentPane().add(labMwSt16, null);
+    scrollPositionen.getViewport().add(tablePositionen, null);
+    jPanel2.add(cbFirmen, null);
+    jPanel2.add(jLabel1, null);
+    jPanel2.add(tfFirma, null);
+    jPanel2.add(jLabel2, null);
+    jPanel2.add(tfStrasse, null);
+    jPanel2.add(tfPLZ, null);
+    jPanel2.add(jLabel11, null);
+    jPanel2.add(jLabel3, null);
+    jPanel2.add(tfOrt, null);
+    jPanel2.add(jLabel4, null);
+    jPanel2.add(buAddFirm, null);
     this.getContentPane().add(tfDate, null);
-    this.getContentPane().add(jLabel9, null);
-    this.getContentPane().add(tfOrt, null);
-    this.getContentPane().add(jLabel1, null);
-    this.getContentPane().add(tfFirma, null);
-    this.getContentPane().add(jLabel2, null);
-    this.getContentPane().add(tfStrasse, null);
-    this.getContentPane().add(jLabel3, null);
-    this.getContentPane().add(tfPLZ, null);
-    this.getContentPane().add(jLabel4, null);
-    this.getContentPane().add(jLabel11, null);
-    this.getContentPane().add(cbFirmen, null);
-    this.getContentPane().add(buAddFirm, null);
+    this.getContentPane().add(jPanel1, null);
+    this.getContentPane().add(jPanel2, null);
   }
 
 	public void actionPerformed(ActionEvent e) {
 		if ( e.getSource() == buSpeichern ) {
 			setAngebot();
 		}else if ( e.getSource() == buAddPosition ) {
-			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-			Object[] o = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0),"Del",new Position()};
-
-			dtm.addRow(o);
-			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
+//			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
+//			Object[] o = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0),"Del",new Position()};
+//
+//			dtm.addRow(o);
+//			dtm.fireTableRowsInserted(dtm.getRowCount(),dtm.getRowCount());
 
 		}else if(e.getSource() == buAddFirm){
 			frame.frame.addChild( new Firmenverwaltung(frame.frame) );
@@ -275,7 +279,7 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 
 	void setAngebot() {
 		ArrayList positionen = new ArrayList();
-		DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
+		PositionsTableModel dtm = (PositionsTableModel)tablePositionen.getModel();
 		String emptyFields = checkData();
 
 		if(!emptyFields.equals(""))
@@ -286,18 +290,19 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 																		  JOptionPane.ERROR_MESSAGE,
 																		  null);
 		else{
-			for(int i = 0; i < tablePositionen.getRowCount(); i++){
-				Position position = (Position)(dtm.getValueAt(i, 7));
-				
-				position.setArtikel("" + (dtm.getValueAt(i, 1)));
-				position.setEinzelPreis(((Float)dtm.getValueAt(i, 2)).floatValue());
-				position.setMenge(((Integer)dtm.getValueAt(i, 0)).intValue());
-				position.setMwst(((Float)dtm.getValueAt(i, 3)).floatValue());
-				position.setRabatt(((Float)dtm.getValueAt(i, 4)).floatValue());
-				
-				positionen.add(position);
-			}
-			
+//			for(int i = 0; i < tablePositionen.getRowCount(); i++){
+//				Position position = (Position)(dtm.getValueAt(i, 7));
+//
+//				position.setArtikel("" + (dtm.getValueAt(i, 1)));
+//				position.setEinzelPreis(((Float)dtm.getValueAt(i, 2)).floatValue());
+//				position.setMenge(((Integer)dtm.getValueAt(i, 0)).intValue());
+//				position.setMwst(((Float)dtm.getValueAt(i, 3)).floatValue());
+//				position.setRabatt(((Float)dtm.getValueAt(i, 4)).floatValue());
+//
+//				positionen.add(position);
+//			}
+			positionen = tablePositionen.getOrderPositions();
+
 			if(positionen.size() == 0){
 				if(angebot != null){
 					// die Bestellsumme neu setzen
@@ -320,10 +325,10 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 					positionen.add(pos);
 				}
 			}
-			
+
 			java.util.Date datum = (java.util.Date)tfDate.getValue();
 			Date sqlDate = new Date(datum.getTime());
-			
+
 			if(angebot == null){
 				angebot = new Angebot(positionen, sqlDate, (Firma)cbFirmen.getSelectedItem(), false);
 			}else{
@@ -331,44 +336,9 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 				angebot.setAnbieter((Firma)cbFirmen.getSelectedItem());
 				angebot.setPositionen(positionen);
 			}
-			
+
 			frame.insertAngebot(angebot, angebotNr);
 			this.dispose();
-		}
-	}
-
-
-
-
-	public void propertyChange(PropertyChangeEvent e) {
-		if(e.getSource() == tablePositionen){
-			DefaultTableModel dtm = (DefaultTableModel)tablePositionen.getModel();
-		  float sum = 0;
-		  float gesamt = 0;
-		  float netto = 0;
-		  float mwst = 0;
-		  float mwst7 = 0;
-		  float mwst16 = 0;
-
-		  for(int i = 0; i < tablePositionen.getRowCount(); i++){
-			gesamt = ((Float)dtm.getValueAt(i, 5)).floatValue();
-				mwst = ((Float)dtm.getValueAt(i, 3)).floatValue();
-				sum += gesamt;
-				if(mwst == 0.16f)
-					mwst16 += (gesamt / 116) * 16;
-				else
-					mwst7 += (gesamt / 107) * 7;
-		  }
-
-		  netto = sum - mwst16 - mwst7;
-		  labNetto.setText(NumberFormat.getCurrencyInstance().format(netto));
-		  labMwSt7.setText(NumberFormat.getCurrencyInstance().format(mwst7));
-		  labMwSt16.setText(NumberFormat.getCurrencyInstance().format(mwst16));
-		  tfBestellsumme.setValue(new Float(sum));
-		  if(tablePositionen.getRowCount() == 0)
-				tfBestellsumme.setEditable(true);
-		  else
-				tfBestellsumme.setEditable(false);
 		}
 	}
 
@@ -386,6 +356,23 @@ public class AngebotFrame extends JDialog implements ActionListener, PropertyCha
 				tfOrt.setText(firma.getOrt());
 			}
 		}
+	}
+
+	/* (Kein Javadoc)
+	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
+	 */
+	public void tableChanged(TableModelEvent e) {
+		PositionsTableModel ptm = (PositionsTableModel)e.getSource();
+
+		tfNetto.setValue(new Float(ptm.getOrderSum() - ptm.get7PercentSum() - ptm.get16PercentSum()));
+		tf7MwSt.setValue(new Float(ptm.get7PercentSum()));
+		tf16MwSt.setValue(new Float(ptm.get16PercentSum()));
+		tfBestellsumme.setValue(new Float(ptm.getOrderSum()));
+
+		if(ptm.getOrderSum() > 0){
+			tfBestellsumme.setEditable(false);
+		}else
+			tfBestellsumme.setEditable(true);
 	}
 
 }

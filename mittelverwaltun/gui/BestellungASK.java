@@ -96,9 +96,8 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		this.setIconifiable(true);
 
 		try {
-			tableBestellung = new PositionsTable(PositionsTable.ASK_STANDARD, true, this, new ArrayList(), frame.getApplicationServer().getInstitutes());
+			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, new ArrayList(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
-			// TODO Automatisch erstellter Catch-Block
 			e.printStackTrace();
 		}
 
@@ -113,9 +112,8 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  this.bestellung = bestellung;
 
 		try {
-			tableBestellung = new PositionsTable(PositionsTable.ASK_STANDARD, true, this, bestellung.getAngebot().getPositionen(), frame.getApplicationServer().getInstitutes());
+			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, bestellung.getAngebot().getPositionen(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
-			// TODO Automatisch erstellter Catch-Block
 			e.printStackTrace();
 		}
 

@@ -51,7 +51,6 @@ public class BestellungBeilageTable extends JTable {
 													super.setValueAt(new Boolean(false), i, 4);
 													((Angebot)super.getValueAt(i, 1)).setAngenommen(false);
 												}
-												getFrame().tfAngebotNr.setText(((Boolean)aValue).booleanValue() == true ? "" + (rowIndex + 1) : "");
 												getFrame().angebotNr = ((Boolean)aValue).booleanValue() == true ? (rowIndex + 1) : 0;
 												((Angebot)super.getValueAt(rowIndex, 1)).setAngenommen(((Boolean)aValue).booleanValue());
 										  }

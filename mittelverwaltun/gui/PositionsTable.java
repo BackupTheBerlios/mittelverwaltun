@@ -40,7 +40,8 @@ public class PositionsTable extends JTable implements ActionListener {
 	public static final int ANZEIGE = 0;
 	public static final int STD_ABWICKLUNG = 1;
 	public static final int ASK_ABWICKLUNG = 2;
-	public static final int ASK_STANDARD = 3;
+	public static final int ASK_DURCHFUEHRUNG = 3;
+	public static final int STD_DURCHFUEHRUNG = 4;
 	
 	private boolean editable = true;
 	private int type = 0;
@@ -139,7 +140,7 @@ public class PositionsTable extends JTable implements ActionListener {
 	  	getColumnModel().getColumn(0).setPreferredWidth(45);	// Menge
 	  	getColumnModel().getColumn(1).setPreferredWidth(127);	// Artikelbezeichnung	
 	  	
-	  	if (type == PositionsTable.ASK_ABWICKLUNG || type == PositionsTable.ASK_STANDARD){
+	  	if (type == PositionsTable.ASK_ABWICKLUNG || type == PositionsTable.ASK_DURCHFUEHRUNG){
 	 		
 	  		getColumnModel().getColumn(2).setPreferredWidth(130);	// Institut
 	  		JComboBox cbInstitutes = new JComboBox();
@@ -178,7 +179,7 @@ public class PositionsTable extends JTable implements ActionListener {
 				getColumnModel().getColumn(5).setPreferredWidth(100);	// Gesamt
 	  	}
 	  	
-		if(type == PositionsTable.ASK_STANDARD){ 
+		if(type == PositionsTable.ASK_DURCHFUEHRUNG || type == PositionsTable.STD_DURCHFUEHRUNG){ 
 			getColumnModel().getColumn(6).setPreferredWidth(25);
 			getColumnModel().getColumn(6).setCellEditor(new TableButtonCellEditor(this));
 			getColumnModel().getColumn(6).setCellRenderer(new TableButtonCellRenderer());

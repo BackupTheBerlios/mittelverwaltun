@@ -25,7 +25,8 @@ public class PositionsTableModel extends DefaultTableModel {
 	public static final int ANZEIGE = 0;
 	public static final int STD_ABWICKLUNG = 1;
 	public static final int ASK_ABWICKLUNG = 2;
-	public static final int ASK_STANDARD = 3;
+	public static final int ASK_DURCHFUEHRUNG = 3;
+	public static final int STD_DURCHFUEHRUNG = 4;
 	
 	private boolean editable = true;
 	private int type;
@@ -39,14 +40,15 @@ public class PositionsTableModel extends DefaultTableModel {
 		if (type == STD_ABWICKLUNG){
 			String[] colheads = {"Menge", "Artikel", "Einzelpreis", "Mwst", "Rabatt", "Gesamt", "Beglichen", "" }; 
 			setColumnIdentifiers(colheads);
+		} else if (type == STD_DURCHFUEHRUNG){
+				String[] colheads = {"Menge", "Artikel", "Einzelpreis", "Mwst", "Rabatt", "Gesamt", "" }; 
+				setColumnIdentifiers(colheads);
 		} else if (type == ASK_ABWICKLUNG){
 				String[] colheads = {"Menge", "Artikel", "Institut", "Einzelpreis", "Mwst", "Gesamt", "Beglichen", "" }; 
 				setColumnIdentifiers(colheads);
-				
-		} else if (type == ASK_STANDARD){
+		} else if (type == ASK_DURCHFUEHRUNG){
 				String[] colheads = {"Menge", "Artikel", "Institut", "Einzelpreis", "Mwst", "Gesamt", "" }; 
 				setColumnIdentifiers(colheads);
-						
 		} else {
 			String[] colheads = {"Menge", "Artikel", "Einzelpreis", "Mwst", "Rabatt", "Gesamt" }; 
 			setColumnIdentifiers(colheads);
@@ -64,7 +66,7 @@ public class PositionsTableModel extends DefaultTableModel {
 			
 			if ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))
 				data = new Object[8];
-			else if(type == ASK_STANDARD)
+			else if(type == ASK_DURCHFUEHRUNG || type == STD_DURCHFUEHRUNG)
 				data = new Object[7];
 			else //default type = 0
 				data = new Object[6];
@@ -75,7 +77,7 @@ public class PositionsTableModel extends DefaultTableModel {
 			data[0] = new Integer(position.getMenge());
 			data[1] = position.getArtikel();
 			
-			if (type == ASK_ABWICKLUNG || type == ASK_STANDARD){
+			if (type == ASK_ABWICKLUNG || type == ASK_DURCHFUEHRUNG){
 				data[2] = position.getInstitut();
 				data[3] = new Float(position.getEinzelPreis());
 				data[4] = new Float(position.getMwst());
@@ -87,7 +89,7 @@ public class PositionsTableModel extends DefaultTableModel {
 				data[5] = new Float(position.getGesamtpreis());
 			}
 			
-			if(type == ASK_STANDARD){ 
+			if(type == ASK_DURCHFUEHRUNG || type == STD_DURCHFUEHRUNG){ 
 				data[6] = new String("X");
 			}else if(type != ANZEIGE ){
 				data[6] = new Boolean(position.getBeglichen()); 
@@ -110,10 +112,13 @@ public class PositionsTableModel extends DefaultTableModel {
 		if (type == STD_ABWICKLUNG){
 			Object[] obj = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0), new Boolean(false), new String("X")};
 			addRow(obj);
+		}else if (type == STD_DURCHFUEHRUNG){
+			Object[] obj = {new Integer(1),"",new Float(0), new Float(0.16), new Float(0), new Float(0), new String("X")};
+			addRow(obj);
 		}else if (type == ASK_ABWICKLUNG){
 			Object[] obj = {new Integer(1),"", null, new Float(0), new Float(0.16), new Float(0), new Boolean(false), new String("X")};
 			addRow(obj);
-		}else if (type == ASK_STANDARD){
+		}else if (type == ASK_DURCHFUEHRUNG){
 			Object[] obj = {new Integer(1),"", null, new Float(0), new Float(0.16), new Float(0), new String("X")};
 			addRow(obj);
 		}else{
@@ -126,7 +131,7 @@ public class PositionsTableModel extends DefaultTableModel {
 	}
 	
 	public boolean isCellEditable(int rowIndex, int colIndex) {
-		if (editable && ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG)||(type == ASK_STANDARD)))
+		if (editable && ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG)||(type == ASK_DURCHFUEHRUNG)||(type == STD_DURCHFUEHRUNG)))
 			return colIndex != 5;
 		else
 			return false;
@@ -143,7 +148,7 @@ public class PositionsTableModel extends DefaultTableModel {
 			
 			  	try{
 			  		
-			  		if (type==STD_ABWICKLUNG){
+			  		if (type==STD_ABWICKLUNG || type==STD_DURCHFUEHRUNG){
 			  			
 			  			int menge = ((Integer)getValueAt(rowIndex,0)).intValue();
 							float preis = ((Float)getValueAt(rowIndex, 2)).floatValue();
@@ -152,7 +157,7 @@ public class PositionsTableModel extends DefaultTableModel {
 						    
 							super.setValueAt(new Float(menge * preis + (menge * preis * mwst) - rabatt), rowIndex, 5);
 			  		
-			  		}else if (type==ASK_ABWICKLUNG || type==ASK_STANDARD){
+			  		}else if (type==ASK_ABWICKLUNG || type==ASK_DURCHFUEHRUNG){
 			  		
 			  			int menge = ((Integer)getValueAt(rowIndex,0)).intValue();
 							float preis = ((Float)getValueAt(rowIndex, 3)).floatValue();
@@ -196,10 +201,10 @@ public class PositionsTableModel extends DefaultTableModel {
 			float mwst = 0.0f;
 			float preis = 0.0f;
 			
-			if (type==STD_ABWICKLUNG){
+			if (type==STD_ABWICKLUNG || type==STD_DURCHFUEHRUNG){
 				mwst = ((Float)getValueAt(i, 3)).floatValue();
 				preis = ((Float)getValueAt(i, 2)).floatValue();
-			}else if (type==ASK_ABWICKLUNG || type==ASK_STANDARD){
+			}else if (type==ASK_ABWICKLUNG || type==ASK_DURCHFUEHRUNG){
 				mwst = ((Float)getValueAt(i, 4)).floatValue();
 				preis = ((Float)getValueAt(i, 3)).floatValue();
 			}
@@ -227,10 +232,10 @@ public class PositionsTableModel extends DefaultTableModel {
 			float mwst = 0.0f;
 			float preis = 0.0f;
 			
-			if (type==STD_ABWICKLUNG){
+			if (type==STD_ABWICKLUNG || type==STD_DURCHFUEHRUNG){
 				mwst = ((Float)getValueAt(i, 3)).floatValue();
 				preis = ((Float)getValueAt(i, 2)).floatValue();
-			}else if (type==ASK_ABWICKLUNG || type==ASK_STANDARD){
+			}else if (type==ASK_ABWICKLUNG || type==ASK_DURCHFUEHRUNG){
 				mwst = ((Float)getValueAt(i, 4)).floatValue();
 				preis = ((Float)getValueAt(i, 3)).floatValue();
 			}
@@ -282,6 +287,14 @@ public class PositionsTableModel extends DefaultTableModel {
 								);
 				}
 			return positions;
+		}else if (type==STD_DURCHFUEHRUNG){
+			ArrayList positions = new ArrayList();
+				for (int i=0; i < getRowCount(); i++){
+					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
+												((Float)getValueAt(i,2)).floatValue(), ((Integer)getValueAt(i,0)).intValue(),
+												((Float)getValueAt(i,3)).floatValue(), ((Float)getValueAt(i,4)).floatValue(),false));
+				}
+			return positions;
 		}else if (type==ASK_ABWICKLUNG){
 			ArrayList positions = new ArrayList();
 				for (int i=0; i < getRowCount(); i++){
@@ -293,7 +306,7 @@ public class PositionsTableModel extends DefaultTableModel {
 				}
 			return positions;
 
-		}else if (type==ASK_STANDARD){
+		}else if (type==ASK_DURCHFUEHRUNG){
 			ArrayList positions = new ArrayList();
 				for (int i=0; i < getRowCount(); i++){
 					positions.add( new Position(((Integer)identifiers.get(i)).intValue(), (String)getValueAt(i,1),
