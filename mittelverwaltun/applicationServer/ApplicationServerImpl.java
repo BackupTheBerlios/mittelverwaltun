@@ -1840,49 +1840,115 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
 	 */
 	public void setBestellung(StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
-		// original StandardBestellung in der Datenbank
-		StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(original.getId());
+		
+		try{
+		
+			// original StandardBestellung in der Datenbank
+			StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(original.getId());
+		
+			ArrayList angebote = db.selectForUpdateAngebote(original.getId());
 	
-		ArrayList angebote = db.selectForUpdateAngebote(original.getId());
-
-		for(int i = 0; i < angebote.size(); i++){
-			Angebot angebot = (Angebot)angebote.get(i);
-
-			angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
-		}
-		dbOriginal.setAngebote(angebote); // Angebote hinzufügen
-		
-		// die Bestellung hat sich zwischenzeitlich geändert
-		if(!original.equals(dbOriginal))
-			throw new ApplicationServerException( 76 );
-			
-		// die Referenznummer der Bestellung hat sich geändert
-		if(!(original.getReferenznr().equals(edited.getReferenznr())))
-			if(db.checkReferenzNr(edited.getReferenznr()) > 0)
-				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
-		
-		if(edited.getPhase() == '0'){
-			db.updateStandardBestellung(edited);
-			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
-		}else if(edited.getPhase() == '1'){
-			db.updateStandardBestellung(edited);
-			// TODO nur ein Angebot aktualisieren
-			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
-			
-			// es wurde auf den Button Bestellen gedrückt
-			if(original.getPhase() == '0'){
-				// Vormerkungen bei FBKonto und ZVTitel setzen
-				db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
-				// ? Vormerkungen Buchen ?
+			for(int i = 0; i < angebote.size(); i++){
+				Angebot angebot = (Angebot)angebote.get(i);
+	
+				angebot.setPositionen(db.selectForUpdatePositionen(angebot.getId())); // Positionen zu Angeboten hinzufügen
 			}
+			dbOriginal.setAngebote(angebote); // Angebote hinzufügen
 			
+			// die Bestellung hat sich zwischenzeitlich geändert
+			if(!original.equals(dbOriginal))
+				throw new ApplicationServerException( 76 );
+				
+			// die Referenznummer der Bestellung hat sich geändert
+			if(!(original.getReferenznr().equals(edited.getReferenznr())))
+				if(db.checkReferenzNr(edited.getReferenznr()) > 0)
+					throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
 			
-		}else if(edited.getPhase() == '2'){
-		
+				
+			if(original.getPhase() == '0'){
+				db.updateStandardBestellung(edited);
+				actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
+				if(edited.getPhase() == '1'){
+					//	Vormerkungen bei FBKonto und ZVTitel setzen
+					db.updateVormerkungen(edited.getFbkonto(), edited.getZvtitel());
+					// ? Vormerkungen Buchen ?
+				}
+			}else if((original.getPhase() == '1') || ((original.getPhase() == '2') && (edited.getPhase() == '3'))){
+				db.updateStandardBestellung(edited);
+				// TODO nur ein Angebot aktualisieren
+				actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
+	
+				// Bestimme Bestellwertdifferenz
+				float dBestellwert;
+				if (edited.getPhase() == '3')
+					dBestellwert = -original.getBestellwert();
+				else dBestellwert = edited.getBestellwert() - original.getBestellwert();
+				System.out.println("dBestellwert = "+dBestellwert);
+				// Bestimme Zahlungsdifferenz
+				float dZahlung = ( edited.getBestellwert() - edited.getVerbindlichkeiten()) - (original.getBestellwert() - original.getVerbindlichkeiten());
+				System.out.println("dZahlung = " + dZahlung);
+				// Aktualisiere Kontenstände
+				if (dBestellwert != 0){ // => Bestellungsänderung
+					
+					//	Bestimme verfügbares ZV-Budget
+					float availableZvBudget = 0.00f;
+					if(original.getZvtitel() instanceof ZVTitel)
+						availableZvBudget = db.getAvailableTgrBudget(((ZVTitel)original.getZvtitel()).getZVKonto().getId());
+					else
+						availableZvBudget = db.getAvailableTgrBudget(original.getZvtitel().getZVTitel().getZVKonto().getId());
+					
+					if (original.getZvtitel().getBudget() > original.getZvtitel().getVormerkungen())
+						availableZvBudget += (original.getZvtitel().getBudget() - original.getZvtitel().getVormerkungen());
+					System.out.println("availableZvBudget = " + availableZvBudget);
+					// Bestimme verfügbares FB-Budget
+					float availableFbBudget = original.getFbkonto().getBudget() - original.getFbkonto().getVormerkungen();
+					
+					if ((dBestellwert > availableZvBudget)||(dBestellwert > availableFbBudget)){
+						System.out.println("keine Deckung");//Error keine Deckung => rollback
+						throw new ApplicationServerException( 162 );
+					}
+					else {
+						db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), dBestellwert);
+						System.out.println("db.updateVormerkungen(original.getFbkonto(), original.getZvtitel(), " + dBestellwert + ");");
+					}
+				}
+			
+				if (dZahlung != 0){ // => Positionen wurden beglichen oder 'zurückgezahlt'
+					float tgrEntry, titelEntry;
+					if (dZahlung < 0){
+						float tgrExpenses = db.getTgrExpensesForOrder(original.getId());
+						System.out.println("tgrExpenses: " + tgrExpenses);
+						if (tgrExpenses > 0){
+							tgrEntry = (tgrExpenses + dZahlung) > 0 ? -dZahlung : tgrExpenses;
+							titelEntry = -(tgrEntry + dZahlung);
+							
+						}else{
+							tgrEntry = 0;
+							titelEntry = -dZahlung;
+						}
+					}else{
+						float availableRessources = original.getZvtitel().getBudget() - original.getZvtitel().getVormerkungen();
+						if (availableRessources > 0){
+							titelEntry = availableRessources < dZahlung ? -availableRessources : -dZahlung;
+							tgrEntry = availableRessources < dZahlung ? availableRessources-dZahlung : 0;
+						}else{
+							tgrEntry = -dZahlung;
+							titelEntry = 0;
+						}
+					}
+					
+					db.updateAccountStates(original.getZvtitel(), tgrEntry, titelEntry, original.getFbkonto(), -dZahlung);
+					System.out.println("db.updateAccountStates(original.getZvtitel(), " + tgrEntry + ", " + titelEntry + ", original.getFbkonto(), "+ (-dZahlung) + ");");
+				}
+			}
+
+			db.commit();
+		}catch (ApplicationServerException e){
+			db.rollback();
+			throw e;
 		}
-		
-		db.commit();
 	}
+	
 	
 	/**
 	 * aktualisiert die Angebote einer Bestellung. Dazu gehört auch löschen, hinzufügen und ändern
@@ -2378,6 +2444,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	public Firma getASKFirma() throws ApplicationServerException {
 		return db.selectASKFirma();
 	}
+	
+	
+	
 }
 
 

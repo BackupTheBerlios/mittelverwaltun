@@ -329,9 +329,17 @@ public class PositionsTableModel extends DefaultTableModel {
 	}
 	
 	public void payAllPositions(){
-		if (editable && ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))){
+		if (/*editable &&*/ ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))){
 			for (int i=0; i<getRowCount();i++){
 				setValueAt(new Boolean(true), i, 6);
+			}	
+		}
+	}
+	
+	public void oweAllPositions(){
+		if (/*editable &&*/ ((type == STD_ABWICKLUNG)||(type == ASK_ABWICKLUNG))){
+			for (int i=0; i<getRowCount();i++){
+				setValueAt(new Boolean(false), i, 6);
 			}	
 		}
 	}

@@ -262,6 +262,10 @@ public class PositionsTable extends JTable implements ActionListener {
 		((PositionsTableModel)getModel()).payAllPositions();
 	}
 	
+	public void oweAllPositions(){
+		((PositionsTableModel)getModel()).oweAllPositions();
+	}
+	
 	public boolean isEditable(){
 		return ((PositionsTableModel)getModel()).isEditable();
 	}

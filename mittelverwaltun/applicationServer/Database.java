@@ -3803,6 +3803,73 @@ public class Database implements Serializable{
 			throw new ApplicationServerException(65, e.getMessage());
 		}
 	}
+
+
+	public void updateVormerkungen(FBUnterkonto fbKonto, ZVUntertitel zvTitel, float summand) throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Float(summand), new Float(summand), new Integer(fbKonto.getId()), new Integer(zvTitel.getId()) };
+			if(statements.get(310).executeUpdate(parameters) == 0)
+				throw new ApplicationServerException(99);
+
+		} catch (SQLException e){
+			throw new ApplicationServerException(98, e.getMessage());
+		}
+	}
+	
+	public float getAvailableTgrBudget(int zvKontoID) throws ApplicationServerException{
+		float budget = 0.00f;
+		
+		try{
+			Object[] parameters = { new Integer(zvKontoID) };
+			ResultSet rs = statements.get(165).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {// Konto vorhanden
+				budget = rs.getFloat(1);
+			}
+			rs.close();// Abfrage schlieﬂen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 159, e.getMessage() );
+		}
+		return budget;
+	}
+
+	public float getTgrExpensesForOrder (int orderID) throws ApplicationServerException{
+		float expenses = 0.00f;
+		
+		try{
+			Object[] parameters = { new Integer(orderID) };
+			ResultSet rs = statements.get(223).executeQuery(parameters);
+			rs.last();	
+			if ( rs.getRow() > 0 ) {// Bestellung vorhanden
+				expenses = -rs.getFloat(1);
+			}
+			rs.close();// Abfrage schlieﬂen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 159, e.getMessage() );
+		}
+		return expenses;
+	}
+	
+	public void updateAccountStates(ZVUntertitel titel, float tgrEntry, float titelEntry, FBUnterkonto konto, float accEntry) throws ApplicationServerException{
+		int zvKontoID;
+		if(titel instanceof ZVTitel)
+			zvKontoID = ((ZVTitel)titel).getZVKonto().getId();
+		else
+			zvKontoID = titel.getZVTitel().getZVKonto().getId();
+		
+		try{
+			Object[] parameters = { new Float(accEntry), new Float(accEntry), new Float(tgrEntry), new Float(tgrEntry + titelEntry), new Float(titelEntry), 
+									new Integer(konto.getId()), new Integer(zvKontoID), new Integer(titel.getId()) };
+			if(statements.get(311).executeUpdate(parameters) == 0)
+				throw new ApplicationServerException(99);
+
+		} catch (SQLException e){
+			throw new ApplicationServerException(98, e.getMessage());
+		}
+		
+	}
+
+
 }
 
 
