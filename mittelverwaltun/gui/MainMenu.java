@@ -27,8 +27,8 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	JMenu menuBestellung = new JMenu("Bestellung");
 		JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
 		JMenu menuErstellen = new JMenu("Erstellen");
-			JMenuItem miAuszahlungsanforderung = new JActivityRelatedMenuItem(1,	"Auszahlungsanforderung");
-			JMenuItem miStandardbestellung = new JActivityRelatedMenuItem(	1,"Standardbestellung");
+			JMenuItem miAuszahlungsanforderung = new JActivityRelatedMenuItem(18,	"Auszahlungsanforderung");
+			JMenuItem miStandardbestellung = new JActivityRelatedMenuItem(	17,"Standardbestellung");
 			JMenuItem miASKBestellung = new JActivityRelatedMenuItem(	1,	"ASK Bestellung");
 		JMenuItem miAendernStornieren = new JActivityRelatedMenuItem(	1,"Ändern/Stornieren");
 		JMenuItem miHUELNummer = new JActivityRelatedMenuItem(1,"HÜL-Nummer eintragen");
