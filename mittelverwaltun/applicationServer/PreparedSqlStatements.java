@@ -2356,36 +2356,22 @@ public class PreparedSqlStatements {
 		}
 		{//337 Report 6 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"i.bezeichnung AS institut, zvk.bezeichnung AS zvKonto, SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben " +
+																		"i.bezeichnung AS institut, " +																		"zvk.bezeichnung AS zvKonto, " +																		"SUM(COALESCE((be.bestellwert - be.verbindlichkeiten),0)) AS ausgaben " +
 																"FROM " +
-																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
-																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE i.id = fbk.institutsId  " +
+																	"ZVKontentitel zvt, ZVKonten zvk, " +
+																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Bestellungen be " +																	"ON be.phase != 0 " +
+																	"AND be.geloescht = '0' " +
 																	"AND be.fbKonto = fbk.id " +
 																	"AND be.zvTitel = zvt.id " +
+															  "WHERE i.id = fbk.institutsId  " +
 																	"AND zvt.zvKontoId = zvk.id " +
-																	"AND be.phase != 0 " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND be.geloescht = '0' " +																"GROUP BY i.bezeichnung, zvk.bezeichnung");
+																"GROUP BY i.bezeichnung, zvk.bezeichnung");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//338 Report 5 siehe gui.Reports.java
-//			ps = con.prepareStatement("SELECT " +
-//																		"zvk.bezeichnung AS zvKonto, " +
-//																		"i.bezeichnung AS institut, " +
-//																		"SUM(bu.betragFbKonto1) AS ausgaben, " +
-//																		"(SELECT SUM(budget) FROM FBKonten WHERE institutsId = i.id) AS kontostand " +
-//																"FROM " +
-//																	"Buchungen bu, ZVKontentitel zvt, ZVKonten zvk, " +
-//																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-//															  "WHERE i.id = fbk.institutsId  " +
-//																	"AND zvt.zvKontoId = zvk.id " +
-//																	"AND bu.typ > 7 " +//																	"AND bu.fbKonto1 = fbk.id " +//																	"AND bu.zvTitel1 = zvt.id " +
-//																	"AND h.id = fbk.haushaltsjahrId " +
-//																	"AND h.id = zvk.haushaltsjahrId " +
-//																	"AND h.status = 0 " +//																"GROUP BY i.bezeichnung");
 			ps = con.prepareStatement("SELECT " +
 																		"zvk.bezeichnung AS zvKonto, " +
 																		"i.bezeichnung AS institut, " +
@@ -2411,22 +2397,40 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement("SELECT " +
 																		"fbk.bezeichnung AS fbKonto, " +
 																		"zvk.bezeichnung AS zvKonto, " +
-																		"SUM(be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"SUM(bu.betragFbKonto1) AS ausgaben " +
 																"FROM " +
-																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +
+																	"Buchungen bu, ZVKontentitel zvt, ZVKonten zvk, " +
 																	"FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE zvt.zvKontoId = zvk.id " +
-																	"AND be.fbKonto = fbk.id " +
-																	"AND be.zvTitel = zvt.id " +
+															  "WHERE zvt.zvKontoId = zvk.id " +															  	"AND bu.typ > 8 " +
+																	"AND bu.fbKonto1 = fbk.id " +
+																	"AND bu.zvTitel1 = zvt.id " +
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND be.geloescht = '0' " +
 																"GROUP BY fbk.bezeichnung, zvk.bezeichnung");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//340 
-			statements[i++] = null;
+		{//340 Report 3 siehe gui.Reports.java
+			/**
+			 * Ein Report, der die institutsinternen Konten, die verteilten Mittel, die Summe
+			 * der Ausgaben und den aktuellen Kontostand enthält
+			 */
+			ps = con.prepareStatement("SELECT " +																		"i.bezeichnung AS institut, " +
+																		"fbk.bezeichnung AS fbKonto, " +																		"(SELECT SUM(betragFbKonto1) FROM Buchungen WHERE fbKonto1 = fbk.id AND typ = '5') AS einnahmen, " +
+																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +																		"fbk.budget AS kontostand " +
+																"FROM " +
+																	"Institute i, ZVKontentitel zvt, ZVKonten zvk, " +
+																	"FBKonten fbk, Haushaltsjahre h " +
+															  "LEFT JOIN Buchungen bu " +
+																	"ON bu.typ > 8 " +
+																	"AND bu.fbKonto1 = fbk.id " +
+																	"AND bu.zvTitel1 = zvt.id " +
+															  "WHERE i.id = fbk.institutsId " +															  	"AND zvt.zvKontoId = zvk.id " +
+																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND h.status = 0 " +
+																"GROUP BY i.bezeichnung, fbk.bezeichnung");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//341
 			statements[i++] = null;

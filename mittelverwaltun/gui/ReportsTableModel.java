@@ -32,7 +32,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "Ausgaben", "Verteilungen"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_3){
-			String[] colheads = {"FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
+			String[] colheads = {"Instiut", "FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_4){
 			String[] colheads = {"FB-Konto", "ZV-Konto", "Ausgaben (FB-Konto)"}; 
@@ -60,12 +60,14 @@ public class ReportsTableModel extends DefaultTableModel {
 		for(int i = 0; i < content.size(); i++){
 			Object[] data = null;
 			
-			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_3 || type == Reports.REPORT_5)
+			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_5)
 				data = new Object[4];
 			else if(type == Reports.REPORT_4 || type == Reports.REPORT_8)
 				data = new Object[3];
 			else if(type == Reports.REPORT_6 )
 				data = new Object[3];
+			else if(type == Reports.REPORT_3 )
+				data = new Object[5];
 			else if(type == Reports.REPORT_7)
 				data = new Object[9];
 			
@@ -85,11 +87,13 @@ public class ReportsTableModel extends DefaultTableModel {
 				data[3] = (Float)row.get(3);							// Verteilungen
 				
 			} else if (type == Reports.REPORT_3){
-				data[0] = (String)row.get(0);							// FB-Konto
-				data[1] = (Float)row.get(1);							// verteilte Mittel
-				data[2] = (Float)row.get(2);							// Ausgaben
-				data[3] = (Float)row.get(3);							// Kontostand
-				
+				if(filter.equals("") || filter.equals((String)row.get(0))){
+					data[0] = (String)row.get(0);							// Institut
+					data[1] = (String)row.get(1);							// FB-Konto
+					data[2] = (Float)row.get(2);							// verteilte Mittel
+					data[3] = (Float)row.get(3);							// Ausgaben
+					data[4] = (Float)row.get(4);							// Kontostand
+				}
 			} else if (type == Reports.REPORT_4){
 				data[0] = (String)row.get(0);							// FB-Konto
 				data[1] = (String)row.get(1);							// ZV-Konto

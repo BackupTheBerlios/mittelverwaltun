@@ -162,6 +162,8 @@ public class ApplicationServerException extends Exception {
 		messages[103] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport8";
 		messages[104] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport6";
 		messages[105] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport5";
+		messages[106] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport4";
+		messages[107] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectReport3";
 			
 
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";

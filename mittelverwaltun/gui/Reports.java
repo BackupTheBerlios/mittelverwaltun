@@ -208,7 +208,13 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} else if(e.getActionCommand() == "showReport"){
 			try {
-				if(cbReportFilter.getSelectedItem() == "Report_5"){
+				if(cbReportFilter.getSelectedItem() == "Report_3"){
+							ArrayList content = frame.getApplicationServer().getReport(REPORT_3);
+							tabReport.fillReport(REPORT_3, filter, content);
+				} else if(cbReportFilter.getSelectedItem() == "Report_4"){
+							ArrayList content = frame.getApplicationServer().getReport(REPORT_4);
+							tabReport.fillReport(REPORT_4, "", content);
+				} else if(cbReportFilter.getSelectedItem() == "Report_5"){
 					if(cbZVKonten.getSelectedItem() != null){
 							ArrayList content = frame.getApplicationServer().getReport(REPORT_5);
 							tabReport.fillReport(REPORT_5, filter, content);
@@ -359,13 +365,13 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		if(e.getSource() == cbReportFilter){
 			tabReport.fillReport(0,"", new ArrayList());
 			filter = "";
-			if(r == "Report_6" || r == "Report_7" || r == "Report_8"){
-				loadInstituts();
+			if(r == "Report_3" || r == "Report_6" || r == "Report_7" || r == "Report_8"){
+				labInstitut.setText("Institute");
 				labInstitut.setVisible(true);
 				cbInstitut.setVisible(true);
 				cbZVKonten.setVisible(false);
 			}else if(r == "Report_5"){
-				loadZVKonten();
+				labInstitut.setText("ZVKonto");
 				labInstitut.setVisible(true);
 				cbZVKonten.setVisible(true);
 				cbInstitut.setVisible(false);
