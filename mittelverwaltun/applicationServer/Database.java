@@ -3783,6 +3783,26 @@ public class Database implements Serializable{
 			throw new ApplicationServerException(98, e.getMessage());
 		}
 	}
+	
+	/**
+	 * fügt eine neue Buchung ein
+	 * @param b - Buchung
+	 * @throws ApplicationServerException
+	 */
+	public void insertBuchung(Buchung b) throws ApplicationServerException{
+		try{
+			Object[] parameters = { b.getDatum(), b.getBenutzer(), "" + b.getTyp(), b.getBeschreibung(), new Integer(b.getBestellung().getId()),
+															new Integer(b.getZvKonto().getId()), new Float(b.getBetragZvKonto()), 
+															new Integer(b.getZvTitel1().getId()), new Float(b.getBetragZvTitel1()), 
+															new Integer(b.getZvTitel2().getId()), new Float(b.getBetragZvTitel2()),
+															new Integer(b.getFbKonto1().getId()), new Float(b.getBetragFbKonto1()),
+															new Integer(b.getFbKonto2().getId()), new Float(b.getBetragFbKonto2()) };
+			statements.get(223).executeUpdate(parameters);
+			
+		} catch (SQLException e){
+			throw new ApplicationServerException(65, e.getMessage());
+		}
+	}
 }
 
 

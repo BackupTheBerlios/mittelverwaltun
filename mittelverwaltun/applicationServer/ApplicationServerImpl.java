@@ -2177,7 +2177,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @throws ApplicationServerException
 	 */
 	private void bucheVormerkungen() throws ApplicationServerException {
-
+		
 	}
 	
 	/**
