@@ -207,6 +207,6 @@ public class Position implements Serializable {
 	 */
 	public Object clone(){
 		return new Position(	this.id, this.artikel, this.einzelPreis, this.menge, this.mwst, this.rabatt, 
-																			(Institut)this.institut.clone(), this.beglichen );
+													((institut == null) ? null :	(Institut)this.institut.clone()), this.beglichen );
 	}
 }
