@@ -2,7 +2,6 @@ package dbObjects;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.ArrayList;
 /**
  * @author robert
  *
@@ -17,43 +16,24 @@ public class Bestellung implements Serializable {
 
 	private String huel;
 
-	private short status;
-
 	private Date datum;
-
-	private String lieferant;
-
-	private String empfaenger;
-
-	private float zahlung;
-
-	private float bestellsumme;
-
-	private ZVUntertitel zvTitel;
-
-	private FBUnterkonto fbKonto;
 
 	private Benutzer besteller;
 
-	private ArrayList[] angebote;
+	private short phase;
 
-	private Kostenart kostenart;
+	private Benutzer auftraggeber;
 
-	public Bestellung(int id, String referenzNr, String huelNr, ZVUntertitel zvTitel, FBUnterkonto fbKonto, short status, 
-										Kostenart kostenart, Date datum, Benutzer besteller, String lieferant, String empfaenger, float zahlung){
-		this.id = id;
-		this.referenznr = referenzNr;
-		this.huel = huelNr;
-		this.zvTitel =zvTitel;
-		this.fbKonto = fbKonto;
-		this.status = status;
-		this.kostenart = kostenart;
-		this.datum = datum;
-		this.besteller = besteller;
-		this.lieferant = lieferant;
-		this.empfaenger = empfaenger;
-		this.zahlung = zahlung;		
-	}
+	private Benutzer empfaenger;
+
+	private ZVTitel zvtitel;
+
+	private FBUnterkonto fbkonto;
+
+	private float bestellwert;
+
+	public Bestellung(){}
+	
 	public int getId() {
 		return id;
 	}
@@ -78,76 +58,12 @@ public class Bestellung implements Serializable {
 		this.huel = huel;
 	}
 
-	public short getStatus() {
-		return status;
-	}
-
-	public void setStatus(short status) {
-		this.status = status;
-	}
-
-	public Kostenart getKostenart() {
-		return kostenart;
-	}
-
-	public void setKostenart(Kostenart kostenart) {
-		this.kostenart = kostenart;
-	}
-
 	public Date getDatum() {
 		return datum;
 	}
 
 	public void setDatum(Date datum) {
 		this.datum = datum;
-	}
-
-	public String getLieferant() {
-		return lieferant;
-	}
-
-	public void setLieferant(String lieferant) {
-		this.lieferant = lieferant;
-	}
-
-	public String getEmpfaenger() {
-		return empfaenger;
-	}
-
-	public void setEmpfaenger(String empfaenger) {
-		this.empfaenger = empfaenger;
-	}
-
-	public float getZahlung() {
-		return zahlung;
-	}
-
-	public void setZahlung(float zahlung) {
-		this.zahlung = zahlung;
-	}
-
-	public float getBestellsumme() {
-		return bestellsumme;
-	}
-
-	public void setBestellsumme(float bestellsumme) {
-		this.bestellsumme = bestellsumme;
-	}
-
-	public FBUnterkonto getFbKonto() {
-		return fbKonto;
-	}
-
-	public void setFbKonto(FBUnterkonto fbKonto) {
-		this.fbKonto = fbKonto;
-	}
-
-	public ZVUntertitel getZvTitel() {
-		return zvTitel;
-	}
-
-	public void setZvTitel(ZVUntertitel zvTitel) {
-		this.zvTitel = zvTitel;
 	}
 
 	public Benutzer getBesteller() {
@@ -158,12 +74,52 @@ public class Bestellung implements Serializable {
 		this.besteller = besteller;
 	}
 
-	public ArrayList[] getAngebote() {
-		return angebote;
+	public short getPhase() {
+		return phase;
 	}
 
-	public void setAngebote(ArrayList[] angebote) {
-		this.angebote = angebote;
+	public void setPhase(short phase) {
+		this.phase = phase;
+	}
+
+	public Benutzer getAuftraggeber() {
+		return auftraggeber;
+	}
+
+	public void setAuftraggeber(Benutzer auftraggeber) {
+		this.auftraggeber = auftraggeber;
+	}
+
+	public Benutzer getEmpfaenger() {
+		return empfaenger;
+	}
+
+	public void setEmpfaenger(Benutzer empfaenger) {
+		this.empfaenger = empfaenger;
+	}
+
+	public ZVTitel getZvtitel() {
+		return zvtitel;
+	}
+
+	public void setZvtitel(ZVTitel zvtitel) {
+		this.zvtitel = zvtitel;
+	}
+
+	public FBUnterkonto getFbkonto() {
+		return fbkonto;
+	}
+
+	public void setFbkonto(FBUnterkonto fbkonto) {
+		this.fbkonto = fbkonto;
+	}
+
+	public float getBestellwert() {
+		return bestellwert;
+	}
+
+	public void setBestellwert(float bestellwert) {
+		this.bestellwert = bestellwert;
 	}
 
 }

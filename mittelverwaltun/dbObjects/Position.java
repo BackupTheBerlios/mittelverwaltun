@@ -12,8 +12,6 @@ public class Position implements Serializable{
 
 	private int id;
 
-	private String beschreibung;
-
 	private float einzelPreis;
 
 	private int menge;
@@ -21,28 +19,17 @@ public class Position implements Serializable{
 
 	private float mwst;
 
-	public Position(int id, String beschreibung, float einzelPreis, int menge, float mwst, float rabatt){
-		this.id = id;
-		this.beschreibung = beschreibung;
-		this.einzelPreis = einzelPreis;
-		this.menge = menge;
-		this.mwst = mwst;
-		this.rabatt = rabatt;
-	}
-	public Position(String beschreibung, float einzelPreis, int menge, float mwst, float rabatt){
-		this.beschreibung = beschreibung;
-		this.einzelPreis = einzelPreis;
-		this.menge = menge;
-		this.mwst = mwst;
-		this.rabatt = rabatt;
-	}
+	private boolean beglichen;
+
+	private Institut institut;
+
+	private String artikel;
+
+	public Position(int id){}
+	
 	
 	public String toString(){
-		return "Id:" + id 	
-				+ " Beschreibung:" + beschreibung 
-				+ " Einzelpreis:" + einzelPreis
-				+ " Menge:" + menge
-				+ " MwSt.:" + rabatt;
+		return "";
 	}
   
 	public int getId() {
@@ -51,14 +38,6 @@ public class Position implements Serializable{
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getBeschreibung() {
-		return beschreibung;
-	}
-
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
 	}
 
 	public float getEinzelPreis() {
@@ -95,6 +74,30 @@ public class Position implements Serializable{
 	
 	public float getGesamtpreis(){
 		return this.menge * this.einzelPreis + (this.menge * this.einzelPreis * this.mwst) - this.rabatt;
+	}
+
+	public boolean getBeglichen() {
+		return beglichen;
+	}
+
+	public void setBeglichen(boolean beglichen) {
+		this.beglichen = beglichen;
+	}
+
+	public Institut getInstitut() {
+		return institut;
+	}
+
+	public void setInstitut(Institut institut) {
+		this.institut = institut;
+	}
+
+	public String getArtikel() {
+		return artikel;
+	}
+
+	public void setArtikel(String artikel) {
+		this.artikel = artikel;
 	}
 
 }

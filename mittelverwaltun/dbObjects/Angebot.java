@@ -1,6 +1,7 @@
 package dbObjects;
 
 import java.util.ArrayList;
+import java.sql.Date;
 /**
  * @author robert
  *
@@ -11,70 +12,25 @@ import java.util.ArrayList;
 
 public class Angebot {
 
-	private String datum;
-
-	private String firma;
-
-	private String strasse;
-
-	private String plz;
-
-	private String ort;
-
 	private ArrayList positionen;
 	
-	private float summe;
+	private Date datum;
 
-	public Angebot(String datum, String firma, String strasse, String plz, String ort, ArrayList positionen, float summe){
-		this.datum = datum;
-		this.firma = firma;
-		this.strasse = strasse;
-		this.plz = plz;
-		this.ort = ort;
-		this.positionen = positionen;
-		this.summe = summe;
+	private Firma anbieter;
+
+	private int id;
+
+	public Angebot(){
 	}
 	
 	
 
-	public String getDatum() {
+	public Date getDatum() {
 		return datum;
 	}
 
-	public void setDatum(String datum) {
+	public void setDatum(Date datum) {
 		this.datum = datum;
-	}
-
-	public String getFirma() {
-		return firma;
-	}
-
-	public void setFirma(String firma) {
-		this.firma = firma;
-	}
-
-	public String getStrasse() {
-		return strasse;
-	}
-
-	public void setStrasse(String strasse) {
-		this.strasse = strasse;
-	}
-
-	public String getPlz() {
-		return plz;
-	}
-
-	public void setPlz(String plz) {
-		this.plz = plz;
-	}
-
-	public String getOrt() {
-		return ort;
-	}
-
-	public void setOrt(String ort) {
-		this.ort = ort;
 	}
 
 	public ArrayList getPositionen() {
@@ -86,14 +42,32 @@ public class Angebot {
 	}
 
 	public String toString(){
-		return firma + ", " + ort;
+		return "";
 	}
-	public float getSumme() {
-		return summe;
+	public Firma getAnbieter() {
+		return anbieter;
 	}
 
-	public void setSumme(float summe) {
-		this.summe = summe;
+	public void setAnbieter(Firma anbieter) {
+		this.anbieter = anbieter;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public float getSumme(){
+		float summe = 0;
+		
+		for(int i = 0; i < positionen.size(); i++){
+			Position position = (Position)positionen.get(i);
+			summe += position.getGesamtpreis();
+		}
+		return summe;
 	}
 
 }
