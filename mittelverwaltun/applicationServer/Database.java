@@ -3019,6 +3019,21 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * löscht ein Angebot anhand der Id. VORSICHT: vorher dazugehörige Positionen löschen
+	 * @param angebotId Id des Angebots
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void deleteAngebot( int angebotId ) throws ApplicationServerException {
+		try{
+			Object[] parameters = {new Integer(angebotId)};
+			statements.get(285).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException( 87, e.getMessage() );
+		}
+	}
+	
+	/**
 	 * löscht alle Positionen zu allen Angeboten einer Bestellung
 	 * @param bestellId
 	 * @throws ApplicationServerException

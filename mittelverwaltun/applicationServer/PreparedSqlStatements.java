@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[285];
+		statements = new PreparedStatementWrapper[290];
 		int i = 0;
 
 		/**************************************/
@@ -1796,7 +1796,7 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		/******************************************/
-		/* Tabelle: Angebote 	                  */
+		/* Tabelle: Angebote 1 	                  */
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//260 fügt ein Angebot in die Tabelle Angebot ein
@@ -1955,6 +1955,27 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//284
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: Angebote 2 	                  */
+		/* Indizes: 285-289                       */
+		/******************************************/
+		{//285 
+			ps = con.prepareStatement("DELETE FROM Angebote WHERE id = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//286
+			statements[i++] = null;
+		}
+		{//287
+			statements[i++] = null;
+		}
+		{//288
+			statements[i++] = null;
+		}
+		{//289
 			statements[i++] = null;
 		}
 	}

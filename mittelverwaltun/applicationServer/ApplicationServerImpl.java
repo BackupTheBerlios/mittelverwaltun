@@ -1746,12 +1746,6 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				
 				db.insertPosition(position, newAngebotId);
 			}
-			// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
-			if(positionen.size() == 0){
-				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, bestellung.getFbkonto().getInstitut());
-				
-				db.insertPosition(position, newAngebotId);
-			}
 		}
 		db.commit();
 		
@@ -1809,41 +1803,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(edited.getPhase() == '0'){
 			
 			db.updateStandardBestellung(edited, 0f);
-			
-			ArrayList oldOffer = original.getAngebote(); // alte Angebote
-			ArrayList newOffer = edited.getAngebote();	 // neue Angebote
-			
-			if(!original.getAngebote().equals(edited.getAngebote())){ // die  haben sich geändert
-				db.deleteAngebote(edited.getId()); // löscht alle Angebote
-				
-				ArrayList angebote = edited.getAngebote();
-				int newAngebotId = 0;
-				for(int i = 0; i < angebote.size(); i++){
-					Angebot angebot = (Angebot)edited.getAngebote().get(i);
-					ArrayList positionen = angebot.getPositionen();
+			actualizeAngebote(original.getAngebote(), edited.getAngebote(), edited.getId());
+		}else if(edited.getPhase() == '1'){
 
-					newAngebotId = db.insertAngebot(angebot, edited.getId());
-
-					// fügt alle Positionen ein
-					for(int j = 0; j < positionen.size(); j++){
-						Position position = (Position)positionen.get(j);
-
-						db.insertPosition(position, newAngebotId);
-					}
-					// einfügen einer Position falls nur der Betrag des Angebots angegeben wurde und keine Positionen
-					if(positionen.size() == 0){
-						Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, edited.getFbkonto().getInstitut());
-
-						db.insertPosition(position, newAngebotId);
-					}
-				}
-			}
-			}else if(edited.getPhase() == '1'){
-//				float v = ((Angebot)edited.getAngebote().get(edited.getAuswahl())).getSumme();
-//			db.updateStandardBestellung(edited, 0f);
-			}else if(edited.getPhase() == '2'){
-			
-			}
+		}else if(edited.getPhase() == '2'){
+		
+		}
 	}
 	
 	/**
@@ -1865,27 +1830,34 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				db.deleteAngebote(bestellId);
 			}else{
 				
-//				if(i >= newOffers.size()){ // restliche alte Angebote löschen
-//					db.deleteOfferPositions(oldOffer.getId());
-//					// db.deleteAngebot(oldOffer.getId());
-//				}else{
-//					Angebot newOffer = (Angebot)newOffers.get(i);
+				if(oldOffers.size() == 0){ // nur neue Angebote
+					db.insertAngebot((Angebot)newOffers.get(i), bestellId);
+				}else{
+				
+					if(i >= newOffers.size()){ // restliche alte Angebote löschen
+						db.deleteOfferPositions(oldOffer.getId());
+						db.deleteAngebot(oldOffer.getId());
+					}else{
+						Angebot newOffer = (Angebot)newOffers.get(i);
 //				
-//					if(newOffer.getId() == 0){ // neue Positionen
-//						if(oldOffer != null)
-//							//db.deleteAngebot(oldOffer.getId());
-//						db.insertAngebot(newOffer, bestellId);
-//					}else{
-//						if(oldOffer != null){
-//							if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
-//								//db.deleteAngebot(oldOffer.getId());
-//							}else{	// gleiche Position
-//								if(!oldOffer.equals(newOffer)) // Position geändert
-//									db.updateAngebot(newOffer);
-//							}
-//						}
-//					}
-//				}
+						if(newOffer.getId() == 0){ // neues Angebot
+							if(oldOffer != null){
+								db.deleteOfferPositions(oldOffer.getId());
+								db.deleteAngebot(oldOffer.getId());
+							}
+							db.insertAngebot(newOffer, bestellId);
+						}else{
+							if(oldOffer != null){
+								if(oldOffer.getId() != newOffer.getId()){	// ungleiche Id der Angebote -> altes Angebot löschen
+									db.deleteOfferPositions(oldOffer.getId());
+									db.deleteAngebot(oldOffer.getId());
+								}else{
+									actualizeAngebot(oldOffer, newOffer, bestellId); // gleiche Angebote
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1912,17 +1884,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 			for(int i = 0; i < posIndex; i++){
 				Position oldP = (Position)oldPs.get(i); 
 				
-				// alle Positionen gelöscht und nur die Summe angegeben oder neue Positionen hinzugefügt
-				if(newPs.size() == 0 || ((Position)newPs.get(0)).getId() == 0){
+				// nur neue Positionen hinzugefügt(mindestens 1)
+				if(((Position)newPs.get(0)).getId() == 0){
 					db.deleteOfferPositions(oldOffer.getId()); // alte Positionen löschen
 					
-					if(newPs.size() == 0){ // keine Positionen
-						Position position = new Position("", newOffer.getSumme(), 1, 0f, 0f, oldP.getInstitut());
-						db.insertPosition(position, oldOffer.getId());
-					}else{
-						for(int j = 0; j < newPs.size(); j++) // neue Positionen
+					for(int j = 0; j < newPs.size(); j++) // neue Positionen
 							db.insertPosition((Position)newPs.get(j), newOffer.getId());
-					}
 					break;
 				}
 				
