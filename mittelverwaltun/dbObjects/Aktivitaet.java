@@ -26,6 +26,10 @@ public class Aktivitaet implements Serializable {
 		return id;
 	}
 
+/**
+ * 
+ * @param id
+ */
 	public void setId(int id) {
 		this.id = id;
 	}
