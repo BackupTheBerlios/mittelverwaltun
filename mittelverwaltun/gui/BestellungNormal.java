@@ -480,6 +480,13 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 		for(int i = 0; i < dtm.getRowCount(); i++){
 			Angebot angebot = (Angebot)dtm.getValueAt(i, 1);
+			
+			// ein Angebot hat mindestens eine Position auch wenn er nur die Summe hat
+			if(angebot.getPositionen().size() == 0){
+				ArrayList positionen = new ArrayList();
+				Position position = new Position("", angebot.getSumme(), 1, 0f, 0f, bestellung.getFbkonto().getInstitut());
+				positionen.add(position);
+			}
 			angebot.setAngenommen(((Boolean)(dtm.getValueAt(i, 4))).booleanValue());
 			angebote.add(angebot);
 		}
