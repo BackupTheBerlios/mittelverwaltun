@@ -128,8 +128,11 @@ public class PreparedSqlStatements {
 										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//22	
-			statements[i++] = null;
+		{//22	gibt alle Software-Beauftragte des Fachbereichs zurück
+			ps = con.prepareStatement( "SELECT id, benutzername, name, vorname " +
+																"FROM Benutzer " +
+																"WHERE swBeauftragter = '1' " +																	"AND geloescht = 0 " );
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//23	
 			ps = con.prepareStatement("UPDATE Benutzer " +
@@ -1726,8 +1729,11 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//249
-			statements[i++] = null;
+		{//249 gibt eine Firma für die ASK-Bestellung zurück
+			ps = con.prepareStatement( 	"SELECT id, name, strassenr, plz, ort, kundennr, " +
+											"telnr, faxnr, email, www, ask, geloescht " +
+										"FROM firmen WHERE ask = '1' AND geloescht = '0'" );
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		/******************************************/
 		/* Tabelle: ASK_Standard_Bestellungen 	  */

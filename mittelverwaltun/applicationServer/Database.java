@@ -668,6 +668,35 @@ public class Database implements Serializable{
 
 		return benutzer;
 	}
+	
+	/**
+	 * gibt alle SwBeauftragte des Fachbereichs zurück
+	 * @return Benutzer-Array mit allen SwBeauftragten
+	 * @throws ApplicationServerException
+	 */
+	public Benutzer[] selectSwBeauftragte() throws ApplicationServerException{
+		Benutzer[] benutzer = null;
+
+		try{
+			ResultSet rs = statements.get(22).executeQuery();
+			rs.last();
+			int count = rs.getRow();
+			rs.beforeFirst();
+			if (count > 0){
+				benutzer = new Benutzer[count];
+				int i = 0;
+				while (rs.next()){
+					benutzer[i] = new Benutzer( rs.getInt(1), rs.getString(2), rs.getString(3),rs.getString(4));
+					i++;
+				}
+			}
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(95, e.getMessage());
+		}
+
+		return benutzer;
+	}
 
 	public TmpRolle[] selectTempRollen (int empfaenger) throws ApplicationServerException{
 
@@ -2379,20 +2408,43 @@ public class Database implements Serializable{
 		try{
 			Object[] parameters = { new Integer(id) };
 			ResultSet rs = statements.get(248).executeQuery(parameters);
-			rs.last();		
-			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeile > 0
-				rs.beforeFirst();		// Vor die erste Zeile springen
-				rs.next();
+			
+			if ( rs.next()) {	
 				firma = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
 											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
 											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
 											rs.getString(12).equalsIgnoreCase( "1" ) );
 			}
-			//rs.close();		// Abfrage schließen
+			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
 			throw new ApplicationServerException( 75, e.getMessage() );
 		}
 	
+		return firma;		// Die Firmen zurückgeben
+	}
+	
+	/**
+	 * gibt die Firma für eine ASK-Bestellung zurück
+	 * @return ASK-Firma
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public Firma selectASKFirma() throws ApplicationServerException {
+		Firma firma = null;		
+		try{
+			ResultSet rs = statements.get(249).executeQuery();
+		
+			if ( rs.next()) {	
+				firma = new Firma( rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+											rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9),
+											rs.getString(10), rs.getString(11).equalsIgnoreCase( "1" ), 
+											rs.getString(12).equalsIgnoreCase( "1" ) );
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 96, e.getMessage() );
+		}
+
 		return firma;		// Die Firmen zurückgeben
 	}
 	

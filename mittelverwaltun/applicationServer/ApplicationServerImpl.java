@@ -2307,6 +2307,22 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		
 		db.commit();
 	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getSwBeauftragte()
+	 */
+	public Benutzer[] getSwBeauftragte() throws ApplicationServerException {
+		return db.selectSwBeauftragte();
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getASKFirma()
+	 */
+	public Firma getASKFirma() throws ApplicationServerException {
+		return null;
+	}
 }
 
 

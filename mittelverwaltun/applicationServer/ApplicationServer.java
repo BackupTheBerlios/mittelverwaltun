@@ -232,5 +232,18 @@ public interface ApplicationServer extends Remote {
 	 * @author w.flat
 	 */	
 	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException;
+	
+	/**
+	 * gibt alle Softwarebeauftragte des Fachbereichs
+	 * @return Benutzer-Array der SW-Beauftragten
+	 * @throws ApplicationServerException
+	 */
+	public Benutzer[] getSwBeauftragte() throws ApplicationServerException;
 
+	/**
+	 * gibt die Firma für eine ASK-Bestellung zurück
+	 * @return ASK-Firma
+	 * @throws ApplicationServerException
+	 */
+	public Firma getASKFirma() throws ApplicationServerException;
 }

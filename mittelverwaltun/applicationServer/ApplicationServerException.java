@@ -151,6 +151,8 @@ public class ApplicationServerException extends Exception {
 		messages[92] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteASK_Standard_Bestellung";
 		messages[93] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectForUpdateASKBestellung";
 		messages[94] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateASKBestellung";
+		messages[95] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectSwBeauftragte";
+		messages[96] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectASKFirma";
 			
 //		Exception Ende ROBERT von 50-99
 
