@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[260];
+		statements = new PreparedStatementWrapper[265];
 		int i = 0;
 
 		/**************************************/
@@ -1584,6 +1584,25 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//259
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: Angebote 	  */
+		/* Indizes: 260-264                       */
+		/******************************************/
+		{//260 fügt ein Angebot in die Tabelle Angebot ein
+			statements[i++] = null;
+		}
+		{//261
+			statements[i++] = null;
+		}
+		{//262
+			statements[i++] = null;
+		}
+		{//263
+			statements[i++] = null;
+		}
+		{//264
 			statements[i++] = null;
 		}
 	}
