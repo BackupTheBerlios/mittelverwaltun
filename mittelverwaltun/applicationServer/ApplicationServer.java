@@ -92,11 +92,19 @@ public interface ApplicationServer extends Remote {
 	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException;
 	 public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws ApplicationServerException;
 	 public Institut[] getInstitutesWithMainAccounts () throws ApplicationServerException;
-
+	
 	 public float getNoPurposeBudgetAmount() throws ApplicationServerException;
 	 public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException;
 	 public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException;
 	 public void setAccountBudget ( FBHauptkonto acc, float budget ) throws ApplicationServerException;
 
-
+	/**
+	 * @author robert
+	 * 
+	 * gibt ein Kostenarten-Array für die Standardbestellung 
+	 * 
+	 * @return Kostenarten ArrayList
+	 * @throws ApplicationServerException
+	 */
+	public Kostenart[] getKostenarten() throws ApplicationServerException;
 }

@@ -18,12 +18,545 @@
     <UML:Package xmi.id="notebookrobertMittelJBuilder1" isRoot="false" isLeaf="false" isAbstract="false" name="applicationServer" isSpecification="false"></UML:Package>
     <UML:Package xmi.id="notebookrobertMittelJBuilder10" isRoot="false" isLeaf="false" isAbstract="false" name="java.lang" isSpecification="false">
       <UML:Namespace.ownedElement>
-        <UML:Class xmi.id="notebookrobertMittelJBuilder11" isRoot="false" isLeaf="true" isAbstract="false" name="String" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder11" isRoot="false" isLeaf="true" isAbstract="false" name="String" visibility="public" isSpecification="false" clientDependency="notebookrobertMittelJBuilder2590 notebookrobertMittelJBuilder2592 notebookrobertMittelJBuilder2594 notebookrobertMittelJBuilder2599 notebookrobertMittelJBuilder2604 notebookrobertMittelJBuilder2606 notebookrobertMittelJBuilder2608 notebookrobertMittelJBuilder2610" isActive="false">
+          <UML:Namespace.ownedElement>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2275" ownerScope="instance" name="value" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="char">
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2276">
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2277" lower="0" upper="-1"></UML:MultiplicityRange>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+            </UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2278" ownerScope="instance" name="offset" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2279" ownerScope="instance" name="count" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2280" ownerScope="instance" name="hash" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2281" ownerScope="classifier" name="serialVersionUID" visibility="private" isSpecification="false" changeability="frozen" ordering="unordered" type="long"></UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2282" ownerScope="classifier" name="serialPersistentFields" visibility="private" isSpecification="false" changeability="frozen" ordering="unordered" type="notebookrobertMittelJBuilder2285">
+              <UML:StructuralFeature.multiplicity>
+                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2283">
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2284" lower="0" upper="-1"></UML:MultiplicityRange>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:StructuralFeature.multiplicity>
+            </UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2286" ownerScope="classifier" name="CASE_INSENSITIVE_ORDER" visibility="public" isSpecification="false" changeability="frozen" ordering="unordered" type="notebookrobertMittelJBuilder2287"></UML:Attribute>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2289" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2290" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2291" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2292" kind="in" type="notebookrobertMittelJBuilder11" name="original" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2293" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2294" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2296" kind="in" type="notebookrobertMittelJBuilder2295" name="value" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2297" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2298" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2300" kind="in" type="notebookrobertMittelJBuilder2299" name="value" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2301" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2302" kind="in" type="int" name="count" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2303" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2304" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2306" kind="in" type="notebookrobertMittelJBuilder2305" name="ascii" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2307" kind="in" type="int" name="hibyte" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2308" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2309" kind="in" type="int" name="count" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2310" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2311" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2313" kind="in" type="notebookrobertMittelJBuilder2312" name="ascii" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2314" kind="in" type="int" name="hibyte" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2315" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2316" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="checkBounds" visibility="private" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2318" kind="in" type="notebookrobertMittelJBuilder2317" name="bytes" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2319" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2320" kind="in" type="int" name="length" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2321" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2322" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2324" kind="in" type="notebookrobertMittelJBuilder2323" name="bytes" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2325" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2326" kind="in" type="int" name="length" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2327" kind="in" type="notebookrobertMittelJBuilder11" name="charsetName" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2328" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2329" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2331" kind="in" type="notebookrobertMittelJBuilder2330" name="bytes" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2332" kind="in" type="notebookrobertMittelJBuilder11" name="charsetName" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2333" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2334" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2336" kind="in" type="notebookrobertMittelJBuilder2335" name="bytes" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2337" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2338" kind="in" type="int" name="length" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2339" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2340" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2342" kind="in" type="notebookrobertMittelJBuilder2341" name="bytes" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2343" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2344" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2345" kind="in" type="notebookrobertMittelJBuilder73" name="buffer" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2346" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2347" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="String" visibility="package" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2348" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2349" kind="in" type="int" name="count" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2351" kind="in" type="notebookrobertMittelJBuilder2350" name="value" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2352" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2353" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="length" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2354" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2355" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="charAt" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2356" kind="in" type="int" name="index" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2357" kind="return" type="char" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2358" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getChars" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2359" kind="in" type="int" name="srcBegin" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2360" kind="in" type="int" name="srcEnd" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2362" kind="in" type="notebookrobertMittelJBuilder2361" name="dst" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2363" kind="in" type="int" name="dstBegin" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2364" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2365" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBytes" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2366" kind="in" type="int" name="srcBegin" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2367" kind="in" type="int" name="srcEnd" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2369" kind="in" type="notebookrobertMittelJBuilder2368" name="dst" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2370" kind="in" type="int" name="dstBegin" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2371" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2372" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBytes" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2373" kind="in" type="notebookrobertMittelJBuilder11" name="charsetName" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2375" kind="return" type="notebookrobertMittelJBuilder2374" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2376" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBytes" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2378" kind="return" type="notebookrobertMittelJBuilder2377" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2379" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="equals" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2380" kind="in" type="notebookrobertMittelJBuilder67" name="anObject" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2381" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2382" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="contentEquals" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2383" kind="in" type="notebookrobertMittelJBuilder73" name="sb" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2384" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2385" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="equalsIgnoreCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2386" kind="in" type="notebookrobertMittelJBuilder11" name="anotherString" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2387" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2388" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="compareTo" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2389" kind="in" type="notebookrobertMittelJBuilder11" name="anotherString" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2390" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2391" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="compareTo" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2392" kind="in" type="notebookrobertMittelJBuilder67" name="o" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2393" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2394" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="compareToIgnoreCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2395" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2396" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2397" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="regionMatches" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2398" kind="in" type="int" name="toffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2399" kind="in" type="notebookrobertMittelJBuilder11" name="other" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2400" kind="in" type="int" name="ooffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2401" kind="in" type="int" name="len" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2402" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2403" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="regionMatches" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2404" kind="in" type="boolean" name="ignoreCase" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2405" kind="in" type="int" name="toffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2406" kind="in" type="notebookrobertMittelJBuilder11" name="other" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2407" kind="in" type="int" name="ooffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2408" kind="in" type="int" name="len" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2409" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2410" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="startsWith" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2411" kind="in" type="notebookrobertMittelJBuilder11" name="prefix" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2412" kind="in" type="int" name="toffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2413" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2414" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="startsWith" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2415" kind="in" type="notebookrobertMittelJBuilder11" name="prefix" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2416" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2417" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="endsWith" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2418" kind="in" type="notebookrobertMittelJBuilder11" name="suffix" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2419" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2420" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="hashCode" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2421" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2422" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="indexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2423" kind="in" type="int" name="ch" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2424" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2425" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="indexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2426" kind="in" type="int" name="ch" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2427" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2428" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2429" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="lastIndexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2430" kind="in" type="int" name="ch" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2431" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2432" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="lastIndexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2433" kind="in" type="int" name="ch" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2434" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2435" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2436" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="indexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2437" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2438" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2439" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="indexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2440" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2441" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2442" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2443" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="indexOf" visibility="package" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2445" kind="in" type="notebookrobertMittelJBuilder2444" name="source" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2446" kind="in" type="int" name="sourceOffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2447" kind="in" type="int" name="sourceCount" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2449" kind="in" type="notebookrobertMittelJBuilder2448" name="target" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2450" kind="in" type="int" name="targetOffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2451" kind="in" type="int" name="targetCount" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2452" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2453" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2454" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="lastIndexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2455" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2456" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2457" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="lastIndexOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2458" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2459" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2460" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2461" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="lastIndexOf" visibility="package" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2463" kind="in" type="notebookrobertMittelJBuilder2462" name="source" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2464" kind="in" type="int" name="sourceOffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2465" kind="in" type="int" name="sourceCount" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2467" kind="in" type="notebookrobertMittelJBuilder2466" name="target" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2468" kind="in" type="int" name="targetOffset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2469" kind="in" type="int" name="targetCount" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2470" kind="in" type="int" name="fromIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2471" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2472" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="substring" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2473" kind="in" type="int" name="beginIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2474" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2475" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="substring" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2476" kind="in" type="int" name="beginIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2477" kind="in" type="int" name="endIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2478" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2479" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="subSequence" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2480" kind="in" type="int" name="beginIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2481" kind="in" type="int" name="endIndex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2482" kind="return" type="notebookrobertMittelJBuilder71" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2483" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="concat" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2484" kind="in" type="notebookrobertMittelJBuilder11" name="str" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2485" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2486" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="replace" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2487" kind="in" type="char" name="oldChar" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2488" kind="in" type="char" name="newChar" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2489" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2490" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="matches" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2491" kind="in" type="notebookrobertMittelJBuilder11" name="regex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2492" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2493" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="replaceFirst" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2494" kind="in" type="notebookrobertMittelJBuilder11" name="regex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2495" kind="in" type="notebookrobertMittelJBuilder11" name="replacement" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2496" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2497" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="replaceAll" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2498" kind="in" type="notebookrobertMittelJBuilder11" name="regex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2499" kind="in" type="notebookrobertMittelJBuilder11" name="replacement" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2500" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2501" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="split" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2502" kind="in" type="notebookrobertMittelJBuilder11" name="regex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2503" kind="in" type="int" name="limit" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2505" kind="return" type="notebookrobertMittelJBuilder2504" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2506" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="split" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2507" kind="in" type="notebookrobertMittelJBuilder11" name="regex" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2509" kind="return" type="notebookrobertMittelJBuilder2508" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2510" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toLowerCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2512" kind="in" type="notebookrobertMittelJBuilder2511" name="locale" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2513" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2514" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toLowerCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2515" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2516" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toUpperCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2517" kind="in" type="notebookrobertMittelJBuilder2511" name="locale" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2518" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2519" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toUpperCase" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2520" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2521" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="trim" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2522" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2523" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toString" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2524" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2525" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toCharArray" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2527" kind="return" type="notebookrobertMittelJBuilder2526" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2528" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2529" kind="in" type="notebookrobertMittelJBuilder67" name="obj" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2530" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2531" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2533" kind="in" type="notebookrobertMittelJBuilder2532" name="data" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2534" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2535" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2537" kind="in" type="notebookrobertMittelJBuilder2536" name="data" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2538" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2539" kind="in" type="int" name="count" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2540" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2541" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="copyValueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2543" kind="in" type="notebookrobertMittelJBuilder2542" name="data" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2544" kind="in" type="int" name="offset" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2545" kind="in" type="int" name="count" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2546" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2547" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="copyValueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2549" kind="in" type="notebookrobertMittelJBuilder2548" name="data" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2550" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2551" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2552" kind="in" type="boolean" name="b" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2553" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2554" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2555" kind="in" type="char" name="c" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2556" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2557" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2558" kind="in" type="int" name="i" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2559" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2560" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2561" kind="in" type="long" name="l" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2562" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2563" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2564" kind="in" type="float" name="f" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2565" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2566" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="valueOf" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2567" kind="in" type="double" name="d" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2568" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2569" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="intern" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2570" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2571" ownerScope="classifier" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="&lt;clinit&gt;" visibility="package" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2572" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Class xmi.id="notebookrobertMittelJBuilder2573" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder2574 notebookrobertMittelJBuilder2575 notebookrobertMittelJBuilder2576" name="CaseInsensitiveComparator" visibility="private" isSpecification="false" clientDependency="notebookrobertMittelJBuilder2587" isActive="false">
+              <UML:Namespace.ownedElement>
+                <UML:Attribute xmi.id="notebookrobertMittelJBuilder2577" ownerScope="classifier" name="serialVersionUID" visibility="private" isSpecification="false" changeability="frozen" ordering="unordered" type="long"></UML:Attribute>
+                <UML:Operation xmi.id="notebookrobertMittelJBuilder2578" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="CaseInsensitiveComparator" visibility="private" isSpecification="false">
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id="notebookrobertMittelJBuilder2579" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id="notebookrobertMittelJBuilder2580" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="compare" visibility="public" isSpecification="false">
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id="notebookrobertMittelJBuilder2581" kind="in" type="notebookrobertMittelJBuilder67" name="o1" isSpecification="false"></UML:Parameter>
+                    <UML:Parameter xmi.id="notebookrobertMittelJBuilder2582" kind="in" type="notebookrobertMittelJBuilder67" name="o2" isSpecification="false"></UML:Parameter>
+                    <UML:Parameter xmi.id="notebookrobertMittelJBuilder2583" kind="return" type="int" isSpecification="false"></UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id="notebookrobertMittelJBuilder2584" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="CaseInsensitiveComparator" visibility="package" isSpecification="false">
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id="notebookrobertMittelJBuilder2585" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+              </UML:Namespace.ownedElement>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue xmi.id="notebookrobertMittelJBuilder2586" name="isDefined" isSpecification="false">
+                  <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+            </UML:Class>
+          </UML:Namespace.ownedElement>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id="notebookrobertMittelJBuilder2589" name="isDefined" isSpecification="false">
+              <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
         <UML:Class xmi.id="notebookrobertMittelJBuilder67" isRoot="false" isLeaf="false" isAbstract="false" name="Object" visibility="public" isSpecification="false" isActive="false"></UML:Class>
         <UML:Class xmi.id="notebookrobertMittelJBuilder940" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder941" name="Error" visibility="public" isSpecification="false" isActive="false"></UML:Class>
         <UML:Interface xmi.id="notebookrobertMittelJBuilder71" isRoot="false" isLeaf="false" isAbstract="true" name="CharSequence" visibility="public" isSpecification="false" stereotype="notebookrobertMittelJBuilder72"></UML:Interface>
         <UML:Class xmi.id="notebookrobertMittelJBuilder73" isRoot="false" isLeaf="true" isAbstract="false" generalization="notebookrobertMittelJBuilder75 notebookrobertMittelJBuilder76 notebookrobertMittelJBuilder74" name="StringBuffer" visibility="public" isSpecification="false" isActive="false"></UML:Class>
         <UML:Class xmi.id="notebookrobertMittelJBuilder939" isRoot="false" isLeaf="false" isAbstract="false" name="Throwable" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2596" isRoot="false" isLeaf="false" isAbstract="false" name="IndexOutOfBoundsException" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2597" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder2598" name="StringIndexOutOfBoundsException" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2601" isRoot="false" isLeaf="false" isAbstract="false" name="RuntimeException" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2602" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder2603" name="NullPointerException" visibility="public" isSpecification="false" isActive="false"></UML:Class>
       </UML:Namespace.ownedElement>
     </UML:Package>
     <UML:Dependency xmi.id="notebookrobertMittelJBuilder1025" isSpecification="false" stereotype="notebookrobertMittelJBuilder1026" client="notebookrobertMittelJBuilder1007" supplier="notebookrobertMittelJBuilder11"></UML:Dependency>
@@ -41,6 +574,8 @@
     <UML:Package xmi.id="notebookrobertMittelJBuilder1126" isRoot="false" isLeaf="false" isAbstract="false" name="java.util" isSpecification="false">
       <UML:Namespace.ownedElement>
         <UML:Class xmi.id="notebookrobertMittelJBuilder1127" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList" visibility="public" isSpecification="false" isActive="false"></UML:Class>
+        <UML:Interface xmi.id="notebookrobertMittelJBuilder2287" isRoot="false" isLeaf="false" isAbstract="true" name="Comparator" visibility="public" isSpecification="false" stereotype="notebookrobertMittelJBuilder2288"></UML:Interface>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2511" isRoot="false" isLeaf="true" isAbstract="false" name="Locale" visibility="public" isSpecification="false" isActive="false"></UML:Class>
       </UML:Namespace.ownedElement>
     </UML:Package>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1139" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
@@ -54,6 +589,11 @@
     <UML:Class xmi.id="notebookrobertMittelJBuilder120" isRoot="false" isLeaf="false" isAbstract="false" name="FBUnterkonto[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1222" isRoot="false" isLeaf="false" isAbstract="false" name="Position[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder123" isRoot="false" isLeaf="false" isAbstract="false" name="FBUnterkonto[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1252">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1253" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1282" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1285" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Dependency xmi.id="notebookrobertMittelJBuilder1288" isSpecification="false" stereotype="notebookrobertMittelJBuilder1289" client="notebookrobertMittelJBuilder472" supplier="notebookrobertMittelJBuilder1127"></UML:Dependency>
@@ -151,17 +691,121 @@
     <UML:Class xmi.id="notebookrobertMittelJBuilder1845" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1847" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Dependency xmi.id="notebookrobertMittelJBuilder187" isSpecification="false" stereotype="notebookrobertMittelJBuilder188" client="notebookrobertMittelJBuilder156" supplier="notebookrobertMittelJBuilder11"></UML:Dependency>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1876">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1877" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
     <UML:Stereotype xmi.id="notebookrobertMittelJBuilder188" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1890" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder1892" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1921">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1922" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder1934" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder1936" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1970">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1971" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder1984" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder1986" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder199">
       <UML:Multiplicity.range>
         <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder200" lower="0" upper="-1"></UML:MultiplicityRange>
       </UML:Multiplicity.range>
     </UML:Multiplicity>
     <UML:Package xmi.id="notebookrobertMittelJBuilder2" isRoot="false" isLeaf="false" isAbstract="false" name="gui" isSpecification="false"></UML:Package>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2015">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2016" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2028" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2030" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2064">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2065" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2077" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2079" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2122" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2124" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2170" isSpecification="false" stereotype="notebookrobertMittelJBuilder2171" client="notebookrobertMittelJBuilder2154" supplier="notebookrobertMittelJBuilder11"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2171" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2172">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2173" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2200" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2202" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2207" isSpecification="false" stereotype="notebookrobertMittelJBuilder2208" client="notebookrobertMittelJBuilder472" supplier="notebookrobertMittelJBuilder2154"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2208" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2209">
+      <UML:Multiplicity.range>
+        <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2210" lower="0" upper="-1"></UML:MultiplicityRange>
+      </UML:Multiplicity.range>
+    </UML:Multiplicity>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2238" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2240" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2270" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2272" isRoot="false" isLeaf="false" isAbstract="false" name="ArrayList[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2288" isRoot="false" isLeaf="false" isAbstract="false" name="interface" isSpecification="false"></UML:Stereotype>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2295" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2299" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2305" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2312" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2317" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2323" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2330" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2335" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2341" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2350" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2361" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2368" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2374" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2377" isRoot="false" isLeaf="false" isAbstract="false" name="byte[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2444" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2448" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2462" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2466" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2504" isRoot="false" isLeaf="false" isAbstract="false" name="java.lang.String[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2508" isRoot="false" isLeaf="false" isAbstract="false" name="java.lang.String[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2526" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2532" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2536" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2542" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Class xmi.id="notebookrobertMittelJBuilder2548" isRoot="false" isLeaf="false" isAbstract="false" name="char[]" isSpecification="false" isActive="false"></UML:Class>
     <UML:Class xmi.id="notebookrobertMittelJBuilder256" isRoot="false" isLeaf="false" isAbstract="false" name="ZVTitel[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Generalization xmi.id="notebookrobertMittelJBuilder2574" isSpecification="false" child="notebookrobertMittelJBuilder2573" parent="notebookrobertMittelJBuilder67"></UML:Generalization>
+    <UML:Generalization xmi.id="notebookrobertMittelJBuilder2575" isSpecification="false" child="notebookrobertMittelJBuilder2573" parent="notebookrobertMittelJBuilder2287"></UML:Generalization>
+    <UML:Generalization xmi.id="notebookrobertMittelJBuilder2576" isSpecification="false" child="notebookrobertMittelJBuilder2573" parent="notebookrobertMittelJBuilder69"></UML:Generalization>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2587" isSpecification="false" stereotype="notebookrobertMittelJBuilder2588" client="notebookrobertMittelJBuilder2573" supplier="notebookrobertMittelJBuilder11"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2588" isRoot="false" isLeaf="false" isAbstract="false" name="use" isSpecification="false"></UML:Stereotype>
     <UML:Class xmi.id="notebookrobertMittelJBuilder259" isRoot="false" isLeaf="false" isAbstract="false" name="ZVTitel[]" isSpecification="false" isActive="false"></UML:Class>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2590" isSpecification="false" stereotype="notebookrobertMittelJBuilder2591" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2285"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2591" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2592" isSpecification="false" stereotype="notebookrobertMittelJBuilder2593" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2511"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2593" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2594" isSpecification="false" stereotype="notebookrobertMittelJBuilder2595" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder73"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2595" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Generalization xmi.id="notebookrobertMittelJBuilder2598" isSpecification="false" child="notebookrobertMittelJBuilder2597" parent="notebookrobertMittelJBuilder2596"></UML:Generalization>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2599" isSpecification="false" stereotype="notebookrobertMittelJBuilder2600" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2597"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2600" isRoot="false" isLeaf="false" isAbstract="false" name="create" isSpecification="false"></UML:Stereotype>
+    <UML:Generalization xmi.id="notebookrobertMittelJBuilder2603" isSpecification="false" child="notebookrobertMittelJBuilder2602" parent="notebookrobertMittelJBuilder2601"></UML:Generalization>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2604" isSpecification="false" stereotype="notebookrobertMittelJBuilder2605" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2602"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2605" isRoot="false" isLeaf="false" isAbstract="false" name="create" isSpecification="false"></UML:Stereotype>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2606" isSpecification="false" stereotype="notebookrobertMittelJBuilder2607" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder71"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2607" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2608" isSpecification="false" stereotype="notebookrobertMittelJBuilder2609" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2573"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2609" isRoot="false" isLeaf="false" isAbstract="false" name="create" isSpecification="false"></UML:Stereotype>
+    <UML:Dependency xmi.id="notebookrobertMittelJBuilder2610" isSpecification="false" stereotype="notebookrobertMittelJBuilder2611" client="notebookrobertMittelJBuilder11" supplier="notebookrobertMittelJBuilder2287"></UML:Dependency>
+    <UML:Stereotype xmi.id="notebookrobertMittelJBuilder2611" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
     <UML:Dependency xmi.id="notebookrobertMittelJBuilder273" isSpecification="false" stereotype="notebookrobertMittelJBuilder274" client="notebookrobertMittelJBuilder94" supplier="notebookrobertMittelJBuilder11"></UML:Dependency>
     <UML:Stereotype xmi.id="notebookrobertMittelJBuilder274" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>
     <UML:Dependency xmi.id="notebookrobertMittelJBuilder275" isSpecification="false" stereotype="notebookrobertMittelJBuilder276" client="notebookrobertMittelJBuilder94" supplier="notebookrobertMittelJBuilder201"></UML:Dependency>
@@ -191,26 +835,31 @@
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder367" kind="in" type="notebookrobertMittelJBuilder11" name="vorname" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder368" kind="in" type="notebookrobertMittelJBuilder11" name="email" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder369" kind="in" type="int" name="privatKonto" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1878" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1878" kind="in" type="notebookrobertMittelJBuilder11" name="telefon" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1965" kind="in" type="notebookrobertMittelJBuilder11" name="fax" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1966" kind="in" type="notebookrobertMittelJBuilder11" name="bau" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1967" kind="in" type="notebookrobertMittelJBuilder11" name="raum" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1968" kind="in" type="boolean" name="softBeauftragter" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2111" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder344" ownerScope="instance" name="benutzername" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder398" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setBenutzername" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder399" kind="in" type="notebookrobertMittelJBuilder11" name="benutzername" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1885" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2117" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder403" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setPasswort" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder404" kind="in" type="notebookrobertMittelJBuilder11" name="passwort" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1887" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2119" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder430" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setVorname" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder431" kind="in" type="notebookrobertMittelJBuilder11" name="vorname" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1899" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2131" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder371" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="Benutzer" visibility="public" isSpecification="false">
@@ -225,58 +874,63 @@
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder379" kind="in" type="notebookrobertMittelJBuilder11" name="vorname" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder380" kind="in" type="notebookrobertMittelJBuilder11" name="email" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder381" kind="in" type="int" name="privatKonto" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1879" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1973" kind="in" type="notebookrobertMittelJBuilder11" name="telefon" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2059" kind="in" type="notebookrobertMittelJBuilder11" name="fax" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2060" kind="in" type="notebookrobertMittelJBuilder11" name="bau" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2061" kind="in" type="notebookrobertMittelJBuilder11" name="raum" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2062" kind="in" type="boolean" name="softBeauftragter" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2112" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder345" ownerScope="instance" name="passwort" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder448" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getGeloescht" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1906" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2138" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder435" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setName" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder436" kind="in" type="notebookrobertMittelJBuilder11" name="name" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1901" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2133" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder414" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setTmpRollen" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder416" kind="in" type="notebookrobertMittelJBuilder1892" name="tmpRollen" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1893" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder416" kind="in" type="notebookrobertMittelJBuilder2124" name="tmpRollen" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2125" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder411" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getTmpRollen" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1891" kind="return" type="notebookrobertMittelJBuilder1890" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2123" kind="return" type="notebookrobertMittelJBuilder2122" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder458" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="equals" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder459" kind="in" type="notebookrobertMittelJBuilder67" name="benutzer" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1910" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2142" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder433" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getName" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1900" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2132" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder423" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getTitel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1896" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2128" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder346" ownerScope="instance" name="rolle" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder347"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder401" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getPasswort" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1886" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2118" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder455" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setGeaendert" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder456" kind="in" type="boolean" name="geaendert" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1909" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2141" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder354" ownerScope="instance" name="vorname" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
@@ -284,42 +938,42 @@
             <UML:Operation xmi.id="notebookrobertMittelJBuilder440" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setEmail" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder441" kind="in" type="notebookrobertMittelJBuilder11" name="email" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1903" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2135" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder396" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBenutzername" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1884" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2116" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder443" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getPrivatKonto" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1904" kind="return" type="int" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2136" kind="return" type="int" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder445" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setPrivatKonto" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder446" kind="in" type="int" name="privatKonto" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1905" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2137" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder356" ownerScope="instance" name="email" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder357" ownerScope="instance" name="privatKonto" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder406" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getRolle" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1888" kind="return" type="notebookrobertMittelJBuilder347" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2120" kind="return" type="notebookrobertMittelJBuilder347" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder418" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getKostenstelle" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1894" kind="return" type="notebookrobertMittelJBuilder8" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2126" kind="return" type="notebookrobertMittelJBuilder8" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder352" ownerScope="instance" name="kostenstelle" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder8"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder393" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setId" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder394" kind="in" type="int" name="id" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1883" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2115" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder355" ownerScope="instance" name="name" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
@@ -327,13 +981,13 @@
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder353" ownerScope="instance" name="titel" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder391" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getId" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1882" kind="return" type="int" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2114" kind="return" type="int" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder425" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setTitel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder426" kind="in" type="notebookrobertMittelJBuilder11" name="titel" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1897" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2129" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder383" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="Benutzer" visibility="public" isSpecification="false">
@@ -342,115 +996,115 @@
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder385" kind="in" type="notebookrobertMittelJBuilder11" name="passwort" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder386" kind="in" type="notebookrobertMittelJBuilder11" name="vorname" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder387" kind="in" type="notebookrobertMittelJBuilder11" name="name" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1880" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2153" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder408" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setRolle" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder409" kind="in" type="notebookrobertMittelJBuilder347" name="rolle" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1889" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2121" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder348" ownerScope="instance" name="tmpRollen" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder351">
               <UML:StructuralFeature.multiplicity>
-                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1876">
+                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2109">
                   <UML:Multiplicity.range>
-                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1877" lower="0" upper="-1"></UML:MultiplicityRange>
+                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2110" lower="0" upper="-1"></UML:MultiplicityRange>
                   </UML:Multiplicity.range>
                 </UML:Multiplicity>
               </UML:StructuralFeature.multiplicity>
             </UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder389" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="toString" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1881" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2113" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder420" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setKostenstelle" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder421" kind="in" type="notebookrobertMittelJBuilder8" name="kostenstelle" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1895" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2127" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder428" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getVorname" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1898" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2130" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder453" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getGeaendert" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1908" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2140" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder343" ownerScope="instance" name="id" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder438" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getEmail" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1902" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2134" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder450" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setGeloescht" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder451" kind="in" type="boolean" name="geloescht" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1907" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2139" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1563" ownerScope="instance" name="telefon" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1597" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getTelefon" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1911" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2143" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1599" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setTelefon" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1600" kind="in" type="notebookrobertMittelJBuilder11" name="telefon" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1912" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2144" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1604" ownerScope="instance" name="fax" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1640" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getFax" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1913" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2145" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1642" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setFax" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1643" kind="in" type="notebookrobertMittelJBuilder11" name="fax" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1914" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2146" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1647" ownerScope="instance" name="bau" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1685" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBau" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1915" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2147" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1687" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setBau" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1688" kind="in" type="notebookrobertMittelJBuilder11" name="bau" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1916" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2148" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1692" ownerScope="instance" name="raum" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1732" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getRaum" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1917" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2149" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1734" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setRaum" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1735" kind="in" type="notebookrobertMittelJBuilder11" name="raum" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1918" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2150" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1739" ownerScope="instance" name="softBeauftragter" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="boolean"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1781" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getSoftBeauftragter" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1919" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2151" kind="return" type="boolean" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1783" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setSoftBeauftragter" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1784" kind="in" type="boolean" name="softBeauftragter" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1920" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2152" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
           </UML:Namespace.ownedElement>
@@ -746,73 +1400,73 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
         </UML:Class>
-        <UML:Class xmi.id="notebookrobertMittelJBuilder472" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder1148" name="Bestellung" visibility="public" isSpecification="false" clientDependency="notebookrobertMittelJBuilder570 notebookrobertMittelJBuilder566 notebookrobertMittelJBuilder1288 notebookrobertMittelJBuilder568 notebookrobertMittelJBuilder574 notebookrobertMittelJBuilder576" isActive="false">
+        <UML:Class xmi.id="notebookrobertMittelJBuilder472" isRoot="false" isLeaf="false" isAbstract="false" generalization="notebookrobertMittelJBuilder1148" name="Bestellung" visibility="public" isSpecification="false" clientDependency="notebookrobertMittelJBuilder570 notebookrobertMittelJBuilder566 notebookrobertMittelJBuilder1288 notebookrobertMittelJBuilder568 notebookrobertMittelJBuilder574 notebookrobertMittelJBuilder576 notebookrobertMittelJBuilder2207" isActive="false">
           <UML:Namespace.ownedElement>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder508" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getStatus" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1261" kind="return" type="short" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2250" kind="return" type="short" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder545" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setFbKonto" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder546" kind="in" type="notebookrobertMittelJBuilder5" name="fbKonto" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1276" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2265" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder493" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getId" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1255" kind="return" type="int" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2244" kind="return" type="int" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder513" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getKostenart" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1263" kind="return" type="short" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2252" kind="return" type="notebookrobertMittelJBuilder2154" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder482" ownerScope="instance" name="empfaenger" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder475" ownerScope="instance" name="huel" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder487" ownerScope="instance" name="fbKonto" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder5"></UML:Attribute>
-            <UML:Attribute xmi.id="notebookrobertMittelJBuilder477" ownerScope="instance" name="kostenart" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="short"></UML:Attribute>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder477" ownerScope="instance" name="kostenart" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder2154"></UML:Attribute>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder483" ownerScope="instance" name="zahlung" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="float"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder533" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getZahlung" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1271" kind="return" type="float" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2260" kind="return" type="float" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder484" ownerScope="instance" name="bestellsumme" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="float"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder528" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getEmpfaenger" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1269" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2258" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder481" ownerScope="instance" name="lieferant" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder520" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setDatum" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder521" kind="in" type="notebookrobertMittelJBuilder480" name="datum" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1266" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2255" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder473" ownerScope="instance" name="id" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder518" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getDatum" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1265" kind="return" type="notebookrobertMittelJBuilder480" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2254" kind="return" type="notebookrobertMittelJBuilder480" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder530" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setEmpfaenger" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder531" kind="in" type="notebookrobertMittelJBuilder11" name="empfaenger" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1270" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2259" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1281" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getAngebote" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1283" kind="return" type="notebookrobertMittelJBuilder1282" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2271" kind="return" type="notebookrobertMittelJBuilder2270" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder540" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setBestellsumme" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder541" kind="in" type="float" name="bestellsumme" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1274" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2263" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1179" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="Bestellung" visibility="public" isSpecification="false">
@@ -823,84 +1477,84 @@
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1183" kind="in" type="notebookrobertMittelJBuilder486" name="zvTitel" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1184" kind="in" type="notebookrobertMittelJBuilder5" name="fbKonto" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1185" kind="in" type="short" name="status" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1186" kind="in" type="short" name="kostenart" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1186" kind="in" type="notebookrobertMittelJBuilder2154" name="kostenart" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1187" kind="in" type="notebookrobertMittelJBuilder480" name="datum" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1188" kind="in" type="notebookrobertMittelJBuilder342" name="besteller" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1189" kind="in" type="notebookrobertMittelJBuilder11" name="lieferant" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1190" kind="in" type="notebookrobertMittelJBuilder11" name="empfaenger" isSpecification="false"></UML:Parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder1191" kind="in" type="float" name="zahlung" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1254" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2274" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder476" ownerScope="instance" name="status" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="short"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder525" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setLieferant" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder526" kind="in" type="notebookrobertMittelJBuilder11" name="lieferant" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1268" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2257" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder500" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setReferenznr" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder501" kind="in" type="notebookrobertMittelJBuilder11" name="referenznr" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1258" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2247" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder538" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBestellsumme" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1273" kind="return" type="float" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2262" kind="return" type="float" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder550" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setZvTitel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder551" kind="in" type="notebookrobertMittelJBuilder486" name="zvTitel" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1278" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2267" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder474" ownerScope="instance" name="referenznr" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder503" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getHuel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1259" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2248" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder510" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setStatus" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder511" kind="in" type="short" name="status" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1262" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2251" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder1284" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setAngebote" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1286" kind="in" type="notebookrobertMittelJBuilder1285" name="angebote" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1287" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1286" kind="in" type="notebookrobertMittelJBuilder2272" name="angebote" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2273" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder535" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setZahlung" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder536" kind="in" type="float" name="zahlung" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1272" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2261" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder523" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getLieferant" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1267" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2256" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder553" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBesteller" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1279" kind="return" type="notebookrobertMittelJBuilder342" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2268" kind="return" type="notebookrobertMittelJBuilder342" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder505" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setHuel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder506" kind="in" type="notebookrobertMittelJBuilder11" name="huel" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1260" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2249" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder1251" ownerScope="instance" name="angebote" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder1127">
               <UML:StructuralFeature.multiplicity>
-                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder1252">
+                <UML:Multiplicity xmi.id="notebookrobertMittelJBuilder2242">
                   <UML:Multiplicity.range>
-                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder1253" lower="0" upper="-1"></UML:MultiplicityRange>
+                    <UML:MultiplicityRange xmi.id="notebookrobertMittelJBuilder2243" lower="0" upper="-1"></UML:MultiplicityRange>
                   </UML:Multiplicity.range>
                 </UML:Multiplicity>
               </UML:StructuralFeature.multiplicity>
@@ -908,34 +1562,34 @@
             <UML:Operation xmi.id="notebookrobertMittelJBuilder555" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setBesteller" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder556" kind="in" type="notebookrobertMittelJBuilder342" name="besteller" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1280" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2269" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder498" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getReferenznr" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1257" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2246" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder495" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setId" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
                 <UML:Parameter xmi.id="notebookrobertMittelJBuilder496" kind="in" type="int" name="id" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1256" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2245" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder515" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setKostenart" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder516" kind="in" type="short" name="kostenart" isSpecification="false"></UML:Parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1264" kind="return" type="void" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder516" kind="in" type="notebookrobertMittelJBuilder2154" name="kostenart" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2253" kind="return" type="void" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder548" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getZvTitel" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1277" kind="return" type="notebookrobertMittelJBuilder486" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2266" kind="return" type="notebookrobertMittelJBuilder486" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Operation xmi.id="notebookrobertMittelJBuilder543" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getFbKonto" visibility="public" isSpecification="false">
               <UML:BehavioralFeature.parameter>
-                <UML:Parameter xmi.id="notebookrobertMittelJBuilder1275" kind="return" type="notebookrobertMittelJBuilder5" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2264" kind="return" type="notebookrobertMittelJBuilder5" isSpecification="false"></UML:Parameter>
               </UML:BehavioralFeature.parameter>
             </UML:Operation>
             <UML:Attribute xmi.id="notebookrobertMittelJBuilder488" ownerScope="instance" name="besteller" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder342"></UML:Attribute>
@@ -1924,6 +2578,39 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
         </UML:Class>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2154" isRoot="false" isLeaf="false" isAbstract="false" name="Kostenart" visibility="public" isSpecification="false" clientDependency="notebookrobertMittelJBuilder2170" isActive="false">
+          <UML:Namespace.ownedElement>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2156" ownerScope="instance" name="id" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="int"></UML:Attribute>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2157" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getId" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2163" kind="return" type="int" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2159" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setId" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2160" kind="in" type="int" name="id" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2164" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Attribute xmi.id="notebookrobertMittelJBuilder2162" ownerScope="instance" name="beschreibung" visibility="private" isSpecification="false" changeability="changeable" ordering="unordered" type="notebookrobertMittelJBuilder11"></UML:Attribute>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2165" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="getBeschreibung" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2166" kind="return" type="notebookrobertMittelJBuilder11" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id="notebookrobertMittelJBuilder2167" ownerScope="instance" concurrency="concurrent" isRoot="false" isLeaf="false" isAbstract="false" isQuery="false" name="setBeschreibung" visibility="public" isSpecification="false">
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2168" kind="in" type="notebookrobertMittelJBuilder11" name="beschreibung" isSpecification="false"></UML:Parameter>
+                <UML:Parameter xmi.id="notebookrobertMittelJBuilder2169" kind="return" type="void" isSpecification="false"></UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Namespace.ownedElement>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id="notebookrobertMittelJBuilder2155" name="isDefined" isSpecification="false">
+              <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
       </UML:Namespace.ownedElement>
     </UML:Package>
     <UML:Class xmi.id="notebookrobertMittelJBuilder412" isRoot="false" isLeaf="false" isAbstract="false" name="TmpRolle[]" isSpecification="false" isActive="false"></UML:Class>
@@ -1972,6 +2659,7 @@
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
         </UML:Interface>
+        <UML:Class xmi.id="notebookrobertMittelJBuilder2285" isRoot="false" isLeaf="false" isAbstract="false" name="ObjectStreamField" visibility="public" isSpecification="false" isActive="false"></UML:Class>
       </UML:Namespace.ownedElement>
     </UML:Package>
     <UML:Stereotype xmi.id="notebookrobertMittelJBuilder680" isRoot="false" isLeaf="false" isAbstract="false" name="access" isSpecification="false"></UML:Stereotype>

@@ -19,8 +19,6 @@ public class Bestellung implements Serializable {
 
 	private short status;
 
-	private short kostenart;
-
 	private Date datum;
 
 	private String lieferant;
@@ -39,8 +37,10 @@ public class Bestellung implements Serializable {
 
 	private ArrayList[] angebote;
 
+	private Kostenart kostenart;
+
 	public Bestellung(int id, String referenzNr, String huelNr, ZVUntertitel zvTitel, FBUnterkonto fbKonto, short status, 
-										short kostenart, Date datum, Benutzer besteller, String lieferant, String empfaenger, float zahlung){
+										Kostenart kostenart, Date datum, Benutzer besteller, String lieferant, String empfaenger, float zahlung){
 		this.id = id;
 		this.referenznr = referenzNr;
 		this.huel = huelNr;
@@ -86,11 +86,11 @@ public class Bestellung implements Serializable {
 		this.status = status;
 	}
 
-	public short getKostenart() {
+	public Kostenart getKostenart() {
 		return kostenart;
 	}
 
-	public void setKostenart(short kostenart) {
+	public void setKostenart(Kostenart kostenart) {
 		this.kostenart = kostenart;
 	}
 

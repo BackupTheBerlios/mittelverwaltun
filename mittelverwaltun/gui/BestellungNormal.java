@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import dbObjects.Angebot;
 import dbObjects.FBHauptkonto;
 import dbObjects.Institut;
+import dbObjects.Kostenart;
 import dbObjects.ZVTitel;
 import dbObjects.ZVUntertitel;
 
@@ -80,9 +81,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   JComboBox cbInstitut = new JComboBox();
   JButton buAddAngebot = new JButton();
   ArrayList angebote = new ArrayList();
-  JRadioButton rbInvestitionen = new JRadioButton();
-  JRadioButton rbReparatur = new JRadioButton();
-  JRadioButton rbVerbrauchersmaterial = new JRadioButton();
   ButtonGroup buttonGroup1 = new ButtonGroup();
   JRadioButton rbErstbeschaffung = new JRadioButton();
   JRadioButton rbErsatz = new JRadioButton();
@@ -96,6 +94,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   JButton buBeenden = new JButton();
   JButton buSpeichern = new JButton();
   JButton buBestellen = new JButton();
+  JTextField tfReferenzNr = new JTextField();
+  JComboBox cbKostenart = new JComboBox();
 
   public BestellungNormal(MainFrame frame) {
   	this.frame = frame;
@@ -164,7 +164,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			 test.setBenutzer(applicationServer.login("r.driesner", psw));
 		   test.setBounds(100,100,800,900);
 			 test.setExtendedState(Frame.MAXIMIZED_BOTH);
-			 
+
 			 test.setJMenuBar( new MainMenu( test ) );
 			 BestellungNormal bestellung = new BestellungNormal(test);
 			 test.addChild(bestellung);
@@ -189,16 +189,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     buAddAngebot.setBounds(new Rectangle(1, 0, 148, 21));
     buAddAngebot.setText("Angebot hinzufügen");
     tpBegruendung.setText("");
-    rbInvestitionen.setFont(new java.awt.Font("Dialog", 0, 12));
-    rbInvestitionen.setSelected(true);
-    rbInvestitionen.setText("Investitionen");
-    rbInvestitionen.setBounds(new Rectangle(78, 114, 112, 23));
-    rbReparatur.setFont(new java.awt.Font("Dialog", 0, 12));
-    rbReparatur.setText("Reparatur");
-    rbReparatur.setBounds(new Rectangle(196, 114, 91, 23));
-    rbVerbrauchersmaterial.setFont(new java.awt.Font("Dialog", 0, 12));
-    rbVerbrauchersmaterial.setText("Verbrauchersmaterial");
-    rbVerbrauchersmaterial.setBounds(new Rectangle(303, 114, 185, 23));
     rbErstbeschaffung.setFont(new java.awt.Font("Dialog", 0, 12));
     rbErstbeschaffung.setSelected(true);
     rbErstbeschaffung.setText("Erstbeschaffung");
@@ -225,6 +215,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     buSpeichern.setText("Speichern");
     buBestellen.setBounds(new Rectangle(4, 484, 112, 25));
     buBestellen.setText("Bestellen");
+    tfReferenzNr.setText("");
+    tfReferenzNr.setBounds(new Rectangle(340, 37, 92, 21));
+    cbKostenart.setBounds(new Rectangle(84, 118, 212, 21));
+    labBestellNr.setBorder(null);
     unten.add(tpAuftragGrund, null);
     unten.add(jLabel14, null);
     unten.add(tfAngebotNr, null);
@@ -235,6 +229,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     jPanel1.add(jTextPane1, null);
     jPanel1.add(tpBegruendung, null);
     jPanel1.add(cbDrittelMittel, null);
+    oben.add(labBestellNr, null);
+    oben.add(tfReferenzNr, null);
     panelBeilage.add(jScrollPane2, null);
     panelBeilage.add(unten, null);
     jScrollPane2.getViewport().add(tableAngebote, null);
@@ -309,8 +305,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     jPanel1.setLayout(null);
     jLabel22.setFont(new java.awt.Font("Dialog", 1, 12));
     jLabel22.setText("Kostenart:");
-    jLabel22.setBounds(new Rectangle(9, 118, 124, 15));
-    jLabel8.setBounds(new Rectangle(304, 13, 75, 15));
+    jLabel22.setBounds(new Rectangle(9, 124, 124, 15));
+    jLabel8.setBounds(new Rectangle(304, 17, 75, 15));
     jLabel8.setText("Inventar-Nr.:");
     jLabel8.setFont(new java.awt.Font("Dialog", 0, 12));
     jLabel12.setBounds(new Rectangle(6, 411, 394, 15));
@@ -334,9 +330,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     jLabel7.setText("zu belastender Haushaltstitel:");
     jLabel7.setBounds(new Rectangle(9, 151, 185, 15));
     labBestellNr.setText(" Best.");
-    labBestellNr.setBounds(new Rectangle(303, 36, 129, 23));
+    labBestellNr.setBounds(new Rectangle(303, 36, 36, 23));
     labBestellNr.setFont(new java.awt.Font("Dialog", 0, 12));
-    labBestellNr.setBorder(BorderFactory.createLineBorder(Color.black));
     tpBegruendung.setFont(new java.awt.Font("Dialog", 0, 12));
     tpBegruendung.setBounds(new Rectangle(8, 46, 531, 90));
     cbDrittelMittel.setFont(new java.awt.Font("Dialog", 0, 11));
@@ -360,9 +355,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     jLabel25.setText("Beilage zur Bestellung");
     jLabel25.setFont(new java.awt.Font("Dialog", 3, 20));
     tfErsatzText.setText("");
-		tfErsatzText.setBounds(new Rectangle(1, 8, 293, 21));
+		tfErsatzText.setBounds(new Rectangle(1, 13, 293, 21));
     tfInventarNr.setText("");
-		tfInventarNr.setBounds(new Rectangle(379, 8, 77, 21));
+		tfInventarNr.setBounds(new Rectangle(379, 14, 77, 21));
     tfAngebotNr.setText("");
 		tfAngebotNr.setBounds(new Rectangle(185, 23, 47, 21));
     buDrucken.setBounds(new Rectangle(344, 484, 112, 25));
@@ -377,25 +372,18 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(jLabel22, null);
     oben.add(jLabel22, null);
     oben.add(jLabel22, null);
-    oben.add(jLabel22, null);
     jTabbedPane1.add(beilagePanel, "Beilage zur Bestellung");
     beilagePanel.add(scrollBeilage, null);
     jTabbedPane1.add(bestellungPanel, "Bestellung");
     bestellungPanel.add(panelBestellung, null);
     scrollBeilage.getViewport().add(panelBeilage, null);
-    buttonGroup1.add(rbInvestitionen);
-    buttonGroup1.add(rbReparatur);
-    buttonGroup1.add(rbVerbrauchersmaterial);
     buttonGroup2.add(rbErstbeschaffung);
     buttonGroup2.add(rbErsatz);
     buttonGroup3.add(rbAngebotGuenstig);
     buttonGroup3.add(rbAuftragGrund);
-    panelErsatz.add(tfInventarNr, null);
     panelErsatz.add(tfErsatzText, null);
     panelErsatz.add(jLabel8, null);
-    oben.add(rbInvestitionen, null);
-    oben.add(rbReparatur, null);
-    oben.add(rbVerbrauchersmaterial, null);
+    panelErsatz.add(tfInventarNr, null);
     oben.add(rbErstbeschaffung, null);
     oben.add(rbErsatz, null);
     oben.add(jLabel22, null);
@@ -408,7 +396,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(labKoSt, null);
     oben.add(jLabel23, null);
     oben.add(jLabel25, null);
-    oben.add(labBestellNr, null);
     oben.add(jLabel9, null);
     oben.add(labKapitel, null);
     oben.add(jLabel11, null);
@@ -420,6 +407,8 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
     oben.add(jPanel1, null);
     oben.add(jLabel22, null);
     panelBeilage.add(oben, null);
+    oben.add(cbKostenart, null);
+    oben.add(jLabel22, null);
 		panelBeilage.setBounds(new Rectangle(617, 156, 548, 678));
 		panelBeilage.setSize(548, 678);
 		panelBeilage.setPreferredSize(new Dimension(548, 678));
@@ -536,6 +525,25 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}
 	}
 
+	/**
+	 * lädt alle Kostenarten in die Combobox
+	 * @author robert
+	 */
+	private void loadKostenart(){
+		try {
+			Kostenart[] kostenarten = frame.getApplicationServer().getKostenarten();
+
+			if(kostenarten != null){
+				cbKostenart.removeAllItems();
+			  for(int i = 0; i < kostenarten.length; i++){
+					cbKostenart.addItem(kostenarten[i]);
+			  }
+			}
+		} catch (ApplicationServerException e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void loadHauptkonten(){
 		try {
 			Institut institut = null;
@@ -568,6 +576,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			loadInstituts();
 
 		loadHauptkonten();
+		loadKostenart();
 	}
 
 

@@ -80,10 +80,10 @@ public class Firma {
 	}
 	
 	/**
-	 * Ausgabe der Firma als String. D.h. Ausgabe vom Firmennamen.
+	 * Ausgabe der Firma als String. D.h. Ausgabe vom Firmennamen, Ort.
 	 */
 	public String toString() {
-		return name;
+		return name + ", " + ort;
 	}
 	
 	/**

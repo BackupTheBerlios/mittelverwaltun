@@ -2360,5 +2360,33 @@ public class Database implements Serializable{
 		 }
 		 return konten;
 	 }
+	 
+	 /**
+	  * @author robert
+	  * 
+	  * gibt alle Kostenarten aus der SQL-Tabelle Kostenarten
+	  * @return Kostenart Array
+	  */
+	 public Kostenart[] selectKostenarten() throws ApplicationServerException{
+			Kostenart[] kostenarten = null;
+			try{
+				ResultSet rs = statements.get(239).executeQuery();
+				rs.last();
+				int count = rs.getRow();
+				rs.beforeFirst();
+				if (count > 0){
+					kostenarten = new Kostenart[count];
+					int i = 0;
+					while (rs.next()){
+						kostenarten[i] = new Kostenart(rs.getInt(1), rs.getString(2));
+						i++;
+					}
+				}
+				rs.close();
+			} catch (SQLException e){
+				throw new ApplicationServerException(1, e.getMessage());
+			}
+		 	return kostenarten;
+	 }	
 
 }

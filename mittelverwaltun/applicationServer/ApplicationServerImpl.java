@@ -1472,4 +1472,12 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		return db.deleteFirma( firma );			// Sonst wird physisch gelöscht
 	}
 
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getKostenarten()
+	 */
+	public Kostenart[] getKostenarten() throws ApplicationServerException {
+		return db.selectKostenarten();
+	}
+
 }
