@@ -291,7 +291,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			 labInstitut.setText("ZVKonto");
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+		} 
 	 }
 
 	public static void main(String[] args) {
@@ -498,7 +498,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		}
+		} 
 	}
 
 	private void showOrder(){
@@ -515,7 +515,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		}
+		} 
 	}
 
 	private void printReport(){

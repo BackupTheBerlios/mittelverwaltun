@@ -90,7 +90,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );	// Die ZVKonten holen und einfügen
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			}
+			} 
 		}
 	}
 	
@@ -151,7 +151,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			}
+			} 
 		}
 		
 		return error;
@@ -177,7 +177,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			}
+			} 
 		}
 		
 		return error;
@@ -203,7 +203,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			}
+			} 
 		}
 		
 		return error;

@@ -483,7 +483,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
-		}
+		} 
 	}
 	
 	private void completeOrder(){

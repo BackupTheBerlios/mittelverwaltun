@@ -640,7 +640,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			}
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+		} 
 	}
 
 	private void setOrderData(){

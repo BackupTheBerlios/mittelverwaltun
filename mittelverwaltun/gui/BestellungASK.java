@@ -96,7 +96,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, new ArrayList(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+		} 
 
 		init();
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
@@ -112,7 +112,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, bestellung.getAngebot().getPositionen(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+		} 
 
 	  init();
 	  setOrderData();
@@ -286,7 +286,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
-		}
+		} 
  }
 
  	private void clearInputFields(){
@@ -622,7 +622,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  } catch (ApplicationServerException e) {
 		  MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 		  e.printStackTrace();
-	  }
+	  } 
   }
 
 

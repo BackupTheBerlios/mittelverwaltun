@@ -87,13 +87,13 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 						frame.addChild( new BestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
+					} 
 				else
 					try {
 						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
+					} 
 			}else if (tabBestellungen.getSelectedOrderType()==OrderTable.ASK_TYP){
 				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.SONDIERUNG)
 					try {
@@ -113,7 +113,7 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					}
+					} 
 			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();

@@ -171,7 +171,7 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 				treeAccounts.loadInstituts( as.getInstitutesWithMainAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			}
+			} 
 		}
 	}
 	
@@ -290,7 +290,7 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 					
 					MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 				
-				}
+				} 
 			}
 		}else if (cmd.equals("refresh")){
 			loadAccounts();
@@ -308,7 +308,7 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		} catch (ApplicationServerException exc1) {
 			tfAvailableResources.setValue(new Float(0));
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", "Der Betrag verfügbarer Mittel konnte nicht bestimmt\nwerden und wird deshalb auf Null gesetzt.", exc1.getMessage(),MessageDialogs.WARNING_ICON);
-		}
+		} 
 		
 		tfRemmitance.setInterval(-((Float)tfBalance.getValue()).floatValue(),((Float)tfAvailableResources.getValue()).floatValue());						
 	}

@@ -67,7 +67,7 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 		try {
 			treeKonten.loadInstituts( applicationServer.getInstitutZuordnungen() );
 		} catch (ApplicationServerException e1) {
-		}
+		} 
 
 		setZuordnungEnabled(false);
 		this.setBounds(0,0,436, 606);
@@ -292,7 +292,7 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 //							  e1.getMessage(),
 //							  "Warnung",
 //							  JOptionPane.ERROR_MESSAGE);
-		}
+		} 
 	}
 
 	void setZuordnungEnabled(boolean b){

@@ -97,7 +97,7 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 			tfBis.setText(hhj.getBis());
 		}	catch (ApplicationServerException e) {
 			System.out.println(e.getMessage());
-		}
+		} 
 	}
 	
 	protected String changeHaushaltsjahr(){
@@ -116,7 +116,7 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 							applicationServer.setHaushaltsjahr(hhj, this.haushaltsjahr);
 						} catch (ApplicationServerException e) {
 							return e.getMessage();
-						}
+						} 
 					}else{
 						return "Von-Datum muss vor dem Bis-Datum kommen.";
 					}

@@ -104,7 +104,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			}
+			} 
 		}
 	}
 	
@@ -342,7 +342,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 							error += delFBUnterkonto();
 					} catch( ApplicationServerException exception ) {
 						error += " - " + exception.toString();
-					}
+					} 
 				}
 			}
 		} else if ( e.getSource() == buAendern ) {		// Button "Ändern" wurde gedrückt
@@ -360,7 +360,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 							error += setFBUnterkonto();
 					} catch( ApplicationServerException exception ) {
 						error += " - " + exception.toString();
-					}
+					} 
 				}
 			}
 		} else if ( e.getSource() == buAktualisieren ) {

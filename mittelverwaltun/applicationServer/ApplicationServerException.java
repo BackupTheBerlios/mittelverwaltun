@@ -1,6 +1,6 @@
 package applicationServer;
 
-public class ApplicationServerException extends Exception {
+public class ApplicationServerException extends Exception  {
 
 	private static int NOM = 200;
 	private static String[] messages = null;

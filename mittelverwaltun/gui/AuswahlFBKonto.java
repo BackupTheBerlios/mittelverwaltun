@@ -78,7 +78,7 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		 try {
 			 treeKonten.loadInstituts( applicationServer.getInstituteWithAccounts(institut, true) );
 		 } catch (ApplicationServerException e1) {
-		 }
+		 } 
 
 		tfKonto.setEnabled(false);
 		buAuswahl.addActionListener( this );

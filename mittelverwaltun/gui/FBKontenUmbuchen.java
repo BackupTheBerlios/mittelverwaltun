@@ -278,7 +278,7 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
-			}
+			} 
 		}
 		
 		return error;

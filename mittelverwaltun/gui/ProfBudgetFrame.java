@@ -193,7 +193,7 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 					} catch (ApplicationServerException exc) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 						exc.printStackTrace();
-					}
+					} 
 					
 				}
 			}
@@ -237,7 +237,7 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			tfPauschBudget.setValue(new Float(0));
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. Professorenpauschale", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-	 	}
+	 	} 
 		
 	 	try {
 			tfAvBudget.setValue(new Float(as.getAvailableNoPurposeBudget()));
@@ -246,7 +246,7 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. verfügbaren Budgets", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
 		 	
-	 	}
+	 	} 
 		
 	 	try{
 			ArrayList pnData = new ArrayList();
@@ -300,6 +300,6 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   }catch(ApplicationServerException e){
 	   		e.printStackTrace();
 	   		MessageDialogs.showDetailMessageDialog(this, "Fehler bei Ermittlung der Professoren bzw. Konten eines Instituts", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-	   }
+	   } 
 	}
 }

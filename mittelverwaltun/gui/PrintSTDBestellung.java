@@ -207,7 +207,7 @@ public class PrintSTDBestellung extends JFrame /* implements Printable */ {
 			
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+		} 
 
 	  // BestellNr.
 		report.setProperty("bestellNr", order.getReferenznr());

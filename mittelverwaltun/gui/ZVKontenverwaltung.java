@@ -113,7 +113,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			}
+			} 
 		}
 	}
 	
@@ -513,7 +513,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 						}			
 					} catch (ApplicationServerException exception) {
 						error += " - " + exception.toString();
-					}
+					} 
 				}
 			}
 		} else if ( e.getSource() == buAendern ) {
@@ -532,7 +532,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 					}
 				} catch (ApplicationServerException exception) {
 					error += " - " + exception.toString();
-				}
+				} 
 			}
 		} else if ( e.getSource() == buAktualisieren ) {
 			loadZVKonten();
@@ -557,7 +557,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 						}			
 					} catch (ApplicationServerException exception) {
 						error += " - " + exception.toString();
-					}
+					} 
 				}
 			}
 		} else if ( e.getSource() == buBeenden ) {
@@ -951,7 +951,7 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 						checkZweckgebunden.setSelected( false );
 					}
 				} catch (ApplicationServerException e1) {
-				}
+				} 
 			}
 		}
 	}
@@ -1075,7 +1075,7 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 					checkZweckgebunden.setSelected( false );
 				}
 			} catch (ApplicationServerException e1) {
-			}
+			} 
 		}
 	}
 	}

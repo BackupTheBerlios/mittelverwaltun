@@ -2511,7 +2511,7 @@ public class PreparedSqlStatements {
 																		"timestamp, benutzerId, typ, beschreibung " +
 																"FROM " +
 																	"Logs " +
-															  "WHERE timestamp BETWEEN ? AND ? ");
+															  "WHERE timestamp BETWEEN ? AND ? " +															  "ORDER BY typ");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

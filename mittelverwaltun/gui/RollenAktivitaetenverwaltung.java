@@ -3,6 +3,7 @@ package gui;
 import applicationServer.*;
 
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -116,7 +117,7 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 		}
 	}
 
-	private void addRolle()  throws ApplicationServerException{
+	private void addRolle()  throws ApplicationServerException, RemoteException{
 		if(tfRollenName.getText().equals("")){
 			throw new ApplicationServerException(1, "Rollenname muss ausgefüllt sein.");
 		}else{
@@ -129,7 +130,7 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 		}
 	}
 
-	private void setRolle() throws ApplicationServerException{
+	private void setRolle() throws ApplicationServerException, RemoteException{
 		if(!listRollen.isSelectionEmpty()){
 			
 			Rolle currRolle = (Rolle)liMoRollen.getElementAt(listRollen.getSelectedIndex());
@@ -142,7 +143,7 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 			throw new ApplicationServerException(0, "Es ist keine Rolle selektiert !");
 	}
 
-	private void delRolle() throws ApplicationServerException{
+	private void delRolle() throws ApplicationServerException, RemoteException{
 		Rolle currRolle = (Rolle)liMoRollen.getElementAt(listRollen.getSelectedIndex());
 		applicationServer.delRolle(currRolle);
 		
@@ -157,7 +158,7 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 		}
 	}
 
-	private void addRollenAktivitaet() throws ApplicationServerException{
+	private void addRollenAktivitaet() throws ApplicationServerException, RemoteException{
 		Rolle rolle = (Rolle)liMoRollen.getElementAt(listRollen.getSelectedIndex());
 		Aktivitaet aktivitaet = (Aktivitaet)liMoAktivitaeten.getElementAt(listAktivitaeten.getSelectedIndex());
 
@@ -179,7 +180,7 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 		}
 	}
 
-	private void delRollenAktivitaet() throws ApplicationServerException{
+	private void delRollenAktivitaet() throws ApplicationServerException, RemoteException{
 		Rolle rolle = (Rolle)liMoRollen.getElementAt(listRollen.getSelectedIndex());
 		Aktivitaet aktivitaet = (Aktivitaet)liMoRollenAktivitaeten.getElementAt(listRollenAktivitaeten.getSelectedIndex());
 
@@ -333,7 +334,9 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 							  e1.getMessage(),
 							  "Warnung",
 							  JOptionPane.ERROR_MESSAGE);
-		}
+		} catch (RemoteException exc){
+		JOptionPane.showMessageDialog( this, exc.getMessage(),	"RemoteException !", JOptionPane.ERROR_MESSAGE );
+	}
 	}
 
 	public void valueChanged(ListSelectionEvent e) {

@@ -236,7 +236,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch ( ApplicationServerException e ) {
 				System.out.println( e.toString() );
-			}
+			} 
 		}
 	}
 	
@@ -313,7 +313,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
-			}
+			} 
 		}
 		
 		return error;

@@ -179,7 +179,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			return "";
 		}catch(ApplicationServerException e){
 			return e.getMessage();
-		}
+		} 
 	}	
 	  
 	public void actionPerformed(ActionEvent e) {
