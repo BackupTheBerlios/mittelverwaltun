@@ -3019,9 +3019,10 @@ public class Database implements Serializable{
 	}
 	
 	/**
-	 * löscht alle Positionen zu einem Angebot
+	 * löscht alle Positionen zu allen Angeboten einer Bestellung
 	 * @param bestellId
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void deletePositions(int bestellId) throws ApplicationServerException {
 		try{
@@ -3033,9 +3034,40 @@ public class Database implements Serializable{
 	}
 	
 	/**
+	 * löscht alle Positionen eines Angebots
+	 * @param angebotId - Id des Angebots
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void deleteOfferPositions(int angebotId) throws ApplicationServerException {
+		try{
+			Object[] parameters = {new Integer(angebotId)};
+			statements.get(280).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException( 86, e.getMessage() );
+		}
+	}
+	
+	/**
+	 * löscht eine Position anhand der Id
+	 * @param id der Position
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
+	public void deletePosition(int id) throws ApplicationServerException {
+		try{
+			Object[] parameters = {new Integer(id)};
+			statements.get(267).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException( 80, e.getMessage() );
+		}
+	}
+	
+	/**
 	 * aktualisiert ein Angebot
 	 * @param angebot
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void updateAngebot(Angebot angebot) throws ApplicationServerException{
 		if(angebot != null){
@@ -3055,6 +3087,7 @@ public class Database implements Serializable{
 	 * aktualisiert eine Position
 	 * @param position
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public void updatePosition(Position p) throws ApplicationServerException{
 		if(p != null){

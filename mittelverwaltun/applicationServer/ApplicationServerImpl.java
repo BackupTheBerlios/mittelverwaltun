@@ -1809,6 +1809,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 		if(edited.getPhase() == '0'){
 			
 			db.updateStandardBestellung(edited, 0f);
+			
+			ArrayList oldOffer = original.getAngebote(); // alte Angebote
+			ArrayList newOffer = edited.getAngebote();	 // neue Angebote
+			
 			if(!original.getAngebote().equals(edited.getAngebote())){ // die  haben sich geändert
 				db.deleteAngebote(edited.getId()); // löscht alle Angebote
 				
@@ -1843,16 +1847,83 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	}
 	
 	/**
+	 * aktualisiert die Angebote einer Bestellung. Dazu gehört auch löschen, hinzufügen und ändern
+	 * der Angebote.
+	 * @param oldOffers
+	 * @param newOffers
+	 * @param bestellId
+	 * @throws ApplicationServerException
+	 */
+	public void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
+		int listIndex = (oldOffers.size() > newOffers.size()) ? oldOffers.size() : newOffers.size(); // grösseren Index benutzen
+		
+		for(int i = 0; i < listIndex; i++){
+			
+			if(newOffers.size() == 0){
+				db.deletePositions(bestellId);
+				db.deleteAngebote(bestellId);
+			}
+			
+		}
+	}
+	
+	/**
 	 * aktualisiert ein vorhandenes Angebot in der Datenbank. Dazu gehört auch löschen, hinzufügen und ändern
 	 * der Positionen.
-	 * @param angebot
+	 * @param oldOffer - altes Angebot
+	 * @param newOffer - neues Angebot
+	 * @param bestellId - Id der Bestellung
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
-	public void actualizeAngebot(Angebot oldOffer, Angebot newOffer) throws ApplicationServerException {
+	public void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws ApplicationServerException {
 		if(!(oldOffer.equals(newOffer))){ // Angebot hat sich geändert
 			
+			db.updateAngebot(newOffer); // aktualisiert nur die Tabelle Angebote
 			
+			ArrayList oldPs = oldOffer.getPositionen(); // alte Positionen
+			ArrayList newPs = newOffer.getPositionen(); // neue Positionen
+			
+			int posIndex = (oldPs.size() > newPs.size()) ? oldPs.size() : newPs.size(); // der grössere Anzahl der Positionen
+			
+			for(int i = 0; i < posIndex; i++){
+				Position oldP = (Position)oldPs.get(i); 
+				
+				// alle Positionen gelöscht und nur die Summe angegeben oder neue Positionen hinzugefügt
+				if(newPs.size() == 0 || ((Position)newPs.get(0)).getId() == 0){
+					db.deletePositions(bestellId);
+					
+					if(newPs.size() == 0){ // keine Positionen
+						Position position = new Position("", newOffer.getSumme(), 1, 0f, 0f, oldP.getInstitut());
+						db.insertPosition(position, oldOffer.getId());
+					}else{
+						for(int j = 0; j < newPs.size(); j++) // neue Positionen
+							db.insertPosition((Position)newPs.get(j), newOffer.getId());
+					}
+					break;
+				}
+				
+				if(i >= newPs.size()){ // restliche Position im alten Angebot löschen
+					db.deletePosition(oldP.getId());
+				}else{
+					Position newP = (Position)newPs.get(i);
+				
+					if(newP.getId() == 0){ // neue Positionen
+						if(oldP != null)
+							db.deletePosition(oldP.getId());
+						db.insertPosition(newP, newOffer.getId());
+					}else{
+						if(oldP != null){
+							if(oldP.getId() != newP.getId()){	// ungleiche Id der Positionen -> alte Position gelöscht
+								db.deletePosition(oldP.getId());
+							}else{	// gleiche Position
+								if(!oldP.equals(newP)) // Position geändert
+									db.updatePosition(newP);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 

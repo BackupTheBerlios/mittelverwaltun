@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[280];
+		statements = new PreparedStatementWrapper[285];
 		int i = 0;
 
 		/**************************************/
@@ -1840,7 +1840,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/******************************************/
-		/* Tabelle: Positionen                 	  */
+		/* Tabelle: Positionen 1               	  */
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//265 fügt eine Positon in die Tabelle Positionen ein
@@ -1870,8 +1870,10 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//269
-			statements[i++] = null;
+		{//269 löscht eine Position anhand der Id
+			ps = con.prepareStatement("DELETE FROM Positionen WHERE id = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		/**************************************************/
 		/* Join: Bestellungen, ASK_Standard_Bestellungen  */
@@ -1932,6 +1934,27 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//279
+			statements[i++] = null;
+		}
+		/******************************************/
+		/* Tabelle: Positionen 2               	  */
+		/* Indizes: 280-284                       */
+		/******************************************/
+		{//280 
+			ps = con.prepareStatement("DELETE FROM Positionen WHERE angebot = ? ");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//281 
+			statements[i++] = null;
+		}
+		{//282
+			statements[i++] = null;
+		}
+		{//283
+			statements[i++] = null;
+		}
+		{//284
 			statements[i++] = null;
 		}
 	}
