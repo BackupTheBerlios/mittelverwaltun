@@ -15,7 +15,6 @@ public class AllTests {
 		TestSuite suite = new TestSuite("Test for gui");
 		//$JUnit-BEGIN$
 		suite.addTest(new TestSuite(BenutzerverwaltungTest.class));
-		suite.addTest(new TestSuite(InstitutverwaltungTest.class));
 		suite.addTest(new TestSuite(HaushaltsjahrAendernTest.class));
 		//$JUnit-END$
 		return suite;

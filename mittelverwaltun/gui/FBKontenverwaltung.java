@@ -92,6 +92,8 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 		showPanel();
 			
 		this.setSize( 818, 318 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 	
 	/**

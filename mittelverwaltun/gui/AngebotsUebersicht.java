@@ -42,7 +42,7 @@ public class AngebotsUebersicht extends JDialog implements ActionListener{
   	super(JOptionPane.getFrameForComponent(parent), title, modal);
     this.setSize(560,245);
     this.setResizable(false);
-    
+		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
     this.angebote = angebote;
     
     try {

@@ -97,8 +97,9 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
   }
   
   private void jbInit() throws Exception {
-    this.setSize(675,671);
-    this.setTitle("ASK-Bestellung");
+		this.setSize(675,671);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		this.setTitle("ASK-Bestellung");
     this.getContentPane().setLayout(null);
 
     titledBorderPanel1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Allgemeine Informationen");

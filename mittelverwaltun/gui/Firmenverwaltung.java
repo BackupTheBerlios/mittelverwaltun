@@ -61,6 +61,8 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 		}
 		
 		loadFirmen();
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 	
 	private void jbInit() throws Exception {

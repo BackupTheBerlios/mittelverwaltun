@@ -40,9 +40,9 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
   JButton buAddRolle = new JButton();
 
 
-  public RollenAktivitaetenverwaltung(ApplicationServer applicationServer) {
-		super( "Benutzerverwaltung" );
-		this.applicationServer = applicationServer;
+  public RollenAktivitaetenverwaltung(MainFrame frame) {
+		super( "Rollenaktivitätenverwaltung" );
+		this.applicationServer = frame.getApplicationServer();
 		this.setClosable(true);
 		this.setIconifiable(true);
 
@@ -70,6 +70,8 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
 		loadRollen();
 
 		this.setBounds(0,0,403, 440);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
   }
 
   private void loadRollen(){
@@ -264,25 +266,26 @@ public class RollenAktivitaetenverwaltung extends JInternalFrame implements Acti
   }
 
   public static void main(String[] args) {
-	  JFrame test = new JFrame("Rollenverwaltung Test");
-	  JDesktopPane desk = new JDesktopPane();
-	  desk.setDesktopManager(new DefaultDesktopManager());
-	  test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	  test.setContentPane(desk);
-	  test.setBounds(100,100,800,700);
-	  try{
-			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			  ApplicationServer applicationServer = server.getMyApplicationServer();
-			  PasswordEncrypt pe = new PasswordEncrypt();
-			  String psw = pe.encrypt(new String("r.driesner").toString());
-			  applicationServer.login("r.driesner", psw);
-				RollenAktivitaetenverwaltung rollenVerwaltung = new RollenAktivitaetenverwaltung(applicationServer);
-			  desk.add(rollenVerwaltung);
-			  test.show();
-				rollenVerwaltung.show();
-	  }catch(Exception e){
-					  System.out.println(e);
-	  }
+	  MainFrame test = new MainFrame("Institutsverwaltung Test");
+		JDesktopPane desk = new JDesktopPane();
+		desk.setDesktopManager(new DefaultDesktopManager());
+		test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		test.setContentPane(desk);
+		test.setBounds(100,100,800,700);
+		try{
+			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+			ApplicationServer applicationServer = server.getMyApplicationServer();
+			test.setApplicationServer(applicationServer);
+			PasswordEncrypt pe = new PasswordEncrypt();
+			String psw = pe.encrypt(new String("r.driesner").toString());
+			applicationServer.login("r.driesner", psw);
+			RollenAktivitaetenverwaltung rollenVerwaltung = new RollenAktivitaetenverwaltung(test);
+			desk.add(rollenVerwaltung);
+			test.show();
+			rollenVerwaltung.show();
+		}catch(Exception e){
+				System.out.println(e);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e){

@@ -79,6 +79,8 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 		showPanel();
 
 		this.setSize( 818, 333 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 
 
@@ -632,7 +634,6 @@ class RootPanel extends JPanel implements ActionListener {
 		checkZweckgebunden.setBounds(new Rectangle(12, 82, 140, 20));
 		labDispolimit.setText("Dispolimit");
 		labDispolimit.setBounds(new Rectangle(12, 112, 90, 15));
-		tfDispolimit.setText("");
 		tfDispolimit.setBounds(new Rectangle(102, 112, 150, 21));
 		rbKapitelTGR.setText("Kapitel/Titelgruppe-Konto");
 		rbKapitelTGR.setBounds(new Rectangle(12, 147, 190, 23));
@@ -814,7 +815,6 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 		rbBis.setBounds(new Rectangle(202, 212, 60, 22));
 		rbAb.setText("Ab");
 		rbAb.setBounds(new Rectangle(262, 212, 60, 22));
-		tfPruefbedingung.setText("");
 		tfPruefbedingung.setBounds(new Rectangle(372, 212, 120, 21));
 		checkFreigegeben.setBounds(new Rectangle(322, 82, 130, 21));
 		checkFreigegeben.setText( "Freigegeben" );
@@ -1134,7 +1134,6 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		labBemerkung.setBounds(new Rectangle(10, 112, 90, 15));
 		labBudget.setText("Budget");
 		labBudget.setBounds(new Rectangle(12, 82, 90, 15));
-		tfBudget.setText("");
 		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
 		tfBemerkung.setText("");
 		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
@@ -1142,7 +1141,6 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
 		rbAb.setText("Ab");
 		rbAb.setBounds(new Rectangle(262, 142, 60, 22));
-		tfPruefbedingung.setText("");
 		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
 		checkPruefbedingung.setSelected(false);
 		checkPruefbedingung.setText("Prüfbedingung");
@@ -1159,7 +1157,6 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		this.setBorder(BorderFactory.createEtchedBorder());
 		labVormerkungen.setText("Vormerkungen");
 		labVormerkungen.setBounds(new Rectangle(302, 82, 90, 15));
-		tfVormerkungen.setText("");
 		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
 		tfTitel.setBounds(new Rectangle(412, 47, 80, 21));
 		this.add(labBezeichnung, null);
@@ -1335,9 +1332,7 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		checkPruefbedingung.setSelected(false);
 		tfUntertitel.setText("");
 		tfUntertitel.setBounds(new Rectangle(412, 47, 80, 21));
-		tfPruefbedingung.setText("");
 		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
-		tfBudget.setText("");
 		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
 		tfKapitel.setText("");
 		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
@@ -1363,7 +1358,6 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		this.setLayout(null);
 		labVormerkungen.setText("Vormerkungen");
 		labVormerkungen.setBounds(new Rectangle(292, 82, 90, 15));
-		tfVormerkungen.setText("");
 		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
 		tfTitel.setBounds(new Rectangle(102, 47, 80, 21));
 		this.add(labBezeichnung, null);
@@ -1527,7 +1521,6 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 		labKategorie.setBounds(new Rectangle(12, 47, 90, 15));
 		labBudget.setText("Budget");
 		labBudget.setBounds(new Rectangle(12, 82, 90, 15));
-		tfBudget.setText("");
 		tfBudget.setBounds(new Rectangle(102, 82, 100, 21));
 		this.setBorder(BorderFactory.createEtchedBorder());
 		this.setOpaque(true);
@@ -1539,7 +1532,6 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 		rbBis.setBounds(new Rectangle(202, 142, 60, 22));
 		rbAb.setText("Ab");
 		rbAb.setBounds(new Rectangle(262, 142, 60, 22));
-		tfPruefbedingung.setText("");
 		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
 		checkPruefbedingung.setSelected(false);
 		checkPruefbedingung.setText("Prüfbedingung");
@@ -1554,7 +1546,6 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 		tfUntertitel.setBounds(new Rectangle(102, 212, 80, 21));
 		labVormerkungen.setText("Vormerkungen");
 		labVormerkungen.setBounds(new Rectangle(292, 82, 90, 15));
-		tfVormerkungen.setText("");
 		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
 		this.add(labTGR, null);
 		this.add(labKapitel, null);
@@ -1727,11 +1718,9 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		checkPruefbedingung.setText("Prüfbedingung");
 		checkPruefbedingung.setBounds(new Rectangle(12, 142, 140, 22));
 		checkPruefbedingung.setSelected(false);
-		tfPruefbedingung.setText("");
 		tfPruefbedingung.setBounds(new Rectangle(372, 142, 120, 21));
 		labKategorie.setText("Kategorie");
 		labKategorie.setBounds(new Rectangle(12, 47, 80, 15));
-		tfBudget.setText("");
 		tfBudget.setBounds(new Rectangle(92, 82, 100, 21));
 		tfKapitel.setText("");
 		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
@@ -1763,7 +1752,6 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		this.setBorder(BorderFactory.createEtchedBorder());
 		labVormerkungen.setText("Vormerkungen");
 		labVormerkungen.setBounds(new Rectangle(302, 82, 90, 15));
-		tfVormerkungen.setText("");
 		tfVormerkungen.setBounds(new Rectangle(392, 82, 100, 21));
 		this.add(rbBis, null);
 		this.add(tfKategorie, null);

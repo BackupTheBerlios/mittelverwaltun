@@ -206,6 +206,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
   }
 
   private void jbInit() throws Exception {
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
     panelAuswahlgrund.add(rbAngebotGuenstig, null);
     panelAuswahlgrund.add(rbAuftragGrund, null);
     panelAuswahlgrund.add(jScrollPane4, null);

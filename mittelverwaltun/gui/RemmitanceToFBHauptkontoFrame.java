@@ -162,6 +162,8 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		this.setSize(615,345);
 		this.setClosable(false);
 		this.setTitle("Mittelverteilung an Fachbereichshauptkonten");
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 
 	void loadAccounts() {

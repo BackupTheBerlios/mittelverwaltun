@@ -71,6 +71,8 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 
 		setZuordnungEnabled(false);
 		this.setBounds(0,0,436, 606);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
   }
 
 

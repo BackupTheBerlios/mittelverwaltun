@@ -39,6 +39,8 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 		} catch( Exception e ) {
 		}
 		this.setSize( 588, 253 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 	
 	/**

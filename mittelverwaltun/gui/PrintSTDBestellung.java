@@ -206,6 +206,7 @@ public class PrintSTDBestellung extends JFrame /* implements Printable */ {
 			report.setPropertyMarked("besteller", true);
 			
 		} catch (ApplicationServerException e) {
+			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		} 
 
@@ -290,7 +291,8 @@ public class PrintSTDBestellung extends JFrame /* implements Printable */ {
 		  preview.setVisible(true);
 
 	  } catch (ReportProcessingException e1) {
-		  e1.printStackTrace();
+			JOptionPane.showMessageDialog(this,e1.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
+			e1.printStackTrace();
 	  }
   }
 

@@ -125,19 +125,21 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   JFormattedTextField tfDatumBis = new JFormattedTextField(DateFormat.getDateInstance());
 
 	public Reports(MainFrame frame) {
+		super( "Reports" );
 		this.frame = frame;
 		try {
 			jbInit();
 		}catch(Exception e) {
+			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 		loadInstituts();
 		loadZVKonten();
+		this.setBounds(0,0,800, 460);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 	}
 
 	private void jbInit() throws Exception {
-
-		this.setSize(new Dimension(800, 458));
 		this.setFrameIcon(null);
     this.setTitle("Reports");
     this.getContentPane().setLayout(null);
@@ -203,7 +205,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     this.getContentPane().add(labInstitut, null);
     this.getContentPane().add(btAktualisieren, null);
     this.getContentPane().add(cbInstitut, null);
-	 this.getContentPane().add(cbLogsType, null);
+	  this.getContentPane().add(cbLogsType, null);
     this.getContentPane().add(cbReportFilter, null);
     this.getContentPane().add(btBeenden, null);
     this.getContentPane().add(spReport, null);
@@ -273,6 +275,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 			labInstitut.setText("Institute");
 	  } catch (ApplicationServerException e) {
+			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 		  e.printStackTrace();
 	  }
   }
@@ -290,6 +293,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			 }
 			 labInstitut.setText("ZVKonto");
 		} catch (ApplicationServerException e) {
+			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		} 
 	 }

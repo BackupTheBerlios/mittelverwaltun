@@ -132,7 +132,8 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   
 	   this.actualize();
 	   this.calculateOverallBudget();
-	   
+		 setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 
 	public void calculateOverallBudget(){

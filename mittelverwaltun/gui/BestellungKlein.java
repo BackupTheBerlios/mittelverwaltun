@@ -254,6 +254,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	 * author w.flat
 	 */
 	private void jbInit() throws Exception {
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 		labTextKostenstelle.setText("Kostenstelle");
 		labTextKostenstelle.setBounds(new Rectangle(10, 40, 80, 15));
 		this.getContentPane().setLayout(null);

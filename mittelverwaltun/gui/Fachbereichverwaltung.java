@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 import applicationServer.ApplicationServer;
-import applicationServer.CentralServer;
 
 import dbObjects.Fachbereich;
 import dbObjects.Institut;
@@ -10,7 +9,6 @@ import dbObjects.Institut;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -41,7 +39,7 @@ public class Fachbereichverwaltung extends JInternalFrame implements ActionListe
   JLabel jLabel9 = new JLabel();
 
 
-  public Fachbereichverwaltung(ApplicationServer applicationServer) {
+  public Fachbereichverwaltung(MainFrame frame) {
 		 try {
 			jbInit();
 		 }
@@ -51,7 +49,7 @@ public class Fachbereichverwaltung extends JInternalFrame implements ActionListe
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.getContentPane().setLayout( null );
-		this.applicationServer = applicationServer;
+		this.applicationServer = frame.getApplicationServer();
 
 		buRefresh.setBorder(null);
 		buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
@@ -68,6 +66,8 @@ public class Fachbereichverwaltung extends JInternalFrame implements ActionListe
 		loadData();
 		loadInstituts();
 		this.setSize( 395, 350 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
   }
 
   private void loadFachbereiche(){
@@ -129,28 +129,7 @@ public class Fachbereichverwaltung extends JInternalFrame implements ActionListe
 			return e.getMessage();
 		}
 	}
-
-	 public static void main(String[] args) {
-		  JFrame test = new JFrame("Fachbereichverwaltung Test");
-		  JDesktopPane desk = new JDesktopPane();
-		  desk.setDesktopManager(new DefaultDesktopManager());
-		  test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		  test.setContentPane(desk);
-		  test.setBounds(100,100,800,700);
-		  try{
-			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			  ApplicationServer applicationServer = server.getMyApplicationServer();
-			  PasswordEncrypt pe = new PasswordEncrypt();
-			  String psw = pe.encrypt(new String("r.driesner").toString());
-			  applicationServer.login("r.driesner", psw);
-			  Fachbereichverwaltung fachbereichverwaltung = new Fachbereichverwaltung(applicationServer);
-			  desk.add(fachbereichverwaltung);
-			  test.show();
-			  fachbereichverwaltung.show();
-		  }catch(Exception e){
-				  System.out.println(e);
-		  }
-	 }
+	 
 
   private void jbInit() throws Exception {
 	 this.setTitle("Fachbereichverwaltung");

@@ -43,7 +43,8 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	private void jbInit() throws Exception {
 	    
 		this.setSize(800, 290);
-		this.setFrameIcon(null);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    this.setFrameIcon(null);
 	    this.setTitle("Bestellungsauswahl");
 	    this.getContentPane().setLayout(null);
 	

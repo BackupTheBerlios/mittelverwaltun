@@ -51,6 +51,7 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
 		buBeenden.addActionListener( this );
 
 		this.setBounds(0,0,460, 320);
+		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
   }
 
   /**

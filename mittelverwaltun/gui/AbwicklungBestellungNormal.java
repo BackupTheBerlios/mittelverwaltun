@@ -104,6 +104,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   
   private void jbInit() throws Exception {
     this.setSize(675,671);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
     this.setTitle("Standardbestellung");
     this.getContentPane().setLayout(null);
 

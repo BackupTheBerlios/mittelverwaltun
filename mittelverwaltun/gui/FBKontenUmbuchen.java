@@ -50,6 +50,8 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 		}
 		
 		this.setSize( 540, 398 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 	
 	/**

@@ -29,11 +29,11 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	JButton buRefresh = new JButton();
 	
 	
-	public Institutverwaltung(ApplicationServer applicationServer) {
+	public Institutverwaltung(MainFrame frame) {
 		super( "Institutsverwaltung" );
 		this.setClosable(true);
 		this.setIconifiable(true);
-		this.applicationServer = applicationServer;
+		this.applicationServer = frame.getApplicationServer();
 		
 		try {
 			jbInit();
@@ -59,6 +59,8 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 		loadInstitutes();
 		loadInstitutsleiter();
 		this.setSize( 442, 225 );
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    
 	}
 	
 	private void jbInit() throws Exception {
@@ -214,7 +216,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 	}
 
 	public static void main(String[] args) {
-		JFrame test = new JFrame("Institutsverwaltung Test");
+		MainFrame test = new MainFrame("Institutsverwaltung Test");
 		JDesktopPane desk = new JDesktopPane();
 		desk.setDesktopManager(new DefaultDesktopManager());
 		test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -226,7 +228,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			PasswordEncrypt pe = new PasswordEncrypt();
 			String psw = pe.encrypt(new String("r.driesner").toString());
 			applicationServer.login("r.driesner", psw);
-			Institutverwaltung institutverwaltung = new Institutverwaltung(applicationServer);
+			Institutverwaltung institutverwaltung = new Institutverwaltung(test);
 			desk.add(institutverwaltung);
 			test.show();
 			institutverwaltung.show();
