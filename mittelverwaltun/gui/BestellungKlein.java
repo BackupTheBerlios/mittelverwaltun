@@ -51,7 +51,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
   JPanel jPanel1 = new JPanel();
   JLabel jLabel6 = new JLabel();
   JLabel jLabel5 = new JLabel();
-  JTextField tfAuszahlungAn = new JTextField();
   BestellungKleinTable table = new BestellungKleinTable();
   JScrollPane scrollTable = new JScrollPane();
   JLabel jLabel1 = new JLabel();
@@ -69,6 +68,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
   JComboBox cbInstitut = new JComboBox();
   JLabel jLabel24 = new JLabel();
   JLabel labInstitut = new JLabel();
+  JLabel labUser = new JLabel();
 
   public BestellungKlein(MainFrame frame) {
 		super( "Kleinbestellung erstellen" );
@@ -79,14 +79,14 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		setData();
-		
-    try {
+		try {
       jbInit();
     }
     catch(Exception e) {
       e.printStackTrace();
     }
 
+		labUser.setText(frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
 
 		buAbbrechen.addActionListener(this);
 		buBestellen.addActionListener(this);
@@ -102,17 +102,25 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
   }
 
-  
+
   private void loadInstituts(){
 	  try {
-		  Institut[] instituts = frame.getApplicationServer().getInstitutes();
-
-		  if(instituts != null){
-			  cbInstitut.removeAllItems();
-				 for(int i = 0; i < instituts.length; i++){
-					  cbInstitut.addItem(instituts[i]);
-				 }
-		  }
+//		TODO Admin durch die Aktivität austauschen
+			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
+				Institut[] instituts = frame.getApplicationServer().getInstitutes();
+			
+			  if(instituts != null){
+				  cbInstitut.removeAllItems();
+					 for(int i = 0; i < instituts.length; i++){
+						  cbInstitut.addItem(instituts[i]);
+					 }
+			  }
+			}else{
+				Institut institut = frame.getBenutzer().getKostenstelle();
+				
+				cbInstitut.removeAllItems();
+				cbInstitut.addItem(institut);
+			}
 	  } catch (ApplicationServerException e) {
 		  e.printStackTrace();
 	  }
@@ -145,10 +153,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
   }
 
   private void setData(){
-//		  TODO Admin durch die Aktivität austauschen
-	  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-		  loadInstituts();
-
+	  loadInstituts();
 	  loadHauptkonten();
   }
 
@@ -267,8 +272,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
     jLabel5.setFont(new java.awt.Font("Dialog", 1, 11));
     jLabel5.setText("Verwendung oder Begründung");
     jLabel5.setBounds(new Rectangle(5, 3, 187, 15));
-    tfAuszahlungAn.setText("");
-    tfAuszahlungAn.setBounds(new Rectangle(100, 3, 419, 21));
     cbKostenstelle.setBounds(new Rectangle(88, 27, 345, 21));
     cbInstitut.setBounds(new Rectangle(88, 3, 345, 21));
     jLabel24.setFont(new java.awt.Font("Dialog", 0, 12));
@@ -277,6 +280,9 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
     labInstitut.setFont(new java.awt.Font("Dialog", 0, 12));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(13, 9, 50, 15));
+    labUser.setBounds(new Rectangle(99, 9, 296, 15));
+    labUser.setText("Auszahlung an:");
+    labUser.setFont(new java.awt.Font("Dialog", 1, 11));
     jPanel2.add(jLabel5, null);
     jPanel2.add(tpVerwendung, null);
     this.getContentPane().add(oben, null);
@@ -287,7 +293,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
     jPanel1.add(tfKarteiNr, null);
     unten.add(jPanel2, null);
     jPanel4.add(jLabel13, null);
-    jPanel4.add(tfAuszahlungAn, null);
+    jPanel4.add(labUser, null);
     this.getContentPane().add(cbInstitut, null);
     this.getContentPane().add(cbKostenstelle, null);
     this.getContentPane().add(jLabel24, null);
@@ -389,7 +395,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			DefaultTableModel dtm = (DefaultTableModel)table.getModel();
 		  float sum = 0;
 		  float price = 0;
-	
+
 		  for(int i = 0; i < table.getRowCount(); i++){
 				price = ((Float)dtm.getValueAt(i, 3)).floatValue();
 				sum += price;
@@ -402,7 +408,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	public void itemStateChanged(ItemEvent e) {
 		if(e.getSource() == cbKostenstelle){
 			FBHauptkonto kostenstelle = (FBHauptkonto)cbKostenstelle.getSelectedItem();
-
+			labUser.setText("Hallo" + frame.getBenutzer().getName() + ", " + frame.getBenutzer().getVorname());
 			if(kostenstelle != null){
 				labKapitel.setText("");
 				labTitel.setText("");

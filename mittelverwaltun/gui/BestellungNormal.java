@@ -511,19 +511,27 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	private void loadInstituts(){
-		try {
-			Institut[] instituts = frame.getApplicationServer().getInstitutes();
-
-			if(instituts != null){
+	  try {
+//		TODO Admin durch die Aktivität austauschen
+			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
+				Institut[] instituts = frame.getApplicationServer().getInstitutes();
+			
+			  if(instituts != null){
+				  cbInstitut.removeAllItems();
+					 for(int i = 0; i < instituts.length; i++){
+						  cbInstitut.addItem(instituts[i]);
+					 }
+			  }
+			}else{
+				Institut institut = frame.getBenutzer().getKostenstelle();
+				
 				cbInstitut.removeAllItems();
-				  for(int i = 0; i < instituts.length; i++){
-						cbInstitut.addItem(instituts[i]);
-				  }
+				cbInstitut.addItem(institut);
 			}
-		} catch (ApplicationServerException e) {
-			e.printStackTrace();
-		}
-	}
+	  } catch (ApplicationServerException e) {
+		  e.printStackTrace();
+	  }
+  }
 
 	/**
 	 * lädt alle Kostenarten in die Combobox
@@ -571,10 +579,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	private void setData(){
-//		TODO Admin durch die Aktivität austauschen
-		if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-			loadInstituts();
-
+		loadInstituts();
 		loadHauptkonten();
 		loadKostenart();
 	}
