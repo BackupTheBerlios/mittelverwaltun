@@ -2389,11 +2389,11 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement("SELECT " +
 																		"zvk.bezeichnung AS zvKonto, " +
 																		"i.bezeichnung AS institut, " +
-																		"(bu.betragFbKonto1) AS ausgaben, " +
+																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +
 																		"(SELECT SUM(budget) FROM FBKonten WHERE institutsId = i.id) AS kontostand " +
 																"FROM " +
 																	"ZVKontentitel zvt, ZVKonten zvk, " +
-																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 7 " +
+																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
 																	"AND bu.fbKonto1 = fbk.id " +
 																	"AND bu.zvTitel1 = zvt.id " +
 															  "WHERE i.id = fbk.institutsId  " +
@@ -2401,7 +2401,7 @@ public class PreparedSqlStatements {
 																	"AND h.id = fbk.haushaltsjahrId " +
 																	"AND h.id = zvk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																"");
+																"GROUP BY zvk.bezeichnung, i.bezeichnung");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//339 Report 4 siehe gui.Reports.java
