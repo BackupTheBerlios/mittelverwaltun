@@ -153,6 +153,7 @@ public class ApplicationServerException extends Exception {
 		messages[94] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateASKBestellung";
 		messages[95] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectSwBeauftragte";
 		messages[96] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectASKFirma";
+		messages[97] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectASKBestellung";
 			
 //		Exception Ende ROBERT von 50-99
 
