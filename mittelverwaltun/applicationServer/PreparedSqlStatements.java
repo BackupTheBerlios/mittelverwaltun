@@ -1616,7 +1616,12 @@ public class PreparedSqlStatements {
 		/* Indizes: 260-264                       */
 		/******************************************/
 		{//265 fügt eine Positon in die Tabelle Positionen ein
-			statements[i++] = null;
+			ps = con.prepareStatement("INSERT " +
+																"INTO Angebote " +
+																	 "( angebot, institut, menge, artikel, einzelPreis, mwSt, rabatt) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?)");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//266
 			statements[i++] = null;
