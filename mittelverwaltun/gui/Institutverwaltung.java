@@ -1,83 +1,109 @@
 package gui;
 
-import applicationServer.ApplicationServer;
-import applicationServer.CentralServer;
-import dbObjects.Benutzer;
-import dbObjects.Institut;
+import applicationServer.*;
+import dbObjects.*;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import java.awt.event.*;
-import java.rmi.Naming;
+import java.rmi.*;
+import java.awt.*;
 
 public class Institutverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener {
 	
 	ApplicationServer applicationServer;
-	JPanel panel = new JPanel();
-	JScrollPane scrollInstitute = new JScrollPane();
 	DefaultListModel listModel = new DefaultListModel();
-	JList listInstitute = new JList(listModel);
-
+	JPanel panelWindow = new JPanel();
+	JScrollPane scrollInstitute = new JScrollPane();
+	JList listInstitute = new JList();
+	JLabel labInstitute = new JLabel();
+	JLabel labBezeichnung = new JLabel();
 	JTextField tfBezeichnung = new JTextField();
+	JLabel labKostenstelle = new JLabel();
 	JTextField tfKostenstelle = new JTextField();
+	JLabel labInstitutsleiter = new JLabel();
 	JComboBox cbInstitutsleiter = new JComboBox();
-
-	JButton buAnlegen = new JButton( "Anlegen" );
-	JButton buAendern = new JButton( "Ändern" );
-	JButton buLoeschen = new JButton( "Löschen" );
-	JButton buBeenden = new JButton( "Beenden" );
-	JButton buRefresh = new JButton("");
+	JButton buAnlegen = new JButton();
+	JButton buAendern = new JButton();
+	JButton buLoeschen = new JButton();
+	JButton buBeenden = new JButton();
+	JButton buRefresh = new JButton();
 	
 	
 	public Institutverwaltung(ApplicationServer applicationServer) {
-	  super( "Haushaltsjahr abschließen/anlegen" );
-	  this.setClosable(true);
-	  this.setIconifiable(true);
-	  this.getContentPane().setLayout( null );
-	  this.applicationServer = applicationServer;
+		super( "Haushaltsjahr abschließen/anlegen" );
+		this.setClosable(true);
+		this.setIconifiable(true);
+		this.applicationServer = applicationServer;
 		
-		
-	  Setting.setPosAndLoc( this.getContentPane(), panel, 5, 5, 430, 190 );
-	  panel.setBorder(BorderFactory.createEtchedBorder());
-	  panel.setLayout( null );
-	
-	  Setting.setPosAndLoc( panel, new JLabel( "Institute" ), 10, 10, 100, 16 );
-	  Setting.setPosAndLoc( panel, scrollInstitute, 10, 30, 150, 150 );
-	  scrollInstitute.getViewport().add( listInstitute, null );
-		
-	  Setting.setPosAndLoc( panel, new JLabel( "Bezeichnung" ), 170, 30, 100, 16 );
-	  Setting.setPosAndLoc( panel, tfBezeichnung, 280, 30, 140, 22 );
-		
-	  Setting.setPosAndLoc( panel, new JLabel( "Kostenstelle" ), 170, 60, 100, 16 );
-	  Setting.setPosAndLoc( panel, tfKostenstelle, 280, 60, 140, 22 );
-		
-	  Setting.setPosAndLoc( panel, new JLabel( "Institutsleiter" ), 170, 90, 100, 16 );
-		Setting.setPosAndLoc( panel, cbInstitutsleiter, 280, 90, 140, 22 );
-		
-	  Setting.setPosAndLoc( panel, buRefresh, 100, 5, 20, 20 );
-	  buRefresh.setBorder(null);
+		try {
+			jbInit();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		buRefresh.setBorder(null);
 		buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
 		buRefresh.setToolTipText("Aktualisieren");
 		buRefresh.addActionListener( this );
-		Setting.setPosAndLoc( panel, buAnlegen, 170, 120, 110, 25 );
-	  buAnlegen.setIcon(Functions.getAddIcon(getClass()));
-    buAnlegen.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buAendern, 310, 120, 110, 25 );
-	  buAendern.setIcon(Functions.getEditIcon(getClass()));
-    buAendern.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buLoeschen, 170, 155, 110, 25 );
-	  buLoeschen.setIcon(Functions.getDelIcon(getClass()));
-    buLoeschen.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buBeenden, 310, 155, 110, 25 );
-	  buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-    buBeenden.addActionListener( this );
-	  listInstitute.addListSelectionListener(this);
+		buAnlegen.setIcon(Functions.getAddIcon(getClass()));
+		buAnlegen.addActionListener( this );
+		buAendern.setIcon(Functions.getEditIcon(getClass()));
+    	buAendern.addActionListener( this );
+		buLoeschen.setIcon(Functions.getDelIcon(getClass()));
+		buLoeschen.addActionListener( this );
+		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
+		buBeenden.addActionListener( this );
+		listInstitute.addListSelectionListener(this);
 		listInstitute.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		loadInstitutes();
 		loadInstitutsleiter();
-	  this.setSize( 450, 235 );
+		this.setSize( 442, 225 );
+	}
 	
+	private void jbInit() throws Exception {
+		buAnlegen.setBounds(new Rectangle(172, 122, 110, 25));
+		buAnlegen.setText("Anlegen");
+		buAendern.setBounds(new Rectangle(312, 122, 110, 25));
+		buAendern.setText("Ändern");
+		buLoeschen.setBounds(new Rectangle(172, 157, 110, 25));
+		buLoeschen.setText("Löschen");
+		buBeenden.setBounds(new Rectangle(312, 157, 110, 25));
+		buBeenden.setText("Beenden");
+		buRefresh.setBounds(new Rectangle(102, 7, 20, 20));
+		buRefresh.setText("");
+		panelWindow.setOpaque(true);
+		scrollInstitute.setBounds(new Rectangle(12, 32, 150, 150));
+		cbInstitutsleiter.setBounds(new Rectangle(282, 92, 140, 21));
+		labInstitutsleiter.setBounds(new Rectangle(172, 92, 100, 15));
+		tfKostenstelle.setBounds(new Rectangle(282, 62, 140, 21));
+		labKostenstelle.setBounds(new Rectangle(172, 62, 100, 15));
+		tfBezeichnung.setBounds(new Rectangle(282, 32, 140, 21));
+		labBezeichnung.setBounds(new Rectangle(172, 32, 100, 15));
+		labInstitute.setBounds(new Rectangle(12, 12, 100, 15));
+		panelWindow.add(scrollInstitute, null);
+		panelWindow.add(labInstitute, null);
+		panelWindow.add(labBezeichnung, null);
+		panelWindow.add(tfBezeichnung, null);
+		panelWindow.add(labKostenstelle, null);
+		panelWindow.add(tfKostenstelle, null);
+		panelWindow.add(labInstitutsleiter, null);
+		panelWindow.add(cbInstitutsleiter, null);
+		panelWindow.add(buAnlegen, null);
+		panelWindow.add(buLoeschen, null);
+		panelWindow.add(buRefresh, null);
+		panelWindow.add(buAendern, null);
+		scrollInstitute.getViewport().add(listInstitute, null);
+		panelWindow.setBorder(BorderFactory.createEtchedBorder());
+		panelWindow.setLayout(null);
+		labInstitute.setText("Institute");
+		labBezeichnung.setText("Bezeichnung");
+		tfBezeichnung.setText("");
+		labKostenstelle.setText("Kostenstelle");
+		tfKostenstelle.setText("");
+		labInstitutsleiter.setText("Institutsleiter");
+		this.getContentPane().add(panelWindow, BorderLayout.CENTER);
+		panelWindow.add(buBeenden, null);
 	}
 	
 	protected void loadInstitutes(){

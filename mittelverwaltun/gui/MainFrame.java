@@ -1,38 +1,29 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.*;
-import java.net.InetAddress;
-import java.rmi.Naming;
-import java.rmi.RemoteException;
-import javax.swing.JFrame;
-import applicationServer.ApplicationServer;
-import applicationServer.CentralServer;
-import applicationServer.ConnectionException;
+import java.rmi.*;
+import applicationServer.*;
 import dbObjects.Benutzer;
 
 public class MainFrame extends JFrame implements ActionListener {
 
 	ApplicationServer applicationServer;
 	CentralServer centralServer;
-	LoginDialog login;
 	JDesktopPane desk;
 	Benutzer benutzer;
 
 	
 	final String host = "localhost";				// Adresse und
 	final String serverName = "mittelverwaltung";	// ServerName
-
-	public MainFrame(){
+	
+	public MainFrame(CentralServer centralServer, ApplicationServer applicationServer, Benutzer benutzer){
 		super( "Mittelverwaltungsprogramm" );
 		try{
-			centralServer = (CentralServer)Naming.lookup("//" + host + "/" + serverName);
-			InetAddress addr = InetAddress.getLocalHost();
-			applicationServer = centralServer.getMyApplicationServer( addr.getHostName(), addr.getHostAddress() );
-			this.setVisible(false);
-			login = new LoginDialog(this, "Login Mittelverwaltung", true);
-			login.show();
+			this.centralServer = centralServer;
+			this.applicationServer = applicationServer;
+			this.benutzer = benutzer;
 			setJMenuBar( new MainMenu( this ) );
 			this.desk = new JDesktopPane();
 			desk.setDesktopManager(new DefaultDesktopManager());

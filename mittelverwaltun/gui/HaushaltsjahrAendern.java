@@ -1,62 +1,89 @@
 package gui;
 
+import dbObjects.*;
+import applicationServer.*;
+
 import javax.swing.*;
-
-import dbObjects.Haushaltsjahr;
-
-import applicationServer.ApplicationServer;
-import applicationServer.ApplicationServerException;
-import applicationServer.CentralServer;
-
+import java.awt.*;
 import java.awt.event.*;
-import java.rmi.Naming;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.rmi.*;
+import java.text.*;
 import java.util.Date;
 
 
 public class HaushaltsjahrAendern extends JInternalFrame implements ActionListener {
 	
-	ApplicationServer applicationServer;
-	JPanel panel = new JPanel();
+	JPanel panelFrame = new JPanel();
+	JLabel labJahr = new JLabel();
 	JTextField tfJahr = new JTextField();
-	DateTextField tfVon = new DateTextField();
-	DateTextField tfBis = new DateTextField();
-	JButton buUebernehmen = new JButton( "Ändern" );
-	JButton buBeenden = new JButton( "Beenden" );
-  Haushaltsjahr haushaltsjahr = null;
+	JLabel labVon = new JLabel();
+	JTextField tfVon = new JTextField();
+	JLabel labBis = new JLabel();
+	JTextField tfBis = new JTextField();
+	JButton buUebernehmen = new JButton();
+	JButton buBeenden = new JButton();
+
+	ApplicationServer applicationServer;
+	Haushaltsjahr haushaltsjahr;
 	
 	
 	public HaushaltsjahrAendern(ApplicationServer applicationServer) {
 		super( "Haushaltsjahr ändern" );
 		this.setClosable(true);
 		this.setIconifiable(true);
-		this.getContentPane().setLayout( null );
 		this.applicationServer = applicationServer;
 		
-		Setting.setPosAndLoc( this.getContentPane(), panel, 5, 5, 270, 130 );
-		panel.setBorder(BorderFactory.createEtchedBorder());
-		panel.setLayout( null );		
+		try {
+		  jbInit();
+		}
+		catch(Exception e) {
+		  e.printStackTrace();
+		}
 		
-		Setting.setPosAndLoc( panel, new JLabel( "Jahr" ), 10, 10, 50, 16 );
-		Setting.setPosAndLoc( panel, tfJahr, 40, 10, 80, 22 );
-
-		Setting.setPosAndLoc( panel, new JLabel( "Von" ), 10, 50, 50, 16 );
-		Setting.setPosAndLoc( panel, tfVon, 40, 50, 80, 22 );
-		
-		Setting.setPosAndLoc( panel, new JLabel( "Bis" ), 150, 50, 50, 16 );
-		Setting.setPosAndLoc( panel, tfBis, 180, 50, 80, 22 );
-		
-		
-		Setting.setPosAndLoc( panel, buUebernehmen, 10, 90, 110, 25 );
 		buUebernehmen.setIcon(Functions.getEditIcon(getClass()));
 		buUebernehmen.addActionListener( this );
-		Setting.setPosAndLoc( panel, buBeenden, 150, 90, 110, 25 );
 		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
 		buBeenden.addActionListener( this );
 		
 		loadHaushaltsjahr();
-		this.setSize( 290, 170 );
+		this.setSize( 330, 170 );
+	}
+	
+	/**
+	 * Initialisierung der graphischen Oberfläche. 
+	 * @throws Exception
+	 * @author w.flat
+	 */
+	private void jbInit() throws Exception {
+		panelFrame.setLayout(null);
+		panelFrame.setBorder(BorderFactory.createEtchedBorder());
+		labJahr.setText("Jahr");
+		labJahr.setBounds(new Rectangle(12, 12, 50, 15));
+		tfJahr.setText("");
+		tfJahr.setBounds(new Rectangle(62, 12, 80, 21));
+		labVon.setPreferredSize(new Dimension(34, 15));
+		labVon.setText("Von");
+		labVon.setBounds(new Rectangle(12, 52, 50, 15));
+		tfVon.setText("");
+		tfVon.setBounds(new Rectangle(62, 52, 80, 21));
+		labBis.setText("Bis");
+		labBis.setBounds(new Rectangle(152, 52, 50, 15));
+		tfBis.setPreferredSize(new Dimension(57, 21));
+		tfBis.setText("");
+		tfBis.setBounds(new Rectangle(202, 52, 80, 21));
+		buUebernehmen.setBounds(new Rectangle(12, 92, 130, 25));
+		buUebernehmen.setText("Übernehmen");
+		buBeenden.setBounds(new Rectangle(152, 92, 130, 25));
+		buBeenden.setText("Beenden");
+		this.getContentPane().add(panelFrame, BorderLayout.CENTER);
+		panelFrame.add(labJahr, null);
+		panelFrame.add(tfJahr, null);
+		panelFrame.add(labVon, null);
+		panelFrame.add(tfVon, null);
+		panelFrame.add(labBis, null);
+		panelFrame.add(tfBis, null);
+		panelFrame.add(buUebernehmen, null);
+		panelFrame.add(buBeenden, null);
 	}
 	
 	protected void loadHaushaltsjahr(){

@@ -14,6 +14,24 @@ import javax.swing.ImageIcon;
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class Functions {
+	
+	static public ImageIcon getConnectorIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","connector.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	static public ImageIcon getFHLogo(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","fhlogo.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
 
 	static public ImageIcon getFindIcon(Class clazz){
 		try{

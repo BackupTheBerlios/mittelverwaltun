@@ -259,7 +259,6 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miAendern ) {
 			frame.addChild( new HaushaltsjahrAendern(frame.getApplicationServer()) );
 		} else if ( e.getSource() == miMitteluebertrag ) {
-			frame.addChild( new MittelUebertrag( frame ) );
 		} else if ( e.getSource() == miLoglisteAnzeigen ) {
 		} else if ( e.getSource() == miZVAusgabeNachK ) {
 		} else if ( e.getSource() == miZVAusgabeNachKundI ) {

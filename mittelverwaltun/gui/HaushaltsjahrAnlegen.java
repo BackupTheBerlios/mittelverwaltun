@@ -2,73 +2,93 @@ package gui;
 
 import javax.swing.*;
 import java.awt.event.*;
-
+import java.awt.*;
 
 public class HaushaltsjahrAnlegen extends JInternalFrame implements ActionListener {
 	
-	JPanel panel = new JPanel();
-
+	JPanel panelWindow = new JPanel();
 	JScrollPane scrollZVKonten = new JScrollPane();
+	JLabel labZVKonten = new JLabel();
 	JList listZVKonten = new JList();
-  
+	JRadioButton rbUebernehmen = new JRadioButton();
+	JRadioButton rbBeantragtGenehmigt = new JRadioButton();
+	JRadioButton rbBeantragt = new JRadioButton();
+	JRadioButton rbVerwerfen = new JRadioButton();
+	JButton buUebernehmen = new JButton();
+	JButton buAnlegen = new JButton();
+	JButton buAbbrechen = new JButton();
+	JButton buBeenden = new JButton();  
 	ButtonGroup buGroup = new ButtonGroup();
-	JRadioButton rbUebernehmen = new JRadioButton( "‹bernehmen" );
-	JRadioButton rbBeantragt = new JRadioButton( "Beantragt" );
-	JRadioButton rbBeantragtGenehmigt = new JRadioButton( "Beantragt/Genehmigt" );
-	JRadioButton rbVerwerfen = new JRadioButton( "Verwerfen" );
-  
-	JButton buUebernehmen = new JButton( "‹bernehmen" );
-	JButton buAnlegen = new JButton( "Abschlieﬂen/Anlegen" );
-	JButton buAbbrechen = new JButton( "Abbrechen" );
-	JButton buBeenden = new JButton( "Beenden" );
-
 	MainFrame frame;
 
 	public HaushaltsjahrAnlegen( MainFrame frame ) {
-	  super( "Haushaltsjahr abschlieﬂen/anlegen" );
-	  this.setClosable(true);
-	  this.setIconifiable(true);
-	  this.getContentPane().setLayout( null );
-	  this.frame = frame;
+		super( "Haushaltsjahr abschlieﬂen/anlegen" );
+		this.setClosable(true);
+		this.setIconifiable(true);
+		this.frame = frame;
+	  
+		try {
+			jbInit();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	
-	  Setting.setPosAndLoc( this.getContentPane(), panel, 5, 5, 435, 340 );
-	  panel.setBorder(BorderFactory.createEtchedBorder());
-	  panel.setLayout( null );
+		buGroup.add( rbUebernehmen );
+		rbUebernehmen.setSelected( true );
+		buGroup.add( rbBeantragtGenehmigt );
+		buGroup.add( rbBeantragt );
+		buGroup.add( rbVerwerfen );
+		buUebernehmen.addActionListener( this );
+		buBeenden.addActionListener( this );
+		buAbbrechen.addActionListener( this );
+		buBeenden.addActionListener( this );
+		
+		this.setSize( 455, 385 );
+	}
 	
-	  Setting.setPosAndLoc( panel, new JLabel( "ZV-Konten" ), 10, 10, 150, 16 );
-	  Setting.setPosAndLoc( panel, scrollZVKonten, 10, 30, 200, 200 );
-	  scrollZVKonten.getViewport().add( listZVKonten, null );
-
-	  Setting.setPosAndLoc( panel, rbUebernehmen, 250, 30, 150, 25 );
-	  Setting.setPosAndLoc( panel, rbBeantragtGenehmigt, 250, 95, 150, 25 );
-	  Setting.setPosAndLoc( panel, rbBeantragt, 250, 150, 150, 25 );
-	  Setting.setPosAndLoc( panel, rbVerwerfen, 250, 205, 150, 25 );
-	  buGroup.add( rbUebernehmen );
-	  rbUebernehmen.setSelected( true );
-	  buGroup.add( rbBeantragtGenehmigt );
-	  buGroup.add( rbBeantragt );
-	  buGroup.add( rbVerwerfen );
-		
-
-	  Setting.setPosAndLoc( panel, buUebernehmen, 10, 260, 200, 25 );
-	  buUebernehmen.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buAnlegen, 220, 260, 200, 25 );
-	  buBeenden.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buAbbrechen, 10, 300, 200, 25 );
-	  buAbbrechen.addActionListener( this );
-	  Setting.setPosAndLoc( panel, buBeenden, 220, 300, 200, 25 );
-	  buBeenden.addActionListener( this );
-
-		
-	  this.setSize( 455, 385 );
+	private void jbInit() throws Exception {
+		panelWindow.setBorder(BorderFactory.createEtchedBorder());
+		panelWindow.setMaximumSize(new Dimension(32767, 32767));
+		panelWindow.setLayout(null);
+		labZVKonten.setText("ZV-Konten");
+		labZVKonten.setBounds(new Rectangle(12, 12, 150, 15));
+		rbUebernehmen.setText("‹bernehmen");
+		rbUebernehmen.setBounds(new Rectangle(252, 32, 150, 23));
+		rbBeantragtGenehmigt.setText("Beantragt/Genehmigt");
+		rbBeantragtGenehmigt.setBounds(new Rectangle(252, 97, 150, 23));
+		rbBeantragt.setText("Beantragt");
+		rbBeantragt.setBounds(new Rectangle(252, 152, 150, 23));
+		rbVerwerfen.setText("Verwerfen");
+		rbVerwerfen.setBounds(new Rectangle(252, 207, 150, 23));
+		buUebernehmen.setBounds(new Rectangle(12, 262, 200, 25));
+		buUebernehmen.setText("‹bernehmen");
+		buAnlegen.setBounds(new Rectangle(222, 262, 200, 25));
+		buAnlegen.setText("Anlegen");
+		buAbbrechen.setBounds(new Rectangle(12, 302, 200, 25));
+		buAbbrechen.setText("Abbrechen");
+		buBeenden.setBounds(new Rectangle(222, 302, 200, 25));
+		buBeenden.setText("Beenden");
+		scrollZVKonten.setBounds(new Rectangle(12, 32, 200, 200));
+		this.getContentPane().add(panelWindow, BorderLayout.CENTER);
+		panelWindow.add(scrollZVKonten, null);
+		panelWindow.add(labZVKonten, null);
+		scrollZVKonten.getViewport().add(listZVKonten, null);
+		panelWindow.add(rbUebernehmen, null);
+		panelWindow.add(rbBeantragtGenehmigt, null);
+		panelWindow.add(rbBeantragt, null);
+		panelWindow.add(rbVerwerfen, null);
+		panelWindow.add(buUebernehmen, null);
+		panelWindow.add(buAnlegen, null);
+		panelWindow.add(buAbbrechen, null);
+		panelWindow.add(buBeenden, null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	  if ( e.getSource() == buAnlegen ) {
-	  } else if ( e.getSource() == buUebernehmen ) {
-	  } else if ( e.getSource() == buAbbrechen ) {
-	  } else if ( e.getSource() == buBeenden ) {
-		  this.dispose();
-	  }
+		if ( e.getSource() == buAnlegen ) {
+		} else if ( e.getSource() == buUebernehmen ) {
+		} else if ( e.getSource() == buAbbrechen ) {
+		} else if ( e.getSource() == buBeenden ) {
+			this.dispose();
+		}
 	}
 }
