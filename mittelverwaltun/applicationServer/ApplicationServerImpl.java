@@ -1428,14 +1428,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 
 	// fügt ein neues Institut hinzu
 	public int addInstitute(Institut institut) throws ApplicationServerException {
-		if(db.checkInstitute(institut) == 0){
-			int id = db.insertInstitute(institut);
-			
-			db.setAutoCommit(false);
-			
-			return id;
-		}else
-			throw new ApplicationServerException(4);
+		try{
+			if(db.checkInstitute(institut) == 0){
+				return db.insertInstitute(institut);
+			}else
+				throw new ApplicationServerException(4);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
 	}
 
 
@@ -1854,23 +1857,65 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
 	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
-		// ReferenzNr prüfen
-		System.out.println(bestellung.getReferenznr());
-		int c = db.checkReferenzNr(bestellung.getReferenznr());
-		System.out.println("count="+c);
-		if(c > 0)
-			throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
-		
-		int newBestellungId = db.insertBestellung(bestellung);
-		int newAngebotId = 0;
-		
-		// fügt die Standardbestellung ein
-		bestellung.setId(newBestellungId);
-		db.insertStandardBestellung(bestellung);
-		
-		// Fügt alle Angebote ein
-		for(int i = 0; i < bestellung.getAngebote().size(); i++){
-			Angebot angebot = (Angebot)bestellung.getAngebote().get(i);
+		try{	
+			// ReferenzNr prüfen
+			System.out.println(bestellung.getReferenznr());
+			int c = db.checkReferenzNr(bestellung.getReferenznr());
+			System.out.println("count="+c);
+			if(c > 0)
+				throw new ApplicationServerException( 78 ); // ReferenzNr existiert schon
+			
+			int newBestellungId = db.insertBestellung(bestellung);
+			int newAngebotId = 0;
+			
+			// fügt die Standardbestellung ein
+			bestellung.setId(newBestellungId);
+			db.insertStandardBestellung(bestellung);
+			
+			// Fügt alle Angebote ein
+			for(int i = 0; i < bestellung.getAngebote().size(); i++){
+				Angebot angebot = (Angebot)bestellung.getAngebote().get(i);
+				ArrayList positionen = angebot.getPositionen();
+				
+				newAngebotId = db.insertAngebot(angebot, newBestellungId);
+				
+				// fügt alle Positionen ein
+				for(int j = 0; j < positionen.size(); j++){
+					Position position = (Position)positionen.get(j);
+					
+					db.insertPosition(position, newAngebotId);
+				}
+			}
+			
+			if(bestellung.getPhase() == '1'){
+				// Vormerkungen bei FBKonto und ZVTitel setzen
+				db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
+					// ? Vormerkungen Buchen ?
+			}
+			
+			db.commit();
+			return newBestellungId;
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		}
+	}
+
+
+	/* (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
+	 */
+	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+		try{
+			int newBestellungId = db.insertBestellung(bestellung);
+			int newAngebotId = 0;
+			
+			// fügt die ASKbestellung ein
+			bestellung.setId(newBestellungId);
+			db.insertASKBestellung(bestellung);
+			
+			// Fügt das Angebot ein
+			Angebot angebot = (Angebot)bestellung.getAngebot();
 			ArrayList positionen = angebot.getPositionen();
 			
 			newAngebotId = db.insertAngebot(angebot, newBestellungId);
@@ -1881,53 +1926,20 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 				
 				db.insertPosition(position, newAngebotId);
 			}
-		}
-		
-		if(bestellung.getPhase() == '1'){
-			// Vormerkungen bei FBKonto und ZVTitel setzen
-			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
-				// ? Vormerkungen Buchen ?
-		}
-		
-		db.commit();
-		return newBestellungId;
-	}
-
-
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
-	 */
-	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
-	
-		int newBestellungId = db.insertBestellung(bestellung);
-		int newAngebotId = 0;
-		
-		// fügt die ASKbestellung ein
-		bestellung.setId(newBestellungId);
-		db.insertASKBestellung(bestellung);
-		
-		// Fügt das Angebot ein
-		Angebot angebot = (Angebot)bestellung.getAngebot();
-		ArrayList positionen = angebot.getPositionen();
-		
-		newAngebotId = db.insertAngebot(angebot, newBestellungId);
-		
-		// fügt alle Positionen ein
-		for(int j = 0; j < positionen.size(); j++){
-			Position position = (Position)positionen.get(j);
 			
-			db.insertPosition(position, newAngebotId);
+			if(bestellung.getPhase() == '1'){
+				// Vormerkungen bei FBKonto und ZVTitel setzen
+				db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
+					// ? Vormerkungen Buchen ?
+			}
+			
+			db.commit();
+	
+			return newBestellungId;
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
 		}
-		
-		if(bestellung.getPhase() == '1'){
-			// Vormerkungen bei FBKonto und ZVTitel setzen
-			db.updateVormerkungen(bestellung.getFbkonto(), bestellung.getZvtitel(), bestellung.getFbkonto().getVormerkungen());
-				// ? Vormerkungen Buchen ?
-		}
-		
-		db.commit();
-
-		return newBestellungId;
 	}
 
 
