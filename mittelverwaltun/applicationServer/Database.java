@@ -2281,6 +2281,12 @@ public class Database implements Serializable{
    return 0;
 	}
 
+	/**
+	 * aktualisiert eine Rolle
+	 * @param rolle
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateRolle(Rolle rolle) throws ApplicationServerException{
 		try{
 			Object[] parameters = {rolle.getBezeichnung(), new Integer(rolle.getId())};
@@ -2291,6 +2297,12 @@ public class Database implements Serializable{
 		}
 	}
 
+	/**
+	 * löscht eine Rolle
+	 * @param rolle
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteRolle(Rolle rolle) throws ApplicationServerException{
 	  try{
 		Object[] parameters = { new Integer(rolle.getId()), rolle.getBezeichnung() };
@@ -2301,6 +2313,12 @@ public class Database implements Serializable{
 		   }
 	}
 
+	/**
+	 * löscht alle Zuordnungen der Aktivitäten zu einer Rolle
+	 * @param rolle - Id der Rolle
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteRollenAktivitaeten(int rolle)  throws ApplicationServerException{
 		 try{
 			Object[] parameters = {new Integer(rolle)};
@@ -2311,7 +2329,12 @@ public class Database implements Serializable{
 		 }
 	 }
 
-	// Gibt die Anzahl der Benutzer die dieser Rolle zugeordnet sind
+	/**
+	 * Gibt die Anzahl der Benutzer die dieser Rolle zugeordnet sind
+	 * @param rolle
+	 * @return Anzahl der Benutzer die dieser Rolle zugeordnet
+	 * @throws ApplicationServerException
+	 */
 	public int selectBenutzerRolle(Rolle rolle) throws ApplicationServerException{
 	  try{
 		  Object[] parameters = { new Integer(rolle.getId())};
@@ -2324,7 +2347,12 @@ public class Database implements Serializable{
 		}
 	}
 
-	// Gibt die Anzahl der Bestellungen eines Benutzers an
+	/**
+	 * Gibt die Anzahl der Bestellungen eines Benutzers an
+	 * @param benutzer
+	 * @return Anzahl der Bestellungen
+	 * @throws ApplicationServerException
+	 */
 	public int countBestellungen(Benutzer benutzer)throws ApplicationServerException{
 		try{
 		  Object[] parameters = { new Integer(benutzer.getId())};
@@ -2338,7 +2366,13 @@ public class Database implements Serializable{
 	  }
 	}
 
- 	//	Gibt die Anzahl der Bestellungen eines Benutzers an
+ 	/**
+ 	 * Gibt die Anzahl der Bestellungen eines Benutzers an
+ 	 * @param benutzer
+ 	 * @return Anzahl der Bestellungen
+ 	 * @throws ApplicationServerException
+ 	 * @author w.flat
+ 	 */
  	public int countAktiveBestellungen(Benutzer benutzer)throws ApplicationServerException{
 		 try{
 		   Object[] parameters = { new Integer(benutzer.getId())};
@@ -2355,8 +2389,12 @@ public class Database implements Serializable{
 
 	/**
 	 * Gibt die Anzahl der Bestellungen eines Benutzers an
+	 * @param benutzer
+	 * @return Anzahl der Bestellungen eines Benutzers
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
-	 public int countBuchungen(Benutzer benutzer)throws ApplicationServerException{
+	public int countBuchungen(Benutzer benutzer)throws ApplicationServerException{
 		 try{
 		   Object[] parameters = { new Integer(benutzer.getId())};
 			 ResultSet rs = statements.get(220).executeQuery(parameters);
@@ -2374,6 +2412,7 @@ public class Database implements Serializable{
 	  * @param FBHauptkonto
 	  * @return Kontenzuordnungen[]
 	  * @throws ApplicationServerException
+	  * @author robert
 	  */
 	 public Kontenzuordnung[] selectKontenzuordnungen(FBHauptkonto konto)throws ApplicationServerException{
 		Kontenzuordnung[] zuordnung = null;
@@ -2408,6 +2447,7 @@ public class Database implements Serializable{
 	 * @param zvKontoId
 	 * @return Kontenzuordnung
 	 * @throws ApplicationServerException
+	 * @author robert
 	 */
 	public Kontenzuordnung selectKontenzuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		Kontenzuordnung zuordnung = null;
@@ -2429,6 +2469,13 @@ public class Database implements Serializable{
 		return zuordnung;
 	}
 
+	/**
+	 * fügt eine neue Kontenzuordnung hinzu
+	 * @param fbKontoId - Id des FBKontos
+	 * @param zvKontoId - Id des ZVKontos
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void insertKontenZuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		try{
 			Object[] parameters = { new Integer(zvKontoId), new Integer(fbKontoId) };
@@ -2439,6 +2486,13 @@ public class Database implements Serializable{
 		}
 	}
 
+	/**
+	 * löscht eine Kontenzuordnung
+	 * @param fbKontoId - Id des FBKontos
+	 * @param zvKontoId - Id des ZVKontos
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void deleteKontenZuordnung(int fbKontoId, int zvKontoId)throws ApplicationServerException{
 		try{
 			Object[] parameters = { new Integer(zvKontoId), new Integer(fbKontoId) };
@@ -2449,6 +2503,14 @@ public class Database implements Serializable{
 		}
 	}
 
+	/**
+	 * aktualisiert eine Kontenzuordnung
+	 * @param fbKontoId - Id des FBKontos
+	 * @param zvKontoId - Id des ZVKontos
+	 * @param status
+	 * @throws ApplicationServerException
+	 * @author robert
+	 */
 	public void updateKontenZuordnung(int fbKontoId, int zvKontoId, short status)throws ApplicationServerException{
 		try{
 			Object[] parameters = {new Integer(status), new Integer(fbKontoId), new Integer(zvKontoId) };
@@ -2460,7 +2522,13 @@ public class Database implements Serializable{
 	}
 
 
-	//	Abfrage eines ZVKontos in der Datenbank
+	/**
+	 * Abfrage eines ZVKontos in der Datenbank
+	 * @param zvKontoId - Id des ZVKontos
+	 * @return ZVKonto
+	 * @throws ApplicationServerException
+	 * @author w.flat
+	 */
 	public ZVKonto selectZVKonto(int zvKontoId) throws ApplicationServerException {
 		ZVKonto konto = null;
 
@@ -2484,6 +2552,10 @@ public class Database implements Serializable{
 
 	/**
 	 * Abfrage eines FBHauptkontos mit der angegebenen Id.
+	 * @param fbHauptKontoid - Id des FBHauptkontos
+	 * @return FBHauptkonto
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public FBHauptkonto selectFBHauptkonto(int fbHauptKontoid) throws ApplicationServerException {
 		FBHauptkonto konto = null;
@@ -2507,6 +2579,10 @@ public class Database implements Serializable{
 
 	/**
 	 * Abfrage eines FBUnterkontos mit der angegebenen Id.
+	 * @param fbKontoid - Id des FBUnterkontos
+	 * @return FBUnterkonto
+	 * @throws ApplicationServerException
+	 * @author w.flat
 	 */
 	public FBUnterkonto selectFBKonto(int fbKontoid) throws ApplicationServerException {
 		FBUnterkonto konto = null;
@@ -2779,7 +2855,7 @@ public class Database implements Serializable{
 	 * @param Firma, die gelöscht werden soll.
 	 * @return Zeilenindex von der Firma, die gelöscht wurde.
 	 * @throws ApplicationServerException
-	 * 
+	 * @author w.flat
 	 */
 	public int deleteFirma( Firma firma ) throws ApplicationServerException {
 		try{
@@ -2837,8 +2913,14 @@ public class Database implements Serializable{
 	   }
 	}
 
-
-	 // Gibt die Benutzer eines Instituts mit einer bestimmten Rolle zurück
+	 /**
+	  * Gibt die Benutzer eines Instituts mit einer bestimmten Rolle zurück
+	  * @param institut
+	  * @param rollenId - Id der Rolle
+	  * @return Benutzer-Array
+	  * @throws ApplicationServerException
+	  * @author Mario
+	  */
 	 public Benutzer[] selectUsersByRole(Institut institut, int rollenId) throws ApplicationServerException{
 		 Benutzer[] benutzer = null;
 		 try{
@@ -2952,6 +3034,14 @@ public class Database implements Serializable{
 
 		 return result;
 	 }
+	 
+	 /**
+	  * gibt ein FBHauptkonto mit der übergebenen Id zurück und sperrt diesen Datensatz für die Aktualisierung
+	  * @param kontoID - Id des FBHauptkontos
+	  * @return FBHauptkonto
+	  * @throws ApplicationServerException
+	  * @author w.flat
+	  */
 	 public FBHauptkonto selectForUpdateFBHauptkonto(int kontoID) throws ApplicationServerException {
 		 FBHauptkonto konto = null;
 
@@ -2971,8 +3061,12 @@ public class Database implements Serializable{
 		 }
 		 return konto;
 	 }
+	 
 	 /**
 	  * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören.
+	  * @param institut
+	  * @return ArrayListe mit FBHauptkonten
+	  * @throws ApplicationServerException
 	  */
 	 public ArrayList selectNoPurposeFBHauptkonten( Institut institut ) throws ApplicationServerException {
 		 ArrayList konten = new ArrayList();
@@ -3000,9 +3094,9 @@ public class Database implements Serializable{
 	 }
 	 
 	 /**
+	  * gibt alle Kostenarten aus der SQL-Tabelle Kostenarten zurück
+	  * @return Kostenart-Array
 	  * @author robert
-	  * gibt alle Kostenarten aus der SQL-Tabelle Kostenarten
-	  * @return Kostenart Array
 	  */
 	 public Kostenart[] selectKostenarten() throws ApplicationServerException{
 			Kostenart[] kostenarten = null;
@@ -3198,7 +3292,7 @@ public class Database implements Serializable{
 	/**
 	 * wählt eine ASKBestellung zum Aktualisieren
 	 * @param bestellId
-	 * @return
+	 * @return ASKBestellung
 	 * @throws ApplicationServerException
 	 */
 	public ASKBestellung selectForUpdateASKBestellung(int bestellId) throws ApplicationServerException{
@@ -3235,7 +3329,6 @@ public class Database implements Serializable{
 	 * fügt eine ASKBestellung in die Tabelle ASK_Standard_Bestellungen ein
 	 * @param bestellung - ASKbestellung
 	 * @param angebotId - Id des dazugehörigen Angebots
-	 * @return
 	 * @throws ApplicationServerException
 	 * @author robert
 	 */
