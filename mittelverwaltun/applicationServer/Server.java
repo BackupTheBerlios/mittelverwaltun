@@ -8,6 +8,11 @@ import java.io.*;
 import java.rmi.*;
 import com.gc.systray.*;
 
+/**
+ * Klasse zum Erzeugen des Servers. <br>
+ * Mit dem Server kann man die "rmiregistry" starten und den CentralServer bei der "rmiregistry" anmelden.
+ * @author w.flat
+ */
 public class Server extends JFrame implements ActionListener, SystemTrayIconListener {
 	
 	Process rmiProcess = null;
@@ -36,7 +41,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	int presIcon;
 	String presToolTip = "FB-Mittelverwaltung\nFH-Mannheim SS 2005";
 	
-	
+	/**
+	 * Den <code>Server</code> erzeugen.
+	 */
 	public Server() {
 		super("Central Server");
 		this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
@@ -51,27 +58,51 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		this.setVisible( true );
 	}
 	
+	/**
+	 * Erzeugen und Starten des Servers. 
+	 */
 	public static void main(String args[]){
 		Server server = new Server();
 		server.synchronize();
 	}
 
 	/**
-	 * SystemTrayIconListener implementation
+	 * SystemTrayIconListener : Mit der linken Maustaste einmal auf das Icon clicken.<br>
+	 * Diese Methode wird nicht implementiert. 
 	 */
 	public void mouseClickedLeftButton(Point pos, SystemTrayIconManager source) {
 	}
+
+	/**
+	 * SystemTrayIconListener : Mit der rechten Maustaste einmal auf das Icon clicken.<br>
+	 * Diese Methode wird nicht implementiert. 
+	 */
 	public void mouseClickedRightButton(Point pos, SystemTrayIconManager ssource) {
 	}
+
+	/**
+	 * SystemTrayIconListener : Mit der linken Maustaste doppelt auf das Icon clicken. <br>
+	 * Nur diese Methode wird implementiert. 
+	 */
 	public void mouseLeftDoubleClicked(Point pos, SystemTrayIconManager source) {
 		sysTrayMgr.setVisible(false);
 		this.setVisible(true);
 		this.setExtendedState(Frame.NORMAL);
 		this.toFront();
 	}
+
+	/**
+	 * SystemTrayIconListener : Mit der rechten Maustaste doppelt auf das Icon clicken.<br>
+	 * Diese Methode wird nicht implementiert. 
+	 */
 	public void mouseRightDoubleClicked(Point pos, SystemTrayIconManager source) {
 	}
 	
+	/**
+	 * Initialisierung der SysTray. Es wird die DesktopIndicator.dll geladen <br>
+	 * und alle benötigten Icons. Das PopUp-Menü für das TrayIcon wird auch initialisiert. 
+	 * @throws Exception
+	 */
 	private void initSysTray() throws Exception {
 		// MenuItem Registry
 		sysTrayMenu.add(miRegistry);
@@ -108,6 +139,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		sysTrayMgr.setVisible(false);
 	}
 	
+	/**
+	 * Das Laden des angegeben Icons.
+	 * @param fileName = Das Icon, das geladen werden soll. 
+	 * @param clazz = Class von einer beliebigen Componente. 
+	 * @return Id des geladenen Icons. Wenn erfolgreich > 0, sonst -1.
+	 */
 	private int loadIcon(String fileName, Class clazz) {
 		try {
 			File file = new File(".\\image\\");
@@ -132,6 +169,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		}
 	}
 	
+	/**
+	 * Synchronisierung zwischen SysTray und dem Server. 
+	 */
 	public void synchronize() {
 		try {
 			while (true) {
@@ -152,11 +192,18 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		System.exit( 0 );
 	}
 	
+	/**
+	 * Das Frame soll minimiert werden.
+	 */
 	public void iconify() {
 		this.setVisible(false);
 		sysTrayMgr.update(presIcon, presToolTip);
 	}
 	
+	/**
+	 * Initialisierung der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	private void jbInit() throws Exception {
 		this.getContentPane().setLayout(null);
 		buRegistry.setBounds(new Rectangle(320, 10, 200, 25));
@@ -193,43 +240,39 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		
 		this.addWindowListener( new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Server server = (Server)e.getSource();
-				server.actionPerformed( new ActionEvent( server.getCloseButton(), 0, "" ) );
+				actionPerformed( new ActionEvent( buClose, 0, "" ) );
 			}
 			public void windowIconified(WindowEvent e) {
-				Server server = (Server)e.getSource();
-				server.iconify();
+				iconify();
 			}
 		} );
 	}
 	
 	/**
 	 * Einen neuen ApplicationServer generieren.
-	 * @param hostName
-	 * @param hostAdress
-	 * @return ApplicationServerImpl
+	 * @param hostName = Der Hostname, wo sich der Benutzer befindet.
+	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
+	 * @param serverName = Der Name des gestarteten ApplicationServers.
 	 */
-	public ApplicationServerImpl getNewApplicationServer(  String hostName, String hostAdress  ) {
-		User user = new User( hostName, hostAdress );
+	public void addNewApplicationServer(  String hostName, String hostAdress, String serverName  ) {
+		User user = new User( hostName, hostAdress, serverName );
 		listModel.addElement( user );
 		statusBar.showTextForMilliseconds( "Neuer User @" + hostAdress + " hat sich angemeldet.", delay );
-		
-		return user.getApplicationServer();
 	}
 	
 	/**
 	 * Den Benutzer-Namen zum User hinzufügen, da man beim Anlegen eines Users noch nicht weiß, wer sich anmelden wird.
-	 * @param id
-	 * @param benutzerName
+	 * @param serverName = Name des Servers, dem der BenutzerName zugeordnet wird.
+	 * @param benutzerName = benutzerName, der dem serverNamen zugeordnet wird. 
 	 */
-	public void addBenutzerNameToUser( int id, String benutzerName ) {
+	public void addBenutzerNameToUser( String serverName, String benutzerName ) {
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.getApplicationServer().getId() == id ) {
-				temp.setBenutzer( benutzerName );
+			if( temp.serverName.equalsIgnoreCase(serverName) ) {
+				temp.benutzerName = benutzerName;
 				listModel.setElementAt( temp, i );
-				statusBar.showTextForMilliseconds( "Der User @" + temp.getHostAdress() + " hat seinen Namen übermittelt.", delay );
+				statusBar.showTextForMilliseconds( "Der User @" + temp.hostAdress + " hat seinen Namen übermittelt.", delay );
 				break;
 			}
 		}
@@ -237,24 +280,21 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 
 	/**
 	 * Einen User aus der ListBox entfernen
-	 * @param id des Users
+	 * @param serverName = Name des Servers, der aus der Liste entfernt werden soll.
 	 */
-	public void delUser( int id ) {
+	public void delUser(String serverName) {
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.getApplicationServer().getId() == id ) {
+			if( temp.serverName.equalsIgnoreCase(serverName) ) {
 				listModel.removeElementAt( i );
-				statusBar.showTextForMilliseconds( "Der User '" + temp.getBenutzer() + "' hat sich abgemeldet.", delay );
+				statusBar.showTextForMilliseconds( "Der User '" + temp.benutzerName + "' hat sich abgemeldet.", delay );
 				break;
 			}
 		}
 	}
 	
-	public JButton getCloseButton() {
-		return buClose; 
-	}
-	
+
 		
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == buRegistry || e.getSource() == miRegistry ) {
@@ -307,6 +347,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			} else 	if( rmiProcess != null && centralServer != null  ){
 				try {
 					Naming.unbind( "mittelverwaltung" );
+					centralServer.removeAllServer();
+					listModel.removeAllElements();
 					centralServer = null;
 					buRegistry.setEnabled( true );
 					buServer.setText( "Server registrieren" );
@@ -324,11 +366,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		} else if( e.getSource() == buDelUser ) {
 			if( listUser.getSelectedIndex() >= 0 ) {
 				User temp = (User)listModel.getElementAt( listUser.getSelectedIndex() );
-				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.getBenutzer() + 
+				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.benutzerName + 
 														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
 														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
+					centralServer.removeServer(temp.serverName);
 					listModel.removeElementAt( listUser.getSelectedIndex() );
-					statusBar.showTextForMilliseconds( "Der User '" + temp.getBenutzer() + "' wurde entfernt.", delay );
+					statusBar.showTextForMilliseconds( "Der User '" + temp.benutzerName + "' wurde entfernt.", delay );
 				}
 			}
 		} else if( e.getSource() == buClose || e.getSource() == miClose ) {
@@ -354,69 +397,44 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 }
 
 /**
- * Object der zum Anzeigen in der JList verwendet wird. Es wird der Host-Name, die Host-Adresse,
- * der Benutzer und der ApplicationServer gespeichert. Und die toString-Methode überlagert. 
+ * Object der zum Anzeigen in der JList verwendet wird. Es wird der Host-Name, die Host-Adresse, <br>
+ * der BenutzerName und der ApplicationServerName gespeichert. Und die toString-Methode wird überlagert. 
+ * @author w.flat
  */
-class User{
-	String hostName = null;
-	String hostAdress = null;
-	String benutzer = null;
-
-	/**
-	 * 
-	 */
-	ApplicationServerImpl applicationServer = null;
-
+class User {
+	public String hostName = null;
+	public String hostAdress = null;
+	public String serverName = null;
+	public String benutzerName = null;
 	
-	public User( String hostName, String hostAdress ) {
+	/**
+	 * Konstruktor zu Erstellen eines neuen Users.
+	 * @param hostName = Der HostName, wo sich der neue User befindet. 
+	 * @param hostAdress = Die HostAdresse, wo sich der neue User befindet. 
+	 * @param serverName = Die Name des ApplicationServers, der für den neuen User gestartet wurde. 
+	 */
+	public User( String hostName, String hostAdress, String serverName ) {
 		this.hostName = hostName;
 		this.hostAdress = hostAdress;
-		applicationServer = new ApplicationServerImpl();
+		this.serverName = serverName;
 	}
 
 	/**
-	 * 
+	 * Die überlagerte toString-Methode.
+	 * @return Format: benutzerName @ hostAdress (hostName)
 	 */
-	public ApplicationServerImpl getApplicationServer() {
-		return applicationServer;
-	}
-
-	/**
-	 * 
-	 */
-	public void setBenutzer(String benutzer) {
-		this.benutzer = benutzer;
-	}
-
-	/**
-	 * 
-	 */
-	public String getHostAdress() {
-		return hostAdress;
-	}
-
-	/**
-	 * 
-	 */
-	public String getBenutzer() {
-		if (benutzer != null)
-			return benutzer;
-		else
-			return hostName;
-	}
-
 	public String toString() {
-		if( benutzer == null ) {
+		if( benutzerName == null ) {
 			return "user @ " + hostAdress + " (" + hostName + ")";
 		} else {
-			return benutzer + " @ " + hostAdress + " (" + hostName + ")";
+			return benutzerName + " @ " + hostAdress + " (" + hostName + ")";
 		}
 	}
 }
 
 
 /**
- * Anzeigen eines am unterem Rand eines Fensters, die Größe wird im Fenster geregelt.
+ * Anzeigen eines am unterem Rand eines Fensters, die Größe wird im Fenster geregelt. <br>
  * Man kann den Text einfach anzeigen oder für eine bestimmte Zeit(Millisekunden) anzeigen lassen.
  * @author w.flat
  */

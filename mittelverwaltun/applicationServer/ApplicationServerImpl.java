@@ -3,47 +3,49 @@ package applicationServer;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.ArrayList;
-
+import java.rmi.*;
+import java.rmi.server.UnicastRemoteObject;
 import dbObjects.*;
 
-public class ApplicationServerImpl implements ApplicationServer, Serializable {
+/**
+ * Der individuelle ApplicationServer für jeden Benutzer. 
+ * @author w.flat
+ */
+public class ApplicationServerImpl extends UnicastRemoteObject implements ApplicationServer, Serializable {
 
 	private Database db;
+	private String serverName;
 
-	private static int id = 0;
-	private int serverId;
-
-	public ApplicationServerImpl(){
+	public ApplicationServerImpl() throws RemoteException {
 
 		// ToDo lesen aus .ini Datei
 		//db = new Database("com.mysql.jdbc.Driver", "192.168.1.2", "fbmittelverwaltung", "mittelverwaltung");
 		db = new Database("com.mysql.jdbc.Driver", "localhost", "fbmittelverwaltung", "mittelverwaltung");
-		this.serverId = ++id;
+		this.serverName = "mittelverwaltungX";
+	}
+
+	public ApplicationServerImpl(String serverName) throws RemoteException {
+
+		// ToDo lesen aus .ini Datei
+		//db = new Database("com.mysql.jdbc.Driver", "192.168.1.2", "fbmittelverwaltung", "mittelverwaltung");
+		db = new Database("com.mysql.jdbc.Driver", "localhost", "fbmittelverwaltung", "mittelverwaltung");
+		this.serverName = serverName;
 	}
 
 	/**
-	 * Die id des Servers setzen.
-	 * @param id = Neue ID-Nummer des Servers.
+	 * Abfrage des Namen des ApplicationServers.
+	 * @return Name des Servers.
 	 * author w.flat
 	 */
-	public void setId(int id) {
-		this.serverId = id;
-	}
-
-	/**
-	 * Abfrage der id.
-	 * @return ID-Nummer des Servers.
-	 * author w.flat
-	 */
-	public int getId() {
-		return serverId;
+	public String getName() throws RemoteException {
+		return serverName;
 	}
 
 	/*
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#login(java.lang.String, java.lang.String)
 	 */
-	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException{
+	public Benutzer login(String user, String password) throws RemoteException, ConnectionException, ApplicationServerException{
 
 		db.connect(user);
 		
@@ -66,7 +68,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#logout()
 	 */
-	public void logout()throws ConnectionException{
+	public void logout()throws RemoteException, ConnectionException{
 		db.disconnect();
 	}
 
@@ -74,7 +76,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getUsers()
 	 */
-	public Benutzer[] getUsers () throws ApplicationServerException{
+	public Benutzer[] getUsers () throws RemoteException, ApplicationServerException{
 		return db.selectUsers();
 	}
 
@@ -82,7 +84,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getInstitutes()
 	 */
-	public Institut[] getInstitutes () throws ApplicationServerException{
+	public Institut[] getInstitutes () throws RemoteException, ApplicationServerException{
 		return db.selectInstitutes();
 	}
 
@@ -90,11 +92,11 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getRollen()
 	 */
-	public Rolle[] getRollen () throws ApplicationServerException{
+	public Rolle[] getRollen () throws RemoteException, ApplicationServerException{
 		return db.selectRollen();
 	}
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws RemoteException, Exception {
 		ApplicationServer as = new ApplicationServerImpl();
 		as.login("m.schmitt","m.schmitt");
 		Institut[] x = as.getInstitutes();
@@ -109,21 +111,21 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Ermittlung der HaushaltsjahrId vom aktuellem Jahr.
 	 */
-	public int getCurrentHaushaltsjahrId() throws ApplicationServerException {
+	public int getCurrentHaushaltsjahrId() throws RemoteException, ApplicationServerException {
 		return db.selectHaushaltsjahrId();
 	}
 	
 	 /**
 	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten und FBUnterkonten.
 	  */
-	 public Institut[] getInstitutesWithAccounts() throws ApplicationServerException {
+	 public Institut[] getInstitutesWithAccounts() throws RemoteException, ApplicationServerException {
 			 return getInstitutesWithAccounts(true);
 	 }
 	 
 	 /**
 	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten mit/ohne FBUnterkonten.
 	  */
-	 public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws ApplicationServerException {
+	 public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws RemoteException, ApplicationServerException {
 		 Institut[] instituts = db.selectInstitutes();	// Es werden alle Institute ermittelt
 		 ArrayList hauptkonten;
 
@@ -162,7 +164,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 /**
 	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten.
 	  */
-	 public Institut[] getInstitutesWithMainAccounts() throws ApplicationServerException {
+	 public Institut[] getInstitutesWithMainAccounts() throws RemoteException, ApplicationServerException {
 		 return getInstitutesWithAccounts(false);
 	 }
 	 
@@ -170,7 +172,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	  *  (Kein Javadoc)
 	  * @see applicationServer.ApplicationServer#getNoPurposeFBHauptkonten(dbObjects.Institut)
 	  */
-	 public ArrayList getNoPurposeFBHauptkonten( Institut institut ) throws ApplicationServerException {
+	 public ArrayList getNoPurposeFBHauptkonten( Institut institut ) throws RemoteException, ApplicationServerException {
 		 //return db.selectFBHauptkonten( institut );
 		 return db.selectNoPurposeFBHauptkonten( institut );
 	 }
@@ -178,7 +180,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 /**
 	  * Budget eines FBHauptkontos aktualisieren.
 	  */
-	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException{
+	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws RemoteException, ApplicationServerException{
 		try{
 			 //TODO: Test auf maximal zuweisungsfähigen betrag?!
 			 FBHauptkonto accOld = db.selectForUpdateFBHauptkonto(acc.getId());
@@ -222,7 +224,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	  *  (Kein Javadoc)
 	  * @see applicationServer.ApplicationServer#getUsersByRole(dbObjects.Institut, int)
 	  */
-	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
+	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws RemoteException, ApplicationServerException {
 		 return db.selectUsersByRole(i, rollenId);
 	 }
 	 
@@ -230,10 +232,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ermittelt den größtmöglichen Betrag der dem übergebenen FB-Hauptkonto
 	 * zugewiesen werden kann
 	 * @return der zuweisungsfähige Betrag
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author Mario
 	 */
-	public float getAvailableBudgetForAccount (FBHauptkonto account) throws ApplicationServerException{
+	public float getAvailableBudgetForAccount (FBHauptkonto account) throws RemoteException, ApplicationServerException{
 
 		Kontenzuordnung[] joins = null;
 
@@ -258,10 +260,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ermittelt den Betrag des noch nicht an FB-Konten verteilten Budgets des übergebenen ZV-Kontos   
 	 * VORSICHT: Liefert nur korrekte Ergebnisse für _zweckgebundenen_ ZV-Konten!!!
 	 * @return der Betrag des verteilungsfähigen Budgets
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author Mario
 	 */
-	public float getAvailableAccountBudget (ZVKonto account) throws ApplicationServerException{
+	public float getAvailableAccountBudget (ZVKonto account) throws RemoteException, ApplicationServerException{
 		return db.selectTotalAccountBudget(account) - db.selectDistributedAccountBudget(account);
 	}
 	
@@ -269,10 +271,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ermittelt den Betrag des noch nicht an FB-Konten verteilten Budgets 
 	 * über alle _zweckungebundenen_ ZV-Konten
 	 * @return der Betrag des verteilungsfähigen zweckungebundenen Budgets
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author Mario
 	 */	
-	public float getAvailableNoPurposeBudget () throws ApplicationServerException{
+	public float getAvailableNoPurposeBudget () throws RemoteException, ApplicationServerException{
 		return (db.selectNoPurposeZVBudgetSum() - db.selectNoPurposeFBBudgetSum());
 	}
 	
@@ -280,10 +282,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Abfrage von Hauptkonten eines bestimmten Insituts.
 	 * @param institut = Institut von dem die KOnten abgefragt werden.
 	 * @return Liste FBHauptkonten, die zu einem bestimmten Institut angehören.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public ArrayList getFBHauptkonten( Institut institut ) throws ApplicationServerException {
+	public ArrayList getFBHauptkonten( Institut institut ) throws RemoteException, ApplicationServerException {
 		ArrayList hauptkonten;		// Liste mit den Hauptkonten
 
 		hauptkonten = db.selectFBHauptkonten(institut);		// Abfrage der Hauptkonten
@@ -301,10 +303,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param institut = Institut, welchem die FBKonten zugeordnet sind.
 	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
 	 * @return FBUnterkonten
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws ApplicationServerException {
+	public ArrayList getFBUnterkonten( Institut institut, FBHauptkonto hauptkonto ) throws RemoteException, ApplicationServerException {
 		return db.selectFBUnterkonten( institut, hauptkonto );	// Die ermittelten Konten zurückgeben
 	}
 
@@ -312,10 +314,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Abfrage der FBKonten, die ein Benutzer für seine Kleinbestellung verwenden kann.
 	 * @param user = Benutzer, für den die Konten ermittelt werden sollen.
 	 * @return Institut-Array(1) mit den ermittelten Konten. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public Institut[] getFBKontenForUser(Benutzer user) throws ApplicationServerException {
+	public Institut[] getFBKontenForUser(Benutzer user) throws RemoteException, ApplicationServerException {
 		if(user == null)		// Wenn kein User angegeben
 			return null;
 		// Institut mit Hauptkonten
@@ -359,10 +361,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein neues FBHauptkonto erstellen.
 	 * @param FBHauptkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Hauptkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
+	public int addFBHauptkonto( FBHauptkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Kein konto übergeben
 			return 0;
 
@@ -392,10 +394,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein neues FBUnterkonto erstellen.
 	 * @param FBUnterkonto, das erstellt werden soll.
 	 * @return kontoId des eingefügten Unterkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
+	public int addFBUnterkonto( FBUnterkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Wenn kein Konto übergeben wurde
 			return 0;
 		try {
@@ -424,10 +426,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein FBHauptkonto löschen. Dabei werden auch die Unterkonten gelöscht.
 	 * @param FBHauptkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBHauptkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
+	public int delFBHauptkonto( FBHauptkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Kein FBHauptkonto
 			return 0;
 		
@@ -503,10 +505,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein FBUnterkonto löschen.
 	 * @param FBUnterkonto, das gelöscht werden soll.
 	 * @return kontoId des gelöschten FBUnterkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
+	public int delFBUnterkonto( FBUnterkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Kein FBUnterkonto
 			return 0;
 		
@@ -542,10 +544,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein FBHauptkonto aktualisieren.
 	 * @param FBHauptkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBHauptkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setFBHauptkonto( FBHauptkonto konto ) throws ApplicationServerException {
+	public int setFBHauptkonto( FBHauptkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Kein Konto angegeben
 			return 0;
 		
@@ -608,10 +610,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein FBUnterkonto aktualisieren.
 	 * @param FBUnterkonto, welches aktualisiert werden soll
 	 * @return kontoId des aktualisierten FBUnterkontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setFBUnterkonto( FBUnterkonto konto ) throws ApplicationServerException {
+	public int setFBUnterkonto( FBUnterkonto konto ) throws RemoteException, ApplicationServerException {
 		if( konto == null )		// Kein Konto angegeben
 			return 0;
 		try {
@@ -650,10 +652,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, von dem der Betrag abgebucht wird.
 	 * @param FBUnterkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom FBHauptkonto abgebucht wird und welchen das FBUnterkonto erhält.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBHauptkonto haupt, FBUnterkonto unter, float betrag ) throws RemoteException, ApplicationServerException {
 		if( haupt == null || unter == null )	// Ein Konto wurde nicht angegeben
 			return;
 		try {
@@ -702,10 +704,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBHauptkonto, von dem der Betrag abgebucht wird.
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der vom ersten FBHauptkonto abgebucht wird und welchen das zweite FBHauptkonto erhält.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, FBHauptkonto from, FBHauptkonto to, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBHauptkonto from, FBHauptkonto to, float betrag ) throws RemoteException, ApplicationServerException {
 		if( from == null || to == null )
 			return;
 		try {
@@ -752,10 +754,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param FBUnterkonto, von dem der Betrag abgebucht wird.
 	 * @param FBHauptkonto, das den abgebuchten Betrag erhält.
 	 * @param Betrag, der von dem FBUnterkonto abgebucht wird und welchen das FBHauptkonto erhält.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, FBUnterkonto unter, FBHauptkonto haupt, float betrag ) throws RemoteException, ApplicationServerException {
 		if( unter == null || haupt == null )
 			return;
 		try {
@@ -803,7 +805,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @return Liste mit den ZVKonten
 	 * author w.flat
 	 */
-	public ArrayList getZVKonten() throws ApplicationServerException {
+	public ArrayList getZVKonten() throws RemoteException, ApplicationServerException {
 		ArrayList zvKonten = db.selectZVKonten();	// Es werden alle ZVKonten ermittelt
 		ArrayList zvTitel;		// Liste für die ZVTitel
 		
@@ -835,10 +837,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein neues ZVKonto in die Datenbank einfügen.
 	 * @param ZVKonto, welches eingefügt werden soll.
 	 * @return kontoId vom eingefügten ZVKonto
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
+	public int addZVKonto( ZVKonto zvKonto ) throws RemoteException, ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto
 			return 0;
 		try {
@@ -896,10 +898,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Abfrage der Id von einem ZVTitel.
 	 * @param ZVTitel, welcher abgefragt werden soll
 	 * @return ZVTitelId des ZVTitels
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int getZVTitelId( ZVTitel zvTitel ) throws ApplicationServerException {
+	public int getZVTitelId( ZVTitel zvTitel ) throws RemoteException, ApplicationServerException {
 		return db.existsZVTitel( zvTitel );
 	}
 
@@ -907,10 +909,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Einen neuen ZVTitel in die Datenbank erstellen.
 	 * @param ZVTitel, welcher erstellt werden soll
 	 * @return ZVTitelId vom erstellten ZVTitel
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
+	public int addZVTitel( ZVTitel zvTitel ) throws RemoteException, ApplicationServerException {
 		if( zvTitel == null )		// Wenn kein ZVTitel
 			return 0;
 		try {
@@ -939,10 +941,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Einen neuen ZVUntertitel in die Datenbank erstellen.
 	 * @param ZVUntertitel, welcher erstellt werden soll
 	 * @return ZVUntertitelId vom eingefügtem ZVUntertitel
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
+	public int addZVUntertitel( ZVUntertitel zvUntertitel ) throws RemoteException, ApplicationServerException {
 		if( zvUntertitel == null )		// Wenn kein ZVUntertitel
 			return 0;
 		try {
@@ -972,10 +974,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Ein ZVKonto aus der Datenbank löschen. <br>
 	 * Dabei müssen auch alle dazugehörigen ZVTitel und ZVUntertitel gelöscht werden.
 	 * @return ZVKontoId vom gelöschten ZVKonto
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
+	public int delZVKonto( ZVKonto zvKonto ) throws RemoteException, ApplicationServerException {
 		if( zvKonto == null )	// Kein ZVKonto
 			return 0;
 		
@@ -1077,10 +1079,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Dabei wird ermittelt ob mehr als ein ZVKonto zu dem FBKonto einer Kontozuordnung existiert.
 	 * @param ZVKonto für welches die Überprüfung durchgeführt werden soll
 	 * @return Zahl > 0, wenn das ZVKonto nicht zweckgebunden sein kann. Sonst Zahl = 0.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int getNumberOfKontenzuordnungen( ZVKonto zvKonto ) throws ApplicationServerException {
+	public int getNumberOfKontenzuordnungen( ZVKonto zvKonto ) throws RemoteException, ApplicationServerException {
 		return db.countZVKonten( zvKonto );
 	}
 
@@ -1088,10 +1090,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Einen ZVTitel in der Datenbank löschen. Dabei müssen auch alle ZVUntertitel gelöscht werden.
 	 * @param ZVTitel, welcher gelöscht werden sollte.
 	 * @return ZVTitelId vom gelöschten ZVTitel
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
+	public int delZVTitel( ZVTitel zvTitel ) throws RemoteException, ApplicationServerException {
 		if( zvTitel == null )	// Kein ZVTitel
 			return 0;
 		
@@ -1158,10 +1160,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Einen ZVUntertitel in der Datenbank löschen.
 	 * @param ZVUntertitel der gelöscht werden sollte.
 	 * @return ZVUntertitelId vom gelöschten ZVUntertitel.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
+	public int delZVUntertitel( ZVUntertitel zvUntertitel ) throws RemoteException, ApplicationServerException {
 		if( zvUntertitel == null )	// Kein ZVTitel
 			return 0;
 		
@@ -1196,10 +1198,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * ZVTitel und ZVUntertitel aktualisiert, wenn die Änderung diese betreffen.
 	 * @param ZVKonto, das aktualisiert werden soll.
 	 * @return zvKontoId des ZVKontos
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
+	public int setZVKonto( ZVKonto zvKonto ) throws RemoteException, ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto angegeben
 			return 0;
 		try {
@@ -1273,10 +1275,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Es werden auch die ZVUntertitel aktualisiert, wenn die Änderungen diese betreffen.
 	 * @param ZVTitel, der aktualisiert werden soll
 	 * @return ZVTitelId des übergebenen ZVTitels
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setZVTitel( ZVTitel zvTitel ) throws ApplicationServerException {
+	public int setZVTitel( ZVTitel zvTitel ) throws RemoteException, ApplicationServerException {
 		if( zvTitel == null )	// Kein ZVTitel angegeben
 			return 0;
 		try {
@@ -1330,10 +1332,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Einen ZVUntertitel in der Datenbank aktualisieren.
 	 * @param ZVUntertitel, der aktualisiert werden soll
 	 * @return ZVUntertitelId des aktualisierten ZVUntertitels
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setZVUntertitel( ZVUntertitel zvUntertitel ) throws ApplicationServerException {
+	public int setZVUntertitel( ZVUntertitel zvUntertitel ) throws RemoteException, ApplicationServerException {
 		if( zvUntertitel == null )	// Kein ZVUntertitel angegeben
 			return 0;
 		try {
@@ -1368,10 +1370,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVKonto auf das der Betrag gebucht wird.
 	 * @param Betrag, der auf das ZVKonto gebucht wird.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, ZVKonto konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVKonto konto, float betrag ) throws RemoteException, ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1403,10 +1405,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVTitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVTitel gebucht wird.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, ZVTitel konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVTitel konto, float betrag ) throws RemoteException, ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1437,10 +1439,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param benutzer = Benutzer, der die Buchung durchgeführt hat. 
 	 * @param ZVUntertitel auf den der Betrag gebucht wird.
 	 * @param Betrag, der auf den ZVUntertitel gebucht wird.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public void buche( Benutzer benutzer, ZVUntertitel konto, float betrag ) throws ApplicationServerException {
+	public void buche( Benutzer benutzer, ZVUntertitel konto, float betrag ) throws RemoteException, ApplicationServerException {
 		if( konto == null )
 			return;
 		try {
@@ -1471,7 +1473,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setInstitute(dbObjects.Institut, dbObjects.Institut)
 	 */
-	public void setInstitute(Institut editedInst, Institut clientInst) throws ApplicationServerException {
+	public void setInstitute(Institut editedInst, Institut clientInst) throws RemoteException, ApplicationServerException {
 		if(editedInst != null && clientInst != null){
 			try{	
 				Institut dbInst = db.selectForUpdateInstitute(clientInst);
@@ -1505,7 +1507,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delInstitute(dbObjects.Institut)
 	 */
-	public void delInstitute(Institut clientInst) throws ApplicationServerException {
+	public void delInstitute(Institut clientInst) throws RemoteException, ApplicationServerException {
 		if(clientInst != null){
 			try{	
 				Institut dbInst = db.selectForUpdateInstitute(clientInst);
@@ -1547,7 +1549,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addInstitute(dbObjects.Institut)
 	 */
-	public int addInstitute(Institut institut) throws ApplicationServerException {
+	public int addInstitute(Institut institut) throws RemoteException, ApplicationServerException {
 		try{
 			db.insertLog(0, "Institut (Id: " + institut.getId() + " hinzugefügt: \n" +
 											"Institut: " + institut );
@@ -1568,7 +1570,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setUser(dbObjects.Benutzer, dbObjects.Benutzer)
 	 */
-	public void setUser(Benutzer editedUser, Benutzer clientUser) throws ApplicationServerException {
+	public void setUser(Benutzer editedUser, Benutzer clientUser) throws RemoteException, ApplicationServerException {
 		if(editedUser != null && clientUser != null){
 			try{
 				Benutzer dbUser = db.selectForUpdateUser(clientUser);
@@ -1616,7 +1618,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delUser(dbObjects.Benutzer)
 	 */
-	public void delUser(Benutzer clientUser) throws ApplicationServerException {
+	public void delUser(Benutzer clientUser) throws RemoteException, ApplicationServerException {
 		if(clientUser != null){
 			try{	
 				Benutzer dbUser = db.selectForUpdateUser(clientUser);
@@ -1658,7 +1660,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addUser(dbObjects.Benutzer)
 	 */
-	public int addUser(Benutzer benutzer) throws ApplicationServerException {
+	public int addUser(Benutzer benutzer) throws RemoteException, ApplicationServerException {
 		try{	
 			if(db.checkUserMySQL(benutzer) > 0)		// benutzer bereits in der MySQL-DB vorhanden
 				throw new ApplicationServerException(54);
@@ -1692,7 +1694,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getFachbereiche()
 	 */
-	public Fachbereich[] getFachbereiche() throws ApplicationServerException {
+	public Fachbereich[] getFachbereiche() throws RemoteException, ApplicationServerException {
 		return db.selectFachbereiche();
 	}
 
@@ -1700,7 +1702,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setFachbereich(dbObjects.Fachbereich, dbObjects.Fachbereich)
 	 */
-	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws ApplicationServerException {
+	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws RemoteException, ApplicationServerException {
 		try{	
 			Fachbereich dbFB = db.selectForUpdateFachbereich();
 	
@@ -1725,7 +1727,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getHaushaltsjahr()
 	 */
-	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
+	public Haushaltsjahr getHaushaltsjahr() throws RemoteException, ApplicationServerException {
 		return db.selectHaushaltsjahr();
 	}
 
@@ -1733,7 +1735,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setHaushaltsjahr(dbObjects.Haushaltsjahr, dbObjects.Haushaltsjahr)
 	 */
-	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException {
+	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws RemoteException, ApplicationServerException {
 		if(editedHhj != null && clientHhj != null){
 			try{	
 				Haushaltsjahr dbHhj = db.selectForUpdateHaushaltsjahr();
@@ -1759,7 +1761,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getRollenFull()
 	 */
-	public Rolle[] getRollenFull() throws ApplicationServerException {
+	public Rolle[] getRollenFull() throws RemoteException, ApplicationServerException {
 		return db.selectRollenFull();
 	}
 
@@ -1767,7 +1769,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addRollenAktivitaet(int, int)
 	 */
-	public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
+	public void addRollenAktivitaet(int rolle, int aktivitaet) throws RemoteException, ApplicationServerException  {
 		try{	
 			db.insertRollenAktivitaet(rolle, aktivitaet);
 			db.insertLog(0, "RollenAktivitaet hinzugefügt: \n" +
@@ -1785,7 +1787,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delRollenAktivitaet(int, int)
 	 */
-	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
+	public void delRollenAktivitaet(int rolle, int aktivitaet) throws RemoteException, ApplicationServerException  {
 		try{	
 			db.deleteRollenAktivitaet(rolle, aktivitaet);
 			db.insertLog(2, "RollenAktivitaet gelöscht: \n" +
@@ -1804,7 +1806,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getAktivitaeten()
 	 */
-	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException {
+	public Aktivitaet[] getAktivitaeten() throws RemoteException, ApplicationServerException {
 		return db.selectAktivitaeten();
 	}
 
@@ -1812,7 +1814,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addRolle(dbObjects.Rolle)
 	 */
-	public int addRolle(Rolle rolle) throws ApplicationServerException {
+	public int addRolle(Rolle rolle) throws RemoteException, ApplicationServerException {
 		if(db.checkRolle(rolle) == 0){
 			try{
 				db.insertLog(0, "Rolle (Id:" + rolle.getId() + ") hinzugefügt: \n" +
@@ -1833,7 +1835,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setRolle(dbObjects.Rolle, dbObjects.Rolle)
 	 */
-	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws ApplicationServerException {
+	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws RemoteException, ApplicationServerException {
 		if(editedRolle != null && clientRolle != null){
 			try{	
 				Rolle dbRolle = db.selectForUpdateRolle(editedRolle);
@@ -1864,7 +1866,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delRolle(dbObjects.Rolle)
 	 */
-	public void delRolle(Rolle rolle) throws ApplicationServerException {
+	public void delRolle(Rolle rolle) throws RemoteException, ApplicationServerException {
 		if(rolle != null){
 			try{	
 				Rolle dbRolle = db.selectForUpdateRolle(rolle);
@@ -1896,7 +1898,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getUser(java.lang.String, java.lang.String)
 	 */
-	public Benutzer getUser(String user, String password) throws ApplicationServerException {
+	public Benutzer getUser(String user, String password) throws RemoteException, ApplicationServerException {
 		return db.selectUser(user, password);
 	}
 
@@ -1904,16 +1906,16 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getZVKontenOnly()
 	 */
-	public ArrayList getZVKontenOnly() throws ApplicationServerException {
+	public ArrayList getZVKontenOnly() throws RemoteException, ApplicationServerException {
 		return db.selectZVKonten();
 	}
 
 	/**
 	 * gibt Institute mit FBHauptkonten, FBHauptkonten sind mit ihren Kontenzuordnungen
 	 * @return Institute mit FBHauptkonten
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	public Institut[] getInstitutZuordnungen() throws ApplicationServerException {
+	public Institut[] getInstitutZuordnungen() throws RemoteException, ApplicationServerException {
 		Institut[] instituts = db.selectInstitutes();	// Es werden alle Institute ermittelt
 		ArrayList hauptkonten;
 
@@ -1944,7 +1946,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.Kontenzuordnung)
 	 */
-	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws ApplicationServerException {
+	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws RemoteException, ApplicationServerException {
 		try{	
 			// Kontenzuordnung existiert ?
 			Kontenzuordnung dbZuordnung = db.selectKontenzuordnung(fbKonto.getId(), clientZuordnung.getZvKonto().getId());
@@ -1976,7 +1978,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
 	 */
-	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
+	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws RemoteException, ApplicationServerException  {
 		try{	
 			Kontenzuordnung zuordnung = db.selectKontenzuordnung(fbKonto.getId(), zvKonto.getId());
 	
@@ -2015,7 +2017,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
 	 */
-	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
+	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws RemoteException, ApplicationServerException  {
 		try{	
 			db.deleteKontenZuordnung(fbKonto.getId(), zvKonto.getId());
 			db.insertLog(2, "KontenZuordnung gelöscht: \n" +
@@ -2034,17 +2036,17 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getFBKonto(int)
 	 */
-	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException {
+	public FBUnterkonto getFBKonto(int fbKontoId) throws RemoteException, ApplicationServerException {
 		return db.selectFBKonto(fbKontoId);
 	}
 	
 	/**
 	 * Abfrage aller Firmen in der Datenbank.
 	 * @return Liste mit allen Firmen in der Datenbank.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public ArrayList getFirmen() throws ApplicationServerException {
+	public ArrayList getFirmen() throws RemoteException, ApplicationServerException {
 		return db.selectFirmen();
 	}
 	
@@ -2052,10 +2054,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine neue Firma erstellen.
 	 * @param Firma, die erstellt werden soll.
 	 * @return id der erstellten Firma.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int addFirma( Firma firma ) throws ApplicationServerException {
+	public int addFirma( Firma firma ) throws RemoteException, ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
 		try {
@@ -2083,10 +2085,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine Firma in der Datenbank aktualisieren.
 	 * @param Firma, die aktualisiert werden soll.
 	 * @return id der aktualisierten Firma.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int setFirma( Firma firma ) throws ApplicationServerException {
+	public int setFirma( Firma firma ) throws RemoteException, ApplicationServerException {
 		if( firma == null )		// Wurde eine Firma angegeben
 			return 0;
 		try {
@@ -2112,10 +2114,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine Firma in der Datenbank löschen.
 	 * @param Firma, die gelöscht werden soll.
 	 * @return id der gelöschten Firma.
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */
-	public int delFirma( Firma firma ) throws ApplicationServerException {
+	public int delFirma( Firma firma ) throws RemoteException, ApplicationServerException {
 		if( firma == null )					// Wurde eine Firma angegeben
 			return 0;
 		try {
@@ -2138,7 +2140,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getKostenarten()
 	 */
-	public Kostenart[] getKostenarten() throws ApplicationServerException {
+	public Kostenart[] getKostenarten() throws RemoteException, ApplicationServerException {
 		return db.selectKostenarten();
 	}
 
@@ -2146,7 +2148,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getUsers(dbObjects.Institut)
 	 */
-	public Benutzer[] getUsers(Institut institut) throws ApplicationServerException {
+	public Benutzer[] getUsers(Institut institut) throws RemoteException, ApplicationServerException {
 		return db.selectUsers(institut);
 	}
 
@@ -2154,7 +2156,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
 	 */
-	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
+	public int addBestellung(StandardBestellung bestellung) throws RemoteException, ApplicationServerException {
 		try{	
 			// ReferenzNr prüfen
 			System.out.println(bestellung.getReferenznr());
@@ -2205,7 +2207,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
 	 */
-	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
+	public int addBestellung(ASKBestellung bestellung) throws RemoteException, ApplicationServerException {
 		try{
 			int newBestellungId = db.insertBestellung(bestellung);
 			int newAngebotId = 0;
@@ -2246,7 +2248,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
 	 */
-	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
+	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws RemoteException, ApplicationServerException {
 		
 		try{
 		
@@ -2392,9 +2394,9 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param oldOffers
 	 * @param newOffers
 	 * @param bestellId
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws ApplicationServerException {
+	private void actualizeAngebote(ArrayList oldOffers, ArrayList newOffers, int bestellId) throws RemoteException, ApplicationServerException {
 		if(!(oldOffers.equals(newOffers))){
 			
 			while((oldOffers.size() > 0) || (newOffers.size() > 0)){
@@ -2454,10 +2456,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * @param oldOffer - altes Angebot
 	 * @param newOffer - neues Angebot
 	 * @param bestellId - Id der Bestellung
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author robert
 	 */
-	private void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws ApplicationServerException {
+	private void actualizeAngebot(Angebot oldOffer, Angebot newOffer, int bestellId) throws RemoteException, ApplicationServerException {
 		if(!(oldOffer.equals(newOffer))){ // Angebot hat sich geändert
 			
 			db.updateAngebot(newOffer); // aktualisiert nur die Tabelle Angebote
@@ -2509,7 +2511,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
 	 */
-	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
+	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws RemoteException, ApplicationServerException {
 		try{	
 			// original ASKBestellung in der Datenbank
 			ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(original.getId());
@@ -2650,7 +2652,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getStandardBestellung(int)
 	 */
-	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException {
+	public StandardBestellung getStandardBestellung(int id) throws RemoteException, ApplicationServerException {
 		StandardBestellung bestellung = db.selectStandardBestellung(id);
 		
 		ArrayList angebote = db.selectAngebote(id);
@@ -2670,7 +2672,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getASKBestellung(int)
 	 */
-	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException {
+	public ASKBestellung getASKBestellung(int id) throws RemoteException, ApplicationServerException {
 		ASKBestellung bestellung = db.selectASKBestellung(id);
 		
 		ArrayList angebote = db.selectAngebote(id);
@@ -2688,7 +2690,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getBestellungen(int)
 	 */
-	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
+	public ArrayList getBestellungen(int filter) throws RemoteException, ApplicationServerException{
 		return db.selectBestellungen(filter);
 	}
 
@@ -2696,14 +2698,14 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getBestellungen()
 	 */
-	public ArrayList getBestellungen() throws ApplicationServerException{
+	public ArrayList getBestellungen() throws RemoteException, ApplicationServerException{
 		return db.selectBestellungen(-1);
 	}
 	
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getInstituteWithAccounts(dbObjects.Institut, boolean)
 	 */
-	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException {
+	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws RemoteException, ApplicationServerException {
 		Institut[] instituts = {institute};
 		
 		 ArrayList hauptkonten;
@@ -2742,91 +2744,91 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	
 	/**
 	 * Mittelzuweisung an einen ZV-Kontentitel (Typ 1)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheMittelzuweisungZVTitel(Benutzer b, ZVUntertitel t, float buchung) throws ApplicationServerException {
+	private void bucheMittelzuweisungZVTitel(Benutzer b, ZVUntertitel t, float buchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "1", t, buchung));
 	}
 	
 	/**
 	 * Mittelzuweisung an die Titelgruppe eines ZV-Kontos (Typ 2)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheMittelzuweisungZVTitelgruppe(Benutzer b, ZVKonto k, float buchung) throws ApplicationServerException {
+	private void bucheMittelzuweisungZVTitelgruppe(Benutzer b, ZVKonto k, float buchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "2", k, buchung));
 	}
 	
 	/**
 	 * Mittelübernahme aus Geschäftsjahr für ZV-Kontentitel (Typ 3)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheZVMitteluebernahme(Benutzer b, ZVUntertitel von, ZVUntertitel nach, float betrag) throws ApplicationServerException {
+	private void bucheZVMitteluebernahme(Benutzer b, ZVUntertitel von, ZVUntertitel nach, float betrag) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "3", von, -betrag, nach, betrag));
 	}
 	
 	/**
 	 * Mittelübernahme aus Geschäftsjahr für FB-Konten (Typ 4)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheFBMitteluebernahme(Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws ApplicationServerException {
+	private void bucheFBMitteluebernahme(Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "4", von, -betrag, nach, betrag));
 	}
 	
 	/**
 	 * Mittelverteilung von ZV-Budget (zweckgebundenes / -ungebundenes) an FB-Konten (Typ 5)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheMittelverteilung(Benutzer b, FBUnterkonto k, float buchung) throws ApplicationServerException {
+	private void bucheMittelverteilung(Benutzer b, FBUnterkonto k, float buchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "5", k, buchung));
 	}
 	
 	/**
 	 * Mittelumverteilung zwischen FB-Konten (Typ 6)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheUmverteilung (Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws ApplicationServerException {
+	private void bucheUmverteilung (Benutzer b, FBUnterkonto von, FBUnterkonto nach, float betrag) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(b, "6", von, -betrag, nach, betrag));
 	}
 	
 //	/**
 //	 * Vormerkung für Bestellung  (Typ 7)
 //	 * ACHTUNG: evtl. überflüssig da durch Typ 8 abgedeckt
-//	 * @throws ApplicationServerException
+//	 * @throws RemoteException, ApplicationServerException
 //	 */
-//	private void bucheVormerkungen(Bestellung b, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+//	private void bucheVormerkungen(Bestellung b, ZVUntertitel t, FBUnterkonto k, float buchung) throws RemoteException, ApplicationServerException {
 //		
 //	}
 	
 	/**
 	 * Bestellungsänderung = Änderung der Vormerkung !!!(Typ 8)
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheBestellungsaenderung(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+	private void bucheBestellungsaenderung(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(benutzer, "8", bestellung, t, k, buchung));
 	}
 	
 	/**
 	 * Begleichung einer oder meherer Positionen einer Bestellung (Typ 9)
 	 * = Änderung der Budgets und Vormerkungen
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheBestellungsbegleichung(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws ApplicationServerException {
+	private void bucheBestellungsbegleichung(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(benutzer, "9", bestellung, zvk, tgrBuchung, t, titelBuchung, fbk, kontoBuchung));
 	}
 	
 	/**
 	 * Stornierung einer Bestellung Typ 10
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheStornoVormerkungen(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
+	private void bucheStornoVormerkungen(Benutzer benutzer, Bestellung bestellung, ZVUntertitel t, FBUnterkonto k, float buchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(benutzer, "10", bestellung, t, k, buchung));
 	}
 
 	/**
 	 * Stornierung einer Bestellung Typ 11
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 */
-	private void bucheStornoZahlungen(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws ApplicationServerException {
+	private void bucheStornoZahlungen(Benutzer benutzer, Bestellung bestellung, ZVKonto zvk, float tgrBuchung, ZVUntertitel t, float titelBuchung, FBUnterkonto fbk, float kontoBuchung) throws RemoteException, ApplicationServerException {
 		db.insertBuchung(new Buchung(benutzer, "11", bestellung, zvk, tgrBuchung, t, titelBuchung, fbk, kontoBuchung));
 	}
 
@@ -2834,10 +2836,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine Kleinbestellung in die Datenbank einfügen.
 	 * @param bestellung = Kleinbestellung, die erstellt werden soll. 
 	 * @return Id der eingefügten Bestellung. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */	
-	public int addKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
+	public int addKleinbestellung(KleinBestellung bestellung) throws RemoteException, ApplicationServerException {
 		if(bestellung == null)		// keine Bestellung angegeben
 			return 0;
 		try {
@@ -2909,10 +2911,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Alle Kleinbestellung auswählen.
 	 * @return Liste mit Bestellungen. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */	
-	public ArrayList getKleinbestellungen() throws ApplicationServerException {
+	public ArrayList getKleinbestellungen() throws RemoteException, ApplicationServerException {
 		ArrayList bestellungen = db.selectKleinbestellungen();	// Liste mit Bestellungen
 		KleinBestellung temp;		// temporäres Objekt zum Auswaählen der Belege
 		for(int i = 0; i < bestellungen.size(); i++) {
@@ -2925,10 +2927,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/**
 	 * Alle gelöschten Kleinbestellung auswählen.
 	 * @return Liste mit gelöschten Bestellungen. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */	
-	public ArrayList getDelKleinbestellungen() throws ApplicationServerException {
+	public ArrayList getDelKleinbestellungen() throws RemoteException, ApplicationServerException {
 		ArrayList bestellungen = db.selectDelKleinbestellungen();	// Liste mit Bestellungen
 		KleinBestellung temp;		// temporäres Objekt zum Auswaählen der Belege
 		for(int i = 0; i < bestellungen.size(); i++) {
@@ -2942,10 +2944,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine Kleinbestellung löschen. 
 	 * @param Kleinbestellung, die gelöscht werden soll. 
 	 * @return Id der gelöschten Bestellung. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */	
-	public int delKleinbestellung(KleinBestellung bestellung) throws ApplicationServerException {
+	public int delKleinbestellung(KleinBestellung bestellung) throws RemoteException, ApplicationServerException {
 		if(bestellung == null)		// keine Bestellung angegeben
 			return 0;
 		try {
@@ -2986,10 +2988,10 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	 * Eine Kleinbestellung mit einer bestimmter Id abfragen. 
 	 * @param Id des Kontos. 
 	 * @return Kleinbestellung die abgefragt wurde. 
-	 * @throws ApplicationServerException
+	 * @throws RemoteException, ApplicationServerException
 	 * author w.flat
 	 */	
-	public KleinBestellung getKleinbestellung(int id) throws ApplicationServerException {
+	public KleinBestellung getKleinbestellung(int id) throws RemoteException, ApplicationServerException {
 		try {
 			return db.selectKleinbestellung(id);
 		} finally {
@@ -3000,7 +3002,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)
 	 */
-	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException {
+	public void delBestellung(StandardBestellung delOrder) throws RemoteException, ApplicationServerException {
 		try{	
 			// original StandardBestellung in der Datenbank
 			StandardBestellung dbOriginal = db.selectForUpdateStandardBestellung(delOrder.getId());
@@ -3047,7 +3049,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.ASKBestellung)
 	 */
-	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException {
+	public void delBestellung(ASKBestellung delOrder) throws RemoteException, ApplicationServerException {
 		try{	
 			// original StandardBestellung in der Datenbank
 			ASKBestellung dbOriginal = db.selectForUpdateASKBestellung(delOrder.getId());
@@ -3093,21 +3095,21 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getSwBeauftragte()
 	 */
-	public Benutzer[] getSwBeauftragte() throws ApplicationServerException {
+	public Benutzer[] getSwBeauftragte() throws RemoteException, ApplicationServerException {
 		return db.selectSwBeauftragte();
 	}
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getASKFirma()
 	 */
-	public Firma getASKFirma() throws ApplicationServerException {
+	public Firma getASKFirma() throws RemoteException, ApplicationServerException {
 		return db.selectASKFirma();
 	}
 
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getReport(int, dbObjects.Institut)
 	 */
-	public ArrayList getReport(int typ, Date von, Date bis) throws ApplicationServerException {
+	public ArrayList getReport(int typ, Date von, Date bis) throws RemoteException, ApplicationServerException {
 		
 		if(typ == 1){
 			return db.selectReport1(von, bis);
@@ -3133,7 +3135,7 @@ public class ApplicationServerImpl implements ApplicationServer, Serializable {
 	/* (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getLogList(java.sql.Date, java.sql.Date)
 	 */
-	public ArrayList getLogList(Date von, Date bis) throws ApplicationServerException {
+	public ArrayList getLogList(Date von, Date bis) throws RemoteException, ApplicationServerException {
 		return db.selectLogList(von, bis);
 	}
 }

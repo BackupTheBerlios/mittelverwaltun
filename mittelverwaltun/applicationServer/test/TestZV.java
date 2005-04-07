@@ -31,7 +31,4 @@ public class TestZV extends TestCase {
 	public void testZVKontoAdd() {
 	}
 	
-	public static void main(String[] args) {
-		junit.swingui.TestRunner.run(TestZV.class);
-	}
 }
