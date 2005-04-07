@@ -7,27 +7,29 @@ import dbObjects.*;
 import applicationServer.ApplicationServerException;
 import java.awt.Rectangle;
 import java.awt.event.*;
+import java.rmi.*;
 
-
-
+/**
+ * Frame zum Zuweisen der Mittel auf die ZVKonten, ZVTitel und ZVUntertitel. 
+ * @author w.flat
+ */
 public class ZVMittelFestlegen extends JInternalFrame implements ActionListener, TreeSelectionListener {
 
 	JScrollPane scrollKonten = new JScrollPane();
 	ZVKontenTree treeKonten;
 	JLabel labKontostand = new JLabel();
-	CurrencyTextField tfKontostand = new CurrencyTextField(
-		Integer.MIN_VALUE,
-		Integer.MAX_VALUE);
+	CurrencyTextField tfKontostand = new CurrencyTextField(Integer.MIN_VALUE, Integer.MAX_VALUE);
 	JLabel labBetrag = new JLabel();
-	CurrencyTextField tfBetrag = new CurrencyTextField(
-		Integer.MIN_VALUE,
-		Integer.MAX_VALUE);
+	CurrencyTextField tfBetrag = new CurrencyTextField(Integer.MIN_VALUE, Integer.MAX_VALUE);
 	JButton buBuchen = new JButton();
 	JButton buAktualisieren = new JButton();
 	JButton buBeenden = new JButton();
 	MainFrame frame;
 
-	
+	/**
+	 * InternalFrame zum ZVMittelFestlegen erzeugen. 
+	 * @param frame = MainFrame, in dem sich das Internalframe befindet, und das den ApplicationServer hat. 
+	 */
 	public ZVMittelFestlegen( MainFrame frame ) {
 		super( "ZVMittel festlegen" );
 		this.setClosable(true);
@@ -91,11 +93,17 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				treeKonten.delTree();		// Den aktuellen Baum löschen
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );	// Die ZVKonten holen und einfügen
 			} catch (ApplicationServerException e) {
-				System.out.println( e.toString() );
-			} 
+				e.printStackTrace();
+			} catch(RemoteException re) {
+				re.printStackTrace();
+			}
 		}
 	}
 	
+	/**
+	 * Initialisierung der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	private void jbInit() throws Exception {
 		this.getContentPane().setLayout(null);
 		labKontostand.setText("Kontostand");
@@ -135,7 +143,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 	
 	/**
 	 * Führt die Buchung auf das selektierte ZVKonto durch.
-	 * @return error-String
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String bucheZVKonto() {
 		String error = "";
@@ -153,7 +161,9 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} 
+			} catch ( RemoteException re ) {
+				error += " - Fehler bei RMI-Kommunikation\n";
+			}
 		}
 		
 		return error;
@@ -161,7 +171,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 	
 	/**
 	 * Führt die Buchung auf das selektierte ZVTitel durch.
-	 * @return error-String
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String bucheZVTitel() {
 		String error = "";
@@ -179,7 +189,9 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} 
+			} catch ( RemoteException re ) {
+				error += " - Fehler bei RMI-Kommunikation\n";
+			}
 		}
 		
 		return error;
@@ -187,7 +199,7 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 
 	/**
 	 * Führt die Buchung auf das selektierte ZVUntertitel durch.
-	 * @return error-String
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String bucheZVUntertitel() {
 		String error = "";
@@ -205,12 +217,17 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} 
+			} catch ( RemoteException re ) {
+				error += " - Fehler bei RMI-Kommunikation\n";
+			}
 		}
 		
 		return error;
 	}
 	
+	/**
+	 * Behandlung der Button-Ereignisse. 
+	 */
 	public void actionPerformed( ActionEvent e ) {
 		String error = "";
 		if ( e.getSource() == buBuchen ) {
@@ -233,7 +250,9 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 		}
 	}
 
-
+	/**
+	 * Behandlung der Änderungen im Baum.
+	 */
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );
 		showAmount();

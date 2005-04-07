@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.rmi.Naming;
+import java.rmi.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -158,21 +158,21 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		BestellungNormal bestellung;
 	 	try{
 		 	CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-		 	ApplicationServer applicationServer = server.getMyApplicationServer();
-		 	test.setApplicationServer(applicationServer);
-		 	PasswordEncrypt pe = new PasswordEncrypt();
-		 	String psw = pe.encrypt(new String("a").toString());
-		 	test.setBenutzer(applicationServer.login("test", psw));
-	   	test.setBounds(100,100,800,900);
-		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-		 	test.setJMenuBar( new MainMenu( test ) );
-		 	StandardBestellung best = applicationServer.getStandardBestellung(9);
-
-			bestellung = new BestellungNormal(test, best);
-		 	test.addChild(bestellung);
-		 	test.show();
-			bestellung.show();
+//		 	ApplicationServer applicationServer = server.getMyApplicationServer();
+//		 	test.setApplicationServer(applicationServer);
+//		 	PasswordEncrypt pe = new PasswordEncrypt();
+//		 	String psw = pe.encrypt(new String("a").toString());
+//		 	test.setBenutzer(applicationServer.login("test", psw));
+//	   	test.setBounds(100,100,800,900);
+//		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
+//
+//		 	test.setJMenuBar( new MainMenu( test ) );
+//		 	StandardBestellung best = applicationServer.getStandardBestellung(9);
+//
+//			bestellung = new BestellungNormal(test, best);
+//		 	test.addChild(bestellung);
+//		 	test.show();
+//			bestellung.show();
 	 }catch(Exception e){
 			bestellung = new BestellungNormal(test);
 			test.addChild(bestellung);
@@ -485,6 +485,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		} catch (ApplicationServerException e) {
 			MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 			e.printStackTrace();
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 
@@ -550,6 +553,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 
@@ -622,6 +628,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			}
 	  } catch (ApplicationServerException e) {
 		  e.printStackTrace();
+	  } catch(RemoteException re) {
+		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
   }
 
@@ -641,7 +650,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			}
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 
 	private void setOrderData(){

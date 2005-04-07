@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.rmi.RemoteException;
 
 import javax.swing.border.*;
 import javax.swing.event.TableModelEvent;
@@ -484,7 +485,10 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 	
 	private void completeOrder(){
@@ -509,6 +513,9 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 	
@@ -532,6 +539,9 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				//e.printStackTrace();
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 	

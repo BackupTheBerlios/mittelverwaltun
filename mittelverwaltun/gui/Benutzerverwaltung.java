@@ -10,6 +10,7 @@ import dbObjects.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 
 /**
  * <p>Title: </p>
@@ -337,7 +338,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	  }
   }
 
-  protected void addUser() throws ApplicationServerException{
+  protected void addUser() throws ApplicationServerException, RemoteException{
 		if(listBenutzer.isSelectionEmpty())
 			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("") || (tfPasswort.getPassword().length == 0))
@@ -360,7 +361,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		}
   }
 
-	protected void delUser() throws ApplicationServerException{
+	protected void delUser() throws ApplicationServerException, RemoteException{
 		Benutzer currBenutzer = (Benutzer)listModel.getElementAt(listBenutzer.getSelectedIndex());
 		applicationServer.delUser(currBenutzer);
 		listModel.remove(listBenutzer.getSelectedIndex());
@@ -377,7 +378,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	}
 
 
-  protected void changeUser() throws ApplicationServerException{
+  protected void changeUser() throws ApplicationServerException, RemoteException{
 	  if(listBenutzer.isSelectionEmpty()){
 			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		}else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("")){
@@ -438,8 +439,11 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		  }
 	  }catch(ApplicationServerException ex){
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", ex.getMessage(), ex.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		}
-  }
+	  } catch(RemoteException re) {
+		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+	  }
+ }
 
 	public void valueChanged(ListSelectionEvent e) {
 		if(!listBenutzer.isSelectionEmpty()){
@@ -463,6 +467,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 					privatKonto = benutzer.getPrivatKonto();
 				} catch (ApplicationServerException e1) {
 					System.out.println(e1.getMessage());
+				} catch(RemoteException re) {
+					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}else{
 				tfKonto.setText("");
@@ -487,14 +494,14 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		test.setBounds(100,100,800,700);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
-			Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(applicationServer);
-			desk.add(benutzerVerwaltung);
-			test.show();
-			benutzerVerwaltung.show();
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
+//			Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(applicationServer);
+//			desk.add(benutzerVerwaltung);
+//			test.show();
+//			benutzerVerwaltung.show();
 		}catch(Exception e){
 				System.out.println(e);
 		}

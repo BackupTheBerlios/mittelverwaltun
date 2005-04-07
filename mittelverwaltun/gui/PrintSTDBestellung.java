@@ -18,6 +18,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.rmi.*;
 
 
 public class PrintSTDBestellung extends JFrame /* implements Printable */ {
@@ -208,7 +209,9 @@ public class PrintSTDBestellung extends JFrame /* implements Printable */ {
 		} catch (ApplicationServerException e) {
 			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			re.printStackTrace();
+		}
 
 	  // BestellNr.
 		report.setProperty("bestellNr", order.getReferenznr());

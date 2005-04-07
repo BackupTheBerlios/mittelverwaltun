@@ -15,6 +15,11 @@ import java.sql.Date;
 import java.text.*;
 
 
+/**
+ * InternalFrame zur Verwaltung einer Kleinerbestellung. <br>
+ * Dabei kann man eine Auszahlungsanordnung erstellen, stornieren oder drucken. 
+ * @author w.flat
+ */
 public class BestellungKlein extends JInternalFrame implements ActionListener, ItemListener, 
 																PropertyChangeListener, ZVKontoSelectable {
 	
@@ -67,7 +72,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	KleinBestellung bestellung;
 
 	/**
-	 * Konstruktor zum Durchühren einer neun Auszahlungsanordnung. 
+	 * Konstruktor zum Durchühren einer neuen Auszahlungsanordnung. 
 	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
 	 * author w.flat
 	 */
@@ -174,7 +179,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 	}
 
 	/**
-	 * Methode zum Laden aller möglichen User, die zur Zeit die Kleinbestellung durchführen können.
+	 * Methode zum Laden aller möglichen User, die zur Zeit die Kleinbestellung durchführen können. <br>
 	 * author w.flat
 	 */
 	private void loadUsers() {
@@ -210,11 +215,14 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				comboBenutzer.setSelectedItem(frame.getBenutzer());	// Den Benutzer selektieren
 			}
 		} catch(ApplicationServerException e) {
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 	
 	/**
-	 * Methode zum Löschen der FBKonto-Labels und ZVTitel-Labels.
+	 * Methode zum Löschen der FBKonto-Labels und ZVTitel-Labels. <br>
 	 * author w.flat
 	 */
 	private void clearLabels() {
@@ -230,19 +238,19 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		 MainFrame test = new MainFrame("FBMittelverwaltung");
 		 try{
 			 CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			 ApplicationServer applicationServer = server.getMyApplicationServer();
-			 test.setApplicationServer(applicationServer);
-			 PasswordEncrypt pe = new PasswordEncrypt();
-			 String psw = pe.encrypt(new String("r.driesner").toString());
-			 test.setBenutzer(applicationServer.login("r.driesner", psw));
-			 test.setBounds(100,100,700,700);
-			 test.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-			 test.setJMenuBar( new MainMenu( test ) );
-			 BestellungKlein bestellungKlein = new BestellungKlein(test);
-			 test.addChild(bestellungKlein);
-			 test.show();
-			 bestellungKlein.show();
+//			 ApplicationServer applicationServer = server.getMyApplicationServer();
+//			 test.setApplicationServer(applicationServer);
+//			 PasswordEncrypt pe = new PasswordEncrypt();
+//			 String psw = pe.encrypt(new String("r.driesner").toString());
+//			 test.setBenutzer(applicationServer.login("r.driesner", psw));
+//			 test.setBounds(100,100,700,700);
+//			 test.setExtendedState(Frame.MAXIMIZED_BOTH);
+//
+//			 test.setJMenuBar( new MainMenu( test ) );
+//			 BestellungKlein bestellungKlein = new BestellungKlein(test);
+//			 test.addChild(bestellungKlein);
+//			 test.show();
+//			 bestellungKlein.show();
 		 }catch(Exception e){
 				 System.out.println(e);
 		 }
@@ -442,6 +450,9 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				} catch(ApplicationServerException exc) {
 					error = "Fehler bein Generieren der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+				} catch(RemoteException re) {
+					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		} else if( e.getSource() == butStornieren ) {
@@ -460,6 +471,9 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				} catch(ApplicationServerException exc) {
 					String error = "Fehler beim Löschen der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
+				} catch(RemoteException re) {
+					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		}

@@ -20,11 +20,11 @@ public class HaushaltsjahrAendernTest extends TestCase {
 		super(arg0);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
-			this.hhj = new HaushaltsjahrAendern(applicationServer);
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
+//			this.hhj = new HaushaltsjahrAendern(applicationServer);
 		}catch(Exception e){
 				System.out.println(e);
 		}	

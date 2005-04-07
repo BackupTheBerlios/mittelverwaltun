@@ -2,7 +2,7 @@ package gui;
 
 import applicationServer.*;
 
-import java.rmi.Naming;
+import java.rmi.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -67,7 +67,10 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 		try {
 			treeKonten.loadInstituts( applicationServer.getInstitutZuordnungen() );
 		} catch (ApplicationServerException e1) {
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 
 		setZuordnungEnabled(false);
 		this.setBounds(0,0,436, 606);
@@ -107,7 +110,7 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 		}
 	}
 
-	private void setZuordnung() throws ApplicationServerException{
+	private void setZuordnung() throws ApplicationServerException, RemoteException {
 		if(!listZuordnungen.isSelectionEmpty()){
 			Kontenzuordnung zuordnung = (Kontenzuordnung)liMoZuordnungen.getElementAt(listZuordnungen.getSelectedIndex());
 			FBHauptkonto fbKonto = ( (FBHauptkonto)treeKonten.getCurrentNode().getUserObject() );
@@ -121,7 +124,7 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 	}
 
 
-	private void addZuordnung() throws ApplicationServerException{
+	private void addZuordnung() throws ApplicationServerException, RemoteException {
 		if(treeKonten.fbHauptkontoIsSelected()){
 			FBHauptkonto fbKonto = ( (FBHauptkonto)treeKonten.getCurrentNode().getUserObject() );
 			ZVKonto zvKonto = (ZVKonto)liMoZVKonten.getElementAt(listZVKonten.getSelectedIndex());
@@ -151,7 +154,7 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 		}
 	}
 
-	private void delZuordnung() throws ApplicationServerException{
+	private void delZuordnung() throws ApplicationServerException, RemoteException {
 		if(treeKonten.fbHauptkontoIsSelected()){
 			FBHauptkonto fbKonto = ( (FBHauptkonto)treeKonten.getCurrentNode().getUserObject() );
 			ZVKonto zvKonto = ((Kontenzuordnung)liMoZuordnungen.getElementAt(listZuordnungen.getSelectedIndex())).getZvKonto();
@@ -244,14 +247,14 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 	  test.setBounds(100,100,800,700);
 	  try{
 			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			  ApplicationServer applicationServer = server.getMyApplicationServer();
-			  PasswordEncrypt pe = new PasswordEncrypt();
-			  String psw = pe.encrypt(new String("r.driesner").toString());
-			  applicationServer.login("r.driesner", psw);
-				KontenZuordnungverwaltung kontenVerwaltung = new KontenZuordnungverwaltung(applicationServer, test);
-			  desk.add(kontenVerwaltung);
-			  test.show();
-				kontenVerwaltung.show();
+//			  ApplicationServer applicationServer = server.getMyApplicationServer();
+//			  PasswordEncrypt pe = new PasswordEncrypt();
+//			  String psw = pe.encrypt(new String("r.driesner").toString());
+//			  applicationServer.login("r.driesner", psw);
+//				KontenZuordnungverwaltung kontenVerwaltung = new KontenZuordnungverwaltung(applicationServer, test);
+//			  desk.add(kontenVerwaltung);
+//			  test.show();
+//				kontenVerwaltung.show();
 	  }catch(Exception e){
 					  System.out.println(e);
 	  }
@@ -294,7 +297,10 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 //							  e1.getMessage(),
 //							  "Warnung",
 //							  JOptionPane.ERROR_MESSAGE);
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 
 	void setZuordnungEnabled(boolean b){

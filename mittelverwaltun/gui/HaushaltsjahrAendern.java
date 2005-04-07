@@ -97,7 +97,10 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 			tfBis.setText(hhj.getBis());
 		}	catch (ApplicationServerException e) {
 			System.out.println(e.getMessage());
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 	
 	protected String changeHaushaltsjahr(){
@@ -116,7 +119,10 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 							applicationServer.setHaushaltsjahr(hhj, this.haushaltsjahr);
 						} catch (ApplicationServerException e) {
 							return e.getMessage();
-						} 
+						} catch(RemoteException re) {
+							MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																	"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+						}
 					}else{
 						return "Von-Datum muss vor dem Bis-Datum kommen.";
 					}
@@ -156,14 +162,14 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 		test.setBounds(100,100,800,700);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
-			HaushaltsjahrAendern hhj = new HaushaltsjahrAendern(applicationServer);
-			desk.add(hhj);
-			test.show();
-			hhj.show();
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
+//			HaushaltsjahrAendern hhj = new HaushaltsjahrAendern(applicationServer);
+//			desk.add(hhj);
+//			test.show();
+//			hhj.show();
 		}catch(Exception e){
 				System.out.println(e);
 		}

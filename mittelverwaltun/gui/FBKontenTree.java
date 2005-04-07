@@ -8,22 +8,29 @@ import javax.swing.tree.*;
 import dbObjects.*;
 
 
-
+/**
+ * Klasse zum Verwalten der Struktur der FBKonten. <br>
+ * In dem Baum wird ein Array mit Instituten geladen und dieses Institute haben die FBHauptkonten. 
+ * @author w.flat
+ */
 public class FBKontenTree extends JTree {
 
 	/**
-	 * 
+	 * Der Root-Knoten des Baums. 
 	 */
 	DefaultMutableTreeNode root;
 
 	/**
-	 * 
+	 * Das TreeModel des Baums. 
 	 */
 	DefaultTreeModel treeModel;
 
 	
-	// Konstuktor erhält im ersten Parameter den TreeSelectionListener, im dem die Aktionen im Baum behandelt werden
-	// und anschliessend den Namen für den root-Knoten
+	/**
+	 * Konstruktor zum Erzeugen des FBKontenTrees.
+	 * @param tsl = TreeSelectionListener, im dem die Aktionen im Baum behandelt werden. 
+	 * @param rootName = Namee für den root-Knoten.
+	 */ 
 	public FBKontenTree( TreeSelectionListener tsl, String rootName ){
 		super();
 		this.setModel( treeModel = new DefaultTreeModel( root = new DefaultMutableTreeNode( rootName ) ) );
@@ -37,7 +44,14 @@ public class FBKontenTree extends JTree {
 	}
 	
 	
-	// Das Hauptkonto des ausgewählten Knotens ermitteln
+	/**
+	 * Das Hauptkonto des ausgewählten Knotens ermitteln. <br>
+	 * Wenn ein FBUnterkonto ausgewählt ist, dann wird das FBHauptkonto zurückgeliefert, <br>
+	 * welchem dieses FBUnterkonto zugeordnet ist. <br>
+	 * Ist der ausgewählte Knoten ein FBHauptkonto, dann wird das ausgewählte FBHauptkonto zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return FBHauptkonto des ausgewählten Knotens. 
+	 */
 	public FBHauptkonto getFBHauptkonto() {
 		if( getCurrentNode() == null )
 			return null;
@@ -49,7 +63,12 @@ public class FBKontenTree extends JTree {
 			return null;
 	}
 	
-	// Das Unterkonto des ausgewählten Knotens ermitteln
+	/**
+	 * Das FBUnterkonto des ausgewählten Knotens ermitteln. <br>
+	 * Ist der ausgewählte Knoten ein FBUnterkonto, dann wird das ausgewählte FBUnterkonto zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return FBUnterkonto des ausgewählten Knotens. 
+	 */
 	public FBUnterkonto getFBUnterkonto() {
 		if( getCurrentNode() == null )
 			return null;
@@ -61,7 +80,7 @@ public class FBKontenTree extends JTree {
 	
 	/**
 	 * Alle Institute erstellen die im Baum enthalten sind.
-	 * @return ArrayList mit Instituten
+	 * @return ArrayList mit Instituten.
 	 */
 	public ArrayList getInstituts() {
 		ArrayList instituts = new ArrayList();
@@ -72,7 +91,13 @@ public class FBKontenTree extends JTree {
 		return instituts;
 	}
 	
-	// Den Institut des ausgewählten Knotens ermitteln
+	/**
+	 * Den Institut des ausgewählten Knotens ermitteln. <br>
+	 * Ist ein FBKonto ausgewählt, dann wird das Institut ausgegeben, dem dieses FBKonto zugeordnet ist. <br>
+	 * Ist der ausgewählte Knoten ein Institut, dann wird das ausgewählte Institut zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return Institut des ausgewählten Knotens. 
+	 */
 	public Institut getInstitut() {
 		if( getCurrentNode() == null )
 			return null;
@@ -86,7 +111,10 @@ public class FBKontenTree extends JTree {
 			return null;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten der root-Knoten ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten der root-Knoten ist.
+	 * @return true = Wenn der ausgewählte Knoten ein root-Knoten ist, sonst = false.
+	 */
 	public boolean rootIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -96,7 +124,10 @@ public class FBKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten eine Instanz vom Institus-Objekt ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten eine Instanz vom Instituts-Objekt ist. 
+	 * @return true = Wenn der ausgewählte Knoten ein Institut ist, sonst = false.
+	 */
 	public boolean institutIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -106,7 +137,10 @@ public class FBKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten eine Instanz vom FBHauptkonto-Objekt ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten eine Instanz vom FBHauptkonto-Objekt ist. 
+	 * @return true = Wenn der ausgewählte Knoten ein FBHauptkonto ist, sonst = false.
+	 */
 	public boolean fbHauptkontoIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -116,7 +150,10 @@ public class FBKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten eine Instanz vom FBUnterkonto-Objekt ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten eine Instanz vom FBUnterkonto-Objekt ist. 
+	 * @return true = Wenn der ausgewählte Knoten ein FBUnterkonto ist, sonst = false.
+	 */
 	public boolean fbUnterkontoIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -127,14 +164,16 @@ public class FBKontenTree extends JTree {
 		return false;
 	}
 
-	// Den root-Knoten auswählen
+	/**
+	 * Den root-Knoten auswählen.
+	 */
 	public void selectRoot(){
 		if( root != null )	// Wenn der root-Knoten existiert
 			this.setSelectionPath( new TreePath( root ) );
 	}
 	
 	/**
-	 * Löschen des gesammten Baums
+	 * Löschen des gesammten Baums.
 	 */
 	public void delTree() {
 		this.setModel( treeModel = new DefaultTreeModel( root = new DefaultMutableTreeNode( root.getUserObject().toString() ) ) );
@@ -142,7 +181,7 @@ public class FBKontenTree extends JTree {
 	}
 	
 	/**
-	 * Den aktuellen Knoten aktualisieren
+	 * Den aktuellen Knoten aktualisieren. 
 	 */
 	public void refreshCurrentNode() {
 		if( this.getSelectionPath() == null )	// Wenn kein Knoten ausgewählt ist dann wird der null-Zeiger zurückgegeben
@@ -151,7 +190,10 @@ public class FBKontenTree extends JTree {
 		treeModel.reload( (DefaultMutableTreeNode)this.getSelectionPath().getLastPathComponent() );
 	}
 	
-	// Rückgabe des ausgewählten Knotens
+	/**
+	 * Rückgabe des ausgewählten Knotens. 
+	 * @return Der ausgewählte Knoten. 
+	 */
 	public DefaultMutableTreeNode getCurrentNode() {
 		if( this.getSelectionPath() == null )	// Wenn kein Knoten ausgewählt ist dann wird der null-Zeiger zurückgegeben
 			return null;
@@ -159,7 +201,10 @@ public class FBKontenTree extends JTree {
 		return (DefaultMutableTreeNode)this.getSelectionPath().getLastPathComponent();
 	}
 	
-	// Den angegeben Knoten markieren
+	/**
+	 * Den angegeben Knoten markieren.
+	 * @param node = Knoten der markiert werden soll.
+	 */
 	public void selectThisNode( DefaultMutableTreeNode node ) {
 		if( node == null )		// Wenn der Knoten angegebene Knoten nicht existiert dann wird nichts gemacht
 			return;
@@ -172,7 +217,10 @@ public class FBKontenTree extends JTree {
 			setSelectionPath( new TreePath( path ) );		// andernfalls wird angegebene Knoten markiert
 	}
 	
-	// Prozedur zum Laden der Institute
+	/**
+	 * Prozedur zum Laden der Institute.
+	 * @param institute = Institute, die in den Baum geladen werden sollen.
+	 */
 	public void loadInstituts( Institut[] institute ) {
 		if( institute == null )		// wenn keine Institute angegeben wurden
 			return;
@@ -195,7 +243,11 @@ public class FBKontenTree extends JTree {
 		this.expandPath( new TreePath( root ) );	// und den Baum öffnen
 	}
 	
-	// Die Hauptknoten an den angegebenen Knoten anhängen
+	/**
+	 * Die Hauptknoten an den angegebenen Knoten anhängen.
+	 * @param hauptKonten = FBHauptkonten, die an den angegeben Knoten angehängt werden sollen.
+	 * @param instNode = Der Knoten, an dem die FBKonten angehängt werden sollen. 
+	 */
 	public void addHauptkonten( ArrayList hauptKonten, DefaultMutableTreeNode instNode ) {
 		if( hauptKonten == null || instNode == null )	// Sind keine Hauptknoten angegeben  
 			return;
@@ -215,7 +267,11 @@ public class FBKontenTree extends JTree {
 		}
 	}
 	
-	// Die Unterknoten an den angegebenen Knoten anhängen
+	/**
+	 * Die Unterknoten an den angegebenen Knoten anhängen.
+	 * @param hauptKonten = FBUnterknoten, die an den angegeben Knoten angehängt werden sollen.
+	 * @param instNode = Der Knoten, an dem die FBKonten angehängt werden sollen. 
+	 */
 	public void addUnterkonten( ArrayList unterKonten, DefaultMutableTreeNode node ) {
 		if( unterKonten == null )	// Sind keine Unterknoten angegeben  
 			return;
@@ -230,7 +286,10 @@ public class FBKontenTree extends JTree {
 		}
 	}
 
-	// Das markierte Konto aktualisieren 
+	/**
+	 * Das markierte Konto aktualisieren.
+	 * @param konto = FBKonto, welches statt dem ausgewählten Konto gesetzt wird.
+	 */
 	public void updateNode( Object konto ){
 		if( konto == null )		// wenn das konto leer ist
 			return;
@@ -243,7 +302,10 @@ public class FBKontenTree extends JTree {
 		selectThisNode( node );
 	}
 	
-	// An den aktuellen Knoten einen neuen Knoten einfügen
+	/**
+	 * An den aktuellen Knoten einen neuen Knoten anhängen.
+	 * @param konto = FBKonto, das an den aktuellen Knoten angehängt wird.
+	 */
 	public void addNewNode( Object konto ) {
 		if( konto == null )		// wenn kein konto angegeben
 			return;
@@ -258,7 +320,9 @@ public class FBKontenTree extends JTree {
 			selectThisNode( newNode );
 	}
 	
-	// Den aktuellen Knoten löschen
+	/**
+	 * Den aktuellen Knoten löschen.
+	 */
 	public void delNode() {
 		DefaultMutableTreeNode node = getCurrentNode();
 		if( node == null )		// wenn kein aktueller Knoten
@@ -271,7 +335,9 @@ public class FBKontenTree extends JTree {
 		selectThisNode( parent );		// den vater-knoten selektieren
 	}
 	
-	// Überprüfung ob ein Node selektiert ist, wenn nicht dann wird der Eleternknoten selektiert
+	/**
+	 * Überprüfung ob ein Node selektiert ist, wenn nicht dann wird der Eleternknoten selektiert..
+	 */
 	public void checkSelection( TreeSelectionEvent event ) {
 		if( event == null )
 			return;

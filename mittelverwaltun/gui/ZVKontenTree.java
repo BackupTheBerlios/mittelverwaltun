@@ -8,22 +8,29 @@ import javax.swing.tree.*;
 import dbObjects.*;
 
 
-
+/**
+ * Klasse zum Verwalten der Struktur der ZVKonten. <br>
+ * In dem Baum wird ein Array mit ZVKonten geladen. 
+ * @author w.flat
+ */
 public class ZVKontenTree extends JTree {
 
 	/**
-	 * 
+	 * Der Root-Knoten des Baums. 
 	 */
 	DefaultMutableTreeNode root;
 
 	/**
-	 * 
+	 * Das TreeModel des Baums. 
 	 */
 	DefaultTreeModel treeModel;
 
 	
-	// Konstuktor erhält im ersten Parameter den TreeSelectionListener, im dem die Aktionen im Baum behandelt werden
-	// und anschliessend den Namen für den root-Knoten
+	/**
+	 * Konstruktor zum Erzeugen des FBKontenTrees.
+	 * @param tsl = TreeSelectionListener, im dem die Aktionen im Baum behandelt werden. 
+	 * @param rootName = Namee für den root-Knoten.
+	 */ 
 	public ZVKontenTree( TreeSelectionListener tsl, String rootName ){
 		super();
 		this.setModel( treeModel = new DefaultTreeModel( root = new DefaultMutableTreeNode( rootName ) ) );
@@ -36,7 +43,14 @@ public class ZVKontenTree extends JTree {
 		this.addTreeSelectionListener( tsl );
 	}
 	
-	// Abfrage des aktuellen ZVKontos unabhängig welchen Knoten man ausgewählt hat
+	/**
+	 * Abfrage des aktuellen ZVKontos unabhängig welchen Knoten man ausgewählt hat. <br>
+	 * Wenn ein ZVTitel/ZVUntertitel ausgewählt ist, dann wird das ZVKonto zurückgeliefert, <br>
+	 * welchem dieser ZVTitel/ZVUntertitel zugeordnet ist. <br>
+	 * Ist der ausgewählte Knoten ein ZVKonto, dann wird das ausgewählte ZVKonto zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return ZVKonto des ausgewählten Knotens. 
+	 */
 	public ZVKonto getZVKonto() {
 		if( getCurrentNode() == null )	// Kein Knoten ausgewählt
 			return null;
@@ -51,7 +65,14 @@ public class ZVKontenTree extends JTree {
 			return null;
 	}
 	
-	// Abfrage des aktuellen ZVTitels unabhängig welchen Knoten man ausgewählt hat
+	/**
+	 * Abfrage des aktuellen ZVTitels unabhängig welchen Knoten man ausgewählt hat. <br>
+	 * Wenn ein ZVUntertitel ausgewählt ist, dann wird der ZVTitel zurückgeliefert, <br>
+	 * welchem dieser ZVUntertitel zugeordnet ist. <br>
+	 * Ist der ausgewählte Knoten ein ZVTitel, dann wird das ausgewählte ZVTitel zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return ZVTitel des ausgewählten Knotens. 
+	 */
 	public ZVTitel getZVTitel() {
 		if( getCurrentNode() == null )	// Kein Knoten ausgewählt
 			return null;
@@ -64,7 +85,12 @@ public class ZVKontenTree extends JTree {
 			return null;
 	}
 	
-	// Abfrage des aktuellen ZVTitels unabhängig welchen Knoten man ausgewählt hat
+	/**
+	 * Abfrage des aktuellen ZVUntertitels unabhängig welchen Knoten man ausgewählt hat. <br>
+	 * Ist der ausgewählte Knoten ein ZVUntertitel, dann wird das ausgewählte ZVUntertitel zurückgeliefert. <br>
+	 * Sonst wird null zurückgeliefert. 
+	 * @return ZVTitel des ausgewählten Knotens. 
+	 */
 	public ZVUntertitel getZVUntertitel() {
 		if( getCurrentNode() == null )	// Kein Knoten ausgewählt
 			return null;
@@ -75,7 +101,10 @@ public class ZVKontenTree extends JTree {
 			return null;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten der root-Knoten ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten der root-Knoten ist.
+	 * @return true = Wenn der ausgewählte Knoten ein root-Knoten ist, sonst = false.
+	 */
 	public boolean rootIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -85,7 +114,10 @@ public class ZVKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten ein ZVKonto ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten ein ZVKonto ist.
+	 * @return true = Wenn der ausgewählte Knoten ein ZVKonto ist, sonst = false.
+	 */
 	public boolean zvKontoIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -95,7 +127,10 @@ public class ZVKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten ein ZVTitel ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten ein ZVTitel ist.
+	 * @return true = Wenn der ausgewählte Knoten ein ZVTitel ist, sonst = false.
+	 */
 	public boolean zvTitelIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -105,7 +140,10 @@ public class ZVKontenTree extends JTree {
 			return false;
 	}
 	
-	// Abfrage ob der ausgewählte Knoten ein ZVUntertitel ist
+	/**
+	 * Abfrage ob der ausgewählte Knoten ein ZVUntertitel ist.
+	 * @return true = Wenn der ausgewählte Knoten ein ZVUntertitel ist, sonst = false.
+	 */
 	public boolean zvUntertitelIsSelected() {
 		if( this.getSelectionPath() == null )	// Wenn nichts ausgewählt
 			return false;
@@ -116,14 +154,16 @@ public class ZVKontenTree extends JTree {
 		return false;
 	}
 	
-	// Den root-Knoten auswählen
+	/**
+	 * Den root-Knoten auswählen.
+	 */
 	public void selectRoot(){
 		if( root != null )	// Wenn der root-Knoten existiert
 			this.setSelectionPath( new TreePath( root ) );
 	}
 	
 	/**
-	 * Löschen des gesammten Baums ausser dem root-Knoten
+	 * Löschen des gesammten Baums ausser dem root-Knoten.
 	 */
 	public void delTree() {
 		this.setModel( treeModel = new DefaultTreeModel( root = new DefaultMutableTreeNode( root.getUserObject().toString() ) ) );
@@ -131,7 +171,7 @@ public class ZVKontenTree extends JTree {
 	}
 	
 	/**
-	 * Den aktuellen Knoten aktualisieren
+	 * Den aktuellen Knoten aktualisieren. 
 	 */
 	public void refreshCurrentNode() {
 		if( this.getSelectionPath() == null )	// Wenn kein Knoten ausgewählt ist dann wird der null-Zeiger zurückgegeben
@@ -140,7 +180,10 @@ public class ZVKontenTree extends JTree {
 		treeModel.nodeChanged( (DefaultMutableTreeNode)this.getSelectionPath().getLastPathComponent() );
 	}
 	
-	// Rückgabe des ausgewählten Knotens
+	/**
+	 * Rückgabe des ausgewählten Knotens. 
+	 * @return Der ausgewählte Knoten. 
+	 */
 	public DefaultMutableTreeNode getCurrentNode() {
 		if( this.getSelectionPath() == null )	// Wenn kein Knoten ausgewählt ist dann wird der null-Zeiger zurückgegeben
 			return null;
@@ -148,7 +191,10 @@ public class ZVKontenTree extends JTree {
 		return (DefaultMutableTreeNode)this.getSelectionPath().getLastPathComponent();
 	}
 	
-	// Den angegeben Knoten markieren
+	/**
+	 * Den angegeben Knoten markieren.
+	 * @param node = Knoten der markiert werden soll.
+	 */
 	public void selectThisNode( DefaultMutableTreeNode node ) {
 		if( node == null )		// Wenn der Knoten angegebene Knoten nicht existiert dann wird nichts gemacht
 			return;
@@ -161,7 +207,10 @@ public class ZVKontenTree extends JTree {
 			setSelectionPath( new TreePath( path ) );		// andernfalls wird angegebene Knoten markiert
 	}
 	
-	// ZVKonten in den Baum laden
+	/**
+	 * ZVKonten in den Baum laden.
+	 * @param zvKonten = Liste mit Konten, die in den Baum geladen werden sollen. 
+	 */
 	public void loadZVKonten( ArrayList zvKonten ) {
 		if( zvKonten == null )		// Keine konten angegeben
 			return;
@@ -184,7 +233,11 @@ public class ZVKontenTree extends JTree {
 		this.expandPath( new TreePath( root ) );	// und den Baum öffnen
 	}
 	
-	// ZVTitel an einen Knoten anhängen
+	/**
+	 * ZVTitel an einen Knoten anhängen.
+	 * @param titel = ZVTitel, die an den angegeben Knoten angehängt werden sollen.
+	 * @param node = Der Knoten, an dem die ZVTitel angehängt werden sollen. 
+	 */
 	public void addZVTitel( ArrayList titel, DefaultMutableTreeNode node ) {
 		if( titel == null )		// Keine Titel angegeben
 			return;
@@ -201,7 +254,11 @@ public class ZVKontenTree extends JTree {
 		}
 	}
 	
-	// ZVUntertitel an einen ZVTitel-Knoten anhängen
+	/**
+	 * ZVUntertitel an einen Knoten anhängen.
+	 * @param untertitel = ZVUntertitel, die an den angegeben Knoten angehängt werden sollen.
+	 * @param node = Der Knoten, an dem die ZVUntertitel angehängt werden sollen. 
+	 */
 	public void addZVUntertitel( ArrayList untertitel, DefaultMutableTreeNode node ) {
 		if( untertitel == null )		// Keine Untertitel angegeben
 			return;
@@ -218,7 +275,10 @@ public class ZVKontenTree extends JTree {
 	}
 
 
-	// Das markierte Konto aktualisieren 
+	/**
+	 * Das markierte Konto aktualisieren.
+	 * @param konto = ZVKonto/ZVTitel/ZVUntertitel, welches statt dem ausgewählten Konto gesetzt wird.
+	 */
 	public void updateNode( Object konto ){
 		if( konto == null )		// wenn das konto leer ist
 			return;
@@ -232,7 +292,10 @@ public class ZVKontenTree extends JTree {
 	}
 
 	
-	// An den aktuellen Knoten einen neuen Knoten einfügen
+	/**
+	 * An den aktuellen Knoten einen neuen Knoten anhängen.
+	 * @param konto = ZVKonto/ZVTitel/ZVUntertitel, das an den aktuellen Knoten angehängt wird.
+	 */
 	public void addNewNode( Object konto ) {
 		if( konto == null )		// wenn kein konto angegeben
 			return;
@@ -247,7 +310,9 @@ public class ZVKontenTree extends JTree {
 			selectThisNode( newNode );
 	}
 
-	// Den aktuellen Knoten löschen
+	/**
+	 * Den aktuellen Knoten löschen.
+	 */
 	public void delNode() {
 		DefaultMutableTreeNode node = getCurrentNode();
 		if( node == null )		// wenn kein aktueller Knoten
@@ -260,7 +325,9 @@ public class ZVKontenTree extends JTree {
 		selectThisNode( parent );		// den vater-knoten selektieren
 	}
 	
-	// Überprüfung ob ein Node selektiert ist, wenn nicht dann wird der Eleternknoten selektiert
+	/**
+	 * Überprüfung ob ein Node selektiert ist, wenn nicht dann wird der Eleternknoten selektiert..
+	 */
 	public void checkSelection( TreeSelectionEvent event ) {
 		if( event == null )
 			return;

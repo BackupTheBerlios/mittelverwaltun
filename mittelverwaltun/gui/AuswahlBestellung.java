@@ -8,7 +8,7 @@ import applicationServer.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
+import java.rmi.*;
 
 
 /**
@@ -88,25 +88,37 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 						frame.addChild( new BestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 				else
 					try {
 						frame.addChild( new AbwicklungBestellungNormal( frame , frame.applicationServer.getStandardBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 			}else if (tabBestellungen.getSelectedOrderType()==OrderTable.ASK_TYP){
 				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.SONDIERUNG)
 					try {
 						frame.addChild( new BestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 					}
 				else
 					try {
 						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 					}
 			}else if (tabBestellungen.getSelectedOrderType()==OrderTable.ZA_TYP){
 				if(tabBestellungen.getSelectedOrderPhase()==OrderTable.ABGESCHLOSSEN)
@@ -114,7 +126,10 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 						frame.addChild( new BestellungKlein( frame , frame.applicationServer.getKleinbestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();
@@ -130,6 +145,9 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 				}
 			} catch (ApplicationServerException e1) {
 				e1.printStackTrace();
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		} else if(e.getActionCommand() == "dispose"){
 			this.dispose();
@@ -141,11 +159,11 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 		
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			test.setApplicationServer(applicationServer);
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			test.setBenutzer(applicationServer.login("r.driesner", psw));
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			test.setApplicationServer(applicationServer);
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			test.setBenutzer(applicationServer.login("r.driesner", psw));
 			test.setBounds(100,100,800,900);
 			test.setExtendedState(Frame.MAXIMIZED_BOTH);
 

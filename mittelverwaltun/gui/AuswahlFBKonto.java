@@ -12,6 +12,7 @@ import dbObjects.FBUnterkonto;
 import dbObjects.Institut;
 import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
+import java.rmi.*;
 
 
 public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelectionListener {
@@ -50,6 +51,9 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		try {
 			treeKonten.loadInstituts( applicationServer.getInstitutesWithAccounts() );
 		} catch (ApplicationServerException e1) {
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 
 	  tfKonto.setEnabled(false);
@@ -80,7 +84,10 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		 try {
 			 treeKonten.loadInstituts( applicationServer.getInstituteWithAccounts(institut, true) );
 		 } catch (ApplicationServerException e1) {
-		 } 
+		 } catch(RemoteException re) {
+			 MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													 "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		 }
 
 		tfKonto.setEnabled(false);
 		buAuswahl.addActionListener( this );

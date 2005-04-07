@@ -8,13 +8,18 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.*;
+import java.rmi.*;
 
 import applicationServer.ApplicationServerException;
 import dbObjects.*;
 
 /**
- * @author Admin
- * 14.10.2004
+ * Frame zum Verwalten der Firmen. <br>
+ * Es sind folgende Funktionen implementiert :<br>
+ * 1. Anlegen einer neuen Firma.<br>
+ * 2. Aktualisieren einer vorhandenen Firma.<br>
+ * 3. Löschen einer vorhandenen Firma. <br>
+ * @author w.flat
  **/
 public class Firmenverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener {
 	
@@ -47,6 +52,11 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	MainFrame frame;
 	
+	/**
+	 * Erzeugen vom Frame zum Verwalten der Firmen. 
+	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
+	 * author w.flat
+	 */
 	public Firmenverwaltung( MainFrame frame ) {
 		super( "Firmenverwaltung" );
 		this.setClosable( true );
@@ -65,6 +75,10 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
     
 	}
 	
+	/**
+	 * Initialisierung der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	private void jbInit() throws Exception {
 		this.getContentPane().setLayout(null);
 		labName.setText("Name *");
@@ -238,13 +252,16 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch ( ApplicationServerException e ) {
 				System.out.println( e.toString() );
-			} 
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+			}
 		}
 	}
 	
 	/**
 	 * Ermittlung der Fehler, die beim Erstellen oder Aktualisieren einer Firma lokal aufgetretten sind.
-	 * @return error-String
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String getError() {
 		String error = "";
@@ -267,7 +284,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Eine neue Firma an Hand der Eingaben erstellen.
-	 * @return die Neue Firma.
+	 * @return Die neu erstellte Firma.
 	 */
 	Firma getNewFirma() {
 		return new Firma( 0, tfFirma.getText(), tfStrasseNr.getText(), tfPLZ.getText(), tfOrt.getText(),
@@ -277,7 +294,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Eine Firma erstellen.
-	 * @return error-String, mit Fehlern die beim Erstellen aufgetretten sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String addFirma() {
 		String error = getError();
@@ -289,6 +306,8 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				listModelFirmen.addElement( firma );
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
+			} catch(RemoteException re) {
+				error = " - Fehler bei RMI-Kommunikation.\n";
 			}
 		}
 		
@@ -297,7 +316,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Eine Firma aktualisieren.
-	 * @return error-String, mit Fehlern die beim Aktualisieren aufgetretten sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String setFirma() {
 		String error = getError();
@@ -315,7 +334,9 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
-			} 
+			} catch(RemoteException re) {
+				error = " - Fehler bei RMI-Kommunikation.\n";
+			}
 		}
 		
 		return error;
@@ -323,7 +344,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Eine Firma löschen.
-	 * @return error-String, mit Fehlern die beim Löschen aufgetretten sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	String delFirma() {
 		String error = getError();
@@ -340,6 +361,8 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
+			} catch(RemoteException re) {
+				error = " - Fehler bei RMI-Kommunikation.\n";
 			}
 		}
 		
@@ -348,6 +371,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Nachricht beim Löschen einer Firma.
+	 * @return Nachricht die beim Löschen angezeigt wird. 
 	 */
 	String getDelMessage() {
 		return "Wollen Sie die Firma\n" + ((Firma)listModelFirmen.get( listFirmen.getSelectedIndex() )).toString()
@@ -356,6 +380,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 	
 	/**
 	 * Nachricht beim Anlegen einer Firma.
+	 * @return Nachricht die beim Anlegen angezeigt wird. 
 	 */
 	String getAddMessage() {
 		return "Wollen Sie die Firma\n" + tfFirma.getText() + "\nwirklich anlegen.";
@@ -363,6 +388,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 
 	/**
 	 * Nachricht beim Ändern einer Firma.
+	 * @return Nachricht die beim Aktualisieren angezeigt wird. 
 	 */
 	String getEditMessage() {
 		return "Wollen Sie die Firma\n" + ((Firma)listModelFirmen.get( listFirmen.getSelectedIndex() )).toString()

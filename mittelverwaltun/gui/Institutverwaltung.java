@@ -181,7 +181,9 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			return "";
 		}catch(ApplicationServerException e){
 			return e.getMessage();
-		} 
+		} catch(RemoteException re) {
+			return "Fehler bei RMI-Kommunikation.";
+		}
 	}	
 	  
 	public void actionPerformed(ActionEvent e) {
@@ -224,14 +226,14 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 		test.setBounds(100,100,800,700);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
-			Institutverwaltung institutverwaltung = new Institutverwaltung(test);
-			desk.add(institutverwaltung);
-			test.show();
-			institutverwaltung.show();
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
+//			Institutverwaltung institutverwaltung = new Institutverwaltung(applicationServer);
+//			desk.add(institutverwaltung);
+//			test.show();
+//			institutverwaltung.show();
 		}catch(Exception e){
 				System.out.println(e);
 		}

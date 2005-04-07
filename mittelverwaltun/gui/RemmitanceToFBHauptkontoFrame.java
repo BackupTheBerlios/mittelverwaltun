@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.rmi.Naming;
+import java.rmi.*;
 import java.text.ParseException;
 
 /**
@@ -173,7 +173,9 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 				treeAccounts.loadInstituts( as.getInstitutesWithMainAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} 
+			} catch(RemoteException re) {
+				re.printStackTrace();
+			}
 		}
 	}
 	
@@ -188,10 +190,10 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		test.setBounds(100,100,800,700);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
 			//RemmitanceToFBHauptkontoFrame rf = new RemmitanceToFBHauptkontoFrame(applicationServer);
 			//desk.add(rf);
 			//test.show();
@@ -292,7 +294,10 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 					
 					MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 				
-				} 
+				} catch(RemoteException re) {
+					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+				}
 			}
 		}else if (cmd.equals("refresh")){
 			loadAccounts();
@@ -310,7 +315,10 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		} catch (ApplicationServerException exc1) {
 			tfAvailableResources.setValue(new Float(0));
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", "Der Betrag verfügbarer Mittel konnte nicht bestimmt\nwerden und wird deshalb auf Null gesetzt.", exc1.getMessage(),MessageDialogs.WARNING_ICON);
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 		
 		tfRemmitance.setInterval(-((Float)tfBalance.getValue()).floatValue(),((Float)tfAvailableResources.getValue()).floatValue());						
 	}

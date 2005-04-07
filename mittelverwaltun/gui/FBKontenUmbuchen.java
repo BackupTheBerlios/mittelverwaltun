@@ -7,8 +7,15 @@ import javax.swing.*;
 import javax.swing.event.*;
 import dbObjects.*;
 import applicationServer.*;
+import java.rmi.*;
 
-
+/**
+ * InternalFrame zum Umbuchen der FBKonten. <br>
+ * 1. Es ist möglich von einem FBHauptkonto auf ein anderes FBHauptkonto das Budget umzubuchen. <br>
+ * 2. Es ist möglich von einem FBHauptkonto auf eins seiner FBUnterkonten das Budget umzubuchen. <br>
+ * 3. Es ist möglich von einem FBUnterkonto auf das übergeordnete FBHauptkonto das Budget umzubuchen. <br>
+ * @author w.flat
+ */
 public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, TreeSelectionListener, ListSelectionListener {
 	
 	JScrollPane scrollVon = new JScrollPane();
@@ -34,7 +41,11 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 	JLabel labUnterkonten = new JLabel();
 	MainFrame frame;
 
-	
+	/**
+	 * Erzeugen vom Frame zum Umbuchen der FBMittel. 
+	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
+	 * author w.flat
+	 */
 	public FBKontenUmbuchen( MainFrame frame ) {
 		super( "FBKonten umbuchen" );
 		this.setClosable( true );
@@ -55,7 +66,7 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 	}
 	
 	/**
-	 * Laden der Konten aus der Datenbank in den Baum
+	 * Laden der Konten aus der Datenbank in den Baum.
 	 */
 	void loadKonten() {
 		if( frame != null ) {
@@ -64,6 +75,9 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );	// Alle Konten holen
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}
@@ -129,6 +143,10 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 		}
 	}
 	
+	/**
+	 * Initialisieren der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	private void jbInit() throws Exception {
 		this.getContentPane().setLayout(null);
 		labVon.setFont(new java.awt.Font("SansSerif", 0, 13));
@@ -222,6 +240,9 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 		
@@ -251,6 +272,9 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 		
@@ -280,13 +304,18 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
-			} 
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+			}
 		}
 		
 		return error;
 	}
 
-
+	/**
+	 * Verarbeitung der Knopfereignisse. 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String error = "";
 		if ( e.getSource() == buBuchen ) {
@@ -311,12 +340,17 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 		}
 	}
 
-
+	/**
+	 * Verarbeitung der Änderungen im Baum.
+	 */
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );
 		showVonAmount();
 	}
 
+	/**
+	 * Verarbeitung der Veränderungen in den Listen.
+	 */
 	public void valueChanged(ListSelectionEvent e) {
 		if( e.getSource() == listHaupt ) {
 			if( listHaupt.getSelectedIndex() >= 0 ) {

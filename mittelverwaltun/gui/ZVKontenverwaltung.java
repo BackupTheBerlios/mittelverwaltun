@@ -8,8 +8,16 @@ import dbObjects.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.rmi.*;
 
-
+/**
+ * Frame zum Verwalten der ZVKonten, ZVTitel und ZVUntertitel.<br>
+ * Es werden folgende Funktionen bereigestellt: <br>
+ * 1. Erzeugen vom neuen ZVKonten, ZVtiteln und ZVUntertiteln. <br>
+ * 2. Aktualisieren vom vorhandenen ZVKonten, ZVtiteln und ZVUntertiteln. <br>
+ * 3. Löschen vom vorhandenen ZVKonten, ZVtiteln und ZVUntertiteln.
+ * @author w.flat
+ */
 public class ZVKontenverwaltung extends JInternalFrame implements ActionListener, TreeSelectionListener {
 
 	JScrollPane scrollZVKonten = new JScrollPane();
@@ -28,6 +36,10 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	JButton buAktualisieren = new JButton("Aktualisieren");
 	MainFrame frame;
 
+	/**
+	 * Erzeugen von Frame zur ZVKontenverwaltung. 
+	 * @param frame = MainFrame in dem sich das InternalFrame befindet, und das den ApplicationServer besitzt. 
+	 */
 	public ZVKontenverwaltung( MainFrame frame ) {
 		super( "ZV-Kontenverwaltung" );
 		this.setClosable( true );
@@ -106,7 +118,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	  }
 	  
 	/**
-	 * Laden der ZVKonten in den Baum
+	 * Laden der ZVKonten in den Baum. 
 	 */
 	void loadZVKonten() {
 		if( frame != null ) {
@@ -115,12 +127,15 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} 
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+			}
 		}
 	}
 	
 	/**
-	 * Anzeigen vom richtigen Panel und des ausgewählten Kontos im Panel
+	 * Anzeigen vom richtigen Panel und des ausgewählten Kontos im Panel. 
 	 */
 	void showPanel() {
 		if( treeKonten.rootIsSelected() ){
@@ -181,10 +196,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein ZVKonto in der Datenbank und in dem Baum aktualisieren. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Ein ZVKonto in der Datenbank und in dem Baum aktualisieren. 
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String setZVKonto() throws ApplicationServerException {
+	String setZVKonto() throws ApplicationServerException, RemoteException {
 		ZVKonto zvKonto;
 		String error = "";
 		if( treeKonten.getZVKonto().isTGRKonto() ){
@@ -212,10 +228,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVTitel in der Datenbank und in dem Baum aktualisieren. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Einen ZVTitel in der Datenbank und in dem Baum aktualisieren.
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String setZVTitel() throws ApplicationServerException {
+	String setZVTitel() throws ApplicationServerException, RemoteException {
 		ZVTitel zvTitel;
 		String error = "";
 		if( treeKonten.getZVKonto().isTGRKonto() ){
@@ -244,10 +261,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVUntertitel in der Datenbank und in dem Baum aktualisieren. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Einen ZVUntertitel in der Datenbank und in dem Baum aktualisieren. 
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String setZVUntertitel() throws ApplicationServerException {
+	String setZVUntertitel() throws ApplicationServerException, RemoteException {
 		ZVUntertitel zvUntertitel;
 		String error = "";
 		if( treeKonten.getZVKonto().isTGRKonto() ){
@@ -275,10 +293,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein ZVKonto in der Datenbank und in dem Baum einfügen. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Ein ZVKonto in der Datenbank und in dem Baum einfügen.
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String addZVKonto() throws ApplicationServerException {
+	String addZVKonto() throws ApplicationServerException, RemoteException {
 		ZVKonto zvKonto;
 		String error = "";
 		
@@ -309,10 +328,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVTitel in der Datenbank und in dem Baum einfügen. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Einen ZVTitel in der Datenbank und in dem Baum einfügen.
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String addZVTitel() throws ApplicationServerException {
+	String addZVTitel() throws ApplicationServerException, RemoteException {
 		ZVTitel zvTitel;
 		String error = "";
 		if( treeKonten.getZVKonto().isTGRKonto() ){
@@ -338,10 +358,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVUntertitel in der Datenbank und in dem Baum aktualisieren. Wirft eine ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * Einen ZVUntertitel in der Datenbank und in dem Baum aktualisieren. 
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String addZVUntertitel() throws ApplicationServerException {
+	String addZVUntertitel() throws ApplicationServerException, RemoteException {
 		ZVUntertitel zvUntertitel;
 		String error = "";
 		if( treeKonten.getZVKonto().isTGRKonto() ){
@@ -369,9 +390,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 
 	/**
-	 * Ein ZVKonto in der Datenbank und im Baum löschen. Wirft eine ApplicationServerException.
+	 * Ein ZVKonto in der Datenbank und im Baum löschen.
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String delZVKonto() throws ApplicationServerException {
+	String delZVKonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		if( frame.getApplicationServer().delZVKonto( treeKonten.getZVKonto() ) == treeKonten.getZVKonto().getId() ) {
 			treeKonten.delNode();
@@ -383,9 +406,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVTitel in der Datenbank und in dem Baum löschen. Wirft eine ApplicationServerException.
+	 * Einen ZVTitel in der Datenbank und in dem Baum löschen.
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String delZVTitel() throws ApplicationServerException {
+	String delZVTitel() throws ApplicationServerException, RemoteException {
 		String error = "";
 		if( frame.getApplicationServer().delZVTitel( treeKonten.getZVTitel() ) == treeKonten.getZVTitel().getId() ) {
 			treeKonten.getZVKonto().getSubTitel().remove( treeKonten.getZVTitel() );
@@ -398,9 +423,11 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Einen ZVUntertitel in der Datenbank und in dem Baum löschen. Wirft eine ApplicationServerException.
+	 * Einen ZVUntertitel in der Datenbank und in dem Baum löschen. 
+	 * @return String mit Fehlern. Wenn keine Fehler, dann ist der String leer.
+	 * @throws ApplicationServerException, RemoteException.
 	 */
-	String delZVUntertitel() throws ApplicationServerException {
+	String delZVUntertitel() throws ApplicationServerException, RemoteException {
 		String error = "";
 		if( frame.getApplicationServer().delZVUntertitel(treeKonten.getZVUntertitel()) == treeKonten.getZVUntertitel().getId() ) {
 			treeKonten.getZVTitel().getAllUntertitel().remove( treeKonten.getZVUntertitel() );
@@ -413,8 +440,8 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Eine Nachricht erzeugen wenn man auf den "Anlegen"-Button gedrückt hat
-	 * @return die erzeugte Nachricht
+	 * Eine Nachricht erzeugen wenn man auf den "Anlegen"-Button gedrückt hat.
+	 * @return Die erzeugte Nachricht.
 	 */
 	String getAddMessage() {
 		if( treeKonten.rootIsSelected() ) {
@@ -435,8 +462,8 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Eine Nachricht erzeugen wenn man auf den "Ändern"-Button gedrückt hat
-	 * @return die erzeugte Nachricht 
+	 * Eine Nachricht erzeugen wenn man auf den "Ändern"-Button gedrückt hat.
+	 * @return Die erzeugte Nachricht. 
 	 */
 	String getEditMessage() {
 		if( treeKonten.zvKontoIsSelected() ) {
@@ -469,8 +496,8 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Eine Nachricht erzeugen wenn man auf den "Ändern"-Button gedrückt hat
-	 * @return die erzeugte Nachricht
+	 * Eine Nachricht erzeugen wenn man auf den "Ändern"-Button gedrückt hat. 
+	 * @return Die erzeugte Nachricht. 
 	 */
 	String getDelMessage() {
 		if( treeKonten.zvKontoIsSelected() ) {
@@ -487,8 +514,9 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 		}
 	}
 
-
-
+	/**
+	 * Behandlung der Button-Ereignisse.
+	 */
 	public void actionPerformed(ActionEvent e) {
 		String error = "";
 		
@@ -515,7 +543,9 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 						}			
 					} catch (ApplicationServerException exception) {
 						error += " - " + exception.toString();
-					} 
+					} catch(RemoteException re) {
+						error += " - Fehler bei RMI-Kommunikation.";
+					}
 				}
 			}
 		} else if ( e.getSource() == buAendern ) {
@@ -534,7 +564,9 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 					}
 				} catch (ApplicationServerException exception) {
 					error += " - " + exception.toString();
-				} 
+				} catch(RemoteException re) {
+					error += " - Fehler bei RMI-Kommunikation.";
+				}
 			}
 		} else if ( e.getSource() == buAktualisieren ) {
 			loadZVKonten();
@@ -559,7 +591,9 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 						}			
 					} catch (ApplicationServerException exception) {
 						error += " - " + exception.toString();
-					} 
+					} catch(RemoteException re) {
+						error += " - Fehler bei RMI-Kommunikation.";
+					}
 				}
 			}
 		} else if ( e.getSource() == buBeenden ) {
@@ -572,6 +606,9 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 		}
 	}
 
+	/**
+	 * Verarbeitung der Ereignisse im Baum. 
+	 */
 	public void valueChanged(TreeSelectionEvent e) {
 		treeKonten.checkSelection( e );
 		showPanel();
@@ -579,9 +616,10 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn der root-Knoten im Baum ausgewählt wurde.
- * Hier kann man ein neues ZVKonto erstellen.
- * Es werden auch alle Funktion implementiert, die dazu notwendig sind.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn der root-Knoten im Baum ausgewählt wurde.<br>
+ * Hier kann man ein neues ZVKonto erstellen.<br>
+ * Es werden auch alle Funktion implementiert, die dazu notwendig sind.<br>
+ * @author w.flat
  */
 class RootPanel extends JPanel implements ActionListener {
 
@@ -601,6 +639,9 @@ class RootPanel extends JPanel implements ActionListener {
 	JRadioButton rbKapitelTitel = new JRadioButton( "Kapitel/Titel-Konto", false );
 	ButtonGroup group = new ButtonGroup();
 
+	/**
+	 * Erzeugung des <code>RootPanel</code>s.
+	 */
 	public RootPanel() {
 	  try {
 		jbInit();
@@ -612,6 +653,10 @@ class RootPanel extends JPanel implements ActionListener {
 	  setTextfields();
 	}
 	
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		labBezeichnung.setText("Bezeichnung");
 		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
@@ -666,7 +711,7 @@ class RootPanel extends JPanel implements ActionListener {
 	}
 		
 	/**
-	 * Alle Textfelder in Ausgangsposition bringen
+	 * Alle Textfelder in Ausgangsposition bringen. 
 	 */
 	public void setTextfields(){
 		tfBezeichnung.setText( "" );
@@ -681,7 +726,8 @@ class RootPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler die beim Erstellen eines ZVKontos entstanden sind 
+	 * Ermittlung der Fehler, die beim Erstellen eines ZVKontos entstanden sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getAddErrorString() {
 		String error = "";
@@ -692,7 +738,8 @@ class RootPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen eines neuen ZVKontos
+	 * Erstellen eines neuen ZVKontos. 
+	 * @return Neues ZVKonto, das aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVKonto getNewZVKonto() {
 		ZVKonto zvKonto;
@@ -713,7 +760,7 @@ class RootPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons gedrückt wurde. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == rbKapitelTGR ) {
@@ -731,9 +778,10 @@ class RootPanel extends JPanel implements ActionListener {
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein TGRKonto-Knoten im Baum ausgewählt wurde.
- * Es dient auch zum Aktualisieren eines ZVKontos und zum Erstellen eines neuen ZVTitels zum ausgewählten ZVKonto.
- * Es werden auch alle Funktion implementiert, die dazu notwendig sind.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein TGRKonto-Knoten im Baum ausgewählt wurde. <br>
+ * Es dient auch zum Aktualisieren eines ZVKontos und zum Erstellen eines neuen ZVTitels zum ausgewählten ZVKonto.<br>
+ * Es werden auch alle Funktion implementiert, die dazu notwendig sind.<br>
+ * @author w.flat
  */
 class TGRZVKontoPanel extends JPanel implements ActionListener {
 
@@ -762,6 +810,9 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	JRadioButton rbAb = new JRadioButton("Ab", false);
 	CurrencyTextField tfPruefbedingung = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
+	/**
+	 * Das <code>TGRZVKontoPanel</code> ertsellen. 
+	 */
 	public TGRZVKontoPanel() {
 	  try {
 		jbInit();
@@ -770,6 +821,11 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		labBezeichnung.setText("Bezeichnung");
 		labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
@@ -850,7 +906,9 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Die Textfelder mit Daten des übergebenden ZVKontos fühlen
+	 * Die Textfelder mit Daten des übergebenden ZVKontos fühlen. 
+	 * @param frame = MainFrame mit dem ApplicationServer. 
+	 * @param zvKonto = Das ZVKonto, welches angezeigt werden soll. 
 	 */
 	public void setTextfields( ZVKonto zvKonto, MainFrame frame ){
 		if( (this.zvKonto = zvKonto) == null || (this.frame = frame) == null )	// Kein ZVkonto angegeben
@@ -870,7 +928,8 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler die beim Aktualisieren eines ZVKontos entstanden sind  
+	 * Ermittlung der Fehler die beim Aktualisieren eines ZVKontos entstanden sind.  
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		String error = "";
@@ -881,7 +940,8 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler die beim Erstellen eines neuen ZVTitels zu dem ausgewählten ZVKonto entstanden sind  
+	 * Ermittlung der Fehler die beim Erstellen eines neuen ZVTitels zu dem ausgewählten ZVKonto entstanden sind.  
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getAddErrorString() {
 		if( zvKonto == null )
@@ -899,7 +959,8 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Estellen eines aktualisierten ZVKontos
+	 * Estellen eines aktualisierten ZVKontos. 
+	 * @return ZVKonto, das aus den Daten im Panel erzeugt wurde. 
 	 */
 	public ZVKonto getEditZVKonto(){
 		if( zvKonto == null )		// Es wurde kein ZVKonto angegeben
@@ -912,7 +973,8 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Estellen eines neuen ZVTitels zum angegebenem ZVKonto 
+	 * Estellen eines neuen ZVTitels zum angegebenem ZVKonto. 
+	 * @return ZVKonto, das aus den Daten im Panel erzeugt wurde. 
 	 */
 	public ZVTitel getNewZVTitel(){
 		if( zvKonto == null )		// Es wurde kein ZVKonto angegeben
@@ -924,7 +986,7 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {
@@ -951,7 +1013,10 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 						checkZweckgebunden.setSelected( false );
 					}
 				} catch (ApplicationServerException e1) {
-				} 
+				} catch(RemoteException re) {
+					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+				}
 			}
 		}
 	}
@@ -959,9 +1024,10 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein TitelZVKonto-Knoten im Baum ausgewählt wurde.
- * Hier kann man das vorhandene ZVKonto aktualisieren.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein TitelZVKonto-Knoten im Baum ausgewählt wurde.<br>
+ * Hier kann man das vorhandene ZVKonto aktualisieren.<br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class TitelZVKontoPanel extends JPanel implements ActionListener {
 
@@ -978,6 +1044,9 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 	JLabel labBezeichnung = new JLabel();
 	JCheckBox checkFreigegeben = new JCheckBox();
 
+	/**
+	 * Erstellen vom <code>TitelZVKontoPanel</code>.
+	 */
 	public TitelZVKontoPanel() {
 	  try {
 		jbInit();
@@ -986,6 +1055,11 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 	  labBezeichnung.setText("Bezeichnung");
 	  labBezeichnung.setBounds(new Rectangle(12, 12, 90, 15));
@@ -1025,7 +1099,9 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Textfelder mit Daten des ZVKontos fühlen
+	 * Textfelder mit Daten des ZVKontos fühlen. 
+	 * @param frame = MainFrame, welches den ApplicationServer hat. 
+	 * @param zvKonto = Das angezegt werden soll. 
 	 */
 	public void setTextfields( ZVKonto zvKonto, MainFrame frame ){
 		if( (this.zvKonto = zvKonto) == null || (this.frame = frame) == null )
@@ -1040,7 +1116,8 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Ermittlung der Fehler, die beim Aktualisieren eines ZVKontos aufgetreten sind. 
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		String error = "";
@@ -1051,7 +1128,8 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ein aktualisiertes ZVKonto erstellen
+	 * Ein aktualisiertes ZVKonto erstellen.
+	 * @return ZVKonto, das aus den Daten im Panel erzeugt wurde. 
 	 */
 	public ZVKonto getEditZVKonto(){
 		return new ZVKonto( zvKonto.getId(), zvKonto.getHaushaltsJahrId(), tfBezeichnung.getText(), tfKapitel.getText(),
@@ -1059,8 +1137,9 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 					checkZweckgebunden.isSelected(), checkFreigegeben.isSelected() ? '1' : '0',
 					zvKonto.getUebernahmeStatus() );
 	}
+	
 	/**
-	 * Reaktion auf die 'Zweckgebunden'-CheckBox
+	 * Reaktion auf die 'Zweckgebunden'-CheckBox. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 	if( e.getSource() == checkZweckgebunden ) {
@@ -1075,16 +1154,21 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 					checkZweckgebunden.setSelected( false );
 				}
 			} catch (ApplicationServerException e1) {
-			} 
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+			}
 		}
 	}
 	}
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein Titel-Knoten von einem TitelZVKonto im Baum ausgewählt wurde.
- * Hier kann man den vorhandenen ZVTitel aktualisieren und einen neuen ZVUntertitel zum ZVTitel erzeugen.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein Titel-Knoten <br>
+ * von einem TitelZVKonto im Baum ausgewählt wurde.<br>
+ * Hier kann man den vorhandenen ZVTitel aktualisieren und einen neuen ZVUntertitel zum ZVTitel erzeugen.<br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 
@@ -1110,6 +1194,9 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
+	/**
+	 * Erzeugen vom <code>TitelZVKontoTitelPanel</code>.
+	 */
 	public TitelZVKontoTitelPanel() {
 	  try {
 		jbInit();
@@ -1118,6 +1205,11 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		tfKapitel.setText("");
 		tfKapitel.setBounds(new Rectangle(102, 47, 80, 21));
@@ -1190,7 +1282,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 		
 	/**
-	 * Textfelder mit Daten des ZVTitels fühlen
+	 * Textfelder mit Daten des ZVTitels fühlen. 
+	 * @param zvTitel = Von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( ZVTitel zvTitel ){
 		if( (this.zvTitel = zvTitel) == null )	// Kein ZVTitel angegeben
@@ -1212,7 +1305,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler, die beim Aktualisieren des ZVTitels entstanden sind
+	 * Ermittlung der Fehler, die beim Aktualisieren des ZVTitels entstanden sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		if( zvTitel == null )
@@ -1228,7 +1322,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler, die beim Erstellen eines neuen ZVUntertitels zum angegebenem ZVTitel entstanden sind
+	 * Ermittlung der Fehler, die beim Erstellen eines neuen ZVUntertitels zum angegebenem ZVTitel entstanden sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */	
 	public String getAddErrorString() {
 		if( zvTitel == null )
@@ -1244,7 +1339,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Einen aktualisierten ZVTitel erstellen 
+	 * Einen aktualisierten ZVTitel erstellen.
+	 * @return ZVTitel, das aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVTitel getEditZVTitel() {
 		if( zvTitel == null )
@@ -1257,7 +1353,8 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Einen neuen ZVUntertitel zum angegebenem ZVTitel erzeugen
+	 * Einen neuen ZVUntertitel zum angegebenem ZVTitel erzeugen.
+	 * @return ZVUntertitel, das aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVUntertitel getNewZVUntertitel() {
 		if( zvTitel == null )
@@ -1269,7 +1366,7 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {
@@ -1289,9 +1386,10 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein Untertitel-Knoten von einem TitelZVKonto
- * im Baum ausgewählt wurde. Hier kann man den ZVUntertitel aktualisieren.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein Untertitel-Knoten von einem TitelZVKonto<br>
+ * im Baum ausgewählt wurde. Hier kann man den ZVUntertitel aktualisieren.<br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 
@@ -1316,6 +1414,9 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
+	/**
+	 * Erzeugen vom <code>TitelZVKontoUntertitelPanel</code>.
+	 */
 	public TitelZVKontoUntertitelPanel() {
 	  try {
 		jbInit();
@@ -1324,6 +1425,11 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		tfBemerkung.setText("");
 		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
@@ -1391,7 +1497,8 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Textfelder mit Daten des ZVUntertitels fühlen
+	 * Textfelder mit Daten des ZVUntertitels fühlen.
+	 * @param zvUntertitel = ZVUNtertitel, von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( ZVUntertitel zvUntertitel ){
 		if( (this.zvUntertitel = zvUntertitel) == null )	// Kein ZVTitel angegeben
@@ -1413,7 +1520,8 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler, die beim Aktualisieren des ZVUntertitels entstanden sind
+	 * Ermittlung der Fehler, die beim Aktualisieren des ZVUntertitels entstanden sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		if( zvUntertitel == null )
@@ -1427,7 +1535,8 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen des aktualisierten ZVUntertitels 
+	 * Erstellen des aktualisierten ZVUntertitels. 
+	 * @return ZVUntertitel, das aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVUntertitel getEditZVUntertitel() {
 		if( zvUntertitel == null )
@@ -1442,7 +1551,7 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {
@@ -1462,9 +1571,11 @@ class TitelZVKontoUntertitelPanel extends JPanel implements ActionListener {
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein Titel-Knoten von einem TGRZVKonto im Baum ausgewählt wurde.
- * Hier kann man den vorhandenen ZVTitel aktualisieren und einen ZVUntertitel zum ZVTitel erstellen.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden, wenn ein Titel-Knoten <br>
+ * von einem TGRZVKonto im Baum ausgewählt wurde.<br>
+ * Hier kann man den vorhandenen ZVTitel aktualisieren und einen ZVUntertitel zum ZVTitel erstellen.<br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 
@@ -1492,7 +1603,9 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
-	
+	/**
+	 * Erzeugen vom <code>TGRZVKontoTitelPanel</code>.
+	 */	
 	public TGRZVKontoTitelPanel() {
 	  try {
 		jbInit();
@@ -1501,6 +1614,11 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		tfKapitel.setText("");
 		tfKapitel.setBounds(new Rectangle(412, 12, 80, 21));
@@ -1581,7 +1699,8 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Die Textfelder mit den Daten des angegebenen ZVTitels fühlen
+	 * Die Textfelder mit den Daten des angegebenen ZVTitels fühlen.
+	 * @param zvTitel = ZVTitel, von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( ZVTitel zvTitel ){
 		if( (this.zvTitel = zvTitel) == null )
@@ -1605,6 +1724,7 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	
 	/**
 	 * Ermittlung der Fehler beim Aktualisieren des vorhandenen ZVTitels entstanden sind
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		String error = "";
@@ -1616,6 +1736,7 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	
 	/**
 	 * Ermittlung der Fehler beim eines neuen ZVUntertitels zum vorhandenen ZVTitel entstanden sind
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getAddErrorString() {
 		String error = "";
@@ -1628,7 +1749,8 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen von einem aktualisiertem ZVTitel
+	 * Erstellen von einem aktualisiertem ZVTitel.
+	 * @return ZVTitel, der aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVTitel getEditZVTitel() {
 		if( zvTitel == null )
@@ -1642,7 +1764,8 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Einen neuen ZVUntertitel zum angegebenem ZVTitel erzeugen
+	 * Einen neuen ZVUntertitel zum angegebenem ZVTitel erzeugen. 
+	 * @return ZVUntertitel, der aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVUntertitel getNewZVUntertitel() {
 		if( zvTitel == null )
@@ -1655,7 +1778,7 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {
@@ -1675,9 +1798,10 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein Untertitel-Knoten von einem TGRKonto
- * im Baum ausgewählt wurde. Hier kann man den Untertitel aktualisieren.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden wenn ein Untertitel-Knoten von einem TGRKonto<br>
+ * im Baum ausgewählt wurde. Hier kann man den Untertitel aktualisieren. <br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 
@@ -1704,6 +1828,9 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
+	/**
+	 * Erzeugen vom <code>TGRZVKontoUntertitelPanel</code>.
+	 */
 	public TGRZVKontoUntertitelPanel() {
 	  try {
 		jbInit();
@@ -1712,6 +1839,11 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche.
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 		tfBemerkung.setText("");
 		tfBemerkung.setBounds(new Rectangle(102, 112, 210, 21));
@@ -1787,7 +1919,8 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Die Textfelder mit den Daten des übergebenden ZVUntertitels fühlen
+	 * Die Textfelder mit den Daten des übergebenden ZVUntertitels fühlen. 
+	 * @param zvUntertitel = ZVUntertitel, von dem die Daten übernommen werden.
 	 */
 	public void setTextfields( ZVUntertitel zvUntertitel ){
 		if( (this.zvUntertitel = zvUntertitel) == null )
@@ -1810,7 +1943,8 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler, die beim Aktualisieren des ZVUntertitels entstanden sind
+	 * Ermittlung der Fehler, die beim Aktualisieren des ZVUntertitels entstanden sind.
+	 * @return String mit Fehlern. Wenn String leer, dann sind keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		if( zvUntertitel == null )
@@ -1824,7 +1958,8 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen des aktualisierten ZVUntertitels
+	 * Erstellen des aktualisierten ZVUntertitels.
+	 * @return ZVUntertitel, das aus den Daten des Panels erzeugt wurde. 
 	 */
 	public ZVUntertitel getEditZVUntertitel() {
 		if( zvUntertitel == null )
@@ -1838,7 +1973,7 @@ class TGRZVKontoUntertitelPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {

@@ -22,7 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.rmi.Naming;
+import java.rmi.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -96,7 +96,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, new ArrayList(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 
 		init();
 		tfBestellDatum.setValue(new Date(System.currentTimeMillis()));
@@ -112,7 +115,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, bestellung.getAngebot().getPositionen(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 
 	  init();
 	  setOrderData();
@@ -196,6 +202,9 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			}
 	  } catch (ApplicationServerException e) {
 		  e.printStackTrace();
+	  } catch(RemoteException re) {
+		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
   }
 
@@ -209,7 +218,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			labFirma.setText("" + firma);
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		}
+	} catch(RemoteException re) {
+		MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+												"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+	}
   }
 
 
@@ -286,7 +298,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
  }
 
  	private void clearInputFields(){
@@ -356,21 +371,21 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		BestellungASK bestellung;
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			test.setApplicationServer(applicationServer);
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("a").toString());
-			test.setBenutzer(applicationServer.login("test", psw));
-			test.setBounds(100,100,800,900);
-			test.setExtendedState(Frame.MAXIMIZED_BOTH);
-			test.setJMenuBar( new MainMenu( test ) );
-
-			ASKBestellung best = applicationServer.getASKBestellung(8);
-			bestellung = new BestellungASK(test, best);
-			test.addChild(bestellung);
-
-			test.show();
-			bestellung.show();
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			test.setApplicationServer(applicationServer);
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("a").toString());
+//			test.setBenutzer(applicationServer.login("test", psw));
+//			test.setBounds(100,100,800,900);
+//			test.setExtendedState(Frame.MAXIMIZED_BOTH);
+//			test.setJMenuBar( new MainMenu( test ) );
+//
+//			ASKBestellung best = applicationServer.getASKBestellung(8);
+//			bestellung = new BestellungASK(test, best);
+//			test.addChild(bestellung);
+//
+//			test.show();
+//			bestellung.show();
 		}catch(Exception e){
 			bestellung = new BestellungASK(test);
 			test.addChild(bestellung);
@@ -622,7 +637,10 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  } catch (ApplicationServerException e) {
 		  MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 		  e.printStackTrace();
-	  } 
+	  } catch(RemoteException re) {
+		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+	  }
   }
 
 

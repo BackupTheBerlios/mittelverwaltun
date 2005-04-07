@@ -8,7 +8,8 @@ import javax.swing.table.*;
 import dbObjects.*;
 
 /**
- * @author robert
+ * Tabelle zum Anzeigen der Belege die zu einer Kleinbestellung gehören. 
+ * @author w.flat
  */
 public class BestellungKleinTable extends JTable {
 
@@ -306,7 +307,6 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * JButton-Renderer für die letzte Spalte.
 	 * author w.flat
-	 * 02.03.2005
 	 */
 	private static class TableButtonCellRenderer implements TableCellRenderer {
 		final JButton button;
@@ -324,7 +324,6 @@ public class BestellungKleinTable extends JTable {
 	/**
 	 * JButton-CellEditor für die letzte Spalte.
 	 * author w.flat
-	 * 02.03.2005
 	 */
 	private static class TableButtonCellEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {        
 		final JButton button;

@@ -7,10 +7,15 @@ import applicationServer.*;
 import dbObjects.*;
 import java.awt.*;
 import java.awt.event.*;
-
+import java.rmi.*;
 
 /**
- * 
+ * Frame zur Verwaltung der FBHauptkonten. <br>
+ * Es können : <br>
+ * 1. Neue FBKonten angelegt werden.<br>
+ * 2. FBKonten aktualisiert werden. <br>
+ * 3. FBkonten gelöscht werden. <br>
+ * @author w.flat
  */
 public class FBKontenverwaltung extends JInternalFrame implements ActionListener, TreeSelectionListener {
 
@@ -49,7 +54,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	
 	}
 		
-
+	/**
+	 * Erzeugen vom Frame zum Verwalten der FBKonten. 
+	 * @param frame = MainFrame in dem das JInternalFrame liegt und welches den ApplicationServer besitzt.
+	 * author w.flat
+	 */
 	public FBKontenverwaltung( MainFrame frame ) {
 		super( "FB-Kontenverwaltung" );
 		this.setClosable( true );
@@ -106,12 +115,15 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} 
+			} catch(RemoteException re) {
+				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+			}
 		}
 	}
 	
 	/**
-	 * Auswahl des richtigen Panels, das angezeigt wird
+	 * Auswahl des richtigen Panels, das angezeigt werden soll. 
 	 */
 	void showPanel(){
 		if( treeKonten.rootIsSelected() ) {
@@ -137,10 +149,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein neues FBHauptkonto in der Datenbank und im Baum erstellen. Wirft ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * Ein neues FBHauptkonto in der Datenbank und im Baum erstellen. 
+	 * @return String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * @throws ApplicationServerException und RemoteException
 	 */
-	String addFBHauptkonto() throws ApplicationServerException {
+	String addFBHauptkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		FBHauptkonto konto = null;
 		
@@ -162,10 +175,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 
 	/**
-	 * Ein neues FBUnterkonto in der Datenbank und im Baum erstellen. Wirft ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * Ein neues FBUnterkonto in der Datenbank und im Baum erstellen.
+	 * @return String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * @throws ApplicationServerException und RemoteException.
 	 */
-	String addFBUnterkonto() throws ApplicationServerException {
+	String addFBUnterkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		FBUnterkonto konto = null;
 		
@@ -187,10 +201,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein FBHauptkonto in der Datenbank und im Baum aktualisieren. Wirft ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * Ein FBHauptkonto in der Datenbank und im Baum aktualisieren. 
+	 * @return String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * @throws ApplicationServerException und RemoteException.
 	 */
-	String setFBHauptkonto() throws ApplicationServerException {
+	String setFBHauptkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		FBHauptkonto konto = null;
 		
@@ -211,10 +226,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein FBUnterkonto in der Datenbank und im Baum aktualisieren. Wirft ApplicationServerException.
-	 * Rückgabe ist ein String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * Ein FBUnterkonto in der Datenbank und im Baum aktualisieren. 
+	 * @return String mit Fehlern. Wenn der String leer ist, dann sind keine Fehler aufgetreten.
+	 * @throws ApplicationServerException und RemoteException.
 	 */
-	String setFBUnterkonto() throws ApplicationServerException {
+	String setFBUnterkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		FBUnterkonto konto = null;
 		
@@ -235,9 +251,10 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein FBHauptkonto in der Datenbank und im Baum löschen. Wirft ApplicationServerException.
+	 * Ein FBHauptkonto in der Datenbank und im Baum löschen.
+	 * @throws ApplicationServerException und RemoteException.
 	 */
-	String delFBHauptkonto() throws ApplicationServerException {
+	String delFBHauptkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		if( frame.getApplicationServer().delFBHauptkonto( treeKonten.getFBHauptkonto() ) > 0 ) {
 			treeKonten.getInstitut().getHauptkonten().remove( treeKonten.getFBHauptkonto() );
@@ -250,9 +267,10 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Ein FBUnterkonto in der Datenbank und im Baum aktualisieren. Wirft ApplicationServerException.
+	 * Ein FBUnterkonto in der Datenbank und im Baum aktualisieren. 
+	 * @throws ApplicationServerException und RemoteException.
 	 */
-	String delFBUnterkonto() throws ApplicationServerException {
+	String delFBUnterkonto() throws ApplicationServerException, RemoteException {
 		String error = "";
 		if( frame.getApplicationServer().delFBUnterkonto( treeKonten.getFBUnterkonto() )  > 0 ) {
 			treeKonten.getFBHauptkonto().getUnterkonten().remove( treeKonten.getFBUnterkonto() );
@@ -266,7 +284,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	
 	/**
 	 * Erzeugen einer Nachricht wenn man auf den "Anlegen"-Button gedrückt hat.
-	 * @return die erzeugte Nachricht
+	 * @return Die erzeugte Nachricht
 	 */
 	String getAddMessage() {
 		if( treeKonten.institutIsSelected() )
@@ -279,7 +297,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	
 	/**
 	 * Erzeugen einer Nachricht wenn man auf den "Löschen"-Button gedrückt hat.
-	 * @return die erzeugte Nachricht
+	 * @return Die erzeugte Nachricht
 	 */
 	String getDelMessage() {
 		if( treeKonten.fbHauptkontoIsSelected() )
@@ -293,7 +311,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	
 	/**
 	 * Erzeugen einer Nachricht wenn man auf den "Ändern"-Button gedrückt hat.
-	 * @return die erzeugte Nachricht
+	 * @return Die erzeugte Nachricht
 	 */
 	String getEditMessage() {
 		if( treeKonten.fbHauptkontoIsSelected() )
@@ -306,7 +324,7 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 	}
 	
 	/**
-	 * Reaktion auf die Knöpfe
+	 * Reaktion auf die Button-Ereignisse.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		String error = "";
@@ -326,6 +344,9 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 							error += addFBUnterkonto();
 					} catch( ApplicationServerException exception ) {
 						error += " - " + exception.toString();
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 					}
 				}
 			}
@@ -344,7 +365,10 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 							error += delFBUnterkonto();
 					} catch( ApplicationServerException exception ) {
 						error += " - " + exception.toString();
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 				}
 			}
 		} else if ( e.getSource() == buAendern ) {		// Button "Ändern" wurde gedrückt
@@ -362,7 +386,10 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 							error += setFBUnterkonto();
 					} catch( ApplicationServerException exception ) {
 						error += " - " + exception.toString();
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 				}
 			}
 		} else if ( e.getSource() == buAktualisieren ) {
@@ -377,6 +404,9 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 		}
 	}
 	
+	/**
+	 * Reaktion auf die Änderungen im Baum. 
+	 */
 	public void valueChanged( TreeSelectionEvent e ) {
 		treeKonten.checkSelection( e );
 		showPanel();
@@ -384,9 +414,10 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden um ein FBHauptkonto oder ein Institut anzuzeigen,
- * ein FBHauptkonto, FBUnterkonto zu erstellen und ein FBHauptkonto zu aktualisieren.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden um ein FBHauptkonto oder ein Institut anzuzeigen, <br>
+ * ein FBHauptkonto, FBUnterkonto zu erstellen und ein FBHauptkonto zu aktualisieren. <br>
  * Es werden auch alle Funktion implementiert, die dazu benötigt werden.
+ * @author w.flat
  */
 class FBHauptkontoPanel extends JPanel implements ActionListener {
 
@@ -413,6 +444,9 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	JLabel labVormerkungen = new JLabel();
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 
+	/**
+	 * Das FBHauptkontoPanel Erzeugen.
+	 */
 	public FBHauptkontoPanel() {
 	  try {
 		jbInit();
@@ -421,6 +455,11 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 		ex.printStackTrace();
 	  }
 	}
+	
+	/**
+	 * Initialisieren der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 	  this.setLayout(null);
 	  tfBezeichnung.setToolTipText("");
@@ -495,7 +534,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Die Textfelder mit Daten des übergebenden Instituts fühlen
+	 * Die Textfelder mit Daten des übergebenden Instituts fühlen. 
+	 * @param institut = Institut von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( Institut institut ) {
 		if( (this.institut = institut) == null )		// Wenn kein Institut angegeben
@@ -518,7 +558,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Die Textfelder mit Daten des übergebenden FBHauptkontos fühlen
+	 * Die Textfelder mit Daten des übergebenden FBHauptkontos fühlen. 
+	 * @param konto = FBHauptkonto von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( FBHauptkonto konto ) {
 		if( (this.konto = konto) == null )		// Wenn kein FBHauptkonto angegeben
@@ -540,7 +581,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermitlung der Fehler die beim Erstellen eines neuen FBUnterkontos aufgetreten sind
+	 * Ermitlung der Fehler die beim Erstellen eines neuen FBUnterkontos aufgetreten sind. 
+	 * @return String mit Fehlern. Wenn leerer String, dann keine Fehler aufgetreten. 
 	 */
 	public String getAddErrorString() {
 		String error = "";
@@ -555,7 +597,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Ermittlung der Fehler die beim Aktualisieren eines FBHauptkontos aufgetreten sind
+	 * Ermittlung der Fehler die beim Aktualisieren eines FBHauptkontos aufgetreten sind.
+	 * @return String mit Fehlern. Wenn leerer String, dann keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		String error = "";
@@ -568,7 +611,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen eines aktualisierten FBHauptkontos
+	 * Erstellen eines aktualisierten FBHauptkontos. 
+	 * @return FBHauptkonto, welches aus den Daten des Panels erstellt wurde. 
 	 */
 	public FBHauptkonto getEditFBHauptkonto(){
 		if( konto == null )
@@ -582,7 +626,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen eines neuen FBHauptkontos zu einem Institut
+	 * Erstellen eines neuen FBHauptkontos zu einem Institut.
+	 * @return FBHauptkonto, welches aus den Daten des Panels erstellt wurde. 
 	 */
 	public FBHauptkonto getNewFBHauptkonto(){
 		if( institut == null )
@@ -595,7 +640,8 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Erstellen eines neuen FBUnterkontos zu einem FBHauptkonto
+	 * Erstellen eines neuen FBUnterkontos zu einem FBHauptkonto.
+	 * @return FBUnterkonto, welches aus den Daten des Panels erstellt wurde. 
 	 */
 	public FBUnterkonto getNewFBUnterkonto(){
 		if( konto == null )
@@ -606,7 +652,7 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 	}
 
 	/**
-	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde
+	 * Hier erfolgt die Reaktion wenn eines der RadioButtons oder CheckBox gedrückt wurde. 
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if( e.getSource() == checkPruefbedingung ) {
@@ -626,9 +672,10 @@ class FBHauptkontoPanel extends JPanel implements ActionListener {
 }
 
 /**
- * Panel zum Anzeigen aller Textfelder, die gebraucht werden
- * wenn ein FBUnterkonto anzuzeigen. Es werden auch alle
- * Funktion implementiert, die dazu benötigt werden.
+ * Panel zum Anzeigen aller Textfelder, die gebraucht werden <br>
+ * wenn ein FBUnterkonto anzuzeigen. Es werden auch alle <br>
+ * Funktion implementiert, die dazu benötigt werden. 
+ * @author w.flat
  */
 class FBUnterkontoPanel extends JPanel {
 
@@ -647,6 +694,9 @@ class FBUnterkontoPanel extends JPanel {
 	CurrencyTextField tfVormerkungen = new CurrencyTextField( Integer.MIN_VALUE, Integer.MAX_VALUE );
 	JCheckBox checkKleinbestellungen = new JCheckBox();
 	
+	/**
+	 * Erzeugen des FBUnterkontoPanels.
+	 */
 	public FBUnterkontoPanel() {
 	  try {
 		jbInit();
@@ -655,6 +705,11 @@ class FBUnterkontoPanel extends JPanel {
 		ex.printStackTrace();
 	  }
 	}
+	
+	/**
+	 * Initialisierung der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
 	void jbInit() throws Exception {
 	  this.setLayout(null);
 	  tfBezeichnung.setToolTipText("");
@@ -706,7 +761,8 @@ class FBUnterkontoPanel extends JPanel {
 	}
 	
 	/**
-	 * Die Textfelder mit Daten des übergebenden FBUnterkontos fühlen
+	 * Die Textfelder mit Daten des übergebenden FBUnterkontos fühlen. 
+	 * @param konto = FBUnterkonto von dem die Daten übernommen werden. 
 	 */
 	public void setTextfields( FBUnterkonto konto ) {
 		if( (this.konto = konto) == null )		// Wenn kein FBUnterkonto angegeben
@@ -723,6 +779,7 @@ class FBUnterkontoPanel extends JPanel {
 	
 	/**
 	 * Ermittlung der Fehler die beim Aktualisieren eines FBUnterkontos aufgetreten sind
+	 * @return String mit Fehlern. Wenn leerer String, dann keine Fehler aufgetreten. 
 	 */
 	public String getEditErrorString() {
 		String error = "";
@@ -735,7 +792,8 @@ class FBUnterkontoPanel extends JPanel {
 	}
 	
 	/**
-	 * Erstellen eines aktualisierten FBUnterkontos
+	 * Erstellen eines aktualisierten FBUnterkontos.
+	 * @return FBUnterkonto welches aus den Daten des Panels erstellt wurde. 
 	 */
 	public FBUnterkonto getEditFBUnterkonto(){
 		if( konto == null )

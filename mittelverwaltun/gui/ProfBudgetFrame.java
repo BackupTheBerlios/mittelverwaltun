@@ -19,7 +19,7 @@ import dbObjects.Institut;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
+import java.rmi.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -194,7 +194,10 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 					} catch (ApplicationServerException exc) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 						exc.printStackTrace();
-					} 
+					} catch(RemoteException re) {
+						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+					}
 					
 				}
 			}
@@ -212,10 +215,10 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 		test.setBounds(100,100,800,700);
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			applicationServer.login("r.driesner", psw);
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			applicationServer.login("r.driesner", psw);
 //			ProfBudgetFrame pdf = new ProfBudgetFrame(applicationServer);
 //			desk.add(pdf);
 //			test.show();
@@ -238,7 +241,10 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			tfPauschBudget.setValue(new Float(0));
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. Professorenpauschale", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-	 	} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 		
 	 	try {
 			tfAvBudget.setValue(new Float(as.getAvailableNoPurposeBudget()));
@@ -247,7 +253,10 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. verfügbaren Budgets", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
 		 	
-	 	} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 		
 	 	try{
 			ArrayList pnData = new ArrayList();
@@ -301,6 +310,9 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   }catch(ApplicationServerException e){
 	   		e.printStackTrace();
 	   		MessageDialogs.showDetailMessageDialog(this, "Fehler bei Ermittlung der Professoren bzw. Konten eines Instituts", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-	   } 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 }

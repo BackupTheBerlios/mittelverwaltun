@@ -1,11 +1,11 @@
 package gui;
 
 import javax.swing.*;
-import applicationServer.ApplicationServer;
+import applicationServer.*;
 
 import dbObjects.Fachbereich;
 import dbObjects.Institut;
-
+import java.rmi.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -129,7 +129,28 @@ public class Fachbereichverwaltung extends JInternalFrame implements ActionListe
 			return e.getMessage();
 		}
 	}
-	 
+
+	 public static void main(String[] args) {
+		  JFrame test = new JFrame("Fachbereichverwaltung Test");
+		  JDesktopPane desk = new JDesktopPane();
+		  desk.setDesktopManager(new DefaultDesktopManager());
+		  test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		  test.setContentPane(desk);
+		  test.setBounds(100,100,800,700);
+		  try{
+			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
+//			  ApplicationServer applicationServer = server.getMyApplicationServer();
+//			  PasswordEncrypt pe = new PasswordEncrypt();
+//			  String psw = pe.encrypt(new String("r.driesner").toString());
+//			  applicationServer.login("r.driesner", psw);
+//			  Fachbereichverwaltung fachbereichverwaltung = new Fachbereichverwaltung(applicationServer);
+//			  desk.add(fachbereichverwaltung);
+//			  test.show();
+//			  fachbereichverwaltung.show();
+		  }catch(Exception e){
+				  System.out.println(e);
+		  }
+	 }
 
   private void jbInit() throws Exception {
 	 this.setTitle("Fachbereichverwaltung");

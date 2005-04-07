@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.net.URL;
-import java.rmi.Naming;
+import java.rmi.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -277,6 +277,8 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	  } catch (ApplicationServerException e) {
 			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 		  e.printStackTrace();
+	  } catch(RemoteException re) {
+	  	  re.printStackTrace();
 	  }
   }
 
@@ -295,7 +297,9 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		} catch (ApplicationServerException e) {
 			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		} 
+		} catch(RemoteException re) {
+			re.printStackTrace();
+		}
 	 }
 
 	public static void main(String[] args) {
@@ -303,20 +307,20 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		Reports report;
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-			ApplicationServer applicationServer = server.getMyApplicationServer();
-			test.setApplicationServer(applicationServer);
-			PasswordEncrypt pe = new PasswordEncrypt();
-			String psw = pe.encrypt(new String("r.driesner").toString());
-			test.setBenutzer(applicationServer.login("r.driesner", psw));
-			test.setBounds(100,100,800,900);
-			test.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-			test.setJMenuBar( new MainMenu( test ) );
-
-			report = new Reports(test);
-			test.addChild(report);
-			test.show();
-			report.show();
+//			ApplicationServer applicationServer = server.getMyApplicationServer();
+//			test.setApplicationServer(applicationServer);
+//			PasswordEncrypt pe = new PasswordEncrypt();
+//			String psw = pe.encrypt(new String("r.driesner").toString());
+//			test.setBenutzer(applicationServer.login("r.driesner", psw));
+//			test.setBounds(100,100,800,900);
+//			test.setExtendedState(Frame.MAXIMIZED_BOTH);
+//
+//			test.setJMenuBar( new MainMenu( test ) );
+//
+//			report = new Reports(test);
+//			test.addChild(report);
+//			test.show();
+//			report.show();
 	 }catch(Exception e){
 			System.out.println(e);
 	 }
@@ -502,7 +506,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 
 	private void showOrder(){
@@ -519,7 +526,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		} 
+		} catch(RemoteException re) {
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
+		}
 	}
 
 	private void printReport(){

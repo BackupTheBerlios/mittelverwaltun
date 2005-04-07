@@ -11,6 +11,10 @@ import javax.swing.*;
 
 import dbObjects.Rolle;
 
+/**
+ * Das HauptMenü im Client-Fenster.
+ * @author w.flat
+ */
 public class MainMenu extends JMenuBar implements ActionListener {
 
 	// Das Menü "Sitzung"
@@ -220,6 +224,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());
 	}
 	
+	/**
+	 * Die Aktionen wenn eines der Menü-Felder angeclickt werden. 
+	 */
 	public void actionPerformed(ActionEvent e) {
 
 		if ( e.getSource() == miAccountAendern ) {

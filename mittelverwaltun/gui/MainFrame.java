@@ -67,7 +67,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	public void sendBenutzer() {
 		if( centralServer != null && applicationServer != null ) {
 			try {
-				centralServer.addBenutzerNameToUser( applicationServer.getId(), benutzer.getBenutzername() );
+				centralServer.addBenutzerNameToUser( applicationServer.getName(), benutzer.getBenutzername() );
 			} catch (RemoteException e1) {
 			}
 		}
@@ -116,8 +116,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	public void onWindowClosing() {
 		if( centralServer != null && applicationServer != null ) {
 			try {
-				centralServer.delUser( applicationServer.getId() );
 				applicationServer.logout();
+				centralServer.delUser( applicationServer.getName() );
 			} catch(RemoteException e1) {
 			} catch(ConnectionException ec) {
 			}

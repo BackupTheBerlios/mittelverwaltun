@@ -12,7 +12,6 @@ import dbObjects.*;
 /**
  * Anmeldungs-Fenster zum Anmelden im FBMittelverwaltungs-System.
  * @author w.flat
- * 06.03.2005
  */
 public class StartWindow extends JFrame implements ActionListener {
 	
@@ -55,9 +54,13 @@ public class StartWindow extends JFrame implements ActionListener {
 			tfBenutzername.requestFocus();
 			centralServer = (CentralServer)Naming.lookup("//" + host + "/" + serverName);
 			InetAddress addr = InetAddress.getLocalHost();
-			applicationServer = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
-		}
-		catch(Exception e) {
+			String applServerName = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
+			if(applServerName == null)
+				throw new Exception("Der ApplicationServer konnte nicht gestartet werden.");
+			System.out.println(applServerName);
+			applicationServer = (ApplicationServer)Naming.lookup("//" + host + "/" + applServerName);
+			System.out.println(applicationServer.getName());
+		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			centralServer = null;
 			applicationServer = null;
@@ -138,10 +141,16 @@ public class StartWindow extends JFrame implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == butAbbrechen) {		// Wenn der Abbrechen-Button betätigt wurde
+			if(applicationServer != null) {
+				try {
+					applicationServer.logout();
+				} catch (Exception e1) {
+				}
+			}
 			if(centralServer != null && applicationServer != null) {
 				try {
-					centralServer.delUser(applicationServer.getId());
-				} catch (RemoteException e1) {
+					centralServer.delUser(applicationServer.getName());
+				} catch (Exception e1) {
 				}
 			}
 			setVisible(false);
@@ -165,7 +174,7 @@ public class StartWindow extends JFrame implements ActionListener {
 					// Benutzer abfragen
 					benutzer = applicationServer.login(tfBenutzername.getText(), psw);
 					// Dem CentralServer den Namen des Users übertragen
-					centralServer.addBenutzerNameToUser( applicationServer.getId(), benutzer.getBenutzername() );
+					centralServer.addBenutzerNameToUser( applicationServer.getName(), benutzer.getBenutzername() );
 					// Fenster unsichtbar schalten
 					setVisible(false);
 					// Haupt-Fenster generieren
