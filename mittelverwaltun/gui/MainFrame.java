@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import org.jfree.report.Boot;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -28,6 +31,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.centralServer = centralServer;
 			this.applicationServer = applicationServer;
 			this.benutzer = benutzer;
+			Boot.start();	// Initialisierung der Module für das Drucken
 			InetAddress addr = InetAddress.getLocalHost();
 			bg = loadImageResource("image","bg.jpg");
 			if (bg != null)

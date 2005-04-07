@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://localhost/fbm" href="FBMittelverwaltung.jnlp">
+  <information>
+    <title>FBMittelverwaltung</title>
+    <vendor>d</vendor>
+    <homepage href="FBMittelverwaltung.html" />
+  </information>
+  <resources>
+    <j2se version="1.3+" />
+    <jar href="client.jar" />
+  </resources>
+  <application-desc main-class="gui.Start" />
+</jnlp>

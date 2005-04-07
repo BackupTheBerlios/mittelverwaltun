@@ -13,7 +13,6 @@ import dbObjects.Institut;
 import dbObjects.ZVTitel;
 import dbObjects.ZVUntertitel;
 
-import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
 import applicationServer.CentralServer;
 

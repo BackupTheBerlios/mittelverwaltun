@@ -5,7 +5,6 @@ import java.rmi.Naming;
 
 import dbObjects.Benutzer;
 
-import applicationServer.ApplicationServer;
 import applicationServer.CentralServer;
 import junit.framework.TestCase;
 

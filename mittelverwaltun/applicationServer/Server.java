@@ -18,8 +18,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
 
-	String rmiregistry = "C:\\j2sdk1.4.2\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2\\lib";
+	String rmiregistry = "C:\\j2sdk1.4.2_08\\bin\\rmiregistry.exe ";
+	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2_08\\lib";
 
 	final int delay = 3000;
 	JScrollPane scrollList = new JScrollPane();

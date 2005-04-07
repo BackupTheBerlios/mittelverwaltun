@@ -2,7 +2,6 @@ package gui;
 
 import java.rmi.Naming;
 
-import applicationServer.ApplicationServer;
 import applicationServer.CentralServer;
 import junit.framework.TestCase;
 

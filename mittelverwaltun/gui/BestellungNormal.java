@@ -5,7 +5,6 @@ import javax.swing.table.DefaultTableModel;
 
 import dbObjects.*;
 
-import applicationServer.ApplicationServer;
 import applicationServer.ApplicationServerException;
 import applicationServer.CentralServer;
 
