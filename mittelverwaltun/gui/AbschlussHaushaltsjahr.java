@@ -48,13 +48,13 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     
   	this.frame = frame;
   	
-  	this.setSize(760, 460);
+  	this.setSize(1065, 460);
   	this.getContentPane().setLayout(null);
 
     pnHeader.setBackground(Color.white);
     pnHeader.setForeground(Color.black);
     pnHeader.setBorder(null);
-    pnHeader.setBounds(new Rectangle(0, 10, 750, 55));
+    pnHeader.setBounds(new Rectangle(0, 10, 1055, 55));
     pnHeader.setLayout(null);
 
     lbHeadline.setFont(new java.awt.Font("Dialog", 1, 14));
@@ -156,7 +156,7 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 
     pnHeader.add(lbHeadline5, null);
 
-    spContent1.setBounds(new Rectangle(5, 75, 740, 300));
+    spContent1.setBounds(new Rectangle(5, 75, 1045, 300));
     try {
 		taContent1 = new AccountTable(frame.applicationServer.getOffeneZVKonten(frame.applicationServer.getCurrentHaushaltsjahrId()));
 	} catch (RemoteException e) {
@@ -168,19 +168,18 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 	}
     
 	spContent1.getViewport().add(taContent1, null);
-    spContent2.setBounds(new Rectangle(5, 75, 740, 300));
-    
-    
+    spContent2.setBounds(new Rectangle(5, 75, 1045, 300));
+     
     
     //spContent2.setVisible(false);
 
-    spContent3.setBounds(new Rectangle(5, 75, 740, 300));
+    spContent3.setBounds(new Rectangle(5, 75, 1045, 300));
     //spContent3.setVisible(false);
 
-    spContent4.setBounds(new Rectangle(5, 75, 740, 300));
+    spContent4.setBounds(new Rectangle(5, 75, 1045, 300));
     //spContent4.setVisible(false);
 
-    spContent5.setBounds(new Rectangle(5, 75, 740, 300));
+    spContent5.setBounds(new Rectangle(5, 75, 1045, 300));
     //spContent5.setVisible(false);
 
     taContent5.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -188,15 +187,15 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     spContent5.getViewport().add(taContent5, null);
 
     pnSeparator.setBorder(BorderFactory.createLineBorder(Color.gray));
-    pnSeparator.setBounds(new Rectangle(5, 385, 740, 2));
+    pnSeparator.setBounds(new Rectangle(5, 385, 1045, 2));
 
-    btClose.setBounds(new Rectangle(620, 395, 125, 25));
+    btClose.setBounds(new Rectangle(925, 395, 125, 25));
     btClose.setFont(new java.awt.Font("Dialog", 1, 11));
     btClose.setActionCommand("dispose");
     btClose.setText("Beenden");
     btClose.addActionListener(this);
     
-    btApply.setBounds(new Rectangle(490, 395, 125, 25));
+    btApply.setBounds(new Rectangle(795, 395, 125, 25));
     btApply.setEnabled(false);
     btApply.setFont(new java.awt.Font("Dialog", 1, 11));
     btApply.setActionCommand("execute");
@@ -204,13 +203,13 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     btApply.addActionListener(this);
 
     btForward.setText("Weiter");
-    btForward.setBounds(new Rectangle(385, 395, 100, 25));
+    btForward.setBounds(new Rectangle(690, 395, 100, 25));
     btForward.setFont(new java.awt.Font("Dialog", 1, 11));
     btForward.setActionCommand("forward");
     btForward.addActionListener(this);
     
     btBackward.setFont(new java.awt.Font("Dialog", 1, 11));
-    btBackward.setBounds(new Rectangle(280, 395, 100, 25));
+    btBackward.setBounds(new Rectangle(585, 395, 100, 25));
     btBackward.setEnabled(false);
     btBackward.setText("Zurück");
     btBackward.setActionCommand("backward");

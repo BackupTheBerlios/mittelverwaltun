@@ -11,7 +11,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.util.ArrayList;
+
+import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
@@ -94,6 +97,15 @@ public class AccountTable extends JTable {
 		// Übernahmestatus
 		getColumnModel().getColumn(7).setPreferredWidth(110);
 		getColumnModel().getColumn(7).setCellRenderer(dtcr);
+	  	JComboBox cbStatus = new JComboBox();
+	  	cbStatus.addItem("keine");
+	  	cbStatus.addItem("beantragt");
+	  	cbStatus.addItem("bewilligt");
+	  	DefaultTableCellRenderer colStatusRenderer = new DefaultTableCellRenderer();
+	  	colStatusRenderer.setBackground(cbStatus.getBackground());
+	  	getColumnModel().getColumn(7).setCellEditor(new DefaultCellEditor(cbStatus));
+	  	getColumnModel().getColumn(7).setCellRenderer(colStatusRenderer);
+	  	
 		// Übernehmen
 		getColumnModel().getColumn(8).setPreferredWidth(80);
 		// Status
@@ -119,8 +131,19 @@ public class AccountTable extends JTable {
 		}
 	}
 	
+
+	
+	
 	public void tableChanged (TableModelEvent e){
 		super.tableChanged(e);
+		
+		if ((e.getColumn() == 0)&& !(((Boolean)getAccountTableModel().getValueAt(e.getFirstRow(),e.getColumn()))).booleanValue()){
+			getAccountTableModel().setValueAt(new Boolean(false), e.getFirstRow(), 8);
+		}
+		
+		if ((e.getColumn() == 7)&& (getAccountTableModel().getStatus(e.getFirstRow())!= 3)){
+			getAccountTableModel().setValueAt(new Boolean(false), e.getFirstRow(), 8);
+		}
 		doLayout();
 	}
 }
