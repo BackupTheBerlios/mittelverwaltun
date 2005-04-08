@@ -341,15 +341,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					rmiProcess = null;
 				}
 			} else if(butRMIRegistry.getText().equals(stopRMI)) {
-				int result = JOptionPane.YES_OPTION;
-				if( listModel.size() > 0 ) {
-					 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
-																	"Wollen Sie wirklich beenden ?",
-																	"Beenden ?", JOptionPane.YES_NO_OPTION,
-																	JOptionPane.QUESTION_MESSAGE  );
-				}
-				if( result == JOptionPane.NO_OPTION )
-					return;
 				rmiProcess.destroy();
 				rmiProcess = null;
 				butRMIRegistry.setText(startRMI);
@@ -383,6 +374,15 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				}
 			} else if(butCentralServer.getText().equals(stopServer)){
 				try {
+					int result = JOptionPane.YES_OPTION;
+					if( listModel.size() > 0 ) {
+						 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
+																		"Wollen Sie wirklich beenden ?",
+																		"Beenden ?", JOptionPane.YES_NO_OPTION,
+																		JOptionPane.QUESTION_MESSAGE  );
+					}
+					if( result == JOptionPane.NO_OPTION )
+						return;
 					Naming.unbind(CentralServerImpl.CENTRAL_NAME);
 					centralServer.removeAllServer();
 					listModel.removeAllElements();
