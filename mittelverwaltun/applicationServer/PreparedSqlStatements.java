@@ -476,7 +476,8 @@ public class PreparedSqlStatements {
 		/* Indizes: 70-79                     */
 		/**************************************/
 		{//70				(15)
-			ps = con.prepareStatement( "SELECT beschreibung, " +
+			ps = con.prepareStatement( "SELECT " +
+											  "beschreibung, " +
 											  "DATE_FORMAT(beginn,'%d.%m.%Y'), " +
 											  "DATE_FORMAT(ende,'%d.%m.%Y') " +
 										 "FROM Haushaltsjahre " +
@@ -782,7 +783,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT id, haushaltsjahrid, bezeichnung, " +
 											"kapitel, titelgruppe, tgrBudget, " +
 											"dispoLimit, zweckgebunden, freigegeben, " +
-											"uebernahmestatus " +
+											"uebernahmestatus, portiert, abgeschlossen " +
 										"FROM ZVKonten " +
 										"WHERE geloescht = \"0\"" );
 			statements[i++] = new PreparedStatementWrapper(ps);
@@ -848,7 +849,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT haushaltsjahrid, bezeichnung, " +
 											  "kapitel, titelgruppe, tgrBudget, " +
 											  "dispoLimit, zweckgebunden, freigegeben, " +
-											  "uebernahmestatus, geloescht " +
+											  "uebernahmestatus, portiert, abgeschlossen, geloescht " +
 										 	"FROM ZVKonten " +
 											"WHERE id = ? FOR UPDATE");
 			int[] param = {Types.INTEGER};
@@ -869,8 +870,21 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
-		{//127
-			statements[i++] = null;
+		{//127			
+			/**
+			 * Abfrage aller nicht abgeschlossenen ZVKonten eines Haushaltsjahres.
+			 * @author m.schmitt
+			 */
+			ps = con.prepareStatement( "SELECT id, haushaltsjahrid, bezeichnung, " +
+											"kapitel, titelgruppe, tgrBudget, " +
+											"dispoLimit, zweckgebunden, freigegeben, " +
+											"uebernahmestatus, portiert, abgeschlossen " +
+										"FROM ZVKonten " +
+										"WHERE haushaltsjahrid = ? " +
+										  "AND abgeschlossen = \"0\"" +
+										  "AND geloescht = \"0\"" );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//128
 			statements[i++] = null;
@@ -909,7 +923,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT id, haushaltsjahrid, bezeichnung, " +
 																	  "kapitel, titelgruppe, tgrBudget, " +
 																	  "dispoLimit, zweckgebunden, freigegeben, " +
-																	  "uebernahmestatus " +
+																	  "uebernahmestatus, portiert, abgeschlossen " +
 																 "FROM ZVKonten " +
 																	"WHERE geloescht = '0'" +
 																		"AND id = ?");

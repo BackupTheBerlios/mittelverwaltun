@@ -746,11 +746,11 @@ class RootPanel extends JPanel implements ActionListener {
 		if( rbKapitelTGR.isSelected() ){
 			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), tfTGR.getText(), 0,
 									Float.parseFloat( tfDispolimit.getValue().toString() ), checkZweckgebunden.isSelected(),
-									checkFreigegeben.isSelected() ? '1' : '0', (short)0 );
+									checkFreigegeben.isSelected() ? '1' : '0', (short)0, false, false );
 		} else {
 			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), "", 0,
 									Float.parseFloat( tfDispolimit.getValue().toString() ), checkZweckgebunden.isSelected(),
-									checkFreigegeben.isSelected() ? '1' : '0', (short)0 );
+									checkFreigegeben.isSelected() ? '1' : '0', (short)0, false, false );
 			ArrayList temp = new ArrayList();
 			temp.add( new ZVTitel( 0, zvKonto, tfBezeichnung.getText(), tfTitel.getText(), "", 0, "", "" ) );
 			zvKonto.setSubTitel( temp );
@@ -969,7 +969,7 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 		return new ZVKonto( zvKonto.getId(), zvKonto.getHaushaltsJahrId(), tfBezeichnung.getText(), tfKapitel.getText(),
 							tfTGR.getText(), zvKonto.getTgrBudget(), Float.parseFloat( tfDispolimit.getValue().toString() ),
 							checkZweckgebunden.isSelected(), checkFreigegeben.isSelected() ? '1' : '0',
-							zvKonto.getUebernahmeStatus() ); 
+							zvKonto.getUebernahmeStatus(), zvKonto.isPortiert(), zvKonto.isAbgeschlossen() ); 
 	}
 	
 	/**
@@ -1135,7 +1135,7 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 		return new ZVKonto( zvKonto.getId(), zvKonto.getHaushaltsJahrId(), tfBezeichnung.getText(), tfKapitel.getText(),
 					"", zvKonto.getTgrBudget(), Float.parseFloat( tfDispolimit.getValue().toString() ),
 					checkZweckgebunden.isSelected(), checkFreigegeben.isSelected() ? '1' : '0',
-					zvKonto.getUebernahmeStatus() );
+					zvKonto.getUebernahmeStatus(), zvKonto.isPortiert(), zvKonto.isAbgeschlossen() );
 	}
 	
 	/**

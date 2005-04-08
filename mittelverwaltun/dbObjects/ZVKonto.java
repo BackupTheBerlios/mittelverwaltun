@@ -81,6 +81,16 @@ public class ZVKonto implements Serializable {
 	private char freigegeben;
 
 	/**
+	 * Wurde die Kontenstruktur des ZVKonto in das nächste Haushaltsjahr portiert. 
+	 */
+	private boolean portiert;
+
+	/**
+	 * Wurde das ZVKonto im referenzierten Haushaltsjahr abgeschlossen. 
+	 */
+	private boolean abgeschlossen;
+	
+	/**
 	 * Konstruktor zum Erzeugen eines bereits in der Datenbank existierenden ZVKontos, welches nicht gelöscht ist. <br>
 	 * Enthält alle Attribute außer dem Flag 'gelöscht' und der Liste mit den 'Titeln'. 
 	 * @param id = Eindeutige Id dieses ZVKontos. Wird durch die Datenbank vergeben.
@@ -93,9 +103,11 @@ public class ZVKonto implements Serializable {
 	 * @param zweckgebunden = Ist das ZVKonto zweckgebunden oder nicht. 
 	 * @param freigegeben = Ist dieses ZVKonto für die Ausgaben freigegeben. 
 	 * @param uebernahmeStatus = Der Status der Übernahme bei HaushaltsjahresAbschluß. 
+	 * @param portiert = Wurde die Kontenstruktur des ZVKonto in das nächste Haushaltsjahr portiert. 
+	 * @param abgeschlossen = Wurde das ZVKonto im referenzierten Haushaltsjahr abgeschlossen. 
 	 */
 	public ZVKonto( int id, int haushaltsJahrId, String bezeichnung, String kapitel, String titelgruppe, float tgrBudget,
-					float dispoLimit, boolean zweckgebunden, char freigegeben, short uebernahmeStatus ) {
+					float dispoLimit, boolean zweckgebunden, char freigegeben, short uebernahmeStatus, boolean portiert, boolean abgeschlossen ) {
 		this.id = id;
 		this.haushaltsJahrId = haushaltsJahrId;
 		this.bezeichnung = bezeichnung;
@@ -106,7 +118,10 @@ public class ZVKonto implements Serializable {
 		this.zweckgebunden = zweckgebunden;
 		this.freigegeben = freigegeben;
 		this.uebernahmeStatus = uebernahmeStatus;
+		this.portiert = portiert;
+		this.abgeschlossen = abgeschlossen;
 		this.geloescht = false;
+		
 	}
 	
 	/**
@@ -122,10 +137,12 @@ public class ZVKonto implements Serializable {
 	 * @param zweckgebunden = Ist das ZVKonto zweckgebunden oder nicht. 
 	 * @param freigegeben = Ist dieses ZVKonto für die Ausgaben freigegeben. 
 	 * @param uebernahmeStatus = Der Status der Übernahme bei HaushaltsjahresAbschluß. 
+	 * @param portiert Wurde die Kontenstruktur des ZVKonto in das nächste Haushaltsjahr portiert. 
+	 * @param abgeschlossen = Wurde das ZVKonto im referenzierten Haushaltsjahr abgeschlossen. 
 	 * @param geloescht = Flag ob dieses Konto gelöscht wurde. 
 	 */
 	public ZVKonto( int id, int haushaltsJahrId, String bezeichnung, String kapitel, String titelgruppe, float tgrBudget,
-					float dispoLimit, boolean zweckgebunden, char freigegeben, short uebernahmeStatus, boolean geloescht ) {
+					float dispoLimit, boolean zweckgebunden, char freigegeben, short uebernahmeStatus, boolean portiert, boolean abgeschlossen, boolean geloescht ) {
 		this.id = id;
 		this.haushaltsJahrId = haushaltsJahrId;
 		this.bezeichnung = bezeichnung;
@@ -136,6 +153,8 @@ public class ZVKonto implements Serializable {
 		this.zweckgebunden = zweckgebunden;
 		this.freigegeben = freigegeben;
 		this.uebernahmeStatus = uebernahmeStatus;
+		this.portiert = portiert;
+		this.abgeschlossen = abgeschlossen;
 		this.geloescht = geloescht;
 	}
 	
@@ -158,6 +177,8 @@ public class ZVKonto implements Serializable {
 		this.freigegeben = '1';				// Ist freigegeben
 		this.uebernahmeStatus = 0;			// Keine Übernahme 
 		this.geloescht = false;				// Ist nicht gelöscht
+		this.portiert = false;
+		this.abgeschlossen = false;
 	}
 	
 	/**
@@ -180,6 +201,8 @@ public class ZVKonto implements Serializable {
 		this.freigegeben = '1';				// Ist freigegeben
 		this.uebernahmeStatus = 0;			// Keine Übernahme
 		this.geloescht = false;				// Ist nicht gelöscht
+		this.portiert = false;
+		this.abgeschlossen = false;
 	}
 	
 	/**
@@ -189,7 +212,7 @@ public class ZVKonto implements Serializable {
 	public Object clone() {
 		ZVKonto result = new ZVKonto( this.getId(), this.getHaushaltsJahrId(), this.getBezeichnung(), this.getKapitel(),
 										this.getTitelgruppe(), this.getTgrBudget(), this.getDispoLimit(), this.getZweckgebunden(),
-										this.getFreigegeben(), this.getUebernahmeStatus(), this.getGeloescht() );
+										this.getFreigegeben(), this.getUebernahmeStatus(), this.isPortiert(), this.isAbgeschlossen(), this.getGeloescht() );
 		result.setSubTitel( new ArrayList() );
 		
 		return result;
@@ -202,7 +225,7 @@ public class ZVKonto implements Serializable {
 	public Object cloneWhole() {
 		ZVKonto result = new ZVKonto( this.getId(), this.getHaushaltsJahrId(), this.getBezeichnung(), this.getKapitel(),
 										this.getTitelgruppe(), this.getTgrBudget(), this.getDispoLimit(), this.getZweckgebunden(),
-										this.getFreigegeben(), this.getUebernahmeStatus(), this.getGeloescht() );
+										this.getFreigegeben(), this.getUebernahmeStatus(), this.isPortiert(), this.isAbgeschlossen(), this.getGeloescht() );
 		ArrayList zvTitel = new ArrayList();
 		ZVTitel temp = null;
 		for( int i = 0; i < this.getSubTitel().size(); i++ ) {
@@ -479,4 +502,36 @@ public class ZVKonto implements Serializable {
 		return zweckgebunden;
 	}
 
+	public void setPortiert (boolean portiert){
+		this.portiert = portiert;
+	}
+	
+	public boolean isPortiert (){
+		return this.portiert;
+	}
+	
+	public boolean isAbgeschlossen(){
+		return this.abgeschlossen;
+	}
+	
+	public void setAbgeschlossen (boolean abgeschlossen){
+		this.abgeschlossen = abgeschlossen;
+	}
+	
+	public float getBudget(){
+		float budget = tgrBudget;
+		
+		for (int i=0; i < titel.size(); i++)
+			budget += ((ZVTitel)titel.get(i)).getGesamtBudget();
+		
+		return budget;
+	}
+	
+	public float getVormerkungen(){
+		float vormerkungen = 0.0f;
+		for (int i=0; i < titel.size(); i++)
+			vormerkungen += ((ZVTitel)titel.get(i)).getGesamtVormerkungen();
+		return vormerkungen;
+	}
+	
 }

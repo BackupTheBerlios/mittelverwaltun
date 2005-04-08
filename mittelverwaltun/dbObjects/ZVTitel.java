@@ -222,4 +222,20 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 		this.untertitel = untertitel;
 	}
 
+	public float getGesamtBudget(){
+		float budget = getBudget();
+		for( int i = 0; i < untertitel.size(); i++ ) {
+			budget += ((ZVUntertitel)untertitel.get(i)).getBudget();
+		}
+		return budget;
+	}
+
+	public float getGesamtVormerkungen(){
+		float vormerkungen = getVormerkungen();
+		for( int i = 0; i < untertitel.size(); i++ ) {
+			vormerkungen += ((ZVUntertitel)untertitel.get(i)).getVormerkungen();
+		}
+		return vormerkungen;
+	}
+	
 }

@@ -222,6 +222,13 @@ public interface ApplicationServer extends Remote {
 	public int setFBUnterkonto( FBUnterkonto konto ) throws RemoteException, ApplicationServerException;
 	
 	/**
+	 * Abfrage der nicht abgeschlossenen ZVKonten eines Haushaltsjahres mit den dazugehörigen ZVTiteln und ZVUntertiteln.
+	 * @return Liste mit den ZVKonten
+	 * author m.schmitt
+	 */
+	public ArrayList getOffeneZVKonten(int haushaltsjahr) throws RemoteException, ApplicationServerException;
+	
+	/**
 	 * Abfrage der ZVKonten mit den dazugehörigen ZVTiteln und ZVUntertiteln.
 	 * @return Liste mit den ZVKonten
 	 * author w.flat

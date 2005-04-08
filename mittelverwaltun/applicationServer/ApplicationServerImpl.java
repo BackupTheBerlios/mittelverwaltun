@@ -834,6 +834,40 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	}
 	
 	/**
+	 * Abfrage der nicht abgeschlossenen ZVKonten eines Haushaltsjahres mit den dazugehörigen ZVTiteln und ZVUntertiteln.
+	 * @return Liste mit den ZVKonten
+	 * author m.schmitt
+	 */
+	public ArrayList getOffeneZVKonten(int haushaltsjahr) throws RemoteException, ApplicationServerException {
+		ArrayList zvKonten = db.selectOffeneZVKonten(haushaltsjahr);	// Es werden alle ZVKonten ermittelt
+		ArrayList zvTitel;		// Liste für die ZVTitel
+		
+		if( zvKonten == null )	// Keine ZVKonten vorhanden
+			return null;
+
+		// Schleife zur Ermittlung der ZVTitel eines ZVKontos
+		for( int i = 0; i < zvKonten.size(); i++ ) {
+			if( zvKonten.get(i) == null )	// kein ZVKonto
+				continue;
+			// Abfrage der zugehörigen ZVTitel für das ZVKonto
+			((ZVKonto)zvKonten.get(i)).setSubTitel( zvTitel = db.selectZVTitel( (ZVKonto)zvKonten.get(i) ) );
+			if( zvTitel == null )		// Keine ZVTitel
+				continue;
+
+			// Schleife zur Ermittlung aller ZVUntertitel von einem ZVTitel
+			for( int j = 0; j < zvTitel.size(); j++ ) {
+				if( zvTitel.get(j) == null )	// kein ZVTitel
+					continue;
+				// Ermittlung der zugehörigen ZVUntertitel vom ZVTitel
+				((ZVTitel)zvTitel.get(j)).setSubUntertitel( db.selectZVUntertitel( (ZVTitel)zvTitel.get(j) ) );
+			}
+		}
+
+		return zvKonten;	// Rückgabe der ermittelten ZVKonten
+	}
+	
+	
+	/**
 	 * Ein neues ZVKonto in die Datenbank einfügen.
 	 * @param ZVKonto, welches eingefügt werden soll.
 	 * @return kontoId vom eingefügten ZVKonto

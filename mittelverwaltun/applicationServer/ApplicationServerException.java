@@ -28,10 +28,13 @@ public class ApplicationServerException extends Exception  {
 
 	public String getMessage(){
 //		return messages[errorCode] + " (" + errorCode + ")";
-		if(errorCode == 0)
+		System.out.println("Application Server Error: " + errorCode);
+		if(errorCode == 0){
 			return super.getMessage() + " (" + errorCode + ")";
-		else
+		}
+		else{
 			return messages[errorCode] + " (" + errorCode + ")";
+		}
 	}
 
 	public String getNestedMessage(){

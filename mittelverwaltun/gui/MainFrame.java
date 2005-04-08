@@ -45,6 +45,7 @@ public class MainFrame extends JFrame implements ActionListener {
 													}
 											};
 			desk.setDesktopManager(new DefaultDesktopManager());
+			desk.setBackground(new Color(109,183,218));
 			setContentPane(desk);
 			setBounds( 50, 50, 800, 600 );
 			this.addWindowListener( new WindowAdapter() {
@@ -53,6 +54,7 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 			} );
 			this.setExtendedState(Frame.MAXIMIZED_BOTH);
+			
 			this.doLayout();
 			this.show();
 		}catch(Exception e){
