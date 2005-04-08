@@ -18,8 +18,23 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	/**
 	 * Anzahl der zuerstellenden ApplicationServers.
 	 */
-	final static int NUM_APPLICATION_SERVERS = 100;
+	public static int CENTRAL_NUM_APPL = 0;
 	
+	/**
+	 * Der Name des Central-Servers.
+	 */
+	public static String CENTRAL_NAME = "";
+
+	/**
+	 * Der Dateiname von RMI-Registry.
+	 */
+	public static String CENTRAL_RMI = "";
+	
+	/**
+	 * Der Classpath wird aus dem Namen vom rmiregistry ermittelt.
+	 */
+	public static String CENTRAL_CLASSPATH = "";
+
 	/**
 	 * Liste mit den Namen der ApplicationServers, die verwendet werden dürfen, <br>
 	 * d.h. dieses Server sind noch nicht gestartet. 
@@ -56,13 +71,27 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 //	}
 
 	/**
+	 * Anzahl der laufenden Client-Server.
+	 */
+	public String getNumBusy() {
+		return "" + listBusy.size();
+	}
+	
+	/**
+	 * Anzahl der freien Client-Server.
+	 */
+	public String getNumFree() {
+		return "" + listFree.size();
+	}
+
+	/**
 	 * Dem Benutzer einen eigenen ApplicationServer generieren, bie der rmiregistry anmelden.<br>
 	 * Der Name des gestarteten ApplicationServers wird an den Benurtzer per Rückgabewert übermittelt.
 	 * @param hostName = Der Hostname, wo sich der Benutzer befindet.
 	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
 	 * @return Der Name des gestarteten ApplicationServers, wenn erfolgreich. Sonst wird der Zeiger null zurückgegeben.
 	 */
-	public String getMyApplicationServer( String hostName, String hostAdress ) throws RemoteException {
+	public String getMyApplicationServer(String hostName, String hostAdress ) throws RemoteException {
 		if(listFree.size() == 0)	// Wenn keine freien ApplicationServer exisitieren. 
 			return null;
 		String serverToStart = (String)listFree.get(0);		// Server der gestartet werden soll
@@ -87,7 +116,7 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	 * @param serverName = Der Name des gestarteten ApplicationServers.
 	 * @param benutzerName = Der BenutzerName der Benutzers der den ApplicationServer in Anspruch nimmt.
 	 */
-	public void addBenutzerNameToUser( String serverName, String benutzerName ) throws RemoteException {
+	public void addBenutzerNameToUser(String serverName, String benutzerName ) throws RemoteException {
 		if( server != null ) {
 			server.addBenutzerNameToUser( serverName, benutzerName );
 		}
@@ -98,10 +127,10 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	 * @param serverName = Der Name des nicht mehr benötigten ApplicationServers.
 	 */
 	public void delUser( String serverName ) throws RemoteException {
+		removeServer(serverName);
 		if( server != null ) {
 			server.delUser( serverName );
 		}
-		removeServer(serverName);
 	}
 	
 	/**
@@ -145,9 +174,10 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	/**
 	 * Erzeugen aller Namen für die ApplicationServer.
 	 */
-	private void generateNames() {
-		for(int i = 1; i < NUM_APPLICATION_SERVERS; i++) {
-			listFree.add(new String("mittelverwaltung" + i));
+	public void generateNames() {
+		listFree.clear();
+		for(int i = 1; i <= CENTRAL_NUM_APPL; i++) {
+			listFree.add(new String(CENTRAL_NAME + i));
 		}
 		listBusy.clear();
 	}

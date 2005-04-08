@@ -2,6 +2,7 @@ package applicationServer;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import gui.*;
 
 /**
  * Interface des CentralServers, der bei der "rmiregistry" angemeldet wird und<br>

@@ -1,11 +1,23 @@
 package applicationServer;
 
+import org.w3c.dom.*;
+import javax.xml.parsers.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import gui.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import java.awt.*;
 import java.io.*;
 import java.rmi.*;
+import java.text.DateFormat;
+import java.util.Date;
+
 import com.gc.systray.*;
 
 /**
@@ -13,23 +25,64 @@ import com.gc.systray.*;
  * Mit dem Server kann man die "rmiregistry" starten und den CentralServer bei der "rmiregistry" anmelden.
  * @author w.flat
  */
-public class Server extends JFrame implements ActionListener, SystemTrayIconListener {
+public class Server extends JFrame implements ActionListener, SystemTrayIconListener, ListSelectionListener {
 	
+	JTabbedPane tabPane = new JTabbedPane();
+	JPanel panelServer = new JPanel();
+	JPanel panelClients = new JPanel();
+	JPanel panelEinstellungen = new JPanel();
+	JPanel panelInfo = new JPanel();
+	BorderLayout borderLayout1 = new BorderLayout();
+	JLabel labTextBusyClients = new JLabel();
+	JLabel labTextFreeClients = new JLabel();
+	JLabel labNumBusyClients = new JLabel();
+	JLabel labNumFreeClients = new JLabel();
+	JButton butRMIRegistry = new JButton();
+	JButton butCentralServer = new JButton();
+	JButton butBeenden = new JButton();
+	JScrollPane scrollClientList = new JScrollPane();
+	DefaultListModel listModel = new DefaultListModel();
+	JList listClients = new JList(listModel);
+	JLabel labTextStartzeit = new JLabel();
+	JLabel labStartzeit = new JLabel();
+	JButton butDelUser = new JButton();
+	JLabel labDBDriver = new JLabel();
+	JTextField tfDBTreiber = new JTextField();
+	JLabel labDBHost = new JLabel();
+	JTextField tfDBHost = new JTextField();
+	JLabel labDBName = new JLabel();
+	JTextField tfDBName = new JTextField();
+	JLabel labDBPswd = new JLabel();
+	JPasswordField tfDBPswd1 = new JPasswordField();
+	JLabel labNumClients = new JLabel();
+	IntegerTextField tfMaxClients = new IntegerTextField(1);
+	JButton butSave = new JButton();
+	JPasswordField tfDBPswd2 = new JPasswordField();
+	JLabel labServerName = new JLabel();
+	JTextField tfServerName = new JTextField();
+	JLabel labRMIRegistry = new JLabel();
+	JTextField tfRMIRegistry = new JTextField();
+	JButton butRMISuchen = new JButton();
+	JLabel labFHMannheim = new JLabel();
+	JLabel labVorlesung = new JLabel();
+	JLabel labWF = new JLabel();
+	JLabel labRD = new JLabel();
+	JLabel labMS = new JLabel();
+	JLabel labDesigned = new JLabel();
+	JLabel labFHLogo = null;
+	Component lastSelectedPanel = null;
+	JFileChooser fileChooser = new JFileChooser(System.getProperty("java.home"));
+	
+	final static int WND_WIDTH = 320;		// Breite des Login-Fensters
+	final static int WND_HEIGHT = 285;		// Höhe des Login-Fensters
+	
+	// RMI-Prozess
 	Process rmiProcess = null;
 	CentralServerImpl centralServer = null;
-
-	String rmiregistry = "C:\\j2sdk1.4.2_08\\bin\\rmiregistry.exe ";
-	String classpath = "-J-classpath -J\"C:\\j2sdk1.4.2_08\\lib";
-
-	final int delay = 3000;
-	JScrollPane scrollList = new JScrollPane();
-	DefaultListModel listModel = new DefaultListModel();
-	JList listUser = new JList(listModel);
-	JButton buRegistry = new JButton();
-	JButton buServer = new JButton();
-	JButton buDelUser = new JButton();
-	StatusBar statusBar = new StatusBar();
-	JButton buClose = new JButton();
+	String startRMI = "RMI-Registry Starten";
+	String stopRMI = "RMI-Registry Stopen";
+	String startServer = "Central-Server Starten";
+	String stopServer = "Central-Server Stopen";
 	
 	// SystemTray Komponenten
 	JPopupMenu sysTrayMenu = new JPopupMenu();
@@ -41,29 +94,577 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	int presIcon;
 	String presToolTip = "FB-Mittelverwaltung\nFH-Mannheim SS 2005";
 	
+	// XML-Datei
+	final static String xmlFileName = "." + System.getProperty("file.separator") + "xml" + 
+											System.getProperty("file.separator") + "server.xml"; 
+
 	/**
-	 * Den <code>Server</code> erzeugen.
+	 * Erstellen vom <code>Server</code>.
 	 */
 	public Server() {
-		super("Central Server");
-		this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
-		this.setResizable( false );
-		this.setBounds( 100, 100, 538, 213 );
+		super("FB-Mittelverwaltung Server");
 		try {
 			jbInit();
 			initSysTray();
+			loadXMLFile();
+			loadVariables();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		this.setVisible( true );
+		this.show();
 	}
 	
 	/**
-	 * Erzeugen und Starten des Servers. 
+	 * Generieren und starten des Central-Servers.
 	 */
-	public static void main(String args[]){
+	public static void main(String args[]) {
+		System.getSecurityManager();
 		Server server = new Server();
 		server.synchronize();
+	}
+	
+	/**
+	 * Die XML-Datei laden.
+	 */
+	private void loadXMLFile() {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder  = factory.newDocumentBuilder();
+			Document document = builder.parse(new FileInputStream(new File(xmlFileName)));
+			CentralServerImpl.CENTRAL_RMI = document.getElementsByTagName("rmi").item(0).getFirstChild().getNodeValue();
+			setRmiClaspath(CentralServerImpl.CENTRAL_RMI);
+			CentralServerImpl.CENTRAL_NUM_APPL = Integer.parseInt(document.getElementsByTagName("number").item(0).getFirstChild().getNodeValue());
+			CentralServerImpl.CENTRAL_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
+			ApplicationServerImpl.APPL_DB_DRIVER = document.getElementsByTagName("driver").item(0).getFirstChild().getNodeValue();
+			ApplicationServerImpl.APPL_DB_NAME = document.getElementsByTagName("dbname").item(0).getFirstChild().getNodeValue();
+			ApplicationServerImpl.APPL_DB_HOST = document.getElementsByTagName("dbhost").item(0).getFirstChild().getNodeValue();
+			ApplicationServerImpl.APPL_DB_PSWD = document.getElementsByTagName("dbpswd").item(0).getFirstChild().getNodeValue();
+	} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Die XML-Datei speichern.
+	 */
+	private void saveXMLFile() {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder  = factory.newDocumentBuilder();
+			Document document = builder.newDocument();
+			document.appendChild(document.createElement("server"));
+			Node rootNode = document.getDocumentElement();
+			Node tempNode = document.createElement("rmi");
+			tempNode.appendChild(document.createTextNode(CentralServerImpl.CENTRAL_RMI));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("number");
+			tempNode.appendChild(document.createTextNode("" + CentralServerImpl.CENTRAL_NUM_APPL));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("servername");
+			tempNode.appendChild(document.createTextNode(CentralServerImpl.CENTRAL_NAME));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("driver");
+			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_DRIVER));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("dbname");
+			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_NAME));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("dbhost");
+			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_HOST));
+			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("dbpswd");
+			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_PSWD));
+			rootNode.appendChild(tempNode);
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			DOMSource source = new DOMSource( document );
+			FileOutputStream os = new FileOutputStream(xmlFileName);
+			StreamResult result = new StreamResult( os );
+			transformer.transform( source, result );
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Laden der Umgebungsvariablen in den Server. 
+	 */
+	private void loadVariables() {
+		this.tfDBHost.setText(ApplicationServerImpl.APPL_DB_HOST);
+		this.tfDBName.setText(ApplicationServerImpl.APPL_DB_NAME);
+		this.tfDBTreiber.setText(ApplicationServerImpl.APPL_DB_DRIVER);
+		this.tfDBPswd1.setText(ApplicationServerImpl.APPL_DB_PSWD);
+		this.tfDBPswd2.setText(ApplicationServerImpl.APPL_DB_PSWD);
+		this.tfMaxClients.setValue(new Integer(CentralServerImpl.CENTRAL_NUM_APPL));
+		this.tfRMIRegistry.setText(CentralServerImpl.CENTRAL_RMI);
+		this.tfServerName.setText(CentralServerImpl.CENTRAL_NAME);
+		this.labNumBusyClients.setText("");
+		this.labNumFreeClients.setText("");
+	}
+	
+	/**
+	 * Methode zum Überprüfen ob die Einstelungen in Ordnung sind.
+	 * @return String mit Fehlermeldung. Wenn keine Fehler aufgetreten, dann ist der String leer.
+	 */
+	private String checkSettings() {
+		String error = "";
+		if(tfDBHost.getText().length() == 0)
+			error += " - Es wurde keine DB-Hostbezeichnung eingetragen.\n";
+		if(tfDBName.getText().length() == 0)
+			error += " - Es wurde keine DB-Name eingetragen.\n";
+		if(!(new String(tfDBPswd1.getPassword())).equalsIgnoreCase(new String(tfDBPswd2.getPassword())))
+			error += " - Die beiden Passwörter sind nicht identisch.\n";
+		if(tfDBPswd1.getPassword().length == 0 || tfDBPswd2.getPassword().length == 0)
+			error += " - Mindestens eines der Paswörter ist leer.\n";
+		if(tfDBTreiber.getText().length() == 0)
+			error += " - Es wurde kein DB-Treiber eingegeben.\n";
+		if(tfServerName.getText().length() == 0)
+			error += " - Es wurde kein Servername eingegeben.\n";
+		if(CentralServerImpl.CENTRAL_CLASSPATH.length() == 0)
+			error += " - Der CLASSPATH wurde nicht gefunden.\n";
+		if(CentralServerImpl.CENTRAL_RMI.length() == 0)
+			error += " - RMI-Registry wurde nicht ausgewählt.\n";
+		
+		return error;
+	}
+	
+	/**
+	 * Einen neuen ApplicationServer generieren.
+	 * @param hostName = Der Hostname, wo sich der Benutzer befindet.
+	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
+	 * @param serverName = Der Name des gestarteten ApplicationServers.
+	 */
+	public void addNewApplicationServer( String hostName, String hostAdress, String serverName  ) {
+		User user = new User( hostName, hostAdress, serverName );
+		listModel.addElement( user );
+		this.labNumBusyClients.setText(centralServer.getNumBusy());
+		this.labNumFreeClients.setText(centralServer.getNumFree());
+	}
+	
+	/**
+	 * Den Benutzer-Namen zum User hinzufügen, da man beim Anlegen eines Users noch nicht weiß, wer sich anmelden wird.
+	 * @param serverName = Name des Servers, dem der BenutzerName zugeordnet wird.
+	 * @param benutzerName = benutzerName, der dem serverNamen zugeordnet wird. 
+	 */
+	public void addBenutzerNameToUser( String serverName, String benutzerName ) {
+		User temp;
+		for( int i = 0; i < listModel.size(); i++ ) {
+			temp = (User)listModel.getElementAt( i );
+			if( temp.serverName.equalsIgnoreCase(serverName) ) {
+				temp.benutzerName = benutzerName;
+				listModel.setElementAt( temp, i );
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Einen User aus der ListBox entfernen
+	 * @param serverName = Name des Servers, der aus der Liste entfernt werden soll.
+	 */
+	public void delUser(String serverName) {
+		User temp;
+		for( int i = 0; i < listModel.size(); i++ ) {
+			temp = (User)listModel.getElementAt( i );
+			if( temp.serverName.equalsIgnoreCase(serverName) ) {
+				listModel.removeElementAt( i );
+				break;
+			}
+		}
+		this.labNumBusyClients.setText(centralServer.getNumBusy());
+		this.labNumFreeClients.setText(centralServer.getNumFree());
+	}
+	
+	/**
+	 * Aus der angegebenen rmiregistry-Datei die Variablen CentralServerImpl.CENTRAL_RMI und <br>
+	 * CentralServerImpl.CENTRAL_CLASSPATH generieren.
+	 * @param rmiFile = Der Dateiname der rmiregistry.exe.
+	 * @return String mit Fehlermeldung. Wenn keine Fehler aufgetreten, dann ist der String leer.
+	 */
+	private String setRmiClaspath(String rmiFile) {
+		String error = "";
+		try {
+			File f = new File(rmiFile);
+			if(!f.getName().equals("rmiregistry.exe"))
+				throw new Exception("Es keine RMI-Registry ausgewählt.");
+			if(!f.exists())
+				throw new Exception("Die RMI-Registry existiert nicht.");
+			if(!f.exists())
+				throw new Exception("Die RMI-Registry existiert nicht.");
+			File libDir = new File((new File(f.getParent())).getParent() + System.getProperty("file.separator") + "lib");
+			if(!libDir.exists()) 
+				throw new Exception("Der Class-Path wurde nicht gefunden.");
+			CentralServerImpl.CENTRAL_RMI = f.getAbsolutePath();
+			CentralServerImpl.CENTRAL_CLASSPATH = "-J-classpath -J\"" + libDir.getAbsolutePath();
+		} catch(Exception e) {
+			error += " - " + e.toString() + "\n";
+			CentralServerImpl.CENTRAL_CLASSPATH = CentralServerImpl.CENTRAL_RMI = "";
+		}
+		return error;
+	}
+	
+	/**
+	 * Methode zum Übernehmen der Einträge aus den Textfeldern. <br>
+	 * Die Variablen CLASSPATH und RMI des werden aber nur durch den Dialog gesetzt.
+	 */
+	private void setSettings() {
+		ApplicationServerImpl.APPL_DB_HOST = tfDBHost.getText();
+		ApplicationServerImpl.APPL_DB_NAME = tfDBName.getText();
+		ApplicationServerImpl.APPL_DB_PSWD = new String(tfDBPswd1.getPassword());
+		ApplicationServerImpl.APPL_DB_DRIVER = tfDBTreiber.getText();
+		CentralServerImpl.CENTRAL_NAME = tfServerName.getText();
+		CentralServerImpl.CENTRAL_NUM_APPL = ((Integer)tfMaxClients.getValue()).intValue();
+	}
+	
+	/**
+	 * Verarbeitung der Button-Ereignisse. 
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if( e.getSource() == butRMIRegistry || e.getSource() == miRegistry ) {
+			if(butRMIRegistry.getText().equals(startRMI)){
+				String error = checkSettings();
+				if(error.length() > 0) {		// Wenn bei den Einstellungen Fehler aufgetreten sind
+					JOptionPane.showMessageDialog(this, "Es sind folgende Fehler aufgetreten : \n" + error,
+														"Fehler !", JOptionPane.ERROR_MESSAGE);
+					return;			// Meldung ausgeben und zurückspringen
+				}
+				setSettings();		// Keine Fehler aufgetretten, dann die Einstellungen speichern
+				try {
+					rmiProcess = Runtime.getRuntime().exec(CentralServerImpl.CENTRAL_RMI + " " + 
+															CentralServerImpl.CENTRAL_CLASSPATH);
+					butRMIRegistry.setText(stopRMI);
+					butCentralServer.setEnabled( true );
+					miRegistry.setText(stopRMI);
+					miServer.setEnabled( true );
+					presIcon = icons[1];
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					rmiProcess = null;
+				}
+			} else if(butRMIRegistry.getText().equals(stopRMI)) {
+				int result = JOptionPane.YES_OPTION;
+				if( listModel.size() > 0 ) {
+					 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
+																	"Wollen Sie wirklich beenden ?",
+																	"Beenden ?", JOptionPane.YES_NO_OPTION,
+																	JOptionPane.QUESTION_MESSAGE  );
+				}
+				if( result == JOptionPane.NO_OPTION )
+					return;
+				rmiProcess.destroy();
+				rmiProcess = null;
+				butRMIRegistry.setText(startRMI);
+				butCentralServer.setEnabled( false );
+				miRegistry.setText(startRMI);
+				miServer.setEnabled( false );
+				presIcon = icons[0];
+			}
+			if(this.getExtendedState() == Frame.ICONIFIED) {
+				sysTrayMgr.update(presIcon, presToolTip);
+			}
+		} else if( e.getSource() == butCentralServer || e.getSource() == miServer ) {
+			if(butCentralServer.getText().equals(startServer)){
+				try {
+					if(centralServer == null)
+						Naming.rebind(CentralServerImpl.CENTRAL_NAME, centralServer = new CentralServerImpl(this));
+					else {
+						Naming.rebind(CentralServerImpl.CENTRAL_NAME, centralServer);
+						centralServer.generateNames();
+					}
+					butRMIRegistry.setEnabled( false );
+					butCentralServer.setText(stopServer);
+					miRegistry.setEnabled( false );
+					miServer.setText(stopServer);
+					presIcon = icons[2];
+					this.labNumBusyClients.setText(centralServer.getNumBusy());
+					this.labNumFreeClients.setText(centralServer.getNumFree());
+				} catch(Exception ex) {
+					ex.printStackTrace();
+					centralServer = null;
+				}
+			} else if(butCentralServer.getText().equals(stopServer)){
+				try {
+					Naming.unbind(CentralServerImpl.CENTRAL_NAME);
+					centralServer.removeAllServer();
+					listModel.removeAllElements();
+					this.labNumBusyClients.setText("");
+					this.labNumFreeClients.setText("");
+					labStartzeit.setText("");
+					butRMIRegistry.setEnabled( true );
+					butCentralServer.setText(startServer);
+					miRegistry.setEnabled( true );
+					miServer.setText(startServer);
+					presIcon = icons[1];
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			if(this.getExtendedState() == Frame.ICONIFIED) {
+				sysTrayMgr.update(presIcon, presToolTip);
+			}
+		} else if( e.getSource() == butDelUser ) {
+			if( listClients.getSelectedIndex() >= 0 ) {
+				User temp = (User)listModel.getElementAt( listClients.getSelectedIndex() );
+				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.benutzerName + 
+														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
+														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
+					centralServer.removeServer(temp.serverName);
+					listModel.removeElementAt( listClients.getSelectedIndex() );
+					labStartzeit.setText("");
+					this.labNumBusyClients.setText(centralServer.getNumBusy());
+					this.labNumFreeClients.setText(centralServer.getNumFree());
+				}
+			}
+		} else if( e.getSource() == butBeenden || e.getSource() == miClose ) {
+			int result = JOptionPane.YES_OPTION;
+			if( listModel.size() > 0 ) {
+				 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
+																"Wollen Sie wirklich beenden ?",
+																"Beenden ?", JOptionPane.YES_NO_OPTION,
+																JOptionPane.QUESTION_MESSAGE  );
+			}
+			if( result == JOptionPane.NO_OPTION )
+				return;
+			if( rmiProcess != null ) {
+				rmiProcess.destroy();
+			}
+			sysTrayMgr.setVisible(false);
+			sysTrayMgr.removeSystemTrayIconListener(this);
+			saveXMLFile();
+			centralServer = null;
+			this.dispose();
+			System.exit( 0 );
+		} else if(e.getSource() == butRMISuchen) {
+			if( fileChooser.showOpenDialog( this ) == JFileChooser.APPROVE_OPTION ){
+				File tempFile = fileChooser.getSelectedFile();
+				if( tempFile == null){
+					JOptionPane.showMessageDialog( this, "Fehler beim Öffnen der Datei.", "Error !", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				String error = setRmiClaspath(tempFile.getAbsolutePath());
+				if(error.length() > 0) {
+					JOptionPane.showMessageDialog( this, "Folgender Fehler ist aufgetreten: \n" + error, 
+														"Error !", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				tfRMIRegistry.setText(tempFile.getAbsolutePath());
+			}
+		} else if(e.getSource() == butSave) {
+			String error = checkSettings();
+			if(error.length() > 0) {		// Wenn bei den Einstellungen Fehler aufgetreten sind
+				JOptionPane.showMessageDialog(this, "Es sind folgende Fehler aufgetreten : \n" + error,
+													"Fehler !", JOptionPane.ERROR_MESSAGE);
+				return;			// Meldung ausgeben und zurückspringen
+			}
+			setSettings();		// Keine Fehler aufgetretten, dann die Einstellungen speichern
+		}
+	}
+
+	/**
+	 * Initialisieren der graphischen Oberfläche. 
+	 * @throws Exception
+	 */
+	private void jbInit() throws Exception {
+		Dimension size = this.getToolkit().getScreenSize();		// Server in der Mitte des Bildschirms
+		this.setBounds(new Rectangle(	(int)((size.width - WND_WIDTH) / 2), 
+										(int)((size.height - WND_HEIGHT) / 2), 
+										WND_WIDTH, WND_HEIGHT));
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.setLocale(java.util.Locale.getDefault());
+		this.setResizable(false);
+		this.getContentPane().setLayout(borderLayout1);
+		tabPane.setTabPlacement(JTabbedPane.TOP);
+		tabPane.setBorder(BorderFactory.createEtchedBorder());
+		panelServer.setLayout(null);
+		panelClients.setLayout(null);
+		panelEinstellungen.setLayout(null);
+		panelInfo.setLayout(null);
+		labTextBusyClients.setFont(new java.awt.Font("Dialog", 0, 11));
+		labTextBusyClients.setText("Anzahl der angemeldeten Clients : ");
+		labTextBusyClients.setBounds(new Rectangle(10, 20, 180, 15));
+		labTextFreeClients.setFont(new java.awt.Font("Dialog", 0, 11));
+		labTextFreeClients.setText("Anzahl der freien Clients :");
+		labTextFreeClients.setBounds(new Rectangle(10, 50, 180, 15));
+		labNumBusyClients.setFont(new java.awt.Font("Dialog", 0, 12));
+		labNumBusyClients.setForeground(Color.red);
+		labNumBusyClients.setText("0");
+		labNumBusyClients.setBounds(new Rectangle(190, 20, 80, 16));
+		labNumFreeClients.setFont(new java.awt.Font("Dialog", 0, 12));
+		labNumFreeClients.setForeground(Color.blue);
+		labNumFreeClients.setText("100");
+		labNumFreeClients.setBounds(new Rectangle(190, 50, 80, 16));
+		butRMIRegistry.setBounds(new Rectangle(30, 90, 240, 26));
+		butRMIRegistry.setActionCommand("jButton1");
+		butRMIRegistry.setText("RMI-Registry Starten");
+		butCentralServer.setBounds(new Rectangle(30, 130, 240, 26));
+		butCentralServer.setText("Central-Server Starten");
+		butCentralServer.setEnabled(false);
+		butBeenden.setBounds(new Rectangle(30, 170, 240, 26));
+		butBeenden.setText("Anwendung Beenden");
+		labTextStartzeit.setFont(new java.awt.Font("Dialog", 0, 11));
+		labTextStartzeit.setText("Startzeit :");
+		labTextStartzeit.setBounds(new Rectangle(10, 170, 80, 15));
+		labStartzeit.setFont(new java.awt.Font("Dialog", 0, 11));
+		labStartzeit.setForeground(SystemColor.desktop);
+		labStartzeit.setText("");
+		labStartzeit.setBounds(new Rectangle(100, 170, 180, 15));
+		butDelUser.setText("Benutzer Löschen");
+		butDelUser.setBounds(new Rectangle(50, 195, 210, 25));
+		labDBDriver.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBDriver.setText("DB Treiber");
+		labDBDriver.setBounds(new Rectangle(10, 10, 90, 15));
+		tfDBTreiber.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBTreiber.setBounds(new Rectangle(100, 10, 195, 19));
+		listClients.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBHost.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBHost.setText("DB Host");
+		labDBHost.setBounds(new Rectangle(10, 35, 90, 15));
+		tfDBHost.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBHost.setText("");
+		tfDBHost.setBounds(new Rectangle(100, 35, 195, 19));
+		labDBName.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBName.setText("DB Name");
+		labDBName.setBounds(new Rectangle(10, 60, 90, 15));
+		tfDBName.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBName.setText("");
+		tfDBName.setColumns(0);
+		tfDBName.setBounds(new Rectangle(100, 60, 195, 19));
+		labDBPswd.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBPswd.setText("DB Password");
+		labDBPswd.setBounds(new Rectangle(10, 85, 90, 15));
+		tfDBPswd1.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBPswd1.setText("");
+		tfDBPswd1.setBounds(new Rectangle(100, 85, 195, 19));
+		tfDBPswd2.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBPswd2.setText("");
+		tfDBPswd2.setBounds(new Rectangle(100, 110, 195, 19));
+		labNumClients.setFont(new java.awt.Font("Dialog", 0, 11));
+		labNumClients.setText("Max. Clients");
+		labNumClients.setBounds(new Rectangle(10, 150, 90, 15));
+		tfMaxClients.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfMaxClients.setText("");
+		tfMaxClients.setBounds(new Rectangle(100, 150, 60, 19));
+		butSave.setFont(new java.awt.Font("Dialog", 0, 11));
+		butSave.setBounds(new Rectangle(170, 150, 125, 19));
+		butSave.setActionCommand("butSave");
+		butSave.setText("Speichern");
+		labServerName.setFont(new java.awt.Font("Dialog", 0, 11));
+		labServerName.setText("Server-Name");
+		labServerName.setBounds(new Rectangle(10, 175, 90, 15));
+		tfServerName.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfServerName.setText("");
+		tfServerName.setBounds(new Rectangle(100, 175, 195, 19));
+		labRMIRegistry.setFont(new java.awt.Font("Dialog", 0, 11));
+		labRMIRegistry.setText("RMI-Registry");
+		labRMIRegistry.setBounds(new Rectangle(10, 200, 90, 15));
+		tfRMIRegistry.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfRMIRegistry.setText("");
+		tfRMIRegistry.setEnabled(false);
+		tfRMIRegistry.setBounds(new Rectangle(100, 200, 175, 19));
+		labFHMannheim.setText("FH-Mannheim SS2005");
+		labFHMannheim.setBounds(new Rectangle(20, 100, 200, 16));
+		labVorlesung.setText("Vorlesung OO2 + DBA");
+		labVorlesung.setBounds(new Rectangle(20, 120, 200, 16));
+		labWF.setFont(new java.awt.Font("Dialog", 0, 11));
+		labWF.setRequestFocusEnabled(true);
+		labWF.setText("Waldemar Flat");
+		labWF.setBounds(new Rectangle(121, 170, 150, 15));
+		labRD.setFont(new java.awt.Font("Dialog", 0, 11));
+		labRD.setText("Robert Driesner");
+		labRD.setBounds(new Rectangle(121, 150, 150, 15));
+		labMS.setFont(new java.awt.Font("Dialog", 0, 11));
+		labMS.setText("Mario Schmitt");
+		labMS.setBounds(new Rectangle(121, 190, 150, 15));
+		labDesigned.setText("Designed by :");
+		labDesigned.setBounds(new Rectangle(20, 150, 100, 16));
+		labFHLogo = new JLabel(Functions.getFHLogo(getClass()), JLabel.CENTER);
+		labFHLogo.setBounds(new Rectangle(5, 10, 295, 80));
+		scrollClientList.setBounds(new Rectangle(10, 10, 285, 150));
+		butRMISuchen.setBounds(new Rectangle(275, 200, 20, 20));
+		this.getContentPane().add(tabPane, BorderLayout.CENTER);
+		tabPane.add(panelServer,    "Server");
+		panelServer.add(labTextBusyClients, null);
+		panelServer.add(labTextFreeClients, null);
+		panelServer.add(labNumBusyClients, null);
+		tabPane.add(panelClients,   "Clients");
+		panelClients.add(scrollClientList, null);
+		tabPane.add(panelEinstellungen,  "Einstellungen");
+		panelEinstellungen.add(labDBDriver, null);
+		panelEinstellungen.add(tfDBTreiber, null);
+		panelEinstellungen.add(labDBHost, null);
+		tabPane.add(panelInfo,  "Info");
+		panelInfo.add(labFHMannheim, null);
+		panelInfo.add(labVorlesung, null);
+		panelServer.add(labNumFreeClients, null);
+		panelServer.add(butRMIRegistry, null);
+		panelServer.add(butCentralServer, null);
+		panelServer.add(butBeenden, null);
+		scrollClientList.getViewport().add(listClients, null);
+		listClients.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		panelClients.add(labTextStartzeit, null);
+		panelClients.add(labStartzeit, null);
+		panelClients.add(butDelUser, null);
+		panelEinstellungen.add(tfDBHost, null);
+		panelEinstellungen.add(labDBName, null);
+		panelEinstellungen.add(tfDBName, null);
+		panelEinstellungen.add(labDBPswd, null);
+		panelEinstellungen.add(tfDBPswd1, null);
+		panelEinstellungen.add(tfDBPswd2, null);
+		panelEinstellungen.add(labNumClients, null);
+		panelEinstellungen.add(tfMaxClients, null);
+		panelEinstellungen.add(butSave, null);
+		panelEinstellungen.add(labServerName, null);
+		panelEinstellungen.add(tfServerName, null);
+		panelEinstellungen.add(labRMIRegistry, null);
+		panelEinstellungen.add(tfRMIRegistry, null);
+		panelEinstellungen.add(butRMISuchen, null);
+		panelInfo.add(labDesigned, null);
+		panelInfo.add(labRD, null);
+		panelInfo.add(labWF, null);
+		panelInfo.add(labMS, null);
+		panelInfo.add(labFHLogo, null);
+		
+		// Nur ein File kann ausgwählt werden
+		fileChooser.setMultiSelectionEnabled( false );		
+
+		this.addWindowListener( new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				actionPerformed( new ActionEvent( butBeenden, 0, "" ) );
+			}
+			public void windowIconified(WindowEvent e) {
+				iconify();
+			}
+		} );
+		
+		listClients.addListSelectionListener(this);
+		
+		// ActionListenet zuweisen
+		butRMIRegistry.addActionListener( this );
+		butRMIRegistry.setIcon(Functions.getWebIcon(getClass()));
+		// Button Server
+		butCentralServer.addActionListener( this );
+		butCentralServer.setIcon(Functions.getServerIcon(getClass()));
+		// Button Beenden
+		butBeenden.addActionListener( this );
+		butBeenden.setIcon(Functions.getCloseIcon(getClass()));
+		// Button Dialog öffnen
+		butRMISuchen.addActionListener( this );
+		butRMISuchen.setIcon(Functions.getOpenIcon(getClass()));
+		// Button Benutzer löschen
+		butDelUser.addActionListener( this );
+		butDelUser.setIcon(Functions.getDelIcon(getClass()));
+		// Button Einstellungen speichern
+		butSave.addActionListener( this );
+		butSave.setIcon(Functions.getSaveIcon(getClass()));
+	}
+	
+	/**
+	 * Reaktion auf das Clicken in der Liste. 
+	 */
+	public void valueChanged(ListSelectionEvent e) {
+		if( listClients.getSelectedIndex() >= 0 ) {
+			User temp = (User)listModel.getElementAt( listClients.getSelectedIndex() );
+			labStartzeit.setText(temp.startTime);
+		}
 	}
 
 	/**
@@ -106,18 +707,18 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	private void initSysTray() throws Exception {
 		// MenuItem Registry
 		sysTrayMenu.add(miRegistry);
-		miRegistry.setText(buRegistry.getText());
+		miRegistry.setText(butRMIRegistry.getText());
 		miRegistry.addActionListener( this );
 		miRegistry.setIcon(Functions.getWebIcon(getClass()));
 		// MenuItem Server
 		sysTrayMenu.add(miServer);
-		miServer.setText(buServer.getText());
+		miServer.setText(butCentralServer.getText());
 		miServer.addActionListener( this );
 		miServer.setEnabled( false );
 		miServer.setIcon(Functions.getServerIcon(getClass()));
 		// MenuItem Close
 		sysTrayMenu.add(miClose);
-		miClose.setText(buClose.getText());
+		miClose.setText(butBeenden.getText());
 		miClose.addActionListener( this );
 		miClose.setIcon(Functions.getCloseIcon(getClass()));
 
@@ -199,201 +800,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		this.setVisible(false);
 		sysTrayMgr.update(presIcon, presToolTip);
 	}
-	
-	/**
-	 * Initialisierung der graphischen Oberfläche. 
-	 * @throws Exception
-	 */
-	private void jbInit() throws Exception {
-		this.getContentPane().setLayout(null);
-		buRegistry.setBounds(new Rectangle(320, 10, 200, 25));
-		buRegistry.setText("Start Registry");
-		buServer.setBounds(new Rectangle(320, 52, 200, 25));
-		buServer.setText("Server registrieren");
-		buDelUser.setBounds(new Rectangle(320, 93, 200, 25));
-		buDelUser.setText("Benutzer entfernen");
-		buClose.setBounds(new Rectangle(320, 135, 200, 25));
-		buClose.setText("Server beenden");
-		statusBar.setBounds(new Rectangle(0, 169, 532, 20));
-		scrollList.setBounds(new Rectangle(10, 10, 300, 150));
-		this.getContentPane().add(scrollList, null);
-		scrollList.getViewport().add(listUser, null);
-		listUser.setSelectionMode( ListSelectionModel.SINGLE_SELECTION );
-		// Button Registry
-		this.getContentPane().add(buRegistry, null);
-		buRegistry.addActionListener( this );
-		buRegistry.setIcon(Functions.getWebIcon(getClass()));
-		// Button Server
-		this.getContentPane().add(buServer, null);
-		buServer.addActionListener( this );
-		buServer.setEnabled( false );
-		buServer.setIcon(Functions.getServerIcon(getClass()));
-		// Button Benutzer löschen
-		this.getContentPane().add(buDelUser, null);
-		buDelUser.addActionListener( this );
-		buDelUser.setIcon(Functions.getDelIcon(getClass()));
-		// Button Beenden
-		this.getContentPane().add(buClose, null);
-		buClose.addActionListener( this );
-		buClose.setIcon(Functions.getCloseIcon(getClass()));
-		this.getContentPane().add(statusBar, null);
-		
-		this.addWindowListener( new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				actionPerformed( new ActionEvent( buClose, 0, "" ) );
-			}
-			public void windowIconified(WindowEvent e) {
-				iconify();
-			}
-		} );
-	}
-	
-	/**
-	 * Einen neuen ApplicationServer generieren.
-	 * @param hostName = Der Hostname, wo sich der Benutzer befindet.
-	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
-	 * @param serverName = Der Name des gestarteten ApplicationServers.
-	 */
-	public void addNewApplicationServer(  String hostName, String hostAdress, String serverName  ) {
-		User user = new User( hostName, hostAdress, serverName );
-		listModel.addElement( user );
-		statusBar.showTextForMilliseconds( "Neuer User @" + hostAdress + " hat sich angemeldet.", delay );
-	}
-	
-	/**
-	 * Den Benutzer-Namen zum User hinzufügen, da man beim Anlegen eines Users noch nicht weiß, wer sich anmelden wird.
-	 * @param serverName = Name des Servers, dem der BenutzerName zugeordnet wird.
-	 * @param benutzerName = benutzerName, der dem serverNamen zugeordnet wird. 
-	 */
-	public void addBenutzerNameToUser( String serverName, String benutzerName ) {
-		User temp;
-		for( int i = 0; i < listModel.size(); i++ ) {
-			temp = (User)listModel.getElementAt( i );
-			if( temp.serverName.equalsIgnoreCase(serverName) ) {
-				temp.benutzerName = benutzerName;
-				listModel.setElementAt( temp, i );
-				statusBar.showTextForMilliseconds( "Der User @" + temp.hostAdress + " hat seinen Namen übermittelt.", delay );
-				break;
-			}
-		}
-	}
 
-	/**
-	 * Einen User aus der ListBox entfernen
-	 * @param serverName = Name des Servers, der aus der Liste entfernt werden soll.
-	 */
-	public void delUser(String serverName) {
-		User temp;
-		for( int i = 0; i < listModel.size(); i++ ) {
-			temp = (User)listModel.getElementAt( i );
-			if( temp.serverName.equalsIgnoreCase(serverName) ) {
-				listModel.removeElementAt( i );
-				statusBar.showTextForMilliseconds( "Der User '" + temp.benutzerName + "' hat sich abgemeldet.", delay );
-				break;
-			}
-		}
-	}
-	
-
-		
-	public void actionPerformed(ActionEvent e) {
-		if( e.getSource() == buRegistry || e.getSource() == miRegistry ) {
-			if( rmiProcess == null && centralServer == null  ){
-				try {
-					rmiProcess = Runtime.getRuntime().exec(rmiregistry + " " + classpath);
-					buRegistry.setText( "Stop Registry" );
-					buServer.setEnabled( true );
-					miRegistry.setText( "Stop Registry" );
-					miServer.setEnabled( true );
-					presIcon = icons[1];
-					statusBar.showTextForMilliseconds( "RMI-Registry wurde gestartet.", delay );
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					rmiProcess = null;
-				}
-			} else if( rmiProcess != null && centralServer == null  ) {
-				rmiProcess.destroy();
-				rmiProcess = null;
-				statusBar.showTextForMilliseconds( "RMI-Registry wurde gestopt.", delay );
-				buRegistry.setText( "Start Registry" );
-				buServer.setEnabled( false );
-				miRegistry.setText( "Start Registry" );
-				miServer.setEnabled( false );
-				presIcon = icons[0];
-			} else if( rmiProcess != null && centralServer != null ) {
-				JOptionPane.showMessageDialog( this, "Sie müssen zuerst den Server aus der Registry entfernen !",
-														"Fehler !", JOptionPane.ERROR_MESSAGE );
-			}
-			if(this.getExtendedState() == Frame.ICONIFIED) {
-				sysTrayMgr.update(presIcon, presToolTip);
-			}
-		} else if( e.getSource() == buServer || e.getSource() == miServer ) {
-			if( rmiProcess == null && centralServer == null  ){
-				JOptionPane.showMessageDialog( this, "Sie müssen zuerst Registry starten !",
-														"Fehler !", JOptionPane.ERROR_MESSAGE );
-			} else 	if( rmiProcess != null && centralServer == null  ){
-				try {
-					Naming.rebind("mittelverwaltung", centralServer = new CentralServerImpl( this ));
-					buRegistry.setEnabled( false );
-					buServer.setText( "Server entfernen" );
-					miRegistry.setEnabled( false );
-					miServer.setText( "Server entfernen" );
-					presIcon = icons[2];
-					statusBar.showTextForMilliseconds( "Server wurde registriert.", delay );
-				} catch(Exception ex) {
-					ex.printStackTrace();
-					centralServer = null;
-				}
-			} else 	if( rmiProcess != null && centralServer != null  ){
-				try {
-					Naming.unbind( "mittelverwaltung" );
-					centralServer.removeAllServer();
-					listModel.removeAllElements();
-					centralServer = null;
-					buRegistry.setEnabled( true );
-					buServer.setText( "Server registrieren" );
-					miRegistry.setEnabled( true );
-					miServer.setText( "Server registrieren" );
-					presIcon = icons[1];
-					statusBar.showTextForMilliseconds( "Server wurde entfernt.", delay );
-				} catch(Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			if(this.getExtendedState() == Frame.ICONIFIED) {
-				sysTrayMgr.update(presIcon, presToolTip);
-			}
-		} else if( e.getSource() == buDelUser ) {
-			if( listUser.getSelectedIndex() >= 0 ) {
-				User temp = (User)listModel.getElementAt( listUser.getSelectedIndex() );
-				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.benutzerName + 
-														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
-														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
-					centralServer.removeServer(temp.serverName);
-					listModel.removeElementAt( listUser.getSelectedIndex() );
-					statusBar.showTextForMilliseconds( "Der User '" + temp.benutzerName + "' wurde entfernt.", delay );
-				}
-			}
-		} else if( e.getSource() == buClose || e.getSource() == miClose ) {
-			int result = JOptionPane.YES_OPTION;
-			if( listModel.size() > 0 ) {
-				 result = JOptionPane.showConfirmDialog( this, 	"Es sind noch User angemeldet.\n" + 
-																"Wollen Sie wirklich beenden ?",
-																"Beenden ?", JOptionPane.YES_NO_OPTION,
-																JOptionPane.QUESTION_MESSAGE  );
-			}
-			if( result == JOptionPane.NO_OPTION )
-				return;
-			if( rmiProcess != null ) {
-				rmiProcess.destroy();
-			}
-			sysTrayMgr.setVisible(false);
-			sysTrayMgr.removeSystemTrayIconListener(this);
-			centralServer = null;
-			this.dispose();
-			System.exit( 0 );
-		}
-	}
 }
 
 /**
@@ -406,6 +813,7 @@ class User {
 	public String hostAdress = null;
 	public String serverName = null;
 	public String benutzerName = null;
+	public String startTime = null;
 	
 	/**
 	 * Konstruktor zu Erstellen eines neuen Users.
@@ -417,6 +825,8 @@ class User {
 		this.hostName = hostName;
 		this.hostAdress = hostAdress;
 		this.serverName = serverName;
+		this.startTime = DateFormat.getDateInstance().format(new Date(System.currentTimeMillis())) + " um " + 
+						DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
 	}
 
 	/**
@@ -431,54 +841,3 @@ class User {
 		}
 	}
 }
-
-
-/**
- * Anzeigen eines am unterem Rand eines Fensters, die Größe wird im Fenster geregelt. <br>
- * Man kann den Text einfach anzeigen oder für eine bestimmte Zeit(Millisekunden) anzeigen lassen.
- * @author w.flat
- */
-class StatusBar extends JLabel implements ActionListener {
-
-	/**
-	 * Timer zum Löschen des Textes.
-	 */
-	Timer timer = new Timer(1000, this);
-	
-	public StatusBar() {
-		super();
-		this.setBorder( BorderFactory.createLoweredBevelBorder() );
-		this.setForeground( Color.blue );
-	}
-
-	/**
-	 * Einen für eine bestimmte Zeit anzeigen
-	 * @param text
-	 * @param milliseconds
-	 */
-	public void showTextForMilliseconds( String text, int milliseconds ) {
-		if( timer.isRunning() ) {
-			timer.stop();
-		}
-		timer.setInitialDelay( milliseconds );
-		this.setText( text );
-		timer.start();
-	}
-	
-	/**
-	 * Überlagern der setText-Methode, um einen Abstand links zu schaffen.
-	 */
-	public void setText(String text) {
-		String str = "  " + text;
-		super.setText(str);
-	}
-	
-	/**
-	 * Hier wird der Timer ausgeschaltet und der Text gelöscht.
-	 */
-	public void actionPerformed(ActionEvent e) {
-		timer.stop();
-		this.setText( "" );
-	}
-}
-

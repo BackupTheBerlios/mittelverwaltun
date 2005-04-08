@@ -15,20 +15,43 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 
 	private Database db;
 	private String serverName;
+	
+	/**
+	 * Variable zum Festlegen des Triebers für die Datenbank. 
+	 */
+	public static String APPL_DB_DRIVER =  "";
 
+	/**
+	 * Variable zum Festlegen des Hosts, wo sich die Datenbank befindet. 
+	 */
+	public static String APPL_DB_HOST = "";
+
+	/**
+	 * Variable zum Festlegen vom Datenbanknamen. 
+	 */
+	public static String APPL_DB_NAME = "";
+
+	/**
+	 * Variable zum Festlegen des Passworts zum Anmelden bei der Datenbank. 
+	 */
+	public static String APPL_DB_PSWD = "";
+
+	/**
+	 * Den individuellen Server für einen Benutzer erstellen. 
+	 * @throws RemoteException
+	 */
 	public ApplicationServerImpl() throws RemoteException {
-
-		// ToDo lesen aus .ini Datei
-		//db = new Database("com.mysql.jdbc.Driver", "192.168.1.2", "fbmittelverwaltung", "mittelverwaltung");
-		db = new Database("com.mysql.jdbc.Driver", "localhost", "fbmittelverwaltung", "mittelverwaltung");
+		db = new Database(APPL_DB_DRIVER, APPL_DB_HOST, APPL_DB_NAME, APPL_DB_PSWD);
 		this.serverName = "mittelverwaltungX";
 	}
 
+	/**
+	 * Den individuellen Server für einen Benutzer erstellen. 
+	 * @param serverName = Der Name des Servers, der gestartet werden soll. 
+	 * @throws RemoteException
+	 */
 	public ApplicationServerImpl(String serverName) throws RemoteException {
-
-		// ToDo lesen aus .ini Datei
-		//db = new Database("com.mysql.jdbc.Driver", "192.168.1.2", "fbmittelverwaltung", "mittelverwaltung");
-		db = new Database("com.mysql.jdbc.Driver", "localhost", "fbmittelverwaltung", "mittelverwaltung");
+		db = new Database(APPL_DB_DRIVER, APPL_DB_HOST, APPL_DB_NAME, APPL_DB_PSWD);
 		this.serverName = serverName;
 	}
 
