@@ -13,18 +13,27 @@ import java.rmi.*;
 import applicationServer.*;
 import dbObjects.Benutzer;
 
-public class MainFrame extends JFrame implements ActionListener {
-
-	ApplicationServer applicationServer;
-	CentralServer centralServer;
-	JDesktopPane desk;
-	Benutzer benutzer;
-	Image bg;
-	ImageIcon bgIcon;
+/**
+ * Hauptfenster von der FB-Mittelverwaltung. <br>
+ * Das Frame besitzt ein Menü, womit die einzelnen InternalFrames aufgerufen werden. 
+ * @author w.flat
+ */
+public class MainFrame extends JFrame {
 	
-	final String host = "localhost";				// Adresse und
-	final String serverName = "mittelverwaltung";	// ServerName
+	ApplicationServer applicationServer;	// Der individuelle ApplicationServer
+	CentralServer centralServer;	// Der CentralServer zum Mitteilen, dass der ApplicationServer nicht mehr benötigt wird
+	JDesktopPane desk;				// Pane zum Verwalten der Internal-Frames
+	Benutzer benutzer;				// Benutzer des Frames
+	Image bg;						// Das Hintergrund-Bild
+	ImageIcon bgIcon;				// Das Hintergrund-Bild
 	
+	/**
+	 * Zum Erstellen des Mittelverwaltung-Frames. Das <code>StartWindow</code> übernimmt das Einlogen<br>
+	 * und wenn es erfolgreich war, dann wird der MainFrame gestartet. 
+	 * @param centralServer = CentralServer von dem man den ApplicationServer bekommen hat.
+	 * @param applicationServer = Der individuelle ApplicationServer des Frames. 
+	 * @param benutzer = Benutzer, der sich bei dem System angemeldet hat. 
+	 */
 	public MainFrame(CentralServer centralServer, ApplicationServer applicationServer, Benutzer benutzer) {
 		super( "Mittelverwaltungsprogramm" );
 		try{
@@ -39,11 +48,11 @@ public class MainFrame extends JFrame implements ActionListener {
 				
 			setJMenuBar( new MainMenu( this ) );
 			this.desk = new JDesktopPane(){
-													public void paintComponent(Graphics g) {
-													  super.paintComponent(g);
-														g.drawImage(bg, getWidth()/2 - 240, getHeight()/2 - 180, 480, 353, this);
-													}
-											};
+											public void paintComponent(Graphics g) {
+											  super.paintComponent(g);
+												g.drawImage(bg, getWidth()/2 - 240, getHeight()/2 - 180, 480, 353, this);
+											}
+									};
 			desk.setDesktopManager(new DefaultDesktopManager());
 			desk.setBackground(new Color(109,183,218));
 			setContentPane(desk);
@@ -54,7 +63,6 @@ public class MainFrame extends JFrame implements ActionListener {
 				}
 			} );
 			this.setExtendedState(Frame.MAXIMIZED_BOTH);
-			
 			this.doLayout();
 			this.show();
 		}catch(Exception e){
@@ -67,9 +75,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 
+	/**
+	 * Konstruktor zum Erstellen eines Frames zum Testen der InternalFrames. 
+	 * @param title = Der Titel des MainFrames. 
+	 */
 	public MainFrame(String title){
 		super( title );
-	
 		this.desk = new JDesktopPane();
 		desk.setDesktopManager(new DefaultDesktopManager());
 		setContentPane(desk);
@@ -81,24 +92,42 @@ public class MainFrame extends JFrame implements ActionListener {
 		} );
 	}
 	
-	
+	/**
+	 * Den Benutzer des MainFrames festlegen.
+	 * @param benutzer = Neuer Benutzer des Frames.
+	 */
 	public void setBenutzer(Benutzer benutzer) {
 		this.benutzer = benutzer;
 	}
-
+	
+	/**
+	 * Den Benutzer des Frames abfragen. 
+	 * @return Der aktuelle Benutzer des MainFrames. 
+	 */
 	public Benutzer getBenutzer() {
 		return benutzer;
 	}
 	
+	/**
+	 * Den ApplicationServer dem MainFrame zuweisen.
+	 * @param applicationServer = Der neue ApplicationServer für das Frame. 
+	 */
 	public void setApplicationServer(ApplicationServer applicationServer) {
 		this.applicationServer = applicationServer;
 	}
 
+	/**
+	 * Den ApplicationServer beim Frame abfragen, damit alle InternalFrames ihn benutzen können. 
+	 * @return Der aktuelle ApplicationServer. 
+	 */
 	public ApplicationServer getApplicationServer() {
 		return applicationServer;
 	}
 
-	
+	/**
+	 * Neues InternalFrame(Child) im Fenster erzeugen. 
+	 * @param child = Neues InternalFrame, das angezeigt werden soll. 
+	 */
 	public void addChild(JInternalFrame child) {
 		desk.add(child);
 		child.setVisible(true);
@@ -110,63 +139,52 @@ public class MainFrame extends JFrame implements ActionListener {
 	public void onWindowClosing() {
 		if( centralServer != null && applicationServer != null ) {
 			try {
-				applicationServer.logout();
 				centralServer.delUser( applicationServer.getName() );
 			} catch(RemoteException e1) {
-			} catch(ConnectionException ec) {
 			}
 		}
 	   this.dispose();
 	   System.exit(0);
+	}
+	
+	/**
+	 * Das Hintergrund-Bild des Fensters laden. 
+	 * @param pkgname = Der Name des Packages, wo sich das Bild befindet. 
+	 * @param fname = Der Name des Bilds. 
+	 * @return = Das geladene Bild. 
+	 * @throws IOException
+	 */
+	private Image loadImageResource (String pkgname, String fname) throws IOException{
+		Image ret = null;
+		InputStream is = getResourceStream(pkgname, fname);
+
+		if (is != null){
+			byte[] buffer = new byte[0];
+			byte[] tmpbuf = new byte[1024];
+
+			while (true){
+				int len = is.read(tmpbuf);
+				if (len<=0){
+					break;
+				}
+				byte[] newbuf = new byte[buffer.length + len];
+				System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
+				System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
+				buffer = newbuf;
+			}
+			// create image
+			ret = Toolkit.getDefaultToolkit().createImage(buffer);
+			is.close();
+		}
+		return ret;
 	}
 
 	/**
-	 * Logout durchführen und Fenster schließen.
+	 * Den Stream zu einer Resource erzeugen. 
+	 * @param pkgname = Der Name des Packages, wo sich das Bild befindet. 
+	 * @param fname = Der Name des Bilds. 
+	 * @return Der Stream, der erzeugt wurde. 
 	 */
-	public void windowClosing() {
-		if( centralServer != null && applicationServer != null ) {
-			try {
-				applicationServer.logout();
-			} catch(Exception e1) {
-			}
-		}
-	   this.dispose();
-	   System.exit(0);
-	}
-		
-	public void actionPerformed( ActionEvent e ) {
-		
-	}
-	
-	private Image loadImageResource (String pkgname, String fname) throws IOException{
-	 Image ret = null;
-
-	 InputStream is = getResourceStream(pkgname, fname);
-
-	 if (is != null){
-
-		byte[] buffer = new byte[0];
-		byte[] tmpbuf = new byte[1024];
-
-		while (true){
-				  int len = is.read(tmpbuf);
-				  if (len<=0){
-							 break;
-				  }
-				  byte[] newbuf = new byte[buffer.length + len];
-				  System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
-				  System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
-				  buffer = newbuf;
-		}
-
-		// create image
-		ret = Toolkit.getDefaultToolkit().createImage(buffer);
-		is.close();
-	 }
-
-	 return ret;
-  }
-	  
 	private InputStream getResourceStream (String pkgname, String fname){
 		 String resname = "/" + pkgname.replace('.','/')+ "/" + fname;
 		 Class clazz = getClass();
