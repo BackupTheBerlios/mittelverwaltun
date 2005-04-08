@@ -66,18 +66,6 @@ public class MainFrame extends JFrame implements ActionListener {
 			this.onWindowClosing();
 		}
 	}
-	
-	/**
-	 * Den Benutzernamen an den Server senden.
-	 */
-	public void sendBenutzer() {
-		if( centralServer != null && applicationServer != null ) {
-			try {
-				centralServer.addBenutzerNameToUser( applicationServer.getName(), benutzer.getBenutzername() );
-			} catch (RemoteException e1) {
-			}
-		}
-	}
 
 	public MainFrame(String title){
 		super( title );
@@ -185,5 +173,4 @@ public class MainFrame extends JFrame implements ActionListener {
 		 InputStream is = clazz.getResourceAsStream(resname);
 		 return is;
 	}
-
 }

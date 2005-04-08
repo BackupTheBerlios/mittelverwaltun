@@ -43,7 +43,8 @@ public class StartWindow extends JFrame implements ActionListener {
 			this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
 			this.setResizable( false );
 			Dimension size = this.getToolkit().getScreenSize();		// Login-Fenster in der Mitte des Bildschirms
-			this.setBounds(new Rectangle((int)((size.width - WND_WIDTH) / 2), (int)((size.height - WND_HEIGHT) / 2), 322, 252));
+			this.setBounds(new Rectangle((int)((size.width - WND_WIDTH) / 2), (int)((size.height - WND_HEIGHT) / 2), 
+														WND_WIDTH, WND_HEIGHT));
 			this.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
 					actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
@@ -57,9 +58,7 @@ public class StartWindow extends JFrame implements ActionListener {
 			String applServerName = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
 			if(applServerName == null)
 				throw new Exception("Der ApplicationServer konnte nicht gestartet werden.");
-			System.out.println(applServerName);
 			applicationServer = (ApplicationServer)Naming.lookup("//" + host + "/" + applServerName);
-			System.out.println(applicationServer.getName());
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			centralServer = null;
@@ -174,10 +173,9 @@ public class StartWindow extends JFrame implements ActionListener {
 					// Benutzer abfragen
 					benutzer = applicationServer.login(tfBenutzername.getText(), psw);
 					// Dem CentralServer den Namen des Users übertragen
-					centralServer.addBenutzerNameToUser( applicationServer.getName(), benutzer.getBenutzername() );
+					centralServer.addBenutzerNameToUser(applicationServer.getName(), benutzer.getBenutzername());
 					// Fenster unsichtbar schalten
 					setVisible(false);
-					// Haupt-Fenster generieren
 					new MainFrame(centralServer, applicationServer, benutzer);
 					dispose();	// Fenster freigeben
 				} catch (Exception exc) {
@@ -186,7 +184,6 @@ public class StartWindow extends JFrame implements ActionListener {
 			}
 		}
 	}
-
 }
 
 
