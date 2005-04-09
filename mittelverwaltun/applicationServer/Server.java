@@ -124,7 +124,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	}
 	
 	/**
-	 * Die XML-Datei laden.
+	 * Die Einstellungen aus der XML-Datei laden.
 	 */
 	private void loadXMLFile() {
 		try {
@@ -145,7 +145,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	}
 	
 	/**
-	 * Die XML-Datei speichern.
+	 * Die Einstellungen in die XML-Datei speichern.
 	 */
 	private void saveXMLFile() {
 		try {
@@ -270,6 +270,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				break;
 			}
 		}
+		this.labStartzeit.setText("");
 		this.labNumBusyClients.setText(centralServer.getNumBusy());
 		this.labNumFreeClients.setText(centralServer.getNumFree());
 	}
@@ -407,11 +408,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.benutzerName + 
 														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
 														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
-					centralServer.removeServer(temp.serverName);
-					listModel.removeElementAt( listClients.getSelectedIndex() );
-					labStartzeit.setText("");
-					this.labNumBusyClients.setText(centralServer.getNumBusy());
-					this.labNumFreeClients.setText(centralServer.getNumFree());
+					try {
+						centralServer.delUser(temp.serverName);
+					} catch(Exception exc) { }
 				}
 			}
 		} else if( e.getSource() == butBeenden || e.getSource() == miClose ) {

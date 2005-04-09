@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<server><rmi>C:\j2sdk1.4.2\bin\rmiregistry.exe</rmi><number>10</number><servername>mittelverwaltung</servername><driver>com.mysql.jdbc.Driver</driver><dbname>fbmittelverwaltung</dbname><dbhost>localhost</dbhost><dbpswd>mittelverwaltung</dbpswd></server>
+<server><rmi>C:\j2sdk1.4.2\bin\rmiregistry.exe</rmi><number>10</number><servername>mittelverwaltung</servername><driver>com.mysql.jdbc.Driver</driver><dbname>fbmittelverwaltung</dbname><dbhost>192.168.1.10</dbhost><dbpswd>mittelverwaltung</dbpswd></server>

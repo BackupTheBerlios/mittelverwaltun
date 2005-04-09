@@ -95,8 +95,8 @@ public class StartWindow extends JFrame implements ActionListener {
 			});
 			jbInit();
 			loadXMLFile();
-			tfBenutzername.requestFocus();
 			this.show();
+			tfBenutzername.requestFocus();
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			this.actionPerformed(new ActionEvent(butAbbrechen, 0, ""));

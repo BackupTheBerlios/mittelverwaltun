@@ -137,7 +137,7 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	 * Den angegebenen ApplicationServer aus der rmiregistry entfernen. 
 	 * @param serverName = Der Name des ApplicationServers der entfernt werden soll. 
 	 */
-	public void removeServer(String serverName) {
+	private void removeServer(String serverName) {
 		// Den Server aus rmiregistry entfernen. 
 		try {
 			((ApplicationServer)Naming.lookup("//localhost/" + serverName)).logout();
