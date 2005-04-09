@@ -126,7 +126,7 @@ public class PrintASKBestellung extends JFrame {
 	
 	private void createOrder(JFreeReport report){
 		// FH-Logo einfügen
-		final URL imageURL = getClass().getResource("../image/fhlogoklein.gif");
+		final URL imageURL = getClass().getResource("/image/fhlogoklein.gif");
 		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
 		final WaitingImageObserver obs = new WaitingImageObserver(image);
 		obs.waitImageLoaded();

@@ -127,6 +127,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	public Reports(MainFrame frame) {
 		super( "Reports" );
 		this.frame = frame;
+		
 		try {
 			jbInit();
 		}catch(Exception e) {
@@ -544,11 +545,10 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		test.setBackground(Color.WHITE);
 
 		JFreeReport report = new JFreeReport();
-
 		report = parseReport(in);
 		report.setData(tabReport.getModel());
 
-		final URL imageURL = getClass().getResource("../image/fhlogo.jpg");
+		final URL imageURL = getClass().getResource("/image/fhlogo.jpg");
 		final Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
 		final WaitingImageObserver obs = new WaitingImageObserver(image);
 		obs.waitImageLoaded();
