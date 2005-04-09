@@ -134,7 +134,7 @@ public class PrintKleinBestellung extends JFrame {
 	 final ReportGenerator generator = ReportGenerator.getInstance();
 	 try
 	 {
-		result = generator.parseReport(templateURL);
+	 	result = generator.parseReport(templateURL);
 	 }
 	 catch (Exception e)
 	 {
