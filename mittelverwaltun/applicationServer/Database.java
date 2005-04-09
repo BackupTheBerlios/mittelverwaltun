@@ -37,8 +37,7 @@ public class Database implements Serializable {
 			Class.forName(driver);
 			System.out.println("Done.");
 			System.out.println("Connect to database...");
-			con = DriverManager.getConnection("jdbc:mysql://" + url + "/" + database, user, defaultPwd);
-
+			con = DriverManager.getConnection("jdbc:" + url + "/" + database, user, defaultPwd);
 			System.out.println("Connection established.");
 			System.out.println("Set autocommit = false...");
 			con.setAutoCommit(false);

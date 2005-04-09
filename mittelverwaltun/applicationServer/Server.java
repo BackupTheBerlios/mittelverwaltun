@@ -48,8 +48,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	JButton butDelUser = new JButton();
 	JLabel labDBDriver = new JLabel();
 	JTextField tfDBTreiber = new JTextField();
-	JLabel labDBHost = new JLabel();
-	JTextField tfDBHost = new JTextField();
+	JLabel labDBURL = new JLabel();
+	JTextField tfDBURL= new JTextField();
 	JLabel labDBName = new JLabel();
 	JTextField tfDBName = new JTextField();
 	JLabel labDBPswd = new JLabel();
@@ -93,10 +93,17 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	int icons[] = new int[3];
 	int presIcon;
 	String presToolTip = "FB-Mittelverwaltung\nFH-Mannheim SS 2005";
-	
-	// XML-Datei
-	final static String xmlFileName = "." + System.getProperty("file.separator") + "xml" + 
-											System.getProperty("file.separator") + "server.xml"; 
+		
+	// Verzeichnisse und Ordner für die Dateien, die ausgelagert werden müssen
+	final static String xmlPackage = "xml";
+	final static String xmlFileName = "server.xml";
+	final static String imagePackage = "image";
+	final static String[] iconNames = {"traf_red.ICO", "traf_yellow.ICO", "traf_green.ICO"};
+	final static String serverPackage = "applicationServer";
+	final static String[] serverSkelStub = {"ApplicationServerImpl_Skel.class", "ApplicationServerImpl_Stub.class",
+											"CentralServerImpl_Skel.class", "CentralServerImpl_Stub.class",
+											"ApplicationServerException.class", "ConnectionException.class", 
+											"CentralServer.class", "ApplicationServer.class"};
 
 	/**
 	 * Erstellen vom <code>Server</code>.
@@ -104,6 +111,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	public Server() {
 		super("FB-Mittelverwaltung Server");
 		try {
+			restoreFiles();
 			jbInit();
 			initSysTray();
 			loadXMLFile();
@@ -118,7 +126,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Generieren und starten des Central-Servers.
 	 */
 	public static void main(String args[]) {
-		System.getSecurityManager();
 		Server server = new Server();
 		server.synchronize();
 	}
@@ -128,16 +135,17 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	private void loadXMLFile() {
 		try {
+			File temp = new File(xmlFileName);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder  = factory.newDocumentBuilder();
-			Document document = builder.parse(new FileInputStream(new File(xmlFileName)));
+			Document document = builder.parse(new FileInputStream(new File(xmlPackage + File.separator + xmlFileName)));
 			CentralServerImpl.CENTRAL_RMI = document.getElementsByTagName("rmi").item(0).getFirstChild().getNodeValue();
 			setRmiClaspath(CentralServerImpl.CENTRAL_RMI);
 			CentralServerImpl.CENTRAL_NUM_APPL = Integer.parseInt(document.getElementsByTagName("number").item(0).getFirstChild().getNodeValue());
 			CentralServerImpl.CENTRAL_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
 			ApplicationServerImpl.APPL_DB_DRIVER = document.getElementsByTagName("driver").item(0).getFirstChild().getNodeValue();
 			ApplicationServerImpl.APPL_DB_NAME = document.getElementsByTagName("dbname").item(0).getFirstChild().getNodeValue();
-			ApplicationServerImpl.APPL_DB_HOST = document.getElementsByTagName("dbhost").item(0).getFirstChild().getNodeValue();
+			ApplicationServerImpl.APPL_DB_URL = document.getElementsByTagName("dburl").item(0).getFirstChild().getNodeValue();
 			ApplicationServerImpl.APPL_DB_PSWD = document.getElementsByTagName("dbpswd").item(0).getFirstChild().getNodeValue();
 	} catch(Exception e) {
 			e.printStackTrace();
@@ -169,15 +177,15 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			tempNode = document.createElement("dbname");
 			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_NAME));
 			rootNode.appendChild(tempNode);
-			tempNode = document.createElement("dbhost");
-			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_HOST));
+			tempNode = document.createElement("dburl");
+			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_URL));
 			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("dbpswd");
 			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_PSWD));
 			rootNode.appendChild(tempNode);
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource( document );
-			FileOutputStream os = new FileOutputStream(xmlFileName);
+			OutputStream os = new FileOutputStream(new File(xmlPackage + File.separator + xmlFileName));
 			StreamResult result = new StreamResult( os );
 			transformer.transform( source, result );
 		} catch(Exception e) {
@@ -189,7 +197,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Laden der Umgebungsvariablen in den Server. 
 	 */
 	private void loadVariables() {
-		this.tfDBHost.setText(ApplicationServerImpl.APPL_DB_HOST);
+		this.tfDBURL.setText(ApplicationServerImpl.APPL_DB_URL);
 		this.tfDBName.setText(ApplicationServerImpl.APPL_DB_NAME);
 		this.tfDBTreiber.setText(ApplicationServerImpl.APPL_DB_DRIVER);
 		this.tfDBPswd1.setText(ApplicationServerImpl.APPL_DB_PSWD);
@@ -207,7 +215,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	private String checkSettings() {
 		String error = "";
-		if(tfDBHost.getText().length() == 0)
+		if(tfDBURL.getText().length() == 0)
 			error += " - Es wurde keine DB-Hostbezeichnung eingetragen.\n";
 		if(tfDBName.getText().length() == 0)
 			error += " - Es wurde keine DB-Name eingetragen.\n";
@@ -308,7 +316,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Die Variablen CLASSPATH und RMI des werden aber nur durch den Dialog gesetzt.
 	 */
 	private void setSettings() {
-		ApplicationServerImpl.APPL_DB_HOST = tfDBHost.getText();
+		ApplicationServerImpl.APPL_DB_URL= tfDBURL.getText();
 		ApplicationServerImpl.APPL_DB_NAME = tfDBName.getText();
 		ApplicationServerImpl.APPL_DB_PSWD = new String(tfDBPswd1.getPassword());
 		ApplicationServerImpl.APPL_DB_DRIVER = tfDBTreiber.getText();
@@ -514,12 +522,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		tfDBTreiber.setFont(new java.awt.Font("Dialog", 0, 11));
 		tfDBTreiber.setBounds(new Rectangle(100, 10, 195, 19));
 		listClients.setFont(new java.awt.Font("Dialog", 0, 11));
-		labDBHost.setFont(new java.awt.Font("Dialog", 0, 11));
-		labDBHost.setText("DB Host");
-		labDBHost.setBounds(new Rectangle(10, 35, 90, 15));
-		tfDBHost.setFont(new java.awt.Font("Dialog", 0, 11));
-		tfDBHost.setText("");
-		tfDBHost.setBounds(new Rectangle(100, 35, 195, 19));
+		labDBURL.setFont(new java.awt.Font("Dialog", 0, 11));
+		labDBURL.setText("DB URL");
+		labDBURL.setBounds(new Rectangle(10, 35, 90, 15));
+		tfDBURL.setFont(new java.awt.Font("Dialog", 0, 11));
+		tfDBURL.setText("");
+		tfDBURL.setBounds(new Rectangle(100, 35, 195, 19));
 		labDBName.setFont(new java.awt.Font("Dialog", 0, 11));
 		labDBName.setText("DB Name");
 		labDBName.setBounds(new Rectangle(10, 60, 90, 15));
@@ -589,7 +597,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		tabPane.add(panelEinstellungen,  "Einstellungen");
 		panelEinstellungen.add(labDBDriver, null);
 		panelEinstellungen.add(tfDBTreiber, null);
-		panelEinstellungen.add(labDBHost, null);
+		panelEinstellungen.add(labDBURL, null);
 		tabPane.add(panelInfo,  "Info");
 		panelInfo.add(labFHMannheim, null);
 		panelInfo.add(labVorlesung, null);
@@ -602,7 +610,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		panelClients.add(labTextStartzeit, null);
 		panelClients.add(labStartzeit, null);
 		panelClients.add(butDelUser, null);
-		panelEinstellungen.add(tfDBHost, null);
+		panelEinstellungen.add(tfDBURL, null);
 		panelEinstellungen.add(labDBName, null);
 		panelEinstellungen.add(tfDBName, null);
 		panelEinstellungen.add(labDBPswd, null);
@@ -721,17 +729,15 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		miClose.addActionListener( this );
 		miClose.setIcon(Functions.getCloseIcon(getClass()));
 
-		if (!SystemTrayIconManager.initializeSystemDependent(this.getClass())) {
+		if (!SystemTrayIconManager.initializeSystemDependent()) {
 			throw new Exception("No DesktopIndicator.dll - File.");
 		}
-		presIcon = icons[0] = loadIcon("traf_red.ICO", getClass());
-		icons[1] = loadIcon("traf_yellow.ICO", getClass());
-		icons[2] = loadIcon("traf_green.ICO", getClass());
 		for(int i = 0; i < icons.length; i++) {
-			if(icons[i] == -1) {
-				throw new Exception("No Icon.");
+			if((icons[i] = SystemTrayIconManager.loadImage("./" + imagePackage + "/" + iconNames[i])) == -1) {
+				throw new Exception("No Icon. [" + i + "]");
 			}
 		}
+		presIcon = icons[0];
 		sysTrayMgr = new SystemTrayIconManager(presIcon, presToolTip);
 		sysTrayMgr.addSystemTrayIconListener(this);
 		sysTrayMgr.setRightClickView(sysTrayMenu);
@@ -740,35 +746,25 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	}
 	
 	/**
-	 * Das Laden des angegeben Icons.
-	 * @param fileName = Das Icon, das geladen werden soll. 
-	 * @param clazz = Class von einer beliebigen Componente. 
-	 * @return Id des geladenen Icons. Wenn erfolgreich > 0, sonst -1.
+	 * Auslagern der benötigten externen Dateien aus der Jar-Datei in normale Verzeichnisse.
 	 */
-	private int loadIcon(String fileName, Class clazz) {
+	private void restoreFiles() {
 		try {
-			File file = new File(".\\image\\");
-			if(!file.exists()) {
-				file.mkdir();
+			Functions.restoreFile(	SystemTrayIconManager.dllPackage, 		// Die DLL auslagern
+									SystemTrayIconManager.dllName + "." + SystemTrayIconManager.dllExt,
+									getClass());
+			for(int i = 0; i < iconNames.length; i++) {						// Die Bilddateien auslagern
+				Functions.restoreFile(imagePackage, iconNames[i], getClass());
 			}
-			file = new File(".\\image\\" + fileName);
-			if(!file.exists()) {
-				InputStream in = clazz.getResourceAsStream("/image/" + fileName);
-				FileOutputStream out = new FileOutputStream(file);
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-				  out.write(buf, 0, len);
-				}
-				out.close();
-				in.close();        		
+			for(int i = 0; i < serverSkelStub.length; i++) {				// Die Serverdateien auslagern
+				Functions.restoreFile(serverPackage, serverSkelStub[i], getClass());
 			}
-			return SystemTrayIconManager.loadImage("./image/" + fileName);
-		} catch( Exception x ) {
-			return -1;
+			Functions.restoreFile(xmlPackage, xmlFileName, getClass());		// Die XML-Datei auslagern
+		} catch(Exception exc) {
+			exc.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Synchronisierung zwischen SysTray und dem Server. 
 	 */

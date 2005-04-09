@@ -2,8 +2,6 @@ package applicationServer;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import gui.*;
-
 /**
  * Interface des CentralServers, der bei der "rmiregistry" angemeldet wird und<br>
  * das anschließend jedem Benutzer einen eigenen <code>ApplicationServer</code> bei der "rmiregistry" anmeldet<br>

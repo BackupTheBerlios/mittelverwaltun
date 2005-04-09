@@ -230,6 +230,8 @@ public class StartWindow extends JFrame implements ActionListener {
 					centralServer = (CentralServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + CLIENT_SERVER_NAME);
 					InetAddress addr = InetAddress.getLocalHost();
 					String applServerName = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
+					System.out.println(applServerName);
+					applServerName = null;
 					if(applServerName == null)
 						throw new Exception("Der ApplicationServer konnte nicht gestartet werden.");
 					applicationServer = (ApplicationServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + applServerName);

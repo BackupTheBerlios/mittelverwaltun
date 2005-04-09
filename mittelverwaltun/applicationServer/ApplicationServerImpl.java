@@ -24,7 +24,7 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	/**
 	 * Variable zum Festlegen des Hosts, wo sich die Datenbank befindet. 
 	 */
-	public static String APPL_DB_HOST = "";
+	public static String APPL_DB_URL = "";
 
 	/**
 	 * Variable zum Festlegen vom Datenbanknamen. 
@@ -41,7 +41,7 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	 * @throws RemoteException
 	 */
 	public ApplicationServerImpl() throws RemoteException {
-		db = new Database(APPL_DB_DRIVER, APPL_DB_HOST, APPL_DB_NAME, APPL_DB_PSWD);
+		db = new Database(APPL_DB_DRIVER, APPL_DB_URL, APPL_DB_NAME, APPL_DB_PSWD);
 		this.serverName = "mittelverwaltungX";
 	}
 
@@ -51,7 +51,7 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	 * @throws RemoteException
 	 */
 	public ApplicationServerImpl(String serverName) throws RemoteException {
-		db = new Database(APPL_DB_DRIVER, APPL_DB_HOST, APPL_DB_NAME, APPL_DB_PSWD);
+		db = new Database(APPL_DB_DRIVER, APPL_DB_URL, APPL_DB_NAME, APPL_DB_PSWD);
 		this.serverName = serverName;
 	}
 

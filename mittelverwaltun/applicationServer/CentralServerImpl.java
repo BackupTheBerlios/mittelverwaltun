@@ -98,7 +98,7 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 		try {
 			Naming.rebind(serverToStart, new ApplicationServerImpl(serverToStart));
 		} catch(Exception ex) {		// Konnte nicht gestartet werden
-			return null;
+			return ex.toString();
 		}
 		// Anmeldung war erfolgreich => 
 		listFree.remove(0);				// aus listFree löschen

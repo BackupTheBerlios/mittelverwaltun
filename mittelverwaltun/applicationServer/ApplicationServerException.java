@@ -3,7 +3,7 @@ package applicationServer;
 public class ApplicationServerException extends Exception  {
 
 	private static int NOM = 200;
-	private static String[] messages = null;
+	private String[] messages = null;
 
 	private int errorCode;
 
@@ -45,7 +45,7 @@ public class ApplicationServerException extends Exception  {
 		return errorCode;
 	}
 
-	public static void initializeErrorMessages(){
+	public void initializeErrorMessages(){
 
 		messages = new String[NOM];
 

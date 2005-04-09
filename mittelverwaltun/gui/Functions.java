@@ -1,11 +1,8 @@
 package gui;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.swing.ImageIcon;
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
 
 /**
  * Klasse mit statischen Methoden, die zum Laden der Image-Dateien verwendet werden. 
@@ -548,5 +545,45 @@ public class Functions {
 			is.close();
 		}
 		return ret;
+	}
+	
+	/**
+	 * Erstellen von allen nicht existierenden Verzeichnissen<br>
+	 * vom aktuellen Verzeichnis bis zum angegebenem Verzeichnis.<br>
+	 * author w.flat
+	 * @param dir = Verzeichnis, bis einschließlich welchem man alle Verzeichnisse erstellen soll.
+	 */
+	static public void makeDirs(File dir) {
+		if(dir.getAbsolutePath().equals((new File("")).getAbsolutePath()) || dir.getAbsolutePath().equals(""))
+			return;
+		makeDirs(dir.getParentFile());
+		if(!dir.exists())
+			dir.mkdir();
+	}
+	
+	/**
+	 * Methode zum Auslagern einer beliebigen Datei aus der Jar-Datei <br>
+	 * in die gleiche Datei ausserhalb der Jar-Datei. <br>
+	 * Wenn die Datei existiert wird sie nicht überschrieben.<br>
+	 * author w.flat
+	 * @param pkgname = Der Name vom Package, in dem sich eine Datei befindet. 
+	 * @param fname = Der Name der Datei.
+	 * @param clazz = Class einer beliebigen Componente.
+	 * @throws IOException
+	 */
+	static public void restoreFile(String pkgname, String fname, Class clazz) throws IOException {
+		File outFile = new File(pkgname.replace('.', File.separatorChar) + File.separator + fname);
+		makeDirs(outFile.getAbsoluteFile().getParentFile());
+		if(!outFile.exists()) {
+			InputStream is = getResourceStream(pkgname, fname, clazz);
+			FileOutputStream out = new FileOutputStream(outFile);
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = is.read(buf)) > 0) {
+			  out.write(buf, 0, len);
+			}
+			out.close();
+			is.close();        		
+		}
 	}
 }
