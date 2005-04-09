@@ -7,7 +7,6 @@
 package gui;
 
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Insets;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
