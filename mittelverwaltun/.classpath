@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path=""/>
-    <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="D:/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
-    <classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jemmy.jar"/>
-    <classpathentry kind="lib" path="jfreereport-0.8.4_10-all.jar"/>
-    <classpathentry kind="lib" path="lib/bsh-1.2b6.jar"/>
-    <classpathentry kind="lib" path="lib/gnujaxp.jar"/>
-    <classpathentry kind="lib" path="lib/itext-1.02b.jar"/>
-    <classpathentry kind="lib" path="lib/jcommon-0.9.3a.jar"/>
-    <classpathentry kind="lib" path="lib/pixie-0.8.1.jar"/>
-    <classpathentry kind="lib" path="lib/poi-2.0-RC1-20031102.jar"/>
-    <classpathentry kind="output" path=""/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/eclipse/plugins/org.junit_3.8.1/junit.jar"/>
+	<classpathentry kind="lib" path="C:/Dokumente und Einstellungen/robert/jbproject/Mittel/src/jemmy.jar"/>
+	<classpathentry exported="true" kind="lib" path="jfreereport-0.8.4_10-all.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jcommon-0.9.3a.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pixie-0.8.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/poi-2.0-RC1-20031102.jar"/>
+	<classpathentry kind="lib" path="lib/bsh-1.2b6.jar"/>
+	<classpathentry kind="lib" path="lib/itext-1.00.jar"/>
+	<classpathentry kind="output" path=""/>
 </classpath>

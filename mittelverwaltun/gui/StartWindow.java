@@ -82,6 +82,9 @@ public class StartWindow extends JFrame implements ActionListener {
 	 */
 	public StartWindow() {
 		super("Login Mittelverwaltung");
+		
+		createFile("xml", "client.xml");
+		
 		try {
 			this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
 			this.setResizable( false );
@@ -100,6 +103,35 @@ public class StartWindow extends JFrame implements ActionListener {
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			this.actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
+		}
+	}
+	
+	/**
+	 * Das Laden des angegeben Files.
+	 * @param fileName = Das Icon, das geladen werden soll. 
+	 * @param clazz = Class von einer beliebigen Componente. 
+	 * @return Id des geladenen Icons. Wenn erfolgreich > 0, sonst -1.
+	 */
+	private void createFile(String folder, String filename) {
+		try {
+			File file = new File(".\\" + folder + "\\");
+			if(!file.exists()) {
+				file.mkdir();
+			}
+			file = new File(".\\" + folder + "\\" + filename);
+			if(!file.exists()) {
+				InputStream in = getClass().getResourceAsStream("/" + folder + "/" + filename);
+				FileOutputStream out = new FileOutputStream(file);
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+				  out.write(buf, 0, len);
+				}
+				out.close();
+				in.close();        		
+			}
+		} catch( Exception x ) {
+			System.out.println("Fehler bei erstellen der client.xml !");
 		}
 	}
 	
