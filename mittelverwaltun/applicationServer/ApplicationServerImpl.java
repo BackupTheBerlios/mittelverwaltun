@@ -1232,7 +1232,7 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 			if( (db.countBestellungen( zvUntertitel ) > 0) || (db.countBuchungen( zvUntertitel ) > 0) ) {
 				db.selectForUpdateZVUntertitel( zvUntertitel );		// ZVUntertitel zum Aktualisieren auswählen
 				zvUntertitel.setGeloescht( true );					// Flag-Gelöscht setzen
-				return db.updateZVUntertitel( zvUntertitel );	// ZVUntertitel aktualisieren
+				return db.updateZVUntertitel( zvUntertitel );		// ZVUntertitel aktualisieren
 			}
 			
 			// Sost wird der ZVUntertitel aus der Datenbank gelöscht
