@@ -39,7 +39,7 @@ public class MainFrame extends JFrame {
 			this.centralServer = centralServer;
 			this.applicationServer = applicationServer;
 			this.benutzer = benutzer;
-			Boot.start();	// Initialisierung der Module für das Drucken
+//			Boot.start();	// Initialisierung der Module für das Drucken
 			InetAddress addr = InetAddress.getLocalHost();
 			bg = Functions.loadImageResource("image", "bg.jpg", getClass());
 			if (bg != null)

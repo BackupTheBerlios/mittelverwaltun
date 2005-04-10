@@ -7,108 +7,8 @@ public final class ApplicationServerImpl_Stub
     extends java.rmi.server.RemoteStub
     implements applicationServer.ApplicationServer, java.rmi.Remote
 {
-    private static final java.rmi.server.Operation[] operations = {
-	new java.rmi.server.Operation("int addBestellung(dbObjects.ASKBestellung)"),
-	new java.rmi.server.Operation("int addBestellung(dbObjects.StandardBestellung)"),
-	new java.rmi.server.Operation("int addFBHauptkonto(dbObjects.FBHauptkonto)"),
-	new java.rmi.server.Operation("int addFBUnterkonto(dbObjects.FBUnterkonto)"),
-	new java.rmi.server.Operation("int addFirma(dbObjects.Firma)"),
-	new java.rmi.server.Operation("int addInstitute(dbObjects.Institut)"),
-	new java.rmi.server.Operation("int addKleinbestellung(dbObjects.KleinBestellung)"),
-	new java.rmi.server.Operation("void addKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("int addRolle(dbObjects.Rolle)"),
-	new java.rmi.server.Operation("void addRollenAktivitaet(int, int)"),
-	new java.rmi.server.Operation("int addUser(dbObjects.Benutzer)"),
-	new java.rmi.server.Operation("int addZVKonto(dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("int addZVTitel(dbObjects.ZVTitel)"),
-	new java.rmi.server.Operation("int addZVUntertitel(dbObjects.ZVUntertitel)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.FBHauptkonto, dbObjects.FBHauptkonto, float)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.FBHauptkonto, dbObjects.FBUnterkonto, float)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.FBUnterkonto, dbObjects.FBHauptkonto, float)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.ZVKonto, float)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.ZVTitel, float)"),
-	new java.rmi.server.Operation("void buche(dbObjects.Benutzer, dbObjects.ZVUntertitel, float)"),
-	new java.rmi.server.Operation("void delBestellung(dbObjects.ASKBestellung)"),
-	new java.rmi.server.Operation("void delBestellung(dbObjects.StandardBestellung)"),
-	new java.rmi.server.Operation("int delFBHauptkonto(dbObjects.FBHauptkonto)"),
-	new java.rmi.server.Operation("int delFBUnterkonto(dbObjects.FBUnterkonto)"),
-	new java.rmi.server.Operation("int delFirma(dbObjects.Firma)"),
-	new java.rmi.server.Operation("void delInstitute(dbObjects.Institut)"),
-	new java.rmi.server.Operation("int delKleinbestellung(dbObjects.KleinBestellung)"),
-	new java.rmi.server.Operation("void delKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("void delRolle(dbObjects.Rolle)"),
-	new java.rmi.server.Operation("void delRollenAktivitaet(int, int)"),
-	new java.rmi.server.Operation("void delUser(dbObjects.Benutzer)"),
-	new java.rmi.server.Operation("int delZVKonto(dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("int delZVTitel(dbObjects.ZVTitel)"),
-	new java.rmi.server.Operation("int delZVUntertitel(dbObjects.ZVUntertitel)"),
-	new java.rmi.server.Operation("dbObjects.ASKBestellung getASKBestellung(int)"),
-	new java.rmi.server.Operation("dbObjects.Firma getASKFirma()"),
-	new java.rmi.server.Operation("dbObjects.Aktivitaet getAktivitaeten()[]"),
-	new java.rmi.server.Operation("float getAvailableAccountBudget(dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("float getAvailableBudgetForAccount(dbObjects.FBHauptkonto)"),
-	new java.rmi.server.Operation("float getAvailableNoPurposeBudget()"),
-	new java.rmi.server.Operation("java.util.ArrayList getBestellungen()"),
-	new java.rmi.server.Operation("java.util.ArrayList getBestellungen(int)"),
-	new java.rmi.server.Operation("int getCurrentHaushaltsjahrId()"),
-	new java.rmi.server.Operation("java.util.ArrayList getDelKleinbestellungen()"),
-	new java.rmi.server.Operation("java.util.ArrayList getFBHauptkonten(dbObjects.Institut)"),
-	new java.rmi.server.Operation("dbObjects.Institut getFBKontenForUser(dbObjects.Benutzer)[]"),
-	new java.rmi.server.Operation("dbObjects.FBUnterkonto getFBKonto(int)"),
-	new java.rmi.server.Operation("java.util.ArrayList getFBUnterkonten(dbObjects.Institut, dbObjects.FBHauptkonto)"),
-	new java.rmi.server.Operation("dbObjects.Fachbereich getFachbereiche()[]"),
-	new java.rmi.server.Operation("java.util.ArrayList getFirmen()"),
-	new java.rmi.server.Operation("dbObjects.Haushaltsjahr getHaushaltsjahr()"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstitutZuordnungen()[]"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstituteWithAccounts(dbObjects.Institut, boolean)[]"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstitutes()[]"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstitutesWithAccounts()[]"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstitutesWithAccounts(boolean)[]"),
-	new java.rmi.server.Operation("dbObjects.Institut getInstitutesWithMainAccounts()[]"),
-	new java.rmi.server.Operation("dbObjects.KleinBestellung getKleinbestellung(int)"),
-	new java.rmi.server.Operation("java.util.ArrayList getKleinbestellungen()"),
-	new java.rmi.server.Operation("dbObjects.Kostenart getKostenarten()[]"),
-	new java.rmi.server.Operation("java.util.ArrayList getLogList(java.sql.Date, java.sql.Date)"),
-	new java.rmi.server.Operation("java.lang.String getName()"),
-	new java.rmi.server.Operation("java.util.ArrayList getNoPurposeFBHauptkonten(dbObjects.Institut)"),
-	new java.rmi.server.Operation("int getNumberOfKontenzuordnungen(dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("java.util.ArrayList getOffeneZVKonten(int)"),
-	new java.rmi.server.Operation("java.util.ArrayList getReport(int, java.sql.Date, java.sql.Date)"),
-	new java.rmi.server.Operation("dbObjects.Rolle getRollen()[]"),
-	new java.rmi.server.Operation("dbObjects.Rolle getRollenFull()[]"),
-	new java.rmi.server.Operation("dbObjects.StandardBestellung getStandardBestellung(int)"),
-	new java.rmi.server.Operation("dbObjects.Benutzer getSwBeauftragte()[]"),
-	new java.rmi.server.Operation("dbObjects.Benutzer getUser(java.lang.String, java.lang.String)"),
-	new java.rmi.server.Operation("dbObjects.Benutzer getUsers()[]"),
-	new java.rmi.server.Operation("dbObjects.Benutzer getUsers(dbObjects.Institut)[]"),
-	new java.rmi.server.Operation("dbObjects.Benutzer getUsersByRole(dbObjects.Institut, int)[]"),
-	new java.rmi.server.Operation("java.util.ArrayList getZVKonten()"),
-	new java.rmi.server.Operation("java.util.ArrayList getZVKontenOnly()"),
-	new java.rmi.server.Operation("int getZVTitelId(dbObjects.ZVTitel)"),
-	new java.rmi.server.Operation("dbObjects.Benutzer login(java.lang.String, java.lang.String)"),
-	new java.rmi.server.Operation("void logout()"),
-	new java.rmi.server.Operation("void setAccountBudget(dbObjects.Benutzer, dbObjects.FBHauptkonto, float)"),
-	new java.rmi.server.Operation("void setBestellung(dbObjects.Benutzer, dbObjects.ASKBestellung, dbObjects.ASKBestellung)"),
-	new java.rmi.server.Operation("void setBestellung(dbObjects.Benutzer, dbObjects.StandardBestellung, dbObjects.StandardBestellung)"),
-	new java.rmi.server.Operation("int setFBHauptkonto(dbObjects.FBHauptkonto)"),
-	new java.rmi.server.Operation("int setFBUnterkonto(dbObjects.FBUnterkonto)"),
-	new java.rmi.server.Operation("dbObjects.Fachbereich setFachbereich(dbObjects.Fachbereich, dbObjects.Fachbereich)"),
-	new java.rmi.server.Operation("int setFirma(dbObjects.Firma)"),
-	new java.rmi.server.Operation("void setHaushaltsjahr(dbObjects.Haushaltsjahr, dbObjects.Haushaltsjahr)"),
-	new java.rmi.server.Operation("void setInstitute(dbObjects.Institut, dbObjects.Institut)"),
-	new java.rmi.server.Operation("void setKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.Kontenzuordnung)"),
-	new java.rmi.server.Operation("void setRolle(dbObjects.Rolle, dbObjects.Rolle)"),
-	new java.rmi.server.Operation("void setUser(dbObjects.Benutzer, dbObjects.Benutzer)"),
-	new java.rmi.server.Operation("int setZVKonto(dbObjects.ZVKonto)"),
-	new java.rmi.server.Operation("int setZVTitel(dbObjects.ZVTitel)"),
-	new java.rmi.server.Operation("int setZVUntertitel(dbObjects.ZVUntertitel)")
-    };
-    
-    private static final long interfaceHash = -5325691077988084846L;
-    
     private static final long serialVersionUID = 2;
     
-    private static boolean useNewInvoke;
     private static java.lang.reflect.Method $method_addBestellung_0;
     private static java.lang.reflect.Method $method_addBestellung_1;
     private static java.lang.reflect.Method $method_addFBHauptkonto_2;
@@ -206,14 +106,6 @@ public final class ApplicationServerImpl_Stub
     
     static {
 	try {
-	    java.rmi.server.RemoteRef.class.getMethod("invoke",
-		new java.lang.Class[] {
-		    java.rmi.Remote.class,
-		    java.lang.reflect.Method.class,
-		    java.lang.Object[].class,
-		    long.class
-		});
-	    useNewInvoke = true;
 	    $method_addBestellung_0 = applicationServer.ApplicationServer.class.getMethod("addBestellung", new java.lang.Class[] {dbObjects.ASKBestellung.class});
 	    $method_addBestellung_1 = applicationServer.ApplicationServer.class.getMethod("addBestellung", new java.lang.Class[] {dbObjects.StandardBestellung.class});
 	    $method_addFBHauptkonto_2 = applicationServer.ApplicationServer.class.getMethod("addFBHauptkonto", new java.lang.Class[] {dbObjects.FBHauptkonto.class});
@@ -309,14 +201,12 @@ public final class ApplicationServerImpl_Stub
 	    $method_setZVTitel_92 = applicationServer.ApplicationServer.class.getMethod("setZVTitel", new java.lang.Class[] {dbObjects.ZVTitel.class});
 	    $method_setZVUntertitel_93 = applicationServer.ApplicationServer.class.getMethod("setZVUntertitel", new java.lang.Class[] {dbObjects.ZVUntertitel.class});
 	} catch (java.lang.NoSuchMethodException e) {
-	    useNewInvoke = false;
+	    throw new java.lang.NoSuchMethodError(
+		"stub class initialization failed");
 	}
     }
     
     // constructors
-    public ApplicationServerImpl_Stub() {
-	super();
-    }
     public ApplicationServerImpl_Stub(java.rmi.server.RemoteRef ref) {
 	super(ref);
     }
@@ -328,29 +218,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addBestellung_0, new java.lang.Object[] {$param_ASKBestellung_1}, 2018629904499889930L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 0, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ASKBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addBestellung_0, new java.lang.Object[] {$param_ASKBestellung_1}, 2018629904499889930L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -367,29 +236,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addBestellung_1, new java.lang.Object[] {$param_StandardBestellung_1}, -7141568394395948604L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 1, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_StandardBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addBestellung_1, new java.lang.Object[] {$param_StandardBestellung_1}, -7141568394395948604L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -406,29 +254,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addFBHauptkonto_2, new java.lang.Object[] {$param_FBHauptkonto_1}, 6525168342380062248L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 2, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addFBHauptkonto_2, new java.lang.Object[] {$param_FBHauptkonto_1}, 6525168342380062248L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -445,29 +272,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addFBUnterkonto_3, new java.lang.Object[] {$param_FBUnterkonto_1}, 3107194606724584897L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 3, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBUnterkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addFBUnterkonto_3, new java.lang.Object[] {$param_FBUnterkonto_1}, 3107194606724584897L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -484,29 +290,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addFirma_4, new java.lang.Object[] {$param_Firma_1}, -9194144346870270739L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 4, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Firma_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addFirma_4, new java.lang.Object[] {$param_Firma_1}, -9194144346870270739L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -523,29 +308,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addInstitute_5, new java.lang.Object[] {$param_Institut_1}, -3583970179989161010L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 5, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addInstitute_5, new java.lang.Object[] {$param_Institut_1}, -3583970179989161010L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -562,29 +326,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addKleinbestellung_6, new java.lang.Object[] {$param_KleinBestellung_1}, -2730739743943565755L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 6, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_KleinBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addKleinbestellung_6, new java.lang.Object[] {$param_KleinBestellung_1}, -2730739743943565755L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -601,20 +344,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_addKontenZuordnung_7, new java.lang.Object[] {$param_FBHauptkonto_1, $param_ZVKonto_2}, -4177659853049081167L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 7, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		    out.writeObject($param_ZVKonto_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_addKontenZuordnung_7, new java.lang.Object[] {$param_FBHauptkonto_1, $param_ZVKonto_2}, -4177659853049081167L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -631,29 +361,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addRolle_8, new java.lang.Object[] {$param_Rolle_1}, 2142102777982794155L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 8, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Rolle_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addRolle_8, new java.lang.Object[] {$param_Rolle_1}, 2142102777982794155L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -670,20 +379,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_addRollenAktivitaet_9, new java.lang.Object[] {new java.lang.Integer($param_int_1), new java.lang.Integer($param_int_2)}, -4004067517523928360L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 9, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		    out.writeInt($param_int_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_addRollenAktivitaet_9, new java.lang.Object[] {new java.lang.Integer($param_int_1), new java.lang.Integer($param_int_2)}, -4004067517523928360L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -700,29 +396,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addUser_10, new java.lang.Object[] {$param_Benutzer_1}, -5437726647760334324L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 10, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addUser_10, new java.lang.Object[] {$param_Benutzer_1}, -5437726647760334324L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -739,29 +414,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addZVKonto_11, new java.lang.Object[] {$param_ZVKonto_1}, 9027554005221021214L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 11, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVKonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addZVKonto_11, new java.lang.Object[] {$param_ZVKonto_1}, 9027554005221021214L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -778,29 +432,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addZVTitel_12, new java.lang.Object[] {$param_ZVTitel_1}, 290566595758402942L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 12, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVTitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addZVTitel_12, new java.lang.Object[] {$param_ZVTitel_1}, 290566595758402942L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -817,29 +450,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_addZVUntertitel_13, new java.lang.Object[] {$param_ZVUntertitel_1}, -1317476784262082836L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 13, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVUntertitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_addZVUntertitel_13, new java.lang.Object[] {$param_ZVUntertitel_1}, -1317476784262082836L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -856,22 +468,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_14, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, $param_FBHauptkonto_3, new java.lang.Float($param_float_4)}, -1264608219386161848L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 14, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_FBHauptkonto_2);
-		    out.writeObject($param_FBHauptkonto_3);
-		    out.writeFloat($param_float_4);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_14, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, $param_FBHauptkonto_3, new java.lang.Float($param_float_4)}, -1264608219386161848L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -888,22 +485,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_15, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, $param_FBUnterkonto_3, new java.lang.Float($param_float_4)}, -299535951608757931L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 15, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_FBHauptkonto_2);
-		    out.writeObject($param_FBUnterkonto_3);
-		    out.writeFloat($param_float_4);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_15, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, $param_FBUnterkonto_3, new java.lang.Float($param_float_4)}, -299535951608757931L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -920,22 +502,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_16, new java.lang.Object[] {$param_Benutzer_1, $param_FBUnterkonto_2, $param_FBHauptkonto_3, new java.lang.Float($param_float_4)}, 3021457282171243963L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 16, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_FBUnterkonto_2);
-		    out.writeObject($param_FBHauptkonto_3);
-		    out.writeFloat($param_float_4);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_16, new java.lang.Object[] {$param_Benutzer_1, $param_FBUnterkonto_2, $param_FBHauptkonto_3, new java.lang.Float($param_float_4)}, 3021457282171243963L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -952,21 +519,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_17, new java.lang.Object[] {$param_Benutzer_1, $param_ZVKonto_2, new java.lang.Float($param_float_3)}, 7890448751278505492L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 17, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_ZVKonto_2);
-		    out.writeFloat($param_float_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_17, new java.lang.Object[] {$param_Benutzer_1, $param_ZVKonto_2, new java.lang.Float($param_float_3)}, 7890448751278505492L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -983,21 +536,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_18, new java.lang.Object[] {$param_Benutzer_1, $param_ZVTitel_2, new java.lang.Float($param_float_3)}, 5229023204047133144L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 18, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_ZVTitel_2);
-		    out.writeFloat($param_float_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_18, new java.lang.Object[] {$param_Benutzer_1, $param_ZVTitel_2, new java.lang.Float($param_float_3)}, 5229023204047133144L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1014,21 +553,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_buche_19, new java.lang.Object[] {$param_Benutzer_1, $param_ZVUntertitel_2, new java.lang.Float($param_float_3)}, -1195434699394514895L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 19, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_ZVUntertitel_2);
-		    out.writeFloat($param_float_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_buche_19, new java.lang.Object[] {$param_Benutzer_1, $param_ZVUntertitel_2, new java.lang.Float($param_float_3)}, -1195434699394514895L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1045,19 +570,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delBestellung_20, new java.lang.Object[] {$param_ASKBestellung_1}, -8166407972316158362L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 20, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ASKBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delBestellung_20, new java.lang.Object[] {$param_ASKBestellung_1}, -8166407972316158362L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1074,19 +587,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delBestellung_21, new java.lang.Object[] {$param_StandardBestellung_1}, -6664325241200787024L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 21, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_StandardBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delBestellung_21, new java.lang.Object[] {$param_StandardBestellung_1}, -6664325241200787024L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1103,29 +604,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delFBHauptkonto_22, new java.lang.Object[] {$param_FBHauptkonto_1}, 7225732700979535805L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 22, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delFBHauptkonto_22, new java.lang.Object[] {$param_FBHauptkonto_1}, 7225732700979535805L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1142,29 +622,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delFBUnterkonto_23, new java.lang.Object[] {$param_FBUnterkonto_1}, 7769233202323775240L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 23, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBUnterkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delFBUnterkonto_23, new java.lang.Object[] {$param_FBUnterkonto_1}, 7769233202323775240L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1181,29 +640,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delFirma_24, new java.lang.Object[] {$param_Firma_1}, 7067258562379867425L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 24, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Firma_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delFirma_24, new java.lang.Object[] {$param_Firma_1}, 7067258562379867425L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1220,19 +658,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delInstitute_25, new java.lang.Object[] {$param_Institut_1}, 5084473296544705979L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 25, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delInstitute_25, new java.lang.Object[] {$param_Institut_1}, 5084473296544705979L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1249,29 +675,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delKleinbestellung_26, new java.lang.Object[] {$param_KleinBestellung_1}, 8846856844621797200L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 26, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_KleinBestellung_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delKleinbestellung_26, new java.lang.Object[] {$param_KleinBestellung_1}, 8846856844621797200L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1288,20 +693,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delKontenZuordnung_27, new java.lang.Object[] {$param_FBHauptkonto_1, $param_ZVKonto_2}, -5224759650805893156L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 27, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		    out.writeObject($param_ZVKonto_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delKontenZuordnung_27, new java.lang.Object[] {$param_FBHauptkonto_1, $param_ZVKonto_2}, -5224759650805893156L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1318,19 +710,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delRolle_28, new java.lang.Object[] {$param_Rolle_1}, -1680860033238369119L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 28, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Rolle_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delRolle_28, new java.lang.Object[] {$param_Rolle_1}, -1680860033238369119L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1347,20 +727,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delRollenAktivitaet_29, new java.lang.Object[] {new java.lang.Integer($param_int_1), new java.lang.Integer($param_int_2)}, -2883170820284310930L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 29, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		    out.writeInt($param_int_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delRollenAktivitaet_29, new java.lang.Object[] {new java.lang.Integer($param_int_1), new java.lang.Integer($param_int_2)}, -2883170820284310930L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1377,19 +744,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_delUser_30, new java.lang.Object[] {$param_Benutzer_1}, -737084551344207759L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 30, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_delUser_30, new java.lang.Object[] {$param_Benutzer_1}, -737084551344207759L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1406,29 +761,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delZVKonto_31, new java.lang.Object[] {$param_ZVKonto_1}, 5255023716445036258L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 31, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVKonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delZVKonto_31, new java.lang.Object[] {$param_ZVKonto_1}, 5255023716445036258L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1445,29 +779,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delZVTitel_32, new java.lang.Object[] {$param_ZVTitel_1}, 4724966441718242675L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 32, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVTitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delZVTitel_32, new java.lang.Object[] {$param_ZVTitel_1}, 4724966441718242675L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1484,29 +797,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_delZVUntertitel_33, new java.lang.Object[] {$param_ZVUntertitel_1}, 3491329513710688421L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 33, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVUntertitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_delZVUntertitel_33, new java.lang.Object[] {$param_ZVUntertitel_1}, 3491329513710688421L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1523,31 +815,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getASKBestellung_34, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, 226447144831845721L);
-		return ((dbObjects.ASKBestellung) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 34, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.ASKBestellung $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.ASKBestellung) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getASKBestellung_34, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, 226447144831845721L);
+	    return ((dbObjects.ASKBestellung) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1564,25 +833,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getASKFirma_35, null, -4369024237780905153L);
-		return ((dbObjects.Firma) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 35, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Firma $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Firma) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getASKFirma_35, null, -4369024237780905153L);
+	    return ((dbObjects.Firma) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1599,25 +851,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getAktivitaeten_36, null, -5389849291352052074L);
-		return ((dbObjects.Aktivitaet[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 36, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Aktivitaet[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Aktivitaet[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getAktivitaeten_36, null, -5389849291352052074L);
+	    return ((dbObjects.Aktivitaet[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1634,29 +869,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getAvailableAccountBudget_37, new java.lang.Object[] {$param_ZVKonto_1}, 5971802576090395266L);
-		return ((java.lang.Float) $result).floatValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 37, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVKonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		float $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readFloat();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getAvailableAccountBudget_37, new java.lang.Object[] {$param_ZVKonto_1}, 5971802576090395266L);
+	    return ((java.lang.Float) $result).floatValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1673,29 +887,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getAvailableBudgetForAccount_38, new java.lang.Object[] {$param_FBHauptkonto_1}, 7284200744115060332L);
-		return ((java.lang.Float) $result).floatValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 38, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		float $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readFloat();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getAvailableBudgetForAccount_38, new java.lang.Object[] {$param_FBHauptkonto_1}, 7284200744115060332L);
+	    return ((java.lang.Float) $result).floatValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1712,23 +905,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getAvailableNoPurposeBudget_39, null, -4666816342355502050L);
-		return ((java.lang.Float) $result).floatValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 39, interfaceHash);
-		ref.invoke(call);
-		float $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readFloat();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getAvailableNoPurposeBudget_39, null, -4666816342355502050L);
+	    return ((java.lang.Float) $result).floatValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1745,25 +923,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getBestellungen_40, null, -2274442703760382529L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 40, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getBestellungen_40, null, -2274442703760382529L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1780,31 +941,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getBestellungen_41, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -567811436276697477L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 41, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getBestellungen_41, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -567811436276697477L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1821,23 +959,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getCurrentHaushaltsjahrId_42, null, -1018351192106895100L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 42, interfaceHash);
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getCurrentHaushaltsjahrId_42, null, -1018351192106895100L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1854,25 +977,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getDelKleinbestellungen_43, null, 4511290000968961498L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 43, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getDelKleinbestellungen_43, null, 4511290000968961498L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1889,31 +995,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFBHauptkonten_44, new java.lang.Object[] {$param_Institut_1}, 3577407778760608627L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 44, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFBHauptkonten_44, new java.lang.Object[] {$param_Institut_1}, 3577407778760608627L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1930,31 +1013,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFBKontenForUser_45, new java.lang.Object[] {$param_Benutzer_1}, 4260191179896787742L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 45, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFBKontenForUser_45, new java.lang.Object[] {$param_Benutzer_1}, 4260191179896787742L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1971,31 +1031,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFBKonto_46, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -7139528806290552764L);
-		return ((dbObjects.FBUnterkonto) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 46, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.FBUnterkonto $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.FBUnterkonto) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFBKonto_46, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -7139528806290552764L);
+	    return ((dbObjects.FBUnterkonto) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2012,32 +1049,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFBUnterkonten_47, new java.lang.Object[] {$param_Institut_1, $param_FBHauptkonto_2}, -373722492910229279L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 47, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		    out.writeObject($param_FBHauptkonto_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFBUnterkonten_47, new java.lang.Object[] {$param_Institut_1, $param_FBHauptkonto_2}, -373722492910229279L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2054,25 +1067,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFachbereiche_48, null, 5766964865087045017L);
-		return ((dbObjects.Fachbereich[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 48, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Fachbereich[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Fachbereich[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFachbereiche_48, null, 5766964865087045017L);
+	    return ((dbObjects.Fachbereich[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2089,25 +1085,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getFirmen_49, null, -4912317495160858508L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 49, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getFirmen_49, null, -4912317495160858508L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2124,25 +1103,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getHaushaltsjahr_50, null, 9061721627610323575L);
-		return ((dbObjects.Haushaltsjahr) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 50, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Haushaltsjahr $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Haushaltsjahr) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getHaushaltsjahr_50, null, 9061721627610323575L);
+	    return ((dbObjects.Haushaltsjahr) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2159,25 +1121,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstitutZuordnungen_51, null, -8773041853394568451L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 51, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstitutZuordnungen_51, null, -8773041853394568451L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2194,32 +1139,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstituteWithAccounts_52, new java.lang.Object[] {$param_Institut_1, new java.lang.Boolean($param_boolean_2)}, -4550449708954868445L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 52, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		    out.writeBoolean($param_boolean_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstituteWithAccounts_52, new java.lang.Object[] {$param_Institut_1, new java.lang.Boolean($param_boolean_2)}, -4550449708954868445L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2236,25 +1157,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstitutes_53, null, -5374520558832890038L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 53, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstitutes_53, null, -5374520558832890038L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2271,25 +1175,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstitutesWithAccounts_54, null, 4659665908752595404L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 54, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstitutesWithAccounts_54, null, 4659665908752595404L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2306,31 +1193,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstitutesWithAccounts_55, new java.lang.Object[] {new java.lang.Boolean($param_boolean_1)}, 3314966849312047775L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 55, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeBoolean($param_boolean_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstitutesWithAccounts_55, new java.lang.Object[] {new java.lang.Boolean($param_boolean_1)}, 3314966849312047775L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2347,25 +1211,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getInstitutesWithMainAccounts_56, null, 8648467791866684925L);
-		return ((dbObjects.Institut[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 56, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Institut[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Institut[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getInstitutesWithMainAccounts_56, null, 8648467791866684925L);
+	    return ((dbObjects.Institut[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2382,31 +1229,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getKleinbestellung_57, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5122035516259108431L);
-		return ((dbObjects.KleinBestellung) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 57, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.KleinBestellung $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.KleinBestellung) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getKleinbestellung_57, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5122035516259108431L);
+	    return ((dbObjects.KleinBestellung) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2423,25 +1247,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getKleinbestellungen_58, null, 8344725021367795183L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 58, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getKleinbestellungen_58, null, 8344725021367795183L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2458,25 +1265,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getKostenarten_59, null, -6867682227654063130L);
-		return ((dbObjects.Kostenart[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 59, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Kostenart[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Kostenart[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getKostenarten_59, null, -6867682227654063130L);
+	    return ((dbObjects.Kostenart[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2493,32 +1283,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getLogList_60, new java.lang.Object[] {$param_Date_1, $param_Date_2}, 27058466326926922L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 60, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Date_1);
-		    out.writeObject($param_Date_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getLogList_60, new java.lang.Object[] {$param_Date_1, $param_Date_2}, 27058466326926922L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2535,25 +1301,8 @@ public final class ApplicationServerImpl_Stub
 	throws java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getName_61, null, 6317137956467216454L);
-		return ((java.lang.String) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 61, interfaceHash);
-		ref.invoke(call);
-		java.lang.String $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.lang.String) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getName_61, null, 6317137956467216454L);
+	    return ((java.lang.String) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2568,31 +1317,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getNoPurposeFBHauptkonten_62, new java.lang.Object[] {$param_Institut_1}, 2506649164800270070L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 62, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getNoPurposeFBHauptkonten_62, new java.lang.Object[] {$param_Institut_1}, 2506649164800270070L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2609,29 +1335,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getNumberOfKontenzuordnungen_63, new java.lang.Object[] {$param_ZVKonto_1}, 1165981581191234994L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 63, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVKonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getNumberOfKontenzuordnungen_63, new java.lang.Object[] {$param_ZVKonto_1}, 1165981581191234994L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2648,31 +1353,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getOffeneZVKonten_64, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5594928347851691886L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 64, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getOffeneZVKonten_64, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5594928347851691886L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2689,33 +1371,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getReport_65, new java.lang.Object[] {new java.lang.Integer($param_int_1), $param_Date_2, $param_Date_3}, 1279390578186283083L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 65, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		    out.writeObject($param_Date_2);
-		    out.writeObject($param_Date_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getReport_65, new java.lang.Object[] {new java.lang.Integer($param_int_1), $param_Date_2, $param_Date_3}, 1279390578186283083L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2732,25 +1389,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getRollen_66, null, 8060504328917123995L);
-		return ((dbObjects.Rolle[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 66, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Rolle[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Rolle[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getRollen_66, null, 8060504328917123995L);
+	    return ((dbObjects.Rolle[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2767,25 +1407,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getRollenFull_67, null, 4830644982727885940L);
-		return ((dbObjects.Rolle[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 67, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Rolle[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Rolle[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getRollenFull_67, null, 4830644982727885940L);
+	    return ((dbObjects.Rolle[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2802,31 +1425,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getStandardBestellung_68, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -9163243513425107859L);
-		return ((dbObjects.StandardBestellung) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 68, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeInt($param_int_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.StandardBestellung $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.StandardBestellung) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getStandardBestellung_68, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -9163243513425107859L);
+	    return ((dbObjects.StandardBestellung) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2843,25 +1443,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getSwBeauftragte_69, null, -3479095673481886193L);
-		return ((dbObjects.Benutzer[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 69, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Benutzer[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getSwBeauftragte_69, null, -3479095673481886193L);
+	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2878,32 +1461,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getUser_70, new java.lang.Object[] {$param_String_1, $param_String_2}, -31298424909577749L);
-		return ((dbObjects.Benutzer) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 70, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_String_1);
-		    out.writeObject($param_String_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Benutzer $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getUser_70, new java.lang.Object[] {$param_String_1, $param_String_2}, -31298424909577749L);
+	    return ((dbObjects.Benutzer) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2920,25 +1479,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getUsers_71, null, -93502309665610735L);
-		return ((dbObjects.Benutzer[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 71, interfaceHash);
-		ref.invoke(call);
-		dbObjects.Benutzer[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getUsers_71, null, -93502309665610735L);
+	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2955,31 +1497,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getUsers_72, new java.lang.Object[] {$param_Institut_1}, 6902480040832794116L);
-		return ((dbObjects.Benutzer[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 72, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Benutzer[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getUsers_72, new java.lang.Object[] {$param_Institut_1}, 6902480040832794116L);
+	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -2996,32 +1515,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getUsersByRole_73, new java.lang.Object[] {$param_Institut_1, new java.lang.Integer($param_int_2)}, 4638727419777682472L);
-		return ((dbObjects.Benutzer[]) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 73, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		    out.writeInt($param_int_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Benutzer[] $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer[]) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getUsersByRole_73, new java.lang.Object[] {$param_Institut_1, new java.lang.Integer($param_int_2)}, 4638727419777682472L);
+	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3038,25 +1533,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getZVKonten_74, null, 2386231262600236351L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 74, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getZVKonten_74, null, 2386231262600236351L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3073,25 +1551,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getZVKontenOnly_75, null, -1505493009211920427L);
-		return ((java.util.ArrayList) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 75, interfaceHash);
-		ref.invoke(call);
-		java.util.ArrayList $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (java.util.ArrayList) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getZVKontenOnly_75, null, -1505493009211920427L);
+	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3108,29 +1569,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_getZVTitelId_76, new java.lang.Object[] {$param_ZVTitel_1}, 2638308445376525461L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 76, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVTitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_getZVTitelId_76, new java.lang.Object[] {$param_ZVTitel_1}, 2638308445376525461L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3147,32 +1587,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, applicationServer.ConnectionException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_login_77, new java.lang.Object[] {$param_String_1, $param_String_2}, 7933794942774794688L);
-		return ((dbObjects.Benutzer) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 77, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_String_1);
-		    out.writeObject($param_String_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Benutzer $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Benutzer) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_login_77, new java.lang.Object[] {$param_String_1, $param_String_2}, 7933794942774794688L);
+	    return ((dbObjects.Benutzer) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3191,13 +1607,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ConnectionException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_logout_78, null, -2314256391406573046L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 78, interfaceHash);
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_logout_78, null, -2314256391406573046L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3214,21 +1624,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setAccountBudget_79, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, new java.lang.Float($param_float_3)}, 501138883092039617L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 79, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_FBHauptkonto_2);
-		    out.writeFloat($param_float_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setAccountBudget_79, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, new java.lang.Float($param_float_3)}, 501138883092039617L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3245,21 +1641,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setBestellung_80, new java.lang.Object[] {$param_Benutzer_1, $param_ASKBestellung_2, $param_ASKBestellung_3}, 4176581119368034890L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 80, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_ASKBestellung_2);
-		    out.writeObject($param_ASKBestellung_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setBestellung_80, new java.lang.Object[] {$param_Benutzer_1, $param_ASKBestellung_2, $param_ASKBestellung_3}, 4176581119368034890L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3276,21 +1658,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setBestellung_81, new java.lang.Object[] {$param_Benutzer_1, $param_StandardBestellung_2, $param_StandardBestellung_3}, 4173076474818309947L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 81, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_StandardBestellung_2);
-		    out.writeObject($param_StandardBestellung_3);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setBestellung_81, new java.lang.Object[] {$param_Benutzer_1, $param_StandardBestellung_2, $param_StandardBestellung_3}, 4173076474818309947L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3307,29 +1675,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setFBHauptkonto_82, new java.lang.Object[] {$param_FBHauptkonto_1}, -3098460641072066493L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 82, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setFBHauptkonto_82, new java.lang.Object[] {$param_FBHauptkonto_1}, -3098460641072066493L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3346,29 +1693,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setFBUnterkonto_83, new java.lang.Object[] {$param_FBUnterkonto_1}, -3215881295573068950L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 83, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBUnterkonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setFBUnterkonto_83, new java.lang.Object[] {$param_FBUnterkonto_1}, -3215881295573068950L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3385,32 +1711,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setFachbereich_84, new java.lang.Object[] {$param_Fachbereich_1, $param_Fachbereich_2}, 1778860291130592532L);
-		return ((dbObjects.Fachbereich) $result);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 84, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Fachbereich_1);
-		    out.writeObject($param_Fachbereich_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		dbObjects.Fachbereich $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = (dbObjects.Fachbereich) in.readObject();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} catch (java.lang.ClassNotFoundException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setFachbereich_84, new java.lang.Object[] {$param_Fachbereich_1, $param_Fachbereich_2}, 1778860291130592532L);
+	    return ((dbObjects.Fachbereich) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3427,29 +1729,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setFirma_85, new java.lang.Object[] {$param_Firma_1}, 242269189777358345L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 85, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Firma_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setFirma_85, new java.lang.Object[] {$param_Firma_1}, 242269189777358345L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3466,20 +1747,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setHaushaltsjahr_86, new java.lang.Object[] {$param_Haushaltsjahr_1, $param_Haushaltsjahr_2}, -3397053694205119836L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 86, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Haushaltsjahr_1);
-		    out.writeObject($param_Haushaltsjahr_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setHaushaltsjahr_86, new java.lang.Object[] {$param_Haushaltsjahr_1, $param_Haushaltsjahr_2}, -3397053694205119836L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3496,20 +1764,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setInstitute_87, new java.lang.Object[] {$param_Institut_1, $param_Institut_2}, 920348241328705944L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 87, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Institut_1);
-		    out.writeObject($param_Institut_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setInstitute_87, new java.lang.Object[] {$param_Institut_1, $param_Institut_2}, 920348241328705944L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3526,20 +1781,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setKontenZuordnung_88, new java.lang.Object[] {$param_FBHauptkonto_1, $param_Kontenzuordnung_2}, 552054922101026979L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 88, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_FBHauptkonto_1);
-		    out.writeObject($param_Kontenzuordnung_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setKontenZuordnung_88, new java.lang.Object[] {$param_FBHauptkonto_1, $param_Kontenzuordnung_2}, 552054922101026979L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3556,20 +1798,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setRolle_89, new java.lang.Object[] {$param_Rolle_1, $param_Rolle_2}, -3231724069748232909L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 89, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Rolle_1);
-		    out.writeObject($param_Rolle_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setRolle_89, new java.lang.Object[] {$param_Rolle_1, $param_Rolle_2}, -3231724069748232909L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3586,20 +1815,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		ref.invoke(this, $method_setUser_90, new java.lang.Object[] {$param_Benutzer_1, $param_Benutzer_2}, 6349123237153146290L);
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 90, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_Benutzer_1);
-		    out.writeObject($param_Benutzer_2);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		ref.done(call);
-	    }
+	    ref.invoke(this, $method_setUser_90, new java.lang.Object[] {$param_Benutzer_1, $param_Benutzer_2}, 6349123237153146290L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3616,29 +1832,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setZVKonto_91, new java.lang.Object[] {$param_ZVKonto_1}, -908673309052549770L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 91, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVKonto_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setZVKonto_91, new java.lang.Object[] {$param_ZVKonto_1}, -908673309052549770L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3655,29 +1850,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setZVTitel_92, new java.lang.Object[] {$param_ZVTitel_1}, 2760431180400196529L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 92, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVTitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setZVTitel_92, new java.lang.Object[] {$param_ZVTitel_1}, 2760431180400196529L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -3694,29 +1868,8 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    if (useNewInvoke) {
-		Object $result = ref.invoke(this, $method_setZVUntertitel_93, new java.lang.Object[] {$param_ZVUntertitel_1}, -1823691546304551198L);
-		return ((java.lang.Integer) $result).intValue();
-	    } else {
-		java.rmi.server.RemoteCall call = ref.newCall((java.rmi.server.RemoteObject) this, operations, 93, interfaceHash);
-		try {
-		    java.io.ObjectOutput out = call.getOutputStream();
-		    out.writeObject($param_ZVUntertitel_1);
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.MarshalException("error marshalling arguments", e);
-		}
-		ref.invoke(call);
-		int $result;
-		try {
-		    java.io.ObjectInput in = call.getInputStream();
-		    $result = in.readInt();
-		} catch (java.io.IOException e) {
-		    throw new java.rmi.UnmarshalException("error unmarshalling return", e);
-		} finally {
-		    ref.done(call);
-		}
-		return $result;
-	    }
+	    Object $result = ref.invoke(this, $method_setZVUntertitel_93, new java.lang.Object[] {$param_ZVUntertitel_1}, -1823691546304551198L);
+	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
