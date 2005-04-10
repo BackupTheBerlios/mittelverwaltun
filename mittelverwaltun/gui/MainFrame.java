@@ -1,9 +1,6 @@
 package gui;
 
 import javax.swing.*;
-
-import org.jfree.report.Boot;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
