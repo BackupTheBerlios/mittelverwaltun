@@ -1,2 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<client><hostname>localhost</hostname><servername>mittelverwaltung</servername></client>
+<?xml version="1.0" encoding="UTF-8"?><client><hostname>192.168.1.10</hostname><servername>mittelverwaltung</servername></client>
