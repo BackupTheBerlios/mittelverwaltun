@@ -41,7 +41,10 @@ public class SystemTrayIconManager {
 	private Component rightClickView = null;
 	private boolean mouseOnPopup = false;
 
-	private static String dllName = new String("DesktopIndicator");
+	// Package- und Dateiname von der DLL und die Erweiterung
+	public final static String dllPackage = new String("image");
+	public final static String dllName = new String("DesktopIndicator");
+	public final static String dllExt = new String("dll");
 
 	private JDialog d = new JDialog();
 	private JWindow w = new JWindow(d);
@@ -100,7 +103,7 @@ public class SystemTrayIconManager {
 	 */
 	public static boolean initializeSystemDependent() {
 		try {
-			System.loadLibrary(dllName);
+			System.loadLibrary("/" + dllPackage + "/" + dllName);
 		} catch( UnsatisfiedLinkError x ) {
 			return false;
 		}
