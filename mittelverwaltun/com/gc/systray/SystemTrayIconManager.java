@@ -1,6 +1,5 @@
 package com.gc.systray;
 
-import java.io.*;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -105,37 +104,6 @@ public class SystemTrayIconManager {
 		try {
 			System.loadLibrary("/" + dllPackage + "/" + dllName);
 		} catch( UnsatisfiedLinkError x ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Should be called only once sice this method loads the dll.
-	 *
-	 * @return true if the loadin succeds, false otherwise
-	 */
-	public static boolean initializeSystemDependent(Class clazz) {
-		try {
-			File file = new File(".\\image\\");
-			if(!file.exists()) {
-				file.mkdir();
-			}
-			file = new File(".\\image\\" + dllName + ".dll");
-			if(!file.exists()) {
-				InputStream in = clazz.getResourceAsStream("/image/" + dllName + ".dll");
-				FileOutputStream out = new FileOutputStream(file);
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-				  out.write(buf, 0, len);
-				}
-				out.close();
-				in.close();        		
-			}
-			System.loadLibrary("./image/" + dllName);
-		} catch( Exception x ) {
 			return false;
 		}
 
