@@ -523,14 +523,14 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "details"){
 			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, ((Angebot)origin.getAngebote().get(origin.getAngenommenesAngebot())).getAnbieter());
-			dialog.show();
+			dialog.setVisible(true);
 		}else if (e.getActionCommand() == "print"){
 			printOrder();
 		}else if (e.getActionCommand() == "dispose"){
 			this.dispose();
 		}else if (e.getActionCommand() == "showOffers"){
 			AngebotsUebersicht dialog = new AngebotsUebersicht(this, "Angebotsvergleich", true, origin.getAngebote());
-			dialog.show();
+			dialog.setVisible(true);
 		}else if (e.getActionCommand() == "saveOrder"){
 			saveOrder();
 		}else if (e.getActionCommand() == "completeOrder"){

@@ -175,7 +175,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	 }catch(Exception e){
 			bestellung = new BestellungNormal(test);
 			test.addChild(bestellung);
-			test.show();
+			test.setVisible(true);
 			bestellung.show();
 			System.out.println(e);
 	 }
@@ -431,15 +431,15 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}else if ( e.getSource() == buFBKonto ) {
 			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
 			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  fbKontoAuswahl.show();
+		  fbKontoAuswahl.setVisible(true);
 		}else if ( e.getSource() == buTitel ) {
 			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
 			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  kontoAuswahl.show();
+		  kontoAuswahl.setVisible(true);
 		}else if ( e.getSource() == buAddAngebot ) {
 			DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 			AngebotFrame angebot = new AngebotFrame(this);
-			angebot.show();
+			angebot.setVisible(true);
 		}else if ( e.getSource() == buDrucken ) {
 			printBestellung();
 		}else if ( e.getSource() == buBestellen ) {

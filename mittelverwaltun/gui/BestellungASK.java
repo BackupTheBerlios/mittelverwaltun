@@ -388,7 +388,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		}catch(Exception e){
 			bestellung = new BestellungASK(test);
 			test.addChild(bestellung);
-			test.show();
+			test.setVisible(true);
 			bestellung.show();
 			System.out.println(e);
 		}
@@ -587,11 +587,11 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  if ( e.getSource() == buFBKonto ) {
 		  AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
 			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  fbKontoAuswahl.show();
+		  fbKontoAuswahl.setVisible(true);
 	  }else if ( e.getSource() == buTitel ) {
 		  AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
 			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  kontoAuswahl.show();
+		  kontoAuswahl.setVisible(true);
 	  }else if ( e.getSource() == buDrucken ) {
 		  printBestellung();
 	  }else if ( e.getSource() == buBestellen ) {

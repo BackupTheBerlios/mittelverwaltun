@@ -103,7 +103,7 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		
 		
 		MessageDialogs md = new MessageDialogs(parent, title, message, details, icon);
-		md.show();
+		md.setVisible(true);
 		return md.result;
 	}
 
@@ -157,7 +157,7 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 	 */
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
-		f.show();
+		f.setVisible(true);
 		System.out.println(""+showDetailMessageDialog(f,"Application Server: Fehler","TestTestTestTestTest" + "\n" + "TestTestTestTest\nTestTestTestTest","TestTestTestTestTestTestTest \n TestTestTestTest"+"\n"+"TestTest", MessageDialogs.INFO_ICON));
 		f.setVisible(false);
 		f.dispose();

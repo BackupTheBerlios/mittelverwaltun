@@ -95,7 +95,7 @@ public class BestellungBeilageTable extends JTable {
 								}else if(e.getActionCommand() == "Show"){
 									DefaultTableModel dtm = (DefaultTableModel)getModel();
 									AngebotFrame angebot = new AngebotFrame(getFrame(), (Angebot)getValueAt(getSelectedRow(), 1), getSelectedRow());
-									angebot.show();
+									angebot.setVisible(true);
 								}
 							}        
 						};

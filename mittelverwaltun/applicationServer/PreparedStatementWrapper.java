@@ -589,7 +589,7 @@ public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws S
 	stmt.setTimestamp(parameterIndex, x, cal);
 }
 
-public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException{ 
+public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException { 
 	stmt.setUnicodeStream(parameterIndex, x, length);
 }
 

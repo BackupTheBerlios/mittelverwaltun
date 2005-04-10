@@ -100,8 +100,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	final static String imagePackage = "image";
 	final static String[] iconNames = {"traf_red.ICO", "traf_yellow.ICO", "traf_green.ICO"};
 	final static String serverPackage = "applicationServer";
-	final static String[] serverSkelStub = {"ApplicationServerImpl_Skel.class", "ApplicationServerImpl_Stub.class",
-											"CentralServerImpl_Skel.class", "CentralServerImpl_Stub.class",
+	final static String[] serverSkelStub = {"ApplicationServerImpl_Stub.class", "CentralServerImpl_Stub.class",
 											"ApplicationServerException.class", "ConnectionException.class", 
 											"CentralServer.class", "ApplicationServer.class"};
 
@@ -119,7 +118,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		this.show();
+		this.setVisible(true);
 	}
 	
 	/**
@@ -413,8 +412,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		} else if( e.getSource() == butDelUser ) {
 			if( listClients.getSelectedIndex() >= 0 ) {
 				User temp = (User)listModel.getElementAt( listClients.getSelectedIndex() );
-				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User '" + temp.benutzerName + 
-														"' wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
+				if( JOptionPane.showConfirmDialog( this, "Wollen Sie den User " + 
+														(temp.benutzerName == null ? "" : "'" + temp.benutzerName + "' ") + 
+														"wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
 														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
 					try {
 						centralServer.delUser(temp.serverName);
@@ -714,17 +714,20 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	private void initSysTray() throws Exception {
 		// MenuItem Registry
 		sysTrayMenu.add(miRegistry);
+		miRegistry.setFont(new java.awt.Font("Arial", 0, 11));
 		miRegistry.setText(butRMIRegistry.getText());
 		miRegistry.addActionListener( this );
 		miRegistry.setIcon(Functions.getWebIcon(getClass()));
 		// MenuItem Server
 		sysTrayMenu.add(miServer);
+		miServer.setFont(new java.awt.Font("Arial", 0, 11));
 		miServer.setText(butCentralServer.getText());
 		miServer.addActionListener( this );
 		miServer.setEnabled( false );
 		miServer.setIcon(Functions.getServerIcon(getClass()));
 		// MenuItem Close
 		sysTrayMenu.add(miClose);
+		miClose.setFont(new java.awt.Font("Arial", 0, 11));
 		miClose.setText(butBeenden.getText());
 		miClose.addActionListener( this );
 		miClose.setIcon(Functions.getCloseIcon(getClass()));

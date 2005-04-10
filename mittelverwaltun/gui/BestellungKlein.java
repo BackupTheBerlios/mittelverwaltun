@@ -419,7 +419,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		} else if( e.getSource() == butZVTitelAuswahl ) {
 			if(fbKonto != null) {
 				AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
-				kontoAuswahl.show();
+				kontoAuswahl.setVisible(true);
 			}
 		} else if( e.getSource() == butFBKontoAuswahl ) {
 			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, (Benutzer)comboBenutzer.getSelectedItem());
@@ -621,7 +621,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 		}
 		
 		this.setBounds(50, 50, 332, 285);
-		this.show();
+		this.setVisible(true);
 	}
 	
 	/**
@@ -630,7 +630,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 	 * author w.flat
 	 */
 	private void showFBKontoAuswahl(Institut[] inst) {
-		this.show();
+		this.setVisible(true);
 		treeKonten.loadInstituts(inst);
 	}
 

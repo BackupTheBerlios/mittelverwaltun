@@ -64,8 +64,8 @@ public class StartWindow extends JFrame implements ActionListener {
 	/**
 	 * Datei zum Speichern der Einstellungen. 
 	 */
-	final static String xmlFileName = "." + System.getProperty("file.separator") + "xml" + 
-											System.getProperty("file.separator") + "client.xml"; 
+	final static String xmlFileName = "client.xml"; 
+	final static String xmlPackage = "xml"; 
 	
 	/**
 	 * Breite des Login-Fensters
@@ -82,9 +82,7 @@ public class StartWindow extends JFrame implements ActionListener {
 	 */
 	public StartWindow() {
 		super("Login Mittelverwaltung");
-		
-		createFile("xml", "client.xml");
-		
+				
 		try {
 			this.setDefaultCloseOperation( DO_NOTHING_ON_CLOSE );
 			this.setResizable( false );
@@ -96,42 +94,14 @@ public class StartWindow extends JFrame implements ActionListener {
 					actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
 				}
 			});
+			Functions.restoreFile(xmlPackage, xmlFileName, getClass());
 			jbInit();
 			loadXMLFile();
-			this.show();
+			this.setVisible(true);
 			tfBenutzername.requestFocus();
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			this.actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
-		}
-	}
-	
-	/**
-	 * Das Laden des angegeben Files.
-	 * @param fileName = Das Icon, das geladen werden soll. 
-	 * @param clazz = Class von einer beliebigen Componente. 
-	 * @return Id des geladenen Icons. Wenn erfolgreich > 0, sonst -1.
-	 */
-	private void createFile(String folder, String filename) {
-		try {
-			File file = new File(".\\" + folder + "\\");
-			if(!file.exists()) {
-				file.mkdir();
-			}
-			file = new File(".\\" + folder + "\\" + filename);
-			if(!file.exists()) {
-				InputStream in = getClass().getResourceAsStream("/" + folder + "/" + filename);
-				FileOutputStream out = new FileOutputStream(file);
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-				  out.write(buf, 0, len);
-				}
-				out.close();
-				in.close();        		
-			}
-		} catch( Exception x ) {
-			System.out.println("Fehler bei erstellen der client.xml !");
 		}
 	}
 	
@@ -142,7 +112,7 @@ public class StartWindow extends JFrame implements ActionListener {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder  = factory.newDocumentBuilder();
-			Document document = builder.parse(new FileInputStream(new File(xmlFileName)));
+			Document document = builder.parse(new FileInputStream(new File(xmlPackage + File.separator + xmlFileName)));
 			StartWindow.CLIENT_SERVER_HOST = document.getElementsByTagName("hostname").item(0).getFirstChild().getNodeValue();
 			StartWindow.CLIENT_SERVER_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
 			tfHostname.setText(StartWindow.CLIENT_SERVER_HOST);
@@ -170,7 +140,7 @@ public class StartWindow extends JFrame implements ActionListener {
 			rootNode.appendChild(tempNode);
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource( document );
-			FileOutputStream os = new FileOutputStream(xmlFileName);
+			FileOutputStream os = new FileOutputStream(new File(xmlPackage + File.separator + xmlFileName));
 			StreamResult result = new StreamResult( os );
 			transformer.transform( source, result );
 		} catch(Exception e) {
@@ -230,8 +200,6 @@ public class StartWindow extends JFrame implements ActionListener {
 					centralServer = (CentralServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + CLIENT_SERVER_NAME);
 					InetAddress addr = InetAddress.getLocalHost();
 					String applServerName = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
-					System.out.println(applServerName);
-					applServerName = null;
 					if(applServerName == null)
 						throw new Exception("Der ApplicationServer konnte nicht gestartet werden.");
 					applicationServer = (ApplicationServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + applServerName);

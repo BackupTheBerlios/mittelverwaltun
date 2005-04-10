@@ -453,7 +453,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "details"){
 			FirmenDetails dialog = new FirmenDetails(this, "Visitenkarte", true, origin.getAngebot().getAnbieter());
-			dialog.show();
+			dialog.setVisible(true);
 		}else if (e.getActionCommand() == "print"){
 			PrintASKBestellung printOrder = new PrintASKBestellung(origin, frame);
 		}else if (e.getActionCommand() == "dispose"){

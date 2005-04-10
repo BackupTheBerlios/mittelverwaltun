@@ -171,7 +171,7 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 
 			AuswahlBestellung ab = new AuswahlBestellung(test);
 			test.addChild(ab);
-			test.show();
+			test.setVisible(true);
 			ab.show();
 	 }catch(Exception e){
 			System.out.println(e);

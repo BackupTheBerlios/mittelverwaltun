@@ -190,7 +190,7 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 		});
 	  
 		desk.add(child);
-		test.show();
+		test.setVisible(true);
 		child.show();
 	}
 	
