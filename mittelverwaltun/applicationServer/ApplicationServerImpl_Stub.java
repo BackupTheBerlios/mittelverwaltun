@@ -73,36 +73,39 @@ public final class ApplicationServerImpl_Stub
     private static java.lang.reflect.Method $method_getName_61;
     private static java.lang.reflect.Method $method_getNoPurposeFBHauptkonten_62;
     private static java.lang.reflect.Method $method_getNumberOfKontenzuordnungen_63;
-    private static java.lang.reflect.Method $method_getOffeneZVKonten_64;
-    private static java.lang.reflect.Method $method_getReport_65;
-    private static java.lang.reflect.Method $method_getRollen_66;
-    private static java.lang.reflect.Method $method_getRollenFull_67;
-    private static java.lang.reflect.Method $method_getStandardBestellung_68;
-    private static java.lang.reflect.Method $method_getSwBeauftragte_69;
-    private static java.lang.reflect.Method $method_getUser_70;
-    private static java.lang.reflect.Method $method_getUsers_71;
-    private static java.lang.reflect.Method $method_getUsers_72;
-    private static java.lang.reflect.Method $method_getUsersByRole_73;
-    private static java.lang.reflect.Method $method_getZVKonten_74;
-    private static java.lang.reflect.Method $method_getZVKontenOnly_75;
-    private static java.lang.reflect.Method $method_getZVTitelId_76;
-    private static java.lang.reflect.Method $method_login_77;
-    private static java.lang.reflect.Method $method_logout_78;
-    private static java.lang.reflect.Method $method_setAccountBudget_79;
-    private static java.lang.reflect.Method $method_setBestellung_80;
-    private static java.lang.reflect.Method $method_setBestellung_81;
-    private static java.lang.reflect.Method $method_setFBHauptkonto_82;
-    private static java.lang.reflect.Method $method_setFBUnterkonto_83;
-    private static java.lang.reflect.Method $method_setFachbereich_84;
-    private static java.lang.reflect.Method $method_setFirma_85;
-    private static java.lang.reflect.Method $method_setHaushaltsjahr_86;
-    private static java.lang.reflect.Method $method_setInstitute_87;
-    private static java.lang.reflect.Method $method_setKontenZuordnung_88;
-    private static java.lang.reflect.Method $method_setRolle_89;
-    private static java.lang.reflect.Method $method_setUser_90;
-    private static java.lang.reflect.Method $method_setZVKonto_91;
-    private static java.lang.reflect.Method $method_setZVTitel_92;
-    private static java.lang.reflect.Method $method_setZVUntertitel_93;
+    private static java.lang.reflect.Method $method_getOffeneBestellungen_64;
+    private static java.lang.reflect.Method $method_getOffeneFBHauptkonten_65;
+    private static java.lang.reflect.Method $method_getOffeneZVKonten_66;
+    private static java.lang.reflect.Method $method_getReport_67;
+    private static java.lang.reflect.Method $method_getRollen_68;
+    private static java.lang.reflect.Method $method_getRollenFull_69;
+    private static java.lang.reflect.Method $method_getStandardBestellung_70;
+    private static java.lang.reflect.Method $method_getSwBeauftragte_71;
+    private static java.lang.reflect.Method $method_getUser_72;
+    private static java.lang.reflect.Method $method_getUsers_73;
+    private static java.lang.reflect.Method $method_getUsers_74;
+    private static java.lang.reflect.Method $method_getUsersByRole_75;
+    private static java.lang.reflect.Method $method_getZVKonten_76;
+    private static java.lang.reflect.Method $method_getZVKontenOnly_77;
+    private static java.lang.reflect.Method $method_getZVTitelId_78;
+    private static java.lang.reflect.Method $method_login_79;
+    private static java.lang.reflect.Method $method_logout_80;
+    private static java.lang.reflect.Method $method_portZVKonten_81;
+    private static java.lang.reflect.Method $method_setAccountBudget_82;
+    private static java.lang.reflect.Method $method_setBestellung_83;
+    private static java.lang.reflect.Method $method_setBestellung_84;
+    private static java.lang.reflect.Method $method_setFBHauptkonto_85;
+    private static java.lang.reflect.Method $method_setFBUnterkonto_86;
+    private static java.lang.reflect.Method $method_setFachbereich_87;
+    private static java.lang.reflect.Method $method_setFirma_88;
+    private static java.lang.reflect.Method $method_setHaushaltsjahr_89;
+    private static java.lang.reflect.Method $method_setInstitute_90;
+    private static java.lang.reflect.Method $method_setKontenZuordnung_91;
+    private static java.lang.reflect.Method $method_setRolle_92;
+    private static java.lang.reflect.Method $method_setUser_93;
+    private static java.lang.reflect.Method $method_setZVKonto_94;
+    private static java.lang.reflect.Method $method_setZVTitel_95;
+    private static java.lang.reflect.Method $method_setZVUntertitel_96;
     
     static {
 	try {
@@ -170,36 +173,39 @@ public final class ApplicationServerImpl_Stub
 	    $method_getName_61 = applicationServer.ApplicationServer.class.getMethod("getName", new java.lang.Class[] {});
 	    $method_getNoPurposeFBHauptkonten_62 = applicationServer.ApplicationServer.class.getMethod("getNoPurposeFBHauptkonten", new java.lang.Class[] {dbObjects.Institut.class});
 	    $method_getNumberOfKontenzuordnungen_63 = applicationServer.ApplicationServer.class.getMethod("getNumberOfKontenzuordnungen", new java.lang.Class[] {dbObjects.ZVKonto.class});
-	    $method_getOffeneZVKonten_64 = applicationServer.ApplicationServer.class.getMethod("getOffeneZVKonten", new java.lang.Class[] {int.class});
-	    $method_getReport_65 = applicationServer.ApplicationServer.class.getMethod("getReport", new java.lang.Class[] {int.class, java.sql.Date.class, java.sql.Date.class});
-	    $method_getRollen_66 = applicationServer.ApplicationServer.class.getMethod("getRollen", new java.lang.Class[] {});
-	    $method_getRollenFull_67 = applicationServer.ApplicationServer.class.getMethod("getRollenFull", new java.lang.Class[] {});
-	    $method_getStandardBestellung_68 = applicationServer.ApplicationServer.class.getMethod("getStandardBestellung", new java.lang.Class[] {int.class});
-	    $method_getSwBeauftragte_69 = applicationServer.ApplicationServer.class.getMethod("getSwBeauftragte", new java.lang.Class[] {});
-	    $method_getUser_70 = applicationServer.ApplicationServer.class.getMethod("getUser", new java.lang.Class[] {java.lang.String.class, java.lang.String.class});
-	    $method_getUsers_71 = applicationServer.ApplicationServer.class.getMethod("getUsers", new java.lang.Class[] {});
-	    $method_getUsers_72 = applicationServer.ApplicationServer.class.getMethod("getUsers", new java.lang.Class[] {dbObjects.Institut.class});
-	    $method_getUsersByRole_73 = applicationServer.ApplicationServer.class.getMethod("getUsersByRole", new java.lang.Class[] {dbObjects.Institut.class, int.class});
-	    $method_getZVKonten_74 = applicationServer.ApplicationServer.class.getMethod("getZVKonten", new java.lang.Class[] {});
-	    $method_getZVKontenOnly_75 = applicationServer.ApplicationServer.class.getMethod("getZVKontenOnly", new java.lang.Class[] {});
-	    $method_getZVTitelId_76 = applicationServer.ApplicationServer.class.getMethod("getZVTitelId", new java.lang.Class[] {dbObjects.ZVTitel.class});
-	    $method_login_77 = applicationServer.ApplicationServer.class.getMethod("login", new java.lang.Class[] {java.lang.String.class, java.lang.String.class});
-	    $method_logout_78 = applicationServer.ApplicationServer.class.getMethod("logout", new java.lang.Class[] {});
-	    $method_setAccountBudget_79 = applicationServer.ApplicationServer.class.getMethod("setAccountBudget", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.FBHauptkonto.class, float.class});
-	    $method_setBestellung_80 = applicationServer.ApplicationServer.class.getMethod("setBestellung", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.ASKBestellung.class, dbObjects.ASKBestellung.class});
-	    $method_setBestellung_81 = applicationServer.ApplicationServer.class.getMethod("setBestellung", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.StandardBestellung.class, dbObjects.StandardBestellung.class});
-	    $method_setFBHauptkonto_82 = applicationServer.ApplicationServer.class.getMethod("setFBHauptkonto", new java.lang.Class[] {dbObjects.FBHauptkonto.class});
-	    $method_setFBUnterkonto_83 = applicationServer.ApplicationServer.class.getMethod("setFBUnterkonto", new java.lang.Class[] {dbObjects.FBUnterkonto.class});
-	    $method_setFachbereich_84 = applicationServer.ApplicationServer.class.getMethod("setFachbereich", new java.lang.Class[] {dbObjects.Fachbereich.class, dbObjects.Fachbereich.class});
-	    $method_setFirma_85 = applicationServer.ApplicationServer.class.getMethod("setFirma", new java.lang.Class[] {dbObjects.Firma.class});
-	    $method_setHaushaltsjahr_86 = applicationServer.ApplicationServer.class.getMethod("setHaushaltsjahr", new java.lang.Class[] {dbObjects.Haushaltsjahr.class, dbObjects.Haushaltsjahr.class});
-	    $method_setInstitute_87 = applicationServer.ApplicationServer.class.getMethod("setInstitute", new java.lang.Class[] {dbObjects.Institut.class, dbObjects.Institut.class});
-	    $method_setKontenZuordnung_88 = applicationServer.ApplicationServer.class.getMethod("setKontenZuordnung", new java.lang.Class[] {dbObjects.FBHauptkonto.class, dbObjects.Kontenzuordnung.class});
-	    $method_setRolle_89 = applicationServer.ApplicationServer.class.getMethod("setRolle", new java.lang.Class[] {dbObjects.Rolle.class, dbObjects.Rolle.class});
-	    $method_setUser_90 = applicationServer.ApplicationServer.class.getMethod("setUser", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.Benutzer.class});
-	    $method_setZVKonto_91 = applicationServer.ApplicationServer.class.getMethod("setZVKonto", new java.lang.Class[] {dbObjects.ZVKonto.class});
-	    $method_setZVTitel_92 = applicationServer.ApplicationServer.class.getMethod("setZVTitel", new java.lang.Class[] {dbObjects.ZVTitel.class});
-	    $method_setZVUntertitel_93 = applicationServer.ApplicationServer.class.getMethod("setZVUntertitel", new java.lang.Class[] {dbObjects.ZVUntertitel.class});
+	    $method_getOffeneBestellungen_64 = applicationServer.ApplicationServer.class.getMethod("getOffeneBestellungen", new java.lang.Class[] {int.class});
+	    $method_getOffeneFBHauptkonten_65 = applicationServer.ApplicationServer.class.getMethod("getOffeneFBHauptkonten", new java.lang.Class[] {int.class});
+	    $method_getOffeneZVKonten_66 = applicationServer.ApplicationServer.class.getMethod("getOffeneZVKonten", new java.lang.Class[] {int.class});
+	    $method_getReport_67 = applicationServer.ApplicationServer.class.getMethod("getReport", new java.lang.Class[] {int.class, java.sql.Date.class, java.sql.Date.class});
+	    $method_getRollen_68 = applicationServer.ApplicationServer.class.getMethod("getRollen", new java.lang.Class[] {});
+	    $method_getRollenFull_69 = applicationServer.ApplicationServer.class.getMethod("getRollenFull", new java.lang.Class[] {});
+	    $method_getStandardBestellung_70 = applicationServer.ApplicationServer.class.getMethod("getStandardBestellung", new java.lang.Class[] {int.class});
+	    $method_getSwBeauftragte_71 = applicationServer.ApplicationServer.class.getMethod("getSwBeauftragte", new java.lang.Class[] {});
+	    $method_getUser_72 = applicationServer.ApplicationServer.class.getMethod("getUser", new java.lang.Class[] {java.lang.String.class, java.lang.String.class});
+	    $method_getUsers_73 = applicationServer.ApplicationServer.class.getMethod("getUsers", new java.lang.Class[] {});
+	    $method_getUsers_74 = applicationServer.ApplicationServer.class.getMethod("getUsers", new java.lang.Class[] {dbObjects.Institut.class});
+	    $method_getUsersByRole_75 = applicationServer.ApplicationServer.class.getMethod("getUsersByRole", new java.lang.Class[] {dbObjects.Institut.class, int.class});
+	    $method_getZVKonten_76 = applicationServer.ApplicationServer.class.getMethod("getZVKonten", new java.lang.Class[] {});
+	    $method_getZVKontenOnly_77 = applicationServer.ApplicationServer.class.getMethod("getZVKontenOnly", new java.lang.Class[] {});
+	    $method_getZVTitelId_78 = applicationServer.ApplicationServer.class.getMethod("getZVTitelId", new java.lang.Class[] {dbObjects.ZVTitel.class});
+	    $method_login_79 = applicationServer.ApplicationServer.class.getMethod("login", new java.lang.Class[] {java.lang.String.class, java.lang.String.class});
+	    $method_logout_80 = applicationServer.ApplicationServer.class.getMethod("logout", new java.lang.Class[] {});
+	    $method_portZVKonten_81 = applicationServer.ApplicationServer.class.getMethod("portZVKonten", new java.lang.Class[] {java.util.ArrayList.class, int.class, int.class});
+	    $method_setAccountBudget_82 = applicationServer.ApplicationServer.class.getMethod("setAccountBudget", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.FBHauptkonto.class, float.class});
+	    $method_setBestellung_83 = applicationServer.ApplicationServer.class.getMethod("setBestellung", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.ASKBestellung.class, dbObjects.ASKBestellung.class});
+	    $method_setBestellung_84 = applicationServer.ApplicationServer.class.getMethod("setBestellung", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.StandardBestellung.class, dbObjects.StandardBestellung.class});
+	    $method_setFBHauptkonto_85 = applicationServer.ApplicationServer.class.getMethod("setFBHauptkonto", new java.lang.Class[] {dbObjects.FBHauptkonto.class});
+	    $method_setFBUnterkonto_86 = applicationServer.ApplicationServer.class.getMethod("setFBUnterkonto", new java.lang.Class[] {dbObjects.FBUnterkonto.class});
+	    $method_setFachbereich_87 = applicationServer.ApplicationServer.class.getMethod("setFachbereich", new java.lang.Class[] {dbObjects.Fachbereich.class, dbObjects.Fachbereich.class});
+	    $method_setFirma_88 = applicationServer.ApplicationServer.class.getMethod("setFirma", new java.lang.Class[] {dbObjects.Firma.class});
+	    $method_setHaushaltsjahr_89 = applicationServer.ApplicationServer.class.getMethod("setHaushaltsjahr", new java.lang.Class[] {dbObjects.Haushaltsjahr.class, dbObjects.Haushaltsjahr.class});
+	    $method_setInstitute_90 = applicationServer.ApplicationServer.class.getMethod("setInstitute", new java.lang.Class[] {dbObjects.Institut.class, dbObjects.Institut.class});
+	    $method_setKontenZuordnung_91 = applicationServer.ApplicationServer.class.getMethod("setKontenZuordnung", new java.lang.Class[] {dbObjects.FBHauptkonto.class, dbObjects.Kontenzuordnung.class});
+	    $method_setRolle_92 = applicationServer.ApplicationServer.class.getMethod("setRolle", new java.lang.Class[] {dbObjects.Rolle.class, dbObjects.Rolle.class});
+	    $method_setUser_93 = applicationServer.ApplicationServer.class.getMethod("setUser", new java.lang.Class[] {dbObjects.Benutzer.class, dbObjects.Benutzer.class});
+	    $method_setZVKonto_94 = applicationServer.ApplicationServer.class.getMethod("setZVKonto", new java.lang.Class[] {dbObjects.ZVKonto.class});
+	    $method_setZVTitel_95 = applicationServer.ApplicationServer.class.getMethod("setZVTitel", new java.lang.Class[] {dbObjects.ZVTitel.class});
+	    $method_setZVUntertitel_96 = applicationServer.ApplicationServer.class.getMethod("setZVUntertitel", new java.lang.Class[] {dbObjects.ZVUntertitel.class});
 	} catch (java.lang.NoSuchMethodException e) {
 	    throw new java.lang.NoSuchMethodError(
 		"stub class initialization failed");
@@ -1348,12 +1354,48 @@ public final class ApplicationServerImpl_Stub
 	}
     }
     
+    // implementation of getOffeneBestellungen(int)
+    public java.util.ArrayList getOffeneBestellungen(int $param_int_1)
+	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
+    {
+	try {
+	    Object $result = ref.invoke(this, $method_getOffeneBestellungen_64, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -2280419437512116308L);
+	    return ((java.util.ArrayList) $result);
+	} catch (java.lang.RuntimeException e) {
+	    throw e;
+	} catch (java.rmi.RemoteException e) {
+	    throw e;
+	} catch (applicationServer.ApplicationServerException e) {
+	    throw e;
+	} catch (java.lang.Exception e) {
+	    throw new java.rmi.UnexpectedException("undeclared checked exception", e);
+	}
+    }
+    
+    // implementation of getOffeneFBHauptkonten(int)
+    public java.util.ArrayList getOffeneFBHauptkonten(int $param_int_1)
+	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
+    {
+	try {
+	    Object $result = ref.invoke(this, $method_getOffeneFBHauptkonten_65, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, 8120726347109308446L);
+	    return ((java.util.ArrayList) $result);
+	} catch (java.lang.RuntimeException e) {
+	    throw e;
+	} catch (java.rmi.RemoteException e) {
+	    throw e;
+	} catch (applicationServer.ApplicationServerException e) {
+	    throw e;
+	} catch (java.lang.Exception e) {
+	    throw new java.rmi.UnexpectedException("undeclared checked exception", e);
+	}
+    }
+    
     // implementation of getOffeneZVKonten(int)
     public java.util.ArrayList getOffeneZVKonten(int $param_int_1)
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getOffeneZVKonten_64, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5594928347851691886L);
+	    Object $result = ref.invoke(this, $method_getOffeneZVKonten_66, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -5594928347851691886L);
 	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1371,7 +1413,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getReport_65, new java.lang.Object[] {new java.lang.Integer($param_int_1), $param_Date_2, $param_Date_3}, 1279390578186283083L);
+	    Object $result = ref.invoke(this, $method_getReport_67, new java.lang.Object[] {new java.lang.Integer($param_int_1), $param_Date_2, $param_Date_3}, 1279390578186283083L);
 	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1389,7 +1431,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getRollen_66, null, 8060504328917123995L);
+	    Object $result = ref.invoke(this, $method_getRollen_68, null, 8060504328917123995L);
 	    return ((dbObjects.Rolle[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1407,7 +1449,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getRollenFull_67, null, 4830644982727885940L);
+	    Object $result = ref.invoke(this, $method_getRollenFull_69, null, 4830644982727885940L);
 	    return ((dbObjects.Rolle[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1425,7 +1467,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getStandardBestellung_68, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -9163243513425107859L);
+	    Object $result = ref.invoke(this, $method_getStandardBestellung_70, new java.lang.Object[] {new java.lang.Integer($param_int_1)}, -9163243513425107859L);
 	    return ((dbObjects.StandardBestellung) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1443,7 +1485,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getSwBeauftragte_69, null, -3479095673481886193L);
+	    Object $result = ref.invoke(this, $method_getSwBeauftragte_71, null, -3479095673481886193L);
 	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1461,7 +1503,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getUser_70, new java.lang.Object[] {$param_String_1, $param_String_2}, -31298424909577749L);
+	    Object $result = ref.invoke(this, $method_getUser_72, new java.lang.Object[] {$param_String_1, $param_String_2}, -31298424909577749L);
 	    return ((dbObjects.Benutzer) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1479,7 +1521,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getUsers_71, null, -93502309665610735L);
+	    Object $result = ref.invoke(this, $method_getUsers_73, null, -93502309665610735L);
 	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1497,7 +1539,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getUsers_72, new java.lang.Object[] {$param_Institut_1}, 6902480040832794116L);
+	    Object $result = ref.invoke(this, $method_getUsers_74, new java.lang.Object[] {$param_Institut_1}, 6902480040832794116L);
 	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1515,7 +1557,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getUsersByRole_73, new java.lang.Object[] {$param_Institut_1, new java.lang.Integer($param_int_2)}, 4638727419777682472L);
+	    Object $result = ref.invoke(this, $method_getUsersByRole_75, new java.lang.Object[] {$param_Institut_1, new java.lang.Integer($param_int_2)}, 4638727419777682472L);
 	    return ((dbObjects.Benutzer[]) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1533,7 +1575,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getZVKonten_74, null, 2386231262600236351L);
+	    Object $result = ref.invoke(this, $method_getZVKonten_76, null, 2386231262600236351L);
 	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1551,7 +1593,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getZVKontenOnly_75, null, -1505493009211920427L);
+	    Object $result = ref.invoke(this, $method_getZVKontenOnly_77, null, -1505493009211920427L);
 	    return ((java.util.ArrayList) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1569,7 +1611,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_getZVTitelId_76, new java.lang.Object[] {$param_ZVTitel_1}, 2638308445376525461L);
+	    Object $result = ref.invoke(this, $method_getZVTitelId_78, new java.lang.Object[] {$param_ZVTitel_1}, 2638308445376525461L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1587,7 +1629,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, applicationServer.ConnectionException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_login_77, new java.lang.Object[] {$param_String_1, $param_String_2}, 7933794942774794688L);
+	    Object $result = ref.invoke(this, $method_login_79, new java.lang.Object[] {$param_String_1, $param_String_2}, 7933794942774794688L);
 	    return ((dbObjects.Benutzer) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1607,7 +1649,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ConnectionException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_logout_78, null, -2314256391406573046L);
+	    ref.invoke(this, $method_logout_80, null, -2314256391406573046L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1619,12 +1661,29 @@ public final class ApplicationServerImpl_Stub
 	}
     }
     
+    // implementation of portZVKonten(ArrayList, int, int)
+    public void portZVKonten(java.util.ArrayList $param_ArrayList_1, int $param_int_2, int $param_int_3)
+	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
+    {
+	try {
+	    ref.invoke(this, $method_portZVKonten_81, new java.lang.Object[] {$param_ArrayList_1, new java.lang.Integer($param_int_2), new java.lang.Integer($param_int_3)}, 7940601304498133760L);
+	} catch (java.lang.RuntimeException e) {
+	    throw e;
+	} catch (java.rmi.RemoteException e) {
+	    throw e;
+	} catch (applicationServer.ApplicationServerException e) {
+	    throw e;
+	} catch (java.lang.Exception e) {
+	    throw new java.rmi.UnexpectedException("undeclared checked exception", e);
+	}
+    }
+    
     // implementation of setAccountBudget(Benutzer, FBHauptkonto, float)
     public void setAccountBudget(dbObjects.Benutzer $param_Benutzer_1, dbObjects.FBHauptkonto $param_FBHauptkonto_2, float $param_float_3)
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setAccountBudget_79, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, new java.lang.Float($param_float_3)}, 501138883092039617L);
+	    ref.invoke(this, $method_setAccountBudget_82, new java.lang.Object[] {$param_Benutzer_1, $param_FBHauptkonto_2, new java.lang.Float($param_float_3)}, 501138883092039617L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1641,7 +1700,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setBestellung_80, new java.lang.Object[] {$param_Benutzer_1, $param_ASKBestellung_2, $param_ASKBestellung_3}, 4176581119368034890L);
+	    ref.invoke(this, $method_setBestellung_83, new java.lang.Object[] {$param_Benutzer_1, $param_ASKBestellung_2, $param_ASKBestellung_3}, 4176581119368034890L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1658,7 +1717,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setBestellung_81, new java.lang.Object[] {$param_Benutzer_1, $param_StandardBestellung_2, $param_StandardBestellung_3}, 4173076474818309947L);
+	    ref.invoke(this, $method_setBestellung_84, new java.lang.Object[] {$param_Benutzer_1, $param_StandardBestellung_2, $param_StandardBestellung_3}, 4173076474818309947L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1675,7 +1734,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setFBHauptkonto_82, new java.lang.Object[] {$param_FBHauptkonto_1}, -3098460641072066493L);
+	    Object $result = ref.invoke(this, $method_setFBHauptkonto_85, new java.lang.Object[] {$param_FBHauptkonto_1}, -3098460641072066493L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1693,7 +1752,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setFBUnterkonto_83, new java.lang.Object[] {$param_FBUnterkonto_1}, -3215881295573068950L);
+	    Object $result = ref.invoke(this, $method_setFBUnterkonto_86, new java.lang.Object[] {$param_FBUnterkonto_1}, -3215881295573068950L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1711,7 +1770,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setFachbereich_84, new java.lang.Object[] {$param_Fachbereich_1, $param_Fachbereich_2}, 1778860291130592532L);
+	    Object $result = ref.invoke(this, $method_setFachbereich_87, new java.lang.Object[] {$param_Fachbereich_1, $param_Fachbereich_2}, 1778860291130592532L);
 	    return ((dbObjects.Fachbereich) $result);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1729,7 +1788,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setFirma_85, new java.lang.Object[] {$param_Firma_1}, 242269189777358345L);
+	    Object $result = ref.invoke(this, $method_setFirma_88, new java.lang.Object[] {$param_Firma_1}, 242269189777358345L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1747,7 +1806,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setHaushaltsjahr_86, new java.lang.Object[] {$param_Haushaltsjahr_1, $param_Haushaltsjahr_2}, -3397053694205119836L);
+	    ref.invoke(this, $method_setHaushaltsjahr_89, new java.lang.Object[] {$param_Haushaltsjahr_1, $param_Haushaltsjahr_2}, -3397053694205119836L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1764,7 +1823,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setInstitute_87, new java.lang.Object[] {$param_Institut_1, $param_Institut_2}, 920348241328705944L);
+	    ref.invoke(this, $method_setInstitute_90, new java.lang.Object[] {$param_Institut_1, $param_Institut_2}, 920348241328705944L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1781,7 +1840,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setKontenZuordnung_88, new java.lang.Object[] {$param_FBHauptkonto_1, $param_Kontenzuordnung_2}, 552054922101026979L);
+	    ref.invoke(this, $method_setKontenZuordnung_91, new java.lang.Object[] {$param_FBHauptkonto_1, $param_Kontenzuordnung_2}, 552054922101026979L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1798,7 +1857,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setRolle_89, new java.lang.Object[] {$param_Rolle_1, $param_Rolle_2}, -3231724069748232909L);
+	    ref.invoke(this, $method_setRolle_92, new java.lang.Object[] {$param_Rolle_1, $param_Rolle_2}, -3231724069748232909L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1815,7 +1874,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    ref.invoke(this, $method_setUser_90, new java.lang.Object[] {$param_Benutzer_1, $param_Benutzer_2}, 6349123237153146290L);
+	    ref.invoke(this, $method_setUser_93, new java.lang.Object[] {$param_Benutzer_1, $param_Benutzer_2}, 6349123237153146290L);
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
 	} catch (java.rmi.RemoteException e) {
@@ -1832,7 +1891,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setZVKonto_91, new java.lang.Object[] {$param_ZVKonto_1}, -908673309052549770L);
+	    Object $result = ref.invoke(this, $method_setZVKonto_94, new java.lang.Object[] {$param_ZVKonto_1}, -908673309052549770L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1850,7 +1909,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setZVTitel_92, new java.lang.Object[] {$param_ZVTitel_1}, 2760431180400196529L);
+	    Object $result = ref.invoke(this, $method_setZVTitel_95, new java.lang.Object[] {$param_ZVTitel_1}, 2760431180400196529L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
@@ -1868,7 +1927,7 @@ public final class ApplicationServerImpl_Stub
 	throws applicationServer.ApplicationServerException, java.rmi.RemoteException
     {
 	try {
-	    Object $result = ref.invoke(this, $method_setZVUntertitel_93, new java.lang.Object[] {$param_ZVUntertitel_1}, -1823691546304551198L);
+	    Object $result = ref.invoke(this, $method_setZVUntertitel_96, new java.lang.Object[] {$param_ZVUntertitel_1}, -1823691546304551198L);
 	    return ((java.lang.Integer) $result).intValue();
 	} catch (java.lang.RuntimeException e) {
 	    throw e;
