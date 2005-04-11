@@ -116,6 +116,23 @@ public class Bestellung implements Serializable {
 		this.geloescht = false;
 	}
 	
+	public Bestellung(int id, Date datum, char typ, char phase, Benutzer besteller, Benutzer auftraggeber,
+				  ZVUntertitel titel, FBUnterkonto konto, float bestellwert){
+		this.id = id;
+		this.referenznr = "";
+		this.datum = datum;
+		this.besteller = besteller;
+		this.typ = typ;
+		this.phase = phase;
+		this.huel = "";
+		this.auftraggeber = auftraggeber;
+		this.empfaenger = null;
+		this.zvtitel = titel;
+		this.fbkonto = konto;
+		this.bestellwert = bestellwert;
+		this.verbindlichkeiten = 0.0f;
+		this.geloescht = false;
+	}
 	
 	public Bestellung() {
 	}

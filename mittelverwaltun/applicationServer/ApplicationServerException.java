@@ -1,6 +1,10 @@
 package applicationServer;
 
-public class ApplicationServerException extends Exception  {
+import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.server.UnicastRemoteObject;
+
+public class ApplicationServerException extends Exception {
 
 	private static int NOM = 200;
 	private String[] messages = null;
@@ -27,13 +31,14 @@ public class ApplicationServerException extends Exception  {
 	}
 
 	public String getMessage(){
-//		return messages[errorCode] + " (" + errorCode + ")";
-		System.out.println("Application Server Error: " + errorCode);
+		if (messages == null) initializeErrorMessages();
+		
 		if(errorCode == 0){
 			return super.getMessage() + " (" + errorCode + ")";
-		}
-		else{
-			return messages[errorCode] + " (" + errorCode + ")";
+		}else{
+			if (messages[errorCode] != null)
+				return messages[errorCode] + " (" + errorCode + ")";
+			else return "Application Server Error " + errorCode + " [message unavailable"; 
 		}
 	}
 
@@ -129,7 +134,7 @@ public class ApplicationServerException extends Exception  {
 		messages[67] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAngebot.";
 		messages[68] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertPosition.";
 		messages[69] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertASKBestellung.";
-		messages[70] = "Application Server Error: Die Bestellung existiert nicht mehr";
+		messages[70] = "Application Server Error: Die Bestellung existiert nicht \nmehr.";
 		messages[71] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectStandardBestellung";
 		messages[72] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectUser(userId)";
 		messages[73] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectAngebote";
@@ -222,7 +227,21 @@ public class ApplicationServerException extends Exception  {
 		messages[162] = "Application Server Error: Bestellungsänderung konnte nicht durchgeführt werden. Keine ausreichende Deckung vorhanden.";
 		messages[163] = "Application Server Error: Rollback fehlgeschlagen.";
 		messages[164] = "Application Server Error: Commit fehlgeschlagen.";
-//Exception Ende Mario 199
+		messages[165] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectOffeneBestellungen";
+		messages[166] = "Application Server Error: Fehler bei Datenbankzugriff - Database.createAsSelectTempZvKontenTab";
+		messages[167] = "Application Server Error: Fehler bei Datenbankzugriff - Database.createAsSelectTempZvKontentitelTab";
+		messages[168] = "Application Server Error: Fehler bei Datenbankzugriff - Database.existsPortedZvAccount";
+		messages[169] = "Application Server Error: Fehler bei Datenbankzugriff - Database.dropTmpZvKontenTab";
+		messages[170] = "Application Server Error: Fehler bei Datenbankzugriff - Database.dropTmpZvKontentitelTab";
+		messages[171] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectZvKonto";
+		messages[172] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectZvKontentitel";
+		messages[173] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateZvTgrBudget";
+		messages[174] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateZvTitelBudgetTakeovers";
+		messages[175] = "Application Server Error: Fehler bei Datenbankzugriff - Database.createAsSelectTempFbKontenTab";
+		messages[176] = "Application Server Error: Fehler bei Datenbankzugriff - Database.dropTmpFbKontenTab";
+		messages[177] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectFbKonto";
+		
+		//Exception Ende Mario 199
 	}
 
 

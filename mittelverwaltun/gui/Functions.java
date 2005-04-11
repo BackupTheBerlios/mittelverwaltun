@@ -37,7 +37,19 @@ public class Functions {
 	  }catch (IOException e){};
 	  return null;
 	}
-	
+	/**
+	 * Laden der Datei "export16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getExportIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","export16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}	
 	/**
 	 * Laden der Datei "Import.gif".
 	 * @param clazz = Class von einer Componente.

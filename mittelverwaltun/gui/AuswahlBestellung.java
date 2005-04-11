@@ -115,6 +115,8 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 					try {
 						frame.addChild( new AbwicklungBestellungASK( frame , frame.applicationServer.getASKBestellung(tabBestellungen.getSelectedOrderID())));
 					} catch (ApplicationServerException exception) {
+						//System.out.println(exception.getErrorCode());
+						//System.out.println(exception.getNestedMessage());
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
 					} catch(RemoteException re) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 

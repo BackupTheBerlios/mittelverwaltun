@@ -78,6 +78,57 @@ public class Database implements Serializable {
 	}
 
 	/**
+	 * Abfrage aller (nicht abgeschlossenen) FBHauptkonten eines Haushaltsjahres
+	 * @return Array mit den ermittelten Hauptkonten (inkl. Unterkonten und Institut)
+	 * @throws ApplicationServerException
+	 * author m.schmitt
+	 */
+	public ArrayList selectOffeneFBHauptkonten( int haushaltsjahr ) throws ApplicationServerException {
+		ArrayList konten = new ArrayList();	// Liste mit den Hauptkonten
+
+		try{
+			Object[] parameters = { new Integer(haushaltsjahr) };	// Parameter setzen
+			ResultSet rs = statements.get(61).executeQuery(parameters);	// SQL-Statement mit der Nummer 50 ausführen
+			rs.last();		// auf die letzte abgefragte Zeile springen
+
+			if ( rs.getRow() > 0 ) {	// Wenn die Zeilen anzahl größer als 0	
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Wenn es noch Zeilen gibt
+					// Institutobjekt erzeugen
+											//    ID        Bezeichnung       Kostenstelle
+					Institut i = new Institut(rs.getInt(3), rs.getString(12), rs.getString(13));
+					
+					// Neues Kontenobjekt erzeugen
+													//  kontoId     haushaltsJahr      bezeichnung 
+					FBHauptkonto k = new FBHauptkonto( rs.getInt(1), rs.getInt(2), i, rs.getString(4),
+							// hauptkonto      unterkonto        budget         dispolimit     vormerkungen
+							rs.getString(5), rs.getString(6), rs.getFloat(7), rs.getFloat(8), rs.getFloat(9),
+							// prüfbedingung         kleinbestellungen               gelöscht
+							rs.getString(10), rs.getString(11).equalsIgnoreCase("1"), false );
+					
+					// Alle Unterkonten ermitteln
+					k.setUnterkonten(selectFBUnterkonten(i, k));
+					
+					// Alle Kontenzuordnungen ermitteln
+					k.setZuordnung(selectAllKontenzuordnungen(k));
+					
+					// Konto zur Ergebnisliste hinzufügen
+					konten.add( k );
+				}
+			}
+
+			rs.close();					// Die Abfrage schließen
+		} catch(SQLException e) {
+			//System.out.println(e.getMessage());
+			throw new ApplicationServerException( 1, e.getMessage() );
+		}
+		
+		return konten;		// Ermittelten Hauptkonten
+	}
+	
+	
+	/**
 	 * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören <br>
 	 * und nicht gelöscht sind.
 	 * @return Array mit den ermittelten Hauptkonten
@@ -149,6 +200,7 @@ public class Database implements Serializable {
 
 			rs.close();					// Die Abfrage schließen
 		} catch (SQLException e){
+			
 			throw new ApplicationServerException( 1, e.getMessage() );
 		}
 		
@@ -2082,7 +2134,7 @@ public class Database implements Serializable {
 			Object[] parameters = {new Integer(konto.getHaushaltsJahrId()),  konto.getBezeichnung(), konto.getKapitel(),
 							konto.getTitelgruppe(), new Float(konto.getTgrBudget()), new Float(konto.getDispoLimit()),
 							(konto.getZweckgebunden() ? "1" : "0"), ""+konto.getFreigegeben(), ""+konto.getUebernahmeStatus(),
-							(konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId())};
+							(konto.isPortiert() ? "1" : "0"),(konto.isAbgeschlossen() ? "1" : "0"),(konto.getGeloescht() ? "1" : "0"), new Integer(konto.getId())};
 			// SQL-Statement mit der Nummer ausführen 
 			statements.get(124).executeUpdate(parameters);
 			if( konto.getGeloescht() )		// Wenn das gelöschtes Konto
@@ -2436,7 +2488,7 @@ public class Database implements Serializable {
 	 }
 
 	 /**
-	  * gibt die Kontenzuordnungen zu einem FBHauptkonto zurück
+	  * gibt die nicht gesperrten Kontenzuordnungen zu einem FBHauptkonto zurück
 	  * @param FBHauptkonto
 	  * @return Kontenzuordnungen[]
 	  * @throws ApplicationServerException
@@ -2468,7 +2520,44 @@ public class Database implements Serializable {
 	 	return zuordnung;
 	}
 
+	 /**
+	  * Gibt alle Kontenzuordnungen zu einem FBHauptkonto zurück
+	  * @param FBHauptkonto
+	  * @return Kontenzuordnungen[]
+	  * @throws ApplicationServerException
+	  * author mario
+	  */
+	 public Kontenzuordnung[] selectAllKontenzuordnungen(FBHauptkonto konto)throws ApplicationServerException{
+		Kontenzuordnung[] zuordnung = null;
+	 	try{
+	 		
+	 		
+			Object[] parameters = { new Integer(konto.getId())};
+			
+			ResultSet rs = statements.get(238).executeQuery(parameters);
+			
+			
+			rs.last();
 
+			if (rs.getRow() > 0){
+				zuordnung = new Kontenzuordnung[rs.getRow()];
+				rs.beforeFirst();
+
+				int i = 0;
+				while (rs.next()){
+					ZVKonto zvKonto = new ZVKonto(rs.getInt(2), rs.getString(3), rs.getString(4), rs.getString(5), !rs.getString(6).equalsIgnoreCase( "0" ));
+					zuordnung[i++] = new Kontenzuordnung( rs.getShort(1), zvKonto );
+				}
+			}
+			rs.close();
+		} catch (SQLException e){
+			//System.out.println( e.getMessage());
+			throw new ApplicationServerException(1, e.getMessage());
+		}
+	 	return zuordnung;
+	}
+	 
+	 
 	/**
 	 * gibt die Kontenzuordnugn mit der fbKontoId und zvKontoId
 	 * @param fbKontoId
@@ -3542,7 +3631,53 @@ public class Database implements Serializable {
 			}
 			rs.close();		// Abfrage schließen
 		} catch (SQLException e){
-			throw new ApplicationServerException( 73, e.getMessage() );
+			throw new ApplicationServerException( 158, e.getMessage() );
+		}
+	
+		return bestellungen;
+	}
+	
+	/**
+	 * ermittelt die Bestellungen in Sondierungs- oder Abwicklungsphase eines Haushaltsjahres
+	 * @param ID des Haushaltsjahres
+	 * @return ArrayListe von Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList selectOffeneBestellungen(int haushaltsjahr) throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();
+
+		try{
+			ResultSet rs;
+			Object[] parameters = { new Integer(haushaltsjahr) };
+			rs = statements.get(301).executeQuery(parameters);
+			
+						
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+	
+													//  Name              Vorname
+					Benutzer besteller = new Benutzer(rs.getString(5), rs.getString(6));
+													//      Name               Vorname
+					Benutzer auftraggeber = new Benutzer(rs.getString(7), rs.getString(8));
+															// ID          Bezeichnung         Kapitel          Titelgruppe      Zweckgebunden
+					ZVTitel titel = new ZVTitel(new ZVKonto(rs.getInt(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13).equalsIgnoreCase("1")));
+					                                      //  ID           Bezeichnung                   Bezeichnung        Kostenstelle        Hauptkonto
+					FBHauptkonto konto = new FBHauptkonto(rs.getInt(14), rs.getString(15), new Institut(rs.getString(16),  rs.getString(17)), rs.getString(18));
+														// ID      Datum                Typ                       Phase
+					Bestellung b = new Bestellung(	rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), 
+																						// Bestellwert
+													besteller, auftraggeber, titel, konto, rs.getFloat(19) );
+							
+					bestellungen.add( b );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 165, e.getMessage() );
 		}
 	
 		return bestellungen;
@@ -4530,6 +4665,211 @@ public class Database implements Serializable {
 			throw new ApplicationServerException(112, e.getMessage());
 		}
 	}
+
+	/**
+	 * Portiert die ZVKonten eines bestimmten Haushaltsjahres in eine temporäre Tabelle
+	 * @param haushaltsjahr = ID
+	 * @throws ApplicationServerException
+	 */
+	public void createAsSelectTempZvKontenTab (int haushaltsjahr) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Integer (haushaltsjahr) };
+			statements.get(166).executeUpdate(parameters);
+		
+		} catch (SQLException e){
+			throw new ApplicationServerException(166, e.getMessage());
+		}
+	}
+
+	/**
+	 * Portiert die ZVKontentitel eines bestimmten Haushaltsjahres in eine temporäre Tabelle
+	 * @param haushaltsjahr = ID
+	 * @throws ApplicationServerException
+	 */
+	public void createAsSelectTempZvKontentitelTab (int haushaltsjahr) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Integer (haushaltsjahr) };
+			statements.get(167).executeUpdate(parameters);
+		
+		} catch (SQLException e){
+			throw new ApplicationServerException(167, e.getMessage());
+		}
+	}
+
+	public boolean existsPortedZvAccount(int id) throws ApplicationServerException{
+		try{
+			// Parameter für das SQL-Statement festlegen
+			Object[] parameters = {new Integer(id)};
+			// SQL-Statement ausführen
+			ResultSet rs = statements.get(128).executeQuery(parameters);
+			rs.last();	// Auf die letzte Zeile springen
+			if( rs.getRow() > 0 ) {	
+				return true;
+			}else return false;
+		} catch (SQLException e) {
+			throw new ApplicationServerException(168, e.getMessage());
+		}
+	
+	}
+	
+	public int insertAsSelectZvKonto (int acc, int year, boolean wBudget) throws ApplicationServerException{
+		try{
+			PreparedStatementWrapper ps;
+			ResultSet rs;
+			
+			Object[] parameters = { new Integer(year), new Integer(acc)};
+			
+			if (wBudget){
+				ps = statements.get(129);
+			}else ps = statements.get(130);
+			
+			ps.executeUpdate(parameters);
+			rs = ps.getGeneratedKeys();
+			
+			if (rs.next()) {
+				return rs.getInt(1);
+			}else return 0;
+			
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(171, e.getMessage());
+	   }
+	}
+
+	public void insertAsSelectZvKontentitel (int newAccID, int oldAccID, boolean wBudget) throws ApplicationServerException{
+		try{
+			PreparedStatementWrapper ps;
+//			ResultSet rs;
+			
+			Object[] parameters = { new Integer(newAccID), new Integer(oldAccID)};
+			
+			if (wBudget){
+				ps = statements.get(131);
+			}else ps = statements.get(132);
+			
+			ps.executeUpdate(parameters);
+//			rs = ps.getGeneratedKeys();
+//			
+//			if (rs.next()) {
+//				return rs.getInt(1);
+//			}else return 0;
+			
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(172, e.getMessage());
+	   }
+	}
+	
+	
+	public void dropTmpZvKontenTab () throws ApplicationServerException{
+		try{
+			
+			statements.get(168).executeUpdate();
+				
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(169, e.getMessage());
+	   }		
+	}
+	
+	public void dropTmpZvKontentitelTab () throws ApplicationServerException{
+		try{
+			
+			statements.get(169).executeUpdate();
+				
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(170, e.getMessage());
+	   }		
+	}
+	
+	public float updateZvTitelBudgetTakeovers (int oldAccID, int newAccID) throws ApplicationServerException{
+		try{
+			float budget = 0.0f; 
+			
+			Object[] parameters = { new Integer(oldAccID), new Integer(newAccID)};
+			
+			// Ermittle neue Titel-IDs und offene alte Budgets
+			ResultSet rs = statements.get(133).executeQuery(parameters);
+
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	
+				
+				rs.beforeFirst();		
+												
+				while( rs.next() ){
+					if (rs.getInt(1) == 0){ //Falls portierter ZVKontentitel nicht mehr existiert ...
+						budget += rs.getFloat(2); // summiere nicht übernommenes Budget
+					}else{// sonst buche Budget auf neuen Titel
+						Object[] p = {new Float(rs.getFloat(2)), new Integer(rs.getInt(1))};
+						statements.get(134).executeUpdate(p);
+					}
+				}
+			}
+			rs.close();		
+			
+			return budget;
+			
+		} catch (SQLException e){
+			throw new ApplicationServerException(174, e.getMessage());
+		}	
+	}
+
+	public void updateZvTgrBudget (int accID, float budget) throws ApplicationServerException{
+		try{
+						
+			Object[] parameters = { new Float(budget), new Integer(accID)};
+			statements.get(135).executeUpdate(parameters);
+			
+		} catch (SQLException e){
+			throw new ApplicationServerException(173, e.getMessage());
+		}	
+	}
+
+	/**
+	 * Portiert die FBKonten eines bestimmten Haushaltsjahres in eine temporäre Tabelle
+	 * @param haushaltsjahr = ID
+	 * @throws ApplicationServerException
+	 */
+	public void createAsSelectTempFbKontenTab (int haushaltsjahr) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Integer (haushaltsjahr) };
+			statements.get(62).executeUpdate(parameters);
+		
+		} catch (SQLException e){
+			throw new ApplicationServerException(175, e.getMessage());
+		}
+	}
+
+	public void dropTmpFbKontenTab () throws ApplicationServerException{
+		try{
+			
+			statements.get(63).executeUpdate();
+				
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(176, e.getMessage());
+	   }		
+	}
+
+	public int insertAsSelectFbKonto (int acc, int year, boolean wBudget) throws ApplicationServerException{
+		try{
+			PreparedStatementWrapper ps;
+			ResultSet rs;
+			
+			Object[] parameters = { new Integer(year), new Integer(acc)};
+			
+			if (wBudget){
+				ps = statements.get(64);
+			}else ps = statements.get(65);
+			
+			ps.executeUpdate(parameters);
+			rs = ps.getGeneratedKeys();
+			
+			if (rs.next()) { //erster zurückgelieferter Schlüssel = neue Hauptkonto-ID
+				return rs.getInt(1);
+			}else return 0;
+			
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(177, e.getMessage());
+	   }
+	}
+
 }
 
 

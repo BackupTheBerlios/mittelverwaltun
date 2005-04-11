@@ -151,6 +151,16 @@ public interface ApplicationServer extends Remote {
 	public ArrayList getFBHauptkonten( Institut institut ) throws RemoteException, ApplicationServerException;
 	
 	/**
+	 * Abfrage der nicht abgeschlossenen FBHauptkonten eines Haushaltsjahres.
+	 * @param haushaltsjahr = ID des Haushaltsjahres
+	 * @return Liste der FBHauptkonten
+	 * @throws RemoteException, ApplicationServerException
+	 * author m.schmitt
+	 */
+	public ArrayList getOffeneFBHauptkonten( int haushaltsjahr ) throws RemoteException, ApplicationServerException;
+	
+	
+	/**
 	 * Abfrage von Unterkonten eines bestimmten Instituts von einem bestimmten Hauptkonto.
 	 * @param institut = Institut, welchem die FBKonten zugeordnet sind.
 	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
@@ -707,6 +717,15 @@ public interface ApplicationServer extends Remote {
 	public ArrayList getBestellungen(int filter) throws RemoteException, ApplicationServerException;
 	
 	/**
+	 * gibt Bestellungen in Sondierungs- oder Abwicklungsphase eines Haushaltsjahres zurück
+	 * @param filter
+	 * @return ArrayList mit Bestellungen
+	 * @throws RemoteException, ApplicationServerException
+	 * author Mario
+	 */		
+	public ArrayList getOffeneBestellungen(int haushaltsjahr) throws RemoteException, ApplicationServerException;
+	
+	/**
 	 * gibt alle Bestellungen zurück
 	 * @param filter
 	 * @return ArrayList mit Bestellungen
@@ -821,4 +840,9 @@ public interface ApplicationServer extends Remote {
 	 */
 	public ArrayList getLogList(Date von, Date bis) throws RemoteException, ApplicationServerException;
 
+	
+	
+	public void portZVKonten (ArrayList accounts, int oldYear, int newYear) throws RemoteException, ApplicationServerException;
+	
+	
 }

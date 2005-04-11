@@ -322,6 +322,20 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	}
 
 	/**
+	 * Abfrage der nicht abgeschlossenen FBHauptkonten eines Haushaltsjahres.
+	 * @param haushaltsjahr = ID des Haushaltsjahres
+	 * @return Liste der FBHauptkonten
+	 * @throws RemoteException, ApplicationServerException
+	 * author m.schmitt
+	 */
+	public ArrayList getOffeneFBHauptkonten( int haushaltsjahr ) throws RemoteException, ApplicationServerException {
+		
+		return db.selectOffeneFBHauptkonten(haushaltsjahr);
+		
+	}
+
+	
+	/**
 	 * Abfrage von Unterkonten eines bestimmten Instituts von einem bestimmten Hauptkonto.
 	 * @param institut = Institut, welchem die FBKonten zugeordnet sind.
 	 * @param hauptkonto = FBHauptkonto, welchem dei FBUnterkonten zugeordnet sind.
@@ -855,6 +869,10 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 
 		return zvKonten;	// Rückgabe der ermittelten ZVKonten
 	}
+
+
+	
+	
 	
 	/**
 	 * Abfrage der nicht abgeschlossenen ZVKonten eines Haushaltsjahres mit den dazugehörigen ZVTiteln und ZVUntertiteln.
@@ -2753,6 +2771,15 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 
 	/*
 	 *  (Kein Javadoc)
+	 * @see applicationServer.ApplicationServer#getBestellungen(int)
+	 */
+	public ArrayList getOffeneBestellungen(int haushaltsjahr) throws RemoteException, ApplicationServerException{
+		return db.selectOffeneBestellungen(haushaltsjahr);
+	}
+
+	
+	/*
+	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getBestellungen()
 	 */
 	public ArrayList getBestellungen() throws RemoteException, ApplicationServerException{
@@ -3195,6 +3222,89 @@ public class ApplicationServerImpl extends UnicastRemoteObject implements Applic
 	public ArrayList getLogList(Date von, Date bis) throws RemoteException, ApplicationServerException {
 		return db.selectLogList(von, bis);
 	}
+
+	public void finishBudgetYear() throws RemoteException, ApplicationServerException{
+		// Evtl. Tabellensperren ????
+		// 0. Neues Haushaltsjahr anlegen
+		
+		// 1. Lege temporäre Tabellen an
+				
+		// 2. Bestelungen (Abwicklungsphase) abschließen oder stornieren
+		
+		// 3. ZV-Konten portieren und ggf. Budgets übernehmen
+		
+		// 4. FB-Konten portieren und ggf. Budgets übernehmen
+		
+		// 5. Kontenzuordnungen portieren
+		
+		// 6. Bestellungen portieren
+		
+		// 7. Lösche temporäre Tabellen
+		
+		// 8. Commit	
+		
+	}
+	
+	public void portFBKonten (ArrayList accounts, int oldYear, int newYear) throws RemoteException, ApplicationServerException{
+		// Lege temporäre Tabellen an
+		db.createAsSelectTempFbKontenTab(oldYear); 
+		
+				
+		for (int i=0; i < accounts.size(); i++){
+			FBHauptkonto acc = (FBHauptkonto)accounts.get(i);
+			
+			
+		}		
+			
+		// Lösche temporäre Tabellen
+		db.dropTmpFbKontenTab();
+		
+	}
+	
+	
+	public void portZVKonten (ArrayList accounts, int oldYear, int newYear) throws RemoteException, ApplicationServerException{
+		
+		// Lege temporäre Tabellen an
+		db.createAsSelectTempZvKontenTab(oldYear); 
+		db.createAsSelectTempZvKontentitelTab(oldYear); 
+				
+		for (int i=0; i < accounts.size(); i++){
+			ZVKonto acc = (ZVKonto)accounts.get(i);
+			
+			if (db.existsPortedZvAccount(acc.getId())){ // Falls das Konto bereits portiert wurde (d.h. hier geht's um eine nachträgliche Mittelbewilligung)...
+				
+				int newId = db.existsZVKonto(acc);      // ermittle dessen neue ID.
+				
+				if ((newId > 0)&&(acc.getUebernahmeStatus() == 2)){ // Falls eine neue ID existiert und die Mittelübernahme bewilligt wurde...
+					
+					//Übernehme die Budgets der Titel (Vormerkungen existieren keine mehr!)
+					float rest = db.updateZvTitelBudgetTakeovers(acc.getId(), newId);
+					//Übernehme das Titelgruppenbudget
+					db.updateZvTgrBudget(newId, acc.isTGRKonto() ? rest + acc.getTgrBudget() : acc.getTgrBudget());
+					//Übernahmestatus setzen
+					acc.setUebernahmeStatus((short)3);
+				}
+				
+			}else if (acc.isPortiert()){// Struktur muss portiert werden
+				// Portiere Konto
+				int newAccId = db.insertAsSelectZvKonto(acc.getId(), 1, acc.getUebernahmeStatus() == 2);
+				// Portiere Kontentitel
+				db.insertAsSelectZvKontentitel(newAccId, acc.getId(), acc.getUebernahmeStatus() == 2);
+				// Ggf. setze Übernahmestatus
+				if (acc.getUebernahmeStatus() == 2)
+					acc.setUebernahmeStatus((short)3);
+				
+			}
+			
+			setZVKonto(acc);//	Speichere "altes" Konto => Transaktionsswitch in AS-Funktion
+		}		
+			
+		// Lösche temporäre Tabellen
+		db.dropTmpZvKontenTab();
+		db.dropTmpZvKontentitelTab();
+	}
+	
+	
 }
 
 

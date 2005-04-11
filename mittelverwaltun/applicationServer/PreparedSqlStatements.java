@@ -438,19 +438,67 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//61
-			statements[i++] = null;
+			/**
+			 * Abfrage aller (nicht abgeschlossenen) FBHauptkonten eines Haushaltsjahres 
+	 		 * @author m.schmitt
+			 */
+			ps = con.prepareStatement("SELECT k.id, k.haushaltsjahrId, i.id, k.bezeichnung, "+
+										"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " +
+										"k.pruefBedingung, k.kleinbestellungen, i.bezeichnung, i.kostenstelle " +
+										"FROM FBKonten k, Institute i " +
+										"WHERE k.haushaltsjahrID = ? " +
+										"AND k.institutsID = i. id " +
+										"AND k.unterkonto = \"0000\" " +
+										"AND k.geloescht = \"0\" " +
+										"ORDER BY i.kostenstelle, k.hauptkonto");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//62
-			statements[i++] = null;
+		{//62 Temporäre FBKontentabelle mit den Konten eines bestimmten Haushaltsjahres erstellen
+			ps = con.prepareStatement("CREATE TABLE fbkonten_tmp "+
+											       "SELECT * " + 
+												     "FROM fbkonten "+
+													"WHERE haushaltsjahrid = ?"
+									  );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//63
-			statements[i++] = null;
+		{//63 Löscht temporäre FBKonten-Tabelle
+			ps = con.prepareStatement("DROP TABLE fbkonten_tmp");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//64
-			statements[i++] = null;
+		{//64 Portiert die Konten eines bestimmten Hauptkontos inklusive Budgets und Vormerkungen auf ein neues Haushaltsjahr
+			ps = con.prepareStatement(
+					"INSERT INTO fbkonten " +
+								"(haushaltsjahrid, institutsid, hauptkonto, unterkonto, bezeichnung, " +
+								" budget, vormerkungen, dispolimit, pruefbedingung, kleinbestellungen, " + 
+								" geloescht)" +
+						"SELECT   ?, f2.institutsid, f2.hauptkonto, f2.unterkonto, f2.bezeichnung, " +
+								" f2.budget, f2.vormerkungen, f2.dispolimit, f2.pruefbedingung, f2.kleinbestellungen, " + 
+								" f2.geloescht " +
+						  "FROM   fbkonten_tmp f1, fbkonten_tmp f2 " +
+						 "WHERE   f1.id = ? " +
+						   "AND   f1.institutsid = f2.institutsid " +
+			  		  "ORDER BY   f2.hauptkonto, f2.unterkonto");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//65
-			statements[i++] = null;
+		{//65 Portiert die Konten eines bestimmten Hauptkontos ohne Budgets und Vormerkungen auf ein neues Haushaltsjahr
+			ps = con.prepareStatement(
+					"INSERT INTO fbkonten " +
+								"(haushaltsjahrid, institutsid, hauptkonto, unterkonto, bezeichnung, " +
+								" budget, vormerkungen, dispolimit, pruefbedingung, kleinbestellungen, " + 
+								" geloescht)" +
+						"SELECT   ?, f2.institutsid, f2.hauptkonto, f2.unterkonto, f2.bezeichnung, " +
+								" 0, 0, f2.dispolimit, f2.pruefbedingung, f2.kleinbestellungen, " + 
+								" f2.geloescht " +
+						  "FROM   fbkonten_tmp f1, fbkonten_tmp f2 " +
+						 "WHERE   f1.id = ? " +
+						   "AND   f1.institutsid = f2.institutsid " +
+						   "AND   f1.hauptkonto = f2.hauptkonto " +
+					  "ORDER BY   f2.hauptkonto, f2.unterkonto");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//66
 			statements[i++] = null;
@@ -807,14 +855,18 @@ public class PreparedSqlStatements {
 		
 		{//122			(43)
 			/**
-			 * Abfrage eines ZVKontos mit einem bestimmten Kapitel <br>
-			 * und einer bestimmter Titelgruppe und welches nicht gelöscht ist.
+			 * Abfrage eines ZVKontos im aktuellen Haushaltsjahr mit einem bestimmten Kapitel <br>
+			 * und einer bestimmter Titelgruppe und welches nicht gelöscht und nicht abgeschlossen ist.
 			 * @author w.flat 
 			 */
-			ps = con.prepareStatement(	"SELECT id " +
-										"FROM ZVKonten " +
-										"WHERE kapitel = ? " +
-											"AND titelgruppe = ? AND geloescht = '0'" );
+			ps = con.prepareStatement(	"SELECT k.id " +
+										"FROM ZVKonten k, Haushaltsjahre h " +
+										"WHERE k.kapitel = ? " +
+											"AND k.titelgruppe = ? " +
+											"AND k.geloescht = '0' " + 
+											"AND k.abgeschlossen = '0' " +
+											"AND k.haushaltsjahrid = h.id " +
+											"AND h.status = '0'");
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -837,12 +889,13 @@ public class PreparedSqlStatements {
 										"SET haushaltsjahrid = ?, bezeichnung = ?, kapitel = ?, " +
 											"titelgruppe = ?, tgrBudget = ?, dispoLimit = ?, " +
 											"zweckgebunden = ?, freigegeben = ?, uebernahmestatus = ?, " +
-											"geloescht = ? " +
+											"portiert = ?,  abgeschlossen = ?, geloescht = ? " +
 										"WHERE id = ?");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
 							Types.VARCHAR, Types.FLOAT, Types.FLOAT,
 							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-							Types.VARCHAR, Types.INTEGER};
+							Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+							Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//125
@@ -882,33 +935,104 @@ public class PreparedSqlStatements {
 										"FROM ZVKonten " +
 										"WHERE haushaltsjahrid = ? " +
 										  "AND abgeschlossen = \"0\"" +
-										  "AND geloescht = \"0\"" );
+										  "AND geloescht = \"0\" "+ 
+										  "ORDER BY kapitel, titelgruppe");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//128
-			statements[i++] = null;
+		{//128 Wurde das spezifizierte Konto bereits portiert?
+			ps = con.prepareStatement("SELECT id " +
+					 					"FROM zvkonten " +
+									    "WHERE id = ? " +
+									      "AND portiert = '1' " +
+										  "AND geloescht = '0'");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//129
-			statements[i++] = null;
+		{//129 Portiert ein ZVKonto inklusive Budget
+			ps = con.prepareStatement(
+					 "INSERT INTO zvkonten " +
+								 "(	haushaltsjahrid, kapitel, titelgruppe, tgrbudget, " +
+								 "	bezeichnung, zweckgebunden, uebernahmestatus, " +
+								 "	portiert, abgeschlossen, dispolimit, geloescht ) " +
+					 "SELECT ?, kapitel, titelgruppe, tgrbudget, " +
+					        "bezeichnung, zweckgebunden, '0', " +
+							"'0', '0', dispolimit, '0' " +
+					   "FROM zvkonten_tmp " +
+					  "WHERE id = ?");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//130
-			statements[i++] = null;
+		{//130 Portiert ein ZVKonto ohne Budget
+			ps = con.prepareStatement(
+					 "INSERT INTO zvkonten " +
+								 "(	haushaltsjahrid, kapitel, titelgruppe, tgrbudget, " +
+								 "	bezeichnung, zweckgebunden, uebernahmestatus, " +
+								 "	portiert, abgeschlossen, dispolimit, geloescht ) " +
+					 "SELECT ?, kapitel, titelgruppe, 0, " +
+					        "bezeichnung, zweckgebunden, '0', " +
+							"'0', '0', dispolimit, '0' " +
+					   "FROM zvkonten_tmp " +
+					  "WHERE id = ?");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//131
-			statements[i++] = null;
+		{//131 Portiert die Titel eines ZVKontos mit Budgetübernahme auf eine neue Konto-Id
+			ps = con.prepareStatement(
+					"INSERT INTO zvkontentitel " + 
+								"(zvkontoid, titel, untertitel, bezeichnung, " +
+								" budget, vormerkungen, bemerkung, pruefbedingung, geloescht) " +
+					"SELECT	?, titel, untertitel, bezeichnung, " +
+							"budget, vormerkungen, bemerkung, pruefbedingung, geloescht " +
+					  "FROM zvkontentitel_tmp " +
+					 "WHERE zvkontoid = ?" );
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//132
-			statements[i++] = null;
+		{//132 Portiert die Titel eines ZVKontos ohne Budgetübernahme auf eine neue Konto-Id
+			ps = con.prepareStatement(
+					"INSERT INTO zvkontentitel " + 
+								"(zvkontoid, titel, untertitel, bezeichnung, " +
+								" budget, vormerkungen, bemerkung, pruefbedingung, geloescht) " +
+					"SELECT	?, titel, untertitel, bezeichnung, " +
+							"0, 0, bemerkung, pruefbedingung, geloescht " +
+					  "FROM zvkontentitel_tmp " +
+					 "WHERE zvkontoid = ?" );
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//133
-			statements[i++] = null;
+		{//133 Ermittelt die IDs der portierten Titel eines bereits portierten Konten
+			// und die auf den Ursprungstiteln vorhandene Budgets.
+			// Wurde ein portierter Titel gelöscht, so ist dessen ID = 0
+			
+			ps = con.prepareStatement(
+					 "SELECT IF(t2.id is NULL, 0, t2.id), " + 
+						   	"t1.budget " + 
+					   "FROM ZVKontentitel t1 " + 
+				  "LEFT JOIN ZVkontentitel t2 " +
+				         "ON t1.titel = t2.titel " +
+                        "AND t1.untertitel = t2.untertitel " +
+			          "WHERE t1.zvkontoid = ? " + // alte ID
+					    "AND t2.zvkontoid = ? " + // neue ID
+						"AND t2.geloescht = '0'");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//134
-			statements[i++] = null;
+		{//134 Addiert zu übergebenden Betrag auf Titelbudget
+			ps = con.prepareStatement(
+					"UPDATE zvkontentitel " +
+					   "SET budget = budget + ? " +
+					 "WHERE id = ?");
+			int[] param = {Types.FLOAT, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//135
-			statements[i++] = null;
+		{//135 Addiert zu übergebenden Betrag auf Titelgruppenbudget
+			ps = con.prepareStatement(
+					"UPDATE zvkonten " +
+					   "SET tgrbudget = tgrbudget + ? " +
+					 "WHERE id = ?");
+			int[] param = {Types.FLOAT, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//136
 			statements[i++] = null;
@@ -1123,7 +1247,8 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
 										 "FROM ZVKontentitel t, ZVKonten k " +
 										"WHERE t.zvkontoid = ? " +
-										  "AND k.zweckgebunden = \"0\" " +
+										  "AND t.zvkontoid = k.id " +
+										 // "AND k.zweckgebunden = \"0\" " +
 										  "AND t.geloescht = \"0\" " +
 										  "AND k.geloescht = \"0\" " +
 										"GROUP BY k.id");
@@ -1168,17 +1293,31 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//166
-			statements[i++] = null;
+		{//166 Temporäre ZVKontentabelle mit den Konten eines bestimmten Haushaltsjahres erstellen
+			ps = con.prepareStatement("CREATE TABLE zvkonten_tmp "+
+											       "SELECT * " + 
+												     "FROM zvkonten "+
+													"WHERE haushaltsjahrid = ?"
+									  );
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//167
-			statements[i++] = null;
+		{//167 Temporäre ZVKontentiteltabelle mit den Titeln eines bestimmten Haushaltsjahres erstellen
+			ps = con.prepareStatement("CREATE TABLE zvkontentitel_tmp " + 
+					                               "SELECT t.* "+
+												     "FROM zvkontentitel t, zvkonten k " +
+													"WHERE t.zvkontoid = k.id " +
+													  "AND k.haushaltsjahrid = ?");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//168
-			statements[i++] = null;
+		{//168 Löscht temporäre ZVKonten-Tabelle
+			ps = con.prepareStatement("DROP TABLE zvkonten_tmp");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//169
-			statements[i++] = null;
+		{//169 Löscht temporäre ZVKontentitel-Tabelle
+			ps = con.prepareStatement("DROP TABLE zvkontentitel_tmp");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 
 
@@ -1676,8 +1815,15 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//238
-			statements[i++] = null;
+		{//238  Kontenzuordnungen
+			ps = con.prepareStatement( "SELECT b.status, a.id, a.bezeichnung, a.kapitel, a.titelgruppe, a.zweckgebunden " +
+																 "FROM ZVKonten a, Kontenzuordnung b " +
+																 "WHERE a.geloescht = '0' " +
+																   "AND b.fbKontoId = ? " +
+																   "AND b.zvKontoId = a.id " +
+																 "ORDER BY a.kapitel, a.titelgruppe");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//239	gibt alle Kostenarten zurück mit id, beschreibung
 			ps = con.prepareStatement( "SELECT * FROM kostenarten");
@@ -2185,8 +2331,38 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//301
-			statements[i++] = null;
+		{//301 ermittelt alle Bestellungen in Sondierungs- oder Abwicklungsphase eines Haushaltsjahres
+			ps = con.prepareStatement(
+						"SELECT " + 
+							   "o.id, o.datum, o.typ, o.phase, " + 
+							   "u1.name, u1. vorname, " + 
+							   "u2.name, u2.vorname, " +
+							   "zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden, " +
+							   "fk2.id, fk2.bezeichnung, i.bezeichnung, i.kostenstelle, fk2.hauptkonto, " +
+							   "o.bestellwert " +
+						  "FROM bestellungen o, benutzer u1, benutzer u2, zvkontentitel t, " +
+						  	   "zvkonten zk, fbkonten fk1, fbkonten fk2, institute i " +
+						 "WHERE "+
+						       "(o.phase = '0' OR o.phase = '1') " +
+						   "AND o.geloescht = '0' "+
+						   "AND o.besteller = u1.id "+
+						   "AND o.auftraggeber = u2.id "+
+						   "AND o.zvtitel = t.id "+
+						   "AND t.zvkontoid = zk.id "+
+						   "AND o.fbkonto = fk1.id "+
+						   "AND fk1.haushaltsjahrid = fk2.haushaltsjahrid "+
+						   "AND fk1.institutsid = fk2.institutsid "+
+						   "AND fk1.hauptkonto = fk2.hauptkonto "+
+						   "AND fk2.unterkonto = \'0000\' "+
+						   "AND fk2.institutsid = i.id "+
+						   "AND zk.geloescht = \'0\' "+
+						   "AND fk2.geloescht = \'0\' "+
+						   "AND fk2.haushaltsjahrid = zk.haushaltsjahrid "+
+						   "AND zk.haushaltsjahrid = ?"
+					);
+			
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//302
 			statements[i++] = null;

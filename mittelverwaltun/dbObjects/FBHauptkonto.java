@@ -78,7 +78,19 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		this.unterkonten = null;
 	}
 	
-	
+	/**
+	 * Konstruktor, zum Erzeugen von einem neuen FBHauptkonto. 
+	 * @param bez = Bezeichnung des Kontos
+	 * @param inst = Institut, welchem das Konto zugeordnet ist.
+	 * @param haupt = Nummer des Hauptkontos
+	 * @param unter = Nummer des Unterkontos
+	 */
+	public FBHauptkonto(int id, String bez, Institut inst, String haupt ){
+		super(id,  bez, inst, haupt, "0000" );
+		this.dispoLimit = 0.0f;
+		this.pruefung = null;
+		this.unterkonten = null;
+	}
 	/**
 	 * Konstruktor, zum Erzeugen von einem FBHauptkonto. 
 	 * @param id = FBHauptkontoId

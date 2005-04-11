@@ -67,19 +67,19 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		JTextArea labMsg = new JTextArea(message);
 		labMsg.setEditable(false);
 		labMsg.setBackground(this.getBackground());
-		labMsg.setBounds(35,6,300,50);
+		labMsg.setBounds(35,6,345,80);
 		labMsg.setLineWrap(true);
 		cp.add(labMsg);
 			
 		JButton butOk = new JButton("OK");
 		butOk.addActionListener(this);
-		butOk.setBounds(260,61,75,25);
+		butOk.setBounds(305,91,75,25);
 		cp.add(butOk);
 		
 		butDetails = new JButton("Details anzeigen", Functions.getDown24Icon(getClass()));
 		butDetails.setEnabled(!((details==null)||(details.equals(""))));
 		butDetails.addActionListener(this);
-		butDetails.setBounds(35,61,170,25);
+		butDetails.setBounds(35,91,170,25);
 		cp.add(butDetails);
 	
 		JTextArea jta = new JTextArea(details);
@@ -88,13 +88,13 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		
 		jsp = new JScrollPane(jta);
 		jsp.setVisible(false);
-		jsp.setBounds(35,95,300,69);
+		jsp.setBounds(35,135,345,69);
 		cp.add(jsp);
 		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		d.width = (d.width - 355)/2;
-		d.height =(d.height-125)/2;
-		this.setBounds( d.width, d.height, 355,125);
+		d.width = (d.width - 400)/2;
+		d.height =(d.height-155)/2;
+		this.setBounds( d.width, d.height, 400,155);
 		this.setResizable(false);
 		
 	}
@@ -107,6 +107,12 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		return md.result;
 	}
 
+	public static int showInfoMessageDialog(Component parent, String title, String message){
+		MessageDialogs md = new MessageDialogs(parent, title, message, null, INFO_ICON);
+		md.show();
+		return md.result;
+	}
+	
 	/**
 	 * ActionListener Methoden
 	 */

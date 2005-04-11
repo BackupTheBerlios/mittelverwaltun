@@ -189,7 +189,27 @@ public class FBUnterkonto implements Serializable {
 		this.zuordnung = null;
 	}
 	
-	
+	/**
+	 * Konstruktor, zum Erzeugen von einem neuen FBUnterkonto. 
+	 * @param inst = Institut, welchem das Konto zugeordnet ist.
+	 * @param bez = Bezeichnung des Kontos
+	 * @param haupt = Nummer des Hauptkontos
+	 * @param unter = Nummer des Unterkontos
+	 * @param budget = Budget, welches dieses Konto enthält
+	 */
+	public FBUnterkonto( int id, String bez, Institut inst, String haupt, String unter ){
+		this.id = id;
+		this.bezeichnung = bez;
+		this.institut = inst;
+		this.hauptkonto = haupt;
+		this.unterkonto = unter;
+		this.budget = 0.0f;
+		this.vormerkungen = 0.0f;
+		this.haushaltsJahrID = 0;
+		this.geloescht = false;
+		this.kleinbestellungen = false;
+		this.zuordnung = null;
+	}	
 	/**
 	 * Gleichheit von zwei FBUnterkonten. <br>
 	 * Gleichheit ist gegeben, wenn Institut, Hauptkonto und Unterkonto gleich sind. <br>
