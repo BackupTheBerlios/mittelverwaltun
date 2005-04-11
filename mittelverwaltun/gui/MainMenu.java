@@ -106,7 +106,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 						menuSichtwechsel.add( menuTmpRolle );																	//
 						menuTmpRolle.addActionListener(this);																	//
 						for (int i = 0; i < miTmpRollen.length ; i++){															//
-							miTmpRollen[i] = new JActivityRelatedMenuItem(0, frame.getBenutzer().getTmpRollen()[i].toString());	//
+							miTmpRollen[i] = new JActivityRelatedMenuItem(0, frame.getBenutzer().getTmpRollen()[i].getTmpRolle());	//
 							menuTmpRolle.add(miTmpRollen[i]);																	//
 							activityRelItems.add(miTmpRollen[i]);																//
 							miTmpRollen[i].addActionListener(this);																//

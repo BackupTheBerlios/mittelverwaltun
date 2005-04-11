@@ -89,4 +89,9 @@ public class TmpRolle extends Rolle implements Serializable {
 			s = empfaenger.getName() + ", " + empfaenger.getVorname() + " [" + DateFormat.getDateInstance().format(gueltigBis) + "]";
 		return s;
 	}
+	
+	public String getTmpRolle(){
+		return getBezeichnung() + " [" + DateFormat.getDateInstance().format(gueltigBis) + "]";
+		
+	}
 }

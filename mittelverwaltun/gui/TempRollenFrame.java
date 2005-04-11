@@ -118,31 +118,26 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener, L
 	 */
 	private void loadUsers(){
 		try{
-		  Benutzer[] users;
-			//		TODO Admin durch die Aktivität austauschen
-			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-  			users = frame.getApplicationServer().getUsers();
-  		else
-  			users = frame.getApplicationServer().getUsers(frame.getBenutzer().getKostenstelle());
-
-			  if(users != null){
-				  cbBenutzer.removeAllItems();
-					for(int i = 0; i < users.length; i++){
-					 	if(!frame.getBenutzer().equals(users[i])){
-					 		boolean consistsUser = false;
-					 		for(int j = 0; j < liMoBenutzer.getSize(); j++){
-					 			Benutzer user = ((TmpRolle)liMoBenutzer.getElementAt(j)).getEmpfaenger();
-					 			if(user.equals(users[i]))
-					 				consistsUser = true;
-					 		}
-					 		
-					 		if(!consistsUser)
-					 			cbBenutzer.addItem(users[i]);
-					 	}
-					 		
-					}
-					cbBenutzer.setSelectedItem(frame.getBenutzer());
-			  }
+		  Benutzer[] users = frame.getApplicationServer().getUsers();
+  		
+		  if(users != null){
+			  cbBenutzer.removeAllItems();
+				for(int i = 0; i < users.length; i++){
+				 	if(!frame.getBenutzer().equals(users[i])){
+				 		boolean consistsUser = false;
+				 		for(int j = 0; j < liMoBenutzer.getSize(); j++){
+				 			Benutzer user = ((TmpRolle)liMoBenutzer.getElementAt(j)).getEmpfaenger();
+				 			if(user.equals(users[i]))
+				 				consistsUser = true;
+				 		}
+				 		
+				 		if(!consistsUser)
+				 			cbBenutzer.addItem(users[i]);
+				 	}
+				 		
+				}
+				cbBenutzer.setSelectedItem(frame.getBenutzer());
+		  }
 		}catch(Exception e){
 			 System.out.println(e);
 		}
