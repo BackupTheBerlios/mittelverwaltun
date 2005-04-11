@@ -3,7 +3,6 @@ package gui;
 import applicationServer.*;
 
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.sql.Date;
 import java.text.DateFormat;
 
@@ -16,8 +15,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-public class TempRollenFrame extends JInternalFrame implements ActionListener{
+public class TempRollenFrame extends JInternalFrame implements ActionListener, ListSelectionListener{
 
   ApplicationServer applicationServer;
   JScrollPane jScrollPane3 = new JScrollPane();
@@ -35,9 +36,10 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
   JFormattedTextField tfGueltigBisNeu = new JFormattedTextField(DateFormat.getDateInstance());
   JPanel jPanel2 = new JPanel();
   TitledBorder titledBorder2;
-  JButton buRefresh = new JButton();
+  JButton buRefresh = new JButton(Functions.getRefreshIcon(getClass()));
   MainFrame frame;
-
+  JButton buClose = new JButton(Functions.getCloseIcon(getClass()));
+  TmpRolle[] tmpRollen;
 
   public TempRollenFrame(MainFrame frame) {
 		super( "TempRollenverwaltung" );
@@ -55,11 +57,17 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 		buAddTempRolle.addActionListener( this );
 		buDelTempRolle.addActionListener( this );
 		buSaveTempRolle.addActionListener( this );
-
-		loadUsers();
+		buRefresh.addActionListener( this );
+		buClose.addActionListener( this );
+		tfGueltigBisNeu.setValue(new Date(System.currentTimeMillis()));
+		
+		listBenutzer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listBenutzer.addListSelectionListener(this);
+		
 		loadTempRolleBenutzer();
+		loadUsers();
 
-		this.setBounds(0,0,500, 500);
+		this.setBounds(0,0,445, 340);
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 
   }
@@ -69,13 +77,15 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
    */
   private void loadTempRolleBenutzer(){
 		try{
-			TmpRolle[] tmpRollen = applicationServer.getTempRolleUsers(frame.getBenutzer().getId());
+			tmpRollen = applicationServer.getTempRolleUsers(frame.getBenutzer().getId());
 
 			liMoBenutzer.clear();
-			for(int i = 0; i < tmpRollen.length; i++){
-				liMoBenutzer.addElement(tmpRollen[i]);
-		  }
-		  listBenutzer.setSelectedIndex(0);
+			if(tmpRollen != null){
+				for(int i = 0; i < tmpRollen.length; i++){
+					liMoBenutzer.addElement(tmpRollen[i]);
+			  }
+			  listBenutzer.setSelectedIndex(0);
+			}
 		}catch(Exception e){
 			System.out.println(e);
 		}
@@ -83,11 +93,14 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 
 
 	private void addTempRollenBenutzer()  throws ApplicationServerException{
-		if(tfGueltigBis.getText().equals("")){
+		if(tfGueltigBisNeu.getValue() == null){
 			throw new ApplicationServerException(1, "Das Datum muss ausgefüllt sein.");
 		}else{
 			java.util.Date bisUtil = (java.util.Date)tfGueltigBisNeu.getValue();
 			Date bis = new Date(bisUtil.getTime());
+			
+			if(!bis.after(new Date(System.currentTimeMillis())))
+				throw new ApplicationServerException(0, "Das Datum muss in der Zukunft liegen.");
 
 			TmpRolle tmpRolle = new TmpRolle(0, frame.getBenutzer().getId(), (Benutzer)cbBenutzer.getSelectedItem(),
 																				bis);
@@ -105,30 +118,47 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 	 */
 	private void loadUsers(){
 		try{
-			Benutzer[] users = null;
+		  Benutzer[] users;
 			//		TODO Admin durch die Aktivität austauschen
-		  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
-				users = frame.getApplicationServer().getUsers();
-			else
-				users = frame.getApplicationServer().getUsers(frame.getBenutzer().getKostenstelle());
+			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
+  			users = frame.getApplicationServer().getUsers();
+  		else
+  			users = frame.getApplicationServer().getUsers(frame.getBenutzer().getKostenstelle());
 
 			  if(users != null){
 				  cbBenutzer.removeAllItems();
-					 for(int i = 0; i < users.length; i++){
-					 	cbBenutzer.addItem(users[i]);
-					 }
-					 cbBenutzer.setSelectedItem(frame.getBenutzer());
+					for(int i = 0; i < users.length; i++){
+					 	if(!frame.getBenutzer().equals(users[i])){
+					 		boolean consistsUser = false;
+					 		for(int j = 0; j < liMoBenutzer.getSize(); j++){
+					 			Benutzer user = ((TmpRolle)liMoBenutzer.getElementAt(j)).getEmpfaenger();
+					 			if(user.equals(users[i]))
+					 				consistsUser = true;
+					 		}
+					 		
+					 		if(!consistsUser)
+					 			cbBenutzer.addItem(users[i]);
+					 	}
+					 		
+					}
+					cbBenutzer.setSelectedItem(frame.getBenutzer());
 			  }
 		}catch(Exception e){
 			 System.out.println(e);
 		}
 	}
 
-	private void setTempRollenBenutzer() throws ApplicationServerException, RemoteException{
+	private void setTempRollenBenutzer() throws ApplicationServerException{
 		if(!listBenutzer.isSelectionEmpty()){
 
 			TmpRolle currTmpRolle = (TmpRolle)liMoBenutzer.getElementAt(listBenutzer.getSelectedIndex());
-			currTmpRolle.setGueltigBis((Date)tfGueltigBis.getValue());
+			java.util.Date bisUtil = (java.util.Date)tfGueltigBis.getValue();
+			Date bis = new Date(bisUtil.getTime());
+			
+			if(!bis.after(new Date(System.currentTimeMillis())))
+				throw new ApplicationServerException(0, "Das Datum muss in der Zukunft liegen.");
+
+			currTmpRolle.setGueltigBis(bis);
 
 			applicationServer.setTempRolle(currTmpRolle);
 			liMoBenutzer.setElementAt(currTmpRolle, listBenutzer.getSelectedIndex());
@@ -137,7 +167,7 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 			throw new ApplicationServerException(0, "Es ist keine Rolle selektiert !");
 	}
 
-	private void delTempRollenRolle() throws ApplicationServerException, RemoteException{
+	private void delTempRollenRolle() throws ApplicationServerException{
 		TmpRolle currRolle = (TmpRolle)liMoBenutzer.getElementAt(listBenutzer.getSelectedIndex());
 		applicationServer.delTempRolle(currRolle);
 
@@ -150,6 +180,7 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 			else
 				listBenutzer.setSelectedIndex(index-1);
 		}
+		loadUsers();
 	}
 
 	private void reload(){
@@ -162,34 +193,37 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
     this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     this.getContentPane().setLayout(null);
     this.setTitle("TempRollenverwaltung");
-    jScrollPane3.setBounds(new Rectangle(7, 23, 274, 142));
+    jScrollPane3.setBounds(new Rectangle(7, 23, 274, 177));
     jLabel1.setText("Gültig bis:");
-    jLabel1.setBounds(new Rectangle(291, 23, 50, 15));
+    jLabel1.setBounds(new Rectangle(291, 23, 97, 15));
     tfGueltigBis.setBounds(new Rectangle(291, 41, 122, 21));
     buDelTempRolle.setBounds(new Rectangle(291, 105, 122, 25));
     buDelTempRolle.setText("Löschen");
     buSaveTempRolle.setBounds(new Rectangle(291, 70, 122, 25));
-    buSaveTempRolle.setText("Speichern");
+    buSaveTempRolle.setText("Ändern");
     buAddTempRolle.setBounds(new Rectangle(301, 51, 111, 25));
     buAddTempRolle.setText("Einfügen");
     cbBenutzer.setBounds(new Rectangle(8, 22, 404, 25));
     jPanel1.setBorder(titledBorder1);
     jPanel1.setBounds(new Rectangle(3, 8, 427, 84));
     jPanel1.setLayout(null);
-    jLabel2.setBounds(new Rectangle(8, 56, 50, 15));
+    jLabel2.setBounds(new Rectangle(8, 56, 78, 15));
     jLabel2.setText("Gültig bis:");
-    tfGueltigBisNeu.setBounds(new Rectangle(64, 53, 111, 21));
+    tfGueltigBisNeu.setBounds(new Rectangle(98, 53, 111, 21));
     jPanel2.setBorder(titledBorder2);
-    jPanel2.setBounds(new Rectangle(5, 96, 427, 174));
+    jPanel2.setBounds(new Rectangle(5, 96, 427, 209));
     jPanel2.setLayout(null);
-    buRefresh.setText("Aktualisieren");
+    buRefresh.setText("Refresh");
     buRefresh.setBounds(new Rectangle(291, 140, 122, 25));
+    buClose.setBounds(new Rectangle(291, 175, 122, 25));
+    buClose.setText("Beenden");
     jPanel2.add(jLabel1, null);
     jPanel2.add(tfGueltigBis, null);
     jPanel2.add(buSaveTempRolle, null);
     jPanel2.add(buDelTempRolle, null);
     jPanel2.add(buRefresh, null);
     jPanel2.add(jScrollPane3, null);
+    jPanel2.add(buClose, null);
     jScrollPane3.getViewport().add(listBenutzer, null);
     jPanel2.add(jScrollPane3, null);
     this.getContentPane().add(jPanel1, null);
@@ -201,25 +235,25 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
   }
 
   public static void main(String[] args) {
-	  JFrame test = new JFrame("Rollenverwaltung Test");
-	  JDesktopPane desk = new JDesktopPane();
-	  desk.setDesktopManager(new DefaultDesktopManager());
-	  test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	  test.setContentPane(desk);
-	  test.setBounds(100,100,800,700);
-	  try{
-			  CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-//			  ApplicationServer applicationServer = server.getMyApplicationServer();
-//			  PasswordEncrypt pe = new PasswordEncrypt();
-//			  String psw = pe.encrypt(new String("r.driesner").toString());
-//			  applicationServer.login("r.driesner", psw);
-//				RollenAktivitaetenverwaltung rollenVerwaltung = new RollenAktivitaetenverwaltung(applicationServer);
-//			  desk.add(rollenVerwaltung);
-//			  test.show();
-//				rollenVerwaltung.show();
-	  }catch(Exception e){
-					  System.out.println(e);
-	  }
+  	MainFrame test = new MainFrame("FBMittelverwaltung");
+	 	try{
+		 	CentralServer server = (CentralServer)Naming.lookup("//192.168.1.1/mittelverwaltung");
+		 	ApplicationServer applicationServer = server.getMyApplicationServer();
+		 	test.setApplicationServer(applicationServer);
+		 	PasswordEncrypt pe = new PasswordEncrypt();
+		 	String psw = pe.encrypt(new String("r.driesner").toString());
+		 	test.setBenutzer(applicationServer.login("r.driesner", psw));
+	   	test.setBounds(100,100,800,900);
+		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
+
+		 	test.setJMenuBar( new MainMenu( test ) );
+		 	TempRollenFrame rollenVerwaltung = new TempRollenFrame(test);
+		 	test.addChild(rollenVerwaltung);
+		 	test.setVisible(true);
+		 	rollenVerwaltung.show();
+	 }catch(Exception e){
+			System.out.println(e);
+	 }
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -238,15 +272,21 @@ public class TempRollenFrame extends JInternalFrame implements ActionListener{
 				}
 			}else if( e.getSource() == buSaveTempRolle ) {
 				setTempRollenBenutzer();
+			}else if( e.getSource() == buRefresh ) {
+				loadTempRolleBenutzer();
+				loadUsers();
+			}else if( e.getSource() == buClose ) {
+				dispose();
 			}
 		} catch (ApplicationServerException e1) {
-			JOptionPane.showMessageDialog(
-							  this,
-							  e1.getMessage(),
-							  "Warnung",
-							  JOptionPane.ERROR_MESSAGE);
-		} catch (RemoteException exc){
-		JOptionPane.showMessageDialog( this, exc.getMessage(),	"RemoteException !", JOptionPane.ERROR_MESSAGE );
+			MessageDialogs.showDetailMessageDialog(this, "Fehler", e1.getMessage(), e1.getNestedMessage(), MessageDialogs.ERROR_ICON);
+		}
 	}
+
+	public void valueChanged(ListSelectionEvent arg0) {
+		if(!listBenutzer.isSelectionEmpty()){
+			TmpRolle rolle = (TmpRolle)liMoBenutzer.getElementAt(listBenutzer.getSelectedIndex());
+			tfGueltigBis.setValue(rolle.getGueltigBis());
+		}
 	}
 }

@@ -2757,7 +2757,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement("SELECT b.id, b.benutzername, b.name, b.vorname, tr.gueltigBis " +
 																"FROM Benutzer b, TempRollen tr " +
 																"WHERE tr.besitzer = ? " +
-																	"AND b.id = tr.besitzer " +
+																	"AND b.id = tr.empfaenger " +
 																	"AND b.geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);

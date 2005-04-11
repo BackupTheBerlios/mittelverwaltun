@@ -264,8 +264,7 @@ public class Benutzer implements Serializable {
 					((bau == null || user.getBau() == null) ? true : bau.equals(user.getBau())) &&
 					((raum == null || user.getRaum() == null) ? true : raum.equals(user.getRaum())) &&
 					((telefon == null || user.getTelefon() == null) ? true : telefon.equals(user.getTelefon())) &&
-					((fax == null || user.getFax() == null) ? true : fax.equals(user.getFax())) &&
-					(swBeauftragter == user.getSwBeauftragter()) 
+					((fax == null || user.getFax() == null) ? true : fax.equals(user.getFax())) 
 				)
 				return true;
 			else
