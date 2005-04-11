@@ -4888,8 +4888,7 @@ public class Database implements Serializable {
 	/**
 	 * löscht eine temporäre Rolle für eine Benutzer.
 	 * author robert
-	 * @param emfaenger - Id des Benutzers der die temp. Rolle erhält
-	 * @param besitzer - Id des Benutzers dem die Rolle gehört
+	 * @param tmpRolle - temp. Rolle
 	 * @throws ApplicationServerException
 	 */
 	public void deleteTempRolle(TmpRolle tmpRolle)throws ApplicationServerException{
@@ -4903,9 +4902,39 @@ public class Database implements Serializable {
 	}
 	
 	/**
+	 * löscht alle TmpRollen die zu einem Benutzer zugeordnet sind und die die er selbst vergeben hat
+	 * @param empfaenger - Id des Benutzer der die TmpRollen erhält
+	 * @throws ApplicationServerException
+	 */
+	public void deleteUserTempRolle(int empfaenger)throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Integer(empfaenger)};
+			statements.get(355).executeUpdate(parameters);
+		} catch (SQLException e){
+			System.out.println(e.getMessage());
+			throw new ApplicationServerException(149, e.getMessage());
+		}
+	}
+	
+	/**
+	 * löscht alle alten TmpRollen
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void deleteOldTempRolles()throws ApplicationServerException{
+		try{
+			statements.get(354).executeUpdate();
+		} catch (SQLException e){
+			System.out.println(e.getMessage());
+			throw new ApplicationServerException(148, e.getMessage());
+		}
+	}
+	
+	/**
 	 * das Datum einer TempRolle aktualisieren
 	 * @param tmpRolle - TempRolle
 	 * @throws ApplicationServerException
+	 * author robert
 	 */
 	public void updateTempRolle(TmpRolle tmpRolle)throws ApplicationServerException{
 		try{
@@ -4922,6 +4951,7 @@ public class Database implements Serializable {
 	 * @param besitzer - Id des Benutzers der die TempRolle vergeben hat
 	 * @return Benutzer-Array
 	 * @throws ApplicationServerException
+	 * author robert
 	 */
 	public TmpRolle[] selectTempRolleUsers(int besitzer) throws ApplicationServerException{
 		TmpRolle[] tmpRolle = null;

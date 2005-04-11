@@ -210,6 +210,8 @@ public class ApplicationServerException extends Exception {
 		messages[145] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertTmpRolle.";
 		messages[146] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteTmpRolle.";
 		messages[147] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateTempRolle.";
+		messages[148] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteOldTempRollen.";
+		messages[149] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteUserTempRolle.";
 		
 
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";

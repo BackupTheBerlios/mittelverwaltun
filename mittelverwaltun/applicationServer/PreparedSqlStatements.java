@@ -2762,11 +2762,17 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//354
-			statements[i++] = null;
+		{//354 löscht alte TmpRollen
+			ps = con.prepareStatement("DELETE FROM Temprollen " +
+															"WHERE gueltigBis < NOW() " );
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//355 
-			statements[i++] = null;
+		{//355 löscht alle TmpRollen eines Benutzers
+			ps = con.prepareStatement("DELETE FROM Temprollen " +
+																"WHERE empfaenger = ? " +
+																	"OR besitzer = ? " );
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//356
 			statements[i++] = null;

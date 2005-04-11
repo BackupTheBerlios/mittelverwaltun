@@ -70,6 +70,8 @@ public class ApplicationServer implements Serializable {
 		
 		b.getRolle().setAktivitaeten( db.selectAktivitaeten( b.getRolle().getId() ) );
 
+		delOldTempRolles(); // löscht alte TmpRollen
+		
 		TmpRolle[] tmpRollen = db.selectTempRollen(b.getId());
 
 		for (int i=0; i < tmpRollen.length; i++){
@@ -1731,7 +1733,9 @@ public class ApplicationServer implements Serializable {
 				// Benutzer hat aktive Bestellungen
 				if(db.countAktiveBestellungen(dbUser) > 0)
 					throw new ApplicationServerException(50);
-	
+				
+				// TmpRollen des Benutzers löschen
+				db.deleteUserTempRolle(dbUser.getId());
 				
 				// Benutzer hat Bestellungen gemacht
 				if(db.countBestellungen(dbUser) > 0)
@@ -3492,10 +3496,27 @@ public class ApplicationServer implements Serializable {
 	 * @param besitzer - Id des Benutzers der die TempRolle vergeben hat
 	 * @return Benutzer-Array
 	 * @throws ApplicationServerException
+	 * author robert
 	 */
 	public TmpRolle[] getTempRolleUsers(int besitzer) throws ApplicationServerException{
 		try{
 			return db.selectTempRolleUsers(besitzer);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * löscht alte TmpRollen bei denen das GültigBis Datum kleiner als heute ist
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void delOldTempRolles() throws ApplicationServerException{
+		try{
+			db.deleteOldTempRolles();
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
