@@ -28,6 +28,7 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	 * Der Classpath wird aus dem Namen vom rmiregistry ermittelt.
 	 */
 	public static String CENTRAL_CLASSPATH = "";
+	
 
 	/**
 	 * Einen CentralServer erzeugen. <br>
