@@ -308,6 +308,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		ApplicationServer.APPL_DB_PSWD = new String(tfDBPswd1.getPassword());
 		ApplicationServer.APPL_DB_DRIVER = tfDBTreiber.getText();
 		CentralServerImpl.CENTRAL_NAME = tfServerName.getText();
+		saveXMLFile();
 	}
 	
 	/**

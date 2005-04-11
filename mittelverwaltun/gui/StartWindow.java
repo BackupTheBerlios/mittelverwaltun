@@ -226,8 +226,9 @@ public class StartWindow extends JFrame implements ActionListener {
 			if(error.length() > 0){
 				JOptionPane.showMessageDialog( this, "Folgende Fehler sidn aufgetreten :\n" + error, 
 														"Error !", JOptionPane.ERROR_MESSAGE);
+			} else {
+				saveXMLFile();
 			}
-
 		}
 	}
 
