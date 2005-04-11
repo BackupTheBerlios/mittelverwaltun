@@ -207,6 +207,9 @@ public class ApplicationServerException extends Exception {
 		messages[142] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectRollenFull.";
 		messages[143] = "Application Server Error: Fehler bei Datenbankzugriff - Database.checkRolle.";
 		messages[144] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertRolle.";
+		messages[145] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertTmpRolle.";
+		messages[146] = "Application Server Error: Fehler bei Datenbankzugriff - Database.deleteTmpRolle.";
+		messages[147] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateTempRolle.";
 		
 
 		messages[150] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectNoPurposeZVBudgetSum.";
