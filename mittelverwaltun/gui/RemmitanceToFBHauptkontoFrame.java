@@ -173,8 +173,6 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 				treeAccounts.loadInstituts( as.getInstitutesWithMainAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} catch(RemoteException re) {
-				re.printStackTrace();
 			}
 		}
 	}
@@ -294,9 +292,6 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 					
 					MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 				
-				} catch(RemoteException re) {
-					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		}else if (cmd.equals("refresh")){
@@ -315,9 +310,6 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		} catch (ApplicationServerException exc1) {
 			tfAvailableResources.setValue(new Float(0));
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", "Der Betrag verfügbarer Mittel konnte nicht bestimmt\nwerden und wird deshalb auf Null gesetzt.", exc1.getMessage(),MessageDialogs.WARNING_ICON);
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 		
 		tfRemmitance.setInterval(-((Float)tfBalance.getValue()).floatValue(),((Float)tfAvailableResources.getValue()).floatValue());						

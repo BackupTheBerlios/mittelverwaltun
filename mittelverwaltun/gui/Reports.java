@@ -278,8 +278,6 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	  } catch (ApplicationServerException e) {
 			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 		  e.printStackTrace();
-	  } catch(RemoteException re) {
-	  	  re.printStackTrace();
 	  }
   }
 
@@ -298,8 +296,6 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		} catch (ApplicationServerException e) {
 			JOptionPane.showMessageDialog(this,e.getMessage(),"Warnung",JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			re.printStackTrace();
 		}
 	 }
 
@@ -507,9 +503,6 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 
@@ -527,9 +520,6 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			}
 		} catch (ApplicationServerException exception) {
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", exception.getMessage(), exception.getNestedMessage(), MessageDialogs.ERROR_ICON);
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 

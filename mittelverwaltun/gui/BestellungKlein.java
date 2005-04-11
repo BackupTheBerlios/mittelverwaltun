@@ -215,9 +215,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				comboBenutzer.setSelectedItem(frame.getBenutzer());	// Den Benutzer selektieren
 			}
 		} catch(ApplicationServerException e) {
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 	
@@ -450,9 +447,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				} catch(ApplicationServerException exc) {
 					error = "Fehler bein Generieren der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
-				} catch(RemoteException re) {
-					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		} else if( e.getSource() == butStornieren ) {
@@ -471,9 +465,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				} catch(ApplicationServerException exc) {
 					String error = "Fehler beim Löschen der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
-				} catch(RemoteException re) {
-					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		}

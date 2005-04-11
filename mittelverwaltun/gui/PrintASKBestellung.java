@@ -21,7 +21,6 @@ import java.awt.*;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.rmi.*;
 
 
 public class PrintASKBestellung extends JFrame {
@@ -169,8 +168,6 @@ public class PrintASKBestellung extends JFrame {
 			
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			re.printStackTrace();
 		}
 	}
 }

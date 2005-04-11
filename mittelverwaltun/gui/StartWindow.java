@@ -175,7 +175,7 @@ public class StartWindow extends JFrame implements ActionListener {
 		if(e.getSource() == butAbbrechen) {		// Wenn der Abbrechen-Button betätigt wurde
 			if(centralServer != null && applicationServer != null) {
 				try {
-					centralServer.delUser(applicationServer.getName());
+					centralServer.delUser(applicationServer.getId());
 				} catch (Exception e1) { }
 			}
 			saveXMLFile();
@@ -199,25 +199,22 @@ public class StartWindow extends JFrame implements ActionListener {
 				try{
 					centralServer = (CentralServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + CLIENT_SERVER_NAME);
 					InetAddress addr = InetAddress.getLocalHost();
-					String applServerName = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
-					if(applServerName == null)
+					applicationServer = centralServer.getMyApplicationServer(addr.getHostName(), addr.getHostAddress());
+					if(applicationServer == null)
 						throw new Exception("Der ApplicationServer konnte nicht gestartet werden.");
-					applicationServer = (ApplicationServer)Naming.lookup("//" + CLIENT_SERVER_HOST + "/" + applServerName);
 					// Benutzer abfragen
 					benutzer = applicationServer.login(tfBenutzername.getText(), psw);
 					// Dem CentralServer den Namen des Users übertragen
-					centralServer.addBenutzerNameToUser(applicationServer.getName(), benutzer.getBenutzername());
+					centralServer.addBenutzerNameToUser(applicationServer.getId(), benutzer.getBenutzername());
 					// Fenster unsichtbar schalten
 					setVisible(false);
 					new MainFrame(centralServer, applicationServer, benutzer);
 					dispose();	// Fenster freigeben
 				} catch (Exception exc) {
-					if(centralServer != null) {
-						if(applicationServer != null) {
-							try{
-								centralServer.delUser(applicationServer.getName());
-							} catch(Exception ex) { }
-						}
+					if(centralServer != null && applicationServer != null) {
+						try{
+							centralServer.delUser(applicationServer.getId());
+						} catch(Exception ex) { }
 					}
 					centralServer = null;
 					applicationServer = null;

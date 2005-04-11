@@ -194,9 +194,6 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 					} catch (ApplicationServerException exc) {
 						MessageDialogs.showDetailMessageDialog(this, "Fehler", exc.getMessage(), exc.getNestedMessage(),MessageDialogs.WARNING_ICON);
 						exc.printStackTrace();
-					} catch(RemoteException re) {
-						MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-																"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 					}
 					
 				}
@@ -241,9 +238,6 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			tfPauschBudget.setValue(new Float(0));
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. Professorenpauschale", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 		
 	 	try {
@@ -253,9 +247,6 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 			e.printStackTrace();
 			MessageDialogs.showDetailMessageDialog(this, "Fehler bei Bestimmung d. verfügbaren Budgets", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
 		 	
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 		
 	 	try{
@@ -310,9 +301,6 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	   }catch(ApplicationServerException e){
 	   		e.printStackTrace();
 	   		MessageDialogs.showDetailMessageDialog(this, "Fehler bei Ermittlung der Professoren bzw. Konten eines Instituts", e.getMessage(), e.getNestedMessage(),MessageDialogs.WARNING_ICON);
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 }

@@ -10,9 +10,6 @@ import java.rmi.RemoteException;
  */
 public interface CentralServer extends Remote {
 	
-	
-	//public ApplicationServer getMyApplicationServer() throws RemoteException;
-
 	/**
 	 * Dem Benutzer einen eigenen ApplicationServer generieren, bie der rmiregistry anmelden.<br>
 	 * Der Name des gestarteten ApplicationServers wird an den Benurtzer per Rückgabewert übermittelt.
@@ -20,18 +17,23 @@ public interface CentralServer extends Remote {
 	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
 	 * @return Der Name des gestarteten ApplicationServers, wenn erfolgreich. Sonst wird der Zeiger null zurückgegeben.
 	 */
-	public String getMyApplicationServer( String hostName, String hostAdress ) throws RemoteException;
+	public ApplicationServer getMyApplicationServer( String hostName, String hostAdress ) throws RemoteException;
+
+	/**
+	 * Für Testzwecke einen ApplicationServer generieren. Ohne GUI-Anmeldung.
+	 */
+	public ApplicationServer getMyApplicationServer() throws RemoteException;
 
 	/**
 	 * Dem CentralServer den Benutzernamen des angegebenen ApplicationServers mitteilen.
 	 * @param serverName = Der Name des gestarteten ApplicationServers.
 	 * @param benutzerName = Der BenutzerName der Benutzers der den ApplicationServer in Anspruch nimmt.
 	 */
-	public void addBenutzerNameToUser( String serverName, String benutzerName ) throws RemoteException;
+	public void addBenutzerNameToUser( int serverId, String benutzerName ) throws RemoteException;
 
 	/**
 	 * Dem CentralServer mitteilen, dass der angegebene ApplicationServer nicht mehr gebraucht wird.
 	 * @param serverName = Der Name des nicht mehr benötigten ApplicationServers.
 	 */
-	public void delUser( String serverName ) throws RemoteException;
+	public void delUser( int serverId ) throws RemoteException;
 }

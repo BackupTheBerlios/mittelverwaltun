@@ -1,15 +1,12 @@
 package applicationServer;
 
 import org.w3c.dom.*;
-
-import gui.Functions;
-import gui.IntegerTextField;
-
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import gui.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -37,9 +34,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	JPanel panelInfo = new JPanel();
 	BorderLayout borderLayout1 = new BorderLayout();
 	JLabel labTextBusyClients = new JLabel();
-	JLabel labTextFreeClients = new JLabel();
 	JLabel labNumBusyClients = new JLabel();
-	JLabel labNumFreeClients = new JLabel();
 	JButton butRMIRegistry = new JButton();
 	JButton butCentralServer = new JButton();
 	JButton butBeenden = new JButton();
@@ -57,8 +52,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	JTextField tfDBName = new JTextField();
 	JLabel labDBPswd = new JLabel();
 	JPasswordField tfDBPswd1 = new JPasswordField();
-	JLabel labNumClients = new JLabel();
-	IntegerTextField tfMaxClients = new IntegerTextField(1);
 	JButton butSave = new JButton();
 	JPasswordField tfDBPswd2 = new JPasswordField();
 	JLabel labServerName = new JLabel();
@@ -103,9 +96,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	final static String imagePackage = "image";
 	final static String[] iconNames = {"traf_red.ICO", "traf_yellow.ICO", "traf_green.ICO"};
 	final static String serverPackage = "applicationServer";
-	final static String[] serverSkelStub = {"ApplicationServerImpl_Stub.class", "CentralServerImpl_Stub.class",
-											"ApplicationServerException.class", "ConnectionException.class", 
-											"CentralServer.class", "ApplicationServer.class"};
+	final static String[] serverSkelStub = {"CentralServerImpl_Stub.class", "CentralServer.class", "ApplicationServer.class"};
 
 	/**
 	 * Erstellen vom <code>Server</code>.
@@ -143,12 +134,11 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			Document document = builder.parse(new FileInputStream(new File(xmlPackage + File.separator + xmlFileName)));
 			CentralServerImpl.CENTRAL_RMI = document.getElementsByTagName("rmi").item(0).getFirstChild().getNodeValue();
 			setRmiClaspath(CentralServerImpl.CENTRAL_RMI);
-			CentralServerImpl.CENTRAL_NUM_APPL = Integer.parseInt(document.getElementsByTagName("number").item(0).getFirstChild().getNodeValue());
 			CentralServerImpl.CENTRAL_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
-			ApplicationServerImpl.APPL_DB_DRIVER = document.getElementsByTagName("driver").item(0).getFirstChild().getNodeValue();
-			ApplicationServerImpl.APPL_DB_NAME = document.getElementsByTagName("dbname").item(0).getFirstChild().getNodeValue();
-			ApplicationServerImpl.APPL_DB_URL = document.getElementsByTagName("dburl").item(0).getFirstChild().getNodeValue();
-			ApplicationServerImpl.APPL_DB_PSWD = document.getElementsByTagName("dbpswd").item(0).getFirstChild().getNodeValue();
+			ApplicationServer.APPL_DB_DRIVER = document.getElementsByTagName("driver").item(0).getFirstChild().getNodeValue();
+			ApplicationServer.APPL_DB_NAME = document.getElementsByTagName("dbname").item(0).getFirstChild().getNodeValue();
+			ApplicationServer.APPL_DB_URL = document.getElementsByTagName("dburl").item(0).getFirstChild().getNodeValue();
+			ApplicationServer.APPL_DB_PSWD = document.getElementsByTagName("dbpswd").item(0).getFirstChild().getNodeValue();
 	} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -167,23 +157,20 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			Node tempNode = document.createElement("rmi");
 			tempNode.appendChild(document.createTextNode(CentralServerImpl.CENTRAL_RMI));
 			rootNode.appendChild(tempNode);
-			tempNode = document.createElement("number");
-			tempNode.appendChild(document.createTextNode("" + CentralServerImpl.CENTRAL_NUM_APPL));
-			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("servername");
 			tempNode.appendChild(document.createTextNode(CentralServerImpl.CENTRAL_NAME));
 			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("driver");
-			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_DRIVER));
+			tempNode.appendChild(document.createTextNode(ApplicationServer.APPL_DB_DRIVER));
 			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("dbname");
-			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_NAME));
+			tempNode.appendChild(document.createTextNode(ApplicationServer.APPL_DB_NAME));
 			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("dburl");
-			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_URL));
+			tempNode.appendChild(document.createTextNode(ApplicationServer.APPL_DB_URL));
 			rootNode.appendChild(tempNode);
 			tempNode = document.createElement("dbpswd");
-			tempNode.appendChild(document.createTextNode(ApplicationServerImpl.APPL_DB_PSWD));
+			tempNode.appendChild(document.createTextNode(ApplicationServer.APPL_DB_PSWD));
 			rootNode.appendChild(tempNode);
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource( document );
@@ -199,16 +186,14 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Laden der Umgebungsvariablen in den Server. 
 	 */
 	private void loadVariables() {
-		this.tfDBURL.setText(ApplicationServerImpl.APPL_DB_URL);
-		this.tfDBName.setText(ApplicationServerImpl.APPL_DB_NAME);
-		this.tfDBTreiber.setText(ApplicationServerImpl.APPL_DB_DRIVER);
-		this.tfDBPswd1.setText(ApplicationServerImpl.APPL_DB_PSWD);
-		this.tfDBPswd2.setText(ApplicationServerImpl.APPL_DB_PSWD);
-		this.tfMaxClients.setValue(new Integer(CentralServerImpl.CENTRAL_NUM_APPL));
+		this.tfDBURL.setText(ApplicationServer.APPL_DB_URL);
+		this.tfDBName.setText(ApplicationServer.APPL_DB_NAME);
+		this.tfDBTreiber.setText(ApplicationServer.APPL_DB_DRIVER);
+		this.tfDBPswd1.setText(ApplicationServer.APPL_DB_PSWD);
+		this.tfDBPswd2.setText(ApplicationServer.APPL_DB_PSWD);
 		this.tfRMIRegistry.setText(CentralServerImpl.CENTRAL_RMI);
 		this.tfServerName.setText(CentralServerImpl.CENTRAL_NAME);
 		this.labNumBusyClients.setText("");
-		this.labNumFreeClients.setText("");
 	}
 	
 	/**
@@ -243,11 +228,11 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * @param hostAdress = Die Hostadresse, wo sich der Benutzer befindet.
 	 * @param serverName = Der Name des gestarteten ApplicationServers.
 	 */
-	public void addNewApplicationServer( String hostName, String hostAdress, String serverName  ) {
-		User user = new User( hostName, hostAdress, serverName );
+	public void addNewApplicationServer( String hostName, String hostAdress, int serverId  ) {
+		User user = new User( hostName, hostAdress, serverId );
 		listModel.addElement( user );
-		this.labNumBusyClients.setText(centralServer.getNumBusy());
-		this.labNumFreeClients.setText(centralServer.getNumFree());
+		if(!(labNumBusyClients.getText().length() == 0))
+			labNumBusyClients.setText("" + (Integer.parseInt(labNumBusyClients.getText()) + 1));
 	}
 	
 	/**
@@ -255,11 +240,11 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * @param serverName = Name des Servers, dem der BenutzerName zugeordnet wird.
 	 * @param benutzerName = benutzerName, der dem serverNamen zugeordnet wird. 
 	 */
-	public void addBenutzerNameToUser( String serverName, String benutzerName ) {
+	public void addBenutzerNameToUser( int serverId, String benutzerName ) {
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.serverName.equalsIgnoreCase(serverName) ) {
+			if( temp.serverId == serverId ) {
 				temp.benutzerName = benutzerName;
 				listModel.setElementAt( temp, i );
 				break;
@@ -271,18 +256,18 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Einen User aus der ListBox entfernen
 	 * @param serverName = Name des Servers, der aus der Liste entfernt werden soll.
 	 */
-	public void delUser(String serverName) {
+	public void delUser(int serverId) {
 		User temp;
 		for( int i = 0; i < listModel.size(); i++ ) {
 			temp = (User)listModel.getElementAt( i );
-			if( temp.serverName.equalsIgnoreCase(serverName) ) {
+			if( temp.serverId == serverId ) {
 				listModel.removeElementAt( i );
+				if(!(labNumBusyClients.getText().length() == 0))
+					labNumBusyClients.setText("" + (Integer.parseInt(labNumBusyClients.getText()) - 1));
 				break;
 			}
 		}
 		this.labStartzeit.setText("");
-		this.labNumBusyClients.setText(centralServer.getNumBusy());
-		this.labNumFreeClients.setText(centralServer.getNumFree());
 	}
 	
 	/**
@@ -318,12 +303,11 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 * Die Variablen CLASSPATH und RMI des werden aber nur durch den Dialog gesetzt.
 	 */
 	private void setSettings() {
-		ApplicationServerImpl.APPL_DB_URL= tfDBURL.getText();
-		ApplicationServerImpl.APPL_DB_NAME = tfDBName.getText();
-		ApplicationServerImpl.APPL_DB_PSWD = new String(tfDBPswd1.getPassword());
-		ApplicationServerImpl.APPL_DB_DRIVER = tfDBTreiber.getText();
+		ApplicationServer.APPL_DB_URL= tfDBURL.getText();
+		ApplicationServer.APPL_DB_NAME = tfDBName.getText();
+		ApplicationServer.APPL_DB_PSWD = new String(tfDBPswd1.getPassword());
+		ApplicationServer.APPL_DB_DRIVER = tfDBTreiber.getText();
 		CentralServerImpl.CENTRAL_NAME = tfServerName.getText();
-		CentralServerImpl.CENTRAL_NUM_APPL = ((Integer)tfMaxClients.getValue()).intValue();
 	}
 	
 	/**
@@ -370,15 +354,13 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 						Naming.rebind(CentralServerImpl.CENTRAL_NAME, centralServer = new CentralServerImpl(this));
 					else {
 						Naming.rebind(CentralServerImpl.CENTRAL_NAME, centralServer);
-						centralServer.generateNames();
 					}
 					butRMIRegistry.setEnabled( false );
 					butCentralServer.setText(stopServer);
 					miRegistry.setEnabled( false );
 					miServer.setText(stopServer);
 					presIcon = icons[2];
-					this.labNumBusyClients.setText(centralServer.getNumBusy());
-					this.labNumFreeClients.setText(centralServer.getNumFree());
+					this.labNumBusyClients.setText("0");
 				} catch(Exception ex) {
 					ex.printStackTrace();
 					centralServer = null;
@@ -395,10 +377,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					if( result == JOptionPane.NO_OPTION )
 						return;
 					Naming.unbind(CentralServerImpl.CENTRAL_NAME);
-					centralServer.removeAllServer();
 					listModel.removeAllElements();
 					this.labNumBusyClients.setText("");
-					this.labNumFreeClients.setText("");
 					labStartzeit.setText("");
 					butRMIRegistry.setEnabled( true );
 					butCentralServer.setText(startServer);
@@ -419,9 +399,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 														(temp.benutzerName == null ? "" : "'" + temp.benutzerName + "' ") + 
 														"wirklich entfernen ?", "Entfernen ?", JOptionPane.YES_NO_OPTION,
 														JOptionPane.QUESTION_MESSAGE  ) == JOptionPane.YES_OPTION ){
-					try {
-						centralServer.delUser(temp.serverName);
-					} catch(Exception exc) { }
+					this.delUser(temp.serverId);
 				}
 			}
 		} else if( e.getSource() == butBeenden || e.getSource() == miClose ) {
@@ -490,25 +468,18 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		panelInfo.setLayout(null);
 		labTextBusyClients.setFont(new java.awt.Font("Dialog", 0, 11));
 		labTextBusyClients.setText("Anzahl der angemeldeten Clients : ");
-		labTextBusyClients.setBounds(new Rectangle(10, 20, 180, 15));
-		labTextFreeClients.setFont(new java.awt.Font("Dialog", 0, 11));
-		labTextFreeClients.setText("Anzahl der freien Clients :");
-		labTextFreeClients.setBounds(new Rectangle(10, 50, 180, 15));
+		labTextBusyClients.setBounds(new Rectangle(10, 40, 180, 15));
 		labNumBusyClients.setFont(new java.awt.Font("Dialog", 0, 12));
 		labNumBusyClients.setForeground(Color.red);
-		labNumBusyClients.setText("0");
-		labNumBusyClients.setBounds(new Rectangle(190, 20, 80, 16));
-		labNumFreeClients.setFont(new java.awt.Font("Dialog", 0, 12));
-		labNumFreeClients.setForeground(Color.blue);
-		labNumFreeClients.setText("100");
-		labNumFreeClients.setBounds(new Rectangle(190, 50, 80, 16));
-		butRMIRegistry.setBounds(new Rectangle(30, 90, 240, 26));
+		labNumBusyClients.setText("");
+		labNumBusyClients.setBounds(new Rectangle(190, 40, 80, 16));
+		butRMIRegistry.setBounds(new Rectangle(33, 90, 240, 26));
 		butRMIRegistry.setActionCommand("jButton1");
 		butRMIRegistry.setText("RMI-Registry Starten");
-		butCentralServer.setBounds(new Rectangle(30, 130, 240, 26));
+		butCentralServer.setBounds(new Rectangle(33, 130, 240, 26));
 		butCentralServer.setText("Central-Server Starten");
 		butCentralServer.setEnabled(false);
-		butBeenden.setBounds(new Rectangle(30, 170, 240, 26));
+		butBeenden.setBounds(new Rectangle(33, 170, 240, 26));
 		butBeenden.setText("Anwendung Beenden");
 		labTextStartzeit.setFont(new java.awt.Font("Dialog", 0, 11));
 		labTextStartzeit.setText("Startzeit :");
@@ -547,29 +518,24 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		tfDBPswd2.setFont(new java.awt.Font("Dialog", 0, 11));
 		tfDBPswd2.setText("");
 		tfDBPswd2.setBounds(new Rectangle(100, 110, 195, 19));
-		labNumClients.setFont(new java.awt.Font("Dialog", 0, 11));
-		labNumClients.setText("Max. Clients");
-		labNumClients.setBounds(new Rectangle(10, 150, 90, 15));
-		tfMaxClients.setFont(new java.awt.Font("Dialog", 0, 11));
-		tfMaxClients.setText("");
-		tfMaxClients.setBounds(new Rectangle(100, 150, 60, 19));
-		butSave.setFont(new java.awt.Font("Dialog", 0, 11));
-		butSave.setBounds(new Rectangle(170, 150, 125, 19));
-		butSave.setActionCommand("butSave");
-		butSave.setText("Speichern");
 		labServerName.setFont(new java.awt.Font("Dialog", 0, 11));
 		labServerName.setText("Server-Name");
-		labServerName.setBounds(new Rectangle(10, 175, 90, 15));
+		labServerName.setBounds(new Rectangle(10, 135, 90, 15));
 		tfServerName.setFont(new java.awt.Font("Dialog", 0, 11));
 		tfServerName.setText("");
-		tfServerName.setBounds(new Rectangle(100, 175, 195, 19));
+		tfServerName.setBounds(new Rectangle(100, 135, 195, 19));
 		labRMIRegistry.setFont(new java.awt.Font("Dialog", 0, 11));
 		labRMIRegistry.setText("RMI-Registry");
-		labRMIRegistry.setBounds(new Rectangle(10, 200, 90, 15));
+		labRMIRegistry.setBounds(new Rectangle(10, 160, 90, 15));
 		tfRMIRegistry.setFont(new java.awt.Font("Dialog", 0, 11));
 		tfRMIRegistry.setText("");
 		tfRMIRegistry.setEnabled(false);
-		tfRMIRegistry.setBounds(new Rectangle(100, 200, 175, 19));
+		tfRMIRegistry.setBounds(new Rectangle(100, 160, 175, 19));
+		butRMISuchen.setBounds(new Rectangle(275, 160, 20, 20));
+		butSave.setFont(new java.awt.Font("Dialog", 0, 11));
+		butSave.setBounds(new Rectangle(50, 200, 205, 19));
+		butSave.setActionCommand("butSave");
+		butSave.setText("Einstellungen Speichern");
 		labFHMannheim.setText("FH-Mannheim SS2005");
 		labFHMannheim.setBounds(new Rectangle(20, 100, 200, 16));
 		labVorlesung.setText("Vorlesung OO2 + DBA");
@@ -589,11 +555,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		labFHLogo = new JLabel(Functions.getFHLogo(getClass()), JLabel.CENTER);
 		labFHLogo.setBounds(new Rectangle(5, 10, 295, 80));
 		scrollClientList.setBounds(new Rectangle(10, 10, 285, 150));
-		butRMISuchen.setBounds(new Rectangle(275, 200, 20, 20));
 		this.getContentPane().add(tabPane, BorderLayout.CENTER);
 		tabPane.add(panelServer,    "Server");
 		panelServer.add(labTextBusyClients, null);
-		panelServer.add(labTextFreeClients, null);
 		panelServer.add(labNumBusyClients, null);
 		tabPane.add(panelClients,   "Clients");
 		panelClients.add(scrollClientList, null);
@@ -604,7 +568,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		tabPane.add(panelInfo,  "Info");
 		panelInfo.add(labFHMannheim, null);
 		panelInfo.add(labVorlesung, null);
-		panelServer.add(labNumFreeClients, null);
 		panelServer.add(butRMIRegistry, null);
 		panelServer.add(butCentralServer, null);
 		panelServer.add(butBeenden, null);
@@ -619,8 +582,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 		panelEinstellungen.add(labDBPswd, null);
 		panelEinstellungen.add(tfDBPswd1, null);
 		panelEinstellungen.add(tfDBPswd2, null);
-		panelEinstellungen.add(labNumClients, null);
-		panelEinstellungen.add(tfMaxClients, null);
 		panelEinstellungen.add(butSave, null);
 		panelEinstellungen.add(labServerName, null);
 		panelEinstellungen.add(tfServerName, null);
@@ -812,7 +773,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 class User {
 	public String hostName = null;
 	public String hostAdress = null;
-	public String serverName = null;
+	public int serverId = 0;
 	public String benutzerName = null;
 	public String startTime = null;
 	
@@ -822,10 +783,10 @@ class User {
 	 * @param hostAdress = Die HostAdresse, wo sich der neue User befindet. 
 	 * @param serverName = Die Name des ApplicationServers, der für den neuen User gestartet wurde. 
 	 */
-	public User( String hostName, String hostAdress, String serverName ) {
+	public User( String hostName, String hostAdress, int serverId ) {
 		this.hostName = hostName;
 		this.hostAdress = hostAdress;
-		this.serverName = serverName;
+		this.serverId = serverId;
 		this.startTime = DateFormat.getDateInstance().format(new Date(System.currentTimeMillis())) + " um " + 
 						DateFormat.getTimeInstance().format(new Date(System.currentTimeMillis()));
 	}

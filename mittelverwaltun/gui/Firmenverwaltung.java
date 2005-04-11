@@ -8,7 +8,6 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.rmi.*;
 
 import applicationServer.ApplicationServerException;
 import dbObjects.*;
@@ -252,9 +251,6 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch ( ApplicationServerException e ) {
 				System.out.println( e.toString() );
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}
@@ -306,8 +302,6 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				listModelFirmen.addElement( firma );
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				error = " - Fehler bei RMI-Kommunikation.\n";
 			}
 		}
 		
@@ -334,8 +328,6 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				error = " - Fehler bei RMI-Kommunikation.\n";
 			}
 		}
 		
@@ -361,8 +353,6 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 				}
 			} catch( ApplicationServerException e ) {
 				error = " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				error = " - Fehler bei RMI-Kommunikation.\n";
 			}
 		}
 		

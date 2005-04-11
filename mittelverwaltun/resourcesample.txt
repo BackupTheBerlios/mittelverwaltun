@@ -1,4 +1,0 @@
-guibrowser.main_class=org.netbeans.jemmy.explorer.GUIBrowser
-guibrowser.main_window=GUI Browser
-guibrowser.show_properties_menu=Tools|Properties
-guibrowser.properties_window=Properties

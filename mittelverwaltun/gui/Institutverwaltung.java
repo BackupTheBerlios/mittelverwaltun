@@ -181,8 +181,6 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 			return "";
 		}catch(ApplicationServerException e){
 			return e.getMessage();
-		} catch(RemoteException re) {
-			return "Fehler bei RMI-Kommunikation.";
 		}
 	}	
 	  

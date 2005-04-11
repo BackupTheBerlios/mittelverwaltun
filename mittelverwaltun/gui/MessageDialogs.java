@@ -109,7 +109,7 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 
 	public static int showInfoMessageDialog(Component parent, String title, String message){
 		MessageDialogs md = new MessageDialogs(parent, title, message, null, INFO_ICON);
-		md.show();
+		md.setVisible(true);
 		return md.result;
 	}
 	

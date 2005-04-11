@@ -115,9 +115,6 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}

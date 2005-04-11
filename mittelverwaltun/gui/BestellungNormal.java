@@ -484,9 +484,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		} catch (ApplicationServerException e) {
 			MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 
@@ -552,9 +549,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 				e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 
@@ -627,9 +621,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			}
 	  } catch (ApplicationServerException e) {
 		  e.printStackTrace();
-	  } catch(RemoteException re) {
-		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
   }
 
@@ -649,9 +640,6 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			}
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 

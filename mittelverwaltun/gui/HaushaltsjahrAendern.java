@@ -97,9 +97,6 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 			tfBis.setText(hhj.getBis());
 		}	catch (ApplicationServerException e) {
 			System.out.println(e.getMessage());
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 	}
 	
@@ -119,9 +116,6 @@ public class HaushaltsjahrAendern extends JInternalFrame implements ActionListen
 							applicationServer.setHaushaltsjahr(hhj, this.haushaltsjahr);
 						} catch (ApplicationServerException e) {
 							return e.getMessage();
-						} catch(RemoteException re) {
-							MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-																	"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 						}
 					}else{
 						return "Von-Datum muss vor dem Bis-Datum kommen.";

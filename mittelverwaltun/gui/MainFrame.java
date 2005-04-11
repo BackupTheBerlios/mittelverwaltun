@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import org.jfree.report.Boot;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -36,7 +39,7 @@ public class MainFrame extends JFrame {
 			this.centralServer = centralServer;
 			this.applicationServer = applicationServer;
 			this.benutzer = benutzer;
-//			Boot.start();	// Initialisierung der Module für das Drucken
+			Boot.start();	// Initialisierung der Module für das Drucken
 			InetAddress addr = InetAddress.getLocalHost();
 			bg = Functions.loadImageResource("image", "bg.jpg", getClass());
 			if (bg != null)
@@ -135,7 +138,7 @@ public class MainFrame extends JFrame {
 	public void onWindowClosing() {
 		if( centralServer != null && applicationServer != null ) {
 			try {
-				centralServer.delUser( applicationServer.getName() );
+				centralServer.delUser( applicationServer.getId() );
 			} catch(RemoteException e1) {
 			}
 		}

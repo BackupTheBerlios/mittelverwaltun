@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import dbObjects.*;
 import applicationServer.*;
-import java.rmi.*;
 
 /**
  * InternalFrame zum Umbuchen der FBKonten. <br>
@@ -75,9 +74,6 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );	// Alle Konten holen
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}
@@ -240,9 +236,6 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 		
@@ -272,9 +265,6 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 		
@@ -304,9 +294,6 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 				tfBetrag.setValue( new Float( 0 ) );
 			} catch( ApplicationServerException e ) {
 				error += " - " + e.toString() + ".\n";
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 		

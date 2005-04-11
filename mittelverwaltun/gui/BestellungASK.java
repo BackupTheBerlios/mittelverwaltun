@@ -95,9 +95,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, new ArrayList(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 
 		init();
@@ -114,9 +111,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			tableBestellung = new PositionsTable(PositionsTable.ASK_DURCHFUEHRUNG, true, this, bestellung.getAngebot().getPositionen(), frame.getApplicationServer().getInstitutes());
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 
 	  init();
@@ -201,9 +195,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			}
 	  } catch (ApplicationServerException e) {
 		  e.printStackTrace();
-	  } catch(RemoteException re) {
-		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
   }
 
@@ -217,9 +208,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 			labFirma.setText("" + firma);
 		} catch (ApplicationServerException e) {
 			e.printStackTrace();
-	} catch(RemoteException re) {
-		MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-												"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	}
   }
 
@@ -297,9 +285,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		} catch (ApplicationServerException e) {
 				MessageDialogs.showDetailMessageDialog(this, "Fehler", e.getMessage(), e.getNestedMessage(), MessageDialogs.ERROR_ICON);
 				e.printStackTrace();
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
  }
 
@@ -636,9 +621,6 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	  } catch (ApplicationServerException e) {
 		  MessageDialogs.showDetailMessageDialog(this, "Warnung", e.getMessage(), e.getNestedMessage(), MessageDialogs.WARNING_ICON);
 		  e.printStackTrace();
-	  } catch(RemoteException re) {
-		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
   }
 

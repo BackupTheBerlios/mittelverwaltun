@@ -127,9 +127,6 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}
@@ -1013,9 +1010,6 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 						checkZweckgebunden.setSelected( false );
 					}
 				} catch (ApplicationServerException e1) {
-				} catch(RemoteException re) {
-					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}
 		}
@@ -1154,9 +1148,6 @@ class TitelZVKontoPanel extends JPanel implements ActionListener {
 					checkZweckgebunden.setSelected( false );
 				}
 			} catch (ApplicationServerException e1) {
-			} catch(RemoteException re) {
-				MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-														"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 			}
 		}
 	}

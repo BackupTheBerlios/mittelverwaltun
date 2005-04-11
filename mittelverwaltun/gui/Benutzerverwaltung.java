@@ -467,9 +467,6 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 					privatKonto = benutzer.getPrivatKonto();
 				} catch (ApplicationServerException e1) {
 					System.out.println(e1.getMessage());
-				} catch(RemoteException re) {
-					MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-															"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 				}
 			}else{
 				tfKonto.setText("");

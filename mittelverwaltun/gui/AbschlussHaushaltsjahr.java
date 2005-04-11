@@ -13,7 +13,6 @@ import applicationServer.ApplicationServerException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 
@@ -179,10 +178,7 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     try {
 		atContent1 = new AccountTable(AccountTable.ZV_KONTEN, frame.applicationServer.getOffeneZVKonten(frame.applicationServer.getCurrentHaushaltsjahrId()));
 		atContent1.getAccountTableModel().addTableModelListener(this);
-    } catch (RemoteException re) {
-		MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-				"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
-	} catch (ApplicationServerException ae) {
+    } catch (ApplicationServerException ae) {
 		// TODO Auto-generated catch block
 		ae.printStackTrace();
 	}
@@ -192,9 +188,6 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 	
 	try {
 		fbKonten = frame.applicationServer.getOffeneFBHauptkonten(frame.applicationServer.getCurrentHaushaltsjahrId());
-	} catch (RemoteException re) {
-		MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-				"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	} catch (ApplicationServerException ae) {
 		// TODO Auto-generated catch block
 		ae.printStackTrace();
@@ -214,9 +207,6 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     spContent4.setBounds(new Rectangle(5, 75, 1045, 300));
     try {
 		aotContent4 = new AnnualOrderTable(frame.applicationServer.getOffeneBestellungen(frame.applicationServer.getCurrentHaushaltsjahrId()), atContent2, atContent1);
-	} catch (RemoteException re) {
-		MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-				"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	} catch (ApplicationServerException ae) {
 		// TODO Auto-generated catch block
 		ae.printStackTrace();
@@ -382,9 +372,6 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 			// TODO Auto-generated catch block
 			System.out.println(e1.getNestedMessage());
 			e1.printStackTrace();
-		} catch (RemoteException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
 		}
   	}else if (cmd == "dispose"){
   		this.dispose();

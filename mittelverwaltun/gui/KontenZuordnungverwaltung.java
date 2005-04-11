@@ -67,9 +67,6 @@ public class KontenZuordnungverwaltung extends JInternalFrame implements ActionL
 		try {
 			treeKonten.loadInstituts( applicationServer.getInstitutZuordnungen() );
 		} catch (ApplicationServerException e1) {
-		} catch(RemoteException re) {
-			MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													"Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		}
 
 		setZuordnungEnabled(false);

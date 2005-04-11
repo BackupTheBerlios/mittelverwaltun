@@ -7,7 +7,6 @@ import dbObjects.*;
 import applicationServer.ApplicationServerException;
 import java.awt.Rectangle;
 import java.awt.event.*;
-import java.rmi.*;
 
 /**
  * Frame zum Zuweisen der Mittel auf die ZVKonten, ZVTitel und ZVUntertitel. 
@@ -94,8 +93,6 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );	// Die ZVKonten holen und einfügen
 			} catch (ApplicationServerException e) {
 				e.printStackTrace();
-			} catch(RemoteException re) {
-				re.printStackTrace();
 			}
 		}
 	}
@@ -161,8 +158,6 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} catch ( RemoteException re ) {
-				error += " - Fehler bei RMI-Kommunikation\n";
 			}
 		}
 		
@@ -189,8 +184,6 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} catch ( RemoteException re ) {
-				error += " - Fehler bei RMI-Kommunikation\n";
 			}
 		}
 		
@@ -217,8 +210,6 @@ public class ZVMittelFestlegen extends JInternalFrame implements ActionListener,
 				showAmount();
 			} catch ( ApplicationServerException e ) {
 				error += " - " + e.toString() + "\n";
-			} catch ( RemoteException re ) {
-				error += " - Fehler bei RMI-Kommunikation\n";
 			}
 		}
 		

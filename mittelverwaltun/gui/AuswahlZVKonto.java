@@ -14,7 +14,6 @@ import dbObjects.Kontenzuordnung;
 import dbObjects.ZVKonto;
 import dbObjects.ZVUntertitel;
 import applicationServer.ApplicationServerException;
-import java.rmi.*;
 
 
 public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelectionListener {
@@ -93,9 +92,6 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
 
 		  } catch (ApplicationServerException e) {
 			  System.out.println( e.toString() );
-		  } catch(RemoteException re) {
-			  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
-													  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 		  }
 	  }
   }
