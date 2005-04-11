@@ -598,4 +598,77 @@ public class Functions {
 			is.close();        		
 		}
 	}
+	
+	final public static int CODE = 1;
+	final public static int DECODE = 2;
+	final private static int DIVISOR = 123456;
+	final private static String KEY = "OO2-DBA-Projekt";
+
+	/**
+	 * XOR-Verschlüsselung oder -Entschlüsselung eines übergebenen Textes.
+	 * @param text = Text der verschlüsselt oder entschlüsselt werden soll.
+	 * @param cORd = Flag zum Entscheiden ob verschlüsselt oder entschlüsselt werden soll. <br>
+	 *               Hat Auswirkungen auf ob man die Prüfsumme überprüfen oder hinzufügen muss.
+	 * @return Der entschlüsselte oder verschlüsselte Text.
+	 */
+	static public String xorText(String text, int cORd) {
+		String result = text;
+		StringBuffer buf = new StringBuffer();
+		int summe = 0;
+		try {
+			if(cORd == CODE) {			// Wenn der String mit XOR kodieren werden soll
+			    for(int i = 0; i < text.length(); i++)
+			        summe += (int)text.charAt(i);
+			    result = "" + (summe % DIVISOR) + "\n" + result;	// Prüfsumme vorne anhängen
+			}
+			for(int i = 0; i < result.length(); i++)				// XOR-Verfahren durchführen
+			    buf.append((char)(result.charAt(i) ^ KEY.charAt(i % KEY.length())));
+			if(cORd == DECODE) {		// Wenn der String mit XOR dekodiert werden soll
+			    result = buf.substring(buf.indexOf("\n") + 1);
+			    summe = 0;
+			    for(int i = 0; i < result.length(); i++)
+			        summe += (int)result.charAt(i);
+			    if((summe % DIVISOR) != Integer.parseInt(buf.substring(0, buf.indexOf("\n"))))
+			        throw new Exception("Keine Übereinstimmung bei der Prüfsumme !");
+			} else {
+			    result = buf.toString();
+			}
+		} catch(Exception exc) {
+		    result = "";
+		}
+		return result;
+	}
+
+	/**
+	 * Einlesen einer Datei und Ausgabe als String.
+	 * @param fileName = Datei, die eingelesen werden soll.
+	 * @return Der Datei-Inhlat als String.
+	 */
+	static public String readFile(String fileName) {
+		StringBuffer result = new StringBuffer();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(new File(fileName)));
+			int ch;
+			while((ch = in.read()) != -1) {
+				result.append((char)ch);
+			}
+			in.close();
+		} catch(Exception e) {
+		}
+		return result.toString();
+	}
+
+	/**
+	 * Einen Text in die Datei reinschreiben.
+	 * @param fileName = Datei, die eingelesen werden soll.
+	 * @param text = Der neue Inhalt der Datei.
+	 */
+	static public void writeFile(String fileName, String text) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(new File(fileName)));
+			out.write(text);
+			out.close();
+		} catch(Exception e) {
+		}
+	}
 }
