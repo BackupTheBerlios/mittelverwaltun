@@ -1,12 +1,15 @@
 package applicationServer;
 
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import gui.*;
+
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -131,7 +134,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			File temp = new File(xmlFileName);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder  = factory.newDocumentBuilder();
-			Document document = builder.parse(new FileInputStream(new File(xmlPackage + File.separator + xmlFileName)));
+			String text = Functions.readFile(xmlPackage.replace('.', '/') + File.separator + xmlFileName);
+			text = Functions.xorText(text, Functions.DECODE);
+			Document document = builder.parse(new InputSource(new StringReader(text)));
 			CentralServerImpl.CENTRAL_RMI = document.getElementsByTagName("rmi").item(0).getFirstChild().getNodeValue();
 			setRmiClaspath(CentralServerImpl.CENTRAL_RMI);
 			CentralServerImpl.CENTRAL_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
@@ -174,9 +179,11 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			rootNode.appendChild(tempNode);
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource( document );
-			OutputStream os = new FileOutputStream(new File(xmlPackage + File.separator + xmlFileName));
+			StringWriter os = new StringWriter();
 			StreamResult result = new StreamResult( os );
 			transformer.transform( source, result );
+			String str = Functions.xorText(os.toString(), Functions.CODE);
+			Functions.writeFile(xmlPackage.replace('.', '/') + File.separator + xmlFileName, str);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
