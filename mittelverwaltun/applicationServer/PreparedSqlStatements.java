@@ -479,6 +479,7 @@ public class PreparedSqlStatements {
 						  "FROM   fbkonten_tmp f1, fbkonten_tmp f2 " +
 						 "WHERE   f1.id = ? " +
 						   "AND   f1.institutsid = f2.institutsid " +
+						   "AND   f1.hauptkonto = f2.hauptkonto " +
 			  		  "ORDER BY   f2.hauptkonto, f2.unterkonto");
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);

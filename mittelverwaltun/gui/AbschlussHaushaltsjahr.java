@@ -367,7 +367,7 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
   		updateView();
   	}else if (cmd == "execute"){
   		try {
-			frame.getApplicationServer().portZVKonten(atContent1.getAccounts(), 1, 1);
+			frame.getApplicationServer().portFBKonten(atContent2.getAccounts(), 1, 1);
 		} catch (ApplicationServerException e1) {
 			// TODO Auto-generated catch block
 			System.out.println(e1.getNestedMessage());

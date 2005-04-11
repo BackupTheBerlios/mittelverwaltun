@@ -33,7 +33,9 @@ public class AnnualOrderTableModel extends DefaultTableModel {
 	
 	ArrayList fbRowReferences = new ArrayList();
 	ArrayList zvRowReferences = new ArrayList();
-			
+		
+	
+	
 	public AnnualOrderTableModel (ArrayList orders, AccountTable fbAccounts, AccountTable zvAccounts){
 		super();
 		

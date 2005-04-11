@@ -28,6 +28,16 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 	private String pruefung;
 	
 	/**
+	 * Flag für den Jahresabschluss - kein entsprechendes Feld in der Datenbank 
+	 */
+	private boolean portieren = false ;
+
+	/**
+	 * Flag für den Jahresabschluss - keine entsprechendes Feld in der Datenbank 
+	 */	
+	private boolean budgetUebernehmen = false;
+	
+	/**
 	 * Konstruktor, zum Erzeugen von einem FBHauptkonto. 
 	 * @param id = FBHauptkontoId
 	 * @param haushaltsJahrID = HaushaltsJahrID
@@ -371,4 +381,19 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		return result;
 	}
 
+	public boolean getPortieren(){
+		return portieren;
+	}
+	
+	public void setPortieren(boolean portieren){
+		this.portieren = portieren;
+	}
+	
+	public boolean getBudgetUebernehmen(){
+		return budgetUebernehmen;
+	}
+	
+	public void setBudgetUebernehmen(boolean budgetUebernehmen){
+		this.budgetUebernehmen = budgetUebernehmen;
+	}
 }

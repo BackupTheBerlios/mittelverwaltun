@@ -276,8 +276,14 @@ public int getRowOfAccount(int accId){
 			
 			}
 			return accounts;
-		}
-		
-		return null;
+		}else if(typ == FB_KONTEN){
+			for (int i=0; i < accounts.size(); i++){
+				
+				((FBHauptkonto)accounts.get(i)).setPortieren(getPortieren(i));
+				((FBHauptkonto)accounts.get(i)).setBudgetUebernehmen(getUebernehmen(i));
+			
+			}
+			return accounts;
+		}else return null;
 	}
 }
