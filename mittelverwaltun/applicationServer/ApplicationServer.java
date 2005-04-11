@@ -53,9 +53,14 @@ public class ApplicationServer implements Serializable {
 		return id;
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#login(java.lang.String, java.lang.String)
+	/**
+	 * prüft ob der Benutzer in der MySQL-Datenbank existiert und ob das Passwort übereinstimmt.
+	 * Gibt nach dem erfolgreichem einloggen den Benutzer mit allen Objekten und Informationen zurück.
+	 * @param user - Login-Benutzer
+	 * @param password - Passwort des Login-Benutzers
+	 * @return Benutzer mit allen Objekten
+	 * @throws ConnectionException
+	 * @throws ApplicationServerException
 	 */
 	public Benutzer login(String user, String password) throws ConnectionException, ApplicationServerException{
 
@@ -76,33 +81,37 @@ public class ApplicationServer implements Serializable {
 		return b;
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#logout()
+	/**
+	 * Beenden der Verbindung mit dem Server
+	 * @throws RemoteException, ConnectionException
 	 */
 	public void logout()throws ConnectionException{
 		db.disconnect();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getUsers()
+	/**
+	 * gibt alle nicht gelöschten Benutzer im System zurück
+	 * @return Benutzer-Array
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Benutzer[] getUsers () throws ApplicationServerException{
 		return db.selectUsers();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getInstitutes()
+	/**
+	 * gibt alle Institute zurück
+	 * @return Institut-Array
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Institut[] getInstitutes () throws ApplicationServerException{
 		return db.selectInstitutes();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getRollen()
+	/**
+	 * gibt alle Rollen im System zurück
+	 * @return Rollen - Array
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Rolle[] getRollen () throws ApplicationServerException{
 		return db.selectRollen();
@@ -121,23 +130,29 @@ public class ApplicationServer implements Serializable {
 	}
 
 	/**
-	 * Ermittlung der HaushaltsjahrId vom aktuellem Jahr.
+	 * Ermittlung der HaushaltsjahrId vom aktuellem Jahr
+	 * @return Id des aktuellen Haushaltsjahrs
+	 * @throws ApplicationServerException
 	 */
 	public int getCurrentHaushaltsjahrId() throws ApplicationServerException {
 		return db.selectHaushaltsjahrId();
 	}
 	
-	 /**
-	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten und FBUnterkonten.
-	  */
-	 public Institut[] getInstitutesWithAccounts() throws ApplicationServerException {
+	/**
+	 * Abfrage der Institute mit den dazugehörigen FBHauptkonten und FBUnterkonten
+	 * @return Institut-Array
+	 * @throws RemoteException, ApplicationServerException
+	 */
+	public Institut[] getInstitutesWithAccounts() throws ApplicationServerException {
 			 return getInstitutesWithAccounts(true);
 	 }
 	 
-	 /**
-	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten mit/ohne FBUnterkonten.
-	  */
-	 public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws ApplicationServerException {
+	/**
+	 * Abfrage der Institute mit den dazugehörigen FBHauptkonten und FBUnterkonten
+	 * @return Institut-Array
+	 * @throws RemoteException, ApplicationServerException
+	 */
+	public Institut[] getInstitutesWithAccounts (boolean subAccountsIncluded) throws ApplicationServerException {
 		 Institut[] instituts = db.selectInstitutes();	// Es werden alle Institute ermittelt
 		 ArrayList hauptkonten;
 
@@ -173,26 +188,35 @@ public class ApplicationServer implements Serializable {
 		 return instituts;
 	 }
 	 
-	 /**
-	  * Abfrage der Institute mit den dazugehörigen FBHauptkonten.
-	  */
-	 public Institut[] getInstitutesWithMainAccounts() throws ApplicationServerException {
+	/**
+ 	 * Abfrage der Institute mit den dazugehörigen FBHauptkonten
+ 	 * @return Institut-Array
+ 	 * @throws RemoteException, ApplicationServerException
+ 	 */
+ 	public Institut[] getInstitutesWithMainAccounts() throws ApplicationServerException {
 		 return getInstitutesWithAccounts(false);
 	 }
 	 
-	 /*
-	  *  (Kein Javadoc)
-	  * @see applicationServer.ApplicationServer#getNoPurposeFBHauptkonten(dbObjects.Institut)
-	  */
-	 public ArrayList getNoPurposeFBHauptkonten( Institut institut ) throws ApplicationServerException {
+ 	/**
+	 * Abfrage aller FBHauptkonten in der Datenbank, die zum angegebenem Institut gehören
+	 * @param institut
+	 * @return ArrayList mit FBHauptkonten
+	 * @throws RemoteException, ApplicationServerException
+	 */
+	public ArrayList getNoPurposeFBHauptkonten( Institut institut ) throws ApplicationServerException {
 		 //return db.selectFBHauptkonten( institut );
 		 return db.selectNoPurposeFBHauptkonten( institut );
 	 }
 	 
-	 /**
-	  * Budget eines FBHauptkontos aktualisieren.
-	  */
-	 public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException{
+	/**
+	 * Budget eines FBHauptkontos aktualisieren.
+	 * @param b - Benutzer der die Änderung durchführt
+	 * @param acc - FBHauptkonto
+	 * @param remmitance - Betrag
+	 * @throws RemoteException, ApplicationServerException
+	 * author Mario
+	 */
+ 	public void setAccountBudget ( Benutzer b, FBHauptkonto acc, float remmitance ) throws ApplicationServerException{
 		try{
 			 //TODO: Test auf maximal zuweisungsfähigen betrag?!
 			 FBHauptkonto accOld = db.selectForUpdateFBHauptkonto(acc.getId());
@@ -232,11 +256,14 @@ public class ApplicationServer implements Serializable {
 		}
 	 }
 	 
-	 /*
-	  *  (Kein Javadoc)
-	  * @see applicationServer.ApplicationServer#getUsersByRole(dbObjects.Institut, int)
-	  */
-	 public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
+ 	/**
+	 *  Gibt die Benutzer eines Instituts mit einer bestimmten Rolle zurück
+	 * @param i - Institut
+	 * @param rollenId - Id der Rolle
+	 * @return Benutzer-Array
+	 * @throws RemoteException, ApplicationServerException
+	 */
+ 	public Benutzer[] getUsersByRole(Institut i, int rollenId) throws ApplicationServerException {
 		 return db.selectUsersByRole(i, rollenId);
 	 }
 	 
@@ -865,6 +892,7 @@ public class ApplicationServer implements Serializable {
 	
 	/**
 	 * Abfrage der nicht abgeschlossenen ZVKonten eines Haushaltsjahres mit den dazugehörigen ZVTiteln und ZVUntertiteln.
+	 * @param haushaltsjahr - Id des Haushaltsjahres
 	 * @return Liste mit den ZVKonten
 	 * author m.schmitt
 	 */
@@ -1533,9 +1561,11 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setInstitute(dbObjects.Institut, dbObjects.Institut)
+	/**
+	 * aktualisiert ein Institut
+	 * @param editedInst - Institut mit Änderungen
+	 * @param clientInst - Orginal Institut beim Client
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public void setInstitute(Institut editedInst, Institut clientInst) throws ApplicationServerException {
 		if(editedInst != null && clientInst != null){
@@ -1567,9 +1597,10 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delInstitute(dbObjects.Institut)
+	/**
+	 * löscht das übergebene Institut
+	 * @param institut - das zu löschende Institut
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public void delInstitute(Institut clientInst) throws ApplicationServerException {
 		if(clientInst != null){
@@ -1609,9 +1640,11 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addInstitute(dbObjects.Institut)
+	/**
+	 * fügt ein neues Institut hinzu
+	 * @param institut - neues Institut
+	 * @return neue Id des Instituts
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public int addInstitute(Institut institut) throws ApplicationServerException {
 		try{
@@ -1630,9 +1663,11 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setUser(dbObjects.Benutzer, dbObjects.Benutzer)
+	/**
+	 * aktualisiert einen Benutzer im System
+	 * @param editedUser - Benutzer mit Änderungen
+	 * @param clientUser - Original Benutzer beim Client
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public void setUser(Benutzer editedUser, Benutzer clientUser) throws ApplicationServerException {
 		if(editedUser != null && clientUser != null){
@@ -1678,9 +1713,10 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delUser(dbObjects.Benutzer)
+	/**
+	 * löscht den übergebenen Benutzer aus dem System
+	 * @param benutzer - der zu löschende Benutzer
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public void delUser(Benutzer clientUser) throws ApplicationServerException {
 		if(clientUser != null){
@@ -1720,9 +1756,11 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addUser(dbObjects.Benutzer)
+	/**
+	 * fügt einen neuen Benutzer ein
+	 * @param benutzer - neuer Benutzer
+	 * @return Id des Benutzers
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public int addUser(Benutzer benutzer) throws ApplicationServerException {
 		try{	
@@ -1754,17 +1792,21 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getFachbereiche()
+	/**
+	 * gibt alle Fachbereiche zurück. (Im Moment nur ein Fachbereich möglich)
+	 * @return Fachbereich-Array
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Fachbereich[] getFachbereiche() throws ApplicationServerException {
 		return db.selectFachbereiche();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setFachbereich(dbObjects.Fachbereich, dbObjects.Fachbereich)
+	/**
+	 * aktualisiert den Fachbereich
+	 * @param editedFB - Fachbereich mit Änderungen
+	 * @param fb - original Fachbereich beim Client
+	 * @return gibt den aktualisierten Fachberich zurück
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Fachbereich setFachbereich(Fachbereich editedFB, Fachbereich fb) throws ApplicationServerException {
 		try{	
@@ -1787,17 +1829,20 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getHaushaltsjahr()
+	/**
+	 * gibt das Haushaltsjahr zurück
+	 * @return Haushaltsjahr
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
 		return db.selectHaushaltsjahr();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setHaushaltsjahr(dbObjects.Haushaltsjahr, dbObjects.Haushaltsjahr)
+	/**
+	 * aktualisiert den Haushaltsjahr
+	 * @param editedHhj - Haushaltsjahr mit Änderungen
+	 * @param clientHhj - original Haushaltsjahr beim Client
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException {
 		if(editedHhj != null && clientHhj != null){
@@ -1821,19 +1866,24 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 	
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getRollenFull()
+	/**
+	 * gibt alle Rollen mit allen zugehörigen Aktivitäten zurück
+	 * @return Rollen-Array
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Rolle[] getRollenFull() throws ApplicationServerException {
 		return db.selectRollenFull();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addRollenAktivitaet(int, int)
-	 */
-	public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
+	/**
+   * fügt eine neue Zuordnung einer Aktivität zu einer Rolle
+   * @param rolle - Id der Rolle
+   * @param aktivitaet - Id der Aktivität
+   * @throws RemoteException, ApplicationServerException
+   * author robert
+   */
+  public void addRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		try{	
 			db.insertRollenAktivitaet(rolle, aktivitaet);
 			db.insertLog(0, "RollenAktivitaet hinzugefügt: \n" +
@@ -1847,11 +1897,14 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delRollenAktivitaet(int, int)
-	 */
-	public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
+  /**
+   * löscht die Zuordnung einer Aktivität zu einer Rolle
+   * @param rolle - Id der Rolle
+   * @param aktivitaet - Id der Aktivität
+   * @throws RemoteException, ApplicationServerException
+   * author robert
+   */
+  public void delRollenAktivitaet(int rolle, int aktivitaet) throws ApplicationServerException  {
 		try{	
 			db.deleteRollenAktivitaet(rolle, aktivitaet);
 			db.insertLog(2, "RollenAktivitaet gelöscht: \n" +
@@ -1866,17 +1919,22 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getAktivitaeten()
+  /**
+	 * gibt alle Aktivitäten die Rollen zugeordnet werden können.
+	 * @return Aktivitaet-Array
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Aktivitaet[] getAktivitaeten() throws ApplicationServerException {
 		return db.selectAktivitaeten();
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addRolle(dbObjects.Rolle)
+	/**
+	 * fügt eine neue Rolle hinzu
+	 * @param rolle - neue Rolle
+	 * @return id - neue Id der Rolle
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public int addRolle(Rolle rolle) throws ApplicationServerException {
 		if(db.checkRolle(rolle) == 0){
@@ -1895,9 +1953,12 @@ public class ApplicationServer implements Serializable {
 			throw new ApplicationServerException(8);
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setRolle(dbObjects.Rolle, dbObjects.Rolle)
+  /**
+	 * aktualisiert eine Rolle
+	 * @param editedRolle - Rolle mit Änderungen
+	 * @param clientRolle - original Rolle beim Client
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void setRolle(Rolle editedRolle, Rolle clientRolle) throws ApplicationServerException {
 		if(editedRolle != null && clientRolle != null){
@@ -1926,9 +1987,11 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delRolle(dbObjects.Rolle)
+	/**
+	 * löscht eine Rolle
+	 * @param rolle - zu löschende Rolle
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void delRolle(Rolle rolle) throws ApplicationServerException {
 		if(rolle != null){
@@ -1958,17 +2021,23 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getUser(java.lang.String, java.lang.String)
+	/**
+	 * gibt einen Benutzer anhand der übergebenen Benutzernamens und Passworts
+	 * @param user - Benutzername
+	 * @param password
+	 * @return zugehörige Benutzer
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Benutzer getUser(String user, String password) throws ApplicationServerException {
 		return db.selectUser(user, password);
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getZVKontenOnly()
+	/**
+	 * gibt nur die ZVKonten zurück ohne die Titel
+	 * @return ArrayList mit ZVKonten
+	 * @throws RemoteException, ApplicationServerException
+	 * author w.flat
 	 */
 	public ArrayList getZVKontenOnly() throws ApplicationServerException {
 		return db.selectZVKonten();
@@ -2006,9 +2075,12 @@ public class ApplicationServer implements Serializable {
 		return instituts;
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.Kontenzuordnung)
+	/**
+	 * aktualisiert die Kontenzuordnung
+	 * @param fbKonto - FBKonto der Kontenzuordnung
+	 * @param clientZuordnung - ZVKonto und Status der Kontenzuordnung
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void setKontenZuordnung(FBHauptkonto fbKonto, Kontenzuordnung clientZuordnung) throws ApplicationServerException {
 		try{	
@@ -2038,9 +2110,12 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
+	/**
+	 * fügt eine neue Kontenzuordnung hinzu
+	 * @param fbKonto
+	 * @param zvKonto
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void addKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
 		try{	
@@ -2077,9 +2152,12 @@ public class ApplicationServer implements Serializable {
 		}	
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delKontenZuordnung(dbObjects.FBHauptkonto, dbObjects.ZVKonto)
+	/**
+	 * löscht eine Kontenzuordnung
+	 * @param fbKonto
+	 * @param zvKonto
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void delKontenZuordnung(FBHauptkonto fbKonto, ZVKonto zvKonto) throws ApplicationServerException  {
 		try{	
@@ -2096,9 +2174,12 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getFBKonto(int)
+	/**
+	 * gibt das FBKonto mit der übergebenen Id zurück
+	 * @param fbKontoId - Id des FBKontos
+	 * @return FBKonto als FBUnterkonto
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public FBUnterkonto getFBKonto(int fbKontoId) throws ApplicationServerException {
 		return db.selectFBKonto(fbKontoId);
@@ -2201,24 +2282,34 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getKostenarten()
+	/**
+	 * gibt ein Kostenarten-Array für die Standardbestellung
+	 * @return Kostenarten ArrayList
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Kostenart[] getKostenarten() throws ApplicationServerException {
 		return db.selectKostenarten();
 	}
 
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getUsers(dbObjects.Institut)
+	/**
+	 * gibt ein Array aller Benutzer des übergebenen Instituts zurück
+	 * @param institut
+	 * @return	Benutzer Array
+	 * @throws RemoteException, ApplicationServerException
 	 */
 	public Benutzer[] getUsers(Institut institut) throws ApplicationServerException {
 		return db.selectUsers(institut);
 	}
 
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.StandardBestellung)
+	/**
+	 * speichert eine StandardBestellung
+	 * @param bestellung - Standardbestellung
+	 * @return id - gibt die neue Id der Bestellung
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public int addBestellung(StandardBestellung bestellung) throws ApplicationServerException {
 		try{	
@@ -2268,8 +2359,12 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#addBestellung(dbObjects.ASKBestellung)
+	/**
+	 * speichert eine ASKBestellung
+	 * @param bestellung - Standardbestellung
+	 * @return id - gibt die neue Id der Bestellung
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public int addBestellung(ASKBestellung bestellung) throws ApplicationServerException {
 		try{
@@ -2309,8 +2404,12 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.StandardBestellung, dbObjects.StandardBestellung)
+	/**
+	 * speichert die Standardbestellung
+	 * @param original - orginale Standardbestellung
+	 * @param edited - geänderte Standardbestellung
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void setBestellung(Benutzer benutzer, StandardBestellung original, StandardBestellung edited) throws ApplicationServerException {
 		
@@ -2572,8 +2671,12 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#setBestellung(dbObjects.ASKBestellung, dbObjects.ASKBestellung)
+	/**
+	 * speichert die ASKBestellung
+	 * @param original - orginale ASKBestellung
+	 * @param edited - geänderte ASKBestellung
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void setBestellung(Benutzer benutzer, ASKBestellung original, ASKBestellung edited) throws ApplicationServerException {
 		try{	
@@ -2712,9 +2815,12 @@ public class ApplicationServer implements Serializable {
 	
 	}
 	
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getStandardBestellung(int)
+	/**
+	 * gibt eine StandardBestellung mit allen Objekten zurück
+	 * @param id - BestellungId
+	 * @return StandardBestellung mit der zugehörigen Id
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public StandardBestellung getStandardBestellung(int id) throws ApplicationServerException {
 		StandardBestellung bestellung = db.selectStandardBestellung(id);
@@ -2732,9 +2838,12 @@ public class ApplicationServer implements Serializable {
 		return bestellung;
 	}
 	
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getASKBestellung(int)
+	/**
+	 * gibt eine ASKBestellung mit allen Objekten zurück
+	 * @param id - BestellungId
+	 * @return ASKBestellung mit der zugehörigen Id
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public ASKBestellung getASKBestellung(int id) throws ApplicationServerException {
 		ASKBestellung bestellung = db.selectASKBestellung(id);
@@ -2750,9 +2859,12 @@ public class ApplicationServer implements Serializable {
 		return bestellung;
 	}
 	
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getBestellungen(int)
+	/**
+	 * gibt Bestellungen ggf. eines bestimmten Typs zurück
+	 * @param filter
+	 * @return ArrayList mit Bestellungen
+	 * @throws RemoteException, ApplicationServerException
+	 * author Mario
 	 */
 	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
 		return db.selectBestellungen(filter);
@@ -2767,16 +2879,23 @@ public class ApplicationServer implements Serializable {
 	}
 
 	
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getBestellungen()
+	/**
+	 * gibt alle Bestellungen zurück
+	 * @param filter
+	 * @return ArrayList mit Bestellungen
+	 * @throws RemoteException, ApplicationServerException
+	 * author Mario
 	 */
 	public ArrayList getBestellungen() throws ApplicationServerException{
 		return db.selectBestellungen(-1);
 	}
 	
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getInstituteWithAccounts(dbObjects.Institut, boolean)
+	/**
+	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts
+	 * @param subAccountsIncluded
+	 * @return Intitut-Array
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Institut[] getInstituteWithAccounts(Institut institute, boolean subAccountsIncluded) throws ApplicationServerException {
 		Institut[] instituts = {institute};
@@ -3072,8 +3191,11 @@ public class ApplicationServer implements Serializable {
 		}		
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.StandardBestellung)
+	/**
+	 * löscht eine StandardBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
+	 * @param delOrder - StandardBestellung die gelöscht werden soll
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void delBestellung(StandardBestellung delOrder) throws ApplicationServerException {
 		try{	
@@ -3119,8 +3241,11 @@ public class ApplicationServer implements Serializable {
 	}
 
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#delBestellung(dbObjects.ASKBestellung)
+	/**
+	 * löscht eine ASKBestellung komplett aus der Datenbank. Die Bestellung darf noch nicht in der Abwicklungsphase sein.
+	 * @param delOrder - ASKBestellung die gelöscht werden soll
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public void delBestellung(ASKBestellung delOrder) throws ApplicationServerException {
 		try{	
@@ -3165,22 +3290,35 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getSwBeauftragte()
+	/**
+	 * gibt alle Softwarebeauftragte des Fachbereichs
+	 * @return Benutzer-Array der SW-Beauftragten
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Benutzer[] getSwBeauftragte() throws ApplicationServerException {
 		return db.selectSwBeauftragte();
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getASKFirma()
+	/**
+	 * gibt die Firma für eine ASK-Bestellung zurück
+	 * @return ASK-Firma
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public Firma getASKFirma() throws ApplicationServerException {
 		return db.selectASKFirma();
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getReport(int, dbObjects.Institut)
+	/**
+	 * Gibt eine ArrayList mit Inhalten für den entsprechenden Report zurück, siehe Reports Klasse für
+	 * den Aufbau der ArrayListe
+	 * @param typ	- Typen der Reports z.B. Reports.REPORT_1
+	 * @param von - Datum für den Startpunkt
+	 * @param bis - Datum für den Endpunkt
+	 * @return ArrayListe mit den Angaben für den Report siehe nähe Infos zu den Objekten in Reports
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public ArrayList getReport(int typ, Date von, Date bis) throws ApplicationServerException {
 		
@@ -3205,8 +3343,13 @@ public class ApplicationServer implements Serializable {
 		return null;
 	}
 
-	/* (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getLogList(java.sql.Date, java.sql.Date)
+	/**
+	 * Gibt eine ArrayList mit allen Änderungen in der Datenbank zurück
+	 * @param von - Datum für den Startpunkt
+	 * @param bis - Datum für den Endpunkt
+	 * @return	ArrayList
+	 * @throws RemoteException, ApplicationServerException
+	 * author robert
 	 */
 	public ArrayList getLogList(Date von, Date bis) throws ApplicationServerException {
 		return db.selectLogList(von, bis);
@@ -3293,7 +3436,73 @@ public class ApplicationServer implements Serializable {
 		db.dropTmpZvKontentitelTab();
 	}
 	
+	/**
+	 * fügt eine neue Zuordnung einer TempRolle zu einem Benutzer
+	 * @param tmpRolle - neue TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void addTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.insertTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
 	
+	/**
+	 * löscht eine TempRolle eines Benutzers
+	 * @param tmpRolle - zu löschende TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void delTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.deleteTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * aktualisiert eine TempRolle eines Benutzers
+	 * @param tmpRolle - TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void setTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.updateTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * gibt alle TempRollen mit Benutzern, die die Rolle von dem Besitzer erhalten haben
+	 * @param besitzer - Id des Benutzers der die TempRolle vergeben hat
+	 * @return Benutzer-Array
+	 * @throws ApplicationServerException
+	 */
+	public TmpRolle[] getTempRolleUsers(int besitzer) throws ApplicationServerException{
+		try{
+			return db.selectTempRolleUsers(besitzer);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
 }
 
 

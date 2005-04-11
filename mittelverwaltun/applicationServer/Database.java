@@ -4869,6 +4869,85 @@ public class Database implements Serializable {
 		   throw new ApplicationServerException(177, e.getMessage());
 	   }
 	}
+	
+	/**
+	 * fügt eine temporäre Rolle für eine Benutzer hinzu.
+	 * author robert
+	 * @param tmpRolle - neue TempRolle des Benutzers
+	 * @throws ApplicationServerException
+	 */
+	public void insertTempRolle(TmpRolle tmpRolle)throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Integer(tmpRolle.getEmpfaenger().getId()), new Integer(tmpRolle.getBesitzer()), tmpRolle.getGueltigBis()};
+			statements.get(350).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException(145, e.getMessage());
+		}
+	}
+	
+	/**
+	 * löscht eine temporäre Rolle für eine Benutzer.
+	 * author robert
+	 * @param emfaenger - Id des Benutzers der die temp. Rolle erhält
+	 * @param besitzer - Id des Benutzers dem die Rolle gehört
+	 * @throws ApplicationServerException
+	 */
+	public void deleteTempRolle(TmpRolle tmpRolle)throws ApplicationServerException{
+		try{
+			Object[] parameters = { new Integer(tmpRolle.getEmpfaenger().getId()), new Integer(tmpRolle.getBesitzer()) };
+			statements.get(351).executeUpdate(parameters);
+		} catch (SQLException e){
+			System.out.println(e.getMessage());
+			throw new ApplicationServerException(146, e.getMessage());
+		}
+	}
+	
+	/**
+	 * das Datum einer TempRolle aktualisieren
+	 * @param tmpRolle - TempRolle
+	 * @throws ApplicationServerException
+	 */
+	public void updateTempRolle(TmpRolle tmpRolle)throws ApplicationServerException{
+		try{
+			Object[] parameters = {tmpRolle.getGueltigBis(), new Integer(tmpRolle.getEmpfaenger().getId()), new Integer(tmpRolle.getBesitzer()) };
+			statements.get(352).executeUpdate(parameters);
+		} catch (SQLException e){
+			System.out.println(e.getMessage());
+			throw new ApplicationServerException(147, e.getMessage());
+		}
+	}
+	
+	/**
+	 * gibt alle TempRollen mit Benutzern, die die Rolle von dem Besitzer erhalten haben
+	 * @param besitzer - Id des Benutzers der die TempRolle vergeben hat
+	 * @return Benutzer-Array
+	 * @throws ApplicationServerException
+	 */
+	public TmpRolle[] selectTempRolleUsers(int besitzer) throws ApplicationServerException{
+		TmpRolle[] tmpRolle = null;
+
+		try{
+			Object[] parameters = {new Integer(besitzer) };
+			ResultSet rs = statements.get(353).executeQuery(parameters);
+			rs.last();
+			int count = rs.getRow();
+			rs.beforeFirst();
+			if (count > 0){
+				tmpRolle = new TmpRolle[count];
+				int i = 0;
+				while (rs.next()){
+					tmpRolle[i] = new TmpRolle(0, besitzer, new Benutzer(rs.getInt(1), rs.getString(2),  rs.getString(3),  rs.getString(4)),
+																		 rs.getDate(5));
+					i++;
+				}
+			}
+			rs.close();
+		} catch (SQLException e){
+			throw new ApplicationServerException(115, e.getMessage());
+		}
+
+		return tmpRolle;
+	}
 
 }
 

@@ -2,6 +2,7 @@ package dbObjects;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.DateFormat;
 /**
  * @author robert
  *
@@ -14,6 +15,8 @@ public class TmpRolle extends Rolle implements Serializable {
 
 	private int besitzer = 0;
 	
+	private Benutzer empfaenger;
+	
 	public TmpRolle(int id, int besitzer, Date gueltigBis){
 		super(id);
 		this.besitzer = besitzer;
@@ -23,6 +26,13 @@ public class TmpRolle extends Rolle implements Serializable {
 	public TmpRolle(int id, String bezeichnung, int besitzer, Date gueltigBis){
 		super(id, bezeichnung);
 		this.besitzer = besitzer;
+		this.gueltigBis = gueltigBis;
+	}
+	
+	public TmpRolle(int id, int besitzer, Benutzer empfaenger, Date gueltigBis){
+		super(id);
+		this.besitzer = besitzer;
+		this.empfaenger = empfaenger;
 		this.gueltigBis = gueltigBis;
 	}
 	
@@ -48,6 +58,14 @@ public class TmpRolle extends Rolle implements Serializable {
 		this.besitzer = besitzer;
 	}
 	
+	public Benutzer getEmpfaenger() {
+		return empfaenger;
+	}
+
+	public void setEmpfaenger(Benutzer empfaenger) {
+		this.empfaenger = empfaenger;
+	}
+	
 	public Object clone(){
 		int[] a = null;
 		Aktivitaet[] af = null;
@@ -63,5 +81,12 @@ public class TmpRolle extends Rolle implements Serializable {
 //				af[i] = (Aktivitaet)aktivitaetenFull[i].clone();
 //		}
 		return new TmpRolle(this.getId(), this.getBezeichnung(), a, this.besitzer, (Date)this.gueltigBis.clone());
+	}
+	
+	public String toString(){
+		String s = "";
+		if(empfaenger != null)
+			s = empfaenger.getName() + ", " + empfaenger.getVorname() + " [" + DateFormat.getDateInstance().format(gueltigBis) + "]";
+		return s;
 	}
 }

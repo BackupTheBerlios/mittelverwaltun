@@ -20,6 +20,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Sitzung"
 	JMenu menuSitzung = new JMenu("Sitzung");
 			JMenuItem miAccountAendern = new JActivityRelatedMenuItem(0, "Account ändern");
+			JMenuItem miTmpRollenVerwalten = new JActivityRelatedMenuItem(0, "TempRollen verwalten");
 			JMenu menuSichtwechsel = new JMenu("Sichtwechsel");
 				JMenuItem miDefaultRolle = new JActivityRelatedMenuItem(0,	"Standardrolle"); 
 				JMenu menuTmpRolle = new JMenu("Temporäre Rollen"); 
@@ -91,6 +92,9 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuSitzung.add( miAccountAendern );
 			activityRelItems.add( miAccountAendern );
 			miAccountAendern.addActionListener( this );
+			menuSitzung.add( miTmpRollenVerwalten );
+			activityRelItems.add( miTmpRollenVerwalten );
+			miTmpRollenVerwalten.addActionListener( this );
 			menuSitzung.add( menuSichtwechsel );
 				menuSichtwechsel.add( miDefaultRolle );
 				activityRelItems.add( miDefaultRolle );
@@ -231,6 +235,8 @@ public class MainMenu extends JMenuBar implements ActionListener {
 
 		if ( e.getSource() == miAccountAendern ) {
 			frame.addChild( new Benutzerverwaltung(frame) );
+		} else if ( e.getSource() == miTmpRollenVerwalten ) {						
+			frame.addChild( new TempRollenFrame(frame) );
 		} else if ( e.getSource() == miDefaultRolle ) {						
 			enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());	//
 		} else if ( e.getSource() ==  miLogoutBeenden ) {					//

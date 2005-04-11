@@ -19,7 +19,7 @@ public class PreparedSqlStatements {
 	public PreparedSqlStatements (Connection con) throws SQLException{
 		PreparedStatement ps;
 
-		statements = new PreparedStatementWrapper[350];
+		statements = new PreparedStatementWrapper[360];
 		int i = 0;
 
 		/**************************************/
@@ -2726,6 +2726,58 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//349
+			statements[i++] = null;
+		}
+		/**********************************/
+		/* Tabelle: Temprollen  */
+		/* Indizes: 350-359					      */
+		/**********************************/
+		{//350 fügt eine neue temp. Rolle hinzu
+			ps = con.prepareStatement( "INSERT INTO Temprollen(empfaenger, besitzer, gueltigBis) " +
+																	"VALUES(?, ?, ?) " );
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.DATE};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//351 löscht eine temp. Rolle
+			ps = con.prepareStatement("DELETE FROM Temprollen " +
+																"WHERE empfaenger = ? " +
+																	"AND besitzer = ? " );
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//352 aktualisiert das Datum einer TempRolle
+			ps = con.prepareStatement( "UPDATE Temprollen " +
+								 "SET gueltigBis = ? " +
+								"WHERE empfaenger = ? " +
+								"AND besitzer = ? " );
+			int[] param = {Types.DATE, Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//353 gibt die Benutzer die eine TempRolle vom Besitzer erhalten haben
+			ps = con.prepareStatement("SELECT b.id, b.benutzername, b.name, b.vorname, tr.gueltigBis " +
+																"FROM Benutzer b, TempRollen tr " +
+																"WHERE tr.besitzer = ? " +
+																	"AND b.id = tr.besitzer " +
+																	"AND b.geloescht = '0'");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
+		}
+		{//354
+			statements[i++] = null;
+		}
+		{//355 
+			statements[i++] = null;
+		}
+		{//356
+			statements[i++] = null;
+		}
+		{//357
+			statements[i++] = null;
+		}
+		{//358
+			statements[i++] = null;
+		}
+		{//359
 			statements[i++] = null;
 		}
 	}

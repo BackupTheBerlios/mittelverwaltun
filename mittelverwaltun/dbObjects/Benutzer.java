@@ -109,7 +109,7 @@ public class Benutzer implements Serializable {
 		this.swBeauftragter = swBeauftragter;
 	}
 	
-	public Benutzer(int id, String benutzername, String name,String vorname){
+	public Benutzer(int id, String benutzername, String name, String vorname){
 		this.id = id;
 		this.benutzername = benutzername;
 		this.vorname = vorname;
