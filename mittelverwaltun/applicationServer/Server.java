@@ -144,7 +144,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			ApplicationServer.APPL_DB_NAME = document.getElementsByTagName("dbname").item(0).getFirstChild().getNodeValue();
 			ApplicationServer.APPL_DB_URL = document.getElementsByTagName("dburl").item(0).getFirstChild().getNodeValue();
 			ApplicationServer.APPL_DB_PSWD = document.getElementsByTagName("dbpswd").item(0).getFirstChild().getNodeValue();
-	} catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

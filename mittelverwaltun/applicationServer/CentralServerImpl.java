@@ -17,7 +17,7 @@ public class CentralServerImpl extends UnicastRemoteObject implements CentralSer
 	/**
 	 * Der Name des Central-Servers.
 	 */
-	public static String CENTRAL_NAME = "";
+	public static String CENTRAL_NAME = "mittelverwaltung";
 
 	/**
 	 * Der Dateiname von RMI-Registry.

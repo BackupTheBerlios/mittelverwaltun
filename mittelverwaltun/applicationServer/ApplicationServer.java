@@ -18,22 +18,22 @@ public class ApplicationServer implements Serializable {
 	/**
 	 * Variable zum Festlegen des Triebers für die Datenbank. 
 	 */
-	public static String APPL_DB_DRIVER =  "";
+	public static String APPL_DB_DRIVER =  "com.mysql.jdbc.Driver";
 
 	/**
 	 * Variable zum Festlegen des Hosts, wo sich die Datenbank befindet. 
 	 */
-	public static String APPL_DB_URL = "";
+	public static String APPL_DB_URL = "mysql://localhost";
 
 	/**
 	 * Variable zum Festlegen vom Datenbanknamen. 
 	 */
-	public static String APPL_DB_NAME = "";
+	public static String APPL_DB_NAME = "fbmittelverwaltung";
 
 	/**
 	 * Variable zum Festlegen des Passworts zum Anmelden bei der Datenbank. 
 	 */
-	public static String APPL_DB_PSWD = "";
+	public static String APPL_DB_PSWD = "mittelverwaltung";
 
 	/**
 	 * Den individuellen Server für einen Benutzer erstellen. 
@@ -433,10 +433,12 @@ public class ApplicationServer implements Serializable {
 				db.selectForUpdateFBHauptkonto( konto );	// Zum Aktualisieren auswählen
 				return db.updateFBHauptkonto( konto );
 			}
-			db.insertLog(0, "FBHauptKonto (Id: " + konto.getId() + " hinzugefügt: \n" +
-											"FBHauptKonto: " + konto );
+			id = db.insertFBHauptkonto( konto );			// Sonst ein neues FBHauptkonto erstellen
 			
-			return db.insertFBHauptkonto( konto );			// Sonst ein neues FBHauptkonto erstellen
+			db.insertLog(0, "FBHauptKonto (Id: " + konto.getId() + " hinzugefügt: \n" +
+					"FBHauptKonto: " + konto );
+			
+			return id;
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;

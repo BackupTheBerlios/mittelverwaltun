@@ -4,8 +4,7 @@ package applicationServer;
 public class ApplicationServerException extends Exception {
 
 	private static int NOM = 200;
-	private String[] messages = null;
-
+	private static String[] messages = null;
 	private int errorCode;
 
 	public ApplicationServerException(int errorCode){

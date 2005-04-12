@@ -1718,7 +1718,7 @@ public class Database implements Serializable {
 
 		try{
 			// Parameter für das SQL-Statement
-			Object[] parameters = {new Integer(zvTitel.getZVKonto().getId())};
+			Object[] parameters = {new Integer(zvTitel.getZVKonto().getId()), zvTitel.getTitel()};
 			// SQL-Statement mit der Nummer 141 ausführen
 			ResultSet rs = statements.get(141).executeQuery(parameters);
 			rs.last();		// In die letzte Zeile springen

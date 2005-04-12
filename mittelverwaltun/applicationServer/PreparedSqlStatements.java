@@ -160,7 +160,7 @@ public class PreparedSqlStatements {
 
 		{//26			(6)
 			ps = con.prepareStatement("DELETE " +
-										"FROM Benutzer " +"" +
+										"FROM Benutzer " +
 									   "WHERE id = ? " +
 										 "AND benutzername = ?");
 			int[] param = {Types.INTEGER, Types.VARCHAR};
@@ -291,12 +291,11 @@ public class PreparedSqlStatements {
 			 * und nicht gelöscht sind. 
 	 		 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT id, haushaltsjahrId, institutsId, bezeichnung, "+
-										"hauptkonto, unterkonto, budget, dispoLimit, vormerkungen, " +										"pruefBedingung, kleinbestellungen " +
-										"FROM FBKonten " +
-										"WHERE institutsID = ? " +
-										"AND unterkonto = \"0000\" " +
-										"AND geloescht = \"0\"");
+			ps = con.prepareStatement("SELECT DISTINCT(k.id), k.haushaltsjahrId, k.institutsId, k.bezeichnung, "+
+										"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " +										"k.pruefBedingung, k.kleinbestellungen " +
+										"FROM FBKonten k, Haushaltsjahre h " +
+										"WHERE k.institutsID = ? AND h.status = '0' AND k.haushaltsjahrId = h.id " +
+										"AND k.unterkonto = '0000' AND k.geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -306,15 +305,13 @@ public class PreparedSqlStatements {
 			 * bestimmten FBHauptkonto angehören und nicht gelöscht sind. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT a.id, a.haushaltsjahrId, a.institutsId, a.bezeichnung, " +
+			ps = con.prepareStatement("SELECT DISTINCT(a.id), a.haushaltsjahrId, a.institutsId, a.bezeichnung, " +
 										"a.hauptkonto, a.unterkonto, a.budget, a.vormerkungen, a.kleinbestellungen " +
-										"FROM FBKonten a, FBKonten b " +
-										"WHERE a.institutsID = ? " +
-										"AND a.institutsID = b.institutsID " +
-										"AND b.id = ? " +
-										"AND a.hauptkonto = b.hauptkonto " +
-										"AND NOT (a.unterkonto = \"0000\") " +
-										"AND a.geloescht = \"0\"");
+										"FROM FBKonten a, FBKonten b, Haushaltsjahre h " +
+										"WHERE a.institutsID = ? AND a.institutsID = b.institutsID " +
+										"AND b.id = ? AND a.hauptkonto = b.hauptkonto AND a.unterkonto != '0000' " +
+										"AND h.id = a.haushaltsjahrId AND h.id = b.haushaltsjahrId AND h.status = '0' " +
+										"AND a.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -323,10 +320,9 @@ public class PreparedSqlStatements {
 			 * Einfügen eines FBKontos in die Datenbank. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("INSERT " +
-										"INTO FBKonten " +
-											 "(haushaltsjahrId, institutsID, bezeichnung, hauptkonto, " +
-											 "unterkonto, budget, dispoLimit, vormerkungen, pruefBedingung," +											 "kleinbestellungen, geloescht) " +
+			ps = con.prepareStatement("INSERT INTO FBKonten " +
+										 "(haushaltsjahrId, institutsID, bezeichnung, hauptkonto, " +
+										 "unterkonto, budget, dispoLimit, vormerkungen, pruefBedingung," +										 "kleinbestellungen, geloescht) " +
 									  "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
 							Types.VARCHAR, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.VARCHAR,
@@ -339,18 +335,15 @@ public class PreparedSqlStatements {
 			 * Abfrage der FBKontoId, von einem bestimmten FBKonto und welches nicht gelöscht ist. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT id " +
-										"FROM FBKonten "+
-										"WHERE institutsID = ? " +
-										"AND hauptkonto = ? " +
-										"AND unterkonto = ? AND geloescht = '0'");
+			ps = con.prepareStatement("SELECT k.id FROM FBKonten k, Haushaltsjahre h "+
+										"WHERE k.institutsID = ? AND k.hauptkonto = ? AND k.unterkonto = ? " +
+										"AND h.id = k.haushaltsjahrId AND h.status = '0' AND k.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
 		{//54			(13)
-			ps = con.prepareStatement("DELETE " +
-										"FROM FBKonten " +
+			ps = con.prepareStatement("DELETE FROM FBKonten " +
 									   "WHERE id = ? ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -383,11 +376,12 @@ public class PreparedSqlStatements {
 			 * Diese Konten dürfen außer einem bestimmten Benutzer nicht zugeordnet sein.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT id, haushaltsjahrId, institutsId, bezeichnung, " + 
-											"hauptkonto, unterkonto, budget, dispoLimit, vormerkungen, " + 											"pruefBedingung, kleinbestellungen, geloescht " + 
-										"FROM FBKonten " + 
-										"WHERE institutsId = ? AND hauptkonto = ? AND kleinbestellungen = '1' AND " + 											"geloescht = '0' AND unterkonto != \"0000\" AND " + 
-											"id NOT IN (SELECT DISTINCT(a.id) " + 														"FROM FBKonten a, Benutzer b " + 
+			ps = con.prepareStatement(	"SELECT DISTINCT(k.id), k.haushaltsjahrId, k.institutsId, k.bezeichnung, " + 
+											"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " + 											"k.pruefBedingung, k.kleinbestellungen, k.geloescht " + 
+										"FROM FBKonten k, Haushaltsjahre h " + 
+										"WHERE k.institutsId = ? AND k.hauptkonto = ? AND k.kleinbestellungen = '1' AND " + 											"k.geloescht = '0' AND k.unterkonto != '0000' AND " +
+											"h.id = k.haushaltsjahrId AND h.status = '0' AND " +
+											"k.id NOT IN (SELECT DISTINCT(a.id) " + 														"FROM FBKonten a, Benutzer b " + 
 														"WHERE a.hauptkonto = ? AND a.unterkonto != \"0000\" AND " + 															"a.institutsId = b.institutsId AND " + 
 															"a.kleinbestellungen = '1' AND " + 															"a.id = b.privatKontoId AND " + 
 															"b.id != ? AND a.geloescht = '0')" ); 
@@ -414,15 +408,12 @@ public class PreparedSqlStatements {
 			 * Abfrage eines bestimmten FBKontos und welches gelöscht ist. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT id " +
-										"FROM FBKonten "+
-										"WHERE institutsID = ? " +
-										"AND hauptkonto = ? " +
-										"AND unterkonto = ? AND geloescht = '1'");
+			ps = con.prepareStatement(	"SELECT k.id FROM FBKonten k, Haushaltsjahre h "+
+											"WHERE k.institutsID = ? AND k.hauptkonto = ? AND k.unterkonto = ? " +
+											"AND h.id = k.haushaltsjahrId AND h.status = '0' AND k.geloescht = '1'");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		
 		{//60
 			ps = con.prepareStatement( "SELECT " +
 											  "distinct fbk.id, fbk.haushaltsjahrId, fbk.institutsId, fbk.bezeichnung, " +
@@ -648,7 +639,7 @@ public class PreparedSqlStatements {
 		/* Indizes: 90-99					  */
 		/**************************************/
 		{//90			(33)
-			ps = con.prepareStatement( "GRANT RELOAD ON * . * TO ?@'%' IDENTIFIED BY 'mittelverwaltung' " +
+			ps = con.prepareStatement( "GRANT RELOAD ON * . * TO ?@'%' IDENTIFIED BY '" + ApplicationServer.APPL_DB_PSWD + "' " +
 																	"WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0; ");
 			int[] param = {Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -659,7 +650,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//92			(36)
-			ps = con.prepareStatement("GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, LOCK TABLES ON `fbmittelverwaltung` . * TO ?@'%' WITH GRANT OPTION ");
+			ps = con.prepareStatement("GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, LOCK TABLES ON `" + ApplicationServer.APPL_DB_NAME + "` . * TO ?@'%' WITH GRANT OPTION ");
 			int[] param = {Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -829,12 +820,12 @@ public class PreparedSqlStatements {
 			 * Abfrage aller nicht gelöschten ZVKonten in der Datenbank.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( "SELECT id, haushaltsjahrid, bezeichnung, " +
-											"kapitel, titelgruppe, tgrBudget, " +
-											"dispoLimit, zweckgebunden, freigegeben, " +
-											"uebernahmestatus, portiert, abgeschlossen " +
-										"FROM ZVKonten " +
-										"WHERE geloescht = \"0\"" );
+			ps = con.prepareStatement( "SELECT DISTINCT(k.id), k.haushaltsjahrId, k.bezeichnung, " +
+											"k.kapitel, k.titelgruppe, k.tgrBudget, " +
+											"k.dispoLimit, k.zweckgebunden, k.freigegeben, " +
+											"k.uebernahmestatus, k.portiert, k.abgeschlossen " +
+										"FROM ZVKonten k, Haushaltsjahre h " +
+										"WHERE h.status = '0' AND k.haushaltsjahrId = h.id AND k.geloescht = '0'" );
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//121			(42)
@@ -842,8 +833,7 @@ public class PreparedSqlStatements {
 			 * Neues ZVKonto erstellen.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( 	"INSERT " +
-										"INTO ZVKonten " +
+			ps = con.prepareStatement( 	"INSERT INTO ZVKonten " +
 											"(haushaltsjahrid, bezeichnung, kapitel, " +
 											"titelgruppe, tgrBudget, dispoLimit, "+
 											"zweckgebunden, freigegeben, uebernahmestatus) " +
@@ -916,10 +906,10 @@ public class PreparedSqlStatements {
 			 * und bestimmter Titelgruppe und welches gelöscht ist.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT id " +
-										"FROM ZVKonten " +
-										"WHERE kapitel = ? " +
-											"AND titelgruppe = ? AND geloescht != '0'" );
+			ps = con.prepareStatement(	"SELECT k.id " +
+										"FROM ZVKonten k, Haushaltsjahre h " +
+										"WHERE k.kapitel = ? AND titelgruppe = ? AND " +
+										"h.id = k.haushaltsjahrid AND h.status = '0' AND geloescht != '0'" );
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1069,10 +1059,8 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT id, zvKontoID, bezeichnung, " +
 											"titel, untertitel, budget, vormerkungen, " +
 											"bemerkung, pruefBedingung, geloescht " +
-										"FROM ZVKontenTitel " +
-										"WHERE zvKontoId = ? "+
-											"AND untertitel = \"\" " +
-											"AND geloescht = \"0\"");
+										"FROM ZVKontenTitel k " +
+										"WHERE zvKontoId = ? AND untertitel = '' AND geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1085,10 +1073,8 @@ public class PreparedSqlStatements {
 											"titel, untertitel, budget, vormerkungen, " +
 											"bemerkung, pruefBedingung, geloescht " +
 										"FROM ZVKontenTitel " +
-										"WHERE zvKontoId = ? " +
-											"AND NOT (untertitel = \"\") "+
-											"AND geloescht = \"0\"");
-			int[] param = {Types.INTEGER};
+										"WHERE zvKontoId = ? AND titel = ? AND untertitel != '' AND geloescht = '0'");
+			int[] param = {Types.INTEGER, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
@@ -1100,9 +1086,7 @@ public class PreparedSqlStatements {
 			 */
 			ps = con.prepareStatement( "SELECT id " +
 										"FROM ZVKontenTitel " +
-										"WHERE zvKontoID = ? " +
-											"AND titel = ? " +
-											"AND untertitel = ? AND geloescht = '0'" );
+										"WHERE zvKontoID = ? AND titel = ? AND untertitel = ? AND geloescht = '0'" );
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1111,8 +1095,7 @@ public class PreparedSqlStatements {
 			 * Einen ZVTitel erstellen.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( 	"INSERT " +
-										"INTO ZVKontenTitel " +
+			ps = con.prepareStatement( 	"INSERT INTO ZVKontenTitel " +
 											"(zvKontoID, bezeichnung, titel, untertitel, " +
 											"budget, vormerkungen, bemerkung, pruefBedingung) " +
 										"VALUES (?,?,?,?,?,?,?,?)");
@@ -1535,7 +1518,7 @@ public class PreparedSqlStatements {
 		}
 
 		/******************************************/
-		/* Tabelle: Bestellungen	1			  				*/
+		/* Tabelle: Bestellungen	1			  */
 		/* Indizes: 210-219                       */
 		/******************************************/
 		{//210 gibt Anzahl der Bestellungen eines Benutzers
@@ -1666,10 +1649,10 @@ public class PreparedSqlStatements {
 			 * Ermittlung der Anzahl der Buchungen bei denen ein bestimmtes FBKonto verwendet wurde.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellungId) " +
+			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellung) " +
 										"FROM FBKonten a, Buchungen b " +
 										"WHERE a.id = ? " +
-										"AND (a.id = b.fbKontoId1 OR a.id = b.fbKontoId2)" );
+										"AND (a.id = b.fbKonto1 OR a.id = b.fbKonto2)" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1678,10 +1661,10 @@ public class PreparedSqlStatements {
 			 * Anzahl der Buchungen bei denen ein bestimmter ZVTitel angegeben wurde.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellungId) " +
+			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellung) " +
 										"FROM ZVKontenTitel a, Buchungen b " +
 										"WHERE a.id = ? " +
-										"AND (a.id = b.zvTitelId1 OR a.id = b.zvTitelId2)" );
+										"AND (a.id = b.zvTitel1 OR a.id = b.zvTitel2)" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}

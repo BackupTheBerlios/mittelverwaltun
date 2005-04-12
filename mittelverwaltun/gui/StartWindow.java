@@ -1,6 +1,7 @@
 package gui;
 
 import org.w3c.dom.*;
+import org.xml.sax.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -54,12 +55,12 @@ public class StartWindow extends JFrame implements ActionListener {
 	/**
 	 * Variable zum Einstellen der Hostbezeichnung, wo sich der FB-Mittelverwaltung-Server befindet. 
 	 */
-	public static String CLIENT_SERVER_HOST = "";
+	private static String CLIENT_SERVER_HOST = "localhost";
 
 	/**
 	 * Variable zum Einstellen vom Namen des Servers. 
 	 */
-	public static String CLIENT_SERVER_NAME = "";
+	private static String CLIENT_SERVER_NAME = "mittelverwaltung";
 
 	/**
 	 * Datei zum Speichern der Einstellungen. 
@@ -94,14 +95,17 @@ public class StartWindow extends JFrame implements ActionListener {
 					actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
 				}
 			});
-			Functions.restoreFile(xmlPackage, xmlFileName, getClass());
 			jbInit();
-			loadXMLFile();
 			this.setVisible(true);
 			tfBenutzername.requestFocus();
 		} catch(Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Warnung", JOptionPane.ERROR_MESSAGE);
 			this.actionPerformed(new ActionEvent(butAbbrechen, 0, ""));
+		}
+		try {
+			Functions.restoreFile(xmlPackage, xmlFileName, getClass());
+			loadXMLFile();
+		} catch(IOException ioexc) {
 		}
 	}
 	
@@ -112,12 +116,18 @@ public class StartWindow extends JFrame implements ActionListener {
 		try {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder  = factory.newDocumentBuilder();
-			Document document = builder.parse(new FileInputStream(new File(xmlPackage + File.separator + xmlFileName)));
+			String text = Functions.readFile(xmlPackage.replace('.', '/') + File.separator + xmlFileName);
+			text = Functions.xorText(text, Functions.DECODE);
+			Document document = builder.parse(new InputSource(new StringReader(text)));
 			StartWindow.CLIENT_SERVER_HOST = document.getElementsByTagName("hostname").item(0).getFirstChild().getNodeValue();
 			StartWindow.CLIENT_SERVER_NAME = document.getElementsByTagName("servername").item(0).getFirstChild().getNodeValue();
+			if(document.getElementsByTagName("lastuser").item(0).getChildNodes().getLength() > 0) {
+			    tfBenutzername.setText(document.getElementsByTagName("lastuser").item(0).getFirstChild().getNodeValue());
+			    tfPasswort.requestFocus();
+			}
 			tfHostname.setText(StartWindow.CLIENT_SERVER_HOST);
 			tfServername.setText(StartWindow.CLIENT_SERVER_NAME);
-	} catch(Exception e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -138,11 +148,16 @@ public class StartWindow extends JFrame implements ActionListener {
 			tempNode = document.createElement("servername");
 			tempNode.appendChild(document.createTextNode(StartWindow.CLIENT_SERVER_NAME));
 			rootNode.appendChild(tempNode);
+			tempNode = document.createElement("lastuser");
+			tempNode.appendChild(document.createTextNode(tfBenutzername.getText()));
+			rootNode.appendChild(tempNode);
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			DOMSource source = new DOMSource( document );
-			FileOutputStream os = new FileOutputStream(new File(xmlPackage + File.separator + xmlFileName));
+			StringWriter os = new StringWriter();
 			StreamResult result = new StreamResult( os );
 			transformer.transform( source, result );
+			String str = Functions.xorText(os.toString(), Functions.CODE);
+			Functions.writeFile(xmlPackage.replace('.', '/') + File.separator + xmlFileName, str);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -209,6 +224,7 @@ public class StartWindow extends JFrame implements ActionListener {
 					// Fenster unsichtbar schalten
 					setVisible(false);
 					new MainFrame(centralServer, applicationServer, benutzer);
+					saveXMLFile();
 					dispose();	// Fenster freigeben
 				} catch (Exception exc) {
 					if(centralServer != null && applicationServer != null) {
@@ -261,16 +277,16 @@ public class StartWindow extends JFrame implements ActionListener {
 		labDesigned.setText("Designed by :");
 		labDesigned.setBounds(new Rectangle(20, 145, 100, 16));
 		labHostname.setFont(new java.awt.Font("Dialog", 0, 11));
-		labHostname.setText("Name vom Server-Host :");
+		labHostname.setText("Hostbezeichnung des Servers :");
 		labHostname.setBounds(new Rectangle(10, 20, 130, 15));
 		tfHostname.setFont(new java.awt.Font("Dialog", 0, 11));
-		tfHostname.setText("");
+		tfHostname.setText(StartWindow.CLIENT_SERVER_HOST);
 		tfHostname.setBounds(new Rectangle(140, 20, 155, 19));
 		labServername.setFont(new java.awt.Font("Dialog", 0, 11));
 		labServername.setText("Name des Servers :");
 		labServername.setBounds(new Rectangle(10, 55, 130, 15));
 		tfServername.setFont(new java.awt.Font("Dialog", 0, 11));
-		tfServername.setText("");
+		tfServername.setText(StartWindow.CLIENT_SERVER_NAME);
 		tfServername.setBounds(new Rectangle(140, 55, 155, 19));
 		butSave.setBounds(new Rectangle(50, 100, 205, 22));
 		butSave.setFont(new java.awt.Font("Dialog", 0, 11));
