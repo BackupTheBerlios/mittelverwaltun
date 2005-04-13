@@ -307,7 +307,7 @@ public class StartWindow extends JFrame implements ActionListener {
 		labFHLogo.setText("");
 		labFHLogo.setBounds(new Rectangle(10, 10, 295, 80));
 		this.getContentPane().add(tabPane,  BorderLayout.CENTER);
-		tabPane.add(panelLogin,   "Anmelden");
+		tabPane.add(panelLogin,   "Anmeldung");
 		panelLogin.add(labPasswort, null);
 		panelLogin.add(labBenutzername, null);
 		panelLogin.add(butAnmelden, null);

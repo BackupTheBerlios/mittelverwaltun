@@ -121,7 +121,6 @@ public class ZVKonto implements Serializable {
 		this.portiert = portiert;
 		this.abgeschlossen = abgeschlossen;
 		this.geloescht = false;
-		
 	}
 	
 	/**
