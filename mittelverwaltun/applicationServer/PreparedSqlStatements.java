@@ -492,8 +492,19 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//66
-			statements[i++] = null;
+		{//66 Ermittelt der ID eines FB-Kontos dessen ID in einem anderen (zu übergebenden) Haushaltsjahr
+			ps = con.prepareStatement(
+					"SELECT f2.id " +
+					  "FROM FBKonten f1, FBKonten f2 " +
+					 "WHERE f1.id = ? " +
+					   "AND f1.institutsid = f2.institutsid " +
+					   "AND f1.hauptkonto = f2.hauptkonto " +
+					   "AND f1.unterkonto = f2.unterkonto " +
+					   "AND f2.haushaltsjahrid = ? " +
+					   "AND f1.geloescht = '0' " +
+					   "AND f2.geloescht = '0' ");
+			int[] param = {Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//67
 			statements[i++] = null;
@@ -547,14 +558,30 @@ public class PreparedSqlStatements {
 										"WHERE status = 0");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//74
-			statements[i++] = null;
+		
+		{//74 Fügt ein neues Haushaltsjahr ein
+			ps = con.prepareStatement(
+					"INSERT INTO Haushaltsjahre " +
+								"(beginn, status) " +
+						 "VALUES (?,?)");
+			int[] param = {Types.DATE, Types.VARCHAR};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//75
-			statements[i++] = null;
+		{//75 Aktualisiert den Status eines Haushaltsjahres
+			ps = con.prepareStatement(
+					"UPDATE Haushaltsjahre " +
+					   "SET status = ? " +
+					 "WHERE id = ? ");
+			int[] param = {Types.VARCHAR, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//76
-			statements[i++] = null;
+		{//76 Aktualisiert das Ende eines Haushaltsjahres
+			ps = con.prepareStatement(
+					"UPDATE Haushaltsjahre " +
+					   "SET ende = ? " +
+					 "WHERE id = ? ");
+			int[] param = {Types.DATE, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//77
 			statements[i++] = null;
@@ -846,19 +873,35 @@ public class PreparedSqlStatements {
 		
 		{//122			(43)
 			/**
-			 * Abfrage eines ZVKontos im aktuellen Haushaltsjahr mit einem bestimmten Kapitel <br>
-			 * und einer bestimmter Titelgruppe und welches nicht gelöscht und nicht abgeschlossen ist.
+			 * Abfrage eines ZVKontos im aktuellen Haushaltsjahr mit einem bestimmten Kapitel
+			 * und einer bestimmter Titelgruppe (Titelgruppenkonto) oder Titel (Titelkonto)und 
+			 * welches nicht gelöscht oder abgeschlossen ist.
 			 * @author w.flat 
 			 */
 			ps = con.prepareStatement(	"SELECT k.id " +
-										"FROM ZVKonten k, Haushaltsjahre h " +
-										"WHERE k.kapitel = ? " +
-											"AND k.titelgruppe = ? " +
-											"AND k.geloescht = '0' " + 
-											"AND k.abgeschlossen = '0' " +
-											"AND k.haushaltsjahrid = h.id " +
-											"AND h.status = '0'");
-			int[] param = {Types.VARCHAR, Types.VARCHAR};
+										  "FROM zvkonten k, zvkontentitel t, haushaltsjahre h " +
+										 "WHERE k.kapitel = ? " +
+										   "AND k.titelgruppe = '' " +
+										   "AND k.id = t.zvkontoid " +
+										   "AND t.titel = ? " +
+										   "AND t.untertitel = '' " +
+										   "AND k.haushaltsjahrid = h.id " +
+										   "AND h.status = '0' " +
+										   "AND t.geloescht = '0' " +
+										   "AND k.geloescht = '0' " +
+										   "AND k.abgeschlossen = '0' " +
+										 "UNION " +
+										"SELECT k.id " +
+										  "FROM zvkonten k, haushaltsjahre h " +
+										 "WHERE k.kapitel = ? " +
+										   "AND k.titelgruppe = ? " +
+										   "AND NOT k.titelgruppe = '' " +
+										   "AND k.haushaltsjahrid = h.id " +
+										   "AND h.status = '0' " +
+										   "AND k.geloescht = '0' " +
+										   "AND k.abgeschlossen = '0'");
+			//               Kapitel       Titel            Kapitel      Titelgruppe
+			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
@@ -907,10 +950,27 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement(	"SELECT k.id " +
-										"FROM ZVKonten k, Haushaltsjahre h " +
-										"WHERE k.kapitel = ? AND titelgruppe = ? AND " +
-										"h.id = k.haushaltsjahrid AND h.status = '0' AND geloescht != '0'" );
-			int[] param = {Types.VARCHAR, Types.VARCHAR};
+								  "FROM zvkonten k, zvkontentitel t, haushaltsjahre h " +
+								 "WHERE k.kapitel = ? " +
+								   "AND k.titelgruppe = '' " +
+								   "AND k.id = t.zvkontoid " +
+								   "AND t.titel = ? " +
+								   "AND t.untertitel = '' " +
+								   "AND k.haushaltsjahrid = h.id " +
+								   "AND h.status = '0' " +
+								   "AND t.geloescht = '0' " +
+								   "AND k.geloescht = '1' " +
+								 "UNION " +
+								"SELECT k.id " +
+								  "FROM zvkonten k, haushaltsjahre h " +
+								 "WHERE k.kapitel = ? " +
+								   "AND k.titelgruppe = ? " +
+								   "AND NOT k.titelgruppe = '' " +
+								   "AND k.haushaltsjahrid = h.id " +
+								   "AND h.status = '0' " +
+								   "AND k.geloescht = '1' " );
+			//               Kapitel       Titel            Kapitel      Titelgruppe
+			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		
@@ -1025,8 +1085,51 @@ public class PreparedSqlStatements {
 			int[] param = {Types.FLOAT, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//136
-			statements[i++] = null;
+		{//136 Ermittelt anhand der ID eines ZV-Titels dessen ID in einem anderen (zu übergebenden) Haushaltsjahr (ID)
+			ps = con.prepareStatement(
+					"SELECT t4.id " +
+					  "FROM zvkontentitel t1, zvkontentitel t2, zvkonten k1, " +
+					       "zvkontentitel t3, zvkontentitel t4, zvkonten k2 " +
+				     "WHERE t1.id = ? " +
+					   "AND t1.zvkontoid = k1.id " +
+					   "AND k1.titelgruppe = '' " +
+					   "AND k1.id = t2.zvkontoid " +
+					   "AND t2.titel = t1.titel " +
+					   "AND t2.untertitel = '' " +
+					   "AND t3.untertitel = t2.untertitel " +
+					   "AND t3.titel = t2.titel " +
+					   "AND t3.zvkontoid = k2.id "+ 
+					   "AND k2.titelgruppe = k1.titelgruppe " +
+					   "AND k2.kapitel = k1.kapitel " +
+					   "AND k2.haushaltsjahrid = ? " +
+					   "AND k2.id = t4.zvkontoid " +
+					   "AND t4.titel = t1.titel " +
+					   "AND t4.untertitel = t1.untertitel " +
+					   "AND t1.geloescht = '0' " +
+					   "AND t2.geloescht = '0' " +
+					   "AND k1.geloescht = '0' " +
+					   "AND t3.geloescht = '0' " +
+					   "AND t4.geloescht = '0' " +
+					   "AND k2.geloescht = '0' " +
+					 "UNION " +
+					"SELECT t2.id " +
+					  "FROM zvkonten k1, zvkontentitel t1, " +
+					       "zvkonten k2, zvkontentitel t2 " +
+					 "WHERE t1.id = ? " +
+					   "AND t1.zvkontoid = k1.id " +
+					   "AND NOT k1.titelgruppe = '' " +
+					   "AND k2.kapitel = k1.kapitel " +
+					   "AND k2.titelgruppe = k1.titelgruppe " +
+					   "AND k2.haushaltsjahrid = ? " +
+					   "AND k2.id = t2.zvkontoid " +
+					   "AND t2.titel = t1.titel " +
+					   "AND t2.untertitel = t1.untertitel " +
+					   "AND t1.geloescht = '0' " +
+					   "AND t2.geloescht = '0' " +
+					   "AND k1.geloescht = '0' " +
+					   "AND k2.geloescht = '0'");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//137
 			statements[i++] = null;
@@ -2321,7 +2424,7 @@ public class PreparedSqlStatements {
 							   "o.id, o.datum, o.typ, o.phase, " + 
 							   "u1.name, u1. vorname, " + 
 							   "u2.name, u2.vorname, " +
-							   "zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden, " +
+							   "t.id, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden, " +
 							   "fk2.id, fk2.bezeichnung, i.bezeichnung, i.kostenstelle, fk2.hauptkonto, " +
 							   "o.bestellwert " +
 						  "FROM bestellungen o, benutzer u1, benutzer u2, zvkontentitel t, " +
@@ -2348,8 +2451,14 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//302
-			statements[i++] = null;
+		{//302 Ändert ZV-Titel und FB-Konto einer Bestellung
+			ps = con.prepareStatement(
+					"UPDATE Bestellungen " + 
+					   "SET zvtitel = ?, " +
+					       "fbkonto = ? " +
+					 "WHERE id = ?");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//303
 			statements[i++] = null;
@@ -2372,10 +2481,10 @@ public class PreparedSqlStatements {
 		{//309
 			statements[i++] = null;
 		}
-		/**********************************/
-		/* Join: FBKonten, ZVKontentitel  */
-		/* Indizes: 310-324					      */
-		/**********************************/
+		/*****************************************************/
+		/* Join: FBKonten, ZVKontentitel, Kontenzuordnungen  */
+		/* Indizes: 310-324					                 */
+		/*****************************************************/
 		{//310 Addition eine Betrags auf die Vormerkungen
 			ps = con.prepareStatement("UPDATE FBKonten k, ZVKontentitel t " +
 																"SET k.vormerkungen = (k.vormerkungen + ?), t.vormerkungen = (t.vormerkungen + ?) " +
@@ -2418,14 +2527,69 @@ public class PreparedSqlStatements {
 			int[] param = {	Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//313
-			statements[i++] = null;
+		{//313 Portiert die Kontenzuordnungen eines Haushaltsjahres in eine temporäre Tabelle.
+			// Die Konten-IDs werden bereits umgesetzt.
+			ps = con.prepareStatement(
+					"CREATE TABLE kontenzuordnung_tmp  " +
+						"SELECT z2.id zvkontoid, f2.id fbkontoid, k.status " +
+						  "FROM kontenzuordnung k, " +
+						       "fbkonten f1, fbkonten f2, " +
+							   "zvkonten z1, zvkonten z2 " +
+						 "WHERE k.fbkontoid = f1.id " +
+						   "AND f1.haushaltsjahrid = ? " +
+						   "AND f2.haushaltsjahrid = ? " +
+						   "AND f1.institutsid = f2.institutsid " +
+						   "AND f1.hauptkonto = f2.hauptkonto " +
+						   "AND f1.unterkonto = f2.unterkonto " +
+						   "AND k.zvkontoid = z1.id " +
+						   "AND z1.haushaltsjahrid = f1.haushaltsjahrid " +
+						   "AND z2.haushaltsjahrid = f2.haushaltsjahrid " +
+						   "AND z2.kapitel = z1.kapitel " +
+						   "AND NOT z1.titelgruppe = '' " +
+						   "AND z2.titelgruppe = z1.titelgruppe " +
+						   "AND f1.geloescht = '0' " +
+						   "AND f2.geloescht = '0' " +
+						   "AND z1.geloescht = '0' " +
+						   "AND z2.geloescht = '0' " +
+					    "UNION " +
+						"SELECT z2.id zvkontoid, f2.id fbkontoid, k.status " +
+						  "FROM kontenzuordnung k, " +
+						       "zvkonten z1, zvkontentitel t1, " +
+							   "zvkonten z2, zvkontentitel t2, " +
+							   "fbkonten f1, fbkonten f2 " +
+					     "WHERE z1.id = k.zvkontoid " +
+						   "AND z1.id = t1.zvkontoid " +
+						   "AND z1.haushaltsjahrid = ? " +
+						   "AND z1.titelgruppe = '' " +
+						   "AND t1.untertitel = ''" +
+						   "AND z2.id = t2.zvkontoid " +
+						   "AND z2.haushaltsjahrid = ? " +
+						   "AND z2.titelgruppe = '' " +
+						   "AND t2.untertitel = '' " +
+						   "AND z1.kapitel = z2.kapitel " +
+						   "AND t1.titel = t2.titel " +
+						   "AND f1.id = k.fbkontoid " +
+						   "AND f1.haushaltsjahrid = z1.haushaltsjahrid " +
+						   "AND f2.haushaltsjahrid = z2.haushaltsjahrid " +
+						   "AND f1.institutsid = f2.institutsid " +
+						   "AND f1.hauptkonto = f2.hauptkonto " +
+						   "AND f1.unterkonto = f2.unterkonto " +
+						   "AND z1.geloescht = '0' " +
+						   "AND t1.geloescht = '0' " +
+						   "AND z2.geloescht = '0' " +
+						   "AND t2.geloescht = '0' " +
+						   "AND f1.geloescht = '0' " +
+						   "AND f2.geloescht = '0'");
+			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER };
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//314
-			statements[i++] = null;
+		{//314 Fügt alle Datensätze der temporären Kontenzuordnungstabelle in die persistente Kontenzuordnungstabelle ein
+			ps = con.prepareStatement("INSERT INTO kontenzuordnung SELECT * FROM kontenzuordnung_tmp");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//315 
-			statements[i++] = null;
+		{//315 Löscht temporäre Kontenzuordnungstabelle
+			ps = con.prepareStatement("DROP TABLE kontenzuordnung_tmp");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//316
 			statements[i++] = null;
