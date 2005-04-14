@@ -3575,6 +3575,90 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 	
+	/**
+	 * fügt eine neue Zuordnung einer TempRolle zu einem Benutzer
+	 * @param tmpRolle - neue TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void addTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.insertTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * löscht eine TempRolle eines Benutzers
+	 * @param tmpRolle - zu löschende TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void delTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.deleteTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * aktualisiert eine TempRolle eines Benutzers
+	 * @param tmpRolle - TempRolle
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void setTempRolle(TmpRolle tmpRolle) throws ApplicationServerException{
+		try{
+			db.updateTempRolle(tmpRolle);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * gibt alle TempRollen mit Benutzern, die die Rolle von dem Besitzer erhalten haben
+	 * @param besitzer - Id des Benutzers der die TempRolle vergeben hat
+	 * @return Benutzer-Array
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public TmpRolle[] getTempRolleUsers(int besitzer) throws ApplicationServerException{
+		try{
+			return db.selectTempRolleUsers(besitzer);
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
+	
+	/**
+	 * löscht alte TmpRollen bei denen das GültigBis Datum kleiner als heute ist
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public void delOldTempRolles() throws ApplicationServerException{
+		try{
+			db.deleteOldTempRolles();
+		} catch(ApplicationServerException e) {
+			db.rollback();
+			throw e;
+		} finally {
+			db.commit();
+		}
+	}
 }
 
 
