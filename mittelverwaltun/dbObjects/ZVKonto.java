@@ -162,7 +162,6 @@ public class ZVKonto implements Serializable {
 	 * @param bezeichnung = Die Bezeichnung des Kontos.
 	 * @param kapitel = Kapitel ist eine 5.stellige Nummer
 	 * @param titelgruppe = Die Titelgruppe des ZVKontos ist eine 2.stellige Nummer.
-	 * @param dispoLimit = Der DispoKredit, der vorläufig dem ZVKonto eingeräumt wurde. 
 	 */
 	public ZVKonto(String bezeichnung, String kapitel, String titelgruppe, float dispo ) {
 		this.id = 0;						// Id ist noch nicht bekannt
@@ -186,7 +185,6 @@ public class ZVKonto implements Serializable {
 	 * @param bezeichnung = Die Bezeichnung des Kontos.
 	 * @param kapitel = Kapitel ist eine 5.stellige Nummer
 	 * @param titelgruppe = Die Titelgruppe des ZVKontos ist eine 2.stellige Nummer.
-	 * @param dispoLimit = Der DispoKredit, der vorläufig dem ZVKonto eingeräumt wurde. 
 	 */
 	public ZVKonto(int id, String bezeichnung, String kapitel, String titelgruppe, boolean zweckgebunden){
 		this.id = id;
@@ -353,11 +351,11 @@ public class ZVKonto implements Serializable {
 	 * @param titelgruppe = Die neue Titelgruppe des ZVKontos.
 	 */
 	public void setTitelgruppe(String titelgruppe) {
+	    if(!isTGRKonto() || titelgruppe.length() != 2)		// Wenn kein TGR-Konto oder keine Titelgruppe angegeben,
+	        return;											// dann kann die Titelgruppe auch nicht geändert werden.
 		this.titelgruppe = titelgruppe;
-		if (isTGRKonto()) {		// Wenn ein TGRKOnto, dann auch bei den Titeln ändern
-			for (int i = 0; i < titel.size(); i++) {
-				((ZVTitel) titel.get(i)).setNewTGR(titelgruppe);
-			}
+		for (int i = 0; i < titel.size(); i++) {
+			((ZVTitel)titel.get(i)).setNewTGR(titelgruppe);
 		}
 	}
 	

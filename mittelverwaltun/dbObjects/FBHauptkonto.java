@@ -5,7 +5,10 @@ import java.util.ArrayList;
 
 /**
  * Diese Klasse repräsentiert ein Fachbereichs-Hauptkonto. <br>
- * Das FBHauptkonto kann mehrere FBUnterkonten enthalten. 
+ * Ein FBHauptkonto ist immer einem Institut zugeordnet. <br>
+ * Das Hauptkonto ist eine 2.stellige Nummer, dass das FBHauptkonto innerhalb eines Instituts eindeutig identifiziert. <br>
+ * Die Unterkonto-Nummer eines FBHaupkontos ist immer "0000". <br>
+ * Das FBHauptkonto kann mehrere FBUnterkonten haben. 
  * @author w.flat
  */
 public class FBHauptkonto extends FBUnterkonto implements Serializable {
@@ -93,7 +96,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 	 * @param bez = Bezeichnung des Kontos
 	 * @param inst = Institut, welchem das Konto zugeordnet ist.
 	 * @param haupt = Nummer des Hauptkontos
-	 * @param unter = Nummer des Unterkontos
 	 */
 	public FBHauptkonto(int id, String bez, Institut inst, String haupt ){
 		super(id,  bez, inst, haupt, "0000" );

@@ -4,8 +4,10 @@ import java.io.Serializable;
 
 /**
  * FBUnterkonto. <br> 
- * Diese Klasse repräsentiert ein FB-Unterkonto, welches einem Professor <br> 
+ * Diese Klasse repräsentiert ein FB-Unterkonto, welches einem Professor <br>
  * oder einem Mitarbeiter eines Institus zugeordnet ist. <br>
+ * Die Hauptkonto-Nummer ist die Nummer des FBHauptkontos, welchem das FBUNterkonto zugeordnet ist. <br>
+ * Die Unterkonto-Nummer ist immer ungleich "0000".
  * @author w.flat
  */
 public class FBUnterkonto implements Serializable {
@@ -173,7 +175,6 @@ public class FBUnterkonto implements Serializable {
 	 * @param bez = Bezeichnung des Kontos
 	 * @param haupt = Nummer des Hauptkontos
 	 * @param unter = Nummer des Unterkontos
-	 * @param budget = Budget, welches dieses Konto enthält
 	 */
 	public FBUnterkonto( String bez, Institut inst, String haupt, String unter ){
 		this.id = 0;
@@ -195,7 +196,6 @@ public class FBUnterkonto implements Serializable {
 	 * @param bez = Bezeichnung des Kontos
 	 * @param haupt = Nummer des Hauptkontos
 	 * @param unter = Nummer des Unterkontos
-	 * @param budget = Budget, welches dieses Konto enthält
 	 */
 	public FBUnterkonto( int id, String bez, Institut inst, String haupt, String unter ){
 		this.id = id;
@@ -335,7 +335,7 @@ public class FBUnterkonto implements Serializable {
 
 	/**
 	 * Die Hauptkontennummer aktualisieren. 
-	 * @param = Neuer Wert von dem Hauptkonto. 
+	 * @param hautpkonto = Neuer Wert von dem Hauptkonto. 
 	 */
 	public void setHauptkonto(String hautpkonto) {
 		this.hauptkonto = hautpkonto;
@@ -351,7 +351,7 @@ public class FBUnterkonto implements Serializable {
 
 	/**
 	 * Die Unterkontennummer aktualisieren. 
-	 * @param = Neuer Wert von dem Unterkonto. 
+	 * @param unterkonto = Neuer Wert von dem Unterkonto. 
 	 */
 	public void setUnterkonto(String unterkonto) {
 		this.unterkonto = unterkonto;

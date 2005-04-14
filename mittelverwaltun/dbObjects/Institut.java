@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Die Klasse zu Speichern eines Instituts. Das Institut wird verwendet als Kostenstelle aller Bestellungen. <br>
+ * Die Klasse zu Speichern eines Instituts. <br>
+ * Das Institut wird verwendet als Kostenstelle von allen Bestellungen. <br>
+ * Die Kostenstelle ist eine 6.stellige Nummer, dass den Institut eindeutig identifiziert. <br>
  * Nur für ein Institut können Hauptkonten erstellt werden. 
  * @author w.flat
  */

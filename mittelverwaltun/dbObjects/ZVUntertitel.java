@@ -448,7 +448,7 @@ public class ZVUntertitel implements Serializable {
 
 	/**
 	 * Die aktuelle Bezeichnung vom ZVUntertitel abfragen. 
-	 * @param Die aktuelle Bezeichnung des ZVUntertitels. 
+	 * @return Die aktuelle Bezeichnung des ZVUntertitels. 
 	 */
 	public String getBezeichnung() {
 		return bezeichnung;
