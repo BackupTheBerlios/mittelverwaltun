@@ -534,7 +534,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 				newBestellung.setBesteller(bestellung.getBesteller());
 				newBestellung.setHuel(bestellung.getHuel());
 				id = bestellung.getId();
-				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, newBestellung);
+				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, newBestellung, true);
 			}else{
 				id = frame.getApplicationServer().addBestellung(newBestellung);
 			}
@@ -557,17 +557,19 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	}
 
 	public void setZVKonto(ZVUntertitel zvTitel) {
-		if(zvTitel.getZVTitel() != null){
-			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText(zvTitel.getUntertitel());
-			this.zvTitel = zvTitel.getZVTitel();
-		}else{
-			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText("");
-			this.zvTitel = zvTitel;
-		}
+		if (zvTitel != null){
+			if(zvTitel.getZVTitel() != null){
+				labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
+				labTitel.setText(zvTitel.getTitel());
+				labUT.setText(zvTitel.getUntertitel());
+				this.zvTitel = zvTitel.getZVTitel();
+			}else{
+				labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
+				labTitel.setText(zvTitel.getTitel());
+				labUT.setText("");
+				this.zvTitel = zvTitel;
+			}
+		}else this.zvTitel = null;
 	}
 
 
@@ -649,7 +651,9 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		tfBestellDatum.setValue(bestellung.getDatum());
 		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
 		cbEmpfaenger.setSelectedItem(bestellung.getEmpfaenger());
-		cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+		
+		if(bestellung.getFbkonto()!=null) cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+
 		if(bestellung.getErsatzbeschaffung())
 			rbErsatz.doClick();
 		else
@@ -732,8 +736,10 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 	 */
 	public void setFBKonto(FBUnterkonto fbKonto) {
 		this.fbKonto = fbKonto;
-		tfFBKonto.setText(fbKonto.toString());
-		buBestellen.setSelected(true);
+		if (fbKonto != null){
+			tfFBKonto.setText(fbKonto.toString());
+			buBestellen.setSelected(true);
+		}
 	}
 
 }

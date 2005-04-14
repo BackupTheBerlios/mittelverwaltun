@@ -1,9 +1,3 @@
-/*
- * Created on 09.04.2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
 package gui;
 
 
@@ -24,9 +18,6 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * @author Mario
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class AnnualOrderTable extends JTable {
 	AccountTable fbAccountTab, zvAccountTab;
@@ -42,9 +33,7 @@ public class AnnualOrderTable extends JTable {
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		applyTableRendering();
-	
 	}
-
 	
 	public AnnualOrderTableModel getAnnualOrderTableModel(){
 		return (AnnualOrderTableModel)getModel();
@@ -96,14 +85,21 @@ public class AnnualOrderTable extends JTable {
 	}
 
 	public void actualize(){
-		for (int i=0; i < getAnnualOrderTableModel().getRowCount(); i++){
-			if (fbAccountTab.isAccountBudgetCopied(getAnnualOrderTableModel().getFbAccountTabRow(i)) && zvAccountTab.isAccountBudgetCopied(getAnnualOrderTableModel().getZvAccountTabRow(i)))
-				getAnnualOrderTableModel().setValueAt(new String("Portieren"),i,8);
-			else
-				getAnnualOrderTableModel().setValueAt(new String("Abschließen"),i,8);			
+		
+		AnnualOrderTableModel tm = getAnnualOrderTableModel();
+		
+		for (int i=0; i < tm.getRowCount(); i++){
+			if ((tm.getPhase(i)==0)||(fbAccountTab.isAccountBudgetCopied(tm.getFbAccountTabRow(i)) && zvAccountTab.isAccountBudgetCopied(tm.getZvAccountTabRow(i))))
+				tm.setValueAt(new String("Portieren"),i,8);
+			else if (getAnnualOrderTableModel().getAktion(i) < 1)
+				tm.setValueAt(new String("Abschließen"),i,8);
 		}
 		
 		applyTableRendering();
+	}
+	
+	public ArrayList getOrders(){
+		return getAnnualOrderTableModel().getOrders();
 	}
 	
 	private static class ColoredCellRenderer implements TableCellRenderer {
@@ -174,5 +170,7 @@ public class AnnualOrderTable extends JTable {
 	
 			}else return null;
 		}
-	}	
+	}
+	
+
 }

@@ -23,18 +23,27 @@ import dbObjects.ZVTitel;
  */
 public class AnnualOrderTableModel extends DefaultTableModel {
 	
+	// Bestelltypen
 	static final int STD_TYP = 0;
 	static final int ASK_TYP = 1;
 	static final int ZA_TYP = 2;
+	
+	// Bestellphasen
 	static final int SONDIERUNG = 0;
 	static final int ABWICKLUNG = 1;
 	static final int ABGESCHLOSSEN = 2;
 	static final int STORNIERT = 2;
 	
+	// Aktionen
+	static final int UNDEFINED = -1;
+	static final int PORTIEREN = 0;
+	static final int ABSCHLIESSEN = 1;
+	static final int STORNIEREN = 2;
+	
 	ArrayList fbRowReferences = new ArrayList();
 	ArrayList zvRowReferences = new ArrayList();
-		
-	
+
+	ArrayList orders = new ArrayList();
 	
 	public AnnualOrderTableModel (ArrayList orders, AccountTable fbAccounts, AccountTable zvAccounts){
 		super();
@@ -43,6 +52,9 @@ public class AnnualOrderTableModel extends DefaultTableModel {
 	    
 		setColumnIdentifiers(colheads);
 		if (orders != null){
+			
+			this.orders = orders;
+			
 			for(int i = 0; i < orders.size(); i++){
 				Bestellung order = (Bestellung)orders.get(i);
 				Object[] data = new Object[9];
@@ -149,4 +161,30 @@ public class AnnualOrderTableModel extends DefaultTableModel {
 			return ((Integer)zvRowReferences.get(rowIndex)).intValue();
 		}else return -1;
 	}
-}
+	
+	public int getAktion(int rowIndex){
+		if ((rowIndex < this.getRowCount())&& (rowIndex >= 0)){
+			String value = (String)getValueAt(rowIndex,8);
+			if (value.equalsIgnoreCase("Portieren"))
+				return PORTIEREN;
+			else if (value.equalsIgnoreCase("Abschlieﬂen"))
+				return ABSCHLIESSEN;
+			else if (value.equalsIgnoreCase("Stornieren"))
+				return STORNIEREN;
+			else return UNDEFINED;
+		}else return UNDEFINED;
+	}
+	
+	public ArrayList getOrders(){
+		for(int i = 0; i < orders.size(); i++){
+			Bestellung order = (Bestellung)orders.get(i);
+			if (getAktion(i) == ABSCHLIESSEN)
+				order.setPhase('2');
+			else if (getAktion(i) == STORNIEREN)
+				order.setPhase('3');
+		}
+		return orders;
+	}
+	
+}	
+

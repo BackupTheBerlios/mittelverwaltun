@@ -477,7 +477,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder, true);
 			origin = as.getASKBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();
@@ -502,7 +502,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder, true);
 			origin = as.getASKBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();
@@ -525,7 +525,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder, true);
 			origin = as.getASKBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();

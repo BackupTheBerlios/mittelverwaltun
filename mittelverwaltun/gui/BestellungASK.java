@@ -150,7 +150,9 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 		buBestellen.setEnabled(true);
 		cbAuftraggeber.setSelectedItem(bestellung.getAuftraggeber());
 		cbEmpfaenger.setSelectedItem(bestellung.getEmpfaenger());
-		cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+		
+		if(bestellung.getFbkonto()!=null) cbInstitut.setSelectedItem(bestellung.getFbkonto().getInstitut());
+		
 		cbSwBeauftragter.setSelectedItem(bestellung.getSwbeauftragter());
 		tfBestellDatum.setValue(bestellung.getDatum());
 		labFirma.setText("" + bestellung.getAngebot().getAnbieter());
@@ -273,7 +275,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 				id = frame.getApplicationServer().addBestellung(editedOrder);
 			else{
 				id = editedOrder.getId();
-				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, editedOrder);
+				frame.getApplicationServer().setBestellung(frame.getBenutzer(), bestellung, editedOrder, true);
 			}
 			
 			buDelete.setEnabled(true);
@@ -637,30 +639,48 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	}
 
 	public void setZVKonto(ZVUntertitel zvTitel) {
-		if(zvTitel.getZVTitel() != null){
-			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText(zvTitel.getUntertitel());
-			this.zvTitel = zvTitel.getZVTitel();
-		}else{
-			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
-			labTitel.setText(zvTitel.getTitel());
-			labUT.setText("");
-			this.zvTitel = (ZVTitel)zvTitel;
-		}
-	}
+		if (zvTitel != null){
+			if(zvTitel.getZVTitel() != null){
+				labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
+				labTitel.setText(zvTitel.getTitel());
+				labUT.setText(zvTitel.getUntertitel());
+				this.zvTitel = zvTitel.getZVTitel();
+			}else{
+				labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
+				labTitel.setText(zvTitel.getTitel());
+				labUT.setText("");
+				this.zvTitel = zvTitel;
+			}
+		}else this.zvTitel = null;
+	}	
+	
+//	public void setZVKonto(ZVUntertitel zvTitel) {
+//		if(zvTitel.getZVTitel() != null){
+//			labKapitel.setText(zvTitel.getZVTitel().getZVKonto().getKapitel());
+//			labTitel.setText(zvTitel.getTitel());
+//			labUT.setText(zvTitel.getUntertitel());
+//			this.zvTitel = zvTitel.getZVTitel();
+//		}else{
+//			labKapitel.setText(((ZVTitel)zvTitel).getZVKonto().getKapitel());
+//			labTitel.setText(zvTitel.getTitel());
+//			labUT.setText("");
+//			this.zvTitel = (ZVTitel)zvTitel;
+//		}
+//	}
 
-	/* (Kein Javadoc)
-	 * @see gui.FBKontoSelectable#setFBKonto(dbObjects.FBUnterkonto)
-	 */
 	public void setFBKonto(FBUnterkonto fbKonto) {
 		this.fbKonto = fbKonto;
-		tfFBKonto.setText(fbKonto.toString());
+		if (fbKonto != null){
+			tfFBKonto.setText(fbKonto.toString());
+			buBestellen.setSelected(true);
+		}
 	}
+	
+//	public void setFBKonto(FBUnterkonto fbKonto) {
+//		this.fbKonto = fbKonto;
+//		tfFBKonto.setText(fbKonto.toString());
+//	}
 
-	/* (Kein Javadoc)
-	 * @see javax.swing.event.TableModelListener#tableChanged(javax.swing.event.TableModelEvent)
-	 */
 	public void tableChanged(TableModelEvent e) {
 		PositionsTableModel ptm = (PositionsTableModel)e.getSource();
 

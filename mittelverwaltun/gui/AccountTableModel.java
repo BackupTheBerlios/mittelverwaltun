@@ -103,9 +103,9 @@ public  AccountTableModel (int typ, ArrayList accounts){
 				data[1] = acc.getInstitut().getKostenstelle();
 				data[2] = acc.getHauptkonto();
 				data[3] = acc.getBezeichnung();
-				data[4] = new Float(acc.getBudget());
+				data[4] = new Float(acc.getGesamtbudget());
 				data[5] = new Integer(0);
-				data[6] = new Float(acc.getVormerkungen());
+				data[6] = new Float(acc.getGesamtvormerkungen());
 			
 				data[7] = new Boolean(false);
 				
@@ -258,7 +258,7 @@ public int getRowOfAccount(int accId){
 				FBHauptkonto acc = (FBHauptkonto)accounts.get(i);
 				Kontenzuordnung[] z = acc.getZuordnung();
 				if ((z != null)&&(z.length > 0)&&(!z[0].getZvKonto().getZweckgebunden())&&getUebernehmen(i))
-					budget += acc.getBudget();
+					budget += acc.getGesamtbudget();
 			}
 		}
 		return budget;

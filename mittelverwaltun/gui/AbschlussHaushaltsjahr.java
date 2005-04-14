@@ -66,13 +66,13 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     
   	this.frame = frame;
   	
-  	this.setSize(1065, 460);
+  	this.setSize(835, 488);
   	this.getContentPane().setLayout(null);
 
     pnHeader.setBackground(Color.white);
     pnHeader.setForeground(Color.black);
     pnHeader.setBorder(null);
-    pnHeader.setBounds(new Rectangle(0, 10, 1055, 55));
+    pnHeader.setBounds(new Rectangle(0, 10, 825, 55));
     pnHeader.setLayout(null);
 
     lbHeadline.setFont(new java.awt.Font("Dialog", 1, 14));
@@ -174,51 +174,44 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 
     pnHeader.add(lbHeadline5, null);
 
-    spContent1.setBounds(new Rectangle(5, 75, 1045, 270));
+    spContent1.setBounds(new Rectangle(5, 75, 815, 270));
     try {
 		atContent1 = new AccountTable(AccountTable.ZV_KONTEN, frame.applicationServer.getOffeneZVKonten(frame.applicationServer.getCurrentHaushaltsjahrId()));
 		atContent1.getAccountTableModel().addTableModelListener(this);
+		spContent1.getViewport().add(atContent1, null);
     } catch (ApplicationServerException ae) {
 		// TODO Auto-generated catch block
 		ae.printStackTrace();
 	}
-    spContent1.getViewport().add(atContent1, null);
+    
     
     ArrayList fbKonten = new ArrayList();
+    spContent2.setBounds(new Rectangle(5, 75, 815, 270));
+    spContent3.setBounds(new Rectangle(58, 75, 709, 300));
 	
-	try {
+    try {
 		fbKonten = frame.applicationServer.getOffeneFBHauptkonten(frame.applicationServer.getCurrentHaushaltsjahrId());
+		
+		atContent2 = new AccountTable(AccountTable.FB_KONTEN, fbKonten);
+	    atContent2.getAccountTableModel().addTableModelListener(this);
+	    spContent2.getViewport().add(atContent2, null);
+	    
+	    mtContent3 = new MappingsTable(fbKonten, atContent2, atContent1);
+	    spContent3.getViewport().add(mtContent3, null);
 	} catch (ApplicationServerException ae) {
-		// TODO Auto-generated catch block
 		ae.printStackTrace();
 	}
     
-    spContent2.setBounds(new Rectangle(5, 75, 813, 270));
-    atContent2 = new AccountTable(AccountTable.FB_KONTEN, fbKonten);
-    atContent2.getAccountTableModel().addTableModelListener(this);
-    spContent2.getViewport().add(atContent2, null);
-    //spContent2.setVisible(false);
-
-    spContent3.setBounds(new Rectangle(173, 75, 708, 300));
-    mtContent3 = new MappingsTable(fbKonten, atContent2, atContent1);
-    spContent3.getViewport().add(mtContent3, null);
-    //spContent3.setVisible(false);
-
-    spContent4.setBounds(new Rectangle(5, 75, 1045, 300));
+    spContent4.setBounds(new Rectangle(5, 75, 815, 300));
     try {
 		aotContent4 = new AnnualOrderTable(frame.applicationServer.getOffeneBestellungen(frame.applicationServer.getCurrentHaushaltsjahrId()), atContent2, atContent1);
-	} catch (ApplicationServerException ae) {
-		// TODO Auto-generated catch block
+		spContent4.getViewport().add(aotContent4, null);
+    } catch (ApplicationServerException ae) {
 		ae.printStackTrace();
 	}
-    spContent4.getViewport().add(aotContent4, null);
-    //spContent4.setVisible(false);
-
-    spContent5.setBounds(new Rectangle(5, 75, 1045, 300));
-    //spContent5.setVisible(false);
-
+    
+    spContent5.setBounds(new Rectangle(5, 75, 815, 300));
     taContent5.setFont(new java.awt.Font("Dialog", 1, 11));
-    taContent5.setText("\n\tZusammenfassung\n\t==================");
     spContent5.getViewport().add(taContent5, null);
 
     btTakeOverAcc.setBounds(new Rectangle(5, 350, 180, 25));
@@ -233,36 +226,36 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     btTakeOverBudget.setText("Alle Budgets übernehmen");
     btTakeOverBudget.addActionListener(this);
   
-    lbZvBudget.setBounds(new Rectangle(435, 352, 200, 20));
+    lbZvBudget.setBounds(new Rectangle(220, 380, 200, 20));
     lbZvBudget.setText("Zweckungebundenes ZV-Budget");
     lbZvBudget.setFont(new java.awt.Font("Dialog", 1, 11));
     lbZvBudget.setHorizontalAlignment(SwingConstants.RIGHT);
     
-    tfZvBudget.setBounds(new Rectangle(640, 352, 100, 20));
+    tfZvBudget.setBounds(new Rectangle(425, 380, 100, 20));
     tfZvBudget.setValue(new Float(0));
     tfZvBudget.setFont(new java.awt.Font("Dialog", 1, 11));
     tfZvBudget.setHorizontalAlignment(SwingConstants.RIGHT);
     
-    lbFbBudget.setBounds(new Rectangle(745, 352, 200, 20));
+    lbFbBudget.setBounds(new Rectangle(530, 380, 185, 20));
     lbFbBudget.setText("Zweckungebundenes FB-Budget");
     lbFbBudget.setFont(new java.awt.Font("Dialog", 1, 11));
     lbFbBudget.setHorizontalAlignment(SwingConstants.RIGHT);
  
-    tfFbBudget.setBounds(new Rectangle(950, 352, 100, 20));
+    tfFbBudget.setBounds(new Rectangle(720, 380, 100, 20));
     tfFbBudget.setValue(new Float(0));
     tfFbBudget.setFont(new java.awt.Font("Dialog", 1, 11));
     tfFbBudget.setHorizontalAlignment(SwingConstants.RIGHT);
     
     pnSeparator.setBorder(BorderFactory.createLineBorder(Color.gray));
-    pnSeparator.setBounds(new Rectangle(5, 385, 1045, 2));
+    pnSeparator.setBounds(new Rectangle(5, 413, 815, 2));
 
-    btClose.setBounds(new Rectangle(925, 395, 125, 25));
+    btClose.setBounds(new Rectangle(695, 423, 125, 25));
     btClose.setFont(new java.awt.Font("Dialog", 1, 11));
     btClose.setActionCommand("dispose");
     btClose.setText("Beenden");
     btClose.addActionListener(this);
     
-    btApply.setBounds(new Rectangle(795, 395, 125, 25));
+    btApply.setBounds(new Rectangle(565, 423, 125, 25));
     btApply.setEnabled(false);
     btApply.setFont(new java.awt.Font("Dialog", 1, 11));
     btApply.setActionCommand("execute");
@@ -270,13 +263,13 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     btApply.addActionListener(this);
 
     btForward.setText("Weiter");
-    btForward.setBounds(new Rectangle(690, 395, 100, 25));
+    btForward.setBounds(new Rectangle(460, 423, 100, 25));
     btForward.setFont(new java.awt.Font("Dialog", 1, 11));
     btForward.setActionCommand("forward");
     btForward.addActionListener(this);
     
     btBackward.setFont(new java.awt.Font("Dialog", 1, 11));
-    btBackward.setBounds(new Rectangle(585, 395, 100, 25));
+    btBackward.setBounds(new Rectangle(355, 423, 100, 25));
     btBackward.setEnabled(false);
     btBackward.setText("Zurück");
     btBackward.setActionCommand("backward");
@@ -333,9 +326,9 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
   	
   	btTakeOverAcc.setVisible(layer < 3);
   	btTakeOverBudget.setVisible(layer < 3);
-  	btApply.setEnabled(layer == 5);
-  	btBackward.setEnabled(layer != 1);
-  	btForward.setEnabled(layer != 5);
+  	btApply.setEnabled(layer == 4);
+  	btBackward.setEnabled((layer > 1)&&(layer < 5));
+  	btForward.setEnabled(layer < 4);
   	
   	if (((Float)tfFbBudget.getValue()).floatValue() > ((Float)tfZvBudget.getValue()).floatValue()){
   		tfFbBudget.setBackground(new Color(255, 204, 204));
@@ -367,12 +360,40 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
   		updateView();
   	}else if (cmd == "execute"){
   		try {
-			frame.getApplicationServer().portFBKonten(atContent2.getAccounts(), 1, 1);
-		} catch (ApplicationServerException e1) {
-			// TODO Auto-generated catch block
-			System.out.println(e1.getNestedMessage());
-			e1.printStackTrace();
+			int[] cnts = frame.getApplicationServer().finishBudgetYear(frame.getBenutzer(), frame.getApplicationServer().getCurrentHaushaltsjahrId(), aotContent4.getOrders(), atContent1.getAccounts(), atContent2.getAccounts(), true);
+		
+			taContent5.setText(
+				"\n\t" +
+				"Zusammenfassung\n\t"+
+				"==================\n\t" +
+				"> Abgeschlossene Bestellungen: " + cnts[0] + "\n\t" +
+				"> Stornierte Bestellungen: " + cnts[1] + "\n\t" +
+				"> Portierte Bestellungen: " + cnts[2] + "\n\t" +
+				"> Portierte Zentralverwaltungskonten: " + cnts[3] + "\n\t" +
+				"> Portierte Zentralverwaltungstitel: " + cnts[4] + "\n\t" +
+				"> Übernommene Zentralverwaltungsbudgets: " + cnts[5] + "\n\t" +
+				"> Abgeschlossene Zentralverwaltungskonten: " + cnts[6] + "\n\t" +
+				"> Portierte Fachbereichskonten: " + cnts[7] + "\n\t" +
+				"> Übernommene Fachbereichsbudgets: " + cnts[8] + "\n\t" +
+				"> Abgeschlossene Fachbereichskonten: alle\n\t" +
+				"> Portierte Kontenzuordnungen: " + cnts[9]
+			);
+
+  		} catch (ApplicationServerException ase) {
+			System.out.println(ase.getNestedMessage());
+			ase.printStackTrace();
+			taContent5.setText(
+					"\n\t" +
+					"Fehler bei Haushaltsjahreabschluss\n\t"+
+					"==================================\n\t"+
+					"Message from server: " + ase.getMessage() + "\n\t" +
+					"Nested message: " + ase.getNestedMessage()
+					);
 		}
+  		
+  		layer++;
+  		updateView();
+  	
   	}else if (cmd == "dispose"){
   		this.dispose();
   	}else if (cmd == "takeOverAccounts"){

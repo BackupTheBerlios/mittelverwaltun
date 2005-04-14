@@ -551,7 +551,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), tempOrigin, editedOrder, true);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();
@@ -576,7 +576,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder, true);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();
@@ -599,7 +599,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		try {
 			//StandardBestellung copy = (StandardBestellung)editedOrder.clone();
-			as.setBestellung(frame.getBenutzer(), origin, editedOrder);
+			as.setBestellung(frame.getBenutzer(), origin, editedOrder, true);
 			origin = as.getStandardBestellung(origin.getId());
 			updateComponentEnabling();
 			updatePhase();
