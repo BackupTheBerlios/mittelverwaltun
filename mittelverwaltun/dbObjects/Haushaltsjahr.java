@@ -1,6 +1,7 @@
 package dbObjects;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 
 /**
@@ -11,38 +12,37 @@ import java.io.Serializable;
  */
 public class Haushaltsjahr implements Serializable {
 
-	private String beschreibung;
-	private String von;
-	private String bis;
-	private int status;
+	private Date von = null;
+	private Date bis = null;
+	private int status = 3;
+	/* status=0: aktiv
+	 * status=1: inaktiv, noch nicht abgeschlossene ZV-Konten
+	 * status=2: inaktiv, abgeschlossen
+	 * status=3: inaktiv, setup
+	 */
+	public Haushaltsjahr(Date von){
+		this.von = von;
+	}
 	
-	public Haushaltsjahr(String beschreibung, String von, String bis){
-		this.beschreibung = beschreibung;
+	public Haushaltsjahr(Date von, Date bis){
+		
 		this.von = von;
 		this.bis = bis;
 	}
 	
-	public void setBeschreibung(String beschreibung){
-		this.beschreibung = beschreibung;
-	}
-	
-	public String getBeschreibung(){
-		return this.beschreibung;
-	}
-	
-	public void setVon(String von){
+	public void setVon(Date von){
 		this.von = von;
 	}
 	
-	public String getVon(){
+	public Date getVon(){
 		return this.von;
 	}
 	
-	public void setBis(String bis){
+	public void setBis(Date bis){
 		this.bis = bis;
 	}
 	
-	public String getBis(){
+	public Date getBis(){
 		return this.bis;
 	}
 	

@@ -241,7 +241,15 @@ public class ApplicationServerException extends Exception {
 		messages[175] = "Application Server Error: Fehler bei Datenbankzugriff - Database.createAsSelectTempFbKontenTab";
 		messages[176] = "Application Server Error: Fehler bei Datenbankzugriff - Database.dropTmpFbKontenTab";
 		messages[177] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectFbKonto";
-		
+		messages[178] = "Application Server Error: Fehler bei Datenbankzugriff - Database.createAsSelectTempKontenzuordnungTab";
+		messages[179] = "Application Server Error: Fehler bei Datenbankzugriff - Database.dropTmpKontenzuordnungTab";
+		messages[180] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectKontenzuordnungen";
+		messages[181] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectZvKontoIdInYear";
+		messages[182] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFbKontoIdInYear";
+		messages[183] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateOrderAccounts";
+		messages[184] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertHaushaltsjahr";
+		messages[185] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateHaushaltsjahrStatus";
+		messages[186] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateHaushaltsjahrEnde";
 		//Exception Ende Mario 199
 	}
 

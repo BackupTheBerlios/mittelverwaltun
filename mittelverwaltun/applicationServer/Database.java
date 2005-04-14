@@ -1365,23 +1365,23 @@ public class Database implements Serializable {
 	 * gibt das aktuelle Haushaltsjahr zurück
 	 * @throws ApplicationServerException
 	 */
-	public Haushaltsjahr selectHaushaltsjahr() throws ApplicationServerException{
-		Haushaltsjahr hhj;
-		try{
-			ResultSet rs = statements.get(70).executeQuery();
-			rs.last();
-			int count = rs.getRow();
-			rs.beforeFirst();
-			rs.next();
-			if (count > 0){
-				return new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
-			}else{
-				throw new ApplicationServerException(6);
-			}
-		} catch (SQLException e){
-			throw new ApplicationServerException(132, e.getMessage());
-		}
-	}
+//	public Haushaltsjahr selectHaushaltsjahr() throws ApplicationServerException{
+//		Haushaltsjahr hhj;
+//		try{
+//			ResultSet rs = statements.get(70).executeQuery();
+//			rs.last();
+//			int count = rs.getRow();
+//			rs.beforeFirst();
+//			rs.next();
+//			if (count > 0){
+//				return new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
+//			}else{
+//				throw new ApplicationServerException(6);
+//			}
+//		} catch (SQLException e){
+//			throw new ApplicationServerException(132, e.getMessage());
+//		}
+//	}
 
 	/**
 	 * gibt das aktuelle Haushaltsjahr zurück, d.h. wenn status = 0
@@ -1390,37 +1390,37 @@ public class Database implements Serializable {
 	 * @return	Haushaltsjahr
 	 * @throws ApplicationServerException
 	 */
-	public Haushaltsjahr selectForUpdateHaushaltsjahr() throws ApplicationServerException{
-		Haushaltsjahr hhj = null;
-
-		try{
-			ResultSet rs = statements.get(70).executeQuery();
-			if(rs.next())
-				hhj = new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
-		} catch (SQLException e){
-			throw new ApplicationServerException(133, e.getMessage());
-		}
-		return hhj;
-	}
+//	public Haushaltsjahr selectForUpdateHaushaltsjahr() throws ApplicationServerException{
+//		Haushaltsjahr hhj = null;
+//
+//		try{
+//			ResultSet rs = statements.get(70).executeQuery();
+//			if(rs.next())
+//				hhj = new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
+//		} catch (SQLException e){
+//			throw new ApplicationServerException(133, e.getMessage());
+//		}
+//		return hhj;
+//	}
 
 	/**
 	 * aktualisiert das Haushaltsjahr
 	 * @param hhj
 	 * @throws ApplicationServerException
 	 */
-	public void updateHaushaltsjahr(Haushaltsjahr hhj) throws ApplicationServerException{
-		if(hhj != null){
-			try{
-				Object[] parameters = {hhj.getBeschreibung(), hhj.getVon(), hhj.getBis()};
-
-				if(statements.get(71).executeUpdate(parameters) == 0)
-					throw new ApplicationServerException(6);
-
-			} catch (SQLException e){
-				throw new ApplicationServerException(134, e.getMessage());
-			}
-		}
-	}
+//	public void updateHaushaltsjahr(Haushaltsjahr hhj) throws ApplicationServerException{
+//		if(hhj != null){
+//			try{
+//				Object[] parameters = {hhj.getBeschreibung(), hhj.getVon(), hhj.getBis()};
+//
+//				if(statements.get(71).executeUpdate(parameters) == 0)
+//					throw new ApplicationServerException(6);
+//
+//			} catch (SQLException e){
+//				throw new ApplicationServerException(134, e.getMessage());
+//			}
+//		}
+//	}
 	
 	/**
 	 * Abfrage der HaushaltsjahrId vom aktuellem Jahr
@@ -1755,15 +1755,20 @@ public class Database implements Serializable {
 								"" + konto.getUebernahmeStatus()};
 			// SQL-Statement ausführen
 			statements.get(121).executeUpdate(parameters);
-			
-			return existsZVKonto( konto );	// KontoId ermitteln und zurückgeben
+			ResultSet rs = statements.get(121).getGeneratedKeys();
+			if (rs.next()) {
+				   return rs.getInt(1);
+			}else return 0;	// KontoId ermitteln und zurückgeben
 		} catch (SQLException e){
 			throw new ApplicationServerException( 0, e.getMessage() );
 		}
 	}
 
 	/**
-	 * Abfrage ob ein ZVKonto existiert. Dabei ist nur der Kapitel und die Titelgruppe entscheidend.
+	 * Abfrage ob ein ZVKonto existiert. 
+	 * Notwendig:
+	 *    - Titelkonto: Kapitel des ZVKontos und Titel des (einzigen) ZV-Titels
+	 *    - Titelgruppenkonto: Kapitel und Titelgruppe des ZV-Kontos.
 	 * @param ZVKonto, welches überprüft werden soll
 	 * @return kontoId vom übergebenen ZVKonto
 	 * @throws ApplicationServerException
@@ -1771,8 +1776,14 @@ public class Database implements Serializable {
 	 */
 	public int existsZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
+			
 			// Parameter für das SQL-Statement
-			Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
+			Object[] parameters = {konto.getKapitel(),"" , konto.getKapitel(), konto.getTitelgruppe()};
+						
+			if (!konto.isTGRKonto()){
+				parameters[1] = ((ZVTitel)konto.getSubTitel().get(0)).getTitel();
+			}
+			
 			// SQL-Statement mit der Nummer 122 ausführen
 			ResultSet rs = statements.get(122).executeQuery(parameters);
 			rs.last();		// In die letzte Zeile springen
@@ -1798,7 +1809,11 @@ public class Database implements Serializable {
 	public int existsDeleteZVKonto( ZVKonto konto ) throws ApplicationServerException {
 		try{
 			// Parameter für das SQL-Statement
-			Object[] parameters = {konto.getKapitel(), konto.getTitelgruppe()};
+			Object[] parameters = {konto.getKapitel(),"" , konto.getKapitel(), konto.getTitelgruppe()};
+						
+			if (!konto.isTGRKonto()){
+				parameters[1] = ((ZVTitel)konto.getSubTitel().get(0)).getTitel();
+			}
 			// SQL-Statement mit der Nummer 126 ausführen
 			ResultSet rs = statements.get(126).executeQuery(parameters);
 			rs.last();		// In die letzte Zeile springen
@@ -3663,14 +3678,14 @@ public class Database implements Serializable {
 					Benutzer besteller = new Benutzer(rs.getString(5), rs.getString(6));
 													//      Name               Vorname
 					Benutzer auftraggeber = new Benutzer(rs.getString(7), rs.getString(8));
-															// ID          Bezeichnung         Kapitel          Titelgruppe      Zweckgebunden
-					ZVTitel titel = new ZVTitel(new ZVKonto(rs.getInt(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getString(13).equalsIgnoreCase("1")));
+															               // ID          Bezeichnung         Kapitel          Titelgruppe      Zweckgebunden
+					ZVTitel titel = new ZVTitel(rs.getInt(9), new ZVKonto(rs.getInt(10), rs.getString(11), rs.getString(12), rs.getString(13), rs.getString(14).equalsIgnoreCase("1")));
 					                                      //  ID           Bezeichnung                   Bezeichnung        Kostenstelle        Hauptkonto
-					FBHauptkonto konto = new FBHauptkonto(rs.getInt(14), rs.getString(15), new Institut(rs.getString(16),  rs.getString(17)), rs.getString(18));
+					FBHauptkonto konto = new FBHauptkonto(rs.getInt(15), rs.getString(16), new Institut(rs.getString(17),  rs.getString(18)), rs.getString(19));
 														// ID      Datum                Typ                       Phase
 					Bestellung b = new Bestellung(	rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), 
 																						// Bestellwert
-													besteller, auftraggeber, titel, konto, rs.getFloat(19) );
+													besteller, auftraggeber, titel, konto, rs.getFloat(20) );
 							
 					bestellungen.add( b );
 				}
@@ -4735,24 +4750,18 @@ public class Database implements Serializable {
 	   }
 	}
 
-	public void insertAsSelectZvKontentitel (int newAccID, int oldAccID, boolean wBudget) throws ApplicationServerException{
+	public int insertAsSelectZvKontentitel (int newAccID, int oldAccID, boolean wBudget) throws ApplicationServerException{
 		try{
 			PreparedStatementWrapper ps;
-//			ResultSet rs;
-			
+		
 			Object[] parameters = { new Integer(newAccID), new Integer(oldAccID)};
 			
 			if (wBudget){
 				ps = statements.get(131);
 			}else ps = statements.get(132);
 			
-			ps.executeUpdate(parameters);
-//			rs = ps.getGeneratedKeys();
-//			
-//			if (rs.next()) {
-//				return rs.getInt(1);
-//			}else return 0;
-			
+			return ps.executeUpdate(parameters);
+
 	   } catch (SQLException e){
 		   throw new ApplicationServerException(172, e.getMessage());
 	   }
@@ -4979,6 +4988,115 @@ public class Database implements Serializable {
 		return tmpRolle;
 	}
 
+	public void createAsSelectTempKontenzuordnungTab (int oldYear, int newYear) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Integer (oldYear), new Integer (newYear), new Integer (oldYear), new Integer (newYear) };
+			statements.get(313).executeUpdate(parameters);
+		
+		} catch (SQLException e){
+			throw new ApplicationServerException(178, e.getMessage());
+		}
+	}
+
+	public void dropTmpKontenzuordnungTab () throws ApplicationServerException{
+		try{
+			
+			statements.get(315).executeUpdate();
+				
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(179, e.getMessage());
+	   }		
+	}
+
+	public int insertAsSelectKontenzuordnungen () throws ApplicationServerException{
+		try{
+			
+			return statements.get(314).executeUpdate();
+				
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(180, e.getMessage());
+	   }		
+	}
+
+	public int selectZvTitelIdInYear (int title, int year) throws ApplicationServerException{
+		try{
+			
+			Object[] parameters = { new Integer(title), new Integer(year), new Integer(title), new Integer(year)};
+			
+			ResultSet rs = statements.get(136).executeQuery(parameters);
+			
+			if (rs.next()) { //erster zurückgelieferter Schlüssel = neue ZV-Titel-ID
+				return rs.getInt(1);
+			}else return 0;
+			
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(181, e.getMessage());
+	   }		
+	}
+	
+	public int selectFbKontoIdInYear (int acc, int year) throws ApplicationServerException{
+		try{
+			
+			Object[] parameters = { new Integer(acc), new Integer(year)};
+			
+			ResultSet rs = statements.get(66).executeQuery(parameters);
+			
+			if (rs.next()) { //erster zurückgelieferter Schlüssel = neue ZV-Titel-ID
+				return rs.getInt(1);
+			}else return 0;
+			
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(182, e.getMessage());
+	   }		
+	}
+
+	public int updateOrderAccounts (int order, int zvAcc, int fbAcc) throws ApplicationServerException{
+		try{
+			
+			Object[] parameters = { new Integer(zvAcc), (fbAcc > 0) ? new Integer(fbAcc) : null, new Integer(order)};
+			return statements.get(302).executeUpdate(parameters);
+						
+	   } catch (SQLException e){
+		   throw new ApplicationServerException(183, e.getMessage());
+	   }				
+	}
+
+	public int insertHaushaltsjahr (java.sql.Date beginn, char status) throws ApplicationServerException{
+		
+		try {
+			Object[] parameters = {beginn, "3"};
+			statements.get(74).executeUpdate(parameters);
+			
+			ResultSet rs = statements.get(74).getGeneratedKeys();
+			
+			if (rs.next()) {
+				return rs.getInt(1);
+			}else return 0;
+			
+		} catch (SQLException e) {
+			throw new ApplicationServerException(184, e.getMessage());
+		}
+		
+	}
+	
+	public int updateHaushaltsjahrStatus (int id, char status) throws ApplicationServerException{
+		try {
+			Object[] parameters = {""+status, new Integer(id)};
+			return statements.get(75).executeUpdate(parameters);
+		} catch (SQLException e) {
+			throw new ApplicationServerException(185, e.getMessage());
+		}
+	}
+
+	public int updateHaushaltsjahrEnde (int id, java.sql.Date ende) throws ApplicationServerException{
+		try {
+			Object[] parameters = {ende, new Integer(id)};
+			return statements.get(76).executeUpdate(parameters);
+		} catch (SQLException e) {
+			throw new ApplicationServerException(186, e.getMessage());
+		}
+	}
+	
 }
 
 

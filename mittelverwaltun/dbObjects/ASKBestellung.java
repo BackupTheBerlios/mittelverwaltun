@@ -67,6 +67,24 @@ public class ASKBestellung extends Bestellung implements Serializable {
 		this.swbeauftragter = swbeauftragter;
 	}
 	
+	public void payPositionen (){
+		if (angebot != null) angebot.payPositionen();
+	}
+	
+	public void owePositionen (){
+		if (angebot != null) angebot.owePositionen();
+	}
+	
+	public void updateBestellwert(){
+		if (angebot != null) 
+			setBestellwert(angebot.getSumme());
+	}
+	
+	public void updateVerbindlichkeiten(){
+		if (angebot != null) 
+			setVerbindlichkeiten(angebot.getVerbindlichkeiten());
+	}
+	
 	public Object clone(){
 			
 		ZVUntertitel t = null;

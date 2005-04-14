@@ -398,4 +398,24 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 	public void setBudgetUebernehmen(boolean budgetUebernehmen){
 		this.budgetUebernehmen = budgetUebernehmen;
 	}
+	
+	public float getGesamtbudget(){
+		float budget = getBudget();
+		if (unterkonten != null){
+			for (int i=0; i<unterkonten.size(); i++){
+				budget += ((FBUnterkonto)unterkonten.get(i)).getBudget();
+			}
+		}
+		return budget;
+	}
+	
+	public float getGesamtvormerkungen(){
+		float debit = getVormerkungen();
+		if (unterkonten != null){
+			for (int i=0; i<unterkonten.size(); i++){
+				debit += ((FBUnterkonto)unterkonten.get(i)).getVormerkungen();
+			}
+		}		
+		return debit;		
+	}
 }

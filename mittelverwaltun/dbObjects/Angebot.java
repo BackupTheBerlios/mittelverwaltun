@@ -85,6 +85,20 @@ public class Angebot implements Serializable {
 		return gesamtSumme;
 	}
 
+	public float getVerbindlichkeiten(){
+		float summe = 0;
+		
+		if (positionen.size() > 0)
+			for(int i = 0; i < positionen.size(); i++){
+				Position position = (Position)positionen.get(i);
+				if (!position.getBeglichen())
+					summe += position.getGesamtpreis();
+			}
+		
+		return summe;
+	}
+	
+	
 	public boolean equals(Object o){
 		if(o != null){
 			Angebot angebot = (Angebot)o;
@@ -119,6 +133,22 @@ public class Angebot implements Serializable {
 	public void setAngenommen(boolean angenommen) {
 		this.angenommen = angenommen;
 	}
+	
+	public void payPositionen (){
+		if (positionen != null){
+			for(int i=0; i<positionen.size(); i++)
+				((Position)positionen.get(i)).setBeglichen(true);
+		}
+	}
+	
+	public void owePositionen (){
+		if (positionen != null){
+				for(int i=0; i<positionen.size(); i++)
+					((Position)positionen.get(i)).setBeglichen(false);
+		}
+	}
+	
+		
 	
 	/**
 	 * erstellt eine Kopie von einem Angebot

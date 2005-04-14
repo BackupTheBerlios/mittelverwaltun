@@ -234,6 +234,30 @@ public class StandardBestellung extends Bestellung implements Serializable {
 		return result;
 	}
 	
+	public void payPositionen(){
+		int i;
+		if ((i = getAngenommenesAngebot()) != -1)
+			((Angebot)angebote.get(i)).payPositionen();
+	}
+	
+	public void owePositionen(){
+		int i;
+		if ((i = getAngenommenesAngebot()) != -1)
+			((Angebot)angebote.get(i)).owePositionen();
+	}
+	
+	public void updateBestellwert(){
+		int i;
+		if ((i = getAngenommenesAngebot()) != -1)
+			setBestellwert(((Angebot)angebote.get(i)).getSumme());
+	}
+	
+	public void updateVerbindlichkeiten(){
+		int i;
+		if ((i = getAngenommenesAngebot()) != -1)
+			setVerbindlichkeiten(((Angebot)angebote.get(i)).getVerbindlichkeiten());
+	}
+	
 	/**
 	 * gibt die Summe der 7 % - igen MwSt der Positionen zurück
 	 * @return 7 % MwSt-Summe aller Positionen

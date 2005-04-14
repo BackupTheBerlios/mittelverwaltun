@@ -91,10 +91,11 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 	
 	/**
 	 * Konstruktor, zum Erzeugen von eines leeren ZVTitel, der lediglich ein ZVKonto enthält.
-	 * @param konto = Das ZVKonto, welches den ZVTitel beinhaltet. 
+	 * @param ID = ID des ZV-Titels
+	 * @param konto = Konto des Titels
 	 */
-	public ZVTitel( ZVKonto konto ){
-		super( 0, null, "", "", "",	0.0f, 0.0f, "", "", false );
+	public ZVTitel(int id, ZVKonto konto ){
+		super( id, null, "", "", "",	0.0f, 0.0f, "", "", false );
 		this.zvKonto = konto;
 	}
 	
