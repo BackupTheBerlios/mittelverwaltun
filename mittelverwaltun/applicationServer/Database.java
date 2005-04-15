@@ -669,7 +669,8 @@ public class Database implements Serializable {
 				benutzer = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),
 										new Rolle(rs.getInt(4), rs.getString(5)), new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
 										rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
-										rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
+										rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ),
+										rs.getInt(19));
 			}else {
 				throw new ApplicationServerException(2);
 			}
@@ -699,7 +700,8 @@ public class Database implements Serializable {
 				b = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),
 							new Rolle(rs.getInt(4), rs.getString(5)), new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
 							rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
-							rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
+							rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ),
+							rs.getInt(19));
 			rs.close();
 		} catch (SQLException e){
 			throw new ApplicationServerException(114, e.getMessage());
@@ -730,7 +732,8 @@ public class Database implements Serializable {
 																			new Institut(rs.getInt(10), rs.getString(11), rs.getString(12)),
 																			rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8),
 																			rs.getInt(9),rs.getString(15), rs.getString(16), rs.getString(17), 
-																			rs.getString(18),!rs.getString(19).equalsIgnoreCase( "0" ));
+																			rs.getString(18),!rs.getString(19).equalsIgnoreCase( "0" ),
+																			rs.getInt(20));
 					i++;
 				}
 			}
@@ -1042,7 +1045,7 @@ public class Database implements Serializable {
 																			new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
 																			rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
 																			rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),
-																			!rs.getString(18).equalsIgnoreCase( "0" ));
+																			!rs.getString(18).equalsIgnoreCase( "0" ), rs.getInt(19));
 					i++;
 				}
 			}
@@ -1071,7 +1074,8 @@ public class Database implements Serializable {
 				benutzer = new Benutzer(rs.getInt(1), rs.getString(2), rs.getString(3),
 										new Rolle(rs.getInt(4), rs.getString(5)), new Institut(rs.getInt(6), rs.getString(7), rs.getString(8)),
 										rs.getString(9), rs.getString(10), rs.getString(11), rs.getString(12), rs.getInt(13),
-										rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ));
+										rs.getString(14), rs.getString(15), rs.getString(16), rs.getString(17),!rs.getString(18).equalsIgnoreCase( "0" ),
+										rs.getInt(19));
 			}else {
 				throw new ApplicationServerException(2);
 			}
@@ -1211,6 +1215,7 @@ public class Database implements Serializable {
 													benutzer.getTitel(), benutzer.getName(),  benutzer.getVorname(), benutzer.getEmail(),
 													((benutzer.getPrivatKonto() == 0) ? null : new Integer(benutzer.getPrivatKonto())), benutzer.getTelefon(), benutzer.getFax(), 
 													benutzer.getBau(), benutzer.getRaum(), (benutzer.getSwBeauftragter() ? "1" : "0"),
+													new Integer(benutzer.getSichtbarkeit()),
 													new Integer(benutzer.getId())};
 			if(statements.get(21).executeUpdate(param2) == 0)
 				throw new ApplicationServerException(2);
@@ -1258,7 +1263,7 @@ public class Database implements Serializable {
 												new Integer(benutzer.getKostenstelle().getId()),  benutzer.getTitel(), benutzer.getName(),
 												benutzer.getVorname(), benutzer.getEmail(), ((benutzer.getPrivatKonto() == 0) ? null : new Integer(benutzer.getPrivatKonto())), 
 												benutzer.getTelefon(), benutzer.getFax(), benutzer.getBau(), benutzer.getRaum(), 
-												(benutzer.getSwBeauftragter() ? "1" : "0")};
+												(benutzer.getSwBeauftragter() ? "1" : "0"), new Integer(benutzer.getSichtbarkeit())};
 			statements.get(24).executeUpdate(param3);
 
 			ResultSet rs = statements.get(24).getGeneratedKeys();

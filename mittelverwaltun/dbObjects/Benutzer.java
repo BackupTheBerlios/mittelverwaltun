@@ -9,6 +9,12 @@ import java.io.Serializable;
  * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
  */
 public class Benutzer implements Serializable {
+	
+	public static int VIEW_PRIVAT = 0;
+	
+	public static int VIEW_INSTITUT = 1;
+	
+	public static int VIEW_FACHBEREICH = 0;	
 
 	private int id;
 
@@ -45,10 +51,12 @@ public class Benutzer implements Serializable {
 	private String raum;
 
 	private boolean swBeauftragter;
+	
+	private int sichtbarkeit;
 
 	public Benutzer(int id, String benutzername, String passwort, Rolle rolle, TmpRolle[] tmpRollen, Institut kostenstelle, String titel,
 			String vorname, String name, String email, int privatKonto, String telefon, String fax, String bau, String raum, boolean swBeauftragter, 
-			boolean geloescht, boolean geaendert){
+			boolean geloescht, boolean geaendert, int sichtbarkeit){
 		this.id = id;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -67,11 +75,12 @@ public class Benutzer implements Serializable {
 		this.swBeauftragter = swBeauftragter;
 		this.geloescht = geloescht;
 		this.geaendert = geaendert;
+		this.sichtbarkeit = sichtbarkeit;
 	}
 	
 	public Benutzer(String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
 									String titel, String name, String vorname, String email, int privatKonto, 
-									String telefon, String fax, String bau, String raum, boolean swBeauftragter){
+									String telefon, String fax, String bau, String raum, boolean swBeauftragter, int sichtbarkeit){
 		this.id = 0;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -87,11 +96,12 @@ public class Benutzer implements Serializable {
 		this.bau = bau;
 		this.raum = raum;
 		this.swBeauftragter = swBeauftragter;
+		this.sichtbarkeit = sichtbarkeit;
 	}
 	
 	public Benutzer(int id, String benutzername, String passwort, Rolle rolle, Institut kostenstelle, 
 									String titel, String name, String vorname, String email, int privatKonto, 
-									String telefon, String fax, String bau, String raum, boolean swBeauftragter){
+									String telefon, String fax, String bau, String raum, boolean swBeauftragter, int sichtbarkeit){
 		this.id = id;
 		this.benutzername = benutzername;
 		this.passwort = passwort;
@@ -107,6 +117,7 @@ public class Benutzer implements Serializable {
 		this.bau = bau;
 		this.raum = raum;
 		this.swBeauftragter = swBeauftragter;
+		this.sichtbarkeit = sichtbarkeit;
 	}
 	
 	public Benutzer(int id, String benutzername, String name, String vorname){
@@ -316,6 +327,14 @@ public class Benutzer implements Serializable {
 	public void setSwBeauftragter(boolean swBeauftragter) {
 		this.swBeauftragter = swBeauftragter;
 	}
+	
+	public int getSichtbarkeit() {
+		return sichtbarkeit;
+	}
+
+	public void setSichtbarkeit(int sichtbarkeit) {
+		this.sichtbarkeit = sichtbarkeit;
+	}
 
 	public Object clone(){
 		TmpRolle[] tr = null;
@@ -329,7 +348,7 @@ public class Benutzer implements Serializable {
 		return new Benutzer(
 						this.id, this.benutzername, this.passwort, rolle==null?null:(Rolle)rolle.clone(), tr, kostenstelle==null?null:(Institut)kostenstelle.clone(),
 						this.titel, this.vorname, this.name, this.email, this.privatKonto, this.telefon, this.fax, this.bau, this.raum, this.swBeauftragter, 
-						this.geloescht, this.geaendert);
+						this.geloescht, this.geaendert, this.sichtbarkeit);
 	}
 	
 }

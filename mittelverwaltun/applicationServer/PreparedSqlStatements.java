@@ -122,11 +122,11 @@ public class PreparedSqlStatements {
 												"name = ?, " +
 												"vorname = ?, " +
 												"email = ?, " +
-												"privatKontoId = ?, telefon = ?, fax = ?, bau = ?, raum = ?, swBeauftragter = ?" +
+												"privatKontoId = ?, telefon = ?, fax = ?, bau = ?, raum = ?, swBeauftragter = ?, sichtbarkeit = ? " +
 									   "WHERE id = ?");
 			int[] param = {Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR, Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
+										 Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//22	gibt alle Software-Beauftragte des Fachbereichs zurück
@@ -146,12 +146,12 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement(	"INSERT " +
 										  "INTO Benutzer " +
 												"(benutzername, passwort, rollenId, institutsId, titel, " +
-												"name, vorname, email, privatKontoId, telefon, fax, bau, raum, swBeauftragter)" +
-										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+												"name, vorname, email, privatKontoId, telefon, fax, bau, raum, swBeauftragter, sichtbarkeit)" +
+										"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 										Statement.RETURN_GENERATED_KEYS);
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.VARCHAR,
 										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.VARCHAR, 
-										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+										 Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//25	
@@ -1417,7 +1417,7 @@ public class PreparedSqlStatements {
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
 											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter, b.sichtbarkeit " +
 										"FROM Benutzer b, Institute i, Rollen r " +
 									   "WHERE b.institutsId = i.id " +
 									     "AND b.rollenId = r.id " +
@@ -1432,7 +1432,7 @@ public class PreparedSqlStatements {
 															   		  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, "+
 															   		  "i.id, i.bezeichnung, i.kostenstelle, " +
 															   		  "r.id, r.bezeichnung, " +
-																			"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+																			"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter, b.sichtbarkeit " +
 																"FROM Benutzer b, Institute i, Rollen r " +
 															   "WHERE b.institutsId = i.id " +
 																 "AND b.geloescht = 0 " +
@@ -1444,7 +1444,7 @@ public class PreparedSqlStatements {
 																	  "r.id, r.bezeichnung, " +
 																	  "i.id, i.bezeichnung, i.kostenstelle, " +
 																	  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-																		"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+																		"b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter, b.sichtbarkeit " +
 																"FROM Benutzer b, Institute i, Rollen r " +
 															   "WHERE b.institutsId = i.id " +
 																 "AND b.rollenId = r.id " +
@@ -1459,7 +1459,7 @@ public class PreparedSqlStatements {
 																	  "r.id, r.bezeichnung, " +
 																	  "i.id, i.bezeichnung, i.kostenstelle, " +
 																	  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-																	  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+																	  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter, b.sichtbarkeit " +
 																"FROM Benutzer b, Institute i, Rollen r " +
 															   "WHERE b.institutsId = i.id " +
 															     "AND i.id = ? " +
@@ -1473,7 +1473,7 @@ public class PreparedSqlStatements {
 											  "r.id, r.bezeichnung, " +
 											  "i.id, i.bezeichnung, i.kostenstelle, " +
 											  "b.titel, b.name, b.vorname, b.email, b.privatKontoId, " +
-											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter " +
+											  "b.telefon, b.fax, b.bau, b.raum, b.swBeauftragter, b.sichtbarkeit " +
 										"FROM Benutzer b, Institute i, Rollen r " +
 										"WHERE b.id = ? " +											"AND b.institutsId = i.id " +
 										  "AND b.rollenId = r.id " +

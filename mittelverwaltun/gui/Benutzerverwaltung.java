@@ -66,6 +66,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JLabel jLabel14 = new JLabel();
   JLabel jLabel15 = new JLabel();
   JCheckBox cbSoftBeauftragter = new JCheckBox();
+  String[] sichten = {"Privat", "Institut", "Fachbereich"}; 
+  JComboBox cbSichtbarkeit = new JComboBox(sichten);
+  JLabel jLabel16 = new JLabel();
 
   public Benutzerverwaltung(MainFrame frame){
 		super( "Account ändern" );
@@ -245,6 +248,10 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     jLabel15.setPreferredSize(new Dimension(100, 16));
     cbSoftBeauftragter.setText("Softwarebeauftragter");
     cbSoftBeauftragter.setBounds(new Rectangle(236, 222, 182, 23));
+    cbSichtbarkeit.setBounds(new Rectangle(621, 220, 165, 22));
+    jLabel16.setBounds(new Rectangle(514, 224, 116, 15));
+    jLabel16.setText("Sichtbarkeit(*)");
+    jLabel16.setPreferredSize(new Dimension(100, 16));
     this.getContentPane().add(jLabel1, null);
     this.getContentPane().add(jLabel5, null);
     this.getContentPane().add(jLabel2, null);
@@ -283,6 +290,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     this.getContentPane().add(tfTelefon, null);
     this.getContentPane().add(tfBau, null);
     this.getContentPane().add(jScrollPane1, null);
+    this.getContentPane().add(cbSichtbarkeit, null);
+    this.getContentPane().add(jLabel16, null);
     jScrollPane1.getViewport().add(listBenutzer, null);
   }
 
@@ -351,7 +360,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			  Benutzer benutzer = new Benutzer(tfBenutzername.getText(), psw, (Rolle)cbRollen.getSelectedItem(),
 																				(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
 																				tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
-																				tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
+																				tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected(),
+																				cbSichtbarkeit.getSelectedIndex());
 				int key = applicationServer.addUser(benutzer);
 				benutzer.setId(key);
 			  listModel.addElement(benutzer);
@@ -400,7 +410,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			Benutzer benutzer = new Benutzer(currBenutzer.getId(), tfBenutzername.getText(), passwort, (Rolle)cbRollen.getSelectedItem(),
 																			(Institut)cbInstitut.getSelectedItem(), tfTitel.getText(), tfName.getText(),
 																			tfVorname.getText(), tfEMail.getText(), privatKonto, tfTelefon.getText(),
-																			tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected());
+																			tfFax.getText(), tfBau.getText(), tfRaum.getText(), cbSoftBeauftragter.isSelected(),
+																			cbSichtbarkeit.getSelectedIndex());
 			applicationServer.setUser(benutzer, currBenutzer);
 			listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
 			if(frame != null)
@@ -418,7 +429,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 				if(listBenutzer.isSelectionEmpty()){
 					throw new ApplicationServerException(0, "Es ist kein Institut selektiert !");
 			  }else{
-				  if(JOptionPane.showConfirmDialog(this, "Wollen Sie wirklich löschen ?", "Löschen", 
+				  if(JOptionPane.showConfirmDialog(this, "Wollen Sie wirklich löschen ?", "Löschen",
 				  																JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 					  delUser();
 						loadUsers();
@@ -440,7 +451,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	  }catch(ApplicationServerException ex){
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", ex.getMessage(), ex.getNestedMessage(), MessageDialogs.ERROR_ICON);
 	  } catch(RemoteException re) {
-		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(), 
+		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(),
 												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
 	  }
  }
@@ -458,7 +469,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			tfBau.setText(benutzer.getBau());
 			tfRaum.setText(benutzer.getRaum());
 			cbSoftBeauftragter.setSelected(benutzer.getSwBeauftragter());
-			
+
 			if(benutzer.getPrivatKonto() != 0){
 				try {
 					FBUnterkonto fbKonto = applicationServer.getFBKonto(benutzer.getPrivatKonto());
@@ -475,7 +486,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			tfTitel.setText(benutzer.getTitel());
 			tfPasswort.setText("");
 			tfPasswortWdhl.setText("");
-
+			
+			cbSichtbarkeit.setSelectedIndex(benutzer.getSichtbarkeit());
+			
 			cbInstitut.setSelectedItem(benutzer.getKostenstelle());
 			cbRollen.setSelectedItem(benutzer.getRolle());
 		}
@@ -483,25 +496,25 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	}
 
 	public static void main(String[] args) {
-		JFrame test = new JFrame("Benutzerverwaltung Test");
-		JDesktopPane desk = new JDesktopPane();
-		desk.setDesktopManager(new DefaultDesktopManager());
-		test.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		test.setContentPane(desk);
-		test.setBounds(100,100,800,700);
-		try{
-			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-//			ApplicationServer applicationServer = server.getMyApplicationServer();
-//			PasswordEncrypt pe = new PasswordEncrypt();
-//			String psw = pe.encrypt(new String("r.driesner").toString());
-//			applicationServer.login("r.driesner", psw);
-//			Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(applicationServer);
-//			desk.add(benutzerVerwaltung);
-//			test.show();
-//			benutzerVerwaltung.show();
-		}catch(Exception e){
-				System.out.println(e);
-		}
+		MainFrame test = new MainFrame("Benutzerverwaltung");
+	 	try{
+		 	CentralServer server = (CentralServer)Naming.lookup("//192.168.1.1/mittelverwaltung");
+		 	ApplicationServer applicationServer = server.getMyApplicationServer();
+		 	test.setApplicationServer(applicationServer);
+		 	PasswordEncrypt pe = new PasswordEncrypt();
+		 	String psw = pe.encrypt(new String("r.driesner").toString());
+		 	test.setBenutzer(applicationServer.login("r.driesner", psw));
+	   	test.setBounds(100,100,800,900);
+		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
+
+		 	test.setJMenuBar( new MainMenu( test ) );
+		 	Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(test.getApplicationServer());
+		 	test.addChild(benutzerVerwaltung);
+		 	test.setVisible(true);
+		 	benutzerVerwaltung.show();
+	 }catch(Exception e){
+			System.out.println(e);
+	 }
   }
 
 	/* (Kein Javadoc)
