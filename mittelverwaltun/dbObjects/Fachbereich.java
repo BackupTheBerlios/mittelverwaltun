@@ -6,27 +6,52 @@ import java.lang.String;
 /**
  * @author robert
  *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * Klasse für den Fachbereich
  */
 public class Fachbereich extends Institut implements Serializable {
+	
+	/**
+	 * Pauschale für einen Professor
+	 */
 	private float profPauschale;
+	
+	/**
+	 * String für PLZ mit Ort
+	 */
 	private String plzOrt;
 
+	/**
+	 * String für Strasse und Haus-Nummer
+	 */
 	private String strasseHausNr;
 
+	/**
+	 * Bezeichnung der Fachhochschule
+	 */
 	private String fhBezeichnung;
 
+	/**
+	 * Beschreibung der Fachhochschule
+	 */
 	private String fhBeschreibung;
 
+	/**
+	 * Bezeichnung der Fachbereichs
+	 */
 	private String fbBezeichnung;
-
-	/*public Fachbereich(int id, String hochschule, float profPauschale, String bezeichnung, String kostenstelle) {
-		super(id, bezeichnung, kostenstelle, false);
-		this.profPauschale = profPauschale;
-		this.hochschule = hochschule;
-	}*/
 	
+	/**
+	 * Konstruktor
+	 * @param id - Id des Fachbereichs (Institu)
+	 * @param fbBezeichnung - Bezeichnung der Fachbereichs
+	 * @param profPauschale - Pauschale für einen Professor
+	 * @param bezeichnung - Bezeichnung des Instuts
+	 * @param kostenstelle - Kostenstelle
+	 * @param strasseHausNr
+	 * @param plzOrt
+	 * @param fhBezeichnung - Bezeichnung der Fachhochschule
+	 * @param fhBeschreibung - Beschreibung der Fachhochschule
+	 */
 	public Fachbereich(int id, String fbBezeichnung, float profPauschale, String bezeichnung, String kostenstelle,
 											String strasseHausNr, String plzOrt, String fhBezeichnung, String fhBeschreibung) {
 		super(id, bezeichnung, kostenstelle, false);
@@ -38,6 +63,16 @@ public class Fachbereich extends Institut implements Serializable {
 		this.fhBeschreibung = fhBeschreibung;
 	}
 	
+	/**
+	 * Konstruktor
+	 * @param id - Id des Fachbereichs (Institu)
+	 * @param fbBezeichnung - Bezeichnung der Fachbereichs
+	 * @param profPauschale - Pauschale für einen Professor
+	 * @param strasseHausNr
+	 * @param plzOrt
+	 * @param fhBezeichnung - Bezeichnung der Fachhochschule
+	 * @param fhBeschreibung - Beschreibung der Fachhochschule
+	 */
 	public Fachbereich(int id, String fbBezeichnung, float profPauschale,
 											String strasseHausNr, String plzOrt,  String fhBezeichnung, String fhBeschreibung) {
 		super(id, null, null, false);
@@ -49,10 +84,18 @@ public class Fachbereich extends Institut implements Serializable {
 		this.fhBeschreibung = fhBeschreibung;
 	}
 	
+	/**
+	 * gibt die ProfessorPauschale zurück
+	 * @return ProfessorPauschale
+	 */
 	public float getProfPauschale() {
 		return profPauschale;
 	}
 
+	/**
+	 * setzt die ProfessorPauschale
+	 * @param profPauschale
+	 */
 	public void setProfPauschale(float profPauschale) {
 		this.profPauschale = profPauschale;
 	}
@@ -93,26 +136,50 @@ public class Fachbereich extends Institut implements Serializable {
 		this.strasseHausNr = strasseHausNr;
 	}
 
+	/**
+	 * gibt die Bezeichnung der Fachhoschule zurück
+	 * @return fhBezeichnung
+	 */
 	public String getFhBezeichnung() {
 		return fhBezeichnung;
 	}
 
+	/**
+	 * setzt die Bezeichnung der Fachhoschule
+	 * @param fhBezeichnung
+	 */
 	public void setFhBezeichnung(String fhBezeichnung) {
 		this.fhBezeichnung = fhBezeichnung;
 	}
 
+	/**
+	 * gibt die Beschreibung der Fachhoschule zurück
+	 * @return fhBezeichnung
+	 */
 	public String getFhBeschreibung() {
 		return fhBeschreibung;
 	}
 
+	/**
+	 * setzt die Beschreibung der Fachhoschule
+	 * @param fhBeschreibung
+	 */
 	public void setFhBeschreibung(String fhBeschreibung) {
 		this.fhBeschreibung = fhBeschreibung;
 	}
 
+	/**
+	 * gibt die Bezeichnung des Fachbereichs zurück
+	 * @return fbBezeichnung
+	 */
 	public String getFbBezeichnung() {
 		return fbBezeichnung;
 	}
 
+	/**
+	 * setzt die Bezeichnung des Fachbereichs
+	 * @param fbBezeichnung
+	 */
 	public void setFbBezeichnung(String fbBezeichnung) {
 		this.fbBezeichnung = fbBezeichnung;
 	}

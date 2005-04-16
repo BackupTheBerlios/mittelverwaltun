@@ -6,8 +6,7 @@ import java.text.DateFormat;
 /**
  * @author robert
  *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * Klasse für eine temporäre Rolle die ein Benutzer im System erhalten kann
  */
 public class TmpRolle extends Rolle implements Serializable {
 

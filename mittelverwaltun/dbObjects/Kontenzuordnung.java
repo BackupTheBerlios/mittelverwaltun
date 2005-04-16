@@ -5,11 +5,13 @@ import java.io.Serializable;
 /**
  * @author robert
  *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * Klasse für die Zuordnung eines ZVKontos zu einem FBKonto
  */
 public class Kontenzuordnung implements Serializable {
 
+	/**
+	 * Status für die Kontenzuordnung: 0 - nicht gesperrt, 1-gesperrt
+	 */
 	private short status;
 
 	private ZVKonto zvKonto;

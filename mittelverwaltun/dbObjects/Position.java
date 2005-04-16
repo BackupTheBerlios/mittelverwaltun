@@ -5,8 +5,7 @@ import java.io.Serializable;
 /**
  * @author robert
  *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * Klasse für eine Positione in der Standard- bzw. ASKBestellung
  */
 public class Position implements Serializable {
 
@@ -15,6 +14,7 @@ public class Position implements Serializable {
 	private float einzelPreis;
 
 	private int menge;
+	
 	private float rabatt;
 
 	private float mwst;

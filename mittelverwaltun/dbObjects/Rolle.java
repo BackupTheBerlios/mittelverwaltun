@@ -5,46 +5,80 @@ import java.io.Serializable;
 /**
  * @author robert
  *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * Klasse für eine Rolle für einen Benutzer im System
  */
 public class Rolle implements Serializable {
 
+	/**
+	 * Id der Rolle
+	 */
 	private int id;
 
+	/**
+	 * Array für die Id der Aktivitäten der Rolle
+	 */
 	private int[] aktivitaeten;
 
 	private String bezeichnung;
 	
+	/**
+	 * Array für die Aktivitäten der Rolle
+	 */
 	private Aktivitaet[] aktivitaetenFull;
 
+	/**
+	 * Konstutktor
+	 * @param id
+	 */
 	public Rolle (int id){
 		this.id = id;
 		this.bezeichnung = null;
 		this.aktivitaeten = null;
 	}
 	
+	/**
+	 * Konstutktor
+	 * @param id
+	 * @param bezeichnung
+	 */
 	public Rolle(int id, String bezeichnung){
 		this.id = id;
 		this.bezeichnung = bezeichnung;
 		this.aktivitaeten = null;
 	}
 	
+	/**
+	 * Konstutktor
+	 * @param id
+	 * @param aktivitaeten - Array mit Id der Aktivitäten
+	 * @param bezeichnung
+	 */
 	public Rolle(int id, int[] aktivitaeten, String bezeichnung){
 		this.id = id;
 		this.aktivitaeten = aktivitaeten;
 		this.bezeichnung = bezeichnung;
 	}
 
-//	Änderung Anfang 01.09.2004	
+  /**
+   * Konstutktor
+   * @param id
+   * @param bezeichnung
+   * @param aktivitaeten
+   */
 	public Rolle(int id, String bezeichnung, Aktivitaet[] aktivitaeten){			
 		this.id = id;
 		this.aktivitaetenFull = aktivitaeten;
 		this.bezeichnung = bezeichnung;
 		this.aktivitaeten = null;
 	}
-//	Änderung Ende 01.09.2004
-	
+
+	/**
+	 * Konstutktor
+	 * @param id
+	 * @param bezeichnung
+	 * @param aktivitaetenFull
+	 * @param aktivitaeten - Array mit Id der Aktivitäten
+	 */
 	public Rolle(int id, String bezeichnung, Aktivitaet[] aktivitaetenFull, int[] aktivitaeten){			
 		this.id = id;
 		this.aktivitaetenFull = aktivitaetenFull;
@@ -77,10 +111,18 @@ public class Rolle implements Serializable {
 		this.id = id;
 	}
 
+	/**
+	 * gibt ein Array mit Id´s der Aktivitäten zurück
+	 * @return Int-Array
+	 */
 	public int[] getAktivitaeten() {
 		return aktivitaeten;
 	}
 
+	/**
+	 * setzt das Array mit Id´s der Aktivitäten
+	 * @param aktivitaeten
+	 */
 	public void setAktivitaeten(int[] aktivitaeten) {
 		this.aktivitaeten = aktivitaeten;
 	}
@@ -93,11 +135,18 @@ public class Rolle implements Serializable {
 		this.bezeichnung = bezeichnung;
 	}
 	
-	
+	/**
+	 * gibt ein Array der Aktivitäten zurück nicht nur die Id´s zurück
+	 * @return Aktivitaet-Array
+	 */
 	public Aktivitaet[] getAktivitaetenFull() {
 		return aktivitaetenFull;
 	}
 
+	/**
+	 * setzt das Array der Aktivitäten
+	 * @param aktivitaetenFull
+	 */
 	public void setAktivitaetenFull(Aktivitaet[] aktivitaetenFull) {
 		this.aktivitaetenFull = aktivitaetenFull;
 	}
