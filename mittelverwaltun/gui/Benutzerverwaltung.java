@@ -10,17 +10,15 @@ import dbObjects.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 
 /**
- * <p>Title: </p>
- * <p>Description: </p>
+ * <p>Title: Benutzerverwaltung</p>
+ * <p>Description: Verwaltung der Benutzer, d.h. anlegen, ändern, löschen der Systembenutzer. Accountänderung des eigenen Daten</p>
  * <p>Copyright: Copyright (c) 2004</p>
  * <p>Company: </p>
- * @author not attributable
+ * @author robert
  * @version 1.0
  */
-
 public class Benutzerverwaltung extends JInternalFrame implements ActionListener, ListSelectionListener, FBKontoSelectable {
 
   ApplicationServer applicationServer;
@@ -29,11 +27,14 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JScrollPane jScrollPane1 = new JScrollPane();
   DefaultListModel listModel = new DefaultListModel();
   JList listBenutzer = new JList(listModel);
-  JButton buAnlegen = new JButton();
-  JButton buAendern = new JButton();
-  JButton buLoeschen = new JButton();
-  JButton buBeenden = new JButton();
+
+  JButton buAnlegen = new JButton(Functions.getAddIcon(getClass()));
+  JButton buAendern = new JButton(Functions.getEditIcon(getClass()));
+  JButton buLoeschen = new JButton(Functions.getDelIcon(getClass()));
+  JButton buBeenden = new JButton(Functions.getCloseIcon(getClass()));
   JButton buKontoAuswahl = new JButton();
+  JButton buRefresh = new JButton(Functions.getRefreshIcon(getClass()));
+
   JLabel jLabel2 = new JLabel();
   JTextField tfBenutzername = new JTextField();
   JLabel jLabel3 = new JLabel();
@@ -54,7 +55,6 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JComboBox cbInstitut = new JComboBox();
   JComboBox cbRollen = new JComboBox();
   JLabel jLabel11 = new JLabel();
-  JButton buRefresh = new JButton();
   int privatKonto;
   JButton buKontoEntfernen = new JButton();
   JTextField tfTelefon = new JTextField();
@@ -66,14 +66,16 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JLabel jLabel14 = new JLabel();
   JLabel jLabel15 = new JLabel();
   JCheckBox cbSoftBeauftragter = new JCheckBox();
-  String[] sichten = {"Privat", "Institut", "Fachbereich"}; 
+  String[] sichten = {"Privat", "Institut", "Fachbereich"};
   JComboBox cbSichtbarkeit = new JComboBox(sichten);
   JLabel jLabel16 = new JLabel();
+  private int view = 0;
 
-  public Benutzerverwaltung(MainFrame frame){
-		super( "Account ändern" );
+  public Benutzerverwaltung(MainFrame frame, int view){
+		super("");
 		this.setClosable(true);
 		this.setIconifiable(true);
+		this.view = view;
 		this.frame = frame;
 		this.applicationServer = frame.getApplicationServer();
 
@@ -83,76 +85,39 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		catch(Exception e) {
 		  e.printStackTrace();
 		}
-		buRefresh.setBorder(null);
-		buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
 
-		buAnlegen.setIcon(Functions.getAddIcon(getClass()));
+		buRefresh.addActionListener( this );
+    buKontoAuswahl.addActionListener( this );
+		buKontoEntfernen.addActionListener( this );
+    buAnlegen.addActionListener( this );
+    buAendern.addActionListener( this );
+    buLoeschen.addActionListener( this );
+    buBeenden.addActionListener( this );
 
-		buAendern.setIcon(Functions.getEditIcon(getClass()));
-		buAendern.addActionListener( this );
-
-		buLoeschen.setIcon(Functions.getDelIcon(getClass()));
-
-		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-		buBeenden.addActionListener( this );
-
-		buRefresh.setEnabled(false);
-		buLoeschen.setEnabled(false);
-		buAnlegen.setEnabled(false);
-		cbInstitut.setEnabled(false);
-		cbRollen.setEnabled(false);
-		buKontoAuswahl.setEnabled(false);
-		buKontoEntfernen.setEnabled(false);
-		tfBenutzername.setEnabled(false);
 		tfKonto.setEnabled(false);
 		listBenutzer.addListSelectionListener(this);
 		listBenutzer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		loadUsers();
 		loadInstituts();
 		loadRollen();
-
+		
+		if(view == Benutzer.VIEW_FACHBEREICH){
+			setTitle("Benutzerverwaltung");
+		}else{
+			setTitle("Account ändern");
+			buRefresh.setEnabled(false);
+			buLoeschen.setEnabled(false);
+			buAnlegen.setEnabled(false);
+			cbInstitut.setEnabled(false);
+			cbRollen.setEnabled(false);
+			buKontoAuswahl.setEnabled(false);
+			buKontoEntfernen.setEnabled(false);
+			tfBenutzername.setEnabled(false);
+			cbSoftBeauftragter.setEnabled(false);
+		}
+		
 		this.setBounds(0,0,799, 400);
-  }
-
-  public Benutzerverwaltung(ApplicationServer applicationServer){
-    super( "Benutzerverwaltung" );
-    this.applicationServer = applicationServer;
-    this.setClosable(true);
-    this.setIconifiable(true);
-
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-
-		tfKonto.setEnabled(false);
-
-		buRefresh.setBorder(null);
-    buRefresh.setIcon(Functions.getRefreshIcon(getClass()));
-		buRefresh.addActionListener( this );
-
-    buKontoAuswahl.addActionListener( this );
-		buKontoEntfernen.addActionListener( this );
-
-    buAnlegen.setIcon(Functions.getAddIcon(getClass()));
-    buAnlegen.addActionListener( this );
-
-    buAendern.setIcon(Functions.getEditIcon(getClass()));
-    buAendern.addActionListener( this );
-
-    buLoeschen.setIcon(Functions.getDelIcon(getClass()));
-    buLoeschen.addActionListener( this );
-
-    buBeenden.setIcon(Functions.getCloseIcon(getClass()));
-    buBeenden.addActionListener( this );
-    listBenutzer.addListSelectionListener(this);
-    listBenutzer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		loadUsers();
-		loadInstituts();
-		loadRollen();
-    this.setBounds(0,0,799, 400);
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
   }
 
   private void jbInit() throws Exception {
@@ -221,6 +186,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     jLabel11.setBounds(new Rectangle(6, 8, 116, 15));
     jLabel11.setText("Benutzer");
     jLabel11.setPreferredSize(new Dimension(100, 16));
+    buRefresh.setBorder(null);
     buRefresh.setBounds(new Rectangle(134, 3, 20, 20));
     buRefresh.setToolTipText("Aktualisieren");
     buRefresh.setText("");
@@ -295,11 +261,13 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
     jScrollPane1.getViewport().add(listBenutzer, null);
   }
 
+  /**
+   * lädt User für die Anzeige in der Liste
+   */
   private void loadUsers(){
 	  try{
-			if(frame != null){
-		  	Benutzer benutzer = applicationServer.getUser(frame.getBenutzer().getBenutzername(), frame.getBenutzer().getPasswort());
-				listModel.addElement(benutzer);
+			if(view != Benutzer.VIEW_FACHBEREICH){
+		  	listModel.addElement(frame.getBenutzer());
 				listBenutzer.setSelectedIndex(0);
 		  }else{
 		  	Benutzer[] benutzer = applicationServer.getUsers();
@@ -316,6 +284,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	  }
   }
 
+  /**
+   * lädt Institute in die Combobox
+   */
   private void loadInstituts(){
 	  try{
 		  Institut[] institute = applicationServer.getInstitutes();
@@ -332,6 +303,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 
   }
 
+  /**
+   * lädt Rollen in die Combobox
+   */
   private void loadRollen(){
 	  try{
 		  Rolle[] rollen = applicationServer.getRollen();
@@ -347,7 +321,11 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 	  }
   }
 
-  protected void addUser() throws ApplicationServerException, RemoteException{
+  /**
+   * fügt einen neuen Benutzer in das System ein.
+   * @throws ApplicationServerException
+   */
+  protected void addUser() throws ApplicationServerException{
 		if(listBenutzer.isSelectionEmpty())
 			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("") || (tfPasswort.getPassword().length == 0))
@@ -371,13 +349,21 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		}
   }
 
-	protected void delUser() throws ApplicationServerException, RemoteException{
+  /**
+   * löscht den selektierten Benutzer aus dem System
+   * @throws ApplicationServerException
+   */
+	protected void delUser() throws ApplicationServerException{
 		Benutzer currBenutzer = (Benutzer)listModel.getElementAt(listBenutzer.getSelectedIndex());
 		applicationServer.delUser(currBenutzer);
 		listModel.remove(listBenutzer.getSelectedIndex());
 	}
 
-
+  /**
+   * setzt das Privatkonto für den selektierten Benutzer
+   * @param fbKontoId - Id des FBKontos
+   * @return gibt eine Fehler Meldung zurück falls kein Benutzer selektiert wurde
+   */
 	public String setPrivatKonto(int fbKontoId){
 		if(listBenutzer.isSelectionEmpty()){
 			return "Es ist kein Benutzer selektiert ";
@@ -387,8 +373,11 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		}
 	}
 
-
-  protected void changeUser() throws ApplicationServerException, RemoteException{
+  /**
+   * aktualisierten den selektierten Benutzer
+   * @throws ApplicationServerException
+   */
+  protected void changeUser() throws ApplicationServerException {
 	  if(listBenutzer.isSelectionEmpty()){
 			throw new ApplicationServerException(0, "Es ist kein Benutzer selektiert !");
 		}else if(tfBenutzername.getText().equals("") || tfName.getText().equals("") || tfVorname.getText().equals("")){
@@ -450,10 +439,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		  }
 	  }catch(ApplicationServerException ex){
 			MessageDialogs.showDetailMessageDialog(this, "Fehler", ex.getMessage(), ex.getNestedMessage(), MessageDialogs.ERROR_ICON);
-	  } catch(RemoteException re) {
-		  MessageDialogs.showDetailMessageDialog(this, "Fehler", re.getMessage(),
-												  "Fehler bei RMI-Kommunikation", MessageDialogs.ERROR_ICON);
-	  }
+	  } 
  }
 
 	public void valueChanged(ListSelectionEvent e) {
@@ -486,9 +472,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			tfTitel.setText(benutzer.getTitel());
 			tfPasswort.setText("");
 			tfPasswortWdhl.setText("");
-			
+
 			cbSichtbarkeit.setSelectedIndex(benutzer.getSichtbarkeit());
-			
+
 			cbInstitut.setSelectedItem(benutzer.getKostenstelle());
 			cbRollen.setSelectedItem(benutzer.getRolle());
 		}
@@ -505,10 +491,9 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		 	String psw = pe.encrypt(new String("r.driesner").toString());
 		 	test.setBenutzer(applicationServer.login("r.driesner", psw));
 	   	test.setBounds(100,100,800,900);
-//		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		 	test.setJMenuBar( new MainMenu( test ) );
-		 	Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(test.getApplicationServer());
+		 	Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(test, Benutzer.VIEW_FACHBEREICH);
 		 	test.addChild(benutzerVerwaltung);
 		 	test.setVisible(true);
 		 	benutzerVerwaltung.show();

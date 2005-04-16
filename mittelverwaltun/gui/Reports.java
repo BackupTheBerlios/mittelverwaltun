@@ -10,6 +10,7 @@ import org.jfree.report.modules.parser.base.ReportGenerator;
 import org.jfree.report.util.Log;
 import org.jfree.report.util.WaitingImageObserver;
 
+import dbObjects.Benutzer;
 import dbObjects.Institut;
 import dbObjects.ZVKonto;
 
@@ -25,6 +26,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import javax.swing.border.*;
 
 
 /**
@@ -83,7 +85,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	 * FB-Konto, Einnahmen
 	 */
 	public static final int REPORT_8 = 8;
-	
+
 	/**
 	 * Typ für die Anzeige der Änderungen durch Benutzer in der Datenbank
 	 */
@@ -103,7 +105,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	String[] 	tooltips = {"<html><p>Ein Report, der die Konten der Zentralverwaltung <br>" +
 														"und die zugewiesenen Mittel, die Summe der <br>" +
 														"Ausgaben und aktuellen Kontostände enthält</p></html>",
-												"<html><p>Ein Report, nder die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe <br>" +
+												"<html><p>Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe <br>" +
 														"der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen</p></html>",
 												"<html><p>Ein Report, der die institutsinternen Konten, die verteilten Mittel, die Summe <br>" +
 														"der Ausgaben und den aktuellen Kontostand enthält</p></html>",
@@ -116,7 +118,25 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 														"Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung</p></html>",
 												"Für jedes Instiut ein Report über die Einnahmen",
 												"Anzeige aller Änderungen der Benutzer in der Datenbank"};
-  JButton btDrucken = new JButton(Functions.getPrintIcon(this.getClass()));
+	String[] 	beschreibung = {"Ein Report, der die Konten der Zentralverwaltung " +
+														"und die zugewiesenen Mittel, die Summe der " +
+														"Ausgaben und aktuellen Kontostände enthält",
+														"Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe " +
+																"der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen",
+														"Ein Report, der die institutsinternen Konten, die verteilten Mittel, die Summe " +
+																"der Ausgaben und den aktuellen Kontostand enthält",
+														"Ein Report, der die Ausgaben bei den institutsinternen Konten nach Verwaltungskonten sortiert",
+														"Ein Report von jedem Konto aus der Zentralverwaltung mit Ausgaben jedes Instituts " +
+																"und aktueller Kontostände",
+														"Für jedes Institut ein Report mit Ausgaben sortiert nach Verwaltungskonten",
+														"Für jedes Instiut ein detaillierter Report über die Ausgaben mit FBI-Schlüsselnummer, " +
+																"Hüll-Nr, Datum, welches Konto der Zentralverwaltung belastet wurde, Firma, Beschreibung des bestellten Artikels, " +
+																"Besteller, Nutzer, Festlegung bzw. Anordnung, Status der Bestellung",
+														"Für jedes Instiut ein Report über die Einnahmen",
+														"Anzeige aller Änderungen der Benutzer in der Datenbank"};
+
+	
+	JButton btDrucken = new JButton(Functions.getPrintIcon(this.getClass()));
   JComboBox cbInstitut = new JComboBox();
   String filter = "";
   String xmlFile = "";
@@ -124,11 +144,15 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
   JFormattedTextField tfDatumVon = new JFormattedTextField(DateFormat.getDateInstance());
   JLabel jLabel2 = new JLabel();
   JFormattedTextField tfDatumBis = new JFormattedTextField(DateFormat.getDateInstance());
+  JPanel jPanel1 = new JPanel();
+  TitledBorder titledBorder1;
+  JScrollPane jScrollPane1 = new JScrollPane();
+  JTextArea taBeschreibung = new JTextArea();
 
 	public Reports(MainFrame frame) {
 		super( "Reports" );
 		this.frame = frame;
-		
+
 		try {
 			jbInit();
 		}catch(Exception e) {
@@ -142,7 +166,8 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	}
 
 	private void jbInit() throws Exception {
-		this.setFrameIcon(null);
+		titledBorder1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(165, 163, 151)),"Beschreibung");
+    this.setFrameIcon(null);
     this.setTitle("Reports");
     this.getContentPane().setLayout(null);
 
@@ -162,7 +187,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     tabReport = new ReportsTable(this);
     tabReport.setFont(new java.awt.Font("Dialog", 0, 11));
 
-    spReport.setBounds(new Rectangle(13, 98, 760, 288));
+    spReport.setBounds(new Rectangle(19, 172, 754, 219));
     labInstitut.setFont(new java.awt.Font("Dialog", 1, 11));
     labInstitut.setText("Institut:");
     labInstitut.setBounds(new Rectangle(211, 12, 61, 27));
@@ -203,6 +228,13 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
     jLabel2.setFont(new java.awt.Font("Dialog", 1, 11));
     tfDatumBis.setBounds(new Rectangle(255, 60, 106, 20));
     tfDatumBis.setValue(new Date(System.currentTimeMillis()));
+    jPanel1.setBorder(titledBorder1);
+    jPanel1.setBounds(new Rectangle(19, 87, 754, 79));
+    jPanel1.setLayout(null);
+    jScrollPane1.setBounds(new Rectangle(4, 17, 742, 56));
+    taBeschreibung.setEditable(false);
+    taBeschreibung.setText("");
+    taBeschreibung.setLineWrap(true);
     this.getContentPane().add(cbZVKonten, null);
     this.getContentPane().add(labInstitut, null);
     this.getContentPane().add(btAktualisieren, null);
@@ -210,13 +242,16 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	  this.getContentPane().add(cbLogsType, null);
     this.getContentPane().add(cbReportFilter, null);
     this.getContentPane().add(btBeenden, null);
-    this.getContentPane().add(spReport, null);
     this.getContentPane().add(btDrucken, null);
-    spReport.getViewport().add(tabReport, null);
     this.getContentPane().add(tfDatumBis, null);
     this.getContentPane().add(jLabel1, null);
     this.getContentPane().add(tfDatumVon, null);
     this.getContentPane().add(jLabel2, null);
+    this.getContentPane().add(spReport, null);
+    this.getContentPane().add(jPanel1, null);
+    jPanel1.add(jScrollPane1, null);
+    jScrollPane1.getViewport().add(taBeschreibung, null);
+    spReport.getViewport().add(tabReport, null);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -257,8 +292,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	private void loadInstituts(){
 	  try {
-//		TODO Admin durch die Aktivität austauschen
-			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
+			if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH){
 				Institut[] instituts = frame.getApplicationServer().getInstitutes();
 
 			  if(instituts != null){
@@ -350,38 +384,47 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 		if(r == "Report_1"){
 			cbReportFilter.setToolTipText(tooltips[0]);
+			taBeschreibung.setText(beschreibung[0]);
 			report = REPORT_1;
 			xmlFile = "/xml/report1.xml";
 		}else if(r == "Report_2"){
 			cbReportFilter.setToolTipText(tooltips[1]);
+			taBeschreibung.setText(beschreibung[1]);
 			report = REPORT_2;
 			xmlFile = "/xml/report2.xml";
 		}else if(r == "Report_3"){
 			cbReportFilter.setToolTipText(tooltips[2]);
+			taBeschreibung.setText(beschreibung[2]);
 			report = REPORT_3;
 			xmlFile = "/xml/report3.xml";
 		}else if(r == "Report_4"){
 			cbReportFilter.setToolTipText(tooltips[3]);
+			taBeschreibung.setText(beschreibung[3]);
 			report = REPORT_4;
 			xmlFile = "/xml/report4.xml";
 		}else if(r == "Report_5"){
 			cbReportFilter.setToolTipText(tooltips[4]);
+			taBeschreibung.setText(beschreibung[4]);
 			report = REPORT_5;
 			xmlFile = "/xml/report5.xml";
 		}else if(r == "Report_6"){
 			cbReportFilter.setToolTipText(tooltips[5]);
+			taBeschreibung.setText(beschreibung[5]);
 			report = REPORT_6;
 			xmlFile = "/xml/report6.xml";
 		}else if(r == "Report_7"){
 			cbReportFilter.setToolTipText(tooltips[6]);
+			taBeschreibung.setText(beschreibung[6]);
 			report = REPORT_7;
 			xmlFile = "/xml/report7.xml";
 		}else if(r == "Report_8"){
 			cbReportFilter.setToolTipText(tooltips[7]);
+			taBeschreibung.setText(beschreibung[7]);
 			report = REPORT_8;
 			xmlFile = "/xml/report8.xml";
 		}else if(r == "Logs"){
 			cbReportFilter.setToolTipText(tooltips[8]);
+			taBeschreibung.setText(beschreibung[8]);
 			report = LOGS;
 			xmlFile = "/xml/logs.xml";
 		}
@@ -435,12 +478,12 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 				tabReport.filterView(this.filter);
 		}else if(e.getSource() == cbLogsType){
 			String type = (String)cbLogsType.getSelectedItem();
-	
+
 			if(type.equals("alle"))
 				this.filter = "";
 			else
 				this.filter = type;
-	
+
 			if(report == tabReport.getReportType())
 				tabReport.filterView(this.filter);
 		}
@@ -461,12 +504,12 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			Date von = new Date(vonUtil.getTime());
 
 			java.util.Date bisUtil = (java.util.Date)tfDatumBis.getValue();
-			
+
 			GregorianCalendar cal = new GregorianCalendar();
 			cal.setTime(bisUtil);
 			cal.add(GregorianCalendar.DATE, 1);
 			Date bis = new Date(cal.getTimeInMillis());
-			
+
 			if(cbReportFilter.getSelectedItem() == "Report_1"){
 						ArrayList content = frame.getApplicationServer().getReport(REPORT_1, von, bis);
 						tabReport.fillReport(REPORT_1, "", content);

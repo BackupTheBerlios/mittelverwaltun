@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import dbObjects.Benutzer;
 import dbObjects.Rolle;
 
 /**
@@ -234,7 +235,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if ( e.getSource() == miAccountAendern ) {
-			frame.addChild( new Benutzerverwaltung(frame) );
+			frame.addChild( new Benutzerverwaltung(frame, Benutzer.VIEW_PRIVAT) );
 		} else if ( e.getSource() == miTmpRollenVerwalten ) {						
 			frame.addChild( new TempRollenFrame(frame) );
 		} else if ( e.getSource() == miDefaultRolle ) {						
@@ -258,7 +259,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		}else if ( e.getSource() == miFBKontenZuweisenProf ) {
 			frame.addChild( new ProfBudgetFrame( frame ) );
 		} else if ( e.getSource() == miBenutzer ) {
-			frame.addChild( new Benutzerverwaltung(frame.getApplicationServer()) );
+			frame.addChild( new Benutzerverwaltung(frame, Benutzer.VIEW_FACHBEREICH) );
 		} else if ( e.getSource() == miRollen ) {
 			frame.addChild( new RollenAktivitaetenverwaltung(frame) );
 		} else if ( e.getSource() == miFirmen ) {

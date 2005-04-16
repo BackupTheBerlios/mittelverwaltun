@@ -5,9 +5,8 @@ import java.sql.Date;
 
 /**
  * @author robert
- *
- * Folgendes auswählen, um die Schablone für den erstellten Typenkommentar zu ändern:
- * Fenster&gt;Benutzervorgaben&gt;Java&gt;Codegenerierung&gt;Code und Kommentare
+ * ASKBestellung wird bentzt um eine Software-Bestellung zu tätigen. Dabei gibt es nur ein
+ * Angebot von einer Firma.
  */
 public class ASKBestellung extends Bestellung implements Serializable {
 
@@ -17,6 +16,24 @@ public class ASKBestellung extends Bestellung implements Serializable {
 
 	private Benutzer swbeauftragter;
 	
+	/**
+	 * Konstuktor
+	 * @param id - Id der Bestellung
+	 * @param referenznr - Referenz-Nummer
+	 * @param huel - Hül Nummer
+	 * @param datum - Datum der Bestellung
+	 * @param besteller - Benutzer der die Bestellung bestellt
+	 * @param auftraggeber - Benutzer der die Bestellung in Auftag gegeben hat
+	 * @param empfaenger - Benutzer der die Bestellung empfangen soll
+	 * @param zvtitel - ZVTitel der für die Bestellung benutzt wird
+	 * @param fbkonto - FBKonto der für die Bestellung benutzt wird
+	 * @param bestellwert - Bestellwert der Bestellung
+	 * @param verbindlichkeiten - Verbindlichkeiten der Bestellung
+	 * @param phase - Phase in der sich die Bestellung befindet - siehe Klasse Bestellung
+	 * @param angebot - Angebot der Bestellung
+	 * @param bemerkung - Bemerkungen der Bestellung
+	 * @param swbeauftragter - Software-Beauftragter für die Bestellung
+	 */
 	public ASKBestellung(	int id, String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
 			ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten, char phase, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
 		
@@ -24,9 +41,25 @@ public class ASKBestellung extends Bestellung implements Serializable {
 		this.angebot = angebot;
 		this.bemerkung = bemerkung;
 		this.swbeauftragter = swbeauftragter;
-		
 	}
 	
+	/**
+	 * Konstuktor ohne die Angabe der Id der Bestellung - z.B. für neue ASK-Bestellungen
+	 * @param referenznr - Referenz-Nummer
+	 * @param huel - Hül Nummer
+	 * @param datum - Datum der Bestellung
+	 * @param besteller - Benutzer der die Bestellung bestellt
+	 * @param auftraggeber - Benutzer der die Bestellung in Auftag gegeben hat
+	 * @param empfaenger - Benutzer der die Bestellung empfangen soll
+	 * @param zvtitel - ZVTitel der für die Bestellung benutzt wird
+	 * @param fbkonto - FBKonto der für die Bestellung benutzt wird
+	 * @param bestellwert - Bestellwert der Bestellung
+	 * @param verbindlichkeiten - Verbindlichkeiten der Bestellung
+	 * @param phase - Phase in der sich die Bestellung befindet - siehe Klasse Bestellung
+	 * @param angebot - Angebot der Bestellung
+	 * @param bemerkung - Bemerkungen der Bestellung
+	 * @param swbeauftragter - Software-Beauftragter für die Bestellung
+	 */
 	public ASKBestellung(String referenznr, String huel, Date datum, Benutzer besteller, Benutzer auftraggeber, Benutzer empfaenger,
 			ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten, char phase, Angebot angebot, String bemerkung, Benutzer swbeauftragter){
 	
@@ -36,55 +69,106 @@ public class ASKBestellung extends Bestellung implements Serializable {
 		this.swbeauftragter = swbeauftragter;
 	}
 	
-	
+	/**
+	 * Konstuktor
+	 * @param referenznr - Referenz-Nummer
+	 * @param huel - Hül Nummer
+	 * @param datum - Datum der Bestellung
+	 * @param besteller - Benutzer der die Bestellung bestellt
+	 * @param auftraggeber - Benutzer der die Bestellung in Auftag gegeben hat
+	 * @param empfaenger - Benutzer der die Bestellung empfangen soll
+	 * @param zvtitel - ZVTitel der für die Bestellung benutzt wird
+	 * @param fbkonto - FBKonto der für die Bestellung benutzt wird
+	 * @param bestellwert - Bestellwert der Bestellung
+	 * @param verbindlichkeiten - Verbindlichkeiten der Bestellung
+	 * @param phase - Phase in der sich die Bestellung befindet - siehe Klasse Bestellung
+	 */
 	public ASKBestellung(String referenznr, Date datum, Benutzer besteller, char phase, Benutzer auftraggeber, Benutzer empfaenger, ZVUntertitel zvtitel, FBUnterkonto fbkonto, float bestellwert, float verbindlichkeiten) {
 		super(datum, besteller, phase, auftraggeber, empfaenger, zvtitel, fbkonto, bestellwert, verbindlichkeiten);
 		setTyp('1');
-		// TODO Automatisch erstellter Konstruktoren-Stub
 	}
 
+	/**
+	 * gibt das Angebot der Bestellung zurück
+	 * @return Angebot
+	 */
 	public Angebot getAngebot() {
 		return angebot;
 	}
 
+	/**
+	 * setzt das Angebot der Bestellung
+	 * @param angebot
+	 */
 	public void setAngebot(Angebot angebot) {
 		this.angebot = angebot;
 	}
 
+	/**
+	 * gibt die Bemerkung der Bestellung zurück
+	 * @return Bemerkung
+	 */
 	public String getBemerkung() {
 		return bemerkung;
 	}
 
+	/**
+	 * setzt die Bemerkung der Bestellung
+	 * @param bemerkung
+	 */
 	public void setBemerkung(String bemerkung) {
 		this.bemerkung = bemerkung;
 	}
 
+	/**
+	 * gibt den Software-Beauftragten zurück
+	 * @return Software-Beauftragten
+	 */
 	public Benutzer getSwbeauftragter() {
 		return swbeauftragter;
 	}
 
+	/**
+	 * setzt den Software-Beauftragten
+	 * @param swbeauftragter - Software-Beauftragten
+	 */
 	public void setSwbeauftragter(Benutzer swbeauftragter) {
 		this.swbeauftragter = swbeauftragter;
 	}
 	
+	/**
+	 * begleicht alle Positionen des Angebots
+	 */
 	public void payPositionen (){
 		if (angebot != null) angebot.payPositionen();
 	}
 	
+	/**
+	 * setzt alle Positione auf nicht beglichen
+	 */
 	public void owePositionen (){
 		if (angebot != null) angebot.owePositionen();
 	}
 	
+	/**
+	 * aktualisiert den Bestellwert
+	 */
 	public void updateBestellwert(){
 		if (angebot != null) 
 			setBestellwert(angebot.getSumme());
 	}
 	
+	/**
+	 * aktualisiert die Verbindlichkeiten
+	 */
 	public void updateVerbindlichkeiten(){
 		if (angebot != null) 
 			setVerbindlichkeiten(angebot.getVerbindlichkeiten());
 	}
 	
+	/**
+	 * macht eine Kopie der ASKBestellung
+	 */
 	public Object clone(){
 			
 		ZVUntertitel t = null;
