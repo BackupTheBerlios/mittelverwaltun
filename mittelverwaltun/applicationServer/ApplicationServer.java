@@ -139,6 +139,16 @@ public class ApplicationServer implements Serializable {
 	public int getCurrentHaushaltsjahrId() throws ApplicationServerException {
 		return db.selectHaushaltsjahrId();
 	}
+
+	/**
+	 * Ermittlung der ID des folgenden Haushaltsjahres
+	 * @param ID des vorigen Haushaltsjahres
+	 * @return ID des folgenden Haushaltsjahrs
+	 * @throws ApplicationServerException
+	 */
+	public int getFollowingHaushaltsjahrId(int preYear) throws ApplicationServerException {
+		return db.selectFollowingHaushaltsjahrId(preYear);
+	}
 	
 	/**
 	 * Abfrage der Institute mit den dazugehörigen FBHauptkonten und FBUnterkonten
@@ -1298,7 +1308,7 @@ public class ApplicationServer implements Serializable {
 	 * @throws ApplicationServerException
 	 * author w.flat
 	 */
-	public int setZVKonto( ZVKonto zvKonto ) throws ApplicationServerException {
+	public int setZVKonto( ZVKonto zvKonto, boolean transaction) throws ApplicationServerException {
 		if( zvKonto == null )		// Wenn kein ZVKonto angegeben
 			return 0;
 		try {
@@ -1358,12 +1368,12 @@ public class ApplicationServer implements Serializable {
 			
 			return db.updateZVKonto( zvKonto );
 		} catch(ApplicationServerException e) {
-			db.rollback();
+			if (transaction) db.rollback();
 			throw e;
 		} finally {
 			db.insertLog(1, "ZVKonto (Id: " + zvKonto.getId() + ") aktualisiert: \n" +
 											"ZVKonto: " +  zvKonto );
-			db.commit();
+			if (transaction)db.commit();
 		}
 	}
 
@@ -2986,14 +2996,13 @@ public class ApplicationServer implements Serializable {
 		db.insertBuchung(new Buchung(b, "6", von, -betrag, nach, betrag));
 	}
 	
-//	/**
-//	 * Vormerkung für Bestellung  (Typ 7)
-//	 * ACHTUNG: evtl. überflüssig da durch Typ 8 abgedeckt
-//	 * @throws ApplicationServerException
-//	 */
-//	private void bucheVormerkungen(Bestellung b, ZVUntertitel t, FBUnterkonto k, float buchung) throws ApplicationServerException {
-//		
-//	}
+	/**
+	 * Mittelübernahme aus Geschäftsjahr für ZV-Titelgruppe (Typ 7)
+	 * @throws ApplicationServerException
+	 */
+	private void bucheZVMitteluebernahme(Benutzer b, ZVKonto von, ZVKonto nach, float betrag) throws ApplicationServerException {
+		db.insertBuchung(new Buchung(b, "7", von, -betrag, nach, betrag));
+	}
 	
 	/**
 	 * Bestellungsänderung = Änderung der Vormerkung !!!(Typ 8)
@@ -3154,14 +3163,14 @@ public class ApplicationServer implements Serializable {
 			Buchung old = db.selectBuchung(bestellung.getId(), "9");
 			if(old == null)		// Keine Buchung gefunden
 				throw new ApplicationServerException(43);
-			db.updateAccountStates(old.getZvKonto(), old.getZvTitel1(), old.getFbKonto1(), 
-									-old.getBetragZvKonto(), -old.getBetragZvTitel1(), -old.getBetragFbKonto1());
+			db.updateAccountStates(old.getZvKonto1(), old.getZvTitel1(), old.getFbKonto1(), 
+									-old.getBetragZvKonto1(), -old.getBetragZvTitel1(), -old.getBetragFbKonto1());
 			ZVKonto zvk;
 			if(bestellung.getZvtitel() instanceof ZVTitel)
 				zvk = ((ZVTitel)bestellung.getZvtitel()).getZVKonto();
 			else
 				zvk = bestellung.getZvtitel().getZVTitel().getZVKonto();
-			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, -old.getBetragZvKonto(), bestellung.getZvtitel(), 
+			bucheStornoZahlungen(bestellung.getBesteller(), bestellung, zvk, -old.getBetragZvKonto1(), bestellung.getZvtitel(), 
 									-old.getBetragZvTitel1(), bestellung.getFbkonto(), -old.getBetragFbKonto1());
 			
 			db.insertLog(2, "Klein-Bestellung (Id: " + bestellung.getId() + " gelöscht: \n" +
@@ -3426,11 +3435,11 @@ public class ApplicationServer implements Serializable {
 						
 			}
 			// 2. ZV-Konten portieren und ggf. Budgets übernehmen
-			int[] zvCnts = portZVKonten(zvAccounts, oldYear, newYear, false);
+			int[] zvCnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
 			for (int i=0; i<zvCnts.length; i++)
 				cnts[3+i] = zvCnts[i];
 			// 3. FB-Konten portieren und ggf. Budgets übernehmen
-			int[] fbCnts = portFBKonten(fbAccounts, oldYear, newYear, false);
+			int[] fbCnts = portFBKonten(user, fbAccounts, oldYear, newYear, false);
 			for (int i=0; i<fbCnts.length; i++)
 				cnts[7+i] = fbCnts[i];
 			// 4. Kontenzuordnungen portieren
@@ -3445,7 +3454,7 @@ public class ApplicationServer implements Serializable {
 					int newFbKontoId = db.selectFbKontoIdInYear(order.getFbkonto().getId(), newYear);
 											
 					cnts[2] += db.updateOrderAccounts(order.getId(), newZvTitelId , newFbKontoId);	
-					
+					db.updateBestellungsbuchungen(order.getId(), order.getZvtitel().getId(), newZvTitelId, order.getFbkonto().getId(), newFbKontoId);
 				}
 			
 			}
@@ -3467,11 +3476,42 @@ public class ApplicationServer implements Serializable {
 			throw e;
 		}
 	}
+
+	
+	public int[] finishBudgetYear(Benutzer user, int oldYear, ArrayList zvAccounts, boolean transaction) throws ApplicationServerException{
+		
+	try{
+		/*  cnts[0]: Anzahl portierter ZV-Konten
+		 *  cnts[1]: Anzahl portierter ZV-Titel
+		 *  cnts[2]: Anzahl abgeschlossener ZV-Konten
+		 *  cnts[3]: Anzahl übernommener ZV-Budgets
+		 */		
+		
+		// Evtl. Tabellensperren ????
+		// 1. ZV-Konten portieren und ggf. Budgets übernehmen
+		int newYear = getFollowingHaushaltsjahrId(oldYear);
+		int[] cnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
+				
+		if (cnts[2]==zvAccounts.size())
+			db.updateHaushaltsjahrStatus(oldYear, '2'); // Haushaltsjahr abgeschlossen
+		else
+			db.updateHaushaltsjahrStatus(oldYear, '1'); // Haushaltsjahr inaktiv
+		
+		if (transaction) db.commit();
+		
+		return cnts;
+	} catch (ApplicationServerException e){
+		
+		if (transaction) db.rollback();
+		throw e;
+	}
+}
+	
 	
 	public int portKontenzuordnungen (int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		try{	
 			int cnt = 0;
-			
+			db.dropTmpKontenzuordnungTab();
 			db.createAsSelectTempKontenzuordnungTab(oldYear, newYear);
 			cnt = db.insertAsSelectKontenzuordnungen();
 			db.dropTmpKontenzuordnungTab();
@@ -3483,13 +3523,14 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 	
-	public int[] portFBKonten (ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
+	public int[] portFBKonten (Benutzer user, ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		try{
 			int[] cnts = {0, 0};
 			/*  cnts[0]: Anzahl portierter Konten 
 			 *  cnts[1]: Anzahl übernommener Kontenbudgets
 			 */		
 			// Lege temporäre Tabellen an
+			db.dropTmpFbKontenTab();
 			db.createAsSelectTempFbKontenTab(oldYear); 
 					
 			for (int i=0; i < accounts.size(); i++){
@@ -3497,7 +3538,10 @@ public class ApplicationServer implements Serializable {
 				if (acc.getPortieren()){
 					db.insertAsSelectFbKonto(acc.getId(), newYear, acc.getBudgetUebernehmen());
 					cnts[0]++;
-					if (acc.getBudgetUebernehmen()) cnts[1]++;
+					if (acc.getBudgetUebernehmen()){
+						cnts[1]++;
+						db.insertAsSelectBuchungenFBKontoMitteluebernahme(user, acc.getId(), newYear);
+					}
 				}
 			}		
 				
@@ -3511,7 +3555,7 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 	
-	public int[] portZVKonten (ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
+	public int[] portZVKonten (Benutzer user, ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		
 		try{
 		
@@ -3522,6 +3566,8 @@ public class ApplicationServer implements Serializable {
 			 *  cnts[3]: Anzahl abgeschlossener Konten
 			 */
 			// Lege temporäre Tabellen an
+			db.dropTmpZvKontenTab();
+			db.dropTmpZvKontentitelTab();
 			db.createAsSelectTempZvKontenTab(oldYear); 
 			db.createAsSelectTempZvKontentitelTab(oldYear); 
 					
@@ -3534,13 +3580,17 @@ public class ApplicationServer implements Serializable {
 					
 					if ((newId > 0)&&(acc.getUebernahmeStatus() == 2)){ // Falls eine neue ID existiert und die Mittelübernahme bewilligt wurde...
 						
-						//Übernehme die Budgets der Titel (Vormerkungen existieren keine mehr!)
-						float rest = db.updateZvTitelBudgetTakeovers(acc.getId(), newId);
+						//Übernehme die Budgets der Titel (Vormerkungen existieren keine mehr!) und führe Buchungen durch
+						float rest = db.updateZvTitelBudgetTakeovers(user, acc.getId(), newId);
 						//Übernehme das Titelgruppenbudget
 						db.updateZvTgrBudget(newId, acc.isTGRKonto() ? rest + acc.getTgrBudget() : acc.getTgrBudget());
-						//Übernahmestatus setzen
+						// Erstelle Buchungsdatensatz in Buchungstabelle
+						if ((rest + acc.getTgrBudget()) > 0)
+							bucheZVMitteluebernahme(user, new ZVKonto(acc.getId()),new ZVKonto(newId), rest + acc.getTgrBudget());
+						//Aktualisiere Vorjahreskonto
 						acc.setUebernahmeStatus((short)3);
-						
+						acc.resetBudgets();
+						acc.resetVormerkungen();
 						cnts[2]++;
 					}
 					
@@ -3550,9 +3600,16 @@ public class ApplicationServer implements Serializable {
 					cnts[0]++;
 					// Portiere Kontentitel
 					cnts[1] += db.insertAsSelectZvKontentitel(newAccId, acc.getId(), acc.getUebernahmeStatus() == 2);
-					// Ggf. setze Übernahmestatus
+					// Ggf. setze Übernahmestatus und führe Buchungen durch
 					if (acc.getUebernahmeStatus() == 2){
+						// Buchung Titelgruppenbudgetübernahme
+						if (acc.getTgrBudget() > 0)	bucheZVMitteluebernahme(user, new ZVKonto(acc.getId()),new ZVKonto(newAccId), acc.getTgrBudget());
+						// Buchungen ZV-Titelbudgetübernahme
+						db.insertAsSelectBuchungenZvTitelMitteluebernahme(user, acc.getId(), newAccId);
+						// Aktualisiere Vorjahreskonto
 						acc.setUebernahmeStatus((short)3);
+						acc.resetBudgets();
+						acc.resetVormerkungen();
 						cnts[2]++;
 					}
 					
@@ -3560,7 +3617,7 @@ public class ApplicationServer implements Serializable {
 				
 				if (acc.isAbgeschlossen()) cnts[3]++;
 				
-				setZVKonto(acc);//	Speichere "altes" Konto => Transaktionsswitch in AS-Funktion
+				setZVKonto(acc, false);//	Speichere "altes" Konto => Transaktionsswitch in AS-Funktion
 			}		
 				
 			// Lösche temporäre Tabellen
@@ -3571,9 +3628,16 @@ public class ApplicationServer implements Serializable {
 			return cnts;
 		}catch (ApplicationServerException e){
 			if (transaction) db.rollback();
+			
 			throw e;
 		}
 	}
+	
+	public ArrayList getHaushaltsjahre() throws ApplicationServerException{
+		return db.selectHaushaltsjahre();
+	}
+	
+	
 	
 	/**
 	 * fügt eine neue Zuordnung einer TempRolle zu einem Benutzer

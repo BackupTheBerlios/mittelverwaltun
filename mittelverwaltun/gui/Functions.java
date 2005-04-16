@@ -51,6 +51,35 @@ public class Functions {
 	  return null;
 	}	
 	/**
+	 * Laden der Datei "key.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getKeyIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","key.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	/**
+	 * Laden der Datei "calendar.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getCalendarIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","calendar.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}	
+	
+	
+	/**
 	 * Laden der Datei "Import.gif".
 	 * @param clazz = Class von einer Componente.
 	 * @return Das geladene ImageIcon.

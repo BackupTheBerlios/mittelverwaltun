@@ -250,6 +250,12 @@ public class ApplicationServerException extends Exception {
 		messages[184] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertHaushaltsjahr";
 		messages[185] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateHaushaltsjahrStatus";
 		messages[186] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateHaushaltsjahrEnde";
+		messages[187] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectHaushaltsjahre";
+		messages[188] = "Application Server Error: Fehler bei Datenbankzugriff - Database.updateBestllungsbuchungen";
+		messages[189] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectBuchungenZvTitelMitteluebernahme";
+		messages[190] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectBuchungenFbKontoMitteluebernahme";
+		messages[191] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFollowingHaushaltsjahrId";
+		
 		//Exception Ende Mario 199
 	}
 

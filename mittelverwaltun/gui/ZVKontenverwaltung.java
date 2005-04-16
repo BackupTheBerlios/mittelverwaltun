@@ -214,7 +214,7 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 		
 		ZVKonto copy = (ZVKonto)treeKonten.getZVKonto().cloneWhole();	// Eine Kopie des vorhandenen ZVKontos erstellen
 		copy.setZVKonto( zvKonto );										// Die Kopie aktualisieren
-		if( frame.getApplicationServer().setZVKonto( copy ) == zvKonto.getId() ) {	// In der Datenbank aktualisieren
+		if( frame.getApplicationServer().setZVKonto( copy, true ) == zvKonto.getId() ) {	// In der Datenbank aktualisieren
 			treeKonten.getZVKonto().setZVKonto( zvKonto );		// Im Baum aktualisieren
 			treeKonten.refreshCurrentNode();		// Neu anzeigen
 		} else {

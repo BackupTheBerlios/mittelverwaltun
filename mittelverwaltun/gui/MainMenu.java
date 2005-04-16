@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.*;
-
+import applicationServer.ApplicationServerException;
 import dbObjects.Benutzer;
 import dbObjects.Rolle;
 
@@ -183,16 +183,14 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			activityRelItems.add( miInstitute );
 			miInstitute.addActionListener( this );
 			menuVerwaltung.add( menuHaushaltsjahr );
-				menuHaushaltsjahr.add( miAbschliessen );
-				activityRelItems.add( miAbschliessen );
-				miAbschliessen.addActionListener( this );
+				miAnzeigen.setIcon(Functions.getCalendarIcon(this.getClass()));
 				menuHaushaltsjahr.add( miAnzeigen );
 				activityRelItems.add( miAnzeigen );
 				miAnzeigen.addActionListener( this );
-	//			menuHaushaltsjahr.add( miMitteluebertrag );
-	//			activityRelItems.add( miMitteluebertrag );
-	//			miMitteluebertrag.addActionListener( this );
-			
+				miAbschliessen.setIcon(Functions.getKeyIcon(this.getClass()));
+				menuHaushaltsjahr.add( miAbschliessen );
+				activityRelItems.add( miAbschliessen );
+				miAbschliessen.addActionListener( this );
 			
 		// Das Menü "Reporting"
 		add( menuReporting );
@@ -276,19 +274,18 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == miInstitute ) {
 			frame.addChild( new Institutverwaltung( frame ) );
 		} else if ( e.getSource() == miAbschliessen ) {
-			frame.addChild( new AbschlussHaushaltsjahr( frame ) );
+			try {
+				frame.addChild( new AbschlussHaushaltsjahr( frame, frame.getApplicationServer().getCurrentHaushaltsjahrId(), true ) );
+			} catch (ApplicationServerException e1) {
+				MessageDialogs.showErrorMessageDialog(this, "Fehler", "Aktuelles Haushaltsjahr konnte nicht ermittelt werden.");
+				//e1.printStackTrace();
+			}
 		} else if ( e.getSource() == miAnzeigen ) {
-			//frame.addChild( new HaushaltsjahrAendern(frame.getApplicationServer()) );
+			frame.addChild( new AuswahlHaushaltsjahr(frame) );
 		} else if ( e.getSource() == null/*miMitteluebertrag*/ ) {
 		} else if ( e.getSource() == miReportsLoglisteAnzeigen ) {
 			frame.addChild( new Reports(frame) );
-//		} else if ( e.getSource() == miZVAusgabeNachK ) {
-//		} else if ( e.getSource() == miZVAusgabeNachKundI ) {
-//		} else if ( e.getSource() == miZVVerteilung ) {
-//		} else if ( e.getSource() == miFBAusgabeNachK ) {
-//		} else if ( e.getSource() == miFBAusgabeNachKundV ) {
-//		} else if ( e.getSource() == miIAusgabeNachVK ) {
-//		} else if ( e.getSource() == miBestellungen ){
+
 		} else {																			//Mario: Änderung 01.09.2004
 			int i = 0;																		//
 			while ( i < miTmpRollen.length ) {												//

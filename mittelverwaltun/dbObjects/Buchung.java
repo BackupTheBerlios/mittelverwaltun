@@ -18,10 +18,14 @@ public class Buchung {
 
 	private Bestellung bestellung;
 
-	private ZVKonto zvKonto;
+	private ZVKonto zvKonto1;
 
-	private float betragZvKonto;
+	private float betragZvKonto1;
 
+	private ZVKonto zvKonto2;
+
+	private float betragZvKonto2;
+	
 	private ZVUntertitel zvTitel1;
 
 	private float betragZvTitel1;
@@ -44,8 +48,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = null;
-		this.zvKonto = k;
-		this.betragZvKonto = buchung;
+		this.zvKonto1 = k;
+		this.betragZvKonto1 = buchung;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = null;
 		this.betragZvTitel1 = 0;
 		this.zvTitel2 = null;
@@ -62,8 +68,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = null;
-		this.zvKonto = null;
-		this.betragZvKonto = 0;
+		this.zvKonto1 = null;
+		this.betragZvKonto1 = 0;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = t;
 		this.betragZvTitel1 = buchung;
 		this.zvTitel2 = null;
@@ -80,8 +88,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = null;
-		this.zvKonto = null;
-		this.betragZvKonto = 0;
+		this.zvKonto1 = null;
+		this.betragZvKonto1 = 0;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = null;
 		this.betragZvTitel1 = 0;
 		this.zvTitel2 = null;
@@ -98,12 +108,34 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = null;
-		this.zvKonto = null;
-		this.betragZvKonto = 0;
+		this.zvKonto1 = null;
+		this.betragZvKonto1 = 0;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = t1;
 		this.betragZvTitel1 = buchung1;
 		this.zvTitel2 = t2;
 		this.betragZvTitel2 = buchung2;
+		this.fbKonto1 = null;
+		this.betragFbKonto1 = 0;
+		this.fbKonto2 = null;
+		this.betragFbKonto2 = 0;
+	}
+
+	public Buchung (Benutzer benutzer, String typ, ZVKonto k1, float buchung1, ZVKonto k2, float buchung2){
+		this.benutzer = benutzer;
+		this.timestamp = new Timestamp(System.currentTimeMillis());
+		this.typ = typ;
+		this.beschreibung = "";
+		this.bestellung = null;
+		this.zvKonto1 = k1;
+		this.betragZvKonto1 = buchung1;
+		this.zvKonto2 = k2;
+		this.betragZvKonto2 = buchung2;
+		this.zvTitel1 = null;
+		this.betragZvTitel1 = 0;
+		this.zvTitel2 = null;
+		this.betragZvTitel2 = 0;
 		this.fbKonto1 = null;
 		this.betragFbKonto1 = 0;
 		this.fbKonto2 = null;
@@ -116,8 +148,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = null;
-		this.zvKonto = null;
-		this.betragZvKonto = 0;
+		this.zvKonto1 = null;
+		this.betragZvKonto1 = 0;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = null;
 		this.betragZvTitel1 = 0;
 		this.zvTitel2 = null;
@@ -134,8 +168,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = bestellung;
-		this.zvKonto = null;
-		this.betragZvKonto = 0;
+		this.zvKonto1 = null;
+		this.betragZvKonto1 = 0;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = t;
 		this.betragZvTitel1 = buchung;
 		this.zvTitel2 = null;
@@ -152,8 +188,10 @@ public class Buchung {
 		this.typ = typ;
 		this.beschreibung = "";
 		this.bestellung = bestellung;
-		this.zvKonto = zvk;
-		this.betragZvKonto = tgrBuchung;
+		this.zvKonto1 = zvk;
+		this.betragZvKonto1 = tgrBuchung;
+		this.zvKonto2 = null;
+		this.betragZvKonto2 = 0;
 		this.zvTitel1 = t;
 		this.betragZvTitel1 = titelBuchung;
 		this.zvTitel2 = null;
@@ -205,22 +243,37 @@ public class Buchung {
 		this.bestellung = bestellung;
 	}
 
-	public ZVKonto getZvKonto() {
-		return zvKonto;
+	public ZVKonto getZvKonto1() {
+		return zvKonto1;
 	}
 
-	public void setZvKonto(ZVKonto zvKonto) {
-		this.zvKonto = zvKonto;
+	public void setZvKonto1(ZVKonto zvKonto1) {
+		this.zvKonto1 = zvKonto1;
 	}
 
-	public float getBetragZvKonto() {
-		return betragZvKonto;
+	public float getBetragZvKonto1() {
+		return betragZvKonto1;
 	}
 
-	public void setBetragZvKonto(float betragZvKonto) {
-		this.betragZvKonto = betragZvKonto;
+	public void setBetragZvKonto1(float betragZvKonto1) {
+		this.betragZvKonto1 = betragZvKonto1;
 	}
 
+	public ZVKonto getZvKonto2() {
+		return zvKonto2;
+	}
+
+	public void setZvKonto2(ZVKonto zvKonto2) {
+		this.zvKonto2 = zvKonto2;
+	}
+
+	public float getBetragZvKonto2() {
+		return betragZvKonto2;
+	}
+
+	public void setBetragZvKonto2(float betragZvKonto2) {
+		this.betragZvKonto2 = betragZvKonto2;
+	}
 	public ZVUntertitel getZvTitel1() {
 		return zvTitel1;
 	}

@@ -113,6 +113,12 @@ public class MessageDialogs extends JDialog implements ActionListener, WindowLis
 		return md.result;
 	}
 	
+	public static int showErrorMessageDialog(Component parent, String title, String message){
+		MessageDialogs md = new MessageDialogs(parent, title, message, null, ERROR_ICON);
+		md.setVisible(true);
+		return md.result;
+	}
+	
 	/**
 	 * ActionListener Methoden
 	 */

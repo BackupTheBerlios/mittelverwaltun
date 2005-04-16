@@ -455,7 +455,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//63 Löscht temporäre FBKonten-Tabelle
-			ps = con.prepareStatement("DROP TABLE fbkonten_tmp");
+			ps = con.prepareStatement("DROP TABLE IF EXISTS fbkonten_tmp");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//64 Portiert die Konten eines bestimmten Hauptkontos inklusive Budgets und Vormerkungen auf ein neues Haushaltsjahr
@@ -584,10 +584,21 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//77
-			statements[i++] = null;
+			ps = con.prepareStatement(
+					"SELECT id, beginn, ende, status " +
+					  "FROM Haushaltsjahre " +
+					 "ORDER BY beginn DESC");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//78
-			statements[i++] = null;
+		{//78 Ermittelt anhand der ID des vorigen Haushaltsjahres die ID des folgenden Haushaltsjahres
+			ps = con.prepareStatement(
+					"SELECT new.id " +
+					  "FROM Haushaltsjahre old, Haushaltsjahre new " +
+					 "WHERE old.id = ? " +
+					  "AND old.ende = new.beginn " +
+					  "AND new.status = '0'");
+			int[] param = {Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//79
 			statements[i++] = null;
@@ -1057,7 +1068,7 @@ public class PreparedSqlStatements {
 			// Wurde ein portierter Titel gelöscht, so ist dessen ID = 0
 			
 			ps = con.prepareStatement(
-					 "SELECT IF(t2.id is NULL, 0, t2.id), " + 
+					 "SELECT t1.id, IF(t2.id is NULL, 0, t2.id), " + 
 						   	"t1.budget " + 
 					   "FROM ZVKontentitel t1 " + 
 				  "LEFT JOIN ZVkontentitel t2 " +
@@ -1399,11 +1410,11 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//168 Löscht temporäre ZVKonten-Tabelle
-			ps = con.prepareStatement("DROP TABLE zvkonten_tmp");
+			ps = con.prepareStatement("DROP TABLE IF EXISTS zvkonten_tmp");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//169 Löscht temporäre ZVKontentitel-Tabelle
-			ps = con.prepareStatement("DROP TABLE zvkontentitel_tmp");
+			ps = con.prepareStatement("DROP TABLE IF EXISTS zvkontentitel_tmp");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 
@@ -1738,8 +1749,8 @@ public class PreparedSqlStatements {
 		/* Tabelle: Buchungen   				  */
 		/* Indizes: 220-229                       */
 		/******************************************/
-		{//220 Anzahl der Buchunen zu einem Benutzer
-			ps = con.prepareStatement( "SELECT COUNT(b.betragZvKonto) " +
+		{//220 Anzahl der Buchungen zu einem Benutzer
+			ps = con.prepareStatement( "SELECT COUNT(b.betragZvKonto1) " +
 										 "FROM Benutzer a, Buchungen b " +
 										"WHERE a.id = ? " +
 										"AND a.id = b.benutzer " );
@@ -1774,16 +1785,16 @@ public class PreparedSqlStatements {
 		{//223 fügt eine neue Buchung ein
 			ps = con.prepareStatement("INSERT " +
 																"INTO Buchungen " +
-																	 "(timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto, betragZvKonto, " +																	 "zvTitel1, betragZvTitel1, zvTitel2, betragZvTitel2, " +																	 "fbKonto1, betragFbKonto1, fbKonto2, betragFbKonto2 ) " +
-															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+																	 "(timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto1, betragZvKonto1, zvKonto2, betragZvKonto2, " +																	 "zvTitel1, betragZvTitel1, zvTitel2, betragZvTitel2, " +																	 "fbKonto1, betragFbKonto1, fbKonto2, betragFbKonto2 ) " +
+															  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 															  Statement.RETURN_GENERATED_KEYS);
-			int[] param = {	Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.FLOAT,
+			int[] param = {	Types.TIMESTAMP, Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER, Types.INTEGER, Types.FLOAT, Types.INTEGER, Types.FLOAT,
 										 	Types.INTEGER, Types.FLOAT, Types.INTEGER, Types.FLOAT, 
 											Types.INTEGER, Types.FLOAT, Types.INTEGER, Types.FLOAT	};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//224
-			ps = con.prepareStatement(	"SELECT SUM( betragZVKonto ) " +
+			ps = con.prepareStatement(	"SELECT SUM( betragZVKonto1 ) " +
 					  "FROM buchungen " +
                   "WHERE bestellung = ? " +
 					"AND typ = '9'"); 
@@ -1795,7 +1806,7 @@ public class PreparedSqlStatements {
 			 * Buchung von einer bestimmter Bestellung mit einem bestimmten Typ.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto, betragZvKonto, " +
+			ps = con.prepareStatement(	"SELECT timeStamp, benutzer, typ, beschreibung, bestellung, zvKonto1, betragZvKonto1, " +
 											"zvTitel1, betragZvTitel1, zvTitel2, betragZvTitel2, " +
 											"fbKonto1, betragFbKonto1, fbKonto2, betragFbKonto2 " +
 					  					"FROM buchungen " +
@@ -1803,14 +1814,64 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//226
-			statements[i++] = null;
+		{//226 Führt ein Update der Konten-/Titel_IDs der Buchungen zu einer Bestellung durch
+			ps = con.prepareStatement(
+					"UPDATE Buchungen " +
+					   "SET zvtitel1 = IF(zvtitel1 = ?, ?, zvtitel1), " +
+					       "zvtitel2 = IF(zvtitel2 = ?, ?, zvtitel2), " +
+						   "fbkonto1 = IF(fbkonto1 = ?, ?, fbkonto1), " +
+						   "fbkonto2 = IF(fbkonto2 = ?, ?, fbkonto2) " +
+					 "WHERE bestellung = ?");
+						//   alter Titel   neuer Titel
+			int[] param = { Types.INTEGER, Types.INTEGER,
+						//   alter Titel   neuer Titel
+							Types.INTEGER, Types.INTEGER,
+						//   altes Konto   neues Konto
+							Types.INTEGER, Types.INTEGER,
+						//   altes Konto   neues Konto
+							Types.INTEGER, Types.INTEGER,
+						//    Bestellung
+							Types.INTEGER };
+			
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//227
-			statements[i++] = null;
+		{//227 Fügt alle Mittelübernahmebuchungen für ZV-Titel bei Portierung eines ZV-Kontos ein 
+			ps = con.prepareStatement(
+					"INSERT INTO Buchungen " +
+								"(timestamp, benutzer, typ, beschreibung, " +
+								" zvtitel1, betragZvTitel1, zvtitel2, betragZvTitel2 ) " +
+						 "SELECT " +
+						 		"?, ?, '3', '', " +
+								"old.id, -new.budget, new.id, new.budget " +
+						   "FROM zvkontentitel old, zvkontentitel new " +
+						  "WHERE old.zvkontoid = ? " +
+						    "AND new.zvkontoid = ? " +
+							"AND old.titel = new.titel " +
+							"AND old.untertitel = new.untertitel " +
+							"AND new.budget > 0 " );
+			int[] param = {Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//228
-			statements[i++] = null;
+		{//228 Fügt alle Mittelübernahmebuchungen bei Portierung eines FB-Hauptkontos ein 
+			ps = con.prepareStatement(
+					"INSERT INTO Buchungen " +
+								"(timestamp, benutzer, typ, beschreibung, " +
+								" fbkonto1, betragfbkonto1, fbkonto2, betragfbkonto2) " +
+						 "SELECT " + 
+						 		"?, ?, '4', '', " +
+								"old.id, -new.budget, new.id, new.budget " +
+						  "FROM fbkonten main, fbkonten old, fbkonten new " +
+						 "WHERE main.id = ? " +
+						   "AND main.haushaltsjahrid = old.haushaltsjahrid " +
+						   "AND main.institutsid = old.institutsid " +
+						   "AND main.hauptkonto = old.hauptkonto " +
+						   "AND old.institutsid = new.institutsid " +
+						   "AND old.hauptkonto = new.hauptkonto " +
+						   "AND old.unterkonto = new.unterkonto " +
+						   "AND new.haushaltsjahrid = ? " +
+						   "AND new.budget > 0");
+			int[] param = {Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//229
 			statements[i++] = null;
@@ -2588,7 +2649,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//315 Löscht temporäre Kontenzuordnungstabelle
-			ps = con.prepareStatement("DROP TABLE kontenzuordnung_tmp");
+			ps = con.prepareStatement("DROP TABLE IF EXISTS kontenzuordnung_tmp");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//316
@@ -2822,11 +2883,11 @@ public class PreparedSqlStatements {
 			 */
 			ps = con.prepareStatement("SELECT " +
 																		"zvk.bezeichnung AS zvKonto, " +
-																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +
+																		"( SELECT SUM(betragZvKonto1 + betragZvTitel1) " +
 																			"FROM Buchungen " +
 																			"WHERE typ IN (1, 2) " +
 																				"AND (timestamp BETWEEN ? AND ?) " +
-																				"AND ( zvKonto = zvk.id " +
+																				"AND ( zvKonto1 = zvk.id " +
 																							"OR zvTitel1 IN " +
 																											"( SELECT id " +
 																												"FROM ZVKontentitel " +
@@ -2834,8 +2895,8 @@ public class PreparedSqlStatements {
 																											")" +
 																						")" +
 																		") AS mittel, " +
-																		"( SELECT SUM(betragZvKonto + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND (timestamp BETWEEN ? AND ?) " +
-																				"AND ( zvKonto = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
+																		"( SELECT SUM(betragZvKonto1 + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND (timestamp BETWEEN ? AND ?) " +
+																				"AND ( zvKonto1 = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
 																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel " +																											"WHERE zvKontoId  = zvk.id " +																												"AND geloescht = '0')" +																		") AS kontostand " +
 																"FROM " +
 																	"ZVKonten zvk, Haushaltsjahre h " +

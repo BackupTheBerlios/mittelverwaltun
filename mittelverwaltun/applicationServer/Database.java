@@ -53,7 +53,9 @@ public class Database implements Serializable {
 		}catch (ClassNotFoundException e){
 			throw new ConnectionException("Connection Exception: Invalid database driver." + e.getMessage());
 		}catch (SQLException e){
+			e.printStackTrace();
 			throw new ConnectionException("Connection Exception: Connection refused.");
+		
 		} 
 	}
 
@@ -1431,7 +1433,7 @@ public class Database implements Serializable {
 	 * Abfrage der HaushaltsjahrId vom aktuellem Jahr
 	 */
 	public int selectHaushaltsjahrId() throws ApplicationServerException{
-		Haushaltsjahr hhj;
+		
 		try{
 			ResultSet rs = statements.get(73).executeQuery();
 			rs.last();
@@ -1448,6 +1450,29 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Abfrage der ID des folgenden Haushaltsjahres
+	 */
+	public int selectFollowingHaushaltsjahrId(int preYear) throws ApplicationServerException{
+		
+		try{
+			Object[] parameters = {new Integer(preYear)};
+			ResultSet rs = statements.get(78).executeQuery(parameters);
+			rs.last();
+			int count = rs.getRow();
+			rs.beforeFirst();
+			rs.next();
+			if (count > 0){
+				return rs.getInt(1);
+			}else{
+				return 0;
+			}
+		} catch (SQLException e){
+			throw new ApplicationServerException(191, e.getMessage());
+		}
+	}
+	
+	
 	/**
 	 * gibt alle Rollen zurück
 	 * @return Rolle-Array
@@ -4235,13 +4260,24 @@ public class Database implements Serializable {
 	 */
 	public void insertBuchung(Buchung b) throws ApplicationServerException{
 		try{
-			Object[] parameters = { b.getTimestamp(), new Integer(b.getBenutzer().getId()), "" + b.getTyp(), b.getBeschreibung(),
-						(b.getBestellung()== null) ? null : new Integer(b.getBestellung().getId()),
-						(b.getZvKonto() == null) ? null : new Integer(b.getZvKonto().getId()), new Float(b.getBetragZvKonto()), 
-						(b.getZvTitel1() == null) ? null : new Integer(b.getZvTitel1().getId()), new Float(b.getBetragZvTitel1()), 
-						(b.getZvTitel2() == null) ? null : new Integer(b.getZvTitel2().getId()), new Float(b.getBetragZvTitel2()),
-						(b.getFbKonto1() == null) ? null : new Integer(b.getFbKonto1().getId()), new Float(b.getBetragFbKonto1()),
-						(b.getFbKonto2() == null) ? null : new Integer(b.getFbKonto2().getId()), new Float(b.getBetragFbKonto2()) };
+			Object[] parameters = { 
+					b.getTimestamp(),
+					new Integer(b.getBenutzer().getId()), 
+					"" + b.getTyp(), 
+					b.getBeschreibung(),
+					(b.getBestellung()== null) ? null : new Integer(b.getBestellung().getId()),
+					(b.getZvKonto1() == null) ? null : new Integer(b.getZvKonto1().getId()), 
+					new Float(b.getBetragZvKonto1()),
+					(b.getZvKonto2() == null) ? null : new Integer(b.getZvKonto2().getId()), 
+					new Float(b.getBetragZvKonto2()), 		
+					(b.getZvTitel1() == null) ? null : new Integer(b.getZvTitel1().getId()), 
+					new Float(b.getBetragZvTitel1()), 
+					(b.getZvTitel2() == null) ? null : new Integer(b.getZvTitel2().getId()), 
+					new Float(b.getBetragZvTitel2()),
+					(b.getFbKonto1() == null) ? null : new Integer(b.getFbKonto1().getId()), 
+					new Float(b.getBetragFbKonto1()),
+					(b.getFbKonto2() == null) ? null : new Integer(b.getFbKonto2().getId()), 
+					new Float(b.getBetragFbKonto2()) };
 			statements.get(223).executeUpdate(parameters);
 			
 		} catch (SQLException e){
@@ -4793,7 +4829,7 @@ public class Database implements Serializable {
 	   }		
 	}
 	
-	public float updateZvTitelBudgetTakeovers (int oldAccID, int newAccID) throws ApplicationServerException{
+	public float updateZvTitelBudgetTakeovers (Benutzer b, int oldAccID, int newAccID) throws ApplicationServerException{
 		try{
 			float budget = 0.0f; 
 			
@@ -4808,11 +4844,14 @@ public class Database implements Serializable {
 				rs.beforeFirst();		
 												
 				while( rs.next() ){
-					if (rs.getInt(1) == 0){ //Falls portierter ZVKontentitel nicht mehr existiert ...
-						budget += rs.getFloat(2); // summiere nicht übernommenes Budget
-					}else{// sonst buche Budget auf neuen Titel
-						Object[] p = {new Float(rs.getFloat(2)), new Integer(rs.getInt(1))};
-						statements.get(134).executeUpdate(p);
+					if (rs.getInt(2) == 0){ //Falls portierter ZVKontentitel nicht mehr existiert ...
+						budget += rs.getFloat(3); // summiere nicht übernommenes Budget
+					}else if (rs.getFloat(3) > 0){// sonst buche Budget auf neuen Titel wenn Budget > 0
+						Object[] p = {new Float(rs.getFloat(3)), new Integer(rs.getInt(2))};
+						// Aktualisiere Titelbudget
+						statements.get(134).executeUpdate(p); 
+						// Füge Buchung ein
+						insertBuchung(new Buchung(b, "3", new ZVUntertitel(rs.getInt(1)), -rs.getFloat(3), new ZVUntertitel(rs.getInt(2)), rs.getFloat(3))); 
 					}
 				}
 			}
@@ -5030,9 +5069,12 @@ public class Database implements Serializable {
 			
 			ResultSet rs = statements.get(136).executeQuery(parameters);
 			
+			int result = 0;
 			if (rs.next()) { //erster zurückgelieferter Schlüssel = neue ZV-Titel-ID
-				return rs.getInt(1);
-			}else return 0;
+				result = rs.getInt(1);
+			}
+			rs.close();
+			return result;
 			
 	   } catch (SQLException e){
 		   throw new ApplicationServerException(181, e.getMessage());
@@ -5046,9 +5088,12 @@ public class Database implements Serializable {
 			
 			ResultSet rs = statements.get(66).executeQuery(parameters);
 			
+			int result = 0;
 			if (rs.next()) { //erster zurückgelieferter Schlüssel = neue ZV-Titel-ID
-				return rs.getInt(1);
-			}else return 0;
+				result =  rs.getInt(1);
+			}
+			rs.close();
+			return result;
 			
 	   } catch (SQLException e){
 		   throw new ApplicationServerException(182, e.getMessage());
@@ -5074,10 +5119,10 @@ public class Database implements Serializable {
 			
 			ResultSet rs = statements.get(74).getGeneratedKeys();
 			
-			if (rs.next()) {
-				return rs.getInt(1);
-			}else return 0;
-			
+			int result = 0;
+			if (rs.next()) result =  rs.getInt(1);
+			rs.close();
+			return result;
 		} catch (SQLException e) {
 			throw new ApplicationServerException(184, e.getMessage());
 		}
@@ -5100,6 +5145,59 @@ public class Database implements Serializable {
 		} catch (SQLException e) {
 			throw new ApplicationServerException(186, e.getMessage());
 		}
+	}
+	
+	public ArrayList selectHaushaltsjahre() throws ApplicationServerException{
+		try {
+			ArrayList years = new ArrayList();
+			ResultSet rs = statements.get(77).executeQuery();
+			
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	
+				rs.beforeFirst();		
+				while( rs.next() ){		
+					Haushaltsjahr year = new Haushaltsjahr(rs.getInt(1), rs.getDate(2), rs.getDate(3), rs.getInt(4));
+					years.add(year);
+				}
+			}
+			rs.close();		
+			return years;
+		} catch (SQLException e) {
+			throw new ApplicationServerException(187, e.getMessage());
+		}		
+	}
+	
+	public int updateBestellungsbuchungen (int order, int oldTitle, int newTitle, int oldAcc, int newAcc) throws ApplicationServerException{
+		try{
+		
+		Object[] parameters = { new Integer(oldTitle), new Integer(newTitle),
+								new Integer(oldTitle), new Integer(newTitle),
+								new Integer(oldAcc), new Integer(newAcc),
+								new Integer(oldAcc), new Integer(newAcc),
+								new Integer(order)};
+		
+		return statements.get(226).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException(188, e.getMessage());
+		}
+	}
+	
+	public int insertAsSelectBuchungenZvTitelMitteluebernahme(Benutzer user, int oldAcc, int newAcc) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Timestamp(System.currentTimeMillis()), new Integer(user.getId()), new Integer(oldAcc), new Integer(newAcc)};
+			return statements.get(227).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException(189, e.getMessage());
+		}		
+	}
+
+	public int insertAsSelectBuchungenFBKontoMitteluebernahme(Benutzer user, int oldAcc, int newYear) throws ApplicationServerException{
+		try{
+			Object[] parameters = {new Timestamp(System.currentTimeMillis()), new Integer(user.getId()), new Integer(oldAcc), new Integer(newYear)};
+			return statements.get(228).executeUpdate(parameters);
+		} catch (SQLException e){
+			throw new ApplicationServerException(190, e.getMessage());
+		}		
 	}
 	
 }

@@ -248,4 +248,15 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 		return vormerkungen;
 	}
 	
+	public void resetBudgets(){
+		setBudget(0);
+		for( int i = 0; i < untertitel.size(); i++ )
+			((ZVUntertitel)untertitel.get(i)).setBudget(0);
+	}
+
+	public void resetVormerkungen(){
+		setVormerkungen(0);
+		for( int i = 0; i < untertitel.size(); i++ )
+			((ZVUntertitel)untertitel.get(i)).setVormerkungen(0);
+	}
 }

@@ -160,7 +160,24 @@ public class ZVUntertitel implements Serializable {
 		this.bedingung = "";
 		this.geloescht = false;
 	}
-	
+
+	/**
+	 * Konstruktor, mit minnimaler Attributbelegung.
+	 * Verwendung: Haushaltsjahresabschluss
+	 * @param id = Eindeutige Id vom ZVUntertitel
+	 */
+	public ZVUntertitel( int id ){
+		this.id = id;
+		this.zvTitel = null;
+		this.bezeichnung = "";
+		this.titel = "";
+		this.untertitel = "";
+		this.budget = 0.0f;
+		this.vormerkungen = 0.0f;
+		this.bemerkung = "";
+		this.bedingung = "";
+		this.geloescht = false;
+	}
 	/**
 	 * Eine Kopie von einem <code>ZVUntertitel</code> erstellen. <br>
 	 * Es wird auch der <code>ZVTitel</code> kopiert.

@@ -201,6 +201,26 @@ public class ZVKonto implements Serializable {
 		this.portiert = false;
 		this.abgeschlossen = false;
 	}
+	/**
+	 * Konstruktor zum Erzeugen eines ZVKontos mit minimalen Informationen. <br>
+	 * Verwendung: Haushaltsjahreabschluss
+	 * @param id = eindeutige Id dieses ZVKontos.
+	 */	
+	public ZVKonto( int id) {
+		this.id = id;
+		this.haushaltsJahrId = 0;
+		this.bezeichnung = "";
+		this.kapitel = "";
+		this.titelgruppe = "";
+		this.tgrBudget = 0.0f;
+		this.dispoLimit = 0.0f;
+		this.zweckgebunden = false;
+		this.freigegeben = '0';
+		this.uebernahmeStatus = '0';
+		this.portiert = false;
+		this.abgeschlossen = false;
+		this.geloescht = false;
+	}
 	
 	/**
 	 * Eine Kopie von einem ZVKonto erstellen. Die ZVTitel werden nicht kopiert.
@@ -529,6 +549,17 @@ public class ZVKonto implements Serializable {
 		for (int i=0; i < titel.size(); i++)
 			vormerkungen += ((ZVTitel)titel.get(i)).getGesamtVormerkungen();
 		return vormerkungen;
+	}
+	
+	public void resetBudgets(){
+		tgrBudget = 0;
+		for (int i=0; i < titel.size(); i++)
+			((ZVTitel)titel.get(i)).resetBudgets();
+	}
+	
+	public void resetVormerkungen(){
+		for (int i=0; i < titel.size(); i++)
+			((ZVTitel)titel.get(i)).resetVormerkungen();
 	}
 	
 }

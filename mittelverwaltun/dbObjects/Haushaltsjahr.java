@@ -12,6 +12,7 @@ import java.sql.Date;
  */
 public class Haushaltsjahr implements Serializable {
 
+	private int id = 0;
 	private Date von = null;
 	private Date bis = null;
 	private int status = 3;
@@ -20,6 +21,14 @@ public class Haushaltsjahr implements Serializable {
 	 * status=2: inaktiv, abgeschlossen
 	 * status=3: inaktiv, setup
 	 */
+	public Haushaltsjahr(int id, Date von, Date bis, int status){
+		this.id = id;
+		this.von = von;
+		this.bis = bis;
+		this.status = status;
+	}
+	
+	
 	public Haushaltsjahr(Date von){
 		this.von = von;
 	}
@@ -52,5 +61,24 @@ public class Haushaltsjahr implements Serializable {
 	
 	public int getStatus(){
 		return this.status;
+	}
+	
+	
+	public int getId(){
+		return id;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	
+	public String getStatusString(){
+		switch (status){
+			case 0: return "Aktiv";
+			case 1: return "Inaktiv - Offene Konten";
+			case 2: return "Abgeschlossen";
+			case 3: return "Setup";
+			default: return "";
+		}
 	}
 }
