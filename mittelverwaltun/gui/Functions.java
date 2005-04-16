@@ -655,34 +655,6 @@ public class Functions {
 	}
 	
 	/**
-	 * Laden der Datei "report16.gif".
-	 * @param clazz = Class von einer Componente.
-	 * @return Das geladene ImageIcon.
-	 */
-	static public ImageIcon getReportIcon(Class clazz){
-		try{
-		  Image img = Functions.loadImageResource("image","report16.gif", clazz);
-		  if (img != null)
-			  return  new ImageIcon(img);
-	  }catch (IOException e){};
-		return null;
-	}
-	
-	/**
-	 * Laden der Datei "users16.gif".
-	 * @param clazz = Class von einer Componente.
-	 * @return Das geladene ImageIcon.
-	 */
-	static public ImageIcon getUserIcon(Class clazz){
-		try{
-		  Image img = Functions.loadImageResource("image","users16.gif", clazz);
-		  if (img != null)
-			  return  new ImageIcon(img);
-	  }catch (IOException e){};
-		return null;
-	}
-	
-	/**
 	 * Laden der Datei "institute16.gif".
 	 * @param clazz = Class von einer Componente.
 	 * @return Das geladene ImageIcon.

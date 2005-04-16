@@ -179,8 +179,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 
   private void loadInstituts(){
 	  try {
-//		TODO Admin durch die Aktivität austauschen
-			if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin")){
+			if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH){
 				Institut[] instituts = frame.getApplicationServer().getInstitutes();
 
 			  if(instituts != null){
@@ -189,7 +188,7 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 						  cbInstitut.addItem(instituts[i]);
 					 }
 			  }
-			}else{
+			}else if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT){
 				Institut institut = frame.getBenutzer().getKostenstelle();
 
 				cbInstitut.removeAllItems();
@@ -310,10 +309,9 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
 	private void loadUsers(){
 		try{
 			Benutzer[] users = null;
-			//		TODO Admin durch die Aktivität austauschen
-		  if(frame.getBenutzer().getRolle().getBezeichnung().equals("Admin"))
+			if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH)
 				users = frame.getApplicationServer().getUsers();
-			else
+			else if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT)
 				users = frame.getApplicationServer().getUsers(frame.getBenutzer().getKostenstelle());
 
 			  if(users != null){
