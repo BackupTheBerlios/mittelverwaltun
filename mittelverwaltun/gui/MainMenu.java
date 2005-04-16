@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.*;
+
+
 import applicationServer.ApplicationServerException;
 import dbObjects.Benutzer;
 import dbObjects.Rolle;
@@ -21,7 +23,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Sitzung"
 	JMenu menuSitzung = new JMenu("Sitzung");
 			JMenuItem miAccountAendern = new JActivityRelatedMenuItem(0, "Account ändern");
-			JMenuItem miTmpRollenVerwalten = new JActivityRelatedMenuItem(0, "TempRollen verwalten");
+			JMenuItem miTmpRollenVerwalten = new JActivityRelatedMenuItem(0, "Temporäre Rollen verwalten");
 			JMenu menuSichtwechsel = new JMenu("Sichtwechsel");
 				JMenuItem miDefaultRolle = new JActivityRelatedMenuItem(0,	"Standardrolle"); 
 				JMenu menuTmpRolle = new JMenu("Temporäre Rollen"); 
@@ -51,20 +53,20 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		JMenuItem miRollen = new JActivityRelatedMenuItem(1, "Rollen");
 		JMenuItem miFirmen = new JActivityRelatedMenuItem(1, "Firmen");
 		JMenu menuKonten = new JMenu("Konten");
-			JMenuItem miZVKonten = new JActivityRelatedMenuItem(1, "ZV-Konten");
-			JMenuItem miFBKonten = new JActivityRelatedMenuItem(1, "FB-Konten");
-		JMenuItem miZuordnung = new JActivityRelatedMenuItem(	1,	"Kontenzuordnung");
+			JMenuItem miZVKonten = new JActivityRelatedMenuItem(1, "Zentralverwaltungskonten");
+			JMenuItem miFBKonten = new JActivityRelatedMenuItem(1, "Fachbereichskonten");
+		JMenuItem miZuordnung = new JActivityRelatedMenuItem(	1,	"Kontenzuordnungen");
 		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(1,"Fachbereiche");
 		JMenuItem miInstitute = new JActivityRelatedMenuItem(1, "Institute");
-		JMenu menuHaushaltsjahr = new JMenu( "Haushaltsjahr" );
+		JMenu menuHaushaltsjahr = new JMenu( "Haushaltsjahre" );
 			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	1,	"Aktuelles Haushaltsjahr abschließen");
 			JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Haushaltsjahre anzeigen");
 			//JMenuItem miMitteluebertrag = new JActivityRelatedMenuItem(	1,	"Mittelübertrag aus vergangenem Jahr");
 		
 	// Das Menü "Reporting"
-	JMenu menuReporting = new JMenu("Reporting");
+	JMenu menuReporting = new JMenu("Reports");
 
-		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Reports/Logliste anzeigen");
+		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
 //		JMenu menuZVReport = new JMenu("Zentralverwaltung");
 //			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
 //			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
@@ -93,10 +95,11 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuSitzung.add( miAccountAendern );
 			activityRelItems.add( miAccountAendern );
 			miAccountAendern.addActionListener( this );
-			miAccountAendern.setIcon(Functions.getUserIcon(this.getClass()));
+			miAccountAendern.setIcon(Functions.getPersonIcon(this.getClass()));
 			menuSitzung.add( miTmpRollenVerwalten );
 			activityRelItems.add( miTmpRollenVerwalten );
 			miTmpRollenVerwalten.addActionListener( this );
+			miTmpRollenVerwalten.setIcon(Functions.getRoleIcon(this.getClass()));
 			menuSitzung.add( menuSichtwechsel );
 				menuSichtwechsel.add( miDefaultRolle );
 				activityRelItems.add( miDefaultRolle );
@@ -119,7 +122,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuSitzung.add( miLogoutBeenden );
 			activityRelItems.add( miLogoutBeenden );
 			miLogoutBeenden.addActionListener( this );
-					
+			miLogoutBeenden.setIcon(Functions.getExitIcon(this.getClass()));		
 		// Das Menü "Bestellung"
 		add( menuBestellung );
 			menuBestellung.add( menuBestellungErstellen );
@@ -144,13 +147,16 @@ public class MainMenu extends JMenuBar implements ActionListener {
 				menuZenralverwaltung.add( miKontenbudgetsFestlegen );
 				activityRelItems.add( miKontenbudgetsFestlegen );
 				miKontenbudgetsFestlegen.addActionListener( this );
+				miKontenbudgetsFestlegen.setIcon(Functions.getBudgetIcon(this.getClass()));
 			menuMittelverwaltung.add( menuFachbereichsintern );
 				menuFachbereichsintern.add( miFBKontenZuweisen );
 				activityRelItems.add( miFBKontenZuweisen );
 				miFBKontenZuweisen.addActionListener( this );	
+				miFBKontenZuweisen.setIcon(Functions.getMoneyIcon(this.getClass()));
 				menuFachbereichsintern.add( miFBKontenZuweisenProf );
 				activityRelItems.add( miFBKontenZuweisenProf );
-				miFBKontenZuweisenProf.addActionListener( this );	
+				miFBKontenZuweisenProf.addActionListener( this );
+				miFBKontenZuweisenProf.setIcon(Functions.getMoneyIcon(this.getClass()));
 				menuFachbereichsintern.add( miFBKontenUmbuchen );
 				activityRelItems.add( miFBKontenUmbuchen );
 				miFBKontenUmbuchen.addActionListener( this );	
@@ -165,16 +171,20 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuVerwaltung.add( miRollen );
 			activityRelItems.add( miRollen );
 			miRollen.addActionListener( this );
+			miRollen.setIcon(Functions.getRoleIcon(this.getClass()));
 			menuVerwaltung.add( miFirmen );
 			activityRelItems.add( miFirmen );
 			miFirmen.addActionListener( this );
 			menuVerwaltung.add( menuKonten );
-				menuKonten.add( miZVKonten );
+				menuKonten.setIcon(Functions.getAccountIcon(this.getClass()));
+			    menuKonten.add( miZVKonten );
 				activityRelItems.add( miZVKonten );
 				miZVKonten.addActionListener( this );
+				miZVKonten.setIcon(Functions.getAccountIcon(this.getClass()));
 				menuKonten.add( miFBKonten );
 				activityRelItems.add( miFBKonten );
 				miFBKonten.addActionListener( this );
+				miFBKonten.setIcon(Functions.getAccountIcon(this.getClass()));
 				menuKonten.add( miZuordnung );
 				activityRelItems.add( miZuordnung );
 				miZuordnung.addActionListener( this );
@@ -187,6 +197,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			miInstitute.addActionListener( this );
 			miInstitute.setIcon(Functions.getInstituteIcon(this.getClass()));
 			menuVerwaltung.add( menuHaushaltsjahr );
+				menuHaushaltsjahr.setIcon(Functions.getCalendarIcon(this.getClass()));
 				miAnzeigen.setIcon(Functions.getCalendarIcon(this.getClass()));
 				menuHaushaltsjahr.add( miAnzeigen );
 				activityRelItems.add( miAnzeigen );

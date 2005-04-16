@@ -23,6 +23,118 @@ public class Functions {
 	  }catch (IOException e){};
 	  return null;
 	}
+
+	/**
+	 * Laden der Datei "exit16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getExitIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","exit16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	/**
+	 * Laden der Datei "account16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getAccountIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","account16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+
+	/**
+	 * Laden der Datei "user16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getUserIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","user16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	/**
+	 * Laden der Datei "role16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getRoleIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","role16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+
+	/**
+	 * Laden der Datei "budget16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getBudgetIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","budget16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+
+	/**
+	 * Laden der Datei "money16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getMoneyIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","money16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	/**
+	 * Laden der Datei "person16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getPersonIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","person16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
+	
+	/**
+	 * Laden der Datei "report16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getReportIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","report16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+	  return null;
+	}
 	
 	/**
 	 * Laden der Datei "redo.gif".
