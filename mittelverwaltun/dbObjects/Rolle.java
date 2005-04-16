@@ -56,12 +56,16 @@ public class Rolle implements Serializable {
 		return bezeichnung;
 	}
 
-	public boolean equals(Object rolle){
-		if( (id == ((Rolle)rolle).getId()) && 
-				((bezeichnung == null || ((Rolle)rolle).getBezeichnung() == null) ? true : bezeichnung.equals(((Rolle)rolle).getBezeichnung()))
-			)
-			return true;
-		else
+	public boolean equals(Object o){
+		if(o != null){
+			Rolle rolle = (Rolle)o;
+			if( (id == ((Rolle)rolle).getId()) && 
+					((bezeichnung == null || ((Rolle)rolle).getBezeichnung() == null) ? true : bezeichnung.equals(((Rolle)rolle).getBezeichnung()))
+				)
+				return true;
+			else
+				return false;
+		}else
 			return false;
 	}
 	
