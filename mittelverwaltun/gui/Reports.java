@@ -24,6 +24,7 @@ import java.rmi.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -304,20 +305,20 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		Reports report;
 		try{
 			CentralServer server = (CentralServer)Naming.lookup("//localhost/mittelverwaltung");
-//			ApplicationServer applicationServer = server.getMyApplicationServer();
-//			test.setApplicationServer(applicationServer);
-//			PasswordEncrypt pe = new PasswordEncrypt();
-//			String psw = pe.encrypt(new String("r.driesner").toString());
-//			test.setBenutzer(applicationServer.login("r.driesner", psw));
-//			test.setBounds(100,100,800,900);
-//			test.setExtendedState(Frame.MAXIMIZED_BOTH);
-//
-//			test.setJMenuBar( new MainMenu( test ) );
-//
-//			report = new Reports(test);
-//			test.addChild(report);
-//			test.show();
-//			report.show();
+			ApplicationServer applicationServer = server.getMyApplicationServer();
+			test.setApplicationServer(applicationServer);
+			PasswordEncrypt pe = new PasswordEncrypt();
+			String psw = pe.encrypt(new String("r.driesner").toString());
+			test.setBenutzer(applicationServer.login("r.driesner", psw));
+			test.setBounds(100,100,800,900);
+			test.setExtendedState(Frame.MAXIMIZED_BOTH);
+
+			test.setJMenuBar( new MainMenu( test ) );
+
+			report = new Reports(test);
+			test.addChild(report);
+			test.setVisible(true);
+			report.show();
 	 }catch(Exception e){
 			System.out.println(e);
 	 }
@@ -460,8 +461,11 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			Date von = new Date(vonUtil.getTime());
 
 			java.util.Date bisUtil = (java.util.Date)tfDatumBis.getValue();
-			Date bis = new Date(bisUtil.getTime());
-
+			
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(bisUtil);
+			cal.add(GregorianCalendar.DATE, 1);
+			Date bis = new Date(cal.getTimeInMillis());
 			
 			if(cbReportFilter.getSelectedItem() == "Report_1"){
 						ArrayList content = frame.getApplicationServer().getReport(REPORT_1, von, bis);

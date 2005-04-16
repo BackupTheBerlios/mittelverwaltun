@@ -342,8 +342,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 				  cbRollen.addItem(rollen[i]);
 			  }
 			}
-	  }catch(Exception e){
-		  System.out.println(e);
+	  }catch(ApplicationServerException ex){
+	  	MessageDialogs.showDetailMessageDialog(this, "Fehler", ex.getMessage(), ex.getNestedMessage(), MessageDialogs.ERROR_ICON);
 	  }
   }
 
@@ -505,7 +505,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 		 	String psw = pe.encrypt(new String("r.driesner").toString());
 		 	test.setBenutzer(applicationServer.login("r.driesner", psw));
 	   	test.setBounds(100,100,800,900);
-		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
+//		 	test.setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		 	test.setJMenuBar( new MainMenu( test ) );
 		 	Benutzerverwaltung benutzerVerwaltung = new Benutzerverwaltung(test.getApplicationServer());

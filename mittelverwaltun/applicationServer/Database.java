@@ -4655,7 +4655,7 @@ public class Database implements Serializable {
 					ArrayList row = new ArrayList();
 					Benutzer b = selectUser(rs.getInt(2));
 					
-					row.add(rs.getDate(1)); 		// Datum
+					row.add(new Date(rs.getTimestamp(1).getTime())); 		// Datum
 					row.add(b.getName() + ", " + b.getVorname()); 								// Benutzer
 					row.add(rs.getString(3));		// Typ
 					row.add(rs.getString(4));		// Beschreibung
