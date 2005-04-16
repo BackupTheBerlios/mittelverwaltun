@@ -31,7 +31,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Bestellung"
 	JMenu menuBestellung = new JMenu("Bestellung");
 		JMenu menuBestellungErstellen = new JMenu("Neu...");
-			JMenuItem miAAErstellen = new JActivityRelatedMenuItem(17, "Auszahlungsanforderung");
+			JMenuItem miAAErstellen = new JActivityRelatedMenuItem(18, "Auszahlungsanforderung");
 			JMenuItem miSBErstellen = new JActivityRelatedMenuItem(17, "Standardbestellung");
 			JMenuItem miASKErstellen = new JActivityRelatedMenuItem(17, "ASK-Bestellung");
 		JMenuItem miBestellungenAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
@@ -39,7 +39,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Mittelverwaltung"
 	JMenu menuMittelverwaltung = new JMenu("Mittelverwaltung");
 		JMenu menuZenralverwaltung = new JMenu("Zenralverwaltung");
-			JMenuItem miKontenbudgetsFestlegen = new JActivityRelatedMenuItem(	1,"Kontenbudgets festlegen");
+			JMenuItem miKontenbudgetsFestlegen = new JActivityRelatedMenuItem(	13,"Kontenbudgets festlegen");
 		JMenu menuFachbereichsintern = new JMenu("Fachbereich");
 			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 1, "Umbuchungen zw. Fachbereichskonten" );
 			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 1, "Mittelverteilung" );
@@ -93,6 +93,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuSitzung.add( miAccountAendern );
 			activityRelItems.add( miAccountAendern );
 			miAccountAendern.addActionListener( this );
+			miAccountAendern.setIcon(Functions.getUserIcon(this.getClass()));
 			menuSitzung.add( miTmpRollenVerwalten );
 			activityRelItems.add( miTmpRollenVerwalten );
 			miTmpRollenVerwalten.addActionListener( this );
@@ -160,6 +161,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuVerwaltung.add( miBenutzer );
 			activityRelItems.add( miBenutzer );
 			miBenutzer.addActionListener( this );
+			miBenutzer.setIcon(Functions.getUserIcon(this.getClass()));
 			menuVerwaltung.add( miRollen );
 			activityRelItems.add( miRollen );
 			miRollen.addActionListener( this );
@@ -179,9 +181,11 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuVerwaltung.add( miFachbereiche );
 			activityRelItems.add( miFachbereiche );
 			miFachbereiche.addActionListener( this );
+			miFachbereiche.setIcon(Functions.getFachbereichIcon(this.getClass()));
 			menuVerwaltung.add( miInstitute );
 			activityRelItems.add( miInstitute );
 			miInstitute.addActionListener( this );
+			miInstitute.setIcon(Functions.getInstituteIcon(this.getClass()));
 			menuVerwaltung.add( menuHaushaltsjahr );
 				miAnzeigen.setIcon(Functions.getCalendarIcon(this.getClass()));
 				menuHaushaltsjahr.add( miAnzeigen );
@@ -197,6 +201,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			menuReporting.add( miReportsLoglisteAnzeigen );
 			activityRelItems.add( miReportsLoglisteAnzeigen );
 			miReportsLoglisteAnzeigen.addActionListener( this );
+			miReportsLoglisteAnzeigen.setIcon(Functions.getReportIcon(this.getClass()));
 //			menuReporting.add( menuZVReport );
 //				menuZVReport.add( miZVAusgabeNachK );
 //				activityRelItems.add( miZVAusgabeNachK );

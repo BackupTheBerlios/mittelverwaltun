@@ -32,7 +32,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
   JButton buAendern = new JButton(Functions.getEditIcon(getClass()));
   JButton buLoeschen = new JButton(Functions.getDelIcon(getClass()));
   JButton buBeenden = new JButton(Functions.getCloseIcon(getClass()));
-  JButton buKontoAuswahl = new JButton();
+  JButton buKontoAuswahl = new JButton(Functions.getFindIcon(getClass()));
   JButton buRefresh = new JButton(Functions.getRefreshIcon(getClass()));
 
   JLabel jLabel2 = new JLabel();
@@ -73,11 +73,13 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 
   public Benutzerverwaltung(MainFrame frame, int view){
 		super("");
+		
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.view = view;
 		this.frame = frame;
 		this.applicationServer = frame.getApplicationServer();
+		
 
 		try {
 		  jbInit();
