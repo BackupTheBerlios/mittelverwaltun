@@ -14,7 +14,7 @@ public class Benutzer implements Serializable {
 	
 	public static int VIEW_INSTITUT = 1;
 	
-	public static int VIEW_FACHBEREICH = 0;	
+	public static int VIEW_FACHBEREICH = 2;	
 
 	private int id;
 
