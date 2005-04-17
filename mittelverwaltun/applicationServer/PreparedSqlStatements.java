@@ -509,8 +509,17 @@ public class PreparedSqlStatements {
 		{//67
 			statements[i++] = null;
 		}
-		{//68
-			statements[i++] = null;
+		{//68 Gibt eine FBHauptkonto für ein PrivatKonto zurück
+	    ps = con.prepareStatement("SELECT fb.id, fb.haushaltsjahrId, fb.institutsId, fb.bezeichnung, "+
+																	 "fb.hauptkonto, fb.unterkonto, fb.budget, fb.dispoLimit, fb.pruefBedingung " +
+																"FROM FBKonten fb, Haushaltsjahre h " +
+																"WHERE fb.hauptkonto = ? " +
+																	"AND fb.institutsId = ? " +
+																	"AND fb.unterkonto = \"0000\" " +
+																	"AND h.status = 0 " +
+																  "AND fb.geloescht = '0'");
+			int[] param = {Types.VARCHAR, Types.INTEGER};
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//69 gibt ein FBKonto zurück
 			ps = con.prepareStatement("SELECT id, haushaltsjahrId, institutsId, bezeichnung, "+

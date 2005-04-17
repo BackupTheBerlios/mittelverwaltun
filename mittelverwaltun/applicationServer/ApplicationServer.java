@@ -3723,6 +3723,48 @@ public class ApplicationServer implements Serializable {
 			db.commit();
 		}
 	}
+	
+	/**
+	 * gibt das Privatkonto eines Benutzers zurück in der Struktur
+	 * Institut -> FBHauptkonto -> FBUnterkonto (PrivatKonto)
+	 * @param inst - Institut indem sich das PrivatKonto befindet
+	 * @param pKonto - Id des PrivatKontos
+	 * @return Institut-Array
+	 */
+	public Institut[] getPrivatKonto(Institut inst, int pKonto) throws ApplicationServerException{
+    try{
+        if(inst != null){
+          FBUnterkonto pFBU = db.selectFBKonto(pKonto); //Privat-Konto
+          FBHauptkonto pFBH = db.selectFBHauptkonto(pFBU.getHauptkonto(), inst.getId()); // Hauptkonto des Privatkontos
+      			
+	  			if(pFBU != null && pFBH != null){
+  			    ArrayList unterkonten = new ArrayList();
+  	  			unterkonten.add(pFBU);
+  	  			
+  	  			pFBH.setUnterkonten(unterkonten);
+  	  			pFBH.setInstitut(inst);
+  	  			
+  	  			Kontenzuordnung[] kz = db.selectKontenzuordnungen(pFBH);
+  	  			
+  	  			pFBH.setZuordnung(kz);	// Kontenzuordnung festlegen
+  	  			
+  	  			ArrayList hauptKonto = new ArrayList();
+  	  			hauptKonto.add(pFBH);
+  	  			
+  	  			inst.setHauptkonten(hauptKonto);
+	  			}
+        }
+  			
+  			Institut[] institut = {inst}; 
+  			
+  			return institut;
+  		} catch(ApplicationServerException e) {
+  			db.rollback();
+  			throw e;
+  		} finally {
+  			db.commit();
+  		}
+	}
 }
 
 

@@ -2738,6 +2738,34 @@ public class Database implements Serializable {
 		}
 		return konto;
 	}
+	
+	/**
+	 * Abfrage eines FBHauptkontos für ein PrivatKonto.
+	 * @param hauptkonto - String des FBHauptkontos
+	 * @param institut - Id des Instituts
+	 * @return FBHauptkonto
+	 * @throws ApplicationServerException
+	 * author robert
+	 */
+	public FBHauptkonto selectFBHauptkonto(String hauptkonto, int institut) throws ApplicationServerException {
+			FBHauptkonto konto = null;
+
+			try{
+				Object[] parameters = { hauptkonto, new Integer(institut) };
+				ResultSet rs = statements.get(68).executeQuery(parameters);
+
+				if( rs.next() ){
+					konto = new FBHauptkonto( rs.getInt(1), rs.getInt(2), null, rs.getString(4), rs.getString(5),
+												rs.getString(6), rs.getFloat(7), rs.getFloat(8), rs.getString(9) );
+				}
+
+				rs.close();
+			} catch (SQLException e){
+				System.out.println(e.getMessage());
+				throw new ApplicationServerException( 1, e.getMessage() );
+			}
+			return konto;
+		}
 
 	/**
 	 * Abfrage eines FBUnterkontos mit der angegebenen Id.

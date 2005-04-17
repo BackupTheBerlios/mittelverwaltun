@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
+import dbObjects.Benutzer;
 import dbObjects.FBUnterkonto;
 import dbObjects.Institut;
 import applicationServer.ApplicationServer;
@@ -27,16 +28,16 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 
 
 	/**
-	 * 
+	 * Konstruktor
 	 * @param parent
 	 * @param modal
 	 * @param applicationServer
 	 * @param hauptKonto - sollen auch HauptKonten ausgewählt werden können
 	 */
-  public AuswahlFBKonto(Component parent, boolean modal, ApplicationServer applicationServer, boolean hauptKonto) {
-		super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
+  public AuswahlFBKonto(Component parent, MainFrame frame, boolean hauptKonto) {
+		super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", false);
 		this.parent = parent;
-		this.applicationServer = applicationServer;
+		this.applicationServer = frame.getApplicationServer();
 		this.hauptKonto = hauptKonto;
 
 		try {
@@ -48,7 +49,16 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		}
 		
 		try {
-			treeKonten.loadInstituts( applicationServer.getInstitutesWithAccounts() );
+		  int visibility = frame.getBenutzer().getSichtbarkeit();
+		  
+		  if(visibility == Benutzer.VIEW_FACHBEREICH)
+		    treeKonten.loadInstituts( applicationServer.getInstitutesWithAccounts() );
+		  else if(visibility == Benutzer.VIEW_INSTITUT)
+		    treeKonten.loadInstituts( applicationServer.getInstituteWithAccounts(frame.getBenutzer().getKostenstelle(), true) );
+		  else if(visibility == Benutzer.VIEW_PRIVAT){
+		    treeKonten.loadInstituts( applicationServer.getPrivatKonto(frame.getBenutzer().getKostenstelle(), 
+		            																									 frame.getBenutzer().getPrivatKonto() ) );
+		  }		    
 		} catch (ApplicationServerException e1) {
 		}
 
@@ -61,10 +71,17 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	  this.setBounds(0,0,460, 320);
 		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
     
-}
+  }
  
- 	public AuswahlFBKonto(Component parent, Institut institut, boolean modal, ApplicationServer applicationServer, boolean hauptKonto) {
-		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", modal);
+  /**
+   * Konstruktor
+   * @param parent
+   * @param institut - Institut von dem nur die FBHaupt- und FBUnterkonten angezeigt werden
+   * @param applicationServer
+   * @param hauptKonto - sollen auch HauptKonten ausgewählt werden können 
+   */
+ 	public AuswahlFBKonto(Component parent, Institut institut, ApplicationServer applicationServer, boolean hauptKonto) {
+		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", false);
 		 this.parent = parent;
 		 this.applicationServer = applicationServer;
 		 this.hauptKonto = hauptKonto;
@@ -88,6 +105,8 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		buBeenden.addActionListener( this );
 
 		this.setBounds(0,0,460, 320);
+		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
+    
   }
  
   

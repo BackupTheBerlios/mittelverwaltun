@@ -429,13 +429,20 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		}else if ( e.getSource() == rbAuftragGrund ) {
 			tpAuftragGrund.setVisible(true);
 		}else if ( e.getSource() == buFBKonto ) {
-			AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, frame.getApplicationServer(), true);
-			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  fbKontoAuswahl.setVisible(true);
+		  if(cbInstitut.getSelectedItem() != null){
+				AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame.getApplicationServer(), true);
+				fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+			  fbKontoAuswahl.setVisible(true);
+		  }else{
+		    JOptionPane.showMessageDialog( this,"Kein Institut selektiert !","Warnung",JOptionPane.ERROR_MESSAGE);
+		  }
 		}else if ( e.getSource() == buTitel ) {
-			AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
-			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  kontoAuswahl.setVisible(true);
+	    if(fbKonto != null){
+        AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
+  			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+  		  kontoAuswahl.setVisible(true);
+	    }else
+	      JOptionPane.showMessageDialog( this,"Kein FBKonto selektiert !","Warnung",JOptionPane.ERROR_MESSAGE);
 		}else if ( e.getSource() == buAddAngebot ) {
 			DefaultTableModel dtm = (DefaultTableModel)tableAngebote.getModel();
 			AngebotFrame angebot = new AngebotFrame(this);

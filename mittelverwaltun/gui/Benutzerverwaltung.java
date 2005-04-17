@@ -431,7 +431,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 				loadRollen();
 				loadUsers();
 			} else if ( e.getSource() == buKontoAuswahl ) {
-				AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), false, applicationServer, false);
+				AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), applicationServer, false);
 				kontoAuswahl.setVisible(true);
 			} else if ( e.getSource() == buKontoEntfernen ) {
 				privatKonto = 0;
