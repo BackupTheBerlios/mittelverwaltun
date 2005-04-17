@@ -107,7 +107,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	public Server(){
 		super("FB-Mittelverwaltung Server");
 		try {
-		  restoreFiles();
+//			restoreFiles();
 			jbInit();
 			initSysTray();
 			loadXMLFile();
