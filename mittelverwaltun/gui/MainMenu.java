@@ -252,7 +252,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		}else if ( e.getSource() == miFBKontenZuweisen ) {
 				frame.addChild( new RemmitanceToFBHauptkontoFrame( frame ) );
 		}else if ( e.getSource() == miFBKontenZuweisenProf ) {
-			frame.addChild( new ProfBudgetFrame( frame ) );
+				frame.addChild( new ProfBudgetFrame( frame ) );
 		} else if ( e.getSource() == miBenutzer ) {
 			frame.addChild( new Benutzerverwaltung(frame, Benutzer.VIEW_FACHBEREICH) );
 		} else if ( e.getSource() == miRollen ) {
@@ -304,6 +304,12 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			ActivityRelatedElement e = (ActivityRelatedElement) it.next();
 			if (e==miBestellungenAnzeigen)
 				miBestellungenAnzeigen.setEnabled(r.hasAktivitaet(6)||r.hasAktivitaet(7)|r.hasAktivitaet(8));
+			else if (e == miFBKontenZuweisenProf)
+				miFBKontenZuweisenProf.setEnabled(r.hasAktivitaet(10) && ((frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH) ||(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT)));
+			else if (e == miFBKontenZuweisen)
+				miFBKontenZuweisen.setEnabled(r.hasAktivitaet(10) && ((frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH) ||(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT)));
+			else if (e == miFBKontenUmbuchen)
+				miFBKontenUmbuchen.setEnabled(r.hasAktivitaet(10) && ((frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH) ||(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT)));
 			else e.setActivityStatus(r);
 		}
 	}

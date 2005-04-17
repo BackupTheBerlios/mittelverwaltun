@@ -252,7 +252,18 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	 	try{
 			ArrayList pnData = new ArrayList();
 			
-			Institut[] institutes = as.getInstitutes();
+			Institut[] institutes = new Institut[0];
+			Benutzer b = frame.getBenutzer();
+			if (b != null){
+				if (b.getSichtbarkeit()==Benutzer.VIEW_FACHBEREICH)
+					institutes = as.getInstitutes();
+				else if (b.getSichtbarkeit()==Benutzer.VIEW_INSTITUT){
+					institutes = new Institut[1];
+					institutes[0] = b.getKostenstelle();
+				}
+			}
+			
+		
 			
 			//System.out.println("Institute: "+ institutes.length);
 			

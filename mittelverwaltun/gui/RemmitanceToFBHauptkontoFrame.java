@@ -12,6 +12,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.JTextComponent;
 
+import dbObjects.Benutzer;
 import dbObjects.FBHauptkonto;
 import dbObjects.Institut;
 
@@ -170,7 +171,14 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		if( as != null ) {
 			try {
 				treeAccounts.delTree();
-				treeAccounts.loadInstituts( as.getInstitutesWithMainAccounts() );
+				Benutzer b = frame.getBenutzer();
+				if (b != null){
+					if (b.getSichtbarkeit()==Benutzer.VIEW_FACHBEREICH)
+						treeAccounts.loadInstituts( as.getInstitutesWithMainAccounts() );
+					else if (b.getSichtbarkeit()==Benutzer.VIEW_INSTITUT)
+						treeAccounts.loadInstituts( as.getInstituteWithAccounts(b.getKostenstelle() ,false) );
+				}
+				
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
 			}

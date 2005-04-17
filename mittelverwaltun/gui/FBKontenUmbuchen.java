@@ -71,7 +71,17 @@ public class FBKontenUmbuchen extends JInternalFrame implements ActionListener, 
 		if( frame != null ) {
 			try {
 				treeKonten.delTree();		// Den aktuellen Baum löschen
-				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );	// Alle Konten holen
+				Benutzer b = frame.getBenutzer();
+				if (b != null){
+					if (b.getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH){
+						// Alle Konten holen
+						treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );	
+					}else if (b.getSichtbarkeit() == Benutzer.VIEW_INSTITUT){
+						// Nur Konten des Institutes des angemeldeten Benutzers holen
+						treeKonten.loadInstituts( frame.getApplicationServer().getInstituteWithAccounts(b.getKostenstelle(), true) );	
+					}
+				}
+				
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
 			}
