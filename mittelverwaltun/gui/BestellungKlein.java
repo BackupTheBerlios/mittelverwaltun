@@ -612,6 +612,7 @@ class FBKontoAuswahlDialog extends JDialog implements ActionListener, TreeSelect
 		}
 		
 		this.setBounds(50, 50, 332, 285);
+		this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 		this.setVisible(true);
 	}
 	

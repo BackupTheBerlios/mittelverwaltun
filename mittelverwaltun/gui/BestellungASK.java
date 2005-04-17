@@ -570,13 +570,9 @@ public class BestellungASK extends JInternalFrame implements ActionListener, Tab
   public void actionPerformed(ActionEvent e) {
 	  String error = "";
 	  if ( e.getSource() == buFBKonto ) {
-		  AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame.getApplicationServer(), true);
-			fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  fbKontoAuswahl.setVisible(true);
+		  AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame, true);
 	  }else if ( e.getSource() == buTitel ) {
-		  AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
-			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		  kontoAuswahl.setVisible(true);
+		  AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
 	  }else if ( e.getSource() == buDrucken ) {
 		  printBestellung();
 	  }else if ( e.getSource() == buBestellen ) {

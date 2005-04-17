@@ -17,14 +17,12 @@ public class AuswahlHaushaltsjahr extends JInternalFrame implements ActionListen
 	JScrollPane spContent = new JScrollPane();
 	BudgetYearTable budgetYearTab;
 	
-  	public AuswahlHaushaltsjahr(MainFrame frame) {
+  public AuswahlHaushaltsjahr(MainFrame frame) {
 		
-  		this.frame = frame;
-  		
-  		this.setClosable(true);
+  	this.frame = frame;
+  	this.setClosable(true);
 		this.getContentPane().setLayout(null);
 		this.setSize(440,235);
-		
 		
 		btRefresh.setBounds(new Rectangle(5, 5, 130, 25));
 		btRefresh.setText("Aktualisieren");
@@ -35,7 +33,7 @@ public class AuswahlHaushaltsjahr extends JInternalFrame implements ActionListen
 		spContent.setBounds(new Rectangle(5, 35, 420, 125));
 
 		
-	    try {
+	  try {
 			budgetYearTab = new BudgetYearTable(this, frame.getApplicationServer().getHaushaltsjahre());
 			spContent.getViewport().add(budgetYearTab, null);
 		} catch (ApplicationServerException e) {
@@ -44,20 +42,22 @@ public class AuswahlHaushaltsjahr extends JInternalFrame implements ActionListen
 		
 		
 		pnSeparator.setBorder(BorderFactory.createLineBorder(Color.gray));
-	    pnSeparator.setBounds(new Rectangle(5, 165, 420, 2));
-		
-	    btCancel.setBounds(new Rectangle(305, 172, 120, 25));
-	    btCancel.setText("Beenden");
-	    btCancel.setFont(new java.awt.Font("Dialog", 1, 11));
-	    btCancel.setActionCommand("dispose");
-	    btCancel.addActionListener(this);
+    pnSeparator.setBounds(new Rectangle(5, 165, 420, 2));
+	
+    btCancel.setBounds(new Rectangle(305, 172, 120, 25));
+    btCancel.setText("Beenden");
+    btCancel.setFont(new java.awt.Font("Dialog", 1, 11));
+    btCancel.setActionCommand("dispose");
+    btCancel.addActionListener(this);
 		
 		
 		this.getContentPane().add(spContent, null);
 		this.getContentPane().add(pnSeparator, null);
 		this.getContentPane().add(btCancel, null);
 		this.getContentPane().add(btRefresh, null);
-  	}
+
+		this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+  }
 
 	
 	public void actionPerformed(ActionEvent e) {

@@ -29,11 +29,10 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
 
 
   public AuswahlZVKonto(Component parent, FBUnterkonto fbKonto, boolean modal, MainFrame frame) {
-    super(JOptionPane.getFrameForComponent(parent), "ZVKonto Auswahl", modal);
+    super(frame, "ZVKonto Auswahl", modal);
     this.parent = parent;
     this.frame = frame;
     this.fbKonto = fbKonto;
-    FBUnterkonto test ;
 
     try {
       jbInit();
@@ -51,7 +50,8 @@ public class AuswahlZVKonto extends JDialog implements ActionListener, TreeSelec
 		buBeenden.addActionListener( this );
 
 		this.setBounds(0,0,460, 320);
-		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		this.setVisible(true);
   }
 
   /**

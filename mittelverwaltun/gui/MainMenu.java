@@ -56,7 +56,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			JMenuItem miZVKonten = new JActivityRelatedMenuItem(15, "Zentralverwaltungskonten");
 			JMenuItem miFBKonten = new JActivityRelatedMenuItem(15, "Fachbereichskonten");
 		JMenuItem miZuordnung = new JActivityRelatedMenuItem(	15,	"Kontenzuordnungen");
-		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(16,"Fachbereiche");
+		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(16,"Fachbereich");
 		JMenuItem miInstitute = new JActivityRelatedMenuItem(17, "Institute");
 		JMenu menuHaushaltsjahr = new JMenu( "Haushaltsjahre" );
 			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	18,	"Aktuelles Haushaltsjahr abschlieﬂen");

@@ -430,17 +430,13 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 			tpAuftragGrund.setVisible(true);
 		}else if ( e.getSource() == buFBKonto ) {
 		  if(cbInstitut.getSelectedItem() != null){
-				AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame.getApplicationServer(), true);
-				fbKontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-			  fbKontoAuswahl.setVisible(true);
+				AuswahlFBKonto fbKontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame, true);
 		  }else{
 		    JOptionPane.showMessageDialog( this,"Kein Institut selektiert !","Warnung",JOptionPane.ERROR_MESSAGE);
 		  }
 		}else if ( e.getSource() == buTitel ) {
 	    if(fbKonto != null){
-        AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, false, frame);
-  			kontoAuswahl.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-  		  kontoAuswahl.setVisible(true);
+        AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
 	    }else
 	      JOptionPane.showMessageDialog( this,"Kein FBKonto selektiert !","Warnung",JOptionPane.ERROR_MESSAGE);
 		}else if ( e.getSource() == buAddAngebot ) {

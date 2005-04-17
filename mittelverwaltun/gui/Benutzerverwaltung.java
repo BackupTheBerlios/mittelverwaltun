@@ -116,6 +116,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 			buKontoEntfernen.setEnabled(false);
 			tfBenutzername.setEnabled(false);
 			cbSoftBeauftragter.setEnabled(false);
+			cbSichtbarkeit.setEnabled(false);
 		}
 		
 		this.setBounds(0,0,799, 400);
@@ -431,7 +432,7 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 				loadRollen();
 				loadUsers();
 			} else if ( e.getSource() == buKontoAuswahl ) {
-				AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), applicationServer, false);
+				AuswahlFBKonto kontoAuswahl = new AuswahlFBKonto(this, (Institut)cbInstitut.getSelectedItem(), frame, false);
 				kontoAuswahl.setVisible(true);
 			} else if ( e.getSource() == buKontoEntfernen ) {
 				privatKonto = 0;

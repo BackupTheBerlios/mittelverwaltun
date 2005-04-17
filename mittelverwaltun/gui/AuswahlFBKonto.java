@@ -35,14 +35,13 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	 * @param hauptKonto - sollen auch HauptKonten ausgewählt werden können
 	 */
   public AuswahlFBKonto(Component parent, MainFrame frame, boolean hauptKonto) {
-		super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", false);
+		super(frame, "FBKonto Auswahl", true);
 		this.parent = parent;
 		this.applicationServer = frame.getApplicationServer();
 		this.hauptKonto = hauptKonto;
 
 		try {
 		  jbInit();
-		  pack();
 		}
 		catch(Exception ex) {
 		  ex.printStackTrace();
@@ -69,8 +68,8 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 	  buBeenden.addActionListener( this );
 
 	  this.setBounds(0,0,460, 320);
-		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
-    
+		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		this.setVisible(true);
   }
  
   /**
@@ -80,15 +79,14 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
    * @param applicationServer
    * @param hauptKonto - sollen auch HauptKonten ausgewählt werden können 
    */
- 	public AuswahlFBKonto(Component parent, Institut institut, ApplicationServer applicationServer, boolean hauptKonto) {
-		 super(JOptionPane.getFrameForComponent(parent), "FBKonto Auswahl", false);
+ 	public AuswahlFBKonto(Component parent, Institut institut, MainFrame frame, boolean hauptKonto) {
+		 super(frame, "FBKonto Auswahl", true);
 		 this.parent = parent;
-		 this.applicationServer = applicationServer;
+		 this.applicationServer = frame.getApplicationServer();
 		 this.hauptKonto = hauptKonto;
 		
 		 try {
 			jbInit();
-			pack();
 		 }
 		 catch(Exception ex) {
 			ex.printStackTrace();
@@ -104,9 +102,9 @@ public class AuswahlFBKonto extends JDialog implements ActionListener, TreeSelec
 		buBeenden.setIcon(Functions.getCloseIcon(getClass()));
 		buBeenden.addActionListener( this );
 
-		this.setBounds(0,0,460, 320);
-		setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
-    
+		this.setBounds(50,50,460, 320);
+		this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+		this.setVisible(true);
   }
  
   

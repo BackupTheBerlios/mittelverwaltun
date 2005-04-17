@@ -181,28 +181,28 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
 
     ArrayList zvKonten = new ArrayList();
     try {
-		zvKonten = frame.applicationServer.getOffeneZVKonten(year);
-    } catch (ApplicationServerException ae) {
-		MessageDialogs.showErrorMessageDialog(this, "Fehler", "Zentralverwaltungskonten konnten nicht geladen werden.");
-		initError = true;
-		ae.printStackTrace();
-	}
+			zvKonten = frame.applicationServer.getOffeneZVKonten(year);
+	    } catch (ApplicationServerException ae) {
+			MessageDialogs.showErrorMessageDialog(this, "Fehler", "Zentralverwaltungskonten konnten nicht geladen werden.");
+			initError = true;
+			ae.printStackTrace();
+		}
     spContent1.setBounds(new Rectangle(5, 75, 815, 270));
     atContent1 = new AccountTable(AccountTable.ZV_KONTEN, zvKonten);
-	atContent1.getAccountTableModel().addTableModelListener(this);
-	spContent1.getViewport().add(atContent1, null);
+		atContent1.getAccountTableModel().addTableModelListener(this);
+		spContent1.getViewport().add(atContent1, null);
     
     ArrayList fbKonten = new ArrayList();
     try {
-		if (firstRun) fbKonten = frame.applicationServer.getOffeneFBHauptkonten(year);
-	} catch (ApplicationServerException ae) {
-		MessageDialogs.showErrorMessageDialog(this, "Fehler", "Fachbereichshauptkonten und Kontenzuordnungen\nkonnten nicht geladen werden.");
-		initError = true;
-		ae.printStackTrace();
-	}
+			if (firstRun) fbKonten = frame.applicationServer.getOffeneFBHauptkonten(year);
+		} catch (ApplicationServerException ae) {
+			MessageDialogs.showErrorMessageDialog(this, "Fehler", "Fachbereichshauptkonten und Kontenzuordnungen\nkonnten nicht geladen werden.");
+			initError = true;
+			ae.printStackTrace();
+		}
 
-	spContent2.setBounds(new Rectangle(5, 75, 815, 270));
-	atContent2 = new AccountTable(AccountTable.FB_KONTEN, fbKonten);
+		spContent2.setBounds(new Rectangle(5, 75, 815, 270));
+		atContent2 = new AccountTable(AccountTable.FB_KONTEN, fbKonten);
     atContent2.getAccountTableModel().addTableModelListener(this);
     spContent2.getViewport().add(atContent2, null);
     
@@ -213,16 +213,16 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
    
     ArrayList openOrders = new ArrayList();
     try {
-		if (firstRun) openOrders = frame.applicationServer.getOffeneBestellungen(year);
-    } catch (ApplicationServerException ae) {
-    	MessageDialogs.showErrorMessageDialog(this, "Fehler", "Offene Bestellungen konnten nicht geladen werden.");
-    	initError = true;
-    	ae.printStackTrace();
-	}
+			if (firstRun) openOrders = frame.applicationServer.getOffeneBestellungen(year);
+	   } catch (ApplicationServerException ae) {
+	    	MessageDialogs.showErrorMessageDialog(this, "Fehler", "Offene Bestellungen konnten nicht geladen werden.");
+	    	initError = true;
+	    	ae.printStackTrace();
+		}
     
     spContent4.setBounds(new Rectangle(5, 75, 815, 300));
-	aotContent4 = new AnnualOrderTable(openOrders, atContent2, atContent1);
-	spContent4.getViewport().add(aotContent4, null);
+		aotContent4 = new AnnualOrderTable(openOrders, atContent2, atContent1);
+		spContent4.getViewport().add(aotContent4, null);
     
     spContent5.setBounds(new Rectangle(5, 75, 815, 300));
     taContent5.setFont(new java.awt.Font("Dialog", 1, 11));
@@ -308,6 +308,7 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
     this.getContentPane().add(tfZvBudget);
     
     this.layer = 1;
+    this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
     updateView();
   }
 

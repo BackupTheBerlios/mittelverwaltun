@@ -249,6 +249,7 @@ public class Institutverwaltung extends JInternalFrame implements ActionListener
 				
 				if(institut.getInstitutsleiter().getId() == benutzer.getId()){
 					cbInstitutsleiter.setSelectedIndex(i);
+					cbInstitutsleiter.setToolTipText(benutzer.toString());
 					break;
 				}
 			}
