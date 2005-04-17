@@ -611,7 +611,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	
 	private void updateComponentEnabling(){
 		
-		boolean enable = origin.getPhase()=='1';
+		boolean enable = (origin.getPhase()=='1') && (frame.getActiveRole().hasAktivitaet(4));
 		
 		tfHuelNr.setEnabled(enable);
 		if (tfHuelNr.isEnabled())
@@ -627,7 +627,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 		
 		btSpeichern.setEnabled(enable);
 		
-		btStorno.setEnabled(origin.getPhase() != '3');
+		btStorno.setEnabled((origin.getPhase() != '3') && (frame.getActiveRole().hasAktivitaet(4)));
 	}
 	
 	private void updatePhase(){

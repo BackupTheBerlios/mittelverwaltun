@@ -537,7 +537,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 	
 	private void updateComponentEnabling(){
 		
-		boolean enable = origin.getPhase()=='1';
+		boolean enable = (origin.getPhase()=='1') && (frame.getActiveRole().hasAktivitaet(5));
 		
 		tabPositionen.setEditable(enable);
 		
@@ -547,7 +547,7 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
 		
 		btSpeichern.setEnabled(enable);
 		
-		btStorno.setEnabled(origin.getPhase() != '3');
+		btStorno.setEnabled((origin.getPhase() != '3') && (frame.getActiveRole().hasAktivitaet(5)));
 	}
 	
 	private void updatePhase(){

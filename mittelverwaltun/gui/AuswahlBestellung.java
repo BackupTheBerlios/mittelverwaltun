@@ -2,6 +2,9 @@ package gui;
 
 import javax.swing.*;
 
+import dbObjects.Benutzer;
+import dbObjects.Rolle;
+
 
 import applicationServer.*;
 
@@ -9,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.*;
+import java.util.ArrayList;
 
 
 /**
@@ -30,7 +34,8 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	JComboBox cbFilter;
 	JButton btAktualisieren = new JButton(Functions.getRefreshIcon(this.getClass()));
 	OrderTable tabBestellungen;
-
+	int[] validTypes = {-1, -1, -1};
+	
 	public AuswahlBestellung(MainFrame frame) {
 		this.frame = frame;
 		try {
@@ -41,16 +46,31 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	}
   
 	private void jbInit() throws Exception {
-	    
+	    this.setClosable(true);
+	   
 		this.setSize(800, 290);
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-    this.setFrameIcon(null);
+		this.setFrameIcon(null);
 	    this.setTitle("Bestellungsauswahl");
 	    this.getContentPane().setLayout(null);
 	
-		String[] items = {"kein Filter", "Standardbestellungen", "ASK-Bestellungen", "Ausahlungsanforderungen"};
+		//String[] items = {"kein Filter", "Standardbestellungen", "ASK-Bestellungen", "Ausahlungsanforderungen"};
 	
-	    cbFilter = new JComboBox(items);
+	    cbFilter = new JComboBox();
+	    cbFilter.addItem("kein Filter");
+	    Rolle r = frame.getActiveRole();
+	    if (r.hasAktivitaet(6)){
+	    	cbFilter.addItem("Auszahlungsanforderungen");
+	    	validTypes[0] = 2;
+	    }
+	    if (r.hasAktivitaet(7)){
+	    	cbFilter.addItem("Standardbestellungen");
+	    	validTypes[1] = 0;
+	    }
+	    if (r.hasAktivitaet(8)){
+	    	cbFilter.addItem("ASK-Bestellungen");
+	    	validTypes[2] = 1;
+	    }
 	    cbFilter.setBounds(new Rectangle(15, 12, 180, 27));
 	    cbFilter.setFont(new java.awt.Font("Dialog", 1, 11));
 	    	    
@@ -60,7 +80,17 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	    btAktualisieren.setActionCommand("refresh");
 	    btAktualisieren.addActionListener(this);
 	    
-	    tabBestellungen = new OrderTable(this, frame.applicationServer.getBestellungen());
+	    Benutzer b = frame.getBenutzer();
+	    ArrayList orders = new ArrayList();
+	    if (b != null){
+	    	if (b.getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH)
+	    		orders = frame.applicationServer.getBestellungen(validTypes);
+	    	else if (b.getSichtbarkeit() == Benutzer.VIEW_INSTITUT)
+	    		orders = frame.applicationServer.getInstitutsbestellungen(b.getKostenstelle().getId(), validTypes);
+	    	else if (b.getSichtbarkeit() == Benutzer.VIEW_PRIVAT)
+	    		orders = frame.applicationServer.getKontenbestellungen(b.getPrivatKonto(), validTypes);
+	    }
+	    tabBestellungen = new OrderTable(this, orders);
 	    tabBestellungen.setFont(new java.awt.Font("Dialog", 0, 11));
 	    	    
 	    spBestellungen.setBounds(new Rectangle(15, 49,760, 150));
@@ -120,19 +150,32 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 			}
 		} else if(e.getActionCommand() == "refresh"){
 			String filter = (String)cbFilter.getSelectedItem();
+			int[] types = {-1, -1, -1};
+			if (filter.equals("kein Filter")){
+				for (int i=0; i<validTypes.length; i++)
+					types[i] = validTypes[i];
+			}else if (filter.equals("Standardbestellungen")){
+				types[0] = 0;
+			}else if (filter.equals("ASK-Bestellungen")){
+				types[0] = 1;
+			}else if (filter.equals("Auszahlungsanforderungen")){
+				types[0] = 2;
+			}
+			ArrayList orders = new ArrayList();
 			try {
-				if (filter.equals("kein Filter")){
-					tabBestellungen.setOrders(frame.applicationServer.getBestellungen());
-				}else if (filter.equals("Standardbestellungen")){
-					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(0));
-				}else if (filter.equals("ASK-Bestellungen")){
-					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(1));
-				}else if (filter.equals("Ausahlungsanforderungen")){
-					tabBestellungen.setOrders(frame.applicationServer.getBestellungen(2));
-				}
+				Benutzer b = frame.getBenutzer();
+			    if (b != null){
+			    	if (b.getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH)
+			    		orders = frame.applicationServer.getBestellungen(types);
+			    	else if (b.getSichtbarkeit() == Benutzer.VIEW_INSTITUT)
+			    		orders = frame.applicationServer.getInstitutsbestellungen(b.getKostenstelle().getId(), types);
+			    	else if (b.getSichtbarkeit() == Benutzer.VIEW_PRIVAT)
+			    		orders = frame.applicationServer.getKontenbestellungen(b.getPrivatKonto(), types);
+			    }
 			} catch (ApplicationServerException e1) {
 				e1.printStackTrace();
 			}
+			tabBestellungen.setOrders(orders);
 		} else if(e.getActionCommand() == "dispose"){
 			this.dispose();
 		}

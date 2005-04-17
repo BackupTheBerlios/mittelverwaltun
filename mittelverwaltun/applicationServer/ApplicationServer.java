@@ -2873,16 +2873,7 @@ public class ApplicationServer implements Serializable {
 		return bestellung;
 	}
 	
-	/**
-	 * gibt Bestellungen ggf. eines bestimmten Typs zurück
-	 * @param filter
-	 * @return ArrayList mit Bestellungen
-	 * @throws ApplicationServerException
-	 * author Mario
-	 */
-	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
-		return db.selectBestellungen(filter);
-	}
+
 
 	/*
 	 *  (Kein Javadoc)
@@ -2892,17 +2883,75 @@ public class ApplicationServer implements Serializable {
 		return db.selectOffeneBestellungen(haushaltsjahr);
 	}
 
-	
+
 	/**
-	 * gibt alle Bestellungen zurück
+	 * gibt Bestellungen eines bestimmten Typs zurück
 	 * @param filter
 	 * @return ArrayList mit Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
-	public ArrayList getBestellungen() throws ApplicationServerException{
-		return db.selectBestellungen(-1);
+	public ArrayList getBestellungen(int filter) throws ApplicationServerException{
+		int[] validTypes = {filter};
+		return db.selectBestellungen(validTypes);
 	}
+	
+	/**
+	 * gibt alle Bestellungen zurück
+	 * @return ArrayList mit Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList getBestellungen(int[] validTypes) throws ApplicationServerException{
+		return db.selectBestellungen(validTypes);
+	}
+
+	/**
+	 * gibt Bestellungen eines bestimmten Typs zurück
+	 * @param filter
+	 * @return ArrayList mit Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList getKontenbestellungen(int accID, int filter) throws ApplicationServerException{
+		int[] validTypes = {filter};
+		return db.selectKontenbestellungen(accID, validTypes);
+	}
+
+	/**
+	 * gibt alle Bestellungen zurück
+	 * @return ArrayList mit Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList getKontenbestellungen(int accID, int[] validTypes) throws ApplicationServerException{
+		return db.selectKontenbestellungen(accID, validTypes);
+	}
+
+	/**
+	 * gibt Bestellungen eines bestimmten Typs zurück
+	 * @param filter
+	 * @return ArrayList mit Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList getInstitutsbestellungen(int institute, int filter) throws ApplicationServerException{
+		int[] validTypes = {filter};
+		return db.selectInstitutsbestellungen(institute, validTypes);
+	}
+
+	/**
+	 * gibt alle Bestellungen zurück
+	 * @return ArrayList mit Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList getInstitutsbestellungen(int institute, int[] validTypes) throws ApplicationServerException{
+		return db.selectInstitutsbestellungen(institute, validTypes);
+	}
+
+	
+	
 	
 	/**
 	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts

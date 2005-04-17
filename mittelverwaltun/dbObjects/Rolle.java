@@ -17,14 +17,14 @@ public class Rolle implements Serializable {
 	/**
 	 * Array für die Id der Aktivitäten der Rolle
 	 */
-	private int[] aktivitaeten;
+	private int[] aktivitaeten = null;
 
 	private String bezeichnung;
 	
 	/**
 	 * Array für die Aktivitäten der Rolle
 	 */
-	private Aktivitaet[] aktivitaetenFull;
+	private Aktivitaet[] aktivitaetenFull =null;
 
 	/**
 	 * Konstutktor
@@ -166,5 +166,17 @@ public class Rolle implements Serializable {
 				af[i] = (Aktivitaet)aktivitaetenFull[i].clone();
 		}
 		return new Rolle(this.id, this.bezeichnung, af, a);
+	}
+
+	public boolean hasAktivitaet(int a){
+		boolean r = false;
+		
+		if (aktivitaeten != null){
+			for (int i=0; (i<aktivitaeten.length) && !r; i++){
+				r = aktivitaeten[i] == a;
+			}
+		}
+		
+		return r;
 	}
 }

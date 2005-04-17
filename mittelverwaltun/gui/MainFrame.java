@@ -8,6 +8,7 @@ import java.rmi.*;
 
 import applicationServer.*;
 import dbObjects.Benutzer;
+import dbObjects.Rolle;
 
 /**
  * Hauptfenster von der FB-Mittelverwaltung. <br>
@@ -141,5 +142,9 @@ public class MainFrame extends JFrame {
 		}
 	   this.dispose();
 	   System.exit(0);
+	}
+	
+	public Rolle getActiveRole(){
+		return ((MainMenu)getJMenuBar()).getActiveRole();
 	}
 }

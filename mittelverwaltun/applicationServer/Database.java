@@ -3672,23 +3672,109 @@ public class Database implements Serializable {
  	}
  
 	/**
-	 * gibt in der Datenbank vorhandene Bestelungen zurück
-	 * @param filter (=> Filterung anhand des Bestellungstyps
+	 * ermittelt vorhandene Bestelungen
+	 * @param validTypes: Array von gültigen Bestellungstypen
 	 * @return ArrayListe von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
-	public ArrayList selectBestellungen(int filter) throws ApplicationServerException {
+	public ArrayList selectBestellungen(int[] validTypes) throws ApplicationServerException {
 		ArrayList bestellungen = new ArrayList();
 
 		try{
-			ResultSet rs;
-			if ((filter >= 0)&&(filter<=2)){
-				Object[] parameters = { new Integer(filter) };
-				rs = statements.get(272).executeQuery(parameters);
-			}else{
-				rs = statements.get(273).executeQuery();
+			Object[] parameters = { new Integer(-1), new Integer(-1), new Integer(-1) };
+			
+			if (validTypes != null){
+				for (int i=0; i<validTypes.length; i++)
+					parameters[i] = new Integer(validTypes[i]);
 			}
+			
+			ResultSet rs = statements.get(272).executeQuery(parameters);
+						
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					bestellungen.add( new Bestellung(	rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), 
+																						new Benutzer(rs.getString(5),rs.getString(6)), 
+																						new Benutzer(rs.getString(7),rs.getString(8)), 
+																						new Benutzer(rs.getString(9),rs.getString(10)), 
+																						rs.getFloat(11), rs.getFloat(12)));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 158, e.getMessage() );
+		}
+	
+		return bestellungen;
+	}
+
+	/**
+	 * gibt die über ein bestimmtes FB-Konto 
+	 * abgwickelten Bestellungen zurück
+	 * @param accID: ID des FB-Kontos
+	 * @param validTypes: Array von gültigen Bestellungstypen
+	 * @return ArrayListe von Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList selectKontenbestellungen(int accID, int[] validTypes) throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();
+
+		try{
+			Object[] parameters = { new Integer(-1), new Integer(-1), new Integer(-1), new Integer(accID) };
+			
+			if (validTypes != null){
+				for (int i=0; (i<validTypes.length) && (i<3); i++)
+					parameters[i] = new Integer(validTypes[i]);
+			}
+			
+			ResultSet rs = statements.get(306).executeQuery(parameters);
+						
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+			
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					bestellungen.add( new Bestellung(	rs.getInt(1), rs.getDate(2), rs.getString(3).charAt(0), rs.getString(4).charAt(0), 
+																						new Benutzer(rs.getString(5),rs.getString(6)), 
+																						new Benutzer(rs.getString(7),rs.getString(8)), 
+																						new Benutzer(rs.getString(9),rs.getString(10)), 
+																						rs.getFloat(11), rs.getFloat(12)));
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 158, e.getMessage() );
+		}
+	
+		return bestellungen;
+	}
+
+
+	/**
+	 * ermittelt die Bestellungen die über FB-Konten eines bestimmten Instituts
+	 * abgewickelt werden
+	 * @param institute: ID des Instituts
+	 * @param validTypes: Array von gültigen Bestellungstypen
+	 * @return ArrayListe von Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
+	public ArrayList selectInstitutsbestellungen(int institute, int[] validTypes) throws ApplicationServerException {
+		ArrayList bestellungen = new ArrayList();
+
+		try{
+			Object[] parameters = { new Integer(-1), new Integer(-1), new Integer(-1), new Integer(institute) };
+			
+			if (validTypes != null){
+				for (int i=0; (i<validTypes.length) && (i<3); i++)
+					parameters[i] = new Integer(validTypes[i]);
+			}
+			
+			ResultSet rs = statements.get(304).executeQuery(parameters);
 						
 			rs.last();	
 			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0

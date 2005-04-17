@@ -418,13 +418,15 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT " +
 											  "distinct fbk.id, fbk.haushaltsjahrId, fbk.institutsId, fbk.bezeichnung, " +
 												  "fbk.hauptkonto, fbk.unterkonto, fbk.budget, fbk.dispoLimit, fbk.pruefBedingung " +
-											 "FROM FBKonten fbk, Kontenzuordnung kz, ZVKonten zvk " +
+											 "FROM FBKonten fbk, Kontenzuordnung kz, ZVKonten zvk, Haushaltsjahre h " +
 										"WHERE fbk.institutsID = ? " +
 										  "AND fbk.unterkonto = \"0000\" " +
 										  "AND fbk.geloescht = \"0\" " +
 										  "AND fbk.id = kz.fbkontoid " +
 										  "AND kz.zvkontoid = zvk.id " +
-										  "AND zvk.zweckgebunden = \"0\" ");
+										  "AND zvk.zweckgebunden = \"0\" " +
+										  "AND fbk.haushaltsjahrid = h.id " +
+										  "AND h.status = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1342,11 +1344,13 @@ public class PreparedSqlStatements {
 		}
 		{//161
 			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
-										 "FROM ZVKontentitel t, ZVKonten k " +
+										 "FROM ZVKontentitel t, ZVKonten k, Haushaltsjahre h " +
 										"WHERE t.zvkontoid = k.id " +
 										  "AND k.zweckgebunden = \"0\" " +
 										  "AND t.geloescht = \"0\" " +
 										  "AND k.geloescht = \"0\" " +
+										  "AND k.haushaltsjahrid = h.id " +
+										  "AND h.status = '0' " +
 										"GROUP BY k.id");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
@@ -1364,7 +1368,7 @@ public class PreparedSqlStatements {
 		}
 		{//163
 			ps = con.prepareStatement( "SELECT DISTINCT fb2.id, fb2.budget " +
-										 "FROM kontenzuordnung z, zvkonten zv, fbkonten fb1, fbkonten fb2 " +
+										 "FROM kontenzuordnung z, zvkonten zv, fbkonten fb1, fbkonten fb2, haushaltsjahre h " +
 										"WHERE z.zvkontoid = zv.id " +
 										  "AND zv.zweckgebunden = \"0\" " +
 										  "AND zv.geloescht = \"0\" " +
@@ -1373,7 +1377,9 @@ public class PreparedSqlStatements {
 										  "AND fb1.haushaltsjahrid = fb2.haushaltsjahrid " +
 										  "AND fb1.institutsid = fb2.institutsid " +
 										  "AND fb1.hauptkonto = fb2.hauptkonto " +
-										  "AND fb2.geloescht=\"0\" ");
+										  "AND fb2.geloescht=\"0\" " +
+										  "AND fb1.haushaltsjahrid = h.id " +
+										  "AND h.status = '0'");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//164
@@ -2237,29 +2243,17 @@ public class PreparedSqlStatements {
 											"o.bestellwert, " +
 											"o.verbindlichkeiten " +
 										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
-										"WHERE o.typ = ? " +
+										"WHERE o.typ IN (?, ?, ?) " +
 										  "AND o.besteller = u1.id " +
 										  "AND o.auftraggeber = u2.id " +
 										  "AND o.empfaenger = u3.id " +
 										  "AND o.geloescht = '0' " +
 										  "ORDER BY datum DESC");
-			int[] param = {	Types.INTEGER };
+			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER }; // {typ1, typ2, typ3}
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//273
-			ps = con.prepareStatement(	"SELECT " + 
-											"o.id, o.datum, o.typ, o.phase, " +
-											"u1.name, u1.vorname, " +
-											"u2.name, u2.vorname, " +
-											"u3.name, u3.vorname, " +
-											"o.bestellwert, " +
-											"o.verbindlichkeiten " +
-										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
-										"WHERE o.besteller = u1.id " +
-										  "AND o.auftraggeber = u2.id " +
-										  "AND o.empfaenger = u3.id " +										  "AND o.geloescht = '0' " +
-										  "ORDER BY datum DESC");
-			statements[i++] = new PreparedStatementWrapper(ps);
+			statements[i++] = null;
 		}
 		{//274 select for update für eine StandardBestellung
 			ps = con.prepareStatement("SELECT " +
@@ -2530,17 +2524,50 @@ public class PreparedSqlStatements {
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
-		{//303
+		{//303 
 			statements[i++] = null;
 		}
-		{//304
-			statements[i++] = null;
+		{//304 Ermittelt alle Bestellunen die über FB-Konten eines bestimmten Instituts abgewickelt werden
+			ps = con.prepareStatement(	"SELECT " + 
+											"o.id, o.datum, o.typ, o.phase, " +
+											"u1.name, u1.vorname, " +
+											"u2.name, u2.vorname, " +
+											"u3.name, u3.vorname, " +
+											"o.bestellwert, " +
+											"o.verbindlichkeiten " +
+										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3, fbkonten k " +
+										"WHERE o.besteller = u1.id " +
+										  "AND o.typ IN (?, ?, ?) " +
+										  "AND o.auftraggeber = u2.id " +
+										  "AND o.empfaenger = u3.id " +
+										  "AND o.geloescht = '0' " +
+										  "AND o.fbkonto = k.id " +
+										  "AND k.institutsid = ? " +
+										  "ORDER BY datum DESC");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER,	Types.INTEGER }; //{typ1, typ2, typ3, institutsid}
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//305 
 			statements[i++] = null;
 		}
-		{//306
-			statements[i++] = null;
+		{//306 Ermittelt alle Bestellungen die über ein bestimtes FB-Konto abgewickelt werden
+			ps = con.prepareStatement(	"SELECT " + 
+											"o.id, o.datum, o.typ, o.phase, " +
+											"u1.name, u1.vorname, " +
+											"u2.name, u2.vorname, " +
+											"u3.name, u3.vorname, " +
+											"o.bestellwert, " +
+											"o.verbindlichkeiten " +
+										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3 " +
+										"WHERE o.besteller = u1.id " +
+										  "AND o.typ IN (?, ?, ?) " +
+										  "AND o.auftraggeber = u2.id " +
+										  "AND o.empfaenger = u3.id " +
+										  "AND o.geloescht = '0' " +
+										  "AND o.fbkonto = ? " +
+										  "ORDER BY datum DESC");
+			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER,	Types.INTEGER }; //{typ1, typ2, typ3, fbkontoid}
+			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//307
 			statements[i++] = null;

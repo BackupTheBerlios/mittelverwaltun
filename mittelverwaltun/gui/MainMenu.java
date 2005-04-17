@@ -22,8 +22,8 @@ public class MainMenu extends JMenuBar implements ActionListener {
 
 	// Das Menü "Sitzung"
 	JMenu menuSitzung = new JMenu("Sitzung");
-			JMenuItem miAccountAendern = new JActivityRelatedMenuItem(0, "Account ändern");
-			JMenuItem miTmpRollenVerwalten = new JActivityRelatedMenuItem(0, "Temporäre Rollen verwalten");
+			JMenuItem miAccountAendern = new JActivityRelatedMenuItem(1, "Account ändern");
+			JMenuItem miTmpRollenVerwalten = new JActivityRelatedMenuItem(2, "Temporäre Rollen verwalten");
 			JMenu menuSichtwechsel = new JMenu("Sichtwechsel");
 				JMenuItem miDefaultRolle = new JActivityRelatedMenuItem(0,	"Standardrolle"); 
 				JMenu menuTmpRolle = new JMenu("Temporäre Rollen"); 
@@ -33,40 +33,40 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	// Das Menü "Bestellung"
 	JMenu menuBestellung = new JMenu("Bestellung");
 		JMenu menuBestellungErstellen = new JMenu("Neu...");
-			JMenuItem miAAErstellen = new JActivityRelatedMenuItem(18, "Auszahlungsanforderung");
-			JMenuItem miSBErstellen = new JActivityRelatedMenuItem(17, "Standardbestellung");
-			JMenuItem miASKErstellen = new JActivityRelatedMenuItem(17, "ASK-Bestellung");
-		JMenuItem miBestellungenAnzeigen = new JActivityRelatedMenuItem(17, "Anzeigen");
+			JMenuItem miAAErstellen = new JActivityRelatedMenuItem(3, "Auszahlungsanforderung");
+			JMenuItem miSBErstellen = new JActivityRelatedMenuItem(4, "Standardbestellung");
+			JMenuItem miASKErstellen = new JActivityRelatedMenuItem(5, "ASK-Bestellung");
+		JMenuItem miBestellungenAnzeigen = new JActivityRelatedMenuItem(0, "Anzeigen");
 		
 	// Das Menü "Mittelverwaltung"
 	JMenu menuMittelverwaltung = new JMenu("Mittelverwaltung");
 		JMenu menuZenralverwaltung = new JMenu("Zenralverwaltung");
-			JMenuItem miKontenbudgetsFestlegen = new JActivityRelatedMenuItem(	13,"Kontenbudgets festlegen");
+			JMenuItem miKontenbudgetsFestlegen = new JActivityRelatedMenuItem(9, "Kontenbudgets festlegen");
 		JMenu menuFachbereichsintern = new JMenu("Fachbereich");
-			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 1, "Umbuchungen zw. Fachbereichskonten" );
-			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 1, "Mittelverteilung" );
-			JMenuItem miFBKontenZuweisenProf = new JActivityRelatedMenuItem( 1, "Institutsweise Mittelverteilung nach Professoren" );
+			JMenuItem miFBKontenUmbuchen = new JActivityRelatedMenuItem( 11, "Umbuchungen zw. Fachbereichskonten" );
+			JMenuItem miFBKontenZuweisen = new JActivityRelatedMenuItem( 10, "Mittelverteilung" );
+			JMenuItem miFBKontenZuweisenProf = new JActivityRelatedMenuItem( 10, "Institutsweise Mittelverteilung nach Professoren" );
 
 	// Das Menü "Verwaltung"
 		JMenu menuVerwaltung = new JMenu("Verwaltung");
-		JMenuItem miBenutzer = new JActivityRelatedMenuItem(1, "Benutzer");
-		JMenuItem miRollen = new JActivityRelatedMenuItem(1, "Rollen");
-		JMenuItem miFirmen = new JActivityRelatedMenuItem(1, "Firmen");
+		JMenuItem miBenutzer = new JActivityRelatedMenuItem(12, "Benutzer");
+		JMenuItem miRollen = new JActivityRelatedMenuItem(13, "Rollen");
+		JMenuItem miFirmen = new JActivityRelatedMenuItem(14, "Firmen");
 		JMenu menuKonten = new JMenu("Konten");
-			JMenuItem miZVKonten = new JActivityRelatedMenuItem(1, "Zentralverwaltungskonten");
-			JMenuItem miFBKonten = new JActivityRelatedMenuItem(1, "Fachbereichskonten");
-		JMenuItem miZuordnung = new JActivityRelatedMenuItem(	1,	"Kontenzuordnungen");
-		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(1,"Fachbereiche");
-		JMenuItem miInstitute = new JActivityRelatedMenuItem(1, "Institute");
+			JMenuItem miZVKonten = new JActivityRelatedMenuItem(15, "Zentralverwaltungskonten");
+			JMenuItem miFBKonten = new JActivityRelatedMenuItem(15, "Fachbereichskonten");
+		JMenuItem miZuordnung = new JActivityRelatedMenuItem(	15,	"Kontenzuordnungen");
+		JMenuItem miFachbereiche = new JActivityRelatedMenuItem(16,"Fachbereiche");
+		JMenuItem miInstitute = new JActivityRelatedMenuItem(17, "Institute");
 		JMenu menuHaushaltsjahr = new JMenu( "Haushaltsjahre" );
-			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	1,	"Aktuelles Haushaltsjahr abschließen");
-			JMenuItem miAnzeigen = new JActivityRelatedMenuItem(1, "Haushaltsjahre anzeigen");
-			//JMenuItem miMitteluebertrag = new JActivityRelatedMenuItem(	1,	"Mittelübertrag aus vergangenem Jahr");
+			JMenuItem miAbschliessen = new JActivityRelatedMenuItem(	18,	"Aktuelles Haushaltsjahr abschließen");
+			JMenuItem miAnzeigen = new JActivityRelatedMenuItem(18, "Haushaltsjahre anzeigen");
+		
 		
 	// Das Menü "Reporting"
 	JMenu menuReporting = new JMenu("Reports");
 
-		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(1, "Anzeigen");
+		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(19, "Anzeigen");
 //		JMenu menuZVReport = new JMenu("Zentralverwaltung");
 //			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
 //			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
@@ -82,8 +82,10 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	MainFrame frame;
 
 	// Die Liste aller rollen-/aktivitätsgebundenen Menüeinträge	
-	ArrayList activityRelItems;
+	private ArrayList activityRelItems;
 
+	// Aktive Rolle
+	private Rolle activeRole = null;
 	
 	public MainMenu( MainFrame frame ) {
 		super();
@@ -213,30 +215,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			activityRelItems.add( miReportsLoglisteAnzeigen );
 			miReportsLoglisteAnzeigen.addActionListener( this );
 			miReportsLoglisteAnzeigen.setIcon(Functions.getReportIcon(this.getClass()));
-//			menuReporting.add( menuZVReport );
-//				menuZVReport.add( miZVAusgabeNachK );
-//				activityRelItems.add( miZVAusgabeNachK );
-//				miZVAusgabeNachK.addActionListener( this );
-//				menuZVReport.add( miZVAusgabeNachKundI );
-//				activityRelItems.add( miZVAusgabeNachKundI );
-//				miZVAusgabeNachKundI.addActionListener( this );
-//				menuZVReport.add( miZVVerteilung );
-//				activityRelItems.add( miZVVerteilung );
-//				miZVVerteilung.addActionListener( this );
-//			menuReporting.add( menuFBReport );
-//				menuFBReport.add( miFBAusgabeNachK );
-//				activityRelItems.add( miFBAusgabeNachK );
-//				miFBAusgabeNachK.addActionListener( this );
-//				menuFBReport.add( miFBAusgabeNachKundV );
-//				activityRelItems.add( miFBAusgabeNachKundV );
-//				miFBAusgabeNachKundV.addActionListener( this );
-//			menuReporting.add( menuInstitutReport );
-//				menuInstitutReport.add( miIAusgabeNachVK );
-//				activityRelItems.add( miIAusgabeNachVK );
-//				miIAusgabeNachVK.addActionListener( this );
-//				menuInstitutReport.add( miBestellungen );
-//				activityRelItems.add( miBestellungen );
-//				miBestellungen.addActionListener( this );
+
 		
 		// Aktivieren der Menüeinträge
 		if( frame.getBenutzer() != null )		
@@ -252,8 +231,10 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			frame.addChild( new Benutzerverwaltung(frame, Benutzer.VIEW_PRIVAT) );
 		} else if ( e.getSource() == miTmpRollenVerwalten ) {						
 			frame.addChild( new TempRollenFrame(frame) );
-		} else if ( e.getSource() == miDefaultRolle ) {						
-			enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());	//
+		} else if ( e.getSource() == miDefaultRolle ) {
+			if (frame.desk.getComponentCount() > 0)
+				MessageDialogs.showInfoMessageDialog(frame, "Hinweis", "Um eine andere Rolle anzunehmen, müssen zuerst\nalle offenen Dialogfenster ("+ frame.desk.getComponentCount()  +") geschlossen werden.");
+			else enableMenuItemsAccordingToRole(frame.getBenutzer().getRolle());	//
 		} else if ( e.getSource() ==  miLogoutBeenden ) {					//
 			frame.onWindowClosing();
 		} else if ( e.getSource() == miAAErstellen ) {
@@ -305,8 +286,10 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else {																			//Mario: Änderung 01.09.2004
 			int i = 0;																		//
 			while ( i < miTmpRollen.length ) {												//
-				if ( miTmpRollen[i] == e.getSource() ){										//
-					enableMenuItemsAccordingToRole(frame.getBenutzer().getTmpRollen()[i]);	//					
+				if ( miTmpRollen[i] == e.getSource() ){
+					if (frame.desk.getComponentCount() > 0)
+						MessageDialogs.showInfoMessageDialog(frame, "Hinweis", "Um eine andere Rolle anzunehmen, müssen zuerst\nalle offenen Dialogfenster geschlossen werden.");
+					else enableMenuItemsAccordingToRole(frame.getBenutzer().getTmpRollen()[i]);	//					
 					break;																	//
 				}																			//
 				i++;																		//
@@ -315,11 +298,17 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	}
 	
 	public void enableMenuItemsAccordingToRole (Rolle r){
+		activeRole = r;
 		Iterator it = activityRelItems.iterator();
 		while (it.hasNext()){
 			ActivityRelatedElement e = (ActivityRelatedElement) it.next();
-			e.setActivityStatus(r);
+			if (e==miBestellungenAnzeigen)
+				miBestellungenAnzeigen.setEnabled(r.hasAktivitaet(6)||r.hasAktivitaet(7)|r.hasAktivitaet(8));
+			else e.setActivityStatus(r);
 		}
 	}
 	
+	public Rolle getActiveRole(){
+		return activeRole;
+	}
 }
