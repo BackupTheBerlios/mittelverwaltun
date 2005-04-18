@@ -416,7 +416,6 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		} else if( e.getSource() == butZVTitelAuswahl ) {
 			if(fbKonto != null) {
 				AuswahlZVKonto kontoAuswahl = new AuswahlZVKonto(this, fbKonto, true, frame);
-				kontoAuswahl.setVisible(true);
 			}
 		} else if( e.getSource() == butFBKontoAuswahl ) {
 			FBKontoAuswahlDialog dialog = new FBKontoAuswahlDialog(frame, this, true, (Benutzer)comboBenutzer.getSelectedItem());

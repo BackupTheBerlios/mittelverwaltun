@@ -73,7 +73,6 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 
   public Benutzerverwaltung(MainFrame frame, int view){
 		super("");
-		
 		this.setClosable(true);
 		this.setIconifiable(true);
 		this.view = view;

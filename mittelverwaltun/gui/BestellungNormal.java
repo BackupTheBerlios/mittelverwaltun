@@ -126,6 +126,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 		buBeenden.addActionListener(this);
 		buSpeichern.addActionListener(this);
 		buBestellen.addActionListener(this);
+		buBestellen.setEnabled(false);
 		buFBKonto.addActionListener(this);
 		buDelete.addActionListener(this);
 		buDelete.setEnabled(false);
@@ -674,6 +675,7 @@ public class BestellungNormal extends JInternalFrame implements ActionListener, 
 
 			if(angebot.getAngenommen()){
 				angebotNr = i+1;
+				buBestellen.setEnabled(true);
 			}
 			insertAngebot(angebot, -1);
 		}
