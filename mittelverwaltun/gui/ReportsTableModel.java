@@ -30,7 +30,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "Ausgaben", "Kontostand"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_2){
-			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "Ausgaben", "Verteilungen"}; 
+			String[] colheads = {"ZV-Konto", "zugewiesene Mittel", "freie Mittel", "Kontostand"}; 
 			setColumnIdentifiers(colheads);
 		} else if (type == Reports.REPORT_3){
 			String[] colheads = {"Institut", "FB-Konto", "verteilte Mittel", "Ausgaben", "Kontostand"}; 
@@ -60,8 +60,8 @@ public class ReportsTableModel extends DefaultTableModel {
 
 	
 	public void fillReport (ArrayList content){
-		
-		for(int i = 0; i < content.size(); i++){
+		if(content != null)
+		 for(int i = 0; i < content.size(); i++){
 			Object[] data = null;
 			
 			if (type == Reports.REPORT_1 || type == Reports.REPORT_2 || type == Reports.REPORT_5 || type == Reports.LOGS)
@@ -87,7 +87,7 @@ public class ReportsTableModel extends DefaultTableModel {
 			} else if (type == Reports.REPORT_2){
 				data[0] = (String)row.get(0);							// ZV-Konto
 				data[1] = (Float)row.get(1);							// zugewiesene Mittel
-				data[2] = (Float)row.get(2);							// Ausgaben
+				data[2] = (Float)row.get(2);							// freie Mittel
 				data[3] = (Float)row.get(3);							// Verteilungen
 				
 			} else if (type == Reports.REPORT_3){

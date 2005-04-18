@@ -46,7 +46,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 	public static final int REPORT_1 = 1;
 
 	/**
-	 * Ein Report, nder die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe
+	 * Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe
 	 * der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen
 	 */
 	public static final int REPORT_2 = 2;
@@ -151,8 +151,21 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	public Reports(MainFrame frame) {
 		super( "Reports" );
+		this.setClosable(true);
+		this.setIconifiable(true);
 		this.frame = frame;
-
+		
+		if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT){
+		  items[0] = "no access";
+		  items[1] = "no access";
+		  items[3] = "no access";
+		  items[4] = "no access";
+		  items[8] = "no access";
+		}else if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_PRIVAT){
+		  for (int i = 0; i < items.length; i++)
+	      items[i] = "no access";
+		}
+		
 		try {
 			jbInit();
 		}catch(Exception e) {
@@ -303,11 +316,13 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 					  cbInstitut.addItem(instituts[i]);
 				  }
 			  }
-			}else{
+			}else if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT){
 				Institut institut = frame.getBenutzer().getKostenstelle();
 
 				cbInstitut.removeAllItems();
 				cbInstitut.addItem(institut);
+				
+				this.filter = institut.getBezeichnung();
 			}
 			labInstitut.setText("Institute");
 	  } catch (ApplicationServerException e) {
@@ -383,7 +398,7 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 		int report = 0;
 
 		if(r == "Report_1"){
-			cbReportFilter.setToolTipText(tooltips[0]);
+	    cbReportFilter.setToolTipText(tooltips[0]);
 			taBeschreibung.setText(beschreibung[0]);
 			report = REPORT_1;
 			xmlFile = "/xml/report1.xml";
@@ -433,28 +448,54 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 			tabReport.fillReport(0,"", new ArrayList());
 			filter = "";
 			if(r == "Report_3" || r == "Report_6" || r == "Report_7" || r == "Report_8"){
-				labInstitut.setText("Institute");
+		    labInstitut.setText("Institute");
 				labInstitut.setVisible(true);
 				cbInstitut.setVisible(true);
 				cbZVKonten.setVisible(false);
 				cbLogsType.setVisible(false);
-			}else if(r == "Report_5"){
-				labInstitut.setText("ZVKonto");
-				labInstitut.setVisible(true);
-				cbZVKonten.setVisible(true);
-				cbInstitut.setVisible(false);
-				cbLogsType.setVisible(false);
-			}else if(r == "Logs"){
-				labInstitut.setText("Log-Typ");
-				labInstitut.setVisible(true);
-				cbZVKonten.setVisible(false);
-				cbInstitut.setVisible(false);
-				cbLogsType.setVisible(true);
-			}else{
-				labInstitut.setVisible(false);
-				cbInstitut.setVisible(false);
-				cbLogsType.setVisible(false);
+				
+				Institut i = (Institut)cbInstitut.getSelectedItem();
+
+				if(i.getBezeichnung().equals("alle"))
+					this.filter = "";
+				else
+					this.filter = i.getBezeichnung();
+			}else {
+		    if(r == "Report_5"){
+	        labInstitut.setText("ZVKonto");
+					labInstitut.setVisible(true);
+					cbZVKonten.setVisible(true);
+					cbInstitut.setVisible(false);
+					cbLogsType.setVisible(false);
+					
+					ZVKonto zvk = (ZVKonto)cbZVKonten.getSelectedItem();
+
+					if(zvk.getBezeichnung().equals("alle"))
+						this.filter = "";
+					else
+						this.filter = zvk.getBezeichnung();
+					
+				}else if(r == "Logs"){
+					labInstitut.setText("Log-Typ");
+					labInstitut.setVisible(true);
+					cbZVKonten.setVisible(false);
+					cbInstitut.setVisible(false);
+					cbLogsType.setVisible(true);
+					
+					String type = (String)cbLogsType.getSelectedItem();
+
+					if(type.equals("alle"))
+						this.filter = "";
+					else
+						this.filter = type;
+					
+				}else{
+					labInstitut.setVisible(false);
+					cbInstitut.setVisible(false);
+					cbLogsType.setVisible(false);
+				}  
 			}
+				
 		}else if(e.getSource() == cbInstitut){
 			Institut i = (Institut)cbInstitut.getSelectedItem();
 

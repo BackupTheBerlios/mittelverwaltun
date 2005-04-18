@@ -41,7 +41,6 @@ public class ReportsTable extends JTable{
 	 */
 	public ReportsTable(ActionListener listener){
 		this.actionListener = listener;
-		
 //		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}

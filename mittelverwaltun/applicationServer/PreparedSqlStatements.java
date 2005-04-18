@@ -699,7 +699,7 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//92			(36)
-			ps = con.prepareStatement("GRANT SELECT, INSERT, UPDATE, DELETE, REFERENCES, LOCK TABLES ON `" + ApplicationServer.APPL_DB_NAME + "` . * TO ?@'%' WITH GRANT OPTION ");
+			ps = con.prepareStatement("GRANT ALL PRIVILEGES ON `" + ApplicationServer.APPL_DB_NAME + "` . * TO ?@'%' WITH GRANT OPTION ");
 			int[] param = {Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2910,7 +2910,34 @@ public class PreparedSqlStatements {
 			 * Ein Report, der die Konten der Zentralverwaltung und die zugewiesenen Mittel , die Summe
 			 * der Ausgaben und Verteilungen, so dass der Dekan feststellen kann, wie viel Mittel kann er noch verteilen
 			 */
-			statements[i++] = null;
+		    ps = con.prepareStatement("SELECT " +
+								"zvk.id AS zvKonto, " +
+								"( SELECT SUM(betragZvKonto1 + betragZvTitel1) " +
+									"FROM Buchungen " +
+									"WHERE typ IN (1, 2) " +
+										"AND (timestamp BETWEEN ? AND ?) " +
+										"AND ( zvKonto1 = zvk.id " +
+													"OR zvTitel1 IN " +
+																	"( SELECT id " +
+																		"FROM ZVKontentitel " +
+																		"WHERE zvKontoId = zvk.id " +
+																			"AND geloescht = '0'" +
+																	")" +
+												")" +
+								") AS mittel, " +
+								"(zvk.tgrBudget + (SELECT SUM(budget) " +
+																	"FROM ZVKontentitel " +
+																	"WHERE zvKontoId  = zvk.id " +
+																		"AND geloescht = '0')" +
+								") AS kontostand " +
+						"FROM " +
+							"ZVKonten zvk, Haushaltsjahre h " +
+					  "WHERE h.id = zvk.haushaltsjahrId " +
+							"AND h.status = 0 " +
+							"AND zvk.geloescht = '0'");
+		    
+				int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
+				statements[i++] = new PreparedStatementWrapper(ps,param);
 		}
 		{//342 Report 1 siehe gui.Reports.java
 			/**

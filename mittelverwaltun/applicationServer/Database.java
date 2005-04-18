@@ -4680,27 +4680,28 @@ public class Database implements Serializable {
 	public ArrayList selectReport2(Date von, Date bis) throws ApplicationServerException {
 		ArrayList report = new ArrayList();	// Liste für die ZVKonten
 
-//		try{
-//			ResultSet rs = statements.get(342).executeQuery(); 
-//			rs.last();	
-//			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
-//				rs.beforeFirst();		// Vor die erste Zeile springen
-//
-//				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
-//					ArrayList row = new ArrayList();
-////					row.add(rs.getString(1)); 						// Institut
-////					row.add(rs.getString(2)); 						// FB-Konto
-////					row.add(new Float(rs.getFloat(3))); 	// verteilte Mittel
-////					row.add(new Float(rs.getFloat(4)));		// Ausgaben 
-////					row.add(new Float(rs.getFloat(5)));		// Kontostand
-//
-//					report.add( row );
-//				}
-//			}
-//			rs.close();		// Abfrage schließen
-//		} catch (SQLException e){
-//			throw new ApplicationServerException( 108, e.getMessage() );
-//		}
+		try{
+			Object[] parameters = { new Timestamp(von.getTime()), new Timestamp(bis.getTime()) };
+			ResultSet rs = statements.get(341).executeQuery(parameters); 
+			rs.last();	
+			if ( rs.getRow() > 0 ) {	// Ist die Anzahl der Zeilen größer als 0
+				rs.beforeFirst();		// Vor die erste Zeile springen
+
+				while( rs.next() ){		// Solange es nächste Abfragezeile gibt
+					ArrayList row = new ArrayList();
+					
+					row.add(new Integer(rs.getInt(1))); 	// ZV-Konto
+					row.add(new Float(rs.getFloat(2))); 	// zugewiesene Mittel
+					row.add(new Float(0));								// freie Mittel 
+					row.add(new Float(rs.getFloat(3)));		// Kontostand
+
+					report.add( row );
+				}
+			}
+			rs.close();		// Abfrage schließen
+		} catch (SQLException e){
+			throw new ApplicationServerException( 109, e.getMessage() );
+		}
 
 		return report;
 	}
@@ -5075,7 +5076,7 @@ public class Database implements Serializable {
 	 */
 	public void deleteUserTempRolle(int empfaenger)throws ApplicationServerException{
 		try{
-			Object[] parameters = { new Integer(empfaenger)};
+			Object[] parameters = { new Integer(empfaenger), new Integer(empfaenger)};
 			statements.get(355).executeUpdate(parameters);
 		} catch (SQLException e){
 			System.out.println(e.getMessage());

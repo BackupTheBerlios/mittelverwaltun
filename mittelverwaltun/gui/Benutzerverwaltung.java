@@ -405,8 +405,8 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 																			cbSichtbarkeit.getSelectedIndex());
 			applicationServer.setUser(benutzer, currBenutzer);
 			listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
-			if(frame != null)
-				frame.setBenutzer(benutzer);
+//			if(frame != null)
+//				frame.setBenutzer(benutzer);
 	  }
   }
 

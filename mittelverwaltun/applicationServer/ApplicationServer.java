@@ -3387,7 +3387,18 @@ public class ApplicationServer implements Serializable {
 		if(typ == 1){
 			return db.selectReport1(von, bis);
 		}if(typ == 2){
-			return db.selectReport2(von, bis);
+		  ArrayList report = db.selectReport2(von, bis);
+		  
+		  for (int i = 0; i < report.size(); i++) {
+		    ArrayList row = (ArrayList)report.get(i); // eine Zeile aus dem Report
+		    
+        ZVKonto zvKonto = db.selectZVKonto(((Integer)row.get(0)).intValue());  
+        
+        row.set(0, zvKonto.getBezeichnung());
+        row.set(2, new Float(getAvailableAccountBudget(zvKonto)));
+      }
+		  
+			return report;
 		}if(typ == 3){
 			return db.selectReport3(von, bis);
 		}else if(typ == 4){
