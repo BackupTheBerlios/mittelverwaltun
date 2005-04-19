@@ -3,7 +3,6 @@ package gui;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import applicationServer.*;
 import dbObjects.*;
 
@@ -405,8 +404,17 @@ public class Benutzerverwaltung extends JInternalFrame implements ActionListener
 																			cbSichtbarkeit.getSelectedIndex());
 			applicationServer.setUser(benutzer, currBenutzer);
 			listModel.setElementAt(benutzer, listBenutzer.getSelectedIndex());
-//			if(frame != null)
-//				frame.setBenutzer(benutzer);
+			
+			if(view == Benutzer.VIEW_PRIVAT){
+			  frame.getBenutzer().setBau( tfBau.getText()); 
+			  frame.getBenutzer().setEmail( tfEMail.getText()); 
+			  frame.getBenutzer().setFax( tfFax.getText());  
+			  frame.getBenutzer().setName( tfName.getText()); 
+			  frame.getBenutzer().setRaum( tfRaum.getText()); 
+			  frame.getBenutzer().setTelefon( tfTelefon.getText()); 
+			  frame.getBenutzer().setTitel( tfTitel.getText()); 
+			  frame.getBenutzer().setVorname( tfVorname.getText()); 
+			}
 	  }
   }
 

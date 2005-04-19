@@ -725,15 +725,15 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	private void restoreFiles() {
 		try {
-//			Functions.restoreFile(	SystemTrayIconManager.dllPackage, 		// Die DLL auslagern
-//									SystemTrayIconManager.dllName + "." + SystemTrayIconManager.dllExt,
-//									getClass());
-//			for(int i = 0; i < iconNames.length; i++) {						// Die Bilddateien auslagern
-//				Functions.restoreFile(imagePackage, iconNames[i], getClass());
-//			}
-//			for(int i = 0; i < serverSkelStub.length; i++) {				// Die Serverdateien auslagern
-//				Functions.restoreFile(serverPackage, serverSkelStub[i], getClass());
-//			}
+			Functions.restoreFile(	SystemTrayIconManager.dllPackage, 		// Die DLL auslagern
+									SystemTrayIconManager.dllName + "." + SystemTrayIconManager.dllExt,
+									getClass());
+			for(int i = 0; i < iconNames.length; i++) {						// Die Bilddateien auslagern
+				Functions.restoreFile(imagePackage, iconNames[i], getClass());
+			}
+			for(int i = 0; i < serverSkelStub.length; i++) {				// Die Serverdateien auslagern
+				Functions.restoreFile(serverPackage, serverSkelStub[i], getClass());
+			}
 			Functions.restoreFile(xmlPackage, xmlFileName, getClass());		// Die XML-Datei auslagern
 		} catch(Exception exc) {
 			exc.printStackTrace();
