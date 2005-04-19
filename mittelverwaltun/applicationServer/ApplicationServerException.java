@@ -260,6 +260,7 @@ public class ApplicationServerException extends Exception {
 		messages[191] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFollowingHaushaltsjahrId";
 		messages[192] = "Application Server Error: Fehler bei Datenbankzugriff - Database.lockTablesForHaushaltsjahresabschluss";
 		messages[193] = "Application Server Error: Fehler bei Datenbankzugriff - Database.unlockTables";
+		messages[194] = "Application Server Error: Fehler bei Datenbankzugriff - Database.begin";
 		//Exception Ende Mario 199
 	}
 

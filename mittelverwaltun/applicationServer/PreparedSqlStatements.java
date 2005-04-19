@@ -1164,7 +1164,7 @@ public class PreparedSqlStatements {
 					   "AND zt4.geloescht = '0' " +
 					   "AND zk2.geloescht = '0' " +
 					 "UNION " +
-					"SELECT t2.id " +
+					"SELECT zt2.id " +
 					  "FROM zvkonten zk1, zvkontentitel zt1, " +
 					       "zvkonten zk2, zvkontentitel zt2 " +
 					 "WHERE zt1.id = ? " +

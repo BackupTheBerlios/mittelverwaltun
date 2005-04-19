@@ -1356,6 +1356,21 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * startet eine Transaktion
+	 * @throws ApplicationServerException
+	 */
+	public void begin() throws ApplicationServerException{
+		try {
+			Statement stmt = this.con.createStatement();
+			stmt.execute("BEGIN");
+		} catch (SQLException e) {
+			throw new ApplicationServerException(194, e.getMessage());
+			
+		}
+	}
+	
+	
 //	public void setAutoCommit(boolean commit) throws ApplicationServerException{
 //		try{
 //			if(commit)
@@ -5218,7 +5233,7 @@ public class Database implements Serializable {
 	public int updateOrderAccounts (int order, int zvAcc, int fbAcc) throws ApplicationServerException{
 		try{
 			
-			Object[] parameters = { new Integer(zvAcc), (fbAcc > 0) ? new Integer(fbAcc) : null, new Integer(order)};
+			Object[] parameters = { (zvAcc > 0) ? new Integer(zvAcc) : null, (fbAcc > 0) ? new Integer(fbAcc) : null, new Integer(order)};
 			return statements.get(302).executeUpdate(parameters);
 						
 	   } catch (SQLException e){

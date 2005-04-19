@@ -3458,12 +3458,28 @@ public class ApplicationServer implements Serializable {
 			 *  cnts[9]: Anzahl portierter Kontenzuordnungen
 			 */		
 			
-			// Evtl. Tabellensperren ????
-			//db.lockTablesForHaushaltsjahresabschluss();
-			// 0. Neues Haushaltsjahr anlegen
+			// Temporäre Tabellen (falls nötig) löschen
+			db.dropTmpZvKontenTab();
+			db.dropTmpZvKontentitelTab();
+			db.dropTmpFbKontenTab();
+			db.dropTmpKontenzuordnungTab();
+			
+			// Transaktion starten
+			db.begin();
+			
+			// Neues Haushaltsjahr anlegen
 			java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 			int newYear = db.insertHaushaltsjahr(date, '3');
-							
+			
+			// Temporäre Tabllen anlegen
+			db.createAsSelectTempZvKontenTab(oldYear); 
+			db.createAsSelectTempZvKontentitelTab(oldYear); 
+			db.createAsSelectTempFbKontenTab(oldYear); 
+			db.createAsSelectTempKontenzuordnungTab(oldYear, newYear);
+			
+			// Tabellen sperren
+			// db.lockTablesForHaushaltsjahresabschluss();
+			
 			// 1. Bestelungen (Abwicklungsphase) abschließen oder stornieren
 			for (int i=0; i < orders.size(); i++){
 				
@@ -3541,16 +3557,26 @@ public class ApplicationServer implements Serializable {
 			db.updateHaushaltsjahrEnde(oldYear, date);
 			db.updateHaushaltsjahrStatus(newYear, '0');
 			
-			if (transaction) db.commit();
-					
+			if (transaction){ 
+				db.commit();
+				//System.out.println("ApplicationServer.finishBudgetYear: Commit");	
+			}		
 			return cnts;
 		} catch (ApplicationServerException e){
 			
-			if (transaction) db.rollback();
+			if (transaction){ 
+				db.rollback();
+				//System.out.println("ApplicationServer.finishBudgetYear: Rollback");	
+			}
 			throw e;
-		
 		} finally{
+			// Tabellensperren aufheben
 			//db.unlockTables();
+			// Temporäre Tabellen (falls nötig) löschen
+			db.dropTmpZvKontenTab();
+			db.dropTmpZvKontentitelTab();
+			db.dropTmpFbKontenTab();
+			db.dropTmpKontenzuordnungTab();
 		}
 	}
 
@@ -3564,7 +3590,17 @@ public class ApplicationServer implements Serializable {
 		 *  cnts[3]: Anzahl abgeschlossener ZV-Konten
 		 */		
 		
-		// Evtl. Tabellensperren ????
+		// Temporäre Tabellen (falls nötig) löschen
+		db.dropTmpZvKontenTab();
+		db.dropTmpZvKontentitelTab();
+				
+		// Transaktion starten
+		db.begin();
+		
+		// Temporäre Tabellen anlegen
+		db.createAsSelectTempZvKontenTab(oldYear); 
+		db.createAsSelectTempZvKontentitelTab(oldYear);
+		
 		// 1. ZV-Konten portieren und ggf. Budgets übernehmen
 		int newYear = getFollowingHaushaltsjahrId(oldYear);
 		int[] cnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
@@ -3581,6 +3617,10 @@ public class ApplicationServer implements Serializable {
 		
 		if (transaction) db.rollback();
 		throw e;
+	} finally{
+		// Temporäre Tabellen (falls nötig) löschen
+		db.dropTmpZvKontenTab();
+		db.dropTmpZvKontentitelTab();
 	}
 }
 	
@@ -3588,11 +3628,12 @@ public class ApplicationServer implements Serializable {
 	public int portKontenzuordnungen (int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		try{	
 			int cnt = 0;
-			db.dropTmpKontenzuordnungTab();
-			db.createAsSelectTempKontenzuordnungTab(oldYear, newYear);
+			
+			// Temporäre Tabellen müssen vorher angelegt werden
 			cnt = db.insertAsSelectKontenzuordnungen();
-			db.dropTmpKontenzuordnungTab();
+			
 			if (transaction) db.commit();
+			
 			return cnt;
 		}catch (ApplicationServerException e){
 			if (transaction) db.rollback();
@@ -3606,10 +3647,9 @@ public class ApplicationServer implements Serializable {
 			/*  cnts[0]: Anzahl portierter Konten 
 			 *  cnts[1]: Anzahl übernommener Kontenbudgets
 			 */		
-			// Lege temporäre Tabellen an
-			db.dropTmpFbKontenTab();
-			db.createAsSelectTempFbKontenTab(oldYear); 
-					
+			
+			// Temporäre Tabellen müssen vorher angelegt sein
+			
 			for (int i=0; i < accounts.size(); i++){
 				FBHauptkonto acc = (FBHauptkonto)accounts.get(i);
 				if (acc.getPortieren()){
@@ -3622,8 +3662,6 @@ public class ApplicationServer implements Serializable {
 				}
 			}		
 				
-			// Lösche temporäre Tabellen
-			db.dropTmpFbKontenTab();
 			if (transaction) db.commit();
 			return cnts;
 		} catch (ApplicationServerException e){
@@ -3642,12 +3680,9 @@ public class ApplicationServer implements Serializable {
 			 *  cnts[2]: Anzahl übernommener Kontenbudgets
 			 *  cnts[3]: Anzahl abgeschlossener Konten
 			 */
-			// Lege temporäre Tabellen an
-			db.dropTmpZvKontenTab();
-			db.dropTmpZvKontentitelTab();
-			db.createAsSelectTempZvKontenTab(oldYear); 
-			db.createAsSelectTempZvKontentitelTab(oldYear); 
-					
+			
+			// Temporäre Tabellen müssen vorher angelegt sein!!!
+			
 			for (int i=0; i < accounts.size(); i++){
 				ZVKonto acc = (ZVKonto)accounts.get(i);
 				
@@ -3655,7 +3690,7 @@ public class ApplicationServer implements Serializable {
 					
 					int newId = db.existsZVKonto(acc);      // ermittle dessen neue ID.
 					
-					if ((newId > 0)&&(acc.getUebernahmeStatus() == 2)){ // Falls eine neue ID existiert und die Mittelübernahme bewilligt wurde...
+					if ((newId > 0)&&(acc.getUebernahmeStatus() == 2)&&(acc.isAbgeschlossen())){ // Falls eine neue ID existiert und die Mittelübernahme bewilligt wurde...
 						
 						//Übernehme die Budgets der Titel (Vormerkungen existieren keine mehr!) und führe Buchungen durch
 						float rest = db.updateZvTitelBudgetTakeovers(user, acc.getId(), newId);
@@ -3696,11 +3731,7 @@ public class ApplicationServer implements Serializable {
 				
 				setZVKonto(acc, false);//	Speichere "altes" Konto => Transaktionsswitch in AS-Funktion
 			}		
-				
-			// Lösche temporäre Tabellen
-			db.dropTmpZvKontenTab();
-			db.dropTmpZvKontentitelTab();
-			
+						
 			if (transaction) db.commit();
 			return cnts;
 		}catch (ApplicationServerException e){
