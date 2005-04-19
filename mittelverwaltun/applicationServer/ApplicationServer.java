@@ -1758,7 +1758,7 @@ public class ApplicationServer implements Serializable {
 	
 				// Benutzer hat aktive Bestellungen
 				if(db.countAktiveBestellungen(dbUser) > 0)
-					throw new ApplicationServerException(50);
+					throw new ApplicationServerException(56);
 				
 				// TmpRollen des Benutzers löschen
 				db.deleteUserTempRolle(dbUser.getId());

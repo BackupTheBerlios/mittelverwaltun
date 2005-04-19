@@ -1013,7 +1013,7 @@ public class PreparedSqlStatements {
 								   "AND zt.geloescht = '0' " +
 								   "AND zk.geloescht = '1' " +
 								 "UNION " +
-								"SELECT k.id " +
+								"SELECT zk.id " +
 								  "FROM zvkonten zk, haushaltsjahre h " +
 								 "WHERE zk.kapitel = ? " +
 								   "AND zk.titelgruppe = ? " +
