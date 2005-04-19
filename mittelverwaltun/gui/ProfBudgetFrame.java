@@ -55,7 +55,8 @@ public class ProfBudgetFrame extends JInternalFrame implements ActionListener{
 	public ProfBudgetFrame(MainFrame frame) {
 	   this.frame = frame;
 	   this.as = frame.applicationServer;
-	   	   
+	   this.setClosable(true);
+	    this.setIconifiable(true);   
 	   lbAvBudget.setHorizontalAlignment(SwingConstants.RIGHT);
 	   lbAvBudget.setText("Verfügbare Mittel:");
 	   lbAvBudget.setBounds(new Rectangle(10, 10, 115, 20));

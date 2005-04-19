@@ -97,11 +97,12 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
   }
   
   private void jbInit() throws Exception {
-		this.setSize(675,671);
-		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-		this.setTitle("ASK-Bestellung");
+	this.setSize(675,671);
+	setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+	this.setTitle("ASK-Bestellung");
     this.getContentPane().setLayout(null);
-
+    this.setClosable(true);
+    this.setIconifiable(true);
     titledBorderPanel1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Allgemeine Informationen");
     titledBorderPanel1.setTitleFont(new java.awt.Font("Dialog", 1, 11));
 
@@ -280,11 +281,13 @@ public class AbwicklungBestellungASK extends JInternalFrame implements TableMode
     tabbedZusatzinfos.setFont(new java.awt.Font("Dialog", 0, 11));
     
     	tpBemerkungen.setFont(new java.awt.Font("Dialog", 0, 11));
-	    tpBemerkungen.setText(origin.getBemerkung());
+	    tpBemerkungen.setDisabledTextColor(Color.BLACK);
+    	tpBemerkungen.setText(origin.getBemerkung());
 	    tpBemerkungen.setEditable(false);
 	    tpBemerkungen.setEnabled(false);
 		
 	    tpAnschrift.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpAnschrift.setDisabledTextColor(Color.BLACK);
 	    Fachbereich[] fbs = as.getFachbereiche();
 	    if ((fbs != null) && (fbs.length > 0)){
 	    	

@@ -77,8 +77,10 @@ public class JActivityRelatedMenuItem extends JMenuItem implements ActivityRelat
 		if (this.activity != 0){
 			int i=0;
 			b = false;
-			while ((i < validActivities.length) && !(b = (validActivities[i]==activity))){
-				i++;
+			if (validActivities != null){
+				while ((i < validActivities.length) && !(b = (validActivities[i]==activity))){
+					i++;
+				}
 			}
 		}
 		

@@ -69,7 +69,12 @@ public class Rolle implements Serializable {
 		this.id = id;
 		this.aktivitaetenFull = aktivitaeten;
 		this.bezeichnung = bezeichnung;
-		this.aktivitaeten = null;
+		if ((aktivitaeten!=null)&&(aktivitaeten.length>0)){
+			this.aktivitaeten = new int[aktivitaeten.length];
+			for (int i=0; i < aktivitaeten.length; i++){
+				this.aktivitaeten[i] = aktivitaeten[i].getId();
+			}
+		}
 	}
 
 	/**

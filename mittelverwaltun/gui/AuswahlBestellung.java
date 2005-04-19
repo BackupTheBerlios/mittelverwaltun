@@ -46,7 +46,8 @@ public class AuswahlBestellung extends JInternalFrame implements ActionListener{
 	}
   
 	private void jbInit() throws Exception {
-	    this.setClosable(true);
+		this.setClosable(true);
+	    this.setIconifiable(true);
 	   
 		this.setSize(800, 290);
 		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));

@@ -258,7 +258,8 @@ public class ApplicationServerException extends Exception {
 		messages[189] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectBuchungenZvTitelMitteluebernahme";
 		messages[190] = "Application Server Error: Fehler bei Datenbankzugriff - Database.insertAsSelectBuchungenFbKontoMitteluebernahme";
 		messages[191] = "Application Server Error: Fehler bei Datenbankzugriff - Database.selectFollowingHaushaltsjahrId";
-		
+		messages[192] = "Application Server Error: Fehler bei Datenbankzugriff - Database.lockTablesForHaushaltsjahresabschluss";
+		messages[193] = "Application Server Error: Fehler bei Datenbankzugriff - Database.unlockTables";
 		//Exception Ende Mario 199
 	}
 

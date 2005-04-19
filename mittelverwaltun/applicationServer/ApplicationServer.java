@@ -3451,15 +3451,15 @@ public class ApplicationServer implements Serializable {
 			 *  cnts[2]: Anzahl portierter Bestellungen
 			 *  cnts[3]: Anzahl portierter ZV-Konten
 			 *  cnts[4]: Anzahl portierter ZV-Titel
-			 *  cnts[5]: Anzahl abgeschlossener ZV-Konten
-			 *  cnts[6]: Anzahl übernommener ZV-Budgets
+			 *  cnts[5]: Anzahl übernommener ZV-Budgets
+			 *  cnts[6]: Anzahl abgeschlossener ZV-Konten
 			 *  cnts[7]: Anzahl portierter FB-Konten
 			 *  cnts[8]: Anzahl übernommener FB-Budgets
 			 *  cnts[9]: Anzahl portierter Kontenzuordnungen
 			 */		
 			
 			// Evtl. Tabellensperren ????
-			
+			//db.lockTablesForHaushaltsjahresabschluss();
 			// 0. Neues Haushaltsjahr anlegen
 			java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 			int newYear = db.insertHaushaltsjahr(date, '3');
@@ -3542,12 +3542,15 @@ public class ApplicationServer implements Serializable {
 			db.updateHaushaltsjahrStatus(newYear, '0');
 			
 			if (transaction) db.commit();
-			
+					
 			return cnts;
 		} catch (ApplicationServerException e){
 			
 			if (transaction) db.rollback();
 			throw e;
+		
+		} finally{
+			//db.unlockTables();
 		}
 	}
 
@@ -3557,8 +3560,8 @@ public class ApplicationServer implements Serializable {
 	try{
 		/*  cnts[0]: Anzahl portierter ZV-Konten
 		 *  cnts[1]: Anzahl portierter ZV-Titel
-		 *  cnts[2]: Anzahl abgeschlossener ZV-Konten
-		 *  cnts[3]: Anzahl übernommener ZV-Budgets
+		 *  cnts[2]: Anzahl übernommener ZV-Budgets
+		 *  cnts[3]: Anzahl abgeschlossener ZV-Konten
 		 */		
 		
 		// Evtl. Tabellensperren ????
@@ -3566,7 +3569,7 @@ public class ApplicationServer implements Serializable {
 		int newYear = getFollowingHaushaltsjahrId(oldYear);
 		int[] cnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
 				
-		if (cnts[2]==zvAccounts.size())
+		if (cnts[3]==zvAccounts.size())
 			db.updateHaushaltsjahrStatus(oldYear, '2'); // Haushaltsjahr abgeschlossen
 		else
 			db.updateHaushaltsjahrStatus(oldYear, '1'); // Haushaltsjahr inaktiv

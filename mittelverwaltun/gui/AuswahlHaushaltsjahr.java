@@ -19,11 +19,14 @@ public class AuswahlHaushaltsjahr extends JInternalFrame implements ActionListen
 	
   public AuswahlHaushaltsjahr(MainFrame frame) {
 		
-  	this.frame = frame;
-  	this.setClosable(true);
+  		this.frame = frame;
+  		
+  		this.setClosable(true);
+  	    this.setIconifiable(true);
 		this.getContentPane().setLayout(null);
 		this.setSize(440,235);
-		
+		this.setTitle ("Übersicht Haushaltsjahre");
+		this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
 		btRefresh.setBounds(new Rectangle(5, 5, 130, 25));
 		btRefresh.setText("Aktualisieren");
 		btRefresh.setFont(new java.awt.Font("Dialog", 1, 11));

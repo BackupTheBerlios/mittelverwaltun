@@ -5315,6 +5315,22 @@ public class Database implements Serializable {
 		}		
 	}
 	
+	public void lockTablesForHaushaltsjahresabschluss() throws ApplicationServerException{
+		try {
+			statements.get(7).executeUpdate();
+		} catch (SQLException e) {
+			throw new ApplicationServerException(192, e.getMessage());
+		}
+	}
+
+	public void unlockTables() throws ApplicationServerException{
+		try {
+			statements.get(8).executeUpdate();
+		} catch (SQLException e) {
+			throw new ApplicationServerException(193, e.getMessage());
+		}
+	}
+	
 }
 
 

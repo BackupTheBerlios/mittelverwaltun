@@ -103,10 +103,11 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
   
   private void jbInit() throws Exception {
     this.setSize(675,671);
-		setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
-    this.setTitle("Standardbestellung");
+	this.setLocation((frame.getWidth()/2) - (getWidth()/2), (frame.getHeight()/2) - (getHeight()/2));
+    this.setTitle("Abwicklung Standardbestellung");
     this.getContentPane().setLayout(null);
-
+    this.setClosable(true);
+    this.setIconifiable(true);
     titledBorderPanel1 = new TitledBorder(BorderFactory.createEtchedBorder(Color.white,new Color(156, 156, 158)),"Allgemeine Informationen");
     titledBorderPanel1.setTitleFont(new java.awt.Font("Dialog", 1, 11));
 
@@ -299,21 +300,25 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
     tabbedZusatzinfos.setFont(new java.awt.Font("Dialog", 0, 11));
     
     	tpVerwendungszweck.setFont(new java.awt.Font("Dialog", 0, 11));
+    	tpVerwendungszweck.setDisabledTextColor(Color.BLACK);
     	tpVerwendungszweck.setEnabled(false);
 	    tpVerwendungszweck.setEditable(false);
 	    tpVerwendungszweck.setText(origin.getVerwendungszweck());
 	
 	    tpBegruendung.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpBegruendung.setDisabledTextColor(Color.BLACK);
 	    tpBegruendung.setText(origin.getBegruendung());
 	    tpBegruendung.setEditable(false);
 	    tpBegruendung.setEnabled(false);
 	
 	    tpBemerkungen.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpBemerkungen.setDisabledTextColor(Color.BLACK);
 	    tpBemerkungen.setText(origin.getBemerkung());
 	    tpBemerkungen.setEditable(false);
 	    tpBemerkungen.setEnabled(false);
 		
 	    tpAnschrift.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpAnschrift.setDisabledTextColor(Color.BLACK);
 	    Fachbereich[] fbs = as.getFachbereiche();
 	    if ((fbs != null) && (fbs.length > 0))
 	       	tpAnschrift.setText(fbs[0].getFhBezeichnung() + "\n" +
@@ -328,6 +333,7 @@ public class AbwicklungBestellungNormal extends JInternalFrame implements TableM
 	    tpAnschrift.setEnabled(false);
 	
 	    tpErsatz.setFont(new java.awt.Font("Dialog", 0, 11));
+	    tpErsatz.setDisabledTextColor(Color.BLACK);
 	    if (origin.getErsatzbeschaffung())
 	    	tpErsatz.setText("Ersatzbeschreibung: " + origin.getErsatzbeschreibung() + "\n" +
 	    					 "Inventarnummer: " + origin.getInventarNr());

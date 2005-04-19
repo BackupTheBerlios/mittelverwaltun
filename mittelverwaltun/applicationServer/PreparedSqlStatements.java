@@ -54,11 +54,42 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT SESSION_USER()");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//7
-			statements[i++] = null;
+		{//7 Locks für Haushaltsjahresabschluss
+			ps = con.prepareStatement(
+					"LOCK TABLES " +
+					    "zvkonten_tmp WRITE, " +
+						"zvkonten WRITE, " +
+						"zvkonten AS zk WRITE, " +
+						"zvkonten AS zk1 WRITE, " +
+						"zvkonten AS zk2 WRITE, " +
+						"zvkontentitel WRITE, " +
+						"zvkontentitel AS zt WRITE, " +
+						"zvkontentitel AS zt1 WRITE, " +
+						"zvkontentitel AS zt2 WRITE, " +
+						"zvkontentitel AS zt3 WRITE, " +
+						"zvkontentitel AS zt4 WRITE, " +
+						"zvkontentitel AS ztold WRITE, " +
+						"zvkontentitel AS ztnew WRITE, " +
+						"fbkonten WRITE, " +
+						"fbkonten AS fk WRITE, " +
+						"fbkonten AS fk1 WRITE, " +
+						"fbkonten AS fk2 WRITE, " +
+						"fbkonten AS fkmain WRITE, " +
+						"fbkonten AS fkold WRITE, " +
+						"fbkonten AS fknew WRITE, " +
+						"kontenzuordnung WRITE, " +
+						"kontenzuordnung AS kz WRITE, " +
+						"kontenzuordnung AS kz1 WRITE, " +
+						"kontenzuordnung AS kz2 WRITE, " +
+						"haushaltsjahre WRITE, " +
+						"haushaltsjahre AS h WRITE, " +
+						"haushaltsjahre AS old WRITE, " +
+						"haushaltsjahre AS new WRITE");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
-		{//8
-			statements[i++] = null;
+		{//8 Unlock
+			ps = con.prepareStatement("UNLOCK TABLES");
+			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//9
 			statements[i++] = null;
@@ -198,9 +229,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT COUNT(b.privatKontoId) " +
-										"FROM FBKonten a, Benutzer b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.privatKontoId AND b.geloescht != '0'" );
+										"FROM FBKonten fk, Benutzer b " +
+										"WHERE fk.id = ? " +
+										"AND fk.id = b.privatKontoId AND b.geloescht != '0'" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -210,9 +241,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT COUNT(b.privatKontoId) " +
-										"FROM FBKonten a, Benutzer b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.privatKontoId" );
+										"FROM FBKonten fk, Benutzer b " +
+										"WHERE fk.id = ? " +
+										"AND fk.id = b.privatKontoId" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -291,11 +322,11 @@ public class PreparedSqlStatements {
 			 * und nicht gelöscht sind. 
 	 		 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT DISTINCT(k.id), k.haushaltsjahrId, k.institutsId, k.bezeichnung, "+
-										"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " +										"k.pruefBedingung, k.kleinbestellungen " +
-										"FROM FBKonten k, Haushaltsjahre h " +
-										"WHERE k.institutsID = ? AND h.status = '0' AND k.haushaltsjahrId = h.id " +
-										"AND k.unterkonto = '0000' AND k.geloescht = '0'");
+			ps = con.prepareStatement("SELECT DISTINCT(fk.id), fk.haushaltsjahrId, fk.institutsId, fk.bezeichnung, "+
+										"fk.hauptkonto, fk.unterkonto, fk.budget, fk.dispoLimit, fk.vormerkungen, " +										"fk.pruefBedingung, fk.kleinbestellungen " +
+										"FROM FBKonten fk, Haushaltsjahre h " +
+										"WHERE fk.institutsID = ? AND h.status = '0' AND fk.haushaltsjahrId = h.id " +
+										"AND fk.unterkonto = '0000' AND fk.geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -305,13 +336,13 @@ public class PreparedSqlStatements {
 			 * bestimmten FBHauptkonto angehören und nicht gelöscht sind. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT DISTINCT(a.id), a.haushaltsjahrId, a.institutsId, a.bezeichnung, " +
-										"a.hauptkonto, a.unterkonto, a.budget, a.vormerkungen, a.kleinbestellungen " +
-										"FROM FBKonten a, FBKonten b, Haushaltsjahre h " +
-										"WHERE a.institutsID = ? AND a.institutsID = b.institutsID " +
-										"AND b.id = ? AND a.hauptkonto = b.hauptkonto AND a.unterkonto != '0000' " +
-										"AND h.id = a.haushaltsjahrId AND h.id = b.haushaltsjahrId AND h.status = '0' " +
-										"AND a.geloescht = '0'");
+			ps = con.prepareStatement("SELECT DISTINCT(fk1.id), fk1.haushaltsjahrId, fk1.institutsId, fk1.bezeichnung, " +
+										"fk1.hauptkonto, fk1.unterkonto, fk1.budget, fk1.vormerkungen, fk1.kleinbestellungen " +
+										"FROM FBKonten fk1, FBKonten fk2, Haushaltsjahre h " +
+										"WHERE fk1.institutsID = ? AND fk1.institutsID = fk2.institutsID " +
+										"AND fk2.id = ? AND fk1.hauptkonto = fk2.hauptkonto AND fk1.unterkonto != '0000' " +
+										"AND h.id = fk1.haushaltsjahrId AND h.id = fk2.haushaltsjahrId AND h.status = '0' " +
+										"AND fk1.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -335,9 +366,9 @@ public class PreparedSqlStatements {
 			 * Abfrage der FBKontoId, von einem bestimmten FBKonto und welches nicht gelöscht ist. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement("SELECT k.id FROM FBKonten k, Haushaltsjahre h "+
-										"WHERE k.institutsID = ? AND k.hauptkonto = ? AND k.unterkonto = ? " +
-										"AND h.id = k.haushaltsjahrId AND h.status = '0' AND k.geloescht = '0'");
+			ps = con.prepareStatement("SELECT fk.id FROM FBKonten fk, Haushaltsjahre h "+
+										"WHERE fk.institutsID = ? AND fk.hauptkonto = ? AND fk.unterkonto = ? " +
+										"AND h.id = fk.haushaltsjahrId AND h.status = '0' AND fk.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -376,15 +407,15 @@ public class PreparedSqlStatements {
 			 * Diese Konten dürfen außer einem bestimmten Benutzer nicht zugeordnet sein.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT DISTINCT(k.id), k.haushaltsjahrId, k.institutsId, k.bezeichnung, " + 
-											"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " + 											"k.pruefBedingung, k.kleinbestellungen, k.geloescht " + 
-										"FROM FBKonten k, Haushaltsjahre h " + 
-										"WHERE k.institutsId = ? AND k.hauptkonto = ? AND k.kleinbestellungen = '1' AND " + 											"k.geloescht = '0' AND k.unterkonto != '0000' AND " +
-											"h.id = k.haushaltsjahrId AND h.status = '0' AND " +
-											"k.id NOT IN (SELECT DISTINCT(a.id) " + 														"FROM FBKonten a, Benutzer b " + 
-														"WHERE a.hauptkonto = ? AND a.unterkonto != \"0000\" AND " + 															"a.institutsId = b.institutsId AND " + 
-															"a.kleinbestellungen = '1' AND " + 															"a.id = b.privatKontoId AND " + 
-															"b.id != ? AND a.geloescht = '0')" ); 
+			ps = con.prepareStatement(	"SELECT DISTINCT(fk.id), fk.haushaltsjahrId, fk.institutsId, fk.bezeichnung, " + 
+											"fk.hauptkonto, fk.unterkonto, fk.budget, fk.dispoLimit, fk.vormerkungen, " + 											"fk.pruefBedingung, fk.kleinbestellungen, fk.geloescht " + 
+										"FROM FBKonten fk, Haushaltsjahre h " + 
+										"WHERE fk.institutsId = ? AND fk.hauptkonto = ? AND fk.kleinbestellungen = '1' AND " + 											"fk.geloescht = '0' AND fk.unterkonto != '0000' AND " +
+											"h.id = fk.haushaltsjahrId AND h.status = '0' AND " +
+											"fk.id NOT IN (SELECT DISTINCT(fk1.id) " + 														"FROM FBKonten fk1, Benutzer b " + 
+														"WHERE fk1.hauptkonto = ? AND fk1.unterkonto != \"0000\" AND " + 															"fk1.institutsId = b.institutsId AND " + 
+															"fk1.kleinbestellungen = '1' AND " + 															"fk1.id = b.privatKontoId AND " + 
+															"b.id != ? AND fk1.geloescht = '0')" ); 
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -408,24 +439,24 @@ public class PreparedSqlStatements {
 			 * Abfrage eines bestimmten FBKontos und welches gelöscht ist. 
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT k.id FROM FBKonten k, Haushaltsjahre h "+
-											"WHERE k.institutsID = ? AND k.hauptkonto = ? AND k.unterkonto = ? " +
-											"AND h.id = k.haushaltsjahrId AND h.status = '0' AND k.geloescht = '1'");
+			ps = con.prepareStatement(	"SELECT fk.id FROM FBKonten fk, Haushaltsjahre h "+
+											"WHERE fk.institutsID = ? AND fk.hauptkonto = ? AND fk.unterkonto = ? " +
+											"AND h.id = fk.haushaltsjahrId AND h.status = '0' AND fk.geloescht = '1'");
 			int[] param = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//60
 			ps = con.prepareStatement( "SELECT " +
-											  "distinct fbk.id, fbk.haushaltsjahrId, fbk.institutsId, fbk.bezeichnung, " +
-												  "fbk.hauptkonto, fbk.unterkonto, fbk.budget, fbk.dispoLimit, fbk.pruefBedingung " +
-											 "FROM FBKonten fbk, Kontenzuordnung kz, ZVKonten zvk, Haushaltsjahre h " +
-										"WHERE fbk.institutsID = ? " +
-										  "AND fbk.unterkonto = \"0000\" " +
-										  "AND fbk.geloescht = \"0\" " +
-										  "AND fbk.id = kz.fbkontoid " +
-										  "AND kz.zvkontoid = zvk.id " +
-										  "AND zvk.zweckgebunden = \"0\" " +
-										  "AND fbk.haushaltsjahrid = h.id " +
+											  "distinct fk.id, fk.haushaltsjahrId, fk.institutsId, fk.bezeichnung, " +
+												  "fk.hauptkonto, fk.unterkonto, fk.budget, fk.dispoLimit, fk.pruefBedingung " +
+											 "FROM FBKonten fk, Kontenzuordnung kz, ZVKonten zk, Haushaltsjahre h " +
+										"WHERE fk.institutsID = ? " +
+										  "AND fk.unterkonto = \"0000\" " +
+										  "AND fk.geloescht = \"0\" " +
+										  "AND fk.id = kz.fbkontoid " +
+										  "AND kz.zvkontoid = zk.id " +
+										  "AND zk.zweckgebunden = \"0\" " +
+										  "AND fk.haushaltsjahrid = h.id " +
 										  "AND h.status = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -435,15 +466,15 @@ public class PreparedSqlStatements {
 			 * Abfrage aller (nicht abgeschlossenen) FBHauptkonten eines Haushaltsjahres 
 	 		 * @author m.schmitt
 			 */
-			ps = con.prepareStatement("SELECT k.id, k.haushaltsjahrId, i.id, k.bezeichnung, "+
-										"k.hauptkonto, k.unterkonto, k.budget, k.dispoLimit, k.vormerkungen, " +
-										"k.pruefBedingung, k.kleinbestellungen, i.bezeichnung, i.kostenstelle " +
-										"FROM FBKonten k, Institute i " +
-										"WHERE k.haushaltsjahrID = ? " +
-										"AND k.institutsID = i. id " +
-										"AND k.unterkonto = \"0000\" " +
-										"AND k.geloescht = \"0\" " +
-										"ORDER BY i.kostenstelle, k.hauptkonto");
+			ps = con.prepareStatement("SELECT fk.id, fk.haushaltsjahrId, i.id, fk.bezeichnung, "+
+										"fk.hauptkonto, fk.unterkonto, fk.budget, fk.dispoLimit, fk.vormerkungen, " +
+										"fk.pruefBedingung, fk.kleinbestellungen, i.bezeichnung, i.kostenstelle " +
+										"FROM FBKonten fk, Institute i " +
+										"WHERE fk.haushaltsjahrID = ? " +
+										"AND fk.institutsID = i. id " +
+										"AND fk.unterkonto = \"0000\" " +
+										"AND fk.geloescht = \"0\" " +
+										"ORDER BY i.kostenstelle, fk.hauptkonto");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -496,15 +527,15 @@ public class PreparedSqlStatements {
 		}
 		{//66 Ermittelt der ID eines FB-Kontos dessen ID in einem anderen (zu übergebenden) Haushaltsjahr
 			ps = con.prepareStatement(
-					"SELECT f2.id " +
-					  "FROM FBKonten f1, FBKonten f2 " +
-					 "WHERE f1.id = ? " +
-					   "AND f1.institutsid = f2.institutsid " +
-					   "AND f1.hauptkonto = f2.hauptkonto " +
-					   "AND f1.unterkonto = f2.unterkonto " +
-					   "AND f2.haushaltsjahrid = ? " +
-					   "AND f1.geloescht = '0' " +
-					   "AND f2.geloescht = '0' ");
+					"SELECT fk2.id " +
+					  "FROM FBKonten fk1, FBKonten fk2 " +
+					 "WHERE fk1.id = ? " +
+					   "AND fk1.institutsid = fk2.institutsid " +
+					   "AND fk1.hauptkonto = fk2.hauptkonto " +
+					   "AND fk1.unterkonto = fk2.unterkonto " +
+					   "AND fk2.haushaltsjahrid = ? " +
+					   "AND fk1.geloescht = '0' " +
+					   "AND fk2.geloescht = '0' ");
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -512,14 +543,14 @@ public class PreparedSqlStatements {
 			statements[i++] = null;
 		}
 		{//68 Gibt eine FBHauptkonto für ein PrivatKonto zurück
-	    ps = con.prepareStatement("SELECT fb.id, fb.haushaltsjahrId, fb.institutsId, fb.bezeichnung, "+
-																	 "fb.hauptkonto, fb.unterkonto, fb.budget, fb.dispoLimit, fb.pruefBedingung " +
-																"FROM FBKonten fb, Haushaltsjahre h " +
-																"WHERE fb.hauptkonto = ? " +
-																	"AND fb.institutsId = ? " +
-																	"AND fb.unterkonto = \"0000\" " +
+	    ps = con.prepareStatement("SELECT fk.id, fk.haushaltsjahrId, fk.institutsId, fk.bezeichnung, "+
+																	 "fk.hauptkonto, fk.unterkonto, fk.budget, fk.dispoLimit, fk.pruefBedingung " +
+																"FROM FBKonten fk, Haushaltsjahre h " +
+																"WHERE fk.hauptkonto = ? " +
+																	"AND fk.institutsId = ? " +
+																	"AND fk.unterkonto = \"0000\" " +
 																	"AND h.status = 0 " +
-																  "AND fb.geloescht = '0'");
+																  "AND fk.geloescht = '0'");
 			int[] param = {Types.VARCHAR, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -868,12 +899,12 @@ public class PreparedSqlStatements {
 			 * Abfrage aller nicht gelöschten ZVKonten in der Datenbank.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( "SELECT DISTINCT(k.id), k.haushaltsjahrId, k.bezeichnung, " +
-											"k.kapitel, k.titelgruppe, k.tgrBudget, " +
-											"k.dispoLimit, k.zweckgebunden, k.freigegeben, " +
-											"k.uebernahmestatus, k.portiert, k.abgeschlossen " +
-										"FROM ZVKonten k, Haushaltsjahre h " +
-										"WHERE h.status = '0' AND k.haushaltsjahrId = h.id AND k.geloescht = '0'" );
+			ps = con.prepareStatement( "SELECT DISTINCT(zk.id), zk.haushaltsjahrId, zk.bezeichnung, " +
+											"zk.kapitel, zk.titelgruppe, zk.tgrBudget, " +
+											"zk.dispoLimit, zk.zweckgebunden, zk.freigegeben, " +
+											"zk.uebernahmestatus, zk.portiert, zk.abgeschlossen " +
+										"FROM ZVKonten zk, Haushaltsjahre h " +
+										"WHERE h.status = '0' AND zk.haushaltsjahrId = h.id AND zk.geloescht = '0'" );
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//121			(42)
@@ -899,28 +930,28 @@ public class PreparedSqlStatements {
 			 * welches nicht gelöscht oder abgeschlossen ist.
 			 * @author w.flat 
 			 */
-			ps = con.prepareStatement(	"SELECT k.id " +
-										  "FROM zvkonten k, zvkontentitel t, haushaltsjahre h " +
-										 "WHERE k.kapitel = ? " +
-										   "AND k.titelgruppe = '' " +
-										   "AND k.id = t.zvkontoid " +
-										   "AND t.titel = ? " +
-										   "AND t.untertitel = '' " +
-										   "AND k.haushaltsjahrid = h.id " +
+			ps = con.prepareStatement(	"SELECT zk.id " +
+										  "FROM zvkonten zk, zvkontentitel zt, haushaltsjahre h " +
+										 "WHERE zk.kapitel = ? " +
+										   "AND zk.titelgruppe = '' " +
+										   "AND zk.id = zt.zvkontoid " +
+										   "AND zt.titel = ? " +
+										   "AND zt.untertitel = '' " +
+										   "AND zk.haushaltsjahrid = h.id " +
 										   "AND h.status = '0' " +
-										   "AND t.geloescht = '0' " +
-										   "AND k.geloescht = '0' " +
-										   "AND k.abgeschlossen = '0' " +
+										   "AND zt.geloescht = '0' " +
+										   "AND zk.geloescht = '0' " +
+										   "AND zk.abgeschlossen = '0' " +
 										 "UNION " +
-										"SELECT k.id " +
-										  "FROM zvkonten k, haushaltsjahre h " +
-										 "WHERE k.kapitel = ? " +
-										   "AND k.titelgruppe = ? " +
-										   "AND NOT k.titelgruppe = '' " +
-										   "AND k.haushaltsjahrid = h.id " +
+										"SELECT zk.id " +
+										  "FROM zvkonten zk, haushaltsjahre h " +
+										 "WHERE zk.kapitel = ? " +
+										   "AND zk.titelgruppe = ? " +
+										   "AND NOT zk.titelgruppe = '' " +
+										   "AND zk.haushaltsjahrid = h.id " +
 										   "AND h.status = '0' " +
-										   "AND k.geloescht = '0' " +
-										   "AND k.abgeschlossen = '0'");
+										   "AND zk.geloescht = '0' " +
+										   "AND zk.abgeschlossen = '0'");
 			//               Kapitel       Titel            Kapitel      Titelgruppe
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -970,26 +1001,26 @@ public class PreparedSqlStatements {
 			 * und bestimmter Titelgruppe und welches gelöscht ist.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"SELECT k.id " +
-								  "FROM zvkonten k, zvkontentitel t, haushaltsjahre h " +
-								 "WHERE k.kapitel = ? " +
-								   "AND k.titelgruppe = '' " +
-								   "AND k.id = t.zvkontoid " +
-								   "AND t.titel = ? " +
-								   "AND t.untertitel = '' " +
-								   "AND k.haushaltsjahrid = h.id " +
+			ps = con.prepareStatement(	"SELECT zk.id " +
+								  "FROM zvkonten zk, zvkontentitel zt, haushaltsjahre h " +
+								 "WHERE zk.kapitel = ? " +
+								   "AND zk.titelgruppe = '' " +
+								   "AND zk.id = zt.zvkontoid " +
+								   "AND zt.titel = ? " +
+								   "AND zt.untertitel = '' " +
+								   "AND zk.haushaltsjahrid = h.id " +
 								   "AND h.status = '0' " +
-								   "AND t.geloescht = '0' " +
-								   "AND k.geloescht = '1' " +
+								   "AND zt.geloescht = '0' " +
+								   "AND zk.geloescht = '1' " +
 								 "UNION " +
 								"SELECT k.id " +
-								  "FROM zvkonten k, haushaltsjahre h " +
-								 "WHERE k.kapitel = ? " +
-								   "AND k.titelgruppe = ? " +
-								   "AND NOT k.titelgruppe = '' " +
-								   "AND k.haushaltsjahrid = h.id " +
+								  "FROM zvkonten zk, haushaltsjahre h " +
+								 "WHERE zk.kapitel = ? " +
+								   "AND zk.titelgruppe = ? " +
+								   "AND NOT zk.titelgruppe = '' " +
+								   "AND zk.haushaltsjahrid = h.id " +
 								   "AND h.status = '0' " +
-								   "AND k.geloescht = '1' " );
+								   "AND zk.geloescht = '1' " );
 			//               Kapitel       Titel            Kapitel      Titelgruppe
 			int[] param = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -1078,15 +1109,15 @@ public class PreparedSqlStatements {
 			// Wurde ein portierter Titel gelöscht, so ist dessen ID = 0
 			
 			ps = con.prepareStatement(
-					 "SELECT t1.id, IF(t2.id is NULL, 0, t2.id), " + 
-						   	"t1.budget " + 
-					   "FROM ZVKontentitel t1 " + 
-				  "LEFT JOIN ZVkontentitel t2 " +
-				         "ON t1.titel = t2.titel " +
-                        "AND t1.untertitel = t2.untertitel " +
-			          "WHERE t1.zvkontoid = ? " + // alte ID
-					    "AND t2.zvkontoid = ? " + // neue ID
-						"AND t2.geloescht = '0'");
+					 "SELECT zt1.id, IF(zt2.id is NULL, 0, zt2.id), " + 
+						   	"zt1.budget " + 
+					   "FROM ZVKontentitel zt1 " + 
+				  "LEFT JOIN ZVkontentitel zt2 " +
+				         "ON zt1.titel = zt2.titel " +
+                        "AND zt1.untertitel = zt2.untertitel " +
+			          "WHERE zt1.zvkontoid = ? " + // alte ID
+					    "AND zt2.zvkontoid = ? " + // neue ID
+						"AND zt2.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1108,47 +1139,47 @@ public class PreparedSqlStatements {
 		}
 		{//136 Ermittelt anhand der ID eines ZV-Titels dessen ID in einem anderen (zu übergebenden) Haushaltsjahr (ID)
 			ps = con.prepareStatement(
-					"SELECT t4.id " +
-					  "FROM zvkontentitel t1, zvkontentitel t2, zvkonten k1, " +
-					       "zvkontentitel t3, zvkontentitel t4, zvkonten k2 " +
-				     "WHERE t1.id = ? " +
-					   "AND t1.zvkontoid = k1.id " +
-					   "AND k1.titelgruppe = '' " +
-					   "AND k1.id = t2.zvkontoid " +
-					   "AND t2.titel = t1.titel " +
-					   "AND t2.untertitel = '' " +
-					   "AND t3.untertitel = t2.untertitel " +
-					   "AND t3.titel = t2.titel " +
-					   "AND t3.zvkontoid = k2.id "+ 
-					   "AND k2.titelgruppe = k1.titelgruppe " +
-					   "AND k2.kapitel = k1.kapitel " +
-					   "AND k2.haushaltsjahrid = ? " +
-					   "AND k2.id = t4.zvkontoid " +
-					   "AND t4.titel = t1.titel " +
-					   "AND t4.untertitel = t1.untertitel " +
-					   "AND t1.geloescht = '0' " +
-					   "AND t2.geloescht = '0' " +
-					   "AND k1.geloescht = '0' " +
-					   "AND t3.geloescht = '0' " +
-					   "AND t4.geloescht = '0' " +
-					   "AND k2.geloescht = '0' " +
+					"SELECT zt4.id " +
+					  "FROM zvkontentitel zt1, zvkontentitel zt2, zvkonten zk1, " +
+					       "zvkontentitel zt3, zvkontentitel zt4, zvkonten zk2 " +
+				     "WHERE zt1.id = ? " +
+					   "AND zt1.zvkontoid = zk1.id " +
+					   "AND zk1.titelgruppe = '' " +
+					   "AND zk1.id = zt2.zvkontoid " +
+					   "AND zt2.titel = zt1.titel " +
+					   "AND zt2.untertitel = '' " +
+					   "AND zt3.untertitel = zt2.untertitel " +
+					   "AND zt3.titel = zt2.titel " +
+					   "AND zt3.zvkontoid = zk2.id "+ 
+					   "AND zk2.titelgruppe = zk1.titelgruppe " +
+					   "AND zk2.kapitel = zk1.kapitel " +
+					   "AND zk2.haushaltsjahrid = ? " +
+					   "AND zk2.id = zt4.zvkontoid " +
+					   "AND zt4.titel = zt1.titel " +
+					   "AND zt4.untertitel = zt1.untertitel " +
+					   "AND zt1.geloescht = '0' " +
+					   "AND zt2.geloescht = '0' " +
+					   "AND zk1.geloescht = '0' " +
+					   "AND zt3.geloescht = '0' " +
+					   "AND zt4.geloescht = '0' " +
+					   "AND zk2.geloescht = '0' " +
 					 "UNION " +
 					"SELECT t2.id " +
-					  "FROM zvkonten k1, zvkontentitel t1, " +
-					       "zvkonten k2, zvkontentitel t2 " +
-					 "WHERE t1.id = ? " +
-					   "AND t1.zvkontoid = k1.id " +
-					   "AND NOT k1.titelgruppe = '' " +
-					   "AND k2.kapitel = k1.kapitel " +
-					   "AND k2.titelgruppe = k1.titelgruppe " +
-					   "AND k2.haushaltsjahrid = ? " +
-					   "AND k2.id = t2.zvkontoid " +
-					   "AND t2.titel = t1.titel " +
-					   "AND t2.untertitel = t1.untertitel " +
-					   "AND t1.geloescht = '0' " +
-					   "AND t2.geloescht = '0' " +
-					   "AND k1.geloescht = '0' " +
-					   "AND k2.geloescht = '0'");
+					  "FROM zvkonten zk1, zvkontentitel zt1, " +
+					       "zvkonten zk2, zvkontentitel zt2 " +
+					 "WHERE zt1.id = ? " +
+					   "AND zt1.zvkontoid = zk1.id " +
+					   "AND NOT zk1.titelgruppe = '' " +
+					   "AND zk2.kapitel = zk1.kapitel " +
+					   "AND zk2.titelgruppe = zk1.titelgruppe " +
+					   "AND zk2.haushaltsjahrid = ? " +
+					   "AND zk2.id = zt2.zvkontoid " +
+					   "AND zt2.titel = zt1.titel " +
+					   "AND zt2.untertitel = zt1.untertitel " +
+					   "AND zt1.geloescht = '0' " +
+					   "AND zt2.geloescht = '0' " +
+					   "AND zk1.geloescht = '0' " +
+					   "AND zk2.geloescht = '0'");
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1183,7 +1214,7 @@ public class PreparedSqlStatements {
 			ps = con.prepareStatement( "SELECT id, zvKontoID, bezeichnung, " +
 											"titel, untertitel, budget, vormerkungen, " +
 											"bemerkung, pruefBedingung, geloescht " +
-										"FROM ZVKontenTitel k " +
+										"FROM ZVKontenTitel " +
 										"WHERE zvKontoId = ? AND untertitel = '' AND geloescht = '0'");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -1331,77 +1362,77 @@ public class PreparedSqlStatements {
 		/**************************************/
 		
 		{//160		(44)
-			ps = con.prepareStatement( "SELECT a.id " +
-										"FROM ZVKonten a, ZVKontenTitel b " +
-									   "WHERE a.kapitel = ? " +
-										 "AND a.titelgruppe = \"\" " +
-										 "AND b.titel = ? " +
-										 "AND a.id = b.zvKontoID " +
-										 "AND b.untertitel = \"\" AND a.geloescht = '0'");
+			ps = con.prepareStatement( "SELECT zk.id " +
+										"FROM ZVKonten zk, ZVKontenTitel zt " +
+									   "WHERE zk.kapitel = ? " +
+										 "AND zk.titelgruppe = \"\" " +
+										 "AND zt.titel = ? " +
+										 "AND zk.id = zt.zvKontoID " +
+										 "AND zt.untertitel = \"\" AND zk.geloescht = '0'");
 			int[] param = {Types.VARCHAR, Types.VARCHAR};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//161
-			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
-										 "FROM ZVKontentitel t, ZVKonten k, Haushaltsjahre h " +
-										"WHERE t.zvkontoid = k.id " +
-										  "AND k.zweckgebunden = \"0\" " +
-										  "AND t.geloescht = \"0\" " +
-										  "AND k.geloescht = \"0\" " +
-										  "AND k.haushaltsjahrid = h.id " +
+			ps = con.prepareStatement( "SELECT SUM(zt.budget), zk.tgrbudget " +
+										 "FROM ZVKontentitel zt, ZVKonten zk, Haushaltsjahre h " +
+										"WHERE zt.zvkontoid = zk.id " +
+										  "AND zk.zweckgebunden = \"0\" " +
+										  "AND zt.geloescht = \"0\" " +
+										  "AND zk.geloescht = \"0\" " +
+										  "AND zk.haushaltsjahrid = h.id " +
 										  "AND h.status = '0' " +
 										"GROUP BY k.id");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//162
-			ps = con.prepareStatement( "SELECT SUM(t.budget), k.tgrbudget " +
-										 "FROM ZVKontentitel t, ZVKonten k " +
-										"WHERE t.zvkontoid = ? " +
-										  "AND t.zvkontoid = k.id " +
+			ps = con.prepareStatement( "SELECT SUM(zt.budget), zk.tgrbudget " +
+										 "FROM ZVKontentitel zt, ZVKonten zk " +
+										"WHERE zt.zvkontoid = ? " +
+										  "AND zt.zvkontoid = zk.id " +
 										 // "AND k.zweckgebunden = \"0\" " +
-										  "AND t.geloescht = \"0\" " +
-										  "AND k.geloescht = \"0\" " +
+										  "AND zt.geloescht = \"0\" " +
+										  "AND zk.geloescht = \"0\" " +
 										"GROUP BY k.id");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//163
-			ps = con.prepareStatement( "SELECT DISTINCT fb2.id, fb2.budget " +
-										 "FROM kontenzuordnung z, zvkonten zv, fbkonten fb1, fbkonten fb2, haushaltsjahre h " +
-										"WHERE z.zvkontoid = zv.id " +
-										  "AND zv.zweckgebunden = \"0\" " +
-										  "AND zv.geloescht = \"0\" " +
-										  "AND z.fbkontoid = fb1.id " +
-										  "AND fb1.geloescht = \"0\" " +
-										  "AND fb1.haushaltsjahrid = fb2.haushaltsjahrid " +
-										  "AND fb1.institutsid = fb2.institutsid " +
-										  "AND fb1.hauptkonto = fb2.hauptkonto " +
-										  "AND fb2.geloescht=\"0\" " +
-										  "AND fb1.haushaltsjahrid = h.id " +
+			ps = con.prepareStatement( "SELECT DISTINCT fk2.id, fk2.budget " +
+										 "FROM kontenzuordnung kz, zvkonten zk, fbkonten fk1, fbkonten fk2, haushaltsjahre h " +
+										"WHERE kz.zvkontoid = zk.id " +
+										  "AND zk.zweckgebunden = \"0\" " +
+										  "AND zk.geloescht = \"0\" " +
+										  "AND kz.fbkontoid = fk1.id " +
+										  "AND fk1.geloescht = \"0\" " +
+										  "AND fk1.haushaltsjahrid = fk2.haushaltsjahrid " +
+										  "AND fk1.institutsid = fk2.institutsid " +
+										  "AND fk1.hauptkonto = fk2.hauptkonto " +
+										  "AND fk2.geloescht=\"0\" " +
+										  "AND fk1.haushaltsjahrid = h.id " +
 										  "AND h.status = '0'");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//164
-			ps = con.prepareStatement( "SELECT DISTINCT fb2.id, fb2.budget " +
-										 "FROM kontenzuordnung z, fbkonten fb1, fbkonten fb2 " +
-										"WHERE z.zvkontoid = ? " +
-										  "AND z.fbkontoid = fb1.id " +
-										  "AND fb1.geloescht = \"0\" " +
-										  "AND fb1.haushaltsjahrid = fb2.haushaltsjahrid " +
-										  "AND fb1.institutsid = fb2.institutsid " +
-										  "AND fb1.hauptkonto = fb2.hauptkonto " +
-										  "AND fb2.geloescht=\"0\" ");
+			ps = con.prepareStatement( "SELECT DISTINCT fk2.id, fk2.budget " +
+										 "FROM kontenzuordnung kz, fbkonten fk1, fbkonten fk2 " +
+										"WHERE kz.zvkontoid = ? " +
+										  "AND kz.fbkontoid = fk1.id " +
+										  "AND fk1.geloescht = \"0\" " +
+										  "AND fk1.haushaltsjahrid = fk2.haushaltsjahrid " +
+										  "AND fk1.institutsid = fk2.institutsid " +
+										  "AND fk1.hauptkonto = fk2.hauptkonto " +
+										  "AND fk2.geloescht=\"0\" ");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//165
-			ps = con.prepareStatement(	"SELECT k.tgrbudget - SUM( IF(t.budget < t.vormerkungen, t.vormerkungen - t.budget, 0) ) " +
-										  "FROM zvkonten k, zvkontentitel t " +
-										 "WHERE k.id = ? " +  
-										   "AND k.id = t.zvkontoid " +
-										   "AND k.geloescht=\"0\" " +
-										   "AND t.geloescht=\"0\" " +
-										"GROUP BY k.id" );
+			ps = con.prepareStatement(	"SELECT zk.tgrbudget - SUM( IF(zt.budget < zt.vormerkungen, zt.vormerkungen - zt.budget, 0) ) " +
+										  "FROM zvkonten zk, zvkontentitel zt " +
+										 "WHERE zk.id = ? " +  
+										   "AND zk.id = zt.zvkontoid " +
+										   "AND zk.geloescht=\"0\" " +
+										   "AND zt.geloescht=\"0\" " +
+										"GROUP BY zk.id" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1416,10 +1447,10 @@ public class PreparedSqlStatements {
 		}
 		{//167 Temporäre ZVKontentiteltabelle mit den Titeln eines bestimmten Haushaltsjahres erstellen
 			ps = con.prepareStatement("CREATE TABLE zvkontentitel_tmp " + 
-					                               "SELECT t.* "+
-												     "FROM zvkontentitel t, zvkonten k " +
-													"WHERE t.zvkontoid = k.id " +
-													  "AND k.haushaltsjahrid = ?");
+					                               "SELECT zt.* "+
+												     "FROM zvkontentitel zt, zvkonten zk " +
+													"WHERE zt.zvkontoid = zk.id " +
+													  "AND zk.haushaltsjahrid = ?");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1673,9 +1704,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT COUNT(b.id) " +
-										"FROM FBKonten a, Bestellungen b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.fbKonto" );
+										"FROM FBKonten fk, Bestellungen b " +
+										"WHERE fk.id = ? " +
+										"AND fk.id = b.fbKonto" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1685,9 +1716,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat 
 			 */
 			ps = con.prepareStatement( "SELECT COUNT(b.id) " +
-										"FROM FBKonten a, Bestellungen b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.fbKonto " +
+										"FROM FBKonten fk, Bestellungen b " +
+										"WHERE fk.id = ? " +
+										"AND fk.id = b.fbKonto " +
 										"AND b.phase != '2'" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -1699,9 +1730,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( "SELECT COUNT(b.id) " +
-										"FROM ZVKontenTitel a, Bestellungen b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.zvTitel" );
+										"FROM ZVKontenTitel zt, Bestellungen b " +
+										"WHERE zt.id = ? " +
+										"AND zt.id = b.zvTitel" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1712,9 +1743,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( 	"SELECT COUNT(b.id) " +
-										"FROM ZVKontenTitel a, Bestellungen b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.zvTitel " +
+										"FROM ZVKontenTitel zt, Bestellungen b " +
+										"WHERE zt.id = ? " +
+										"AND zt.id = b.zvTitel " +
 										"AND b.phase != '2'" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -1778,9 +1809,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellung) " +
-										"FROM FBKonten a, Buchungen b " +
-										"WHERE a.id = ? " +
-										"AND (a.id = b.fbKonto1 OR a.id = b.fbKonto2)" );
+										"FROM FBKonten fk, Buchungen b " +
+										"WHERE fk.id = ? " +
+										"AND (fk.id = b.fbKonto1 OR fk.id = b.fbKonto2)" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1790,9 +1821,9 @@ public class PreparedSqlStatements {
 			 * @author w.flat
 			 */
 			ps = con.prepareStatement( 	"SELECT COUNT(b.bestellung) " +
-										"FROM ZVKontenTitel a, Buchungen b " +
-										"WHERE a.id = ? " +
-										"AND (a.id = b.zvTitel1 OR a.id = b.zvTitel2)" );
+										"FROM ZVKontenTitel zt, Buchungen b " +
+										"WHERE zt.id = ? " +
+										"AND (zt.id = b.zvTitel1 OR zt.id = b.zvTitel2)" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1856,13 +1887,13 @@ public class PreparedSqlStatements {
 								" zvtitel1, betragZvTitel1, zvtitel2, betragZvTitel2 ) " +
 						 "SELECT " +
 						 		"?, ?, '3', '', " +
-								"old.id, -new.budget, new.id, new.budget " +
-						   "FROM zvkontentitel old, zvkontentitel new " +
-						  "WHERE old.zvkontoid = ? " +
-						    "AND new.zvkontoid = ? " +
-							"AND old.titel = new.titel " +
-							"AND old.untertitel = new.untertitel " +
-							"AND new.budget > 0 " );
+								"ztold.id, -ztnew.budget, ztnew.id, ztnew.budget " +
+						   "FROM zvkontentitel ztold, zvkontentitel ztnew " +
+						  "WHERE ztold.zvkontoid = ? " +
+						    "AND ztnew.zvkontoid = ? " +
+							"AND ztold.titel = ztnew.titel " +
+							"AND ztold.untertitel = ztnew.untertitel " +
+							"AND ztnew.budget > 0 " );
 			int[] param = {Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1873,17 +1904,17 @@ public class PreparedSqlStatements {
 								" fbkonto1, betragfbkonto1, fbkonto2, betragfbkonto2) " +
 						 "SELECT " + 
 						 		"?, ?, '4', '', " +
-								"old.id, -new.budget, new.id, new.budget " +
-						  "FROM fbkonten main, fbkonten old, fbkonten new " +
-						 "WHERE main.id = ? " +
-						   "AND main.haushaltsjahrid = old.haushaltsjahrid " +
-						   "AND main.institutsid = old.institutsid " +
-						   "AND main.hauptkonto = old.hauptkonto " +
-						   "AND old.institutsid = new.institutsid " +
-						   "AND old.hauptkonto = new.hauptkonto " +
-						   "AND old.unterkonto = new.unterkonto " +
-						   "AND new.haushaltsjahrid = ? " +
-						   "AND new.budget > 0");
+								"fkold.id, -fknew.budget, fknew.id, fknew.budget " +
+						  "FROM fbkonten fkmain, fbkonten fkold, fbkonten fknew " +
+						 "WHERE fkmain.id = ? " +
+						   "AND fkmain.haushaltsjahrid = fkold.haushaltsjahrid " +
+						   "AND fkmain.institutsid = fkold.institutsid " +
+						   "AND fkmain.hauptkonto = fkold.hauptkonto " +
+						   "AND fkold.institutsid = fknew.institutsid " +
+						   "AND fkold.hauptkonto = fknew.hauptkonto " +
+						   "AND fkold.unterkonto = fknew.unterkonto " +
+						   "AND fknew.haushaltsjahrid = ? " +
+						   "AND fknew.budget > 0");
 			int[] param = {Types.TIMESTAMP, Types.INTEGER, Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1917,25 +1948,25 @@ public class PreparedSqlStatements {
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//233  Kontenzuordnungen
-			ps = con.prepareStatement( "SELECT b.status, a.id, a.bezeichnung, a.kapitel, a.titelgruppe, a.zweckgebunden " +
-																 "FROM ZVKonten a, Kontenzuordnung b, haushaltsjahre c " +
-																 "WHERE a.haushaltsjahrid = c.id " +
-																		"AND a.geloescht = '0' " +
-																		"AND b.fbKontoId = ? " +
-																		"AND b.zvKontoId = a.id " +
-																		"AND c.status = 0"	 );
+			ps = con.prepareStatement( "SELECT kz.status, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden " +
+																 "FROM ZVKonten zk, Kontenzuordnung kz, haushaltsjahre h " +
+																 "WHERE zk.haushaltsjahrid = h.id " +
+																		"AND zk.geloescht = '0' " +
+																		"AND kz.fbKontoId = ? " +
+																		"AND kz.zvKontoId = zk.id " +
+																		"AND h.status = 0"	 );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//234 Kontenzuordnung
-			ps = con.prepareStatement( "SELECT b.status, a.id, a.bezeichnung, a.kapitel, a.titelgruppe, a.zweckgebunden " +
-																 "FROM ZVKonten a, Kontenzuordnung b, haushaltsjahre c " +
-																 "WHERE a.haushaltsjahrid = c.id " +
-																		"AND a.geloescht = '0' " +
-																		"AND b.fbKontoId = ? " +
-																		"AND b.zvKontoId = ? " +
-																		"AND b.zvKontoId = a.id " +
-																		"AND c.status = 0"	 );
+			ps = con.prepareStatement( "SELECT kz.status, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden " +
+																 "FROM ZVKonten zk, Kontenzuordnung kz, haushaltsjahre h " +
+																 "WHERE zk.haushaltsjahrid = h.id " +
+																		"AND zk.geloescht = '0' " +
+																		"AND kz.fbKontoId = ? " +
+																		"AND kz.zvKontoId = ? " +
+																		"AND kz.zvKontoId = zk.id " +
+																		"AND h.status = 0"	 );
 			int[] param = {Types.INTEGER, Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1945,10 +1976,10 @@ public class PreparedSqlStatements {
 			 * bei denen eine bestimmtes ZVKonto angegeben ist.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( 	"SELECT COUNT(a.id) " +
-										"FROM ZVKonten a, Kontenzuordnung b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.zvKontoId" );
+			ps = con.prepareStatement( 	"SELECT COUNT(zk.id) " +
+										"FROM ZVKonten zk, Kontenzuordnung kz " +
+										"WHERE zk.id = ? " +
+										"AND zk.id = kz.zvKontoId" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1957,10 +1988,10 @@ public class PreparedSqlStatements {
 			 * Ermittlung der Kontenzuordnungen, bei denen ein bestimmtes FBKonto angegeben ist.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement( "SELECT COUNT(a.id) " +
-										"FROM FBKonten a, Kontenzuordnung b " +
-										"WHERE a.id = ? " +
-										"AND a.id = b.fbKontoId" );
+			ps = con.prepareStatement( "SELECT COUNT(fk.id) " +
+										"FROM FBKonten fk, Kontenzuordnung kz " +
+										"WHERE fk.id = ? " +
+										"AND fk.id = kz.fbKontoId" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -1970,20 +2001,20 @@ public class PreparedSqlStatements {
 			 * Dabei wird ermittelt ob mehr als ein ZVKonto zu dem FBKonto einer Kontozuordnung existiert.
 			 * @author w.flat 
 			 */
-			ps = con.prepareStatement( 	"SELECT (COUNT(b.zvKontoId) - COUNT(DISTINCT b.fbKontoId)) " +
-										"FROM Kontenzuordnung a, Kontenzuordnung b " +
-										"WHERE a.zvKontoId = ? " +
-										"AND a.fbKontoId = b.fbKontoId" );
+			ps = con.prepareStatement( 	"SELECT (COUNT(kz2.zvKontoId) - COUNT(DISTINCT kz2.fbKontoId)) " +
+										"FROM Kontenzuordnung kz1, Kontenzuordnung kz2 " +
+										"WHERE kz1.zvKontoId = ? " +
+										"AND kz1.fbKontoId = kz2.fbKontoId" );
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//238  Kontenzuordnungen
-			ps = con.prepareStatement( "SELECT b.status, a.id, a.bezeichnung, a.kapitel, a.titelgruppe, a.zweckgebunden " +
-																 "FROM ZVKonten a, Kontenzuordnung b " +
-																 "WHERE a.geloescht = '0' " +
-																   "AND b.fbKontoId = ? " +
-																   "AND b.zvKontoId = a.id " +
-																 "ORDER BY a.kapitel, a.titelgruppe");
+			ps = con.prepareStatement( "SELECT kz.status, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden " +
+																 "FROM ZVKonten zk, Kontenzuordnung kz " +
+																 "WHERE zk.geloescht = '0' " +
+																   "AND kz.fbKontoId = ? " +
+																   "AND kz.zvKontoId = zk.id " +
+																 "ORDER BY zk.kapitel, zk.titelgruppe");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2487,18 +2518,18 @@ public class PreparedSqlStatements {
 							   "o.id, o.datum, o.typ, o.phase, " + 
 							   "u1.name, u1. vorname, " + 
 							   "u2.name, u2.vorname, " +
-							   "t.id, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden, " +
+							   "zt.id, zk.id, zk.bezeichnung, zk.kapitel, zk.titelgruppe, zk.zweckgebunden, " +
 							   "fk2.id, fk2.bezeichnung, i.bezeichnung, i.kostenstelle, fk2.hauptkonto, " +
 							   "o.bestellwert " +
-						  "FROM bestellungen o, benutzer u1, benutzer u2, zvkontentitel t, " +
+						  "FROM bestellungen o, benutzer u1, benutzer u2, zvkontentitel zt, " +
 						  	   "zvkonten zk, fbkonten fk1, fbkonten fk2, institute i " +
 						 "WHERE "+
 						       "(o.phase = '0' OR o.phase = '1') " +
 						   "AND o.geloescht = '0' "+
 						   "AND o.besteller = u1.id "+
 						   "AND o.auftraggeber = u2.id "+
-						   "AND o.zvtitel = t.id "+
-						   "AND t.zvkontoid = zk.id "+
+						   "AND o.zvtitel = zt.id "+
+						   "AND zt.zvkontoid = zk.id "+
 						   "AND o.fbkonto = fk1.id "+
 						   "AND fk1.haushaltsjahrid = fk2.haushaltsjahrid "+
 						   "AND fk1.institutsid = fk2.institutsid "+
@@ -2534,14 +2565,14 @@ public class PreparedSqlStatements {
 											"u3.name, u3.vorname, " +
 											"o.bestellwert, " +
 											"o.verbindlichkeiten " +
-										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3, fbkonten k " +
+										"FROM bestellungen o, benutzer u1, benutzer u2, benutzer u3, fbkonten fk " +
 										"WHERE o.besteller = u1.id " +
 										  "AND o.typ IN (?, ?, ?) " +
 										  "AND o.auftraggeber = u2.id " +
 										  "AND o.empfaenger = u3.id " +
 										  "AND o.geloescht = '0' " +
-										  "AND o.fbkonto = k.id " +
-										  "AND k.institutsid = ? " +
+										  "AND o.fbkonto = fk.id " +
+										  "AND fk.institutsid = ? " +
 										  "ORDER BY datum DESC");
 			int[] param = {Types.INTEGER, Types.INTEGER, Types.INTEGER,	Types.INTEGER }; //{typ1, typ2, typ3, institutsid}
 			statements[i++] = new PreparedStatementWrapper(ps, param);
@@ -2582,28 +2613,28 @@ public class PreparedSqlStatements {
 		/* Indizes: 310-324					                 */
 		/*****************************************************/
 		{//310 Addition eine Betrags auf die Vormerkungen
-			ps = con.prepareStatement("UPDATE FBKonten k, ZVKontentitel t " +
-																"SET k.vormerkungen = (k.vormerkungen + ?), t.vormerkungen = (t.vormerkungen + ?) " +
-																"WHERE k.id = ? " +
-																	"AND t.id = ? " +
-																	"AND k.geloescht = '0' " +																	"AND t.geloescht = '0' ");
+			ps = con.prepareStatement("UPDATE FBKonten fk, ZVKontentitel zt " +
+																"SET fk.vormerkungen = (fk.vormerkungen + ?), zt.vormerkungen = (zt.vormerkungen + ?) " +
+																"WHERE fk.id = ? " +
+																	"AND zt.id = ? " +
+																	"AND fk.geloescht = '0' " +																	"AND zt.geloescht = '0' ");
 			int[] param = {	Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//311
-			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKonten zvk, ZVKontentitel t " +	
+			ps = con.prepareStatement(	"UPDATE FBKonten fk, ZVKonten zk, ZVKontentitel zt " +	
 										   "SET " +
-										       "fbk.vormerkungen = (fbk.vormerkungen + ?), " + 
-										       "fbk.budget = (fbk.budget + ?), " +
-										       "zvk.tgrbudget = (zvk.tgrbudget + ?), " +
-										       "t.vormerkungen = (t.vormerkungen + ?), " +
-										       "t.budget = (t.budget + ?) " +
-										 "WHERE fbk.id = ? " +
-										   "AND zvk.id = ? " +
-										   "AND t.id = ? " +
-										   "AND fbk.geloescht = '0' " +
-										   "AND zvk.geloescht = '0' " +
-										   "AND t.geloescht = '0'");
+										       "fk.vormerkungen = (fk.vormerkungen + ?), " + 
+										       "fk.budget = (fk.budget + ?), " +
+										       "zk.tgrbudget = (zk.tgrbudget + ?), " +
+										       "zt.vormerkungen = (zt.vormerkungen + ?), " +
+										       "zt.budget = (zt.budget + ?) " +
+										 "WHERE fk.id = ? " +
+										   "AND zk.id = ? " +
+										   "AND zt.id = ? " +
+										   "AND fk.geloescht = '0' " +
+										   "AND zk.geloescht = '0' " +
+										   "AND zt.geloescht = '0'");
 			int[] param = {	Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2613,13 +2644,13 @@ public class PreparedSqlStatements {
 			 * Kleinbestellung.
 			 * @author w.flat
 			 */
-			ps = con.prepareStatement(	"UPDATE FBKonten fbk, ZVKontentitel zvt, ZVKonten zvk " +	
+			ps = con.prepareStatement(	"UPDATE FBKonten fk, ZVKontentitel zt, ZVKonten zk " +	
 										   "SET " +
-												"zvk.tgrBudget = (zvk.tgrBudget + ?), " +
-												"zvt.budget = (zvt.budget + ?), " +
-											   "fbk.budget = (fbk.budget + ?) " +
-										 "WHERE zvk.id = ? AND zvt.id = ? AND fbk.id = ? " +
-										   "AND fbk.geloescht = '0' AND zvk.geloescht = '0' AND zvt.geloescht = '0'" );
+												"zk.tgrBudget = (zk.tgrBudget + ?), " +
+												"zt.budget = (zt.budget + ?), " +
+											   "fk.budget = (fk.budget + ?) " +
+										 "WHERE zk.id = ? AND zt.id = ? AND fk.id = ? " +
+										   "AND fk.geloescht = '0' AND zk.geloescht = '0' AND zt.geloescht = '0'" );
 			int[] param = {	Types.FLOAT, Types.FLOAT, Types.FLOAT, Types.INTEGER, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2627,55 +2658,55 @@ public class PreparedSqlStatements {
 			// Die Konten-IDs werden bereits umgesetzt.
 			ps = con.prepareStatement(
 					"CREATE TABLE kontenzuordnung_tmp  " +
-						"SELECT z2.id zvkontoid, f2.id fbkontoid, k.status " +
-						  "FROM kontenzuordnung k, " +
-						       "fbkonten f1, fbkonten f2, " +
-							   "zvkonten z1, zvkonten z2 " +
-						 "WHERE k.fbkontoid = f1.id " +
-						   "AND f1.haushaltsjahrid = ? " +
-						   "AND f2.haushaltsjahrid = ? " +
-						   "AND f1.institutsid = f2.institutsid " +
-						   "AND f1.hauptkonto = f2.hauptkonto " +
-						   "AND f1.unterkonto = f2.unterkonto " +
-						   "AND k.zvkontoid = z1.id " +
-						   "AND z1.haushaltsjahrid = f1.haushaltsjahrid " +
-						   "AND z2.haushaltsjahrid = f2.haushaltsjahrid " +
-						   "AND z2.kapitel = z1.kapitel " +
-						   "AND NOT z1.titelgruppe = '' " +
-						   "AND z2.titelgruppe = z1.titelgruppe " +
-						   "AND f1.geloescht = '0' " +
-						   "AND f2.geloescht = '0' " +
-						   "AND z1.geloescht = '0' " +
-						   "AND z2.geloescht = '0' " +
+						"SELECT zk2.id zvkontoid, fk2.id fbkontoid, kz.status " +
+						  "FROM kontenzuordnung kz, " +
+						       "fbkonten fk1, fbkonten fk2, " +
+							   "zvkonten zk1, zvkonten zk2 " +
+						 "WHERE kz.fbkontoid = fk1.id " +
+						   "AND fk1.haushaltsjahrid = ? " +
+						   "AND fk2.haushaltsjahrid = ? " +
+						   "AND fk1.institutsid = fk2.institutsid " +
+						   "AND fk1.hauptkonto = fk2.hauptkonto " +
+						   "AND fk1.unterkonto = fk2.unterkonto " +
+						   "AND kz.zvkontoid = zk1.id " +
+						   "AND zk1.haushaltsjahrid = fk1.haushaltsjahrid " +
+						   "AND zk2.haushaltsjahrid = fk2.haushaltsjahrid " +
+						   "AND zk2.kapitel = zk1.kapitel " +
+						   "AND NOT zk1.titelgruppe = '' " +
+						   "AND zk2.titelgruppe = zk1.titelgruppe " +
+						   "AND fk1.geloescht = '0' " +
+						   "AND fk2.geloescht = '0' " +
+						   "AND zk1.geloescht = '0' " +
+						   "AND zk2.geloescht = '0' " +
 					    "UNION " +
-						"SELECT z2.id zvkontoid, f2.id fbkontoid, k.status " +
-						  "FROM kontenzuordnung k, " +
-						       "zvkonten z1, zvkontentitel t1, " +
-							   "zvkonten z2, zvkontentitel t2, " +
-							   "fbkonten f1, fbkonten f2 " +
-					     "WHERE z1.id = k.zvkontoid " +
-						   "AND z1.id = t1.zvkontoid " +
-						   "AND z1.haushaltsjahrid = ? " +
-						   "AND z1.titelgruppe = '' " +
-						   "AND t1.untertitel = ''" +
-						   "AND z2.id = t2.zvkontoid " +
-						   "AND z2.haushaltsjahrid = ? " +
-						   "AND z2.titelgruppe = '' " +
-						   "AND t2.untertitel = '' " +
-						   "AND z1.kapitel = z2.kapitel " +
-						   "AND t1.titel = t2.titel " +
-						   "AND f1.id = k.fbkontoid " +
-						   "AND f1.haushaltsjahrid = z1.haushaltsjahrid " +
-						   "AND f2.haushaltsjahrid = z2.haushaltsjahrid " +
-						   "AND f1.institutsid = f2.institutsid " +
-						   "AND f1.hauptkonto = f2.hauptkonto " +
-						   "AND f1.unterkonto = f2.unterkonto " +
-						   "AND z1.geloescht = '0' " +
-						   "AND t1.geloescht = '0' " +
-						   "AND z2.geloescht = '0' " +
-						   "AND t2.geloescht = '0' " +
-						   "AND f1.geloescht = '0' " +
-						   "AND f2.geloescht = '0'");
+						"SELECT zk2.id zvkontoid, f2.id fbkontoid, kz.status " +
+						  "FROM kontenzuordnung kz, " +
+						       "zvkonten zk1, zvkontentitel zt1, " +
+							   "zvkonten zk2, zvkontentitel zt2, " +
+							   "fbkonten fk1, fbkonten fk2 " +
+					     "WHERE zk1.id = kz.zvkontoid " +
+						   "AND zk1.id = zt1.zvkontoid " +
+						   "AND zk1.haushaltsjahrid = ? " +
+						   "AND zk1.titelgruppe = '' " +
+						   "AND zt1.untertitel = ''" +
+						   "AND zk2.id = zt2.zvkontoid " +
+						   "AND zk2.haushaltsjahrid = ? " +
+						   "AND zk2.titelgruppe = '' " +
+						   "AND zt2.untertitel = '' " +
+						   "AND zk1.kapitel = zk2.kapitel " +
+						   "AND zt1.titel = zt2.titel " +
+						   "AND fk1.id = kz.fbkontoid " +
+						   "AND fk1.haushaltsjahrid = zk1.haushaltsjahrid " +
+						   "AND fk2.haushaltsjahrid = zk2.haushaltsjahrid " +
+						   "AND fk1.institutsid = fk2.institutsid " +
+						   "AND fk1.hauptkonto = fk2.hauptkonto " +
+						   "AND fk1.unterkonto = fk2.unterkonto " +
+						   "AND zk1.geloescht = '0' " +
+						   "AND zt1.geloescht = '0' " +
+						   "AND zk2.geloescht = '0' " +
+						   "AND zt2.geloescht = '0' " +
+						   "AND fk1.geloescht = '0' " +
+						   "AND fk2.geloescht = '0'");
 			int[] param = {	Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER };
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2775,16 +2806,16 @@ public class PreparedSqlStatements {
 		/**************************/
 		{//335 Report 7 für alle Institute siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"i.bezeichnung AS instiut, " +																		"zvk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
+																		"i.bezeichnung AS instiut, " +																		"zk.bezeichnung AS zvKonto, (be.bestellwert - be.verbindlichkeiten) AS ausgaben, " +
 																		"be.referenzNr , be.huelNr , be.typ, be.datum, be.phase, be.id " +
-																"FROM " +																	"Bestellungen be, ZVKontentitel zvt, ZVKonten zvk, " +																	"Institute i, FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE i.id = fbk.institutsId  " +
-																	"AND be.fbKonto = fbk.id " +																	"AND be.zvTitel = zvt.id " +																	"AND (be.datum BETWEEN ? AND ?) " +
-																	"AND zvt.zvKontoId = zvk.id " +																	"AND fbk.geloescht = '0' " +
-																	"AND zvk.geloescht = '0' " +
-																	"AND zvt.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
-																	"AND h.id = zvk.haushaltsjahrId " +
+																"FROM " +																	"Bestellungen be, ZVKontentitel zt, ZVKonten zk, " +																	"Institute i, FBKonten fk, Haushaltsjahre h " +
+															  "WHERE i.id = fk.institutsId  " +
+																	"AND be.fbKonto = fk.id " +																	"AND be.zvTitel = zt.id " +																	"AND (be.datum BETWEEN ? AND ?) " +
+																	"AND zt.zvKontoId = zk.id " +																	"AND fk.geloescht = '0' " +
+																	"AND zk.geloescht = '0' " +
+																	"AND zt.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
+																	"AND h.id = zk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
 																	"AND be.phase != 0 " +
 																	"AND be.geloescht = '0'" +																"ORDER BY i.bezeichnung");
@@ -2793,62 +2824,62 @@ public class PreparedSqlStatements {
 		}
 		{//336 Report 8 für alle Institute: FB-Konto, ZV-Konto, Einnahmen siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"i.bezeichnung AS institut, fbk.bezeichnung AS fbKonto, SUM(b.betragFbKonto1) " +
+																		"i.bezeichnung AS institut, fk.bezeichnung AS fbKonto, SUM(b.betragFbKonto1) " +
 																"FROM " +
-																	"Institute i, FBKonten fbk, Buchungen b, Haushaltsjahre h " +
-															  "WHERE i.id = fbk.institutsId  " +
-																	"AND b.fbKonto1 = fbk.id " +
+																	"Institute i, FBKonten fk, Buchungen b, Haushaltsjahre h " +
+															  "WHERE i.id = fk.institutsId  " +
+																	"AND b.fbKonto1 = fk.id " +
 																	"AND (b.timestamp BETWEEN ? AND ?) " +
-																	"AND fbk.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
+																	"AND fk.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																	"AND b.typ = '5' " +																"GROUP BY i.bezeichnung, fbk.bezeichnung");
+																	"AND b.typ = '5' " +																"GROUP BY i.bezeichnung, fk.bezeichnung");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//337 Report 6 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"i.bezeichnung AS institut, " +																		"zvk.bezeichnung AS zvKonto, " +																		"SUM(COALESCE((be.bestellwert - be.verbindlichkeiten),0)) AS ausgaben " +
+																		"i.bezeichnung AS institut, " +																		"zk.bezeichnung AS zvKonto, " +																		"SUM(COALESCE((be.bestellwert - be.verbindlichkeiten),0)) AS ausgaben " +
 																"FROM " +
-																	"ZVKontentitel zvt, ZVKonten zvk, " +
-																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Bestellungen be " +																	"ON be.phase != 0 " +
+																	"ZVKontentitel zt, ZVKonten zk, " +
+																	"Institute i, FBKonten fk, Haushaltsjahre h " +																"LEFT JOIN Bestellungen be " +																	"ON be.phase != 0 " +
 																	"AND (be.datum BETWEEN ? AND ?) " +
 																	"AND be.geloescht = '0' " +
-																	"AND be.fbKonto = fbk.id " +
-																	"AND be.zvTitel = zvt.id " +
-															  "WHERE i.id = fbk.institutsId  " +
-																	"AND zvt.zvKontoId = zvk.id " +
-																	"AND fbk.geloescht = '0' " +
-																	"AND zvk.geloescht = '0' " +
-																	"AND zvt.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
-																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND be.fbKonto = fk.id " +
+																	"AND be.zvTitel = zt.id " +
+															  "WHERE i.id = fk.institutsId  " +
+																	"AND zt.zvKontoId = zk.id " +
+																	"AND fk.geloescht = '0' " +
+																	"AND zk.geloescht = '0' " +
+																	"AND zt.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
+																	"AND h.id = zk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																"GROUP BY i.bezeichnung, zvk.bezeichnung");
+																"GROUP BY i.bezeichnung, zk.bezeichnung");
 			int[] param = {	Types.DATE, Types.DATE };													
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
 		{//338 Report 5 siehe gui.Reports.java
 			ps = con.prepareStatement("SELECT " +
-																		"zvk.bezeichnung AS zvKonto, " +
+																		"zk.bezeichnung AS zvKonto, " +
 																		"i.bezeichnung AS institut, " +
 																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +
 																		"( SELECT SUM(budget) " +																			"FROM FBKonten " +																			"WHERE institutsId = i.id " +																			"AND geloescht = '0') AS kontostand " +
 																"FROM " +
-																	"ZVKontentitel zvt, ZVKonten zvk, " +
-																	"Institute i, FBKonten fbk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
+																	"ZVKontentitel zt, ZVKonten zk, " +
+																	"Institute i, FBKonten fk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
 																	"AND (bu.timestamp BETWEEN ? AND ?) " +
-																	"AND bu.fbKonto1 = fbk.id " +
-																	"AND bu.zvTitel1 = zvt.id " +
-															  "WHERE i.id = fbk.institutsId  " +
-																	"AND zvt.zvKontoId = zvk.id " +
-																	"AND fbk.geloescht = '0' " +
-																	"AND zvk.geloescht = '0' " +
-																	"AND zvt.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
-																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND bu.fbKonto1 = fk.id " +
+																	"AND bu.zvTitel1 = zt.id " +
+															  "WHERE i.id = fk.institutsId  " +
+																	"AND zt.zvKontoId = zk.id " +
+																	"AND fk.geloescht = '0' " +
+																	"AND zk.geloescht = '0' " +
+																	"AND zt.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
+																	"AND h.id = zk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																"GROUP BY zvk.bezeichnung, i.bezeichnung");
+																"GROUP BY zk.bezeichnung, i.bezeichnung");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2857,23 +2888,23 @@ public class PreparedSqlStatements {
 			 * Ein Report, der die Ausgaben bei den institutsinternen Konten nach Verwaltungskonten sortiert
 			 */
 			ps = con.prepareStatement("SELECT " +
-																		"fbk.bezeichnung AS fbKonto, " +
-																		"zvk.bezeichnung AS zvKonto, " +
+																		"fk.bezeichnung AS fbKonto, " +
+																		"zk.bezeichnung AS zvKonto, " +
 																		"SUM(bu.betragFbKonto1) AS ausgaben " +
 																"FROM " +
-																	"Buchungen bu, ZVKontentitel zvt, ZVKonten zvk, " +
-																	"FBKonten fbk, Haushaltsjahre h " +
-															  "WHERE zvt.zvKontoId = zvk.id " +															  	"AND bu.typ > 8 " +
+																	"Buchungen bu, ZVKontentitel zt, ZVKonten zk, " +
+																	"FBKonten fk, Haushaltsjahre h " +
+															  "WHERE zt.zvKontoId = zk.id " +															  	"AND bu.typ > 8 " +
 																	"AND (bu.timestamp BETWEEN ? AND ?) " +
-																	"AND bu.fbKonto1 = fbk.id " +
-																	"AND bu.zvTitel1 = zvt.id " +
-																	"AND fbk.geloescht = '0' " +
-																	"AND zvk.geloescht = '0' " +
-																	"AND zvt.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
-																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND bu.fbKonto1 = fk.id " +
+																	"AND bu.zvTitel1 = zt.id " +
+																	"AND fk.geloescht = '0' " +
+																	"AND zk.geloescht = '0' " +
+																	"AND zt.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
+																	"AND h.id = zk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																"GROUP BY fbk.bezeichnung, zvk.bezeichnung");
+																"GROUP BY fk.bezeichnung, zk.bezeichnung");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2883,24 +2914,24 @@ public class PreparedSqlStatements {
 			 * der Ausgaben und den aktuellen Kontostand enthält
 			 */
 			ps = con.prepareStatement("SELECT " +																		"i.bezeichnung AS institut, " +
-																		"fbk.bezeichnung AS fbKonto, " +																		"(SELECT SUM(betragFbKonto1) FROM Buchungen WHERE fbKonto1 = fbk.id AND typ = '5' AND (timestamp BETWEEN ? AND ?)) AS einnahmen, " +
-																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +																		"fbk.budget AS kontostand " +
+																		"fk.bezeichnung AS fbKonto, " +																		"(SELECT SUM(betragFbKonto1) FROM Buchungen WHERE fbKonto1 = fk.id AND typ = '5' AND (timestamp BETWEEN ? AND ?)) AS einnahmen, " +
+																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +																		"fk.budget AS kontostand " +
 																"FROM " +
-																	"Institute i, ZVKontentitel zvt, ZVKonten zvk, " +
-																	"FBKonten fbk, Haushaltsjahre h " +
+																	"Institute i, ZVKontentitel zt, ZVKonten zk, " +
+																	"FBKonten fk, Haushaltsjahre h " +
 															  "LEFT JOIN Buchungen bu " +
 																	"ON bu.typ > 8 " +
 																	"AND (bu.timestamp BETWEEN ? AND ?) " +
-																	"AND bu.fbKonto1 = fbk.id " +
-																	"AND bu.zvTitel1 = zvt.id " +
-															  "WHERE i.id = fbk.institutsId " +															  	"AND zvt.zvKontoId = zvk.id " +
-																	"AND fbk.geloescht = '0' " +
-																	"AND zvk.geloescht = '0' " +
-																	"AND zvt.geloescht = '0' " +
-																	"AND h.id = fbk.haushaltsjahrId " +
-																	"AND h.id = zvk.haushaltsjahrId " +
+																	"AND bu.fbKonto1 = fk.id " +
+																	"AND bu.zvTitel1 = zt.id " +
+															  "WHERE i.id = fk.institutsId " +															  	"AND zt.zvKontoId = zk.id " +
+																	"AND fk.geloescht = '0' " +
+																	"AND zk.geloescht = '0' " +
+																	"AND zt.geloescht = '0' " +
+																	"AND h.id = fk.haushaltsjahrId " +
+																	"AND h.id = zk.haushaltsjahrId " +
 																	"AND h.status = 0 " +
-																"GROUP BY i.bezeichnung, fbk.bezeichnung");
+																"GROUP BY i.bezeichnung, fk.bezeichnung");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps,param);
 		}
@@ -2944,26 +2975,26 @@ public class PreparedSqlStatements {
 			 * der Ausgaben und aktuellen Kontostände enthält
 			 */
 			ps = con.prepareStatement("SELECT " +
-																		"zvk.bezeichnung AS zvKonto, " +
+																		"zk.bezeichnung AS zvKonto, " +
 																		"( SELECT SUM(betragZvKonto1 + betragZvTitel1) " +
 																			"FROM Buchungen " +
 																			"WHERE typ IN (1, 2) " +
 																				"AND (timestamp BETWEEN ? AND ?) " +
-																				"AND ( zvKonto1 = zvk.id " +
+																				"AND ( zvKonto1 = zk.id " +
 																							"OR zvTitel1 IN " +
 																											"( SELECT id " +
 																												"FROM ZVKontentitel " +
-																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +
+																												"WHERE zvKontoId = zk.id " +																													"AND geloescht = '0'" +
 																											")" +
 																						")" +
 																		") AS mittel, " +
 																		"( SELECT SUM(betragZvKonto1 + betragZvTitel1) " +																			"FROM Buchungen " +																			"WHERE typ > 8 " +																				"AND (timestamp BETWEEN ? AND ?) " +
-																				"AND ( zvKonto1 = zvk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zvk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
-																		"(zvk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel " +																											"WHERE zvKontoId  = zvk.id " +																												"AND geloescht = '0')" +																		") AS kontostand " +
+																				"AND ( zvKonto1 = zk.id " +																							"OR zvTitel1 IN " +																											"( SELECT id " +																												"FROM ZVKontentitel " +																												"WHERE zvKontoId = zk.id " +																													"AND geloescht = '0'" +																											")" +																						")" +																		") AS ausgaben, " +
+																		"(zk.tgrBudget + (SELECT SUM(budget) " +																											"FROM ZVKontentitel " +																											"WHERE zvKontoId  = zk.id " +																												"AND geloescht = '0')" +																		") AS kontostand " +
 																"FROM " +
-																	"ZVKonten zvk, Haushaltsjahre h " +
-															  "WHERE h.id = zvk.haushaltsjahrId " +
-																	"AND h.status = 0 " +																	"AND zvk.geloescht = '0'");
+																	"ZVKonten zk, Haushaltsjahre h " +
+															  "WHERE h.id = zk.haushaltsjahrId " +
+																	"AND h.status = 0 " +																	"AND zk.geloescht = '0'");
 			int[] param = {	Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP, Types.TIMESTAMP };													
 			statements[i++] = new PreparedStatementWrapper(ps,param);
 		}

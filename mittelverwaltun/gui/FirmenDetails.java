@@ -37,7 +37,7 @@ public class FirmenDetails extends JDialog {
     super(JOptionPane.getFrameForComponent(parent), title, modal);
     this.setSize(405, 295);
     this.setResizable(false);
-    
+    this.setLocation((JOptionPane.getFrameForComponent(parent).getWidth()/2) - (getWidth()/2), (JOptionPane.getFrameForComponent(parent).getHeight()/2) - (getHeight()/2));
     try {
         lbStrasse.setHorizontalAlignment(SwingConstants.RIGHT);
         lbOrt.setHorizontalAlignment(SwingConstants.RIGHT);

@@ -62,7 +62,8 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 	public RemmitanceToFBHauptkontoFrame(MainFrame frame) {
 		this.frame = frame;
 		this.as = frame.applicationServer;
-		
+		this.setClosable(true);
+	    this.setIconifiable(true);
 		this.getContentPane().setLayout(null);
 
 		btRefresh.setBounds(new Rectangle(10, 10, 140, 25));
@@ -334,11 +335,13 @@ public class RemmitanceToFBHauptkontoFrame extends JInternalFrame implements Act
 		if (e.getSource()!= tfRemmitance)
 			((JTextComponent)(e.getSource())).getCaret().setVisible(false);
 		else{
+			
 			try {
 				tfRemmitance.commitEdit();
 				tfNewBalance.setValue(new Float(((Float)tfBalance.getValue()).floatValue()+((Float)tfRemmitance.getValue()).floatValue()  ));
 			} catch (ParseException e1) {
-				e1.printStackTrace();
+				MessageDialogs.showErrorMessageDialog(frame, "Fehler", "Buchungbetrag auﬂerhalb des zul‰ssigen Wertebereichs.");
+				//e1.printStackTrace();
 			}
 		}
 	}

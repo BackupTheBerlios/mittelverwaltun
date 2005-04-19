@@ -72,8 +72,9 @@ public class AbschlussHaushaltsjahr extends JInternalFrame implements ActionList
   	this.firstRun = firstRun;
   	this.setSize(835, 488);
   	this.setClosable(true);
+  	this.setIconifiable(true);
   	this.getContentPane().setLayout(null);
-
+  	this.setTitle("Abschluss Haushaltsjahr");
     pnHeader.setBackground(Color.white);
     pnHeader.setForeground(Color.black);
     pnHeader.setBorder(null);
