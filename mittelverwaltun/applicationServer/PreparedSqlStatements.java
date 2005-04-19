@@ -2962,7 +2962,8 @@ public class PreparedSqlStatements {
 																	"FROM ZVKontentitel " +
 																	"WHERE zvKontoId  = zvk.id " +
 																		"AND geloescht = '0')" +
-								") AS kontostand " +
+								") AS kontostand, " +
+								"zvk.zweckgebunden " +
 						"FROM " +
 							"ZVKonten zvk, Haushaltsjahre h " +
 					  "WHERE h.id = zvk.haushaltsjahrId " +

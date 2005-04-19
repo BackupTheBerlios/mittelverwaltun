@@ -4707,7 +4707,7 @@ public class Database implements Serializable {
 					
 					row.add(new Integer(rs.getInt(1))); 	// ZV-Konto
 					row.add(new Float(rs.getFloat(2))); 	// zugewiesene Mittel
-					row.add(new Float(0));								// freie Mittel 
+					row.add(rs.getString(4));							// zweckgebunden
 					row.add(new Float(rs.getFloat(3)));		// Kontostand
 
 					report.add( row );

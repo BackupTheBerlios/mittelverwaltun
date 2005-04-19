@@ -3409,7 +3409,11 @@ public class ApplicationServer implements Serializable {
         ZVKonto zvKonto = db.selectZVKonto(((Integer)row.get(0)).intValue());  
         
         row.set(0, zvKonto.getBezeichnung());
-        row.set(2, new Float(getAvailableAccountBudget(zvKonto)));
+        
+        if(((String)row.get(2)).equals("1"))
+          row.set(2, new Float(getAvailableAccountBudget(zvKonto)));  
+        else
+          row.set(2, new Float(getAvailableNoPurposeBudget()));
       }
 		  
 			return report;
