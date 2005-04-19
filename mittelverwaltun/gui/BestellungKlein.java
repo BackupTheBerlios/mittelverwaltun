@@ -101,6 +101,8 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			butFBKontoAuswahl.setIcon(Functions.getFindIcon(getClass()));
 			butZVTitelAuswahl.addActionListener(this);
 			butZVTitelAuswahl.setIcon(Functions.getFindIcon(getClass()));
+			butStornieren.addActionListener(this);
+			butStornieren.setIcon(Functions.getDelIcon(getClass()));
 
 			butStornieren.setVisible(false);
 			tfDatum.setValue(new Date(System.currentTimeMillis()));
@@ -134,7 +136,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 			buAbbrechen.addActionListener(this);
 			buAbbrechen.setIcon(Functions.getCloseIcon(getClass()));
 			if(bestellung.getPhase() == '3') {
-				butStornieren.setEnabled(false);
+				butStornieren.setVisible(false);
 				buDrucken.setEnabled(false);
 			} else {
 				butStornieren.addActionListener(this);
@@ -343,8 +345,7 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 		butZVTitelAuswahl.setBounds(new Rectangle(440, 70, 170, 25));
 		butZVTitelAuswahl.setText("ZVTitel-Auswahl");
 		butStornieren.setBounds(new Rectangle(10, 490, 150, 25));
-		butStornieren.setOpaque(true);
-		butStornieren.setText("Stornieren");
+		butStornieren.setText("Löschen");
 		scrollBelege.setBounds(new Rectangle(5, 5, 590, 150));
 		tpVerwendung.setBounds(new Rectangle(6, 26, 590, 50));
 		comboBenutzer.setBounds(new Rectangle(130, 10, 310, 21));
@@ -442,20 +443,17 @@ public class BestellungKlein extends JInternalFrame implements ActionListener, I
 				bestellung = getKleinBestellung();
 				try {
 					bestellung.setId(frame.getApplicationServer().addKleinbestellung(bestellung));
-					buBestellen.setEnabled(false);
+					buBestellen.setVisible(false);
+					butStornieren.setVisible(true);
 				} catch(ApplicationServerException exc) {
 					error = "Fehler bein Generieren der Bestellung:\n" + exc.toString();
 					JOptionPane.showMessageDialog( this, error,	"Fehler !", JOptionPane.ERROR_MESSAGE );
 				}
 			}
 		} else if( e.getSource() == butStornieren ) {
-			int answer = JOptionPane.showConfirmDialog(
-						getComponent(0),
-						"Soll die Bestellung wirklich storniert werden ? ",
-						"Warnung",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE,
-						null);
+			int answer = JOptionPane.showConfirmDialog( getComponent(0), 
+			        									"Soll die Bestellung wirklich storniert werden ? ", "Warnung",
+														JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 			if(answer == 0) {	// Die Bestellung löschen
 				try {
 					frame.getApplicationServer().delKleinbestellung(bestellung);

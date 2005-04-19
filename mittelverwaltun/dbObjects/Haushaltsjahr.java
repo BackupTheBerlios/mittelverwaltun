@@ -62,8 +62,7 @@ public class Haushaltsjahr implements Serializable {
 	public int getStatus(){
 		return this.status;
 	}
-	
-	
+
 	public int getId(){
 		return id;
 	}

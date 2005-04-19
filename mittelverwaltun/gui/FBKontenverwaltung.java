@@ -112,7 +112,11 @@ public class FBKontenverwaltung extends JInternalFrame implements ActionListener
 		if( frame != null ) {
 			try {
 				treeKonten.delTree();
-				treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );
+				if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH)
+				    treeKonten.loadInstituts( frame.getApplicationServer().getInstitutesWithAccounts() );
+				else if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_INSTITUT)
+				    treeKonten.loadInstituts( frame.getApplicationServer().getInstituteWithAccounts(
+				            						frame.getBenutzer().getKostenstelle(), true) );
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
 			}

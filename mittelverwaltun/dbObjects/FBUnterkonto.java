@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Diese Klasse repräsentiert ein FB-Unterkonto, welches einem Professor <br>
  * oder einem Mitarbeiter eines Institus zugeordnet ist. <br>
  * Die Hauptkonto-Nummer ist die Nummer des FBHauptkontos, welchem das FBUNterkonto zugeordnet ist. <br>
- * Die Unterkonto-Nummer ist immer ungleich "0000".
+ * Die Unterkonto-Nummer ist eine 4.stellige Nummer und immer ungleich "0000".
  * @author w.flat
  */
 public class FBUnterkonto implements Serializable {
@@ -338,6 +338,8 @@ public class FBUnterkonto implements Serializable {
 	 * @param hautpkonto = Neuer Wert von dem Hauptkonto. 
 	 */
 	public void setHauptkonto(String hautpkonto) {
+		if(hautpkonto == null)			return;		// Kein Hautpkonto angegeben
+		if(hautpkonto.length() != 2)	return;		// Hautpkonto falsches Format
 		this.hauptkonto = hautpkonto;
 	}
 
@@ -354,6 +356,8 @@ public class FBUnterkonto implements Serializable {
 	 * @param unterkonto = Neuer Wert von dem Unterkonto. 
 	 */
 	public void setUnterkonto(String unterkonto) {
+		if(unterkonto == null)			return;		// Kein Unterkonto angegeben
+		if(unterkonto.length() != 4)	return;		// Unterkonto falsches Format
 		this.unterkonto = unterkonto;
 	}
 

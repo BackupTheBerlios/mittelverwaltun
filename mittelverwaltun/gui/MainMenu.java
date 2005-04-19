@@ -67,16 +67,11 @@ public class MainMenu extends JMenuBar implements ActionListener {
 	JMenu menuReporting = new JMenu("Reports");
 
 		JMenuItem miReportsLoglisteAnzeigen = new JActivityRelatedMenuItem(19, "Anzeigen");
-//		JMenu menuZVReport = new JMenu("Zentralverwaltung");
-//			JMenuItem miZVAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
-//			JMenuItem miZVAusgabeNachKundI = new JActivityRelatedMenuItem(1, "Ausgbe nach Konten und Instituten");
-//			JMenuItem miZVVerteilung = new JActivityRelatedMenuItem(1, "Verteilung");
-//		JMenu menuFBReport = new JMenu("Fachbereichsintern");
-//			JMenuItem miFBAusgabeNachK = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten");
-//			JMenuItem miFBAusgabeNachKundV = new JActivityRelatedMenuItem(1, "Ausgabe nach Konten und Verwaltungskonten");
-//		JMenu menuInstitutReport = new JMenu("Institutsintern");
-//			JMenuItem miIAusgabeNachVK = new JActivityRelatedMenuItem(1, "Ausgabe nach Verwaltungskonten");
-//			JMenuItem miBestellungen = new JActivityRelatedMenuItem(1, "Bestellungen");
+		
+	// Das Menü "Info"
+	JMenu menuInfo = new JMenu("Info");
+		JMenuItem miInfoAnzeigen = new JActivityRelatedMenuItem(0, "Anzeigen");
+		
 			
 	// Das Hauptfenster
 	MainFrame frame;
@@ -215,7 +210,13 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			activityRelItems.add( miReportsLoglisteAnzeigen );
 			miReportsLoglisteAnzeigen.addActionListener( this );
 			miReportsLoglisteAnzeigen.setIcon(Functions.getReportIcon(this.getClass()));
-
+		
+		// Das Menü "Info"
+		add( menuInfo );
+			menuInfo.add( miInfoAnzeigen );
+			activityRelItems.add( miInfoAnzeigen );
+			miInfoAnzeigen.addActionListener( this );
+			miInfoAnzeigen.setIcon(Functions.getInformationIcon(this.getClass()));
 		
 		// Aktivieren der Menüeinträge
 		if( frame.getBenutzer() != null )		
@@ -282,7 +283,8 @@ public class MainMenu extends JMenuBar implements ActionListener {
 		} else if ( e.getSource() == null/*miMitteluebertrag*/ ) {
 		} else if ( e.getSource() == miReportsLoglisteAnzeigen ) {
 			frame.addChild( new Reports(frame) );
-
+		} else if(e.getSource() == miInfoAnzeigen) {
+		    frame.addChild( new InfoFrame(frame) );
 		} else {																			//Mario: Änderung 01.09.2004
 			int i = 0;																		//
 			while ( i < miTmpRollen.length ) {												//

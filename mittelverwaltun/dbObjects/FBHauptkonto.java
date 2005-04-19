@@ -57,7 +57,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, 0.0f, false, false );
 		this.dispoLimit = dispo;
 		this.pruefung = pruefung;
-		this.unterkonten = null;
 	}
 	
 	/**
@@ -74,7 +73,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super( id, 0, inst, bez, haupt, unter, budget, 0.0f, false, false );
 		this.dispoLimit = dispo;
 		this.pruefung = null;
-		this.unterkonten = null;
 	}
 	
 	/**
@@ -88,7 +86,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super(  bez, inst, haupt, unter );
 		this.dispoLimit = 0.0f;
 		this.pruefung = null;
-		this.unterkonten = null;
 	}
 	
 	/**
@@ -101,7 +98,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super(id,  bez, inst, haupt, "0000" );
 		this.dispoLimit = 0.0f;
 		this.pruefung = null;
-		this.unterkonten = null;
 	}
 	/**
 	 * Konstruktor, zum Erzeugen von einem FBHauptkonto. 
@@ -121,7 +117,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, 0.0f, false, geloescht );
 		this.dispoLimit = dispo;
 		this.pruefung = pruefung;
-		this.unterkonten = null;
 	}
 	
 	/**
@@ -144,7 +139,6 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		super( id, haushaltsJahrID, inst, bez, haupt, unter, budget, vormerkungen, kleinbestellungen, geloescht );
 		this.dispoLimit = dispo;
 		this.pruefung = pruefung;
-		this.unterkonten = null;
 	}
 	
 	
@@ -383,6 +377,18 @@ public class FBHauptkonto extends FBUnterkonto implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Neuen Institut dem FBKonto zuweisen. 
+	 * @param institut = Neuer Wert für das Institut. 
+	 */
+	public void setInstitut(Institut institut) {
+		super.setInstitut(institut);	// Für das FBHauptkonto das Institut übernehmen
+		// Und anschließend für alle FBUnterkonten das Institut übernehmen
+		for(int i = 0; i < unterkonten.size(); i++)
+		    ((FBUnterkonto)unterkonten.get(i)).setInstitut(institut);
+	}
+
+	
 	public boolean getPortieren(){
 		return portieren;
 	}

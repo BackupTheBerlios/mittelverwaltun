@@ -492,7 +492,10 @@ public class ZVKonto implements Serializable {
 	 * @param titel = <code>ArrayList</code> mit den ZVTiteln die dem ZVKonto angehören.
 	 */
 	public void setSubTitel(ArrayList titel) {
-		this.titel = titel;
+	    if(titel == null)
+	        titel.clear();
+	    else
+	        this.titel = titel;
 	}
 
 	/**

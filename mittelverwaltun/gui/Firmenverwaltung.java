@@ -200,15 +200,24 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 		Firma firma = ((Firma)listModelFirmen.get( listFirmen.getSelectedIndex() ));
 		
 		this.tfFirma.setText( firma.getName() );
+		this.tfFirma.setCaretPosition(0);
 		this.tfStrasseNr.setText( firma.getStrasseNr() );
+		this.tfStrasseNr.setCaretPosition(0);
 		this.tfPLZ.setValue( firma.getPlz() );
+		this.tfPLZ.setCaretPosition(0);
 		this.tfOrt.setText( firma.getOrt() );
+		this.tfOrt.setCaretPosition(0);
 		this.tfKundenNr.setText( firma.getKundenNr() );
+		this.tfKundenNr.setCaretPosition(0);
 		this.tfTelNr.setText( firma.getTelNr() );
+		this.tfTelNr.setCaretPosition(0);
 		this.tfFaxNr.setText( firma.getFaxNr() );
+		this.tfFaxNr.setCaretPosition(0);
 		this.tfEMail.setText( firma.getEMail() );
+		this.tfEMail.setCaretPosition(0);
 		this.tfWWW.setText( firma.getWWW() );
-		if(firma.getASK())
+		this.tfWWW.setCaretPosition(0);
+		if(firma.getASK() || frame.getBenutzer().getSichtbarkeit() != Benutzer.VIEW_FACHBEREICH)
 			this.buLoeschen.setEnabled(false);
 		else
 			this.buLoeschen.setEnabled(true);
@@ -248,6 +257,10 @@ public class Firmenverwaltung extends JInternalFrame implements ActionListener, 
 					showFirma();
 				} else {		// Sonst werden nur die Felder gelöscht
 					clearTextFields();
+				}
+				// Man darf nichts löschen und nichts verändern, wenn man keine Fachbereichs-Sichtbarkeit hat
+				if(frame.getBenutzer().getSichtbarkeit() != Benutzer.VIEW_FACHBEREICH) {
+				    buAendern.setEnabled(false);
 				}
 			} catch ( ApplicationServerException e ) {
 				System.out.println( e.toString() );

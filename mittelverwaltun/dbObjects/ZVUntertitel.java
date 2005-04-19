@@ -5,7 +5,8 @@ import java.io.Serializable;
 
 /**
  * Die Klasse repräsentiert einen ZVUntertitel von einem <code>ZVTitel</code>. <br>
- * Ist genau einem <code>ZVTitel</code> zugeordnet. 
+ * Ist genau einem <code>ZVTitel</code> zugeordnet. <br>
+ * Ein Untertitel ist eine 2.stellige Nummer.
  * @author w.flat
  */
 public class ZVUntertitel implements Serializable {
@@ -424,7 +425,7 @@ public class ZVUntertitel implements Serializable {
 	}
 
 	/**
-	 * Neuen Titel dem ZVTitel zuweisen. 
+	 * Neuen Titel dem ZVUntertitel zuweisen. 
 	 * @param titel = Neuer Titel für den ZVUntertitel. 
 	 */
 	public void setTitel(String titel) {

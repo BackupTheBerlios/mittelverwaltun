@@ -7,7 +7,6 @@ import applicationServer.*;
 import dbObjects.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.rmi.*;
 
 /**
@@ -124,7 +123,13 @@ public class ZVKontenverwaltung extends JInternalFrame implements ActionListener
 		if( frame != null ) {
 			try {
 				treeKonten.delTree();
-				treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );
+				if(frame.getBenutzer().getSichtbarkeit() == Benutzer.VIEW_FACHBEREICH)
+				    treeKonten.loadZVKonten( frame.getApplicationServer().getZVKonten() );
+				else {
+				    buAendern.setEnabled(false);
+				    buAnlegen.setEnabled(false);
+				    buLoeschen.setEnabled(false);
+				}
 			} catch (ApplicationServerException e) {
 				System.out.println( e.toString() );
 			}
@@ -741,16 +746,14 @@ class RootPanel extends JPanel implements ActionListener {
 	public ZVKonto getNewZVKonto() {
 		ZVKonto zvKonto;
 		if( rbKapitelTGR.isSelected() ){
-			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), tfTGR.getText(), 0,
+			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), tfTGR.getText(), 0.0f,
 									Float.parseFloat( tfDispolimit.getValue().toString() ), checkZweckgebunden.isSelected(),
 									checkFreigegeben.isSelected() ? '1' : '0', (short)0, false, false );
 		} else {
-			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), "", 0,
+			zvKonto = new ZVKonto( 0, 0, tfBezeichnung.getText(), tfKapitel.getText(), "", 0.0f,
 									Float.parseFloat( tfDispolimit.getValue().toString() ), checkZweckgebunden.isSelected(),
 									checkFreigegeben.isSelected() ? '1' : '0', (short)0, false, false );
-			ArrayList temp = new ArrayList();
-			temp.add( new ZVTitel( 0, zvKonto, tfBezeichnung.getText(), tfTitel.getText(), "", 0, "", "" ) );
-			zvKonto.setSubTitel( temp );
+			zvKonto.getSubTitel().add( new ZVTitel( 0, zvKonto, tfBezeichnung.getText(), tfTitel.getText(), "", 0.0f, "", "" ) );
 		}
 		
 		return zvKonto;
@@ -977,7 +980,7 @@ class TGRZVKontoPanel extends JPanel implements ActionListener {
 		if( zvKonto == null )		// Es wurde kein ZVKonto angegeben
 			return null;
 		
-		return new ZVTitel( 0, zvKonto, tfBezeichnung.getText(), tfKategorie.getText() + tfTGR.getText(), "", 0,
+		return new ZVTitel( 0, zvKonto, tfBezeichnung.getText(), tfKategorie.getText() + tfTGR.getText(), "", 0.0f,
 						tfBemerkung.getText(),
 						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ) );
 	}
@@ -1351,7 +1354,7 @@ class TitelZVKontoTitelPanel extends JPanel implements ActionListener {
 		if( zvTitel == null )
 			return null;
 		return new ZVUntertitel( 0, zvTitel, tfBezeichnung.getText(), tfTitel.getText(), tfUntertitel.getText(),
-						0, 0, tfBemerkung.getText(),
+		        		0.0f, 0.0f, tfBemerkung.getText(),
 						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ),
 						false );
 	}
@@ -1763,7 +1766,7 @@ class TGRZVKontoTitelPanel extends JPanel implements ActionListener {
 			return null;
 		
 		return new ZVUntertitel( 0, zvTitel, tfBezeichnung.getText(), tfKategorie.getText() + tfTitelgruppe.getText(),
-						tfUntertitel.getText(),	0, 0, tfBemerkung.getText(),
+						tfUntertitel.getText(),	0.0f, 0.0f, tfBemerkung.getText(),
 						ZVTitel.getPruefung( checkPruefbedingung.isSelected(), rbBis.isSelected(), tfPruefbedingung.getValue() ), 
 						false );
 	}

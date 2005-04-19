@@ -1270,10 +1270,10 @@ public class Database implements Serializable {
 
 			ResultSet rs = statements.get(24).getGeneratedKeys();
 			
-	    if (rs.next()) {
-	        return rs.getInt(1);
-	    }else
-	        return 0;
+		    if (rs.next()) {
+		        return rs.getInt(1);
+		    }else
+		        return 0;
 		} catch (SQLException e){
 			throw new ApplicationServerException(101, e.getMessage());
 		}

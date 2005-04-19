@@ -468,6 +468,11 @@ public class ApplicationServer implements Serializable {
 		if( konto == null )		// Wenn kein Konto übergeben wurde
 			return 0;
 		try {
+		    FBUnterkonto copy = (FBUnterkonto)konto.clone();	// Feststellen ob das FBHauptkonto vom FBUnterkonto
+		    copy.setUnterkonto("0000");							// existiert
+		    if(db.existsFBKonto( copy ) <= 0)	// Wenn das FBHauptkonto nicht exisitiert
+		        throw new ApplicationServerException(44);
+		    
 			if( db.existsFBKonto( konto ) > 0 )		// Wenn ein FBUnterkonto bereits existiert
 				throw new ApplicationServerException( 19 );
 			
@@ -1023,8 +1028,12 @@ public class ApplicationServer implements Serializable {
 		if( zvTitel == null )		// Wenn kein ZVTitel
 			return 0;
 		try {
+		    if(zvTitel.getZVKonto().isTGRKonto()) {
+		        if(!zvTitel.getTGR().equals(zvTitel.getZVKonto().getTitelgruppe()))
+		            throw new ApplicationServerException(46);
+		    }
 			if( db.existsZVTitel( zvTitel ) > 0 )		// Wenn der ZVTitel bereits existiert
-				throw new ApplicationServerException( 11 );
+				throw new ApplicationServerException( 13 );
 			
 			int id = 0;
 			if( (id = db.existsDeleteZVTitel( zvTitel )) > 0 )	{	// Wenn ein gelöschtes ZVTitel exitiert, dann aktualisieren
@@ -1055,8 +1064,12 @@ public class ApplicationServer implements Serializable {
 		if( zvUntertitel == null )		// Wenn kein ZVUntertitel
 			return 0;
 		try {
+		    ZVUntertitel copy = (ZVUntertitel)zvUntertitel.clone();	// Nachschauen ob der ZVTitel 
+		    copy.setUntertitel("");									// vom ZVUntertitel existiert
+		    if(db.existsZVUntertitel(copy) <= 0)	// Der ZVTitel vom ZVUntertitel existiert nicht
+				throw new ApplicationServerException( 45 );
 			if( db.existsZVUntertitel( zvUntertitel ) > 0 )		// Wenn der ZVUntertitel bereits existiert
-				throw new ApplicationServerException( 11 );
+				throw new ApplicationServerException( 15 );
 			
 			int id = 0;
 			// Wenn ein gelöschtes ZVUntertitel exitiert, dann aktualisieren
@@ -1663,11 +1676,11 @@ public class ApplicationServer implements Serializable {
 	 */
 	public int addInstitute(Institut institut) throws ApplicationServerException {
 		try{
-			db.insertLog(0, "Institut (Id: " + institut.getId() + " hinzugefügt: \n" +
-											"Institut: " + institut );
-			
 			if(db.checkInstitute(institut) == 0){
-				return db.insertInstitute(institut);
+				int id = db.insertInstitute(institut);
+				db.insertLog(0, "Institut (Id: " + institut.getId() + " hinzugefügt: \n" +
+						"Institut: " + institut );
+				return id;
 			}else
 				throw new ApplicationServerException(4);
 		} catch(ApplicationServerException e) {
@@ -2229,10 +2242,10 @@ public class ApplicationServer implements Serializable {
 				db.selectForUpdateFirma( firma );	// Zum Aktualisieren auswählen
 				return db.updateFirma( firma );		// Aktualisieren
 			}
+			id = db.insertFirma( firma );			// Sonst neu erstellen
 			db.insertLog(0, "Firma (Id: " + firma.getId() + " hinzugefügt: \n" +
-											"Firma: " + firma );
-			
-			return db.insertFirma( firma );			// Sonst neu erstellen
+					"Firma: " + firma );
+			return id;
 		} catch(ApplicationServerException e) {
 			db.rollback();
 			throw e;
@@ -3206,6 +3219,7 @@ public class ApplicationServer implements Serializable {
 			return 0;
 		try {
 			bestellung.setPhase('3');
+			bestellung.setGeloescht(true);
 			db.selectForUpdateKleinbestellung(bestellung);	// Zum Aktualisieren auswählen
 			db.updateKleinbestellung(bestellung);		// Bestellung aktualisieren(löschen)
 			// Abfrage der Buchung zur Ermittlung der Beträge, die abgebucht wurden 

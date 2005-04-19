@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 
 /**
- * 
+ * Klasse zum Speichern einer Firma. <br>
+ * Diese Firmen werden für alle Arten von Bestellungen verwendet. 
  * @author w.flat
- * 17.10.2004
  */
 public class Firma implements Serializable {
 	

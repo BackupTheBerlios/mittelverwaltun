@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 /**
  * Die Klasse repräsentiert einen ZVTitel von einem <code>ZVKonto</code>. <br>
- * Ein ZVTitel kann mehrere <code>ZVUntertitel</code> haben und ist nur einem <code>ZVKonto</code> zugeordnet. 
+ * Ein ZVTitel kann mehrere <code>ZVUntertitel</code> haben und ist nur einem <code>ZVKonto</code> zugeordnet. <br>
+ * Ein Titel ist eine 5.stellige Nummer. <br>
+ * Der Untertitel beim ZVTitel ist immer leer.
  * @author w.flat
  */
 public class ZVTitel extends ZVUntertitel implements Serializable {
@@ -229,7 +231,21 @@ public class ZVTitel extends ZVUntertitel implements Serializable {
 	 * @param untertitel = Liste mit den ZVUntertiteln, die dem ZVTitel zugeordnet sind. 
 	 */
 	public void setSubUntertitel(ArrayList untertitel) {
-		this.untertitel = untertitel;
+	    if(untertitel == null)
+	        this.untertitel.clear();
+	    else
+	        this.untertitel = untertitel;
+	}
+	
+	/**
+	 * Neuen Titel dem ZVTitel zuweisen. 
+	 * @param titel = Neuer Titel für den ZVUntertitel. 
+	 */
+	public void setTitel(String titel) {
+		super.setTitel(titel);		// Zuerst für den ZVTitel übernehmen
+		// Danach für alle ZVUntertitel übernehmen
+		for(int i = 0; i < untertitel.size(); i++)
+		    ((ZVUntertitel)untertitel.get(i)).setTitel(titel);
 	}
 
 	public float getGesamtBudget(){

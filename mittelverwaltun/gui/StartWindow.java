@@ -198,6 +198,12 @@ public class StartWindow extends JFrame implements ActionListener {
 			dispose();
 			System.exit(0);
 		} else if(e.getSource() == butAnmelden) {		// Wenn der Anmelden-Button betätigt wurde
+			String error = setSettings();				// Überprüfung der Eingaben. 
+			if(error.length() > 0){
+				JOptionPane.showMessageDialog( this, "Folgende Fehler sidn aufgetreten :\n" + error, 
+														"Error !", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			// Wenn eines der TextFelder leer ist
 			if(tfBenutzername.getText().equals("") || tfPasswort.getPassword().length == 0){
 				JOptionPane.showMessageDialog(this, "Benutzername oder/und Passwort ist/sind leer !!!",
@@ -277,7 +283,7 @@ public class StartWindow extends JFrame implements ActionListener {
 		labDesigned.setText("Designed by :");
 		labDesigned.setBounds(new Rectangle(20, 145, 100, 16));
 		labHostname.setFont(new java.awt.Font("Dialog", 0, 11));
-		labHostname.setText("Hostbezeichnung des Servers :");
+		labHostname.setText("Host des Servers :");
 		labHostname.setBounds(new Rectangle(10, 20, 130, 15));
 		tfHostname.setFont(new java.awt.Font("Dialog", 0, 11));
 		tfHostname.setText(StartWindow.CLIENT_SERVER_HOST);

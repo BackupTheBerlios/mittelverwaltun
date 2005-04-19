@@ -30,7 +30,7 @@ public class Institut implements Serializable {
 	/**
 	 * Alle FBHauptkonten vom Institut. 
 	 */
-	private ArrayList hauptkonten;
+	private ArrayList hauptkonten = new ArrayList();
 
 	/**
 	 * Flag ob der Institut gelöcht ist oder nicht. 
@@ -56,7 +56,6 @@ public class Institut implements Serializable {
 		this.kostenstelle = kostenstelle;
 		this.institutsleiter = institutsleiter;
 		this.geloescht = geloescht;
-		this.hauptkonten = null;
 	}
 	
 	/**
@@ -72,7 +71,6 @@ public class Institut implements Serializable {
 		this.kostenstelle = kostenstelle;
 		this.institutsleiter = null;
 		this.geloescht = geloescht;
-		this.hauptkonten = null;
 	}
 
 	/**
@@ -87,7 +85,6 @@ public class Institut implements Serializable {
 		this.kostenstelle = kostenstelle;
 		this.institutsleiter = null;
 		this.geloescht = false;
-		this.hauptkonten = null;
 	}
 	
 	/**
@@ -103,7 +100,6 @@ public class Institut implements Serializable {
 		this.kostenstelle = kostenstelle;
 		this.institutsleiter = institutsleiter;
 		this.geloescht = false;
-		this.hauptkonten = null;
 	}
 
 	/**
@@ -117,7 +113,6 @@ public class Institut implements Serializable {
 		this.kostenstelle = kostenstelle;
 		this.institutsleiter = null;
 		this.geloescht = false;
-		this.hauptkonten = null;
 	}
 	
 	/**
@@ -141,6 +136,8 @@ public class Institut implements Serializable {
 	 * @param hauptkonten = Liste mit neuen Hauptkonten. 
 	 */
 	public void setHauptkonten(ArrayList hauptkonten) {
+		if(hauptkonten == null)
+			this.hauptkonten.clear();
 		this.hauptkonten = hauptkonten;
 	}
 
@@ -149,17 +146,12 @@ public class Institut implements Serializable {
 	 * @return true = Wenn die Institute gleich sind, sonst = false.
 	 */
 	public boolean equals(Object o){
-		if(o != null){
-			Institut inst = (Institut)o;
-			if( (id == inst.getId()) &&
-					((bezeichnung == null || inst.getBezeichnung() == null) ? true : bezeichnung.equals(inst.getBezeichnung())) &&
-					((kostenstelle == null || inst.getKostenstelle() == null) ? true : kostenstelle.equals(inst.getKostenstelle()))
-				)
-				return true;
-			else
-				return false;
-		} else
+		if(o == null)
 			return false;
+		if(!this.getClass().getName().equalsIgnoreCase(o.getClass().getName()))
+			return false;
+		
+		return this.getKostenstelle().equalsIgnoreCase(((Institut)o).getKostenstelle());
 	}
 
 	/**
@@ -207,6 +199,8 @@ public class Institut implements Serializable {
 	 * @param kostenstelle = Neue Institutsnummer. 
 	 */
 	public void setKostenstelle(String kostenstelle) {
+		if(kostenstelle == null)		return;		// Keine Kostenstelle angegeben
+		if(kostenstelle.length() != 6)	return;		// Kostenstelle falsches Format
 		this.kostenstelle = kostenstelle;
 	}
 

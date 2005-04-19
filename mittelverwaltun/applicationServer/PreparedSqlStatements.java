@@ -568,8 +568,7 @@ public class PreparedSqlStatements {
 										 "FROM Haushaltsjahre " +
 										"WHERE status = 0");
 			statements[i++] = new PreparedStatementWrapper(ps);
-		}
-		
+		}		
 		{//74 Fügt ein neues Haushaltsjahr ein
 			ps = con.prepareStatement(
 					"INSERT INTO Haushaltsjahre " +

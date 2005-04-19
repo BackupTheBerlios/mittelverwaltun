@@ -101,6 +101,9 @@ public class ApplicationServerException extends Exception {
 						"Es gibt Buchungen oder Bestellungen, die diesen ZVTitel/ZVUntertitel verwenden.";
 		messages[42] = "Application Server Error: Die Firma kann nicht gelöscht werden, " +							"da sie in Belegen oder Angeboten verwendet wird.";
 		messages[43] = "Application Server Error: Alte Buchung existiert nicht.";
+		messages[44] = "Application Server Error: FBHauptkonto vom FBUnterkonto existiert nicht.";
+		messages[45] = "Application Server Error: ZVTitel vom ZVUntertitel existiert nicht.";
+		messages[46] = "Application Server Error: Die Titelgruppe stimmt nicht überein [ZVKonto - ZVTitel].";
 
 //		Exception Ende WALDEMAR
 

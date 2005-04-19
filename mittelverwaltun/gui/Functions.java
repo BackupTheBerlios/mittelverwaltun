@@ -500,6 +500,20 @@ public class Functions {
 	}
 
 	/**
+	 * Laden der Datei "Information16.gif".
+	 * @param clazz = Class von einer Componente.
+	 * @return Das geladene ImageIcon.
+	 */
+	static public ImageIcon getInformationIcon(Class clazz){
+		try{
+		  Image img = Functions.loadImageResource("image","Information16.gif", clazz);
+		  if (img != null)
+			  return  new ImageIcon(img);
+	  }catch (IOException e){};
+		return null;
+	}
+
+	/**
 	 * Laden der Datei "Information24.gif".
 	 * @param clazz = Class von einer Componente.
 	 * @return Das geladene ImageIcon.

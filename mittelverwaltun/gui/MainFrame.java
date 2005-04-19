@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
-import java.rmi.*;
 
 import applicationServer.*;
 import dbObjects.Benutzer;
@@ -137,7 +136,11 @@ public class MainFrame extends JFrame {
 		if( centralServer != null && applicationServer != null ) {
 			try {
 				centralServer.delUser( applicationServer.getId() );
-			} catch(RemoteException e1) {
+			} catch(Exception e1) {
+			}
+			try {
+				centralServer.delUser( applicationServer.getId() );
+			} catch(Exception e1) {
 			}
 		}
 	   this.dispose();
