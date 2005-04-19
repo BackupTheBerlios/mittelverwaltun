@@ -3471,12 +3471,6 @@ public class ApplicationServer implements Serializable {
 			java.sql.Date date = new java.sql.Date(System.currentTimeMillis());
 			int newYear = db.insertHaushaltsjahr(date, '3');
 			
-			// Temporäre Tabllen anlegen
-			db.createAsSelectTempZvKontenTab(oldYear); 
-			db.createAsSelectTempZvKontentitelTab(oldYear); 
-			db.createAsSelectTempFbKontenTab(oldYear); 
-			db.createAsSelectTempKontenzuordnungTab(oldYear, newYear);
-			
 			// Tabellen sperren
 			// db.lockTablesForHaushaltsjahresabschluss();
 			
@@ -3525,14 +3519,18 @@ public class ApplicationServer implements Serializable {
 						
 			}
 			// 2. ZV-Konten portieren und ggf. Budgets übernehmen
+			db.createAsSelectTempZvKontenTab(oldYear);
+			db.createAsSelectTempZvKontentitelTab(oldYear);
 			int[] zvCnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
 			for (int i=0; i<zvCnts.length; i++)
 				cnts[3+i] = zvCnts[i];
 			// 3. FB-Konten portieren und ggf. Budgets übernehmen
+			db.createAsSelectTempFbKontenTab(oldYear);
 			int[] fbCnts = portFBKonten(user, fbAccounts, oldYear, newYear, false);
 			for (int i=0; i<fbCnts.length; i++)
 				cnts[7+i] = fbCnts[i];
 			// 4. Kontenzuordnungen portieren
+			db.createAsSelectTempKontenzuordnungTab(oldYear, newYear);
 			cnts[9] = portKontenzuordnungen(oldYear, newYear, false);
 			// 5. Bestellungen portieren
 			for (int i=0; i < orders.size(); i++){
@@ -3708,12 +3706,12 @@ public class ApplicationServer implements Serializable {
 					
 				}else if (acc.isPortiert()){// Struktur muss portiert werden
 					// Portiere Konto
-					int newAccId = db.insertAsSelectZvKonto(acc.getId(), newYear, acc.getUebernahmeStatus() == 2);
+					int newAccId = db.insertAsSelectZvKonto(acc.getId(), newYear, (acc.getUebernahmeStatus() == 2) && (acc.isAbgeschlossen()));
 					cnts[0]++;
 					// Portiere Kontentitel
-					cnts[1] += db.insertAsSelectZvKontentitel(newAccId, acc.getId(), acc.getUebernahmeStatus() == 2);
+					cnts[1] += db.insertAsSelectZvKontentitel(newAccId, acc.getId(), (acc.getUebernahmeStatus() == 2) && (acc.isAbgeschlossen()));
 					// Ggf. setze Übernahmestatus und führe Buchungen durch
-					if (acc.getUebernahmeStatus() == 2){
+					if ((acc.getUebernahmeStatus() == 2) && (acc.isAbgeschlossen())){
 						// Buchung Titelgruppenbudgetübernahme
 						if (acc.getTgrBudget() > 0)	bucheZVMitteluebernahme(user, new ZVKonto(acc.getId()),new ZVKonto(newAccId), acc.getTgrBudget());
 						// Buchungen ZV-Titelbudgetübernahme
