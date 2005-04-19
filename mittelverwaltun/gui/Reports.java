@@ -541,14 +541,17 @@ public class Reports extends JInternalFrame implements ActionListener, ItemListe
 
 	private void showReport(){
 		try {
-			java.util.Date vonUtil = (java.util.Date)tfDatumVon.getValue();
+		  GregorianCalendar cal = new GregorianCalendar();
+		
+		  java.util.Date vonUtil = (java.util.Date)tfDatumVon.getValue();
+		  
 			Date von = new Date(vonUtil.getTime());
-
+			
 			java.util.Date bisUtil = (java.util.Date)tfDatumBis.getValue();
 
-			GregorianCalendar cal = new GregorianCalendar();
 			cal.setTime(bisUtil);
 			cal.add(GregorianCalendar.DATE, 1);
+			cal.add(GregorianCalendar.MINUTE, -1);
 			Date bis = new Date(cal.getTimeInMillis());
 
 			if(cbReportFilter.getSelectedItem() == "Report_1"){

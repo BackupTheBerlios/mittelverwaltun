@@ -1381,7 +1381,7 @@ public class PreparedSqlStatements {
 										  "AND zk.geloescht = \"0\" " +
 										  "AND zk.haushaltsjahrid = h.id " +
 										  "AND h.status = '0' " +
-										"GROUP BY k.id");
+										"GROUP BY zk.id");
 			statements[i++] = new PreparedStatementWrapper(ps);
 		}
 		{//162
@@ -1392,7 +1392,7 @@ public class PreparedSqlStatements {
 										 // "AND k.zweckgebunden = \"0\" " +
 										  "AND zt.geloescht = \"0\" " +
 										  "AND zk.geloescht = \"0\" " +
-										"GROUP BY k.id");
+										"GROUP BY zk.id");
 			int[] param = {Types.INTEGER};
 			statements[i++] = new PreparedStatementWrapper(ps, param);
 		}
@@ -2864,7 +2864,10 @@ public class PreparedSqlStatements {
 																		"zk.bezeichnung AS zvKonto, " +
 																		"i.bezeichnung AS institut, " +
 																		"SUM(COALESCE(bu.betragFbKonto1,0)) AS ausgaben, " +
-																		"( SELECT SUM(budget) " +																			"FROM FBKonten " +																			"WHERE institutsId = i.id " +																			"AND geloescht = '0') AS kontostand " +
+																		"( SELECT SUM(FBKonten.budget) " +																			"FROM FBKonten, Haushaltsjahre " +																			"WHERE FBKonten.institutsId = i.id " +
+																				"AND FBKonten.haushaltsjahrId = h.id " +
+																				"AND Haushaltsjahre.status = 0 " +																				"AND FBKonten.geloescht = '0'" +
+																		") AS kontostand " +
 																"FROM " +
 																	"ZVKontentitel zt, ZVKonten zk, " +
 																	"Institute i, FBKonten fk, Haushaltsjahre h " +																"LEFT JOIN Buchungen bu " +																	"ON bu.typ > 8 " +
