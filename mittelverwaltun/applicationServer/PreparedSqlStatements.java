@@ -2679,7 +2679,7 @@ public class PreparedSqlStatements {
 						   "AND zk1.geloescht = '0' " +
 						   "AND zk2.geloescht = '0' " +
 					    "UNION " +
-						"SELECT zk2.id zvkontoid, f2.id fbkontoid, kz.status " +
+						"SELECT zk2.id zvkontoid, fk2.id fbkontoid, kz.status " +
 						  "FROM kontenzuordnung kz, " +
 						       "zvkonten zk1, zvkontentitel zt1, " +
 							   "zvkonten zk2, zvkontentitel zt2, " +
