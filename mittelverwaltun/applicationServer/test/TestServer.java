@@ -496,13 +496,6 @@ public class TestServer extends TestCase {
 		assertTrue("Betrag auf FBHauptkonto bei ASK-Bestellung abwickeln", haupt1.getBudget() == 950.0f);
 		assertTrue("Betrag auf FBUnterkonto bei ASK-Bestellung abwickeln", unter1.getBudget() == 1300.0f);
 		
-		
-//		try {
-//			applicationServer.delUser(ben1);
-//		} catch(Exception e) { exc = e; fail("Erfolgreich einen Benutzer löschen."); }
-		/**
-		 * 
-		 */
 	}
 	
 	/**

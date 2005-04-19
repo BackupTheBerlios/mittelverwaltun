@@ -39,7 +39,6 @@ public class InfoFrame extends JInternalFrame implements ActionListener {
         }
 		setLocation((frame.getWidth() - WIDTH) / 2, (frame.getHeight()- HEIGHT)/2);
 		this.setSize( WIDTH, HEIGHT );
-		this.setVisible(true);
     }
     
     /**

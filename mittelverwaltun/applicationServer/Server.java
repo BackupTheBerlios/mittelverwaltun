@@ -107,7 +107,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	public Server(){
 		super("FB-Mittelverwaltung Server");
 		try {
-		  restoreFiles();
+			restoreFiles();
 			jbInit();
 			initSysTray();
 			loadXMLFile();
@@ -221,10 +221,17 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			error += " - Es wurde kein DB-Treiber eingegeben.\n";
 		if(tfServerName.getText().length() == 0)
 			error += " - Es wurde kein Servername eingegeben.\n";
-		if(CentralServerImpl.CENTRAL_CLASSPATH.length() == 0)
-			error += " - Der CLASSPATH wurde nicht gefunden.\n";
-		if(CentralServerImpl.CENTRAL_RMI.length() == 0)
-			error += " - RMI-Registry wurde nicht ausgewählt.\n";
+		
+		String temp = setRmiClaspath(tfRMIRegistry.getText());
+		
+		if(temp.length() == 0) {
+			if(CentralServerImpl.CENTRAL_CLASSPATH.length() == 0)
+				error += " - Der CLASSPATH wurde nicht gefunden.\n";
+			if(CentralServerImpl.CENTRAL_RMI.length() == 0)
+				error += " - RMI-Registry wurde nicht ausgewählt.\n";
+		} else {
+			error += temp;
+		}
 		
 		return error;
 	}
@@ -436,12 +443,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					JOptionPane.showMessageDialog( this, "Fehler beim Öffnen der Datei.", "Error !", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				String error = setRmiClaspath(tempFile.getAbsolutePath());
-				if(error.length() > 0) {
-					JOptionPane.showMessageDialog( this, "Folgender Fehler ist aufgetreten: \n" + error, 
-														"Error !", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+//				String error = setRmiClaspath(tempFile.getAbsolutePath());
+//				if(error.length() > 0) {
+//					JOptionPane.showMessageDialog( this, "Folgender Fehler ist aufgetreten: \n" + error, 
+//														"Error !", JOptionPane.ERROR_MESSAGE);
+//					return;
+//				}
 				tfRMIRegistry.setText(tempFile.getAbsolutePath());
 			}
 		} else if(e.getSource() == butSave) {

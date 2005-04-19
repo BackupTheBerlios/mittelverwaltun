@@ -138,6 +138,51 @@ public class MainMenu extends JMenuBar implements ActionListener {
 			miBestellungenAnzeigen.setIcon(Functions.getPasteIcon(this.getClass()));
 			miBestellungenAnzeigen.addActionListener(this);
 						
+			// Das Menü "Verwaltung"
+			add( menuVerwaltung );
+				menuVerwaltung.add( miBenutzer );
+				activityRelItems.add( miBenutzer );
+				miBenutzer.addActionListener( this );
+				miBenutzer.setIcon(Functions.getUserIcon(this.getClass()));
+				menuVerwaltung.add( miRollen );
+				activityRelItems.add( miRollen );
+				miRollen.addActionListener( this );
+				miRollen.setIcon(Functions.getRoleIcon(this.getClass()));
+				menuVerwaltung.add( miFirmen );
+				activityRelItems.add( miFirmen );
+				miFirmen.addActionListener( this );
+				menuVerwaltung.add( menuKonten );
+					menuKonten.setIcon(Functions.getAccountIcon(this.getClass()));
+				    menuKonten.add( miZVKonten );
+					activityRelItems.add( miZVKonten );
+					miZVKonten.addActionListener( this );
+					miZVKonten.setIcon(Functions.getAccountIcon(this.getClass()));
+					menuKonten.add( miFBKonten );
+					activityRelItems.add( miFBKonten );
+					miFBKonten.addActionListener( this );
+					miFBKonten.setIcon(Functions.getAccountIcon(this.getClass()));
+					menuKonten.add( miZuordnung );
+					activityRelItems.add( miZuordnung );
+					miZuordnung.addActionListener( this );
+				menuVerwaltung.add( miFachbereiche );
+				activityRelItems.add( miFachbereiche );
+				miFachbereiche.addActionListener( this );
+				miFachbereiche.setIcon(Functions.getFachbereichIcon(this.getClass()));
+				menuVerwaltung.add( miInstitute );
+				activityRelItems.add( miInstitute );
+				miInstitute.addActionListener( this );
+				miInstitute.setIcon(Functions.getInstituteIcon(this.getClass()));
+				menuVerwaltung.add( menuHaushaltsjahr );
+					menuHaushaltsjahr.setIcon(Functions.getCalendarIcon(this.getClass()));
+					miAnzeigen.setIcon(Functions.getCalendarIcon(this.getClass()));
+					menuHaushaltsjahr.add( miAnzeigen );
+					activityRelItems.add( miAnzeigen );
+					miAnzeigen.addActionListener( this );
+					miAbschliessen.setIcon(Functions.getKeyIcon(this.getClass()));
+					menuHaushaltsjahr.add( miAbschliessen );
+					activityRelItems.add( miAbschliessen );
+					miAbschliessen.addActionListener( this );
+
 		// Das Menü "Mittelverwaltung"
 		add( menuMittelverwaltung );
 			menuMittelverwaltung.add( menuZenralverwaltung );
@@ -157,53 +202,7 @@ public class MainMenu extends JMenuBar implements ActionListener {
 				menuFachbereichsintern.add( miFBKontenUmbuchen );
 				activityRelItems.add( miFBKontenUmbuchen );
 				miFBKontenUmbuchen.addActionListener( this );	
-						
-			
-		// Das Menü "Verwaltung"
-		add( menuVerwaltung );
-			menuVerwaltung.add( miBenutzer );
-			activityRelItems.add( miBenutzer );
-			miBenutzer.addActionListener( this );
-			miBenutzer.setIcon(Functions.getUserIcon(this.getClass()));
-			menuVerwaltung.add( miRollen );
-			activityRelItems.add( miRollen );
-			miRollen.addActionListener( this );
-			miRollen.setIcon(Functions.getRoleIcon(this.getClass()));
-			menuVerwaltung.add( miFirmen );
-			activityRelItems.add( miFirmen );
-			miFirmen.addActionListener( this );
-			menuVerwaltung.add( menuKonten );
-				menuKonten.setIcon(Functions.getAccountIcon(this.getClass()));
-			    menuKonten.add( miZVKonten );
-				activityRelItems.add( miZVKonten );
-				miZVKonten.addActionListener( this );
-				miZVKonten.setIcon(Functions.getAccountIcon(this.getClass()));
-				menuKonten.add( miFBKonten );
-				activityRelItems.add( miFBKonten );
-				miFBKonten.addActionListener( this );
-				miFBKonten.setIcon(Functions.getAccountIcon(this.getClass()));
-				menuKonten.add( miZuordnung );
-				activityRelItems.add( miZuordnung );
-				miZuordnung.addActionListener( this );
-			menuVerwaltung.add( miFachbereiche );
-			activityRelItems.add( miFachbereiche );
-			miFachbereiche.addActionListener( this );
-			miFachbereiche.setIcon(Functions.getFachbereichIcon(this.getClass()));
-			menuVerwaltung.add( miInstitute );
-			activityRelItems.add( miInstitute );
-			miInstitute.addActionListener( this );
-			miInstitute.setIcon(Functions.getInstituteIcon(this.getClass()));
-			menuVerwaltung.add( menuHaushaltsjahr );
-				menuHaushaltsjahr.setIcon(Functions.getCalendarIcon(this.getClass()));
-				miAnzeigen.setIcon(Functions.getCalendarIcon(this.getClass()));
-				menuHaushaltsjahr.add( miAnzeigen );
-				activityRelItems.add( miAnzeigen );
-				miAnzeigen.addActionListener( this );
-				miAbschliessen.setIcon(Functions.getKeyIcon(this.getClass()));
-				menuHaushaltsjahr.add( miAbschliessen );
-				activityRelItems.add( miAbschliessen );
-				miAbschliessen.addActionListener( this );
-			
+	
 		// Das Menü "Reporting"
 		add( menuReporting );
 			menuReporting.add( miReportsLoglisteAnzeigen );

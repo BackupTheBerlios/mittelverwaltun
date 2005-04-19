@@ -246,7 +246,7 @@ public class StartWindow extends JFrame implements ActionListener {
 		} else if(e.getSource() == butSave) {
 			String error = setSettings();
 			if(error.length() > 0){
-				JOptionPane.showMessageDialog( this, "Folgende Fehler sidn aufgetreten :\n" + error, 
+				JOptionPane.showMessageDialog( this, "Folgende Fehler sind aufgetreten :\n" + error, 
 														"Error !", JOptionPane.ERROR_MESSAGE);
 			} else {
 				saveXMLFile();
