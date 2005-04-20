@@ -26,7 +26,7 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * stellt eine Verbindung zur Datenbank her mit dem benutzernamen
+	 * stellt eine Verbindung zur Datenbank her mit dem übergebenen Benutzernamen
 	 * @param user - benutzername
 	 * @throws ConnectionException
 	 * author Mario
@@ -42,8 +42,6 @@ public class Database implements Serializable {
 			System.out.println("Set autocommit = false...");
 			con.setAutoCommit(false);
 			System.out.println("Done.");
-//			System.out.println("Set transaction_isolation_level = repeatable_read...");
-//			con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
 			System.out.println("Set transaction_isolation_level = read_committed...");
 			con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			System.out.println("Done.");
@@ -68,7 +66,6 @@ public class Database implements Serializable {
 		try {
 			System.out.println("Release SQL-Statements...");
 			statements.release();
-//			releaseStatements();
 			System.out.println("Done.");
 			System.out.println("Disconnect database...");
 			con.close();
@@ -83,7 +80,7 @@ public class Database implements Serializable {
 	 * Abfrage aller (nicht abgeschlossenen) FBHauptkonten eines Haushaltsjahres
 	 * @return Array mit den ermittelten Hauptkonten (inkl. Unterkonten und Institut)
 	 * @throws ApplicationServerException
-	 * author m.schmitt
+	 * author Mario
 	 */
 	public ArrayList selectOffeneFBHauptkonten( int haushaltsjahr ) throws ApplicationServerException {
 		ArrayList konten = new ArrayList();	// Liste mit den Hauptkonten
@@ -816,7 +813,7 @@ public class Database implements Serializable {
 	/**
 	 * gibt alle ID der Aktivitäten einer Rolle zurück
 	 * @param rollenId - Id der Rolle
-	 * @return int-Array mit allen Id´s der Aktivitäten
+	 * @return int-Array mit allen Ids der Aktivitäten
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -1369,80 +1366,6 @@ public class Database implements Serializable {
 			
 		}
 	}
-	
-	
-//	public void setAutoCommit(boolean commit) throws ApplicationServerException{
-//		try{
-//			if(commit)
-//				statements.get(5).executeQuery();
-//			else
-//				statements.get(3).executeQuery();
-//		} catch (SQLException e){
-//			System.out.println(e.getMessage());
-//			throw new ApplicationServerException(1, e.getMessage());
-//		}
-//	}
-
-	/**
-	 * gibt das aktuelle Haushaltsjahr zurück
-	 * @throws ApplicationServerException
-	 */
-//	public Haushaltsjahr selectHaushaltsjahr() throws ApplicationServerException{
-//		Haushaltsjahr hhj;
-//		try{
-//			ResultSet rs = statements.get(70).executeQuery();
-//			rs.last();
-//			int count = rs.getRow();
-//			rs.beforeFirst();
-//			rs.next();
-//			if (count > 0){
-//				return new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
-//			}else{
-//				throw new ApplicationServerException(6);
-//			}
-//		} catch (SQLException e){
-//			throw new ApplicationServerException(132, e.getMessage());
-//		}
-//	}
-
-	/**
-	 * gibt das aktuelle Haushaltsjahr zurück, d.h. wenn status = 0
-	 * danach wird das Haushaltsjahr vor einer Aktualisierung für andere
-	 * Benutzer gesperrt (SELECT FOR UPDATE).
-	 * @return	Haushaltsjahr
-	 * @throws ApplicationServerException
-	 */
-//	public Haushaltsjahr selectForUpdateHaushaltsjahr() throws ApplicationServerException{
-//		Haushaltsjahr hhj = null;
-//
-//		try{
-//			ResultSet rs = statements.get(70).executeQuery();
-//			if(rs.next())
-//				hhj = new Haushaltsjahr(rs.getString(1), rs.getString(2), rs.getString(3));
-//		} catch (SQLException e){
-//			throw new ApplicationServerException(133, e.getMessage());
-//		}
-//		return hhj;
-//	}
-
-	/**
-	 * aktualisiert das Haushaltsjahr
-	 * @param hhj
-	 * @throws ApplicationServerException
-	 */
-//	public void updateHaushaltsjahr(Haushaltsjahr hhj) throws ApplicationServerException{
-//		if(hhj != null){
-//			try{
-//				Object[] parameters = {hhj.getBeschreibung(), hhj.getVon(), hhj.getBis()};
-//
-//				if(statements.get(71).executeUpdate(parameters) == 0)
-//					throw new ApplicationServerException(6);
-//
-//			} catch (SQLException e){
-//				throw new ApplicationServerException(134, e.getMessage());
-//			}
-//		}
-//	}
 	
 	/**
 	 * Abfrage der HaushaltsjahrId vom aktuellem Jahr
@@ -4434,6 +4357,15 @@ public class Database implements Serializable {
 		}
 	}
 	
+	/**
+	 * Ermittelt die Summe des Anteils am Titelgruppenbudget eines ZV-Kontos,
+	 * der _nicht_ bereits durch Vormerkungen auf einem zugehörigen ZV-Titel, die nicht durch das
+	 * Titelbudget gedeckt sind, gesperrt/verplant/ausgegeben ist.
+	 * @param zvKontoID: ID des ZV-kontos
+	 * @return Summe des verfügbaren Titelgruppenbudgets
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */	
 	public float getAvailableTgrBudget(int zvKontoID) throws ApplicationServerException{
 		float budget = 0.00f;
 		
@@ -4451,6 +4383,14 @@ public class Database implements Serializable {
 		return budget;
 	}
 
+	/**
+	 * Ermittelt die Summe der Ausgaben einer Bestellung die von der Titelgruppe
+	 * des der Bestellung zugeordneten ZV-Titels bestritten wurden
+	 * @param orderID: ID der Bestellung
+	 * @return Summe der Titelgruppenbuchungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public float getTgrExpensesForOrder (int orderID) throws ApplicationServerException{
 		float expenses = 0.00f;
 		
@@ -4468,6 +4408,17 @@ public class Database implements Serializable {
 		return expenses;
 	}
 	
+	/**
+	 * Aktualisiert die Kontenstände eines ZV-Kontos / FB-Kontos 
+	 * => Begleichen eine Bestellung
+	 * @param titel: zu bebuchender ZV-(Unter)titel
+	 * @param tgrEntry: Buchung auf Titelgruppe
+	 * @param titelEntry: Buchung auf Titel
+	 * @param konto: FB-Haupt- oder -Unterkonto
+	 * @param accEntry: Buchung auf Konto
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void updateAccountStates(ZVUntertitel titel, float tgrEntry, float titelEntry, FBUnterkonto konto, float accEntry) throws ApplicationServerException{
 		int zvKontoID;
 		if(titel instanceof ZVTitel)
@@ -4868,8 +4819,8 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Portiert die ZVKontentitel eines bestimmten Haushaltsjahres in eine temporäre Tabelle
-	 * @param haushaltsjahr = ID
+	 * Kopiert die ZVKontentitel eines bestimmten Haushaltsjahres in eine temporäre Tabelle
+	 * @param haushaltsjahr: ID des Haushaltsjahres
 	 * @throws ApplicationServerException
 	 */
 	public void createAsSelectTempZvKontentitelTab (int haushaltsjahr) throws ApplicationServerException{
@@ -4882,6 +4833,13 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Ermittelt, ob ein ZV-Konto bereits ins aktuelle Haushaltsjahr portiert wurde 
+	 * @param id: ID des ZV-Kontos in vergangenem Haushaltsjahr
+	 * @return true | false
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public boolean existsPortedZvAccount(int id) throws ApplicationServerException{
 		try{
 			// Parameter für das SQL-Statement festlegen
@@ -4897,7 +4855,17 @@ public class Database implements Serializable {
 		}
 	
 	}
-	
+
+	/**
+	 * Portiert ein ZV-Konto innerhalb eines Haushaltsjahresabschlusses
+	 * Voraussetzung: temporäre ZV-Kontentabelle
+	 * @param acc: bisherige ID des ZV-Kontos
+	 * @param year: ID des neuen Haushaltsjahres
+	 * @param wBudget: Budgetübernahme?
+	 * @return neue ID des ZV-Kontos
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectZvKonto (int acc, int year, boolean wBudget) throws ApplicationServerException{
 		try{
 			PreparedStatementWrapper ps;
@@ -4921,6 +4889,16 @@ public class Database implements Serializable {
 	   }
 	}
 
+	/**
+	 * Portiert die Titel eines ZV-Kontos im Rahmen eines Haushaltsjahresabschlusses
+	 * Voraussetzung: Temporäre ZV-Kontentiteltabelle
+	 * @param newAccID: neue ID des ZV-Kontos
+	 * @param oldAccID: bisherige ID des ZV-Kontos
+	 * @param wBudget: Budgetübernahme?
+	 * @return: Anzahl portierter ZV-Titel
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectZvKontentitel (int newAccID, int oldAccID, boolean wBudget) throws ApplicationServerException{
 		try{
 			PreparedStatementWrapper ps;
@@ -4938,7 +4916,11 @@ public class Database implements Serializable {
 	   }
 	}
 	
-	
+	/**
+	 * Löscht temporäre ZV-Kontentabelle
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void dropTmpZvKontenTab () throws ApplicationServerException{
 		try{
 			
@@ -4949,6 +4931,11 @@ public class Database implements Serializable {
 	   }		
 	}
 	
+	/**
+	 * Löscht temporäre ZV-Kontentiteltabelle
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void dropTmpZvKontentitelTab () throws ApplicationServerException{
 		try{
 			
@@ -4958,7 +4945,18 @@ public class Database implements Serializable {
 		   throw new ApplicationServerException(170, e.getMessage());
 	   }		
 	}
+
 	
+	/**
+	 * Übernimmt (nachträglich) das Budget der ZV-Kontentiteln eines bereits portierten ZV-Kontos
+	 * @param b: angemeldeter Benutzer
+	 * @param oldAccID: Alte ID des ZV-Kontos
+	 * @param newAccID: Neue ID des ZV-Kontos
+	 * @return Summe des Budgets das nicht übernommen werden konnte,
+	 *         weil Titel des Kontos zwischenzeitlich gelöscht wurden.
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public float updateZvTitelBudgetTakeovers (Benutzer b, int oldAccID, int newAccID) throws ApplicationServerException{
 		try{
 			float budget = 0.0f; 
@@ -4994,6 +4992,13 @@ public class Database implements Serializable {
 		}	
 	}
 
+	/**
+	 * Aktualisiert das Titelgruppenbudget eines ZV-Kontos
+	 * @param accID: ID des ZV-Kontos
+	 * @param budget: Titelgruppenbudget
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void updateZvTgrBudget (int accID, float budget) throws ApplicationServerException{
 		try{
 						
@@ -5006,9 +5011,10 @@ public class Database implements Serializable {
 	}
 
 	/**
-	 * Portiert die FBKonten eines bestimmten Haushaltsjahres in eine temporäre Tabelle
-	 * @param haushaltsjahr = ID
+	 * Erstellt eine temporäre Tabelle mit den FB-Konten eines Haushaltsjahres
+	 * @param haushaltsjahr: ID des Haushaltsjahres
 	 * @throws ApplicationServerException
+	 * author Mario
 	 */
 	public void createAsSelectTempFbKontenTab (int haushaltsjahr) throws ApplicationServerException{
 		try{
@@ -5020,6 +5026,11 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Löscht temporäre FB-Kontentabelle (=> Haushaltsjahresabschluss)
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void dropTmpFbKontenTab () throws ApplicationServerException{
 		try{
 			
@@ -5030,6 +5041,16 @@ public class Database implements Serializable {
 	   }		
 	}
 
+	/**
+	 * Portiert ein FB-Hauptkonto inklusive seiner Unterkonten innerhalb eines Haushaltsjahresabschlusses  
+	 * Voraussetzung: Temporäre FB-Kontentabelle
+	 * @param acc: ID des Hauptkontos
+	 * @param year: ID des neuen Haushaltsjahres
+	 * @param wBudget: Budgetübernahme
+	 * @return neue Hauptkonto-ID
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectFbKonto (int acc, int year, boolean wBudget) throws ApplicationServerException{
 		try{
 			PreparedStatementWrapper ps;
@@ -5162,6 +5183,14 @@ public class Database implements Serializable {
 		return tmpRolle;
 	}
 
+	/**
+	 * Erstellt temporär eine Kontenzuordnungstabelle (=> Haushaltsjahresabschluss)  
+	 * Voraussetzung: ZV-Konten und FB-Konten müssen bereits portiert sein
+	 * @param oldYear: ID des vergangenen Haushaltsjahres
+	 * @param newYear: ID des neuen Haushaltsjahres
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void createAsSelectTempKontenzuordnungTab (int oldYear, int newYear) throws ApplicationServerException{
 		try{
 			Object[] parameters = {new Integer (oldYear), new Integer (newYear), new Integer (oldYear), new Integer (newYear) };
@@ -5172,6 +5201,11 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Löscht temporäre Kontenzuordnungstabelle
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void dropTmpKontenzuordnungTab () throws ApplicationServerException{
 		try{
 			
@@ -5182,6 +5216,13 @@ public class Database implements Serializable {
 	   }		
 	}
 
+	/**
+	 * Portiert die Kontenzuordnungen innerhalb eines Haushaltsjahresabschlusses  
+	 * Voraussetzung: Temporäre Kontenzuordnungstabelle
+	 * @return Anzahl portierterKontenzuordnungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectKontenzuordnungen () throws ApplicationServerException{
 		try{
 			
@@ -5192,6 +5233,14 @@ public class Database implements Serializable {
 	   }		
 	}
 
+	/**
+	 * Ermittelt die ID eines ZV-Titels in einem Haushaltsjahr 
+	 * @param acc: ID des ZV-Titels im aktuellen Haushaltsjahr
+	 * @param year: ID des zu untersuchenden Haushaltsjahres
+	 * @return ID des Titels im übergebenen Haushaltsjahr
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int selectZvTitelIdInYear (int title, int year) throws ApplicationServerException{
 		try{
 			
@@ -5210,7 +5259,15 @@ public class Database implements Serializable {
 		   throw new ApplicationServerException(181, e.getMessage());
 	   }		
 	}
-	
+
+	/**
+	 * Ermittelt die ID eines FB-Kontos in einem Haushaltsjahr 
+	 * @param acc: ID des FB-Kontos im aktuellen Haushaltsjahr
+	 * @param year: ID des zu untersuchenden Haushaltsjahres
+	 * @return ID des Kontos im übergebenen Haushaltsjahr
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int selectFbKontoIdInYear (int acc, int year) throws ApplicationServerException{
 		try{
 			
@@ -5230,6 +5287,15 @@ public class Database implements Serializable {
 	   }		
 	}
 
+	/**
+	 * Aktualisiert ZV-Titel und FB-Konto einer Bestellung (=> Haushaltsjahresabschluss)
+	 * @param order: ID der zu aktualisierenden Bestellung
+	 * @param zvAcc: ID des neuen ZV-Titels
+	 * @param fbAcc: ID des neuen FB-Kontos  
+	 * @return Anzahl aktualisierter Datensätze
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int updateOrderAccounts (int order, int zvAcc, int fbAcc) throws ApplicationServerException{
 		try{
 			
@@ -5241,6 +5307,14 @@ public class Database implements Serializable {
 	   }				
 	}
 
+	/**
+	 * Fügt ein neues Haushaltsjahr in der Datenbank ein
+	 * @param beginn: Kick-off-Datum des Haushaltsjahres
+	 * @param status: Status des Haushaltsjahres  
+	 * @return ID des Haushaltsjahres
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertHaushaltsjahr (java.sql.Date beginn, char status) throws ApplicationServerException{
 		
 		try {
@@ -5258,7 +5332,15 @@ public class Database implements Serializable {
 		}
 		
 	}
-	
+
+	/**
+	 * Setzt den Status eines Haushaltsjahres
+	 * @param id: ID des Haushaltsjahres
+	 * @param status: Status des Haushaltsjahres  
+	 * @return Anzahl aktualisierter Datensätze
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int updateHaushaltsjahrStatus (int id, char status) throws ApplicationServerException{
 		try {
 			Object[] parameters = {""+status, new Integer(id)};
@@ -5268,6 +5350,14 @@ public class Database implements Serializable {
 		}
 	}
 
+	/**
+	 * Setzt das Abschlussdatum eines Haushaltsjahres
+	 * @param id: ID des Haushaltsjahres
+	 * @param ende: Abschlussdatum  
+	 * @return Anzahl aktualisierter Datensätze
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int updateHaushaltsjahrEnde (int id, java.sql.Date ende) throws ApplicationServerException{
 		try {
 			Object[] parameters = {ende, new Integer(id)};
@@ -5276,7 +5366,13 @@ public class Database implements Serializable {
 			throw new ApplicationServerException(186, e.getMessage());
 		}
 	}
-	
+
+	/**
+	 * Ermittelt alle im System vorhandenen Haushaltsjahre  
+	 * @return Liste von Haushaltsjahren
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public ArrayList selectHaushaltsjahre() throws ApplicationServerException{
 		try {
 			ArrayList years = new ArrayList();
@@ -5297,6 +5393,17 @@ public class Database implements Serializable {
 		}		
 	}
 	
+	/**
+	 * Aktualisiert alle Buchungen einer im Rahmen eines Haushaltsjahresabschlusses portierten Bestellung  
+	 * @param order: ID der portierten Bestellung
+	 * @param oldTitle: bisherige ID des ZV-Titels
+	 * @param newTitle: neue ID des ZV-Titels
+	 * @param newAcc: bisherige ID des FB-Kontos
+	 * @param newAcc: neue ID des FB-Kontos
+	 * @return Anzahl aktualisierter Buchungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int updateBestellungsbuchungen (int order, int oldTitle, int newTitle, int oldAcc, int newAcc) throws ApplicationServerException{
 		try{
 		
@@ -5312,6 +5419,16 @@ public class Database implements Serializable {
 		}
 	}
 	
+	/**
+	 * Trägt alle Buchungen für Mittelübernahmen von ZV-Kontentiteln im Rahmen des
+	 * Haushaltsjahresabschlusses in die Buchungstabelle ein  
+	 * @param user: angemeldeter Benutzer
+	 * @param oldAcc: alte ID des portierten ZV-Kontos
+	 * @param newAcc: neue ID des portierten ZV-Kontos
+	 * @return Anzahl eingefügter Buchungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectBuchungenZvTitelMitteluebernahme(Benutzer user, int oldAcc, int newAcc) throws ApplicationServerException{
 		try{
 			Object[] parameters = {new Timestamp(System.currentTimeMillis()), new Integer(user.getId()), new Integer(oldAcc), new Integer(newAcc)};
@@ -5321,6 +5438,16 @@ public class Database implements Serializable {
 		}		
 	}
 
+	/**
+	 * Trägt alle Buchungen für Mittelübernahmen von FB-Konten im Rahmen des
+	 * Haushaltsjahresabschlusses in die Buchungstabelle ein  
+	 * @param user: angemeldeter Benutzer
+	 * @param oldAcc: alte ID des portierten FB-Hauptkontos
+	 * @param newYear: ID des neuen Haushaltsjahres
+	 * @return Anzahl eingefügter Buchungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int insertAsSelectBuchungenFBKontoMitteluebernahme(Benutzer user, int oldAcc, int newYear) throws ApplicationServerException{
 		try{
 			Object[] parameters = {new Timestamp(System.currentTimeMillis()), new Integer(user.getId()), new Integer(oldAcc), new Integer(newYear)};
@@ -5329,7 +5456,13 @@ public class Database implements Serializable {
 			throw new ApplicationServerException(190, e.getMessage());
 		}		
 	}
-	
+
+	/**
+	 * Setzt Tabellensperren für alle vom Haushaltsjahresabschluss direkt betroffenen
+	 * Tabellen und den für sie benutzten Aliase
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public void lockTablesForHaushaltsjahresabschluss() throws ApplicationServerException{
 		try {
 			statements.get(7).executeUpdate();
@@ -5337,7 +5470,10 @@ public class Database implements Serializable {
 			throw new ApplicationServerException(192, e.getMessage());
 		}
 	}
-
+	/**
+	 * Hebt alle Tabellensperren auf
+	 * author Mario
+	 */
 	public void unlockTables() throws ApplicationServerException{
 		try {
 			statements.get(8).executeUpdate();

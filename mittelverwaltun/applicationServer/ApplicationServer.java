@@ -354,7 +354,7 @@ public class ApplicationServer implements Serializable {
 	 * @param haushaltsjahr = ID des Haushaltsjahres
 	 * @return Liste der FBHauptkonten
 	 * @throws ApplicationServerException
-	 * author m.schmitt
+	 * author Mario
 	 */
 	public ArrayList getOffeneFBHauptkonten( int haushaltsjahr ) throws ApplicationServerException {
 		
@@ -904,16 +904,12 @@ public class ApplicationServer implements Serializable {
 
 		return zvKonten;	// Rückgabe der ermittelten ZVKonten
 	}
-
-
-	
-	
 	
 	/**
 	 * Abfrage der nicht abgeschlossenen ZVKonten eines Haushaltsjahres mit den dazugehörigen ZVTiteln und ZVUntertiteln.
-	 * @param haushaltsjahr - Id des Haushaltsjahres
+	 * @param haushaltsjahr: ID des Haushaltsjahres
 	 * @return Liste mit den ZVKonten
-	 * author m.schmitt
+	 * author Mario
 	 */
 	public ArrayList getOffeneZVKonten(int haushaltsjahr) throws ApplicationServerException {
 		ArrayList zvKonten = db.selectOffeneZVKonten(haushaltsjahr);	// Es werden alle ZVKonten ermittelt
@@ -1859,43 +1855,6 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	/**
-	 * gibt das Haushaltsjahr zurück
-	 * @return Haushaltsjahr
-	 * @throws ApplicationServerException
-	 */
-//	public Haushaltsjahr getHaushaltsjahr() throws ApplicationServerException {
-//		return db.selectHaushaltsjahr();
-//	}
-
-	/**
-	 * aktualisiert den Haushaltsjahr
-	 * @param editedHhj - Haushaltsjahr mit Änderungen
-	 * @param clientHhj - original Haushaltsjahr beim Client
-	 * @throws ApplicationServerException
-	 */
-//	public void setHaushaltsjahr(Haushaltsjahr editedHhj, Haushaltsjahr clientHhj) throws ApplicationServerException {
-//		if(editedHhj != null && clientHhj != null){
-//			try{	
-//				Haushaltsjahr dbHhj = db.selectForUpdateHaushaltsjahr();
-//	
-//				if(dbHhj == null)			// Fachberich existiert nicht mehr
-//					throw new ApplicationServerException(57);
-//	
-//				if(!dbHhj.equals(clientHhj))		//Fachbereich hat sich zwischenzeitlich geändert
-//					throw new ApplicationServerException(58);
-//	
-//				db.updateHaushaltsjahr(editedHhj);
-//			} catch(ApplicationServerException e) {
-//				db.rollback();
-//				throw e;
-//			} finally {
-//				db.insertLog(1, "Haushaltsjahr aktualisiert" );
-//				db.commit();
-//			}
-//		}
-//	}
-	
 	/*
 	 *  (Kein Javadoc)
 	 * @see applicationServer.ApplicationServer#getRollenFull()
@@ -2885,22 +2844,22 @@ public class ApplicationServer implements Serializable {
 
 		return bestellung;
 	}
-	
 
-
-	/*
-	 *  (Kein Javadoc)
-	 * @see applicationServer.ApplicationServer#getBestellungen(int)
+	/**
+	 * Ermittelt alle offene Bestellungen eines Haushaltsjahres
+	 * @param haushaltsjahr: ID des Haushaltsjahres
+	 * @return Liste von Bestellungen
+	 * @throws ApplicationServerException
+	 * author Mario
 	 */
 	public ArrayList getOffeneBestellungen(int haushaltsjahr) throws ApplicationServerException{
 		return db.selectOffeneBestellungen(haushaltsjahr);
 	}
 
-
 	/**
-	 * gibt Bestellungen eines bestimmten Typs zurück
-	 * @param filter
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen eines bestimmten Typs im System
+	 * @param filter: gesuchter Bestellungstyp
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -2910,8 +2869,9 @@ public class ApplicationServer implements Serializable {
 	}
 	
 	/**
-	 * gibt alle Bestellungen zurück
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen im System
+	 * @param validTypes: Array gültiger Bestellungstypen
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -2920,9 +2880,10 @@ public class ApplicationServer implements Serializable {
 	}
 
 	/**
-	 * gibt Bestellungen eines bestimmten Typs zurück
-	 * @param filter
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen eines bestimmten Typs die über ein bestimmtes FB-Konto abgewickelt werden
+	 * @param accID: ID des FB-Kontos
+	 * @param filter: gesuchter Bestellungstyp
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -2932,8 +2893,10 @@ public class ApplicationServer implements Serializable {
 	}
 
 	/**
-	 * gibt alle Bestellungen zurück
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen die über ein bestimmtes FB-Konto abgewickelt werden
+	 * @param accID: ID des FB-Kontos
+	 * @param validTypes: Array gültiger Bestellungstypen
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -2942,9 +2905,10 @@ public class ApplicationServer implements Serializable {
 	}
 
 	/**
-	 * gibt Bestellungen eines bestimmten Typs zurück
-	 * @param filter
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen eines bestimmten Typs eines bestimmten Instituts
+	 * @param institute: ID des Instituts
+	 * @param filter: gesuchter Bestellungstyp
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
@@ -2954,17 +2918,16 @@ public class ApplicationServer implements Serializable {
 	}
 
 	/**
-	 * gibt alle Bestellungen zurück
-	 * @return ArrayList mit Bestellungen
+	 * Ermittelt alle Bestellungen eines bestimmten Instituts
+	 * @param institute: ID des Instituts
+	 * @param validTypes: Array gültiger Bestellungstypen
+	 * @return Liste von Bestellungen
 	 * @throws ApplicationServerException
 	 * author Mario
 	 */
 	public ArrayList getInstitutsbestellungen(int institute, int[] validTypes) throws ApplicationServerException{
 		return db.selectInstitutsbestellungen(institute, validTypes);
 	}
-
-	
-	
 	
 	/**
 	 * gibt FBHauptkonten mit/ohne FBUnterkonten eines Instituts
@@ -3446,6 +3409,18 @@ public class ApplicationServer implements Serializable {
 		return db.selectLogList(von, bis);
 	}
 
+	/**
+	 * Führt einen Haushaltsjahresabschluss für aktive Haushaltsjahre durch.
+	 * @param user: angemeldeter Benutzer (=> Buchungen)
+	 * @param oldYear: ID des "alten" Haushaltsjahres
+	 * @param orders: Liste von offenen Bestellungen
+	 * @param zvAccounts: Liste von ZV-Konten
+	 * @param fbAccounts: Liste von FB-Hauptkonten
+	 * @param transaction: commit/rollback durchführen?
+	 * @return Status-Array
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */		
 	public int[] finishBudgetYear(Benutzer user, int oldYear, ArrayList orders, ArrayList zvAccounts, ArrayList fbAccounts, boolean transaction) throws ApplicationServerException{
 			
 		try{
@@ -3582,51 +3557,70 @@ public class ApplicationServer implements Serializable {
 		}
 	}
 
-	
+	/**
+	 * Führt einen Haushaltsjahresabschluss für inaktive Haushaltsjahre, die 
+	 * noch nicht abgeschlossene ZV-Konten enthalten durch.
+	 * @param user: angemeldeter Benutzer (=> Buchungen)
+	 * @param oldYear: ID des "alten" Haushaltsjahres
+	 * @param zvAccounts: Liste von ZV-Konten
+	 * @param transaction: commit/rollback durchführen?
+	 * @return Status-Array
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */		
 	public int[] finishBudgetYear(Benutzer user, int oldYear, ArrayList zvAccounts, boolean transaction) throws ApplicationServerException{
 		
-	try{
-		/*  cnts[0]: Anzahl portierter ZV-Konten
-		 *  cnts[1]: Anzahl portierter ZV-Titel
-		 *  cnts[2]: Anzahl übernommener ZV-Budgets
-		 *  cnts[3]: Anzahl abgeschlossener ZV-Konten
-		 */		
-		
-		// Temporäre Tabellen (falls nötig) löschen
-		db.dropTmpZvKontenTab();
-		db.dropTmpZvKontentitelTab();
-				
-		// Transaktion starten
-		db.begin();
-		
-		// Temporäre Tabellen anlegen
-		db.createAsSelectTempZvKontenTab(oldYear); 
-		db.createAsSelectTempZvKontentitelTab(oldYear);
-		
-		// 1. ZV-Konten portieren und ggf. Budgets übernehmen
-		int newYear = getFollowingHaushaltsjahrId(oldYear);
-		int[] cnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
-				
-		if (cnts[3]==zvAccounts.size())
-			db.updateHaushaltsjahrStatus(oldYear, '2'); // Haushaltsjahr abgeschlossen
-		else
-			db.updateHaushaltsjahrStatus(oldYear, '1'); // Haushaltsjahr inaktiv
-		
-		if (transaction) db.commit();
-		
-		return cnts;
-	} catch (ApplicationServerException e){
-		
-		if (transaction) db.rollback();
-		throw e;
-	} finally{
-		// Temporäre Tabellen (falls nötig) löschen
-		db.dropTmpZvKontenTab();
-		db.dropTmpZvKontentitelTab();
+		try{
+			/*  cnts[0]: Anzahl portierter ZV-Konten
+			 *  cnts[1]: Anzahl portierter ZV-Titel
+			 *  cnts[2]: Anzahl übernommener ZV-Budgets
+			 *  cnts[3]: Anzahl abgeschlossener ZV-Konten
+			 */		
+			
+			// Temporäre Tabellen (falls nötig) löschen
+			db.dropTmpZvKontenTab();
+			db.dropTmpZvKontentitelTab();
+					
+			// Transaktion starten
+			db.begin();
+			
+			// Temporäre Tabellen anlegen
+			db.createAsSelectTempZvKontenTab(oldYear); 
+			db.createAsSelectTempZvKontentitelTab(oldYear);
+			
+			// 1. ZV-Konten portieren und ggf. Budgets übernehmen
+			int newYear = getFollowingHaushaltsjahrId(oldYear);
+			int[] cnts = portZVKonten(user, zvAccounts, oldYear, newYear, false);
+					
+			if (cnts[3]==zvAccounts.size())
+				db.updateHaushaltsjahrStatus(oldYear, '2'); // Haushaltsjahr abgeschlossen
+			else
+				db.updateHaushaltsjahrStatus(oldYear, '1'); // Haushaltsjahr inaktiv
+			
+			if (transaction) db.commit();
+			
+			return cnts;
+		} catch (ApplicationServerException e){
+			
+			if (transaction) db.rollback();
+			throw e;
+		} finally{
+			// Temporäre Tabellen (falls nötig) löschen
+			db.dropTmpZvKontenTab();
+			db.dropTmpZvKontentitelTab();
+		}
 	}
-}
 	
-	
+	/**
+	 * Portiert Kontenzuordnungen in ein anderes Haushaltsjahr.
+	 * Voraussetzung: Temporäre Kontenzuordnungstabelle muss angelegt sein
+	 * @param oldYear: ID des "alten" Haushaltsjahres (=> nicht mehr verwendet!)
+	 * @param newYear: ID des "neuen" Haushaltsjahres (=> nicht mehr verwendet!)
+	 * @param transaction: commit/rollback durchführen?
+	 * @return Anzahl portierter Kontenzuordnungen
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */	
 	public int portKontenzuordnungen (int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		try{	
 			int cnt = 0;
@@ -3642,7 +3636,20 @@ public class ApplicationServer implements Serializable {
 			throw e;
 		}
 	}
-	
+
+	/**
+	 * Portiert die übergebenen FB-Hauptkonten inklusive ihrer Unterkonten und ggf. inkl. ihres Budgets
+	 * in ein anderes Haushaltsjahr.
+	 * Voraussetzung: Temporäre FB-Kontentabelle muss angelegt sein
+	 * @param user: angemeldeter Benutzer (=> Buchungen)
+	 * @param accounts: Liste von FB-Hauptkonten
+	 * @param oldYear: ID des "alten" Haushaltsjahres (=> nicht mehr verwendet!)
+	 * @param newYear: ID des "neuen" Haushaltsjahres
+	 * @param transaction: commit/rollback durchführen?
+	 * @return Status-Array
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int[] portFBKonten (Benutzer user, ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		try{
 			int[] cnts = {0, 0};
@@ -3671,7 +3678,20 @@ public class ApplicationServer implements Serializable {
 			throw e;
 		}
 	}
-	
+
+	/**
+	 * Portiert die übergebenen ZV-Konten inklusive ihrer Titel und ggf. inkl. ihres Budgets
+	 * in ein anderes Haushaltsjahr
+	 * Voraussetzung: Temporäre ZV-Konten(titel)tabellen müssen angelegt sein
+	 * @param user: angemeldeter Benutzer (=> Buchungen)
+	 * @param accounts: Liste von ZV-Konten
+	 * @param oldYear: ID des "alten" Haushaltsjahres (=> nicht mehr verwendet!)
+	 * @param newYear: ID des "neuen" Haushaltsjahres
+	 * @param transaction: commit/rollback durchführen?
+	 * @return Status-Array
+	 * @throws ApplicationServerException
+	 * author Mario
+	 */
 	public int[] portZVKonten (Benutzer user, ArrayList accounts, int oldYear, int newYear, boolean transaction) throws ApplicationServerException{
 		
 		try{
