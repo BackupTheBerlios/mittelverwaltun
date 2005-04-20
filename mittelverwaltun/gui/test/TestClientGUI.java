@@ -32,21 +32,21 @@ public class TestClientGUI extends TestCase {
 		JTabbedPaneOperator tabPane = new JTabbedPaneOperator(mainFrame);
 		
 		// Den dritten Reiter aswählen
-//		tabPane.setSelectedIndex(1);
-//		JTextFieldOperator tfURL = new JTextFieldOperator(tabPane, url);
-//		JTextFieldOperator tfServername = new JTextFieldOperator(tabPane, servername);
-//
-//		tfURL.setText("");
-//		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
-//		new JDialogOperator(mainFrame, "Error !").close();
-//		tfURL.setText(url);
-//
-//		tfServername.setText("");
-//		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
-//		new JDialogOperator(mainFrame, "Error !").close();
-//		tfServername.setText(servername);
-//		
-//		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
+		tabPane.setSelectedIndex(1);
+		JTextFieldOperator tfURL = new JTextFieldOperator(tabPane, url);
+		JTextFieldOperator tfServername = new JTextFieldOperator(tabPane, servername);
+
+		tfURL.setText("");
+		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
+		new JDialogOperator(mainFrame, "Error !").close();
+		tfURL.setText(url);
+
+		tfServername.setText("");
+		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
+		new JDialogOperator(mainFrame, "Error !").close();
+		tfServername.setText(servername);
+		
+		new JButtonOperator(tabPane, "Einstellungen Speichern").push();
 
 		// Den ersten Reiter testen
 		String benutzer = "w.flat";
@@ -56,17 +56,17 @@ public class TestClientGUI extends TestCase {
 		JPasswordFieldOperator tfPasswort = new JPasswordFieldOperator(tabPane, "");
 		tfBenutzer.setText("");
 		
-//		new JButtonOperator(tabPane, "Anmelden").push();
-//		new JDialogOperator(mainFrame, "Warnung").close();
-//		tfBenutzer.setText(benutzer);
+		new JButtonOperator(tabPane, "Anmelden").push();
+		new JDialogOperator(mainFrame, "Warnung").close();
+		tfBenutzer.setText(benutzer);
 
-//		new JButtonOperator(tabPane, "Anmelden").push();
-//		new JDialogOperator(mainFrame, "Warnung").close();
-//		tfBenutzer.setText("");
+		new JButtonOperator(tabPane, "Anmelden").push();
+		new JDialogOperator(mainFrame, "Warnung").close();
+		tfBenutzer.setText("");
 		tfPasswort.setText(benutzer);
 
-//		new JButtonOperator(tabPane, "Anmelden").push();
-//		new JDialogOperator(mainFrame, "Warnung").close();
+		new JButtonOperator(tabPane, "Anmelden").push();
+		new JDialogOperator(mainFrame, "Warnung").close();
 		tfBenutzer.setText(benutzer);
 		
 		new JButtonOperator(tabPane, "Anmelden").push();
