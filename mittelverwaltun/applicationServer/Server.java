@@ -123,7 +123,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	public static void main(String args[]) {
 		Server server = new Server();
-		server.synchronize();
+//		server.synchronize();
 	}
 	
 	/**
