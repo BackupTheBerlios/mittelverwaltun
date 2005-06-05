@@ -98,8 +98,8 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	final static String xmlFileName = "server.xml";
 	final static String imagePackage = "image";
 	final static String[] iconNames = {"traf_red.ICO", "traf_yellow.ICO", "traf_green.ICO"};
-	final static String serverPackage = "applicationServer";
-	final static String[] serverSkelStub = {"CentralServerImpl_Stub.class", "CentralServer.class", "ApplicationServer.class"};
+//	final static String serverPackage = "applicationServer";
+//	final static String[] serverSkelStub = {"CentralServerImpl_Stub.class", "CentralServer.class", "ApplicationServer.class"};
 
 	/**
 	 * Erstellen vom <code>Server</code>.
@@ -123,7 +123,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	public static void main(String args[]) {
 		Server server = new Server();
-//		server.synchronize();
+		server.synchronize();
 	}
 	
 	/**
@@ -131,7 +131,6 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 	 */
 	private void loadXMLFile() {
 		try {
-			File temp = new File(xmlFileName);
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder  = factory.newDocumentBuilder();
 			String text = Functions.readFile(xmlPackage.replace('.', '/') + File.separator + xmlFileName);
@@ -298,13 +297,13 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				throw new Exception("Es keine RMI-Registry ausgewählt.");
 			if(!f.exists())
 				throw new Exception("Die RMI-Registry existiert nicht.");
-			if(!f.exists())
-				throw new Exception("Die RMI-Registry existiert nicht.");
 			File libDir = new File((new File(f.getParent())).getParent() + System.getProperty("file.separator") + "lib");
 			if(!libDir.exists()) 
 				throw new Exception("Der Class-Path wurde nicht gefunden.");
 			CentralServerImpl.CENTRAL_RMI = f.getAbsolutePath();
-			CentralServerImpl.CENTRAL_CLASSPATH = "-J-classpath -J\"" + libDir.getAbsolutePath();
+			File serverFile = new File("server.jar");
+			CentralServerImpl.CENTRAL_CLASSPATH = "-J-classpath -J\"" + libDir.getAbsolutePath() + (serverFile.exists() ? ";" + serverFile.getAbsolutePath() : "") + "\"";
+			System.out.println(CentralServerImpl.CENTRAL_CLASSPATH);
 		} catch(Exception e) {
 			error += " - " + e.toString() + "\n";
 			CentralServerImpl.CENTRAL_CLASSPATH = CentralServerImpl.CENTRAL_RMI = "";
@@ -339,8 +338,7 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 				}
 				setSettings();		// Keine Fehler aufgetretten, dann die Einstellungen speichern
 				try {
-					rmiProcess = Runtime.getRuntime().exec(CentralServerImpl.CENTRAL_RMI + " " + 
-															CentralServerImpl.CENTRAL_CLASSPATH);
+					rmiProcess = Runtime.getRuntime().exec(CentralServerImpl.CENTRAL_RMI + " " + CentralServerImpl.CENTRAL_CLASSPATH);
 					butRMIRegistry.setText(stopRMI);
 					butCentralServer.setEnabled( true );
 					miRegistry.setText(stopRMI);
@@ -443,12 +441,12 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 					JOptionPane.showMessageDialog( this, "Fehler beim Öffnen der Datei.", "Error !", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-//				String error = setRmiClaspath(tempFile.getAbsolutePath());
-//				if(error.length() > 0) {
-//					JOptionPane.showMessageDialog( this, "Folgender Fehler ist aufgetreten: \n" + error, 
-//														"Error !", JOptionPane.ERROR_MESSAGE);
-//					return;
-//				}
+				String error = setRmiClaspath(tempFile.getAbsolutePath());
+				if(error.length() > 0) {
+					JOptionPane.showMessageDialog( this, "Folgender Fehler ist aufgetreten: \n" + error, 
+														"Error !", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				tfRMIRegistry.setText(tempFile.getAbsolutePath());
 			}
 		} else if(e.getSource() == butSave) {
@@ -738,9 +736,9 @@ public class Server extends JFrame implements ActionListener, SystemTrayIconList
 			for(int i = 0; i < iconNames.length; i++) {						// Die Bilddateien auslagern
 				Functions.restoreFile(imagePackage, iconNames[i], getClass());
 			}
-			for(int i = 0; i < serverSkelStub.length; i++) {				// Die Serverdateien auslagern
-				Functions.restoreFile(serverPackage, serverSkelStub[i], getClass());
-			}
+//			for(int i = 0; i < serverSkelStub.length; i++) {				// Die Serverdateien auslagern
+//				Functions.restoreFile(serverPackage, serverSkelStub[i], getClass());
+//			}
 			Functions.restoreFile(xmlPackage, xmlFileName, getClass());		// Die XML-Datei auslagern
 		} catch(Exception exc) {
 			exc.printStackTrace();
